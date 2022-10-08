@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "libt",
+    "target": "ES2015",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": ["ESNext"]
+  },
+  "include": ["./test"]
+}
