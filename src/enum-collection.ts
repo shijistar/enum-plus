@@ -12,6 +12,7 @@ import type {
   EnumValue,
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
+  ColumnFilterItem,
 } from './types';
 import { EnumValuesArray } from './enum-values';
 
@@ -116,6 +117,10 @@ export class EnumCollectionClass<
 
   valuesEnum() {
     return this.values.valuesEnum();
+  }
+
+  filters(): ColumnFilterItem<V>[] {
+    return this.values.filters();
   }
 
   raw(): T;

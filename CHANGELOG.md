@@ -1,4 +1,10 @@
-## 1.0.0
+## 1.0.1
+
+2023-03-09
+
+- 🆕 Added a new `filters` method that returns an array of enumerated items that can be passed directly to the `Column.filters` of the AntDesign Table component as a list of filtered items for the column
+
+- ## 1.0.0
 
 2022-10-08
 

@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A powerful enum library, like typescript enum but more than that",
   "keywords": [
     "enum",

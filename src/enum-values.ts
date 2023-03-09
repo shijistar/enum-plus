@@ -1,6 +1,7 @@
 import type { EnumItemClass } from './enum-item';
 import type {
   BooleanFirstOptionConfig,
+  ColumnFilterItem,
   EnumInit,
   EnumKey,
   EnumOption,
@@ -93,6 +94,10 @@ export class EnumValuesArray<
       itemsMap[value] = { text: label };
     }
     return itemsMap;
+  }
+
+  filters(): ColumnFilterItem<V>[] {
+    return this.map(({ value, label }) => ({ text: label, value }));
   }
 
   raw(): T;

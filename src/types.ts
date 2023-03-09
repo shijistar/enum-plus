@@ -122,6 +122,23 @@ export interface IEnumValues<
   valuesEnum(): Record<V, { text: string }>;
 
   /**
+   * 生成一个filters数组，可以直接传递给AntDesign Table组件Column的filters属性，作为列的筛选项
+   *
+   * 数据结构为：
+   *
+   * @example
+   * [
+   *  { value: 0, text: "星期日" },
+   *  { value: 1, text: "星期一" },
+   * ]
+   *
+   * @see https://ant.design/components/table-cn#components-table-demo-head
+   * @see https://ant.design/components/table-cn#column
+   */
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  filters(): ColumnFilterItem<V>[];
+
+  /**
    * 获取枚举集合的初始化对象
    * @return {T} 初始化对象集合
    * @memberof IEnumValues
@@ -231,6 +248,20 @@ export type EnumOption<K, V> = {
    * 选项的key，默认使用`value`
    */
   key: K;
+};
+
+/**
+ * Table列筛选项的数据结构
+ */
+export type ColumnFilterItem<V> = {
+  /**
+   * 显示文本
+   */
+  text: string;
+  /**
+   * 值
+   */
+  value: V;
 };
 
 /**

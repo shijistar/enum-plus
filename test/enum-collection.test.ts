@@ -26,7 +26,8 @@ describe('the EnumCollectionClass api', () => {
       has: { value: 3, label: 'has' },
       options: { value: 4, label: 'options' },
       valuesEnum: { value: 5, label: 'valuesEnum' },
-      raw: { value: 6, label: 'raw' },
+      filters: { value: 6, label: 'filters' },
+      raw: { value: 99, label: 'raw' },
       keys: { value: 101, label: 'foo' },
     };
     const strangeEnum = Enum(strangeEnumConfig);
@@ -39,6 +40,8 @@ describe('the EnumCollectionClass api', () => {
     expect(strangeEnum.options).toBe(4);
     expect(strangeEnum.values.options()).toHaveLength(Object.keys(strangeEnumConfig).length);
     expect(strangeEnum.valuesEnum).toBe(5);
+    expect(strangeEnum.filters).toBe(6);
+    expect(strangeEnum.values.filters()).toHaveLength(Object.keys(strangeEnumConfig).length);
     expect(Object.keys(strangeEnum.values.valuesEnum())).toEqual(
       Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key].value.toString())
     );

@@ -64,6 +64,12 @@ export function addEnumValuesTestSuite<
     );
   });
 
+  test('[filters] should be able to generate filter items for AntDesign Table', () => {
+    expect(weekEnum.filters()).toEqual(
+      Object.values(WeekStandardConfig).map(({ value, label }) => ({ text: label, value }))
+    );
+  });
+
   test('[raw] should be able to return the raw object used to initialize the enums', () => {
     expect(weekEnum.raw()).toBe(WeekStandardConfig);
     expect(weekEnum.raw(0)).toEqual(WeekStandardConfig.Sunday);
