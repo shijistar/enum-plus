@@ -90,4 +90,10 @@ export function addEnumValuesTestSuite<
       weekEnum.keyType;
     }).toThrow();
   });
+
+  test('[rawType] should throw error when rawType accessor is called at runtime', () => {
+    expect(() => {
+      weekEnum.rawType;
+    }).toThrow();
+  });
 }

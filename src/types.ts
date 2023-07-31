@@ -189,6 +189,11 @@ export interface IEnumValues<
    * // 使用keyType类型可以更准确的限定取值范围，比使用string这种宽泛的数据类型更好
    */
   keyType: K;
+
+  /**
+   * 枚举项原始初始化对象的类型，如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
+   */
+  rawType: T[K];
 }
 
 export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumValue> =

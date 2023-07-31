@@ -140,6 +140,9 @@ export class EnumCollectionClass<
   get keyType() {
     return this.values.keyType;
   }
+  get rawType() {
+    return this.values.rawType;
+  }
 }
 
 function parseEnumItem<T extends EnumItemInit<V>, K extends EnumKey<any>, V extends EnumValue>(

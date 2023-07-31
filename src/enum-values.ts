@@ -138,4 +138,13 @@ export class EnumValuesArray<
       '枚举的keyType属性仅允许用来声明ts类型，不能在运行时访问! 在ts类型中请配合`typeof`运算符使用，例如: typeof Week.keyType'
     );
   }
+
+  /**
+   * @deprecated Stub方法，不支持直接调用
+   */
+  get rawType(): T[K] {
+    throw new Error(
+      '枚举的rawType属性仅允许用来声明ts类型，不能在运行时访问! 在ts类型中请配合`typeof`运算符使用，例如: typeof Week.rawType'
+    );
+  }
 }
