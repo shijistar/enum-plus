@@ -165,22 +165,34 @@ export function Enum<
   getKey: keyof T | ((item: T) => K) = 'key' as keyof T
 ): IEnum<T, K, V> {
   if (Array.isArray(init)) {
-    const initMap = init.reduce((acc, item) => {
-      const value = typeof getValue === 'function' ? (getValue(item) as V) : (item[getValue] as V);
-      const label = typeof getLabel === 'function' ? getLabel(item) : item[getLabel];
-      const key = getKey
-        ? typeof getKey === 'function'
-          ? (getKey(item) as K)
-          : (item[getKey] as K)
-        : undefined;
-      acc[(key || value) as unknown as K] = {
-        label: label || key || (value != null ? value.toString() : value),
-        value,
-      } as LabelOnlyEnumItemInit as T[K];
-      return acc;
-    }, {} as T);
+    const initMap = getInitMapFromArray<T, K, V>(init, getValue, getLabel, getKey);
     return new EnumCollectionClass<T, K, V>(initMap) as unknown as IEnum<T, K, V>;
   } else {
     return new EnumCollectionClass<T, K, V>(init) as unknown as IEnum<T, K, V>;
   }
+}
+function getInitMapFromArray<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>
+>(
+  init: T[],
+  getValue: keyof T | ((item: T) => V),
+  getLabel: keyof T | ((item: T) => string),
+  getKey: keyof T | ((item: T) => K)
+) {
+  return init.reduce((acc, item) => {
+    const value = typeof getValue === 'function' ? getValue(item) : (item[getValue] as V);
+    const label = typeof getLabel === 'function' ? getLabel(item) : item[getLabel];
+    let key: K | undefined = undefined;
+    if (getKey) {
+      key = typeof getKey === 'function' ? getKey(item) : (item[getKey] as K);
+    }
+    acc[(key ?? value) as unknown as K] = {
+      ...item,
+      label: label || (key ?? '') || (value != null ? value.toString() : value),
+      value,
+    } as LabelOnlyEnumItemInit as T[K];
+    return acc;
+  }, {} as T);
 }

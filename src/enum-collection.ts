@@ -154,7 +154,7 @@ function parseEnumItem<T extends EnumItemInit<V>, K extends EnumKey<any>, V exte
   if (init !== undefined) {
     if (typeof init === 'number' || typeof init === 'string' || typeof init === 'symbol') {
       // EnumValue类型
-      value = init as EnumValue as V;
+      value = init as V;
       label = key as string;
     } else if (typeof init === 'object') {
       if (Object.prototype.toString.call(init) === '[object Object]') {
@@ -168,7 +168,7 @@ function parseEnumItem<T extends EnumItemInit<V>, K extends EnumKey<any>, V exte
           }
         } else if ('label' in init /*TS assertion*/ && Object.keys(init).includes('label')) {
           // {label}类型
-          value = key as EnumValue as V;
+          value = key as unknown as V;
           label = init.label ?? key;
         } else {
           // {} 空对象
@@ -185,7 +185,7 @@ function parseEnumItem<T extends EnumItemInit<V>, K extends EnumKey<any>, V exte
     }
   } else {
     // undefined类型
-    value = key as EnumValue as V;
+    value = key as unknown as V;
     label = key as string;
   }
   return { value, label };

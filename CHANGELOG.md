@@ -1,3 +1,9 @@
+## 1.0.3
+
+2023-11-14
+
+- 🛠 If an enum is created from array, both the `enum.raw` or `enumItem.raw` methods return the original array item
+
 ## 1.0.2
 
 2023-07-31

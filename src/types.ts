@@ -73,12 +73,12 @@ export interface IEnumValues<
   has(keyOrValue?: string | number): boolean;
 
   /**
-   * 生成符合antd规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   * 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   options(): EnumOption<K, V>[];
   /**
-   * 生成符合antd规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   * 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
    *
    * @param config 自定义选项
    */
@@ -87,7 +87,7 @@ export interface IEnumValues<
     config: OptionsConfig & BooleanFirstOptionConfig<B>
   ): EnumOption<K | '', V | ''>[];
   /**
-   * 生成符合antd规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   * 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
    *
    * @param config 自定义选项
    */

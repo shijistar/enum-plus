@@ -45,7 +45,7 @@ export class EnumValuesArray<
 
   label(keyOrValue?: string | number): string | undefined {
     // 先查value，再查key
-    return (this.find((i) => i.value === keyOrValue) || this.find((i) => i.key === keyOrValue))
+    return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue))
       ?.label;
   }
 
@@ -110,7 +110,7 @@ export class EnumValuesArray<
     } else {
       if (Object.keys(this.#raw).includes(value as string)) {
         // 当做key查找
-        return this.#raw[value as K] as T[K];
+        return this.#raw[value as K];
       }
       // 当做value查找
       const itemByValue = this.find((i) => i.value === value);

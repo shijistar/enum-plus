@@ -1,10 +1,11 @@
 import type { EnumInit, EnumKey, EnumValue, IEnumValues, ValueTypeFromSingleInit } from '../src';
-import { getOptionsData } from './utils';
+import { getOptionsData, pickArray } from './utils';
 import { Enum } from '../src';
-import { WeekStandardConfig } from './data/week-config';
+import { StandardWeekConfig } from './data/week-config';
+import { StandardWeekData } from './data/week-data';
 
 describe('the EnumValuesArray api', () => {
-  addEnumValuesTestSuite(Enum(WeekStandardConfig).values);
+  addEnumValuesTestSuite(Enum(StandardWeekConfig).values);
 });
 
 export function addEnumValuesTestSuite<
@@ -35,8 +36,12 @@ export function addEnumValuesTestSuite<
   });
 
   test('[options] should be able to generate select options', () => {
-    expect(getOptionsData(weekEnum.options())).toEqual(Object.values(WeekStandardConfig));
-    expect(getOptionsData(weekEnum.options({}))).toEqual(Object.values(WeekStandardConfig));
+    expect(getOptionsData(weekEnum.options())).toEqual(
+      pickArray(StandardWeekData, ['label', 'value'])
+    );
+    expect(getOptionsData(weekEnum.options({}))).toEqual(
+      pickArray(StandardWeekData, ['label', 'value'])
+    );
     const withDefaultFirstOption = weekEnum.options({ firstOption: true });
     expect(withDefaultFirstOption).toHaveLength(8);
     expect(withDefaultFirstOption[0]).toEqual({ value: '', key: '', label: '全部' });
@@ -57,43 +62,37 @@ export function addEnumValuesTestSuite<
 
   test('[valuesEnum] should be able to generate enum type for AntDesignPro', () => {
     expect(weekEnum.valuesEnum()).toEqual(
-      Object.values(WeekStandardConfig).reduce((acc, { value, label }) => {
+      Object.values(StandardWeekConfig).reduce((acc, { value, label }) => {
         acc[value] = { text: label };
         return acc;
-      }, {})
+      }, {} as Record<number, { text: string }>)
     );
   });
 
   test('[filters] should be able to generate filter items for AntDesign Table', () => {
     expect(weekEnum.filters()).toEqual(
-      Object.values(WeekStandardConfig).map(({ value, label }) => ({ text: label, value }))
+      Object.values(StandardWeekConfig).map(({ value, label }) => ({ text: label, value }))
     );
   });
 
   test('[raw] should be able to return the raw object used to initialize the enums', () => {
-    expect(weekEnum.raw()).toBe(WeekStandardConfig);
-    expect(weekEnum.raw(0)).toEqual(WeekStandardConfig.Sunday);
-    expect(weekEnum.raw('Sunday')).toEqual(WeekStandardConfig.Sunday);
-    expect(weekEnum.raw(6)).toEqual(WeekStandardConfig.Saturday);
-    expect(weekEnum.raw('Saturday')).toEqual(WeekStandardConfig.Saturday);
+    expect(weekEnum.raw()).toBe(StandardWeekConfig);
+    expect(weekEnum.raw(0)).toEqual(StandardWeekConfig.Sunday);
+    expect(weekEnum.raw('Sunday')).toEqual(StandardWeekConfig.Sunday);
+    expect(weekEnum.raw(6)).toEqual(StandardWeekConfig.Saturday);
+    expect(weekEnum.raw('Saturday')).toEqual(StandardWeekConfig.Saturday);
     expect(weekEnum.raw(7)).toBeUndefined();
   });
 
   test('[valueType] should throw error when valueType accessor is called at runtime', () => {
-    expect(() => {
-      weekEnum.valueType;
-    }).toThrow();
+    expect(() => weekEnum.valueType).toThrow();
   });
 
   test('[keyType] should throw error when keyType accessor is called at runtime', () => {
-    expect(() => {
-      weekEnum.keyType;
-    }).toThrow();
+    expect(() => weekEnum.keyType).toThrow();
   });
 
   test('[rawType] should throw error when rawType accessor is called at runtime', () => {
-    expect(() => {
-      weekEnum.rawType;
-    }).toThrow();
+    expect(() => weekEnum.rawType).toThrow();
   });
 }

@@ -1,20 +1,20 @@
 import { addEnumValuesTestSuite } from './enum-values.test';
 import { Enum, KEYS, VALUES } from '../src';
-import { WeekStandardConfig } from './data/week-config';
+import { StandardWeekConfig } from './data/week-config';
 import { toPlainEnums } from './utils';
 import { StandardWeekData } from './data/week-data';
 import { EnumValuesArray } from '../src/enum-values';
 
 describe('the EnumCollectionClass api', () => {
-  addEnumValuesTestSuite(Enum(WeekStandardConfig));
+  addEnumValuesTestSuite(Enum(StandardWeekConfig));
 
   test('[keys] should be able to return all enum keys', () => {
-    const week = Enum(WeekStandardConfig);
-    expect(week.keys).toEqual(Object.keys(WeekStandardConfig));
+    const week = Enum(StandardWeekConfig);
+    expect(week.keys).toEqual(Object.keys(StandardWeekConfig));
   });
 
   test('[values] should be able to return an array of enum items', () => {
-    const week = Enum(WeekStandardConfig);
+    const week = Enum(StandardWeekConfig);
     expect(Array.isArray(week.values)).toBeTruthy();
     expect(toPlainEnums(week.values)).toEqual(StandardWeekData);
   });
@@ -43,7 +43,9 @@ describe('the EnumCollectionClass api', () => {
     expect(strangeEnum.filters).toBe(6);
     expect(strangeEnum.values.filters()).toHaveLength(Object.keys(strangeEnumConfig).length);
     expect(Object.keys(strangeEnum.values.valuesEnum())).toEqual(
-      Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key].value.toString())
+      Object.keys(strangeEnumConfig).map((key) =>
+        strangeEnumConfig[key as keyof typeof strangeEnumConfig].value.toString()
+      )
     );
     expect(strangeEnum.keys).toBe(101);
     expect(strangeEnum.values.map((i) => i.key)).toEqual(Object.keys(strangeEnumConfig));
@@ -60,19 +62,19 @@ describe('the EnumCollectionClass api', () => {
     expect(toPlainEnums(strangerEnum[VALUES])).toEqual(
       Object.keys(strangerEnumConfig).map((key) => ({
         key,
-        value: strangerEnumConfig[key].value,
-        label: strangerEnumConfig[key].label,
+        value: strangerEnumConfig[key as keyof typeof strangerEnumConfig].value,
+        label: strangerEnumConfig[key as keyof typeof strangerEnumConfig].label,
       }))
     );
   });
 
   test('[toString] should return a friendly name', () => {
-    const week = Enum(WeekStandardConfig);
+    const week = Enum(StandardWeekConfig);
     expect(week.toString()).toBe('[object EnumCollection]');
   });
 
   test('enum value/key/label should be success by the [instanceof] operator', () => {
-    const week = Enum(WeekStandardConfig);
+    const week = Enum(StandardWeekConfig);
     expect((0 as unknown) instanceof (week as any)).toBeTruthy();
     expect(('Sunday' as unknown) instanceof (week as any)).toBeTruthy();
     expect(('星期日' as unknown) instanceof (week as any)).toBeTruthy();

@@ -7,9 +7,10 @@ import {
   WeekLabelOnlyConfig,
   WeekNumberConfig,
   WeekStandardArray,
-  WeekStandardConfig,
+  StandardWeekConfig,
   WeekStringConfig,
   WeekValueOnlyConfig,
+  WeekConfigWithKey,
 } from './data/week-config';
 import {
   StandardWeekData,
@@ -22,14 +23,14 @@ import {
 
 describe('should be able to create an enum from object', () => {
   test('should have a return', () => {
-    const week = Enum(WeekStandardConfig);
+    const week = Enum(StandardWeekConfig);
     expect(week).toBeDefined();
     expect(week).not.toBeNull();
     expect(week?.values?.length).toBe(7);
   });
 
   test('created weekdays enum with normal config', () => {
-    const week = Enum(WeekStandardConfig);
+    const week = Enum(StandardWeekConfig);
     expect(toPlainEnums(week.values)).toEqual(StandardWeekData);
   });
 
@@ -54,9 +55,9 @@ describe('should be able to create an enum from object', () => {
     const weekWithEmptyLabel = Enum(
       Object.keys(WeekLabelOnlyConfig).reduce((acc, key) => {
         // clear label
-        acc[key] = { ...acc[key], label: undefined };
+        acc[key] = { ...acc[key], label: undefined as unknown as string };
         return acc;
-      }, {})
+      }, {} as Record<string, { label: string }>)
     );
     expect(toPlainEnums(weekWithEmptyLabel.values)).toEqual(WeekDataHasKeyNoValueNoLabel);
   });
@@ -121,7 +122,7 @@ describe('should be able to create an enum from array', () => {
     const week = Enum(WeekStandardArray, 'value', 'label', '' as 'key');
     expect(toPlainEnums(week.values)).toEqual(WeekDataHasValueHasLabelNoKey);
     const weekWithDefaultKey = Enum(WeekStandardArray, 'value', 'label');
-    expect(toPlainEnums(weekWithDefaultKey.values)).toEqual(WeekStandardArray);
+    expect(toPlainEnums(weekWithDefaultKey.values)).toEqual(StandardWeekData);
   });
 
   test('created weekdays enum with normal config items array, but without label', () => {
@@ -143,5 +144,25 @@ describe('should be able to create an enum from array', () => {
         label: undefined,
       },
     ]);
+  });
+
+  test('[raw] should be able to return the raw object used to initialize the enums', () => {
+    const week = Enum(StandardWeekConfig);
+    expect(week.raw()).toBe(StandardWeekConfig);
+    expect(week.raw(0)).toEqual(StandardWeekConfig.Sunday);
+    expect(week.raw('Sunday')).toEqual(StandardWeekConfig.Sunday);
+    expect(week.raw(6)).toEqual(StandardWeekConfig.Saturday);
+    expect(week.raw('Saturday')).toEqual(StandardWeekConfig.Saturday);
+    expect(week.raw(7)).toBeUndefined();
+  });
+
+  test('weekdays enum from array should be able to access other raw fields', () => {
+    const week = Enum(WeekStandardArray, 'value', 'label', 'key');
+    expect(week.raw()).toEqual(WeekConfigWithKey);
+    expect(week.raw(0)).toEqual(WeekConfigWithKey.Sunday);
+    expect(week.raw('Sunday')).toEqual(WeekConfigWithKey.Sunday);
+    expect(week.raw(6)).toEqual(WeekConfigWithKey.Saturday);
+    expect(week.raw('Saturday')).toEqual(WeekConfigWithKey.Saturday);
+    expect(week.raw(7)).toBeUndefined();
   });
 });
