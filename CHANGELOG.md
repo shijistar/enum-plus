@@ -1,3 +1,22 @@
+<!-- markdownlint-disable MD009 -->
+
+# enum-plus Changelog
+
+## 2.0.0
+
+2025-1-23
+
+### Features
+
+- 🔥 Support for localization of enum text
+  - The `Enum` method now accepts a `localize` option that can be used to localize the enum text
+  - You can also set the `Enum.localize` method to localize all enums in a lower priority
+- 🔥 Add `menus` method
+
+### Breaking Changes
+
+- 💣 All parameters after the first of the `Enum` method has been changed to an `options` object
+
 ## 1.0.3
 
 2023-11-14

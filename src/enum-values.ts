@@ -7,6 +7,7 @@ import type {
   EnumOption,
   EnumValue,
   IEnumValues,
+  MenuItemOption,
   ObjectFirstOptionConfig,
   OptionsConfig,
   ValueTypeFromSingleInit,
@@ -58,21 +59,22 @@ export class EnumValuesArray<
   }
 
   options(): EnumOption<K, V>[];
-  options<B extends boolean>(
-    config: OptionsConfig & BooleanFirstOptionConfig<B>
-  ): EnumOption<K | '', V | ''>[];
+  options(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumOption<K | '', V | ''>[];
   options<FK = never, FV = never>(
     config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumOption<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  options<B extends boolean, FK = never, FV = never>(
-    config: OptionsConfig & (BooleanFirstOptionConfig<B> | ObjectFirstOptionConfig<FK, FV>) = this
+  options<FK = never, FV = never>(
+    config: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = this
       .#optionsConfigDefaults as any
   ): EnumOption<K | FK, V | FV>[] {
     const { firstOption = this.#optionsConfigDefaults.firstOption } = config;
     if (firstOption) {
       if (firstOption === true) {
         // 默认选项
-        return [{ key: '' as K, value: '' as V, label: '全部' }, ...this];
+        const value =
+          ('firstOptionValue' in config ? config.firstOptionValue : undefined) ?? ('' as V);
+        const label = ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ?? 'All';
+        return [{ key: '' as K, value, label }, ...this];
       } else {
         return [
           { ...firstOption, key: firstOption.key ?? (firstOption.value as unknown as K) },
@@ -83,7 +85,7 @@ export class EnumValuesArray<
       return this;
     }
   }
-  #optionsConfigDefaults: OptionsConfig & BooleanFirstOptionConfig<false> = {
+  #optionsConfigDefaults: OptionsConfig & BooleanFirstOptionConfig<V> = {
     firstOption: false,
   };
 
@@ -94,6 +96,10 @@ export class EnumValuesArray<
       itemsMap[value] = { text: label };
     }
     return itemsMap;
+  }
+
+  menus(): MenuItemOption<V>[] {
+    return this.map(({ value, label }) => ({ key: value, label }));
   }
 
   filters(): ColumnFilterItem<V>[] {

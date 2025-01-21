@@ -14,4 +14,5 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: ['src/types.ts'],
+  setupFiles: ['./test/jest.setup.ts'],
 };

@@ -13,6 +13,8 @@ import type {
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
   ColumnFilterItem,
+  EnumItemOptions,
+  MenuItemOption,
 } from './types';
 import { EnumValuesArray } from './enum-values';
 
@@ -51,7 +53,7 @@ export class EnumCollectionClass<
   readonly values!: EnumValuesArray<T, K, V>;
   readonly keys!: K[];
 
-  constructor(init: T = {} as T) {
+  constructor(init: T = {} as T, options?: EnumItemOptions) {
     const keys = Object.keys(init) as K[]; // 定义枚举项，可以通过key直接访问，例如 Week.Monday
     keys.forEach((key) => {
       const { value } = parseEnumItem<EnumItemInit<V>, K, V>(init[key], key);
@@ -67,7 +69,7 @@ export class EnumCollectionClass<
       init,
       ...keys.map((key) => {
         const { value, label } = parseEnumItem<EnumItemInit<V>, K, V>(init[key], key);
-        return new EnumItemClass<T[K], K, V>(key, value, label, init[key]);
+        return new EnumItemClass<T[K], K, V>(key, value, label, init[key], options).readonly();
       })
     );
     // @ts-ignore: 如果init包含values，则使用 VALUES 来避免命名冲突
@@ -79,10 +81,10 @@ export class EnumCollectionClass<
     // 重写 `instanceof` 操作符规则
     // @ts-ignore: 重写 instanceof 操作符，以识别枚举类型
     this[Symbol.hasInstance] = (instance: any): boolean => {
-      // value故意使用==，支持数字和字符创格式的value
+      // value故意使用 ==，支持数字和字符创格式的value
       return this.values.some(
         // eslint-disable-next-line eqeqeq
-        (i) => i.value == instance || i.key === instance || i.label === instance
+        (i) => instance == i.value || instance === i.key
       );
     };
 
@@ -102,14 +104,12 @@ export class EnumCollectionClass<
   }
 
   options(): EnumOption<K, V>[];
-  options<B extends boolean>(
-    config: OptionsConfig & BooleanFirstOptionConfig<B>
-  ): EnumOption<K | '', V | ''>[];
+  options(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumOption<K | '', V | ''>[];
   options<FK = never, FV = never>(
     config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumOption<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  options<B extends boolean, FK = never, FV = never>(
-    config?: OptionsConfig & (BooleanFirstOptionConfig<B> | ObjectFirstOptionConfig<FK, FV>)
+  options<FK = never, FV = never>(
+    config?: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
   ): EnumOption<K | FK, V | FV>[] {
     // @ts-ignore: 调用values的options方法
     return this.values.options(config);
@@ -117,6 +117,10 @@ export class EnumCollectionClass<
 
   valuesEnum() {
     return this.values.valuesEnum();
+  }
+
+  menus(): MenuItemOption<V>[] {
+    return this.values.menus();
   }
 
   filters(): ColumnFilterItem<V>[] {

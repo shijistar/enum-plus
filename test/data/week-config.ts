@@ -1,11 +1,56 @@
+import { Enum } from '../../src';
+
+export const localeEN = {
+  Sunday: 'Sunday',
+  Monday: 'Monday',
+  Tuesday: 'Tuesday',
+  Wednesday: 'Wednesday',
+  Thursday: 'Thursday',
+  Friday: 'Friday',
+  Saturday: 'Saturday',
+} as const;
+export const localeCN = {
+  Sunday: '星期日',
+  Monday: '星期一',
+  Tuesday: '星期二',
+  Wednesday: '星期三',
+  Thursday: '星期四',
+  Friday: '星期五',
+  Saturday: '星期六',
+} as const;
+export const noLocale = {
+  Sunday: 'weekday.sunday',
+  Monday: 'weekday.monday',
+  Tuesday: 'weekday.tuesday',
+  Wednesday: 'weekday.wednesday',
+  Thursday: 'weekday.thursday',
+  Friday: 'weekday.friday',
+  Saturday: 'weekday.saturday',
+} as const;
+
+export let locales: typeof localeEN | typeof localeCN | typeof noLocale = localeEN;
+
+export let lang: 'en-US' | 'zh-CN' | undefined = 'en-US';
+export let sillyLocalize = genSillyLocalizer(lang);
+
+function getLocales(language: typeof lang) {
+  return language === 'zh-CN' ? localeCN : language ? localeEN : noLocale;
+}
+export const setLang = (value: typeof lang | undefined) => {
+  lang = value;
+  locales = getLocales(value);
+  sillyLocalize = genSillyLocalizer(value);
+  Enum.localize = sillyLocalize;
+};
+
 export const StandardWeekConfig = {
-  Sunday: { value: 0, label: '星期日', aliasName: '礼拜天' },
-  Monday: { value: 1, label: '星期一', aliasName: '礼拜一' },
-  Tuesday: { value: 2, label: '星期二', aliasName: '礼拜二' },
-  Wednesday: { value: 3, label: '星期三', aliasName: '礼拜三' },
-  Thursday: { value: 4, label: '星期四', aliasName: '礼拜四' },
-  Friday: { value: 5, label: '星期五', aliasName: '礼拜五' },
-  Saturday: { value: 6, label: '星期六', aliasName: '礼拜六' },
+  Sunday: { value: 0, label: 'weekday.sunday', status: 'error' },
+  Monday: { value: 1, label: 'weekday.monday', status: 'warning' },
+  Tuesday: { value: 2, label: 'weekday.tuesday', status: 'warning' },
+  Wednesday: { value: 3, label: 'weekday.wednesday', status: 'success' },
+  Thursday: { value: 4, label: 'weekday.thursday', status: 'success' },
+  Friday: { value: 5, label: 'weekday.friday', status: 'success' },
+  Saturday: { value: 6, label: 'weekday.saturday', status: 'error' },
 } as const;
 
 export const WeekConfigWithKey = Object.keys(StandardWeekConfig).reduce((acc, key) => {
@@ -64,3 +109,48 @@ export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce((acc, 
   acc[key] = { label: StandardWeekConfig[key].label };
   return acc;
 }, {} as { [key in TKey]: { label: TConfig[key]['label'] } });
+
+export function genSillyLocalizer(language: typeof lang) {
+  if (!language) return undefined;
+  const locales = getLocales(language);
+  return function sillyLocalize(
+    content:
+      | typeof StandardWeekConfig[keyof typeof StandardWeekConfig]['label']
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      | (string & {})
+      | undefined
+  ): typeof content {
+    switch (content) {
+      case 'weekday.sunday':
+        return locales.Sunday as typeof content;
+      case 'weekday.monday':
+        return locales.Monday as typeof content;
+      case 'weekday.tuesday':
+        return locales.Tuesday as typeof content;
+      case 'weekday.wednesday':
+        return locales.Wednesday as typeof content;
+      case 'weekday.thursday':
+        return locales.Thursday as typeof content;
+      case 'weekday.friday':
+        return locales.Friday as typeof content;
+      case 'weekday.saturday':
+        return locales.Saturday as typeof content;
+      default:
+        return content;
+    }
+  };
+}
+
+export function localizeConfigData(config: typeof StandardWeekConfig) {
+  if (sillyLocalize) {
+    return Object.keys(config).reduce((acc, key) => {
+      // @ts-expect-error TS2540: Cannot assign to 'value' because it is a read-only property.
+      acc[key as keyof typeof config] = {
+        ...config[key as keyof typeof config],
+        label: sillyLocalize?.(config[key as keyof typeof config].label),
+      };
+      return acc;
+    }, {} as typeof config);
+  }
+  return config;
+}

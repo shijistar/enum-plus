@@ -2,9 +2,54 @@ import type { KEYS, VALUES } from './index';
 import type { EnumItemClass } from './enum-item';
 
 /**
- * 数组的类型声明
+ * EN: Enum initialization options
  *
- * 本来可以直接使用`EnumClass`, 但是TS不允许`class`中自定义索引访问器，只能使用`type`
+ * CN: 枚举初始化选项
+ */
+export type EnumInitOptions<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>
+> = {
+  /**
+   * EN: The name of the field in the enumeration item that stores the value, or the function to get the key value, default is `value`
+   *
+   * CN: 枚举项的value字段名，或者获取key值的函数，默认为 `value`
+   */
+  getValue?: keyof T | ((item: T) => V);
+  /**
+   * EN: The name of the field in the enumeration item that stores the label, or the function to get the key value, default is `label`
+   *
+   * CN: 枚举项的label字段名，或者获取key值的函数，默认为 `label`
+   */
+  getLabel?: keyof T | ((item: T) => string);
+  /**
+   * EN: The name of the field in the enumeration item that stores the key, or the function to get the key value, default is `key`
+   *
+   * CN: 枚举项的key字段名，或者获取key值的函数，默认为 `key`
+   */
+  getKey?: keyof T | ((item: T) => K);
+} & EnumItemOptions;
+
+export type EnumItemOptions = {
+  /**
+   * EN: Localization function, used to convert the text of the enumeration item to localized text
+   *
+   * CN: 本地化函数，用于把枚举项文本转换为本地化文本
+   *
+   * @param content Original text | 原始文本
+   * @returns Localized text | 本地化文本
+   */
+  localize?: <T extends string>(content: T | undefined) => T | string | undefined;
+};
+/**
+ * EN: Enum collection interface
+ *
+ * EN: Should directly use `EnumClass`, but TS does not allow custom index accessors in `class`, so you can only use `type`
+ *
+ * CN: 数组的类型声明
+ *
+ * CN: 本来可以直接使用`EnumClass`, 但是TS不允许`class`中自定义索引访问器，只能使用`type`
  */
 export type IEnum<
   T extends EnumInit<K, V>,
@@ -20,9 +65,13 @@ export type IEnum<
       }
     : {
         /**
-         * 所有枚举项的数组，可以直接作为AntDesign组件的数据源
+         * EN: All enumeration items in the array, can be used directly as the data source of the AntDesign component
          *
-         * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
+         * EN: Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any modification methods
+         *
+         * CN: 所有枚举项的数组，可以直接作为AntDesign组件的数据源
+         *
+         * CN: 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
          */
         values: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
       }) &
@@ -33,18 +82,24 @@ export type IEnum<
       }
     : {
         /**
-         * 获取枚举项的key列表
+         * EN: Get the key list of the enumeration item
          *
-         * 常在typescript作为类型声明使用，例如： `type Props = { week: typeof Week['keys'] }`
+         * EN: Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any modification methods
+         *
+         * CN: 获取枚举项的key列表
+         *
+         * CN: 常在typescript作为类型声明使用，例如： `type Props = { week: typeof Week['keys'] }`
          */
         keys: K[];
       });
 /**
- * 枚举项集合接口，不包含从数组集成的成员
+ * EN: Enum item collection interface, excluding members inherited from the array
+ *
+ * CN: 枚举项集合接口，不包含从数组集成的成员
  *
  * @export
  * @interface IEnumValues
- * @template T 枚举集合初始化数据的类型
+ * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
  */
 export interface IEnumValues<
   T extends EnumInit<K, V>,
@@ -52,68 +107,74 @@ export interface IEnumValues<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>
 > {
   /**
-   * 获取某个枚举项的label显示名称
-   * @param value 枚举项的value或key
-   * @returns {string | undefined} 枚举项的label显示名称
+   * EN: Get the enumeration item by key or value
+   *
+   * CN: 获取某个枚举项的label显示名称
+   *
+   * @param value Enum item value or key | 枚举项的value或key
+   * @returns {string | undefined} Display name of the enumeration item | 枚举项的label显示名称
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   label(keyOrValue?: string | number): string | undefined;
 
   /**
-   * 获取某个枚举项对应的key
+   * EN: Get the key corresponding to a certain enumeration item
+   *
+   * CN: 获取某个枚举项对应的key
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   key(value?: string | number): K | undefined;
 
   /**
-   * 判断某个枚举项是否存在
-   * @param keyOrValue 枚举项的key或value
+   * EN: Get the value corresponding to a certain enumeration item
+   *
+   * CN: 判断某个枚举项是否存在
+   *
+   * @param keyOrValue Enum item key or value | 枚举项的key或value
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   has(keyOrValue?: string | number): boolean;
 
   /**
-   * 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   * EN: Generate an array of data sources that meet the AntDesign specification, which can be directly passed to the `options` of components such as Select, Radio, and Checkbox
+   *
+   * EN: The data format is: `[{ value: 0, label: 'Sunday' }, { value: 1, label: 'Monday' }]`
+   *
+   * CN: 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   *
+   * CN: 数据格式为：`[{ value: 0, label: 'Sunday' }, { value: 1, label: 'Monday' }]`
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   options(): EnumOption<K, V>[];
   /**
-   * 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   * EN: Generate an array of data sources that meet the AntDesign specification, which can be directly passed to the `options` of components such as Select, Radio, and Checkbox
    *
-   * @param config 自定义选项
+   * CN: 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   *
+   * @param config Custom options | 自定义选项
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  options<B extends boolean>(
-    config: OptionsConfig & BooleanFirstOptionConfig<B>
-  ): EnumOption<K | '', V | ''>[];
+  options(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumOption<K | '', V | ''>[];
   /**
-   * 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   * EN: Generate an array of data sources that meet the AntDesign specification, which can be directly passed to the `options` of components such as Select, Radio, and Checkbox
    *
-   * @param config 自定义选项
+   * CN: 生成符合AntDesign规范的下拉数据源数组，可以直接传给Select、Radio、Checkbox等组件的`options`
+   *
+   * @param config Custom options | 自定义选项
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  options<FK = never, FV = never>(
+  options<FK, FV>(
     config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
-    // todo: (FK extends never ? FV : FK) 这里FV不起作用。
-    /*
-      测试用例：
-      directoryTypes.options({
-        firstOption: { value: 1, label: '目录类型' },
-      } as const)
-     */
   ): EnumOption<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
 
   /**
-   * 生成一个符合AntDesignPro规范的枚举集合对象。
+   * EN: Generate an object that meets the AntDesignPro specification for the enumeration set
    *
-   * 数据结构为：
+   * EN: The data structure is: `{ 0: { text: "Sunday" }, 1: { text: "Monday" } }`
    *
-   * @example
-   * // 对象的`key`为枚举项的值，`value`为枚举项的label名称
-   * {
-   *   0: { text: "星期日" },
-   *   1: { text: "星期一" },
-   * };
+   * CN: 生成一个符合AntDesignPro规范的枚举集合对象。
+   *
+   * CN: 数据结构为：`{ 0: { text: "Sunday" }, 1: { text: "Monday" } }`
    *
    * @see https://procomponents.ant.design/components/schema#valueenum-1
    * @see https://procomponents.ant.design/components/field-set#proformselect
@@ -122,15 +183,13 @@ export interface IEnumValues<
   valuesEnum(): Record<V, { text: string }>;
 
   /**
-   * 生成一个filters数组，可以直接传递给AntDesign Table组件Column的filters属性，作为列的筛选项
+   * EN: Generate a data source that meets the specification of the column filter function of the AntDesign Table component
    *
-   * 数据结构为：
+   * EN: The data structure is: `[{ text: "Sunday", value: 0 }, { text: "Monday", value: 1 }]`
    *
-   * @example
-   * [
-   *  { value: 0, text: "星期日" },
-   *  { value: 1, text: "星期一" },
-   * ]
+   * CN: 为AntDesign Table组件的列筛选功能生成符合规范的数据源
+   *
+   * CN: 数据结构为：`[{ text: "Sunday", value: 0 }, { text: "Monday", value: 1 }]`
    *
    * @see https://ant.design/components/table-cn#components-table-demo-head
    * @see https://ant.design/components/table-cn#column
@@ -139,15 +198,32 @@ export interface IEnumValues<
   filters(): ColumnFilterItem<V>[];
 
   /**
-   * 获取枚举集合的初始化对象
-   * @return {T} 初始化对象集合
+   * EN: Generate a data source that meets the specification of the AntDesign Menu, Dropdown and other components
+   *
+   * EN: The data structure is: `[{ key: 0, label: "Sunday" }, { key: 1, label: "Monday" }]`
+   *
+   * CN: 为 AntDesign Menu、Dropdown 等组件生成符合规范的数据源
+   *
+   * CN: 数据结构为：`[{ key: 0, label: "Sunday" }, { key: 1, label: "Monday" }]`
+   */
+  menus(): MenuItemOption<V>[];
+
+  /**
+   * EN: Get the enumeration item by key or value
+   *
+   * CN: 获取枚举集合的初始化对象
+   *
+   * @return {T} Enum collection initialization object | 初始化对象集合
    * @memberof IEnumValues
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   raw(): T;
   /**
-   * 获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
-   * @param keyOrValue 枚举key或value
+   * EN: Get the original initialization object of a certain enumeration item. If custom fields are added to the enumeration item, you can use this method to get them.
+   *
+   * CN: 获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
+   *
+   * @param keyOrValue Enum key or value | 枚举key或value
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   raw(keyOrValue: V | K): T[K];
@@ -155,43 +231,51 @@ export interface IEnumValues<
   raw(value: unknown): T[K] | undefined;
 
   /**
-   * 所有枚举值的数据类型
+   * EN: The data type of all enumeration values
    *
-   * 📣 注意：仅可作为类型声明使用，不可在运行时调用
+   * EN: 📣 Note: Can only be used as a type declaration, cannot be called at runtime
+   *
+   * CN: 所有枚举值的数据类型
+   *
+   * CN: 📣 注意：仅可作为类型声明使用，不可在运行时调用
    *
    * @example
    *
-   * // 声明变量的类型
+   * // Declare the type of the variable | 声明变量的类型
    * const week: typeof Week.valueType = Week.Monday; // 0
    *
-   * // 声明类型字段
+   * // Declare type field | 声明类型字段
    * type Props = {
    *   week: typeof Week.valueType // 0 | 1
    * };
-   * // 使用valueType类型可以更准确的限定取值范围，比使用number、string这种宽泛的数据类型更好
    */
   valueType: V;
 
   /**
-   * 所有枚举key的数据类型
+   * EN: The data type of all enumeration keys
    *
-   * 📣 注意：仅可作为类型声明使用，不可在运行时调用
+   * EN: 📣 Note: Can only be used as a type declaration, cannot be called at runtime
+   *
+   * CN: 所有枚举key的数据类型
+   *
+   * CN: 📣 注意：仅可作为类型声明使用，不可在运行时调用
    *
    * @example
    *
-   * // 声明变量的类型
+   * // Declare the type of the variable | 声明变量的类型
    * const weekName: typeof Week.keyType = "Sunday"; // "Sunday" | "Monday"
    *
-   * // 声明类型字段
+   * // Declare type field | 声明类型字段
    * type Props = {
    *   weekName: typeof Week.keyType // "Sunday" | "Monday"
    * };
-   * // 使用keyType类型可以更准确的限定取值范围，比使用string这种宽泛的数据类型更好
    */
   keyType: K;
 
   /**
-   * 枚举项原始初始化对象的类型，如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
+   * EN: The type of the original initialization object of the enumeration item. If custom fields are added to the enumeration item, you can use this method to get them.
+   *
+   * CN: 枚举项原始初始化对象的类型，如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
    */
   rawType: T[K];
 }
@@ -237,54 +321,42 @@ export type LabelOnlyEnumItemInit = {
 };
 export type CompactEnumItemInit = Record<string, never>; // 等价于{}
 
-/**
- * 由枚举项生成的作为Select组件数据源的数据结构
- */
+/** 由枚举项生成的作为Select组件数据源的数据结构 */
 export type EnumOption<K, V> = {
-  /**
-   * 选项的值
-   */
+  /** 选项的值 */
   value: V;
-  /**
-   * 选项的显示文本
-   */
+  /**  选项的显示文本 */
   label: string;
-  /**
-   * 选项的key，默认使用`value`
-   */
+  /** 选项的key，默认使用`value` */
   key: K;
 };
 
-/**
- * Table列筛选项的数据结构
- */
+/** Table列筛选项的数据结构 */
 export type ColumnFilterItem<V> = {
-  /**
-   * 显示文本
-   */
+  /** 显示文本 */
   text: string;
-  /**
-   * 值
-   */
+  /** 值 */
   value: V;
 };
 
-/**
- * 枚举值的类型，支持number、string、symbol
- */
+/** 用于生成菜单的数据结构 */
+export type MenuItemOption<V> = {
+  /** 枚举值 */
+  key: V;
+  /** 显示文本 */
+  label: string;
+};
+
+/** 枚举值的类型，支持number、string、symbol */
 export type EnumValue = keyof any;
 
-/**
- * 获取枚举初始化对象中key的类型
- */
+/** 获取枚举初始化对象中key的类型 */
 export type EnumKey<T> = keyof T;
 
-/**
- * options方法的更多选项
- */
+/** options方法的更多选项 */
 export type OptionsConfig = object;
 
-export type BooleanFirstOptionConfig<B extends boolean> = {
+export type BooleanFirstOptionConfig<V> = {
   /**
    * 在头部添加一个默认选项。
    *
@@ -293,29 +365,31 @@ export type BooleanFirstOptionConfig<B extends boolean> = {
    *
    * @default false
    */
-  firstOption?: B;
+  firstOption: boolean;
+  /** 默认选项的值，默认为`''` */
+  firstOptionValue?: V;
+  /** 默认选项的显示文本，默认为`'All'`。如果设置了本地化方法，则会自动调用本地化方法 */
+  firstOptionLabel?: string;
 };
 
 export type ObjectFirstOptionConfig<K, V> = {
-  /**
-   * 首行选项的配置
-   */
+  /** 首行选项的配置 */
   firstOption?: EnumOptionConfig<K, V>;
+  /** 默认选项的值，默认为`''` */
+  firstOptionValue?: never;
+  /** 默认选项的显示文本，默认为`'All'`。如果设置了本地化方法，则会自动调用本地化方法 */
+  firstOptionLabel?: never;
 };
 
 export type EnumOptionConfig<K, V> = Omit<EnumOption<K, V>, 'key'> &
   Partial<Pick<EnumOption<K, V>, 'key'>>;
 
-/**
- * 从枚举集合或枚举项的初始化对象推断value类型
- */
+/** 从枚举集合或枚举项的初始化对象推断value类型 */
 // export type ValueType<T> = ValueTypeFromSingleInit<T> extends never
 //   ? ValueTypeFromEnumInit<T>
 //   : ValueTypeFromSingleInit<T>;
 
-/**
- * 从枚举项的初始化对象推断value类型
- */
+/** 从枚举项的初始化对象推断value类型 */
 export type ValueTypeFromSingleInit<T, FB = string> = T extends EnumValue // literal类型
   ? T
   : T extends StandardEnumItemInit<infer V> // {value, label}类型
@@ -330,9 +404,7 @@ export type ValueTypeFromSingleInit<T, FB = string> = T extends EnumValue // lit
   ? FB
   : never;
 
-/**
- * 从枚举集合初始化对象推断value类型
- */
+/** 从枚举集合初始化对象推断value类型 */
 export type ValueTypeFromEnumInit<
   T,
   K extends EnumKey<T> = EnumKey<T>
@@ -351,3 +423,4 @@ export type ValueTypeFromEnumInit<
   : T extends OmitEnumInit<K> // 格式：{foo: undefined, bar: undefined}
   ? K
   : K; // 未知格式
+// eslint-disable-next-line @typescript-eslint/ban-types

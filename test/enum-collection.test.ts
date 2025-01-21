@@ -1,8 +1,8 @@
 import { addEnumValuesTestSuite } from './enum-values.test';
 import { Enum, KEYS, VALUES } from '../src';
-import { StandardWeekConfig } from './data/week-config';
+import { locales, sillyLocalize, StandardWeekConfig } from './data/week-config';
 import { toPlainEnums } from './utils';
-import { StandardWeekData } from './data/week-data';
+import { getStandardWeekData } from './data/week-data';
 import { EnumValuesArray } from '../src/enum-values';
 
 describe('the EnumCollectionClass api', () => {
@@ -16,7 +16,19 @@ describe('the EnumCollectionClass api', () => {
   test('[values] should be able to return an array of enum items', () => {
     const week = Enum(StandardWeekConfig);
     expect(Array.isArray(week.values)).toBeTruthy();
-    expect(toPlainEnums(week.values)).toEqual(StandardWeekData);
+    expect(toPlainEnums(week.values)).toEqual(getStandardWeekData(locales));
+  });
+
+  test('api methods should be same as EnumValuesArray', () => {
+    const week = Enum(StandardWeekConfig);
+    expect(week.label(1)).toBe(week.values.label(1));
+    expect(week.key(1)).toBe(week.values.key(1));
+    expect(week.has(1)).toBe(week.values.has(1));
+    expect(week.raw()).toBe(week.values.raw());
+    expect(week.options()).toEqual(week.values.options());
+    expect(week.menus()).toEqual(week.values.menus());
+    expect(week.filters()).toEqual(week.values.filters());
+    expect(week.valuesEnum()).toEqual(week.values.valuesEnum());
   });
 
   test('[keys,values] should be able to auto renaming to a non-conflicting name', () => {
@@ -27,6 +39,7 @@ describe('the EnumCollectionClass api', () => {
       options: { value: 4, label: 'options' },
       valuesEnum: { value: 5, label: 'valuesEnum' },
       filters: { value: 6, label: 'filters' },
+      menus: { value: 7, label: 'menus' },
       raw: { value: 99, label: 'raw' },
       keys: { value: 101, label: 'foo' },
     };
@@ -39,9 +52,11 @@ describe('the EnumCollectionClass api', () => {
     expect(strangeEnum.values.has(3)).toBe(true);
     expect(strangeEnum.options).toBe(4);
     expect(strangeEnum.values.options()).toHaveLength(Object.keys(strangeEnumConfig).length);
-    expect(strangeEnum.valuesEnum).toBe(5);
     expect(strangeEnum.filters).toBe(6);
     expect(strangeEnum.values.filters()).toHaveLength(Object.keys(strangeEnumConfig).length);
+    expect(strangeEnum.menus).toBe(7);
+    expect(strangeEnum.values.menus()).toHaveLength(Object.keys(strangeEnumConfig).length);
+    expect(strangeEnum.valuesEnum).toBe(5);
     expect(Object.keys(strangeEnum.values.valuesEnum())).toEqual(
       Object.keys(strangeEnumConfig).map((key) =>
         strangeEnumConfig[key as keyof typeof strangeEnumConfig].value.toString()
@@ -77,11 +92,11 @@ describe('the EnumCollectionClass api', () => {
     const week = Enum(StandardWeekConfig);
     expect((0 as unknown) instanceof (week as any)).toBeTruthy();
     expect(('Sunday' as unknown) instanceof (week as any)).toBeTruthy();
-    expect(('星期日' as unknown) instanceof (week as any)).toBeTruthy();
+    expect((sillyLocalize?.('weekday.sunday') as unknown) instanceof (week as any)).toBeTruthy();
     expect((6 as unknown) instanceof (week as any)).toBeTruthy();
     expect(('Saturday' as unknown) instanceof (week as any)).toBeTruthy();
-    expect(('星期六' as unknown) instanceof (week as any)).toBeTruthy();
+    expect((sillyLocalize?.('weekday.saturday') as unknown) instanceof (week as any)).toBeTruthy();
     expect((7 as unknown) instanceof (week as any)).toBeFalsy();
-    expect(('星期天' as unknown) instanceof (week as any)).toBeFalsy();
+    expect(('[Not Exists]' as unknown) instanceof (week as any)).toBeFalsy();
   });
 });

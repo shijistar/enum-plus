@@ -1,14 +1,20 @@
-export const StandardWeekData = [
-  { key: 'Sunday', value: 0, label: '星期日' },
-  { key: 'Monday', value: 1, label: '星期一' },
-  { key: 'Tuesday', value: 2, label: '星期二' },
-  { key: 'Wednesday', value: 3, label: '星期三' },
-  { key: 'Thursday', value: 4, label: '星期四' },
-  { key: 'Friday', value: 5, label: '星期五' },
-  { key: 'Saturday', value: 6, label: '星期六' },
+import { type localeCN, type localeEN, type noLocale } from './week-config';
+
+/** Standard week data, with key, value and label */
+export const getStandardWeekData = (
+  locales: typeof localeEN | typeof localeCN | typeof noLocale
+) => [
+  { key: 'Sunday', value: 0, label: locales.Sunday },
+  { key: 'Monday', value: 1, label: locales.Monday },
+  { key: 'Tuesday', value: 2, label: locales.Tuesday },
+  { key: 'Wednesday', value: 3, label: locales.Wednesday },
+  { key: 'Thursday', value: 4, label: locales.Thursday },
+  { key: 'Friday', value: 5, label: locales.Friday },
+  { key: 'Saturday', value: 6, label: locales.Saturday },
 ];
 
-export const WeekDataHasKeyHasValueNoLabel = [
+/** Incomplete week data, with key and value, no label (fallback to key) */
+export const getWeekDataHasKeyHasValueNoLabel = () => [
   { key: 'Sunday', value: 0, label: 'Sunday' },
   { key: 'Monday', value: 1, label: 'Monday' },
   { key: 'Tuesday', value: 2, label: 'Tuesday' },
@@ -18,7 +24,8 @@ export const WeekDataHasKeyHasValueNoLabel = [
   { key: 'Saturday', value: 6, label: 'Saturday' },
 ];
 
-export const WeekDataHasKeyNoValueNoLabel = [
+/** Incomplete week data, with key only, no value (fallback to key) and label (fallback to key) */
+export const getWeekDataHasKeyNoValueNoLabel = () => [
   { key: 'Sunday', value: 'Sunday', label: 'Sunday' },
   { key: 'Monday', value: 'Monday', label: 'Monday' },
   { key: 'Tuesday', value: 'Tuesday', label: 'Tuesday' },
@@ -28,27 +35,34 @@ export const WeekDataHasKeyNoValueNoLabel = [
   { key: 'Saturday', value: 'Saturday', label: 'Saturday' },
 ];
 
-export const WeekDataHasKeyNoValueHasLabel = [
-  { key: 'Sunday', value: 'Sunday', label: '星期日' },
-  { key: 'Monday', value: 'Monday', label: '星期一' },
-  { key: 'Tuesday', value: 'Tuesday', label: '星期二' },
-  { key: 'Wednesday', value: 'Wednesday', label: '星期三' },
-  { key: 'Thursday', value: 'Thursday', label: '星期四' },
-  { key: 'Friday', value: 'Friday', label: '星期五' },
-  { key: 'Saturday', value: 'Saturday', label: '星期六' },
+/** Incomplete week data, with key and label, no value (fallback to key) */
+export const getWeekDataHasKeyNoValueHasLabel = (
+  locales: typeof localeEN | typeof localeCN | typeof noLocale
+) => [
+  { key: 'Sunday', value: 'Sunday', label: locales.Sunday },
+  { key: 'Monday', value: 'Monday', label: locales.Monday },
+  { key: 'Tuesday', value: 'Tuesday', label: locales.Tuesday },
+  { key: 'Wednesday', value: 'Wednesday', label: locales.Wednesday },
+  { key: 'Thursday', value: 'Thursday', label: locales.Thursday },
+  { key: 'Friday', value: 'Friday', label: locales.Friday },
+  { key: 'Saturday', value: 'Saturday', label: locales.Saturday },
 ];
 
-export const WeekDataHasValueHasLabelNoKey = [
-  { key: '0', value: 0, label: '星期日' },
-  { key: '1', value: 1, label: '星期一' },
-  { key: '2', value: 2, label: '星期二' },
-  { key: '3', value: 3, label: '星期三' },
-  { key: '4', value: 4, label: '星期四' },
-  { key: '5', value: 5, label: '星期五' },
-  { key: '6', value: 6, label: '星期六' },
+/** Incomplete week data, with value and label, no key (fallback to value) */
+export const getWeekDataHasValueHasLabelNoKey = (
+  locales: typeof localeEN | typeof localeCN | typeof noLocale
+) => [
+  { key: '0', value: 0, label: locales.Sunday },
+  { key: '1', value: 1, label: locales.Monday },
+  { key: '2', value: 2, label: locales.Tuesday },
+  { key: '3', value: 3, label: locales.Wednesday },
+  { key: '4', value: 4, label: locales.Thursday },
+  { key: '5', value: 5, label: locales.Friday },
+  { key: '6', value: 6, label: locales.Saturday },
 ];
 
-export const WeekDataHasValueNoKeyNoLabel = [
+/** Incomplete week data, with value only, no key (fallback to value) and label (fallback to value) */
+export const getWeekDataHasValueNoKeyNoLabel = () => [
   { key: '0', value: 0, label: '0' },
   { key: '1', value: 1, label: '1' },
   { key: '2', value: 2, label: '2' },
