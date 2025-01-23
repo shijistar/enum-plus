@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>enum-plus</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Microsoft YaHei', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <!-- markdownlint-disable MD009 -->
+<h1 id="enum-plus">enum-plus</h1>
+<p><a href="./README.html">English</a> | <a href="./README.zh-CN.html">中文</a></p>
+<blockquote>
+<p>与原生<code>enum</code>一样容易，但更强大得多</p>
+</blockquote>
+<p><a href="https://www.npmjs.com/package/enum-plus"><img src="https://img.shields.io/npm/v/enum-plus.svg" alt="npm version"></a>
+<a href="https://bundlephobia.com/result?p=enum-plus"><img src="https://img.shields.io/bundlephobia/minzip/enum-plus" alt="npm bundle size"></a>
+<a href="https://www.npmjs.com/package/enum-plus"><img src="https://img.shields.io/npm/dm/enum-plus.svg" alt="npm downloads"></a>
+<img src="https://img.shields.io/github/license/shijistar/enum-plus?label=License&amp;color=%23F68F1E" alt="GitHub License"></p>
+<h2 id="简介">简介</h2>
+<p>一个原生<code>enum</code>的完美替代品，完全兼容原生<code>enum</code>的基本用法，还支持为枚举项扩展显示文本，使枚举不再只有字段名和值，还增加了可绑定到 UI 展示的枚举名称。更重要的是，还提供了一些非常实用的扩展方法，可以轻松遍历枚举项数组，甚至可以将枚举直接绑定到下拉框、复选框等 UI 组件。将枚举转换成一个下拉框，只需要一行代码。</p>
+<p>枚举项的显示文本可以通过本地化方法来实现，你可以使用任意流行的国际化类库，比如<code>i18next</code>，甚至可以使用自定义组件。</p>
+<p>还有哪些令人兴奋的特性呢？请继续探索下面的技术文档吧！</p>
+<h2 id="特性">特性</h2>
+<ul>
+<li>兼容原生 <code>enum</code> 的用法，可以作为 <code>enum</code> 的完美替代品</li>
+<li>支持数字、字符串多种数据类型</li>
+<li>为每个枚举项内置了显示文本</li>
+<li>一键获取枚举值的显示文本，也可以直接绑定到下拉框等组件</li>
+<li>显示文本支持本地化，可以使用任意国际化类库</li>
+<li>枚举项支持扩展任意多个自定义字段</li>
+<li>支持将枚举绑定到 <a href="https://ant.design/components/overview-cn">AntDesign</a>、<a href="https://element-plus.org/zh-CN/component/select.html">ElementPlus</a>、<a href="https://mui.com/material-ui">Material-UI</a> 等组件库，只要一行代码</li>
+<li>零依赖，纯原生 JavaScript，可以应用在任意前端框架中</li>
+<li>100% TypeScript 实现，良好支持类型推断</li>
+<li>轻量(gzip 压缩后仅 2KB+)</li>
+</ul>
+<h2 id="安装">安装</h2>
+<p>使用 npm 安装:</p>
+<pre><code class="language-bash">npm install enum-plus
+</code></pre>
+<p>使用 pnpm 安装:</p>
+<pre><code class="language-bash">pnpm add enum-plus
+</code></pre>
+<p>或者使用 bun 安装:</p>
+<pre><code class="language-bash">bun add enum-plus
+</code></pre>
+<p>或者使用 yarn:</p>
+<pre><code class="language-bash">yarn add enum-plus
+</code></pre>
+<h2 id="枚举定义">枚举定义</h2>
+<p>生成一个枚举集合，枚举值支持 <code>number</code> 和 <code>string</code> 两种类型。</p>
+<h4 id="示例-1基础用法与原生枚举用法基本一致">示例 1：基础用法，与原生枚举用法基本一致</h4>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Enum</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;enum-plus&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-title class_">Sunday</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-title class_">Monday</span>: <span class="hljs-number">1</span>,
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">Monday</span>; <span class="hljs-comment">// 1</span>
+</code></pre>
+<h4 id="示例-2值类型使用-string">示例 2：值类型使用 string</h4>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Enum</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;enum-plus&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-title class_">Sunday</span>: <span class="hljs-string">&#x27;Sun&#x27;</span>,
+  <span class="hljs-title class_">Monday</span>: <span class="hljs-string">&#x27;Mon&#x27;</span>,
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">Monday</span>; <span class="hljs-comment">// &#x27;Mon&#x27;</span>
+</code></pre>
+<h4 id="-示例-3标准写法推荐扩展-label-枚举项文本">👍 示例 3（标准写法，推荐）：扩展 label 枚举项文本</h4>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Enum</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;enum-plus&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-title class_">Sunday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期日&#x27;</span> },
+  <span class="hljs-title class_">Monday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期一&#x27;</span> },
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">Monday</span>; <span class="hljs-comment">// 1</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">label</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// 星期一</span>
+</code></pre>
+<h4 id="-示例-4省略-value-字段自动降级使用-key-字段">👍 示例 4：省略 value 字段，自动降级使用 key 字段</h4>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Enum</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;enum-plus&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-title class_">Sunday</span>: { <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期日&#x27;</span> }, <span class="hljs-comment">// 等价于 { value: &quot;Sunday&quot;, label: &#x27;星期日&#x27; }</span>
+  <span class="hljs-title class_">Monday</span>: { <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期一&#x27;</span> }, <span class="hljs-comment">// 等价于 { value: &quot;Monday&quot;, label: &#x27;星期一&#x27; }</span>
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">Monday</span>; <span class="hljs-comment">// &#x27;Monday&#x27;</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">label</span>(<span class="hljs-string">&#x27;Monday&#x27;</span>); <span class="hljs-comment">// 星期一</span>
+</code></pre>
+<h2 id="api">API</h2>
+<ul>
+<li>
+<p><strong>获取枚举值</strong></p>
+<p>可以通过枚举项的 Key 直接获取枚举值，与<code>enum</code>类型用法一致，例如，<code>Week.Monday === 1</code>，<code>Week.Sunday === 0</code></p>
+</li>
+<li>
+<p><strong>values</strong> : <code>{value, label, key, raw}[]</code></p>
+<p>获取枚举项列表</p>
+</li>
+<li>
+<p><strong>keys</strong> : <code>string[]</code></p>
+<p>获取枚举项的 key 列表</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>label</strong> : <code>label(keyOrValue?: string | number): string | undefined</code></p>
+<p>根据某个枚举值或 Key，获取该枚举项的显示文本。如果设置了本地化方法，则会返回本地化后的文本。</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>key</strong> : <code>key(value?: string | number): K | undefined</code></p>
+<p>根据枚举值获取该枚举项的 Key</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>has</strong> : <code>has(keyOrValue?: string | number): boolean</code></p>
+<p>判断某个枚举项（值或 Key）是否存在</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>options</strong> : <code>options(config?: OptionsConfig): {value, label}[]</code></p>
+<p>生成符合 <a href="https://github.com/ant-design/ant-design">AntDesign</a> 规范的下拉数据源数组，可以直接传给 Select、Radio、Checkbox 等组件</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>valuesEnum</strong> : <code>valuesEnum(): Record&lt;V, { text: string }&gt;</code></p>
+<p>生成一个符合 <a href="https://github.com/ant-design/pro-components">AntDesignPro</a> 规范的枚举集合对象，可以传递给 ProFormField、ProTable 组件</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>filters</strong> : <code>filters(): { text, value }[]</code></p>
+<p>生成一个 filters 数组，可以直接传递给 <a href="https://github.com/ant-design/ant-design">AntDesign</a> Table 组件 Column 的 filters 属性，作为列的筛选项</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>raw</strong> : <code>raw(): Record&lt;K, T[K]&gt;</code></p>
+<p>获取枚举集合的初始化对象，即 Enum 方法的第一个参数</p>
+</li>
+<li>
+<p><sup><strong><em>[Func]</em></strong></sup>   <strong>raw</strong> : <code>raw(keyOrValue: V | K): T[K]</code></p>
+<p>获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。</p>
+</li>
+<li>
+<p><sup><strong><em>[Type-ONLY]</em></strong></sup>   <strong>valueType</strong> : <code>valueType: V</code></p>
+<p>获取枚举值的数据类型，注意这是一个类型声明，不可在运行时调用</p>
+</li>
+<li>
+<p><sup><strong><em>[Type-ONLY]</em></strong></sup>   <strong>keyType</strong> : <code>keyType: K</code></p>
+<p>获取枚举项的 key 的数据类型，注意这是一个类型声明，不可在运行时调用</p>
+</li>
+<li>
+<p><sup><strong><em>[Type-ONLY]</em></strong></sup>   <strong>rawType</strong> : <code>rawType: T[K]</code></p>
+<p>获取枚举项原始初始化对象的类型，注意这是一个类型声明，不可在运行时调用</p>
+</li>
+</ul>
+<h2 id="使用方法">使用方法</h2>
+<h4 id="访问枚举项与原生枚举用法一致">访问枚举项，与原生枚举用法一致</h4>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-title class_">Sunday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期日&#x27;</span> },
+  <span class="hljs-title class_">Monday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期一&#x27;</span> },
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">Monday</span>; <span class="hljs-comment">// 1</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">Sunday</span>; <span class="hljs-comment">// 0</span>
+</code></pre>
+<h4 id="获取枚举项数组">获取枚举项数组</h4>
+<pre><code class="language-js"><span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>;
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//  { value: 0, label: &#x27;星期日&#x27;, key: &#x27;Sunday&#x27;, raw: { value: 0, label: &#x27;星期日&#x27; } },</span>
+<span class="hljs-comment">//  { value: 1, label: &#x27;星期一&#x27;, key: &#x27;Monday&#x27;, raw: { value: 1, label: &#x27;星期一&#x27; } }</span>
+<span class="hljs-comment">// ]</span>
+</code></pre>
+<h4 id="获取第一个枚举项的值">获取第一个枚举项的值</h4>
+<pre><code class="language-js"><span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>[<span class="hljs-number">0</span>].<span class="hljs-property">value</span>; <span class="hljs-comment">// 0</span>
+</code></pre>
+<h4 id="判断枚举中是否包含某个值">判断枚举中是否包含某个值</h4>
+<pre><code class="language-js"><span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-title function_">some</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item.<span class="hljs-property">value</span> === <span class="hljs-number">1</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">has</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-number">1</span> instance <span class="hljs-keyword">of</span> <span class="hljs-title class_">Week</span>; <span class="hljs-comment">// true</span>
+</code></pre>
+<h4 id="instanceof-操作符"><code>instanceof</code> 操作符</h4>
+<pre><code class="language-js"><span class="hljs-number">1</span> instance <span class="hljs-keyword">of</span> <span class="hljs-title class_">Week</span> <span class="hljs-comment">// true</span>
+<span class="hljs-string">&quot;1&quot;</span> instance <span class="hljs-keyword">of</span> <span class="hljs-title class_">Week</span> <span class="hljs-comment">// true</span>
+<span class="hljs-string">&quot;Monday&quot;</span> instance <span class="hljs-keyword">of</span> <span class="hljs-title class_">Week</span> <span class="hljs-comment">// true</span>
+</code></pre>
+<h4 id="支持遍历枚举项数组但不支持修改">支持遍历枚举项数组，但不支持修改</h4>
+<pre><code class="language-js"><span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-property">length</span>; <span class="hljs-comment">// 2</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-property">value</span>); <span class="hljs-comment">// [0, 1]，✅ 可遍历</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> {}); <span class="hljs-comment">// ✅ 可遍历</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> item <span class="hljs-keyword">of</span> <span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>) {
+  <span class="hljs-comment">// ✅ 可遍历</span>
+}
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">value</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期二&#x27;</span> }); <span class="hljs-comment">// ❌ 不可修改</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-title function_">splice</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// ❌ 不可修改</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>[<span class="hljs-number">0</span>].<span class="hljs-property">label</span> = <span class="hljs-string">&#x27;foo&#x27;</span>; <span class="hljs-comment">// ❌ 不可修改</span>
+</code></pre>
+<h4 id="获取某个值的显示文本">获取某个值的显示文本</h4>
+<pre><code class="language-js"><span class="hljs-title class_">Week</span>.<span class="hljs-title function_">label</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// 星期一，</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">label</span>(<span class="hljs-title class_">Week</span>.<span class="hljs-property">Monday</span>); <span class="hljs-comment">// 星期一</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">label</span>(<span class="hljs-string">&#x27;Monday&#x27;</span>); <span class="hljs-comment">// 星期一</span>
+</code></pre>
+<h4 id="获取某个枚举项的-key">获取某个枚举项的 key</h4>
+<pre><code class="language-js"><span class="hljs-title class_">Week</span>.<span class="hljs-title function_">key</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// &#x27;Monday&#x27;</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">key</span>(<span class="hljs-title class_">Week</span>.<span class="hljs-property">Monday</span>); <span class="hljs-comment">// &#x27;Monday&#x27;</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">key</span>(<span class="hljs-number">9</span>); <span class="hljs-comment">// undefined, 不存在</span>
+</code></pre>
+<h4 id="添加扩展字段">添加扩展字段</h4>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-title class_">Sunday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期日&#x27;</span>, <span class="hljs-attr">active</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">disabled</span>: <span class="hljs-literal">false</span> },
+  <span class="hljs-title class_">Monday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期一&#x27;</span>, <span class="hljs-attr">active</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">disabled</span>: <span class="hljs-literal">true</span> },
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">raw</span>(<span class="hljs-number">0</span>).<span class="hljs-property">active</span> <span class="hljs-comment">// true</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">raw</span>(<span class="hljs-title class_">Week</span>.<span class="hljs-property">Sunday</span>).<span class="hljs-property">active</span> <span class="hljs-comment">// true</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">raw</span>(<span class="hljs-string">&#x27;Sunday&#x27;</span>).<span class="hljs-property">active</span> <span class="hljs-comment">// true</span>
+</code></pre>
+<h4 id="针对-antdesign-组件库的优化和语法糖">针对 <a href="https://github.com/ant-design/ant-design">AntDesign</a> 组件库的优化和语法糖</h4>
+<ul>
+<li><code>values</code>直接作为<code>Select</code>、<code>Checkbox</code>等组件的数据源</li>
+</ul>
+<pre><code class="language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Select</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;antd&#x27;</span>;
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Select</span> <span class="hljs-attr">options</span>=<span class="hljs-string">{Week.values}</span> /&gt;</span></span>;
+</code></pre>
+<ul>
+<li><code>options</code>方法与<code>values</code>类似，但可选在头部增加一个默认选项</li>
+</ul>
+<pre><code class="language-jsx">&lt;<span class="hljs-title class_">Select</span> options={<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">options</span>({ <span class="hljs-attr">firstOption</span>: <span class="hljs-literal">true</span> })} /&gt;
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//  { value: &#x27;&#x27;, label: &#x27;All&#x27; },</span>
+<span class="hljs-comment">//  { value: 0, label: &#x27;Sunday&#x27; },</span>
+<span class="hljs-comment">//  { value: 1, label: &#x27;Monday&#x27; }</span>
+<span class="hljs-comment">// ]</span>
+
+<span class="hljs-comment">// 自定义头部默认选项</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Select</span> <span class="hljs-attr">options</span>=<span class="hljs-string">{Week.options({</span> <span class="hljs-attr">firstOption:</span> { <span class="hljs-attr">value:</span> <span class="hljs-attr">0</span>, <span class="hljs-attr">label:</span> &#x27;<span class="hljs-attr">Unlimited</span>&#x27; } })} /&gt;</span></span>
+</code></pre>
+<ul>
+<li><code>menus</code>方法可以为 <a href="https://github.com/ant-design/ant-design">AntDesign</a> <code>Menu</code>、<code>Dropdown</code> 等组件生成数据源，格式为：<code>{ key: number|string, label: string }[]</code></li>
+</ul>
+<pre><code class="language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Menu</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;antd&#x27;</span>;
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Menu</span> <span class="hljs-attr">items</span>=<span class="hljs-string">{Week.menus()}</span> /&gt;</span></span>;
+</code></pre>
+<ul>
+<li><code>filters</code>方法可以为 <a href="https://github.com/ant-design/ant-design">AntDesign</a> <code>Table</code> 组件的<code>列筛选</code>功能生成数据源，格式为：<code>{ text: string, value: number|string }[]</code></li>
+</ul>
+<pre><code class="language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Table</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;antd&#x27;</span>;
+<span class="hljs-keyword">const</span> columns = [
+  {
+    <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;week&#x27;</span>,
+    <span class="hljs-attr">dataIndex</span>: <span class="hljs-string">&#x27;week&#x27;</span>,
+    <span class="hljs-attr">filters</span>: <span class="hljs-title class_">Week</span>.<span class="hljs-title function_">filters</span>(),
+  },
+];
+<span class="hljs-comment">// 在表头中显示下拉筛选项</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Table</span> <span class="hljs-attr">columns</span>=<span class="hljs-string">{columns}</span> /&gt;</span></span>;
+</code></pre>
+<ul>
+<li><code>valuesEnum</code>方法可以为 <a href="https://github.com/ant-design/pro-components">AntDesignPro</a> 的<code>ProFormFields</code>、<code>ProTable</code>等组件生成数据源，这是一个类似 Map 的数据结构，格式为：<code>{ [key: number|string]: { text: string } }</code></li>
+</ul>
+<pre><code class="language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ProTable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ant-design/pro-components&#x27;</span>;
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ProFormSelect</span> <span class="hljs-attr">valueEnum</span>=<span class="hljs-string">{Week.valuesEnum()}</span> /&gt;</span></span>;
+</code></pre>
+<h4 id="两个枚举合并或者扩展某个枚举">两个枚举合并（或者扩展某个枚举）</h4>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> myWeek = <span class="hljs-title class_">Enum</span>({
+  ...<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">raw</span>(),
+  <span class="hljs-title class_">Friday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期五&#x27;</span> },
+  <span class="hljs-title class_">Saturday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">6</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;星期六&#x27;</span> },
+});
+</code></pre>
+<h4 id="使用枚举值序列来缩小数据类型-typescript-only">使用枚举值序列来缩小数据类型   <sup><em>[TypeScript ONLY]</em></sup></h4>
+<p>使用 <code>valueType</code> 类型约束，可以将字段类型从宽泛的<code>number</code>或<code>string</code>类型缩小为有限的枚举值序列，这不但能减少错误赋值的可能性，还能提高代码的可读性。</p>
+<pre><code class="language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-attr">weekValue</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">8</span>; <span class="hljs-comment">// 👎 任意数字都可以赋值给周枚举，即使错误的</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">weekName</span>: <span class="hljs-built_in">string</span> = <span class="hljs-string">&#x27;Birthday&#x27;</span>; <span class="hljs-comment">// 👎 任意字符串都可以赋值给周枚举，即使错误的</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">badWeekValue</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Week</span>.<span class="hljs-property">valueType</span> = <span class="hljs-number">8</span>; <span class="hljs-comment">// ❌ 类型错误，8 不是一个有效的周枚举值</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">badWeekName</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Week</span>.<span class="hljs-property">keyType</span> = <span class="hljs-string">&#x27;Birthday&#x27;</span>; <span class="hljs-comment">// ❌ 类型错误，&#x27;Birthday&#x27; 不是一个有效的周枚举名</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">goodWeekValue</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Week</span>.<span class="hljs-property">valueType</span> = <span class="hljs-number">1</span>; <span class="hljs-comment">// ✅ 类型正确，1 是一个有效的周枚举值</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">goodWeekName</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Week</span>.<span class="hljs-property">keyType</span> = <span class="hljs-string">&#x27;Monday&#x27;</span>; <span class="hljs-comment">// ✅ 类型正确，&#x27;Monday&#x27; 是一个有效的周枚举名</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">FooProps</span> = {
+  value?: <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Week</span>.<span class="hljs-property">valueType</span>; <span class="hljs-comment">// 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些</span>
+  names?: <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Week</span>.<span class="hljs-property">keyType</span>[]; <span class="hljs-comment">// 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些</span>
+};
+</code></pre>
+<h4 id="-命名冲突">😟 命名冲突？</h4>
+<p>这里为枚举使用添加一些边界情况，从上面的用例中可以看到，我们可以通过 <code>Week.XXX</code> 来快捷访问枚举项，但是万一枚举项的 key 与枚举方法命名冲突怎么办？</p>
+<p>我们知道枚举类型上还存在 <code>label</code>、<code>key</code>、<code>options</code> 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 <code>values</code> 下访问到它们。请参考下面的代码示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-attr">foo</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">1</span> },
+  <span class="hljs-attr">bar</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> },
+  <span class="hljs-attr">keys</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">3</span> }, <span class="hljs-comment">// 命名冲突</span>
+  <span class="hljs-attr">label</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">4</span> }, <span class="hljs-comment">// 命名冲突</span>
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">keys</span>; <span class="hljs-comment">// 3，枚举项优先级更高，会覆盖掉方法</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">label</span>; <span class="hljs-comment">// 4，枚举项优先级更高，会覆盖掉方法</span>
+<span class="hljs-comment">// 可以通过 values 访问到这些方法 🙂</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-property">keys</span> <span class="hljs-comment">// [&#x27;foo&#x27;, &#x27;bar&#x27;, &#x27;keys&#x27;, &#x27;label&#x27;]</span>
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>.<span class="hljs-title function_">label</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// &#x27;foo&#x27;</span>
+</code></pre>
+<p>更极端一些，万一<code>values</code>与枚举项命名冲突怎么办？放心，你仍然可以通过别名字段访问到<code>values</code>数组。参考下面的示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-variable constant_">VALUES</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;enum-plus&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>({
+  <span class="hljs-attr">foo</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">1</span> },
+  <span class="hljs-attr">bar</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> },
+  <span class="hljs-attr">values</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">3</span> }, <span class="hljs-comment">// 命名冲突</span>
+} <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>);
+
+<span class="hljs-title class_">Week</span>.<span class="hljs-property">values</span>; <span class="hljs-comment">// 3，枚举项优先级更高，会覆盖掉 values</span>
+<span class="hljs-title class_">Week</span>[<span class="hljs-variable constant_">VALUES</span>]; <span class="hljs-comment">// VALUES 是一个别名Symbol</span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//  { value: 1, key: &#x27;foo&#x27;, label: &#x27;foo&#x27; },</span>
+<span class="hljs-comment">//  { value: 2, key: &#x27;bar&#x27;, label: &#x27;bar&#x27; },</span>
+<span class="hljs-comment">//  { value: 3, key: &#x27;values&#x27;, label: &#x27;values&#x27; }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// 等价于原来的 Week.values 🙂</span>
+</code></pre>
+<h2 id="本地化">本地化</h2>
+<p><code>enum-plus</code> 本身不提供国际化功能，但是可以通过 <code>localize</code> 选项来实现本地化文本。你需要自己在项目中维护语言，并且在 <code>localize</code> 方法中实现文本的本地化。你也可以使用任意流行的国际化库，比如 <code>i18next</code>。</p>
+<pre><code class="language-tsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Enum</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;enum-plus&#x27;</span>;
+<span class="hljs-keyword">import</span> i18next <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;i18next&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Localize</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Localize&#x27;</span>;
+
+<span class="hljs-keyword">let</span> lang = <span class="hljs-string">&#x27;zh-CN&#x27;</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">setLang</span> = (<span class="hljs-params">l: string</span>) =&gt; {
+  lang = l;
+};
+
+<span class="hljs-comment">// ❌ 这不是一个好例子，仅为了演示基础功能，请采用后面其它的方式</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">sillyLocalize</span> = (<span class="hljs-params">content: string</span>) =&gt; {
+  <span class="hljs-keyword">if</span> (lang === <span class="hljs-string">&#x27;zh-CN&#x27;</span>) {
+    <span class="hljs-keyword">switch</span> (content) {
+      <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;week.sunday&#x27;</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;星期日&#x27;</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;week.monday&#x27;</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;星期一&#x27;</span>;
+      <span class="hljs-attr">default</span>:
+        <span class="hljs-keyword">return</span> content;
+    }
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">switch</span> (content) {
+      <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;week.sunday&#x27;</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Sunday&#x27;</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;week.monday&#x27;</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Monday&#x27;</span>;
+      <span class="hljs-attr">default</span>:
+        <span class="hljs-keyword">return</span> content;
+    }
+  }
+};
+<span class="hljs-comment">// ✅ 建议使用 i18next 或其他国际化库</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">i18nLocalize</span> = (<span class="hljs-params">content: string | <span class="hljs-literal">undefined</span></span>) =&gt; i18next.<span class="hljs-title function_">t</span>(content);
+<span class="hljs-comment">// ✅ 或者封装成一个基础组件</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">componentLocalize</span> = (<span class="hljs-params">content: string | <span class="hljs-literal">undefined</span></span>) =&gt; <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Localize</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{content}</span> /&gt;</span></span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Week</span> = <span class="hljs-title class_">Enum</span>(
+  {
+    <span class="hljs-title class_">Sunday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;week.sunday&#x27;</span> },
+    <span class="hljs-title class_">Monday</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;week.monday&#x27;</span> },
+  } <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>,
+  {
+    <span class="hljs-attr">localize</span>: sillyLocalize,
+    <span class="hljs-comment">// localize: i18nLocalize, // 👍 推荐使用i18类库</span>
+    <span class="hljs-comment">// localize: componentLocalize, // 👍 推荐使用组件形式</span>
+  }
+);
+<span class="hljs-title function_">setLang</span>(<span class="hljs-string">&#x27;zh-CN&#x27;</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">label</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// 星期一</span>
+<span class="hljs-title function_">setLang</span>(<span class="hljs-string">&#x27;en-US&#x27;</span>);
+<span class="hljs-title class_">Week</span>.<span class="hljs-title function_">label</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// Monday</span>
+</code></pre>
+<p>每个枚举类型都这样设置可能比较繁琐，你也可以通过 <code>Enum.localize</code> 方法来全局设置。如果静态设置和初始化选项两者同时存在，则枚举类型的初始化选项方式优先级更高。</p>
+<pre><code class="language-js"><span class="hljs-title class_">Enum</span>.<span class="hljs-property">localize</span> = sillyLocalize;
+</code></pre>
+
+            
+            
+        </body>
+        </html>
