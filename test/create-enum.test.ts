@@ -191,7 +191,7 @@ describe('should be able to create an enum from array', () => {
 });
 
 describe('should support auto-incremented number enums', () => {
-  test('should create valid auto-incremented enums', () => {
+  test('should be able to create auto-incremented enums', () => {
     const firstSeedEnum = Enum({
       A: 1,
       B: undefined as unknown as number,
@@ -249,7 +249,7 @@ describe('should support auto-incremented number enums', () => {
     ]);
   });
 
-  test('should be compatible with "wrong format" auto-incremented enums', () => {
+  test('should stop auto-increment starting from "non-number" enum item', () => {
     const undefinedFollowString = Enum({
       A: 'AAA',
       B: undefined as unknown as string,

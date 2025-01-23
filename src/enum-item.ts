@@ -35,7 +35,7 @@ export class EnumItemClass<
     get: (target, prop) => {
       const origin = target[prop as keyof typeof this];
       if (prop === 'label') {
-        return target.#localize(target.label);
+        return target.toString();
       } else if (typeof origin === 'function') {
         return origin.bind(target);
       }
@@ -98,15 +98,12 @@ export class EnumItemClass<
   readonly() {
     return this.#localizedProxy;
   }
-
   toString() {
     return this.#localize(this.label) ?? this.label;
   }
-
   toLocaleString() {
     return this.toString();
   }
-
   valueOf() {
     return this.value;
   }

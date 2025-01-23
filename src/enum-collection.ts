@@ -232,13 +232,12 @@ function inferFromNull<K extends EnumKey<any>, V extends EnumValue, TT extends E
     // find seed
     for (let i = index - 1; i >= 0; i--) {
       const val = typeInit[keys[i]];
+      count++;
       if (typeof val === 'number') {
         seed = val;
-        count++;
         break;
       } else {
         // only nulls
-        count++;
         continue;
       }
     }
