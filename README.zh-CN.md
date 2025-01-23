@@ -1,41 +1,73 @@
 <!-- markdownlint-disable MD009 -->
 
-# enum-plus
-
-一个 TypeScript 枚举库，完全兼容原生 `enum` 枚举对象的用法，同时扩展了一些高非常实用的方法，支持本地化方案。可以作为 `enum` 的完美替代品。
+# @tiny-codes/enum-plus
 
 [English](./README.md) | [中文](./README.zh-CN.md)
 
+> 与原生`enum`一样容易，但更强大得多
+
+[![npm version](https://img.shields.io/npm/v/@tiny-codes/enum-plus.svg)](https://www.npmjs.com/package/@tiny-codes/enum-plus)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/@tiny-codes/enum-plus)](https://bundlephobia.com/result?p=@tiny-codes/enum-plus)
+[![npm downloads](https://img.shields.io/npm/dm/@tiny-codes/enum-plus.svg)](https://www.npmjs.com/package/@tiny-codes/enum-plus)
+![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E)
+
+⬇️&nbsp;&nbsp; [简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [使用方法](#使用方法) | [本地化](#本地化) &nbsp;&nbsp;⬇️
+
+## 简介
+
+一个原生`enum`的完美替代品，完全兼容原生`enum`的基本用法，还支持为枚举项扩展显示文本，使枚举不再只有字段名和值，还增加了可绑定到 UI 展示的枚举名称。更重要的是，还提供了一些非常实用的扩展方法，可以轻松遍历枚举项数组，甚至可以将枚举直接绑定到下拉框、复选框等 UI 组件。将枚举转换成一个下拉框，只需要一行代码。
+
+枚举项的显示文本可以通过本地化方法来实现，你可以使用任意流行的国际化类库，比如`i18next`，甚至可以使用自定义组件。
+
+还有哪些令人兴奋的特性呢？请继续探索下面的技术文档吧！
+
 ## 特性
 
-- 兼容原生 `enum` 类型的用法，可以作为 `enum` 的替代品
-- 支持字符串和数字两种枚举类型
-- 扩展了一组常用的枚举项集合操作方法，如 `label`、`key`、`options`，既可以很简单获取枚举项的显示文本，也可以用于绑定下拉框等组件
-- 良好支持 TypeScript 类型推断
-- 轻量(gzip 压缩后仅 4KB)
+- 兼容原生 `enum` 的用法，可以作为 `enum` 的完美替代品
+- 支持数字、字符串多种数据类型
+- 为每个枚举项内置了显示文本
+- 一键获取枚举值的显示文本，也可以直接绑定到下拉框等组件
+- 显示文本支持本地化，可以使用任意国际化类库
+- 枚举项支持扩展任意多个自定义字段
+- 支持将枚举绑定到 [AntDesign](https://ant.design/components/overview-cn)、[ElementPlus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 等组件库，只要一行代码
+- 零依赖，纯原生 JavaScript，可以应用在任意前端框架中
+- 100% TypeScript 实现，良好支持类型推断
+- 轻量(gzip 压缩后仅 2KB+)
 
 ## 安装
 
 使用 npm 安装:
 
 ```bash
-npm install enum-plus
+npm install @tiny-codes/enum-plus
+```
+
+使用 pnpm 安装:
+
+```bash
+pnpm add @tiny-codes/enum-plus
+```
+
+或者使用 bun 安装:
+
+```bash
+bun add @tiny-codes/enum-plus
 ```
 
 或者使用 yarn:
 
 ```bash
-yarn add enum-plus
+yarn add @tiny-codes/enum-plus
 ```
 
 ## 枚举定义
 
 生成一个枚举集合，枚举值支持 `number` 和 `string` 两种类型。
 
-示例 1：基础用法，与原生枚举用法基本一致
+#### 示例 1：基础用法，与原生枚举用法基本一致
 
 ```js
-import { Enum } from 'enum-plus';
+import { Enum } from '@tiny-codes/enum-plus';
 
 const Week = Enum({
   Sunday: 0,
@@ -44,10 +76,10 @@ const Week = Enum({
 Week.Monday; // 1
 ```
 
-示例 2：值类型使用 string
+#### 示例 2：值类型使用 string
 
 ```js
-import { Enum } from 'enum-plus';
+import { Enum } from '@tiny-codes/enum-plus';
 
 const Week = Enum({
   Sunday: 'Sun',
@@ -56,23 +88,23 @@ const Week = Enum({
 Week.Monday; // 'Mon'
 ```
 
-👍 示例 3（标准写法，推荐）：扩展 label 枚举项文本
+#### 👍👍 【推荐】 示例 3（标准用法）：包含 Key、Value，以及显示文本
 
 ```js
-import { Enum } from 'enum-plus';
+import { Enum } from '@tiny-codes/enum-plus';
 
 const Week = Enum({
-  Sunday: { value: 0, label: '星期日' },
-  Monday: { value: 1, label: '星期一' },
+  Sunday: { value: 0, label: '星期日' }, // 此示例不包含本地化
+  Monday: { value: 1, label: '星期一' }, // 此示例不包含本地化
 } as const);
 Week.Monday; // 1
 Week.label(1); // 星期一
 ```
 
-👍 示例 4：省略 value 字段，自动降级使用 key 字段
+#### 👍 示例 4：如果 Key 与 Value 相同，可以采用省略写法
 
 ```js
-import { Enum } from 'enum-plus';
+import { Enum } from '@tiny-codes/enum-plus';
 
 const Week = Enum({
   Sunday: { label: '星期日' }, // 等价于 { value: "Sunday", label: '星期日' }
@@ -84,100 +116,213 @@ Week.label('Monday'); // 星期一
 
 ## API
 
-- **获取枚举值**
+### 拾取枚举值
 
-  可以通过枚举项的 Key 直接获取枚举值，与`enum`类型用法一致，例如，`Week.Monday` = 1，`Week.Sunday` = 0
+`Enum.XXX`
 
-- **values** :`MyEnum.values: {value, label, key, raw}[]`
-
-  获取枚举项列表
-
-- **keys** : `MyEnum.keys: string[]`
-
-  获取枚举项的 key 列表
-
-- **label** 方法 : `label(keyOrValue?: string | number): string | undefined`
-
-  根据某个枚举值或 Key，获取该枚举项的显示文本。如果设置了本地化方法，则会返回本地化后的文本。
-
-- **key** 方法 : `key(value?: string | number): K | undefined`
-
-  根据枚举值获取该枚举项的 Key
-
-- **has** 方法 : `has(keyOrValue?: string | number): boolean`
-
-  判断某个枚举项（值或 Key）是否存在
-
-- **options** 方法 : `options(config?: OptionsConfig): {value, label}[]`
-
-  生成符合 AntDesign 规范的下拉数据源数组，可以直接传给 Select、Radio、Checkbox 等组件
-
-- **valuesEnum** 方法 : `valuesEnum(): Record<V, { text: string }>`
-
-  生成一个符合 AntDesignPro 规范的枚举集合对象，可以传递给 ProFormField、ProTable 组件
-
-- **filters** 方法 : `filters(): { text, value }[]`
-
-  生成一个 filters 数组，可以直接传递给 AntDesign Table 组件 Column 的 filters 属性，作为列的筛选项
-
-- **raw** 方法 : `raw(): T`
-
-  获取枚举集合的初始化对象，即 Enum 方法的第一个参数
-
-- **raw** 方法 : `raw(keyOrValue: V | K): T[K]`
-
-  获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
-
-- _(type only)_ **valueType** : `valueType: V`
-
-  获取枚举值的数据类型，注意这是一个类型声明，不可在运行时调用
-
-- _(type only)_ **keyType** : `keyType: K`
-
-  获取枚举项的 key 的数据类型，注意这是一个类型声明，不可在运行时调用
-
-- _(type only)_ **rawType** : `rawType: T[K]`
-
-  获取枚举项原始初始化对象的类型，注意这是一个类型声明，不可在运行时调用
-
-## 使用方法
-
-- **访问枚举项，与原生枚举用法一致**
+像原生`enum`一样，从枚举类型中拾取一个枚举项的值
 
 ```js
 Week.Monday; // 1
 Week.Sunday; // 0
 ```
 
-- **添加扩展字段**
+---
+
+### values
+
+`{value, label, key, raw}[]`
+
+获取一个包含全部枚举项的只读数组，可以方便地遍历枚举项。由于符合 [AntDesign](https://github.com/ant-design/ant-design) 组件的数据规范，因此支持将枚举一键转换成下拉框、复选框等组件，只需要一行代码，更多详情可以参考后面的例子
+
+---
+
+### keys
+
+`string[]`
+
+获取一个包含全部枚举项`Key`的只读数组
+
+---
+
+### label
+
+<sup>**_[方法]_**</sup> `label(keyOrValue?: string | number): string | undefined`
+
+根据某个枚举值或枚举 Key，获取该枚举项的显示文本。如果设置了本地化，则会返回本地化后的文本。
+
+```js
+Week.label(1); // 星期一
+Week.label('Monday'); // 星期一
+```
+
+---
+
+### key
+
+<sup>**_[方法]_**</sup> `key(value?: string | number): string | undefined`
+
+根据枚举值获取该枚举项的 Key，如果不存在则返回`undefined`
+
+```js
+Week.key(1); // 'Monday'
+```
+
+---
+
+### has
+
+<sup>**_[方法]_**</sup> `has(keyOrValue?: string | number): boolean`
+
+判断某个枚举项（值或 Key）是否存在
+
+```js
+Week.has(1); // true
+Week.has('Sunday'); // true
+Week.has(9); // false
+Week.has('Birthday'); // false
+```
+
+---
+
+### options
+
+<sup>**_[方法]_**</sup> `options(config?: OptionsConfig): {value, label}[]`
+
+`options`与`values`相似，都是返回一个包含全部枚举项的数组。区别是，options 返回的元素只包含`label`和`value`两个字段，同时，options 方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
+
+---
+
+### valuesEnum
+
+<sup>**_[方法]_**</sup> `valuesEnum(): Record<V, { text: string }>`
+
+生成一个符合 [AntDesignPro](https://procomponents.ant.design/components/schema#valueenum) 规范的枚举集合对象，可以传递给 `ProFormField`、`ProTable` 组件。
+
+数据格式为：
+
+```js
+{
+  0: { text: '星期日' },
+  1: { text: '星期一' },
+}
+```
+
+---
+
+### filters
+
+<sup>**_[方法]_**</sup> `filters(): { text, value }[]`
+
+生成一个 filters 数组，可以直接传递给 [AntDesign](https://ant.design/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
+
+数据格式为：
+
+```js
+[
+  { text: '星期日', value: 0 },
+  { text: '星期一', value: 1 },
+];
+```
+
+---
+
+### raw
+
+<sup>**_[方法重载^1]_**</sup> `raw(): Record<K, T[K]>`
+<br/>
+<sup>**_[方法重载^2]_**</sup> `raw(keyOrValue: V | K): T[K]`
+
+第一个无参数的重载，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
+
+第二个重载方法用来处理单个枚举项，根据枚举值或枚举 Key 获取该枚举项的原始初始化对象，也就是说第二个方法是第一个方法返回值的一部分。另外，如果在枚举项上添加了额外的扩展字段的话，也可以用这种方式获取到
 
 ```js
 const Week = Enum({
-  Sunday: { value: 0, label: '星期日', active: true, disabled: false },
-  Monday: { value: 1, label: '星期一', active: false, disabled: true },
+  Sunday: { value: 0, label: '星期日' },
+  Monday: { value: 1, label: '星期一' },
 } as const);
-Week.raw(0).active // true
-Week.raw(Week.Sunday).active // true
-Week.raw('Sunday').active // true
+
+Week.raw(); // { Sunday: { value: 0, label: '星期日' }, Monday: { value: 1, label: '星期一' } }
+Week.raw(0); // { value: 0, label: '星期日' }
+Week.raw('Monday'); // { value: 1, label: '星期一' }
 ```
 
-- **获取枚举项数组**
+---
+
+### valueType <sup>**_[Type-ONLY]_**</sup>
+
+`value1 | value2 | ...`
+
+在 TypeScript 中，获取一个包含全部枚举值的联合类型，用于缩小变量或组件属性的数据类型，避免使用`number`、`string`这种过于宽泛的类型，提高代码的可读性和类型安全性
+
+```typescript
+const weekValue: typeof Week.valueType = 1;
+const weeks: typeof Week.valueType[] = [0, 1];
+type WeekValues = typeof Week.valueType; // 0 | 1
+```
+
+> 注意，这只是一个 TypeScript 类型，只能用来约束类型，不可在运行时调用，运行时调用会抛出异常
+
+---
+
+### keyType <sup>**_[Type-ONLY]_**</sup>
+
+`key1 | key2 | ...`
+
+与`valueType`类似，获取一个包含全部枚举 Key 的联合类型
+
+```typescript
+const weekKey: typeof Week.keyType = 'Monday';
+const weekKeys: typeof Week.keyType[] = ['Sunday', 'Monday'];
+type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
+```
+
+> 注意，这只是一个 TypeScript 类型，只能用来约束类型，不可在运行时调用，运行时调用会抛出异常
+
+---
+
+### rawType <sup>**_[Type-ONLY]_**</sup>
+
+`{ value: V, label: string, [...] }`
+
+与无参数的`raw`方法类似，只不过`raw`方法支持在运行时调用，而`rawType`只能用来约束类型
+
+> 注意，这只是一个 TypeScript 类型，只能用来约束类型，不可在运行时调用，运行时调用会抛出异常
+
+---
+
+## 使用方法
+
+#### 访问枚举项，与原生枚举用法一致
+
+```js
+const Week = Enum({
+  Sunday: { value: 0, label: '星期日' },
+  Monday: { value: 1, label: '星期一' },
+} as const);
+
+Week.Monday; // 1
+Week.Sunday; // 0
+```
+
+#### 获取枚举项数组
 
 ```js
 Week.values;
 // [
 //  { value: 0, label: '星期日', key: 'Sunday', raw: { value: 0, label: '星期日' } },
-//  { value: 1, label: '星期一', key: 'Monday' }
+//  { value: 1, label: '星期一', key: 'Monday', raw: { value: 1, label: '星期一' } }
 // ]
 ```
 
-- 获取第一个枚举项的值
+#### 获取第一个枚举项的值
 
 ```js
 Week.values[0].value; // 0
 ```
 
-- 判断枚举中是否包含某个值
+#### 判断枚举中是否包含某个值
 
 ```js
 Week.values.some(item => item.value === 1); // true
@@ -185,7 +330,7 @@ Week.has(1); // true
 1 instance of Week; // true
 ```
 
-- `instanceof` 操作符
+#### `instanceof` 操作符
 
 ```js
 1 instance of Week // true
@@ -193,7 +338,7 @@ Week.has(1); // true
 "Monday" instance of Week // true
 ```
 
-- 支持遍历枚举项数组，但不支持修改
+#### 支持遍历枚举项数组，但不支持修改
 
 ```js
 Week.values.length; // 2
@@ -207,7 +352,7 @@ Week.values.splice(0, 1); // ❌ 不可修改
 Week.values[0].label = 'foo'; // ❌ 不可修改
 ```
 
-- 获取某个值的显示文本
+#### 获取某个值的显示文本
 
 ```js
 Week.label(1); // 星期一，
@@ -215,63 +360,79 @@ Week.label(Week.Monday); // 星期一
 Week.label('Monday'); // 星期一
 ```
 
-- 获取某个枚举项的 key
+#### 获取某个枚举项的 key
 
 ```js
 Week.key(1); // 'Monday'
 Week.key(Week.Monday); // 'Monday'
-Week.key(9); // undefined
+Week.key(9); // undefined, 不存在
 ```
 
-- 针对 [AntDesign](https://github.com/ant-design/ant-design) 组件库的优化和语法糖
+#### 添加扩展字段
 
-  - `values`直接作为`Select`、`Checkbox`等组件的数据源
+```js
+const Week = Enum({
+  Sunday: { value: 0, label: '星期日', active: true, disabled: false },
+  Monday: { value: 1, label: '星期一', active: false, disabled: true },
+} as const);
+Week.raw(0).active // true
+Week.raw(Week.Sunday).active // true
+Week.raw('Sunday').active // true
+```
 
-  ```jsx
-  <Select options={Week.values} />
-  ```
+#### 针对 [AntDesign](https://github.com/ant-design/ant-design) 组件库的优化和语法糖
 
-  - `options`方法与`values`类似，但可选在头部增加一个默认选项
+- `values`直接作为`Select`、`Checkbox`等组件的数据源
 
-  ```jsx
-  <Select options={Week.options({ firstOption: true })} />
-  // [
-  //  { value: '', label: 'All' },
-  //  { value: 0, label: 'Sunday' },
-  //  { value: 1, label: 'Monday' }
-  // ]
+```jsx
+import { Select } from 'antd';
+<Select options={Week.values} />;
+```
 
-  // 自定义头部默认选项
-  <Select options={Week.options({ firstOption: { value: 0, label: 'Unlimited' } })} />
-  ```
+- `options`方法与`values`类似，但可选在头部增加一个默认选项
 
-  - `menus`方法可以为 [AntDesign](https://github.com/ant-design/ant-design) `Menu`、`Dropdown` 等组件生成数据源，格式为：`{ key: number|string, label: string }[]`
+```jsx
+<Select options={Week.options({ firstOption: true })} />
+// [
+//  { value: '', label: 'All' },
+//  { value: 0, label: 'Sunday' },
+//  { value: 1, label: 'Monday' }
+// ]
 
-  ```jsx
-  <Menu items={Week.menus()} />
-  ```
+// 自定义头部默认选项
+<Select options={Week.options({ firstOption: { value: 0, label: 'Unlimited' } })} />
+```
 
-  - `filters`方法可以为 [AntDesign](https://github.com/ant-design/ant-design) `Table` 组件的`列筛选`功能生成数据源，格式为：`{ text: string, value: number|string }[]`
+- `menus`方法可以为 [AntDesign](https://github.com/ant-design/ant-design) `Menu`、`Dropdown` 等组件生成数据源，格式为：`{ key: number|string, label: string }[]`
 
-  ```jsx
-  const columns = [
-    {
-      title: 'Weekday',
-      dataIndex: 'weekday',
-      key: 'weekday',
-      filters: Week.filters(),
-    },
-  ];
-  <Table columns={columns} />;
-  ```
+```jsx
+import { Menu } from 'antd';
+<Menu items={Week.menus()} />;
+```
 
-  - `valuesEnum`方法可以为 [AntDesignPro](https://github.com/ant-design/pro-components) 的`ProFormFields`、`ProTable`等组件生成数据源，这是一个类似 Map 的数据结构，格式为：`{ [key: number|string]: { text: string } }`
+- `filters`方法可以为 [AntDesign](https://github.com/ant-design/ant-design) `Table` 组件的`列筛选`功能生成数据源，格式为：`{ text: string, value: number|string }[]`
 
-  ```jsx
-  <ProFormSelect valueEnum={Week.valuesEnum()} />
-  ```
+```jsx
+import { Table } from 'antd';
+const columns = [
+  {
+    title: 'week',
+    dataIndex: 'week',
+    filters: Week.filters(),
+  },
+];
+// 在表头中显示下拉筛选项
+<Table columns={columns} />;
+```
 
-- 两个枚举合并（或者扩展某个枚举）
+- `valuesEnum`方法可以为 [AntDesignPro](https://github.com/ant-design/pro-components) 的`ProFormFields`、`ProTable`等组件生成数据源，这是一个类似 Map 的数据结构，格式为：`{ [key: number|string]: { text: string } }`
+
+```jsx
+import { ProTable } from '@ant-design/pro-components';
+<ProFormSelect valueEnum={Week.valuesEnum()} />;
+```
+
+#### 两个枚举合并（或者扩展某个枚举）
 
 ```js
 const myWeek = Enum({
@@ -281,18 +442,27 @@ const myWeek = Enum({
 });
 ```
 
-- _[TypeScript Only]_ 【强烈建议】 使用枚举值的数据类型
+#### 使用枚举值序列来缩小数据类型 &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
 
-使用 `valueType` 类型可以更精确的限制数据类型，相比使用 number、string 这种宽泛的数据类型更好
+使用 `valueType` 类型约束，可以将字段类型从宽泛的`number`或`string`类型缩小为有限的枚举值序列，这不但能减少错误赋值的可能性，还能提高代码的可读性。
 
 ```typescript
-type FooComponentProps = {
-  value?: typeof Week.valueType; // 数据类型从number缩小至 0 | 1
-  names?: typeof Week.keyType; // 'Sunday' | 'Monday'
+const weekValue: number = 8; // 👎 任意数字都可以赋值给周枚举，即使错误的
+const weekName: string = 'Birthday'; // 👎 任意字符串都可以赋值给周枚举，即使错误的
+
+const badWeekValue: typeof Week.valueType = 8; // ❌ 类型错误，8 不是一个有效的周枚举值
+const badWeekName: typeof Week.keyType = 'Birthday'; // ❌ 类型错误，'Birthday' 不是一个有效的周枚举名
+
+const goodWeekValue: typeof Week.valueType = 1; // ✅ 类型正确，1 是一个有效的周枚举值
+const goodWeekName: typeof Week.keyType = 'Monday'; // ✅ 类型正确，'Monday' 是一个有效的周枚举名
+
+type FooProps = {
+  value?: typeof Week.valueType; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
+  names?: typeof Week.keyType[]; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
 };
 ```
 
-- 😟 命名冲突？
+#### 😟 命名冲突？
 
 这里为枚举使用添加一些边界情况，从上面的用例中可以看到，我们可以通过 `Week.XXX` 来快捷访问枚举项，但是万一枚举项的 key 与枚举方法命名冲突怎么办？
 
@@ -315,7 +485,7 @@ Week.values.label(1); // 'foo'
 更极端一些，万一`values`与枚举项命名冲突怎么办？放心，你仍然可以通过别名字段访问到`values`数组。参考下面的示例：
 
 ```js
-import { VALUES } from 'enum-plus';
+import { VALUES } from '@tiny-codes/enum-plus';
 
 const Week = Enum({
   foo: { value: 1 },
@@ -326,19 +496,19 @@ const Week = Enum({
 Week.values; // 3，枚举项优先级更高，会覆盖掉 values
 Week[VALUES]; // VALUES 是一个别名Symbol
 // [
-//  { value: 1, label: 'foo' },
-//  { value: 2, label: 'bar' },
-//  { value: 3, label: 'values' }
+//  { value: 1, key: 'foo', label: 'foo' },
+//  { value: 2, key: 'bar', label: 'bar' },
+//  { value: 3, key: 'values', label: 'values' }
 // ]
 // 等价于原来的 Week.values 🙂
 ```
 
 ## 本地化
 
-`enum-plus` 本身不提供国际化功能，但是可以通过 `localize` 选项来实现本地化文本。你需要自己在项目中维护语言，并且在 `localize` 方法中实现文本的本地化。你也可以使用任意流行的国际化库，比如 `i18next`。
+`@tiny-codes/enum-plus` 本身不提供国际化功能，但是可以通过 `localize` 选项来实现本地化文本。你需要自己在项目中维护语言，并且在 `localize` 方法中实现文本的本地化。你也可以使用任意流行的国际化库，比如 `i18next`。
 
 ```tsx
-import { Enum } from 'enum-plus';
+import { Enum } from '@tiny-codes/enum-plus';
 import i18next from 'i18next';
 import Localize from './Localize';
 
@@ -351,33 +521,33 @@ const setLang = (l: string) => {
 const sillyLocalize = (content: string) => {
   if (lang === 'zh-CN') {
     switch (content) {
-      case 'weekday.sunday':
+      case 'week.sunday':
         return '星期日';
-      case 'weekday.monday':
+      case 'week.monday':
         return '星期一';
       default:
         return content;
     }
   } else {
     switch (content) {
-      case 'weekday.sunday':
+      case 'week.sunday':
         return 'Sunday';
-      case 'weekday.monday':
+      case 'week.monday':
         return 'Monday';
       default:
         return content;
     }
   }
 };
-// ✅ 请使用 i18next 或其他国际化库
-const i18nLocalize = (content: string) => i18next.t(content);
+// ✅ 建议使用 i18next 或其他国际化库
+const i18nLocalize = (content: string | undefined) => i18next.t(content);
 // ✅ 或者封装成一个基础组件
-const componentLocalize = (content: string) => <Localize value={content} />;
+const componentLocalize = (content: string | undefined) => <Localize value={content} />;
 
 const Week = Enum(
   {
-    Sunday: { value: 0, label: 'weekday.sunday' },
-    Monday: { value: 1, label: 'weekday.monday' },
+    Sunday: { value: 0, label: 'week.sunday' },
+    Monday: { value: 1, label: 'week.monday' },
   } as const,
   {
     localize: sillyLocalize,
