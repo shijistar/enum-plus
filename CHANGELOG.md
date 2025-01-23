@@ -8,9 +8,9 @@
 
 ### Features
 
-- 🔥 Support for localization of enum text
+- 🔥 Support for enum text localization
   - The `Enum` method now accepts a `localize` option that can be used to localize the enum text
-  - You can also set the `Enum.localize` method to localize all enums in a lower priority
+  - You can also set the `Enum.localize` static method to localize all enums in a lower priority
 - 🔥 Add `menus` method
 
 ### Breaking Changes

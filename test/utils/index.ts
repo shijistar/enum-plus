@@ -1,4 +1,4 @@
-import type { EnumItemInit, EnumOption, EnumValue, StandardEnumItemInit } from '../../src';
+import type { EnumItemInit, EnumItemOptionData, EnumValue, StandardEnumItemInit } from '../../src';
 import type { EnumItemClass } from '../../src/enum-item';
 
 export function toPlainEnums<T extends EnumItemInit<EnumValue>>(
@@ -38,7 +38,7 @@ export function pickArray<T extends Record<string, any>>(
   return array.map((item) => pickObject(item, fieldNames));
 }
 
-export function getOptionsData<K, V>(options: EnumOption<K, V>[]) {
+export function getOptionsData<K, V>(options: EnumItemOptionData<K, V>[]) {
   return options.map(({ value, label }) => ({ value, label }));
 }
 

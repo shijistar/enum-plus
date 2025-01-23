@@ -4,7 +4,7 @@ import type {
   ColumnFilterItem,
   EnumInit,
   EnumKey,
-  EnumOption,
+  EnumItemOptionData,
   EnumValue,
   IEnumValues,
   MenuItemOption,
@@ -14,13 +14,13 @@ import type {
 } from './types';
 
 /**
- * 枚举项集合数组
+ * Enum items array, mostly are simple wrappers for EnumCollectionClass
  *
  * @export
  * @class EnumValuesArray
  * @extends {Array<EnumItemClass<T, K, V>>}
  * @implements {IEnumValues<T, K, V>}
- * @template T 枚举集合初始化数据的类型
+ * @template T Type of the initialization data of the enum collection
  */
 export class EnumValuesArray<
     T extends EnumInit<K, V>,
@@ -33,10 +33,10 @@ export class EnumValuesArray<
   #raw: T;
 
   /**
-   * 构造函数
+   * Instantiate an enum items array
    *
-   * @param {T} raw 原始初始化数据对象
-   * @param {...EnumItemClass<T[K], K, V>[]} items 生成后的枚举项数组
+   * @param {T} raw Original initialization data object
+   * @param {...EnumItemClass<T[K], K, V>[]} items Enum item instance array
    * @memberof EnumValuesArray
    */
   constructor(raw: T, ...items: EnumItemClass<T[K], K, V>[]) {
@@ -45,7 +45,7 @@ export class EnumValuesArray<
   }
 
   label(keyOrValue?: string | number): string | undefined {
-    // 先查value，再查key
+    //  First find by value, then find by key
     return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue))
       ?.label;
   }
@@ -58,15 +58,17 @@ export class EnumValuesArray<
     return this.some((i) => i.value === keyOrValue || i.key === keyOrValue);
   }
 
-  options(): EnumOption<K, V>[];
-  options(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumOption<K | '', V | ''>[];
+  options(): EnumItemOptionData<K, V>[];
+  options(
+    config?: OptionsConfig & BooleanFirstOptionConfig<V>
+  ): EnumItemOptionData<K | '', V | ''>[];
   options<FK = never, FV = never>(
-    config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
-  ): EnumOption<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
+    config?: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
+  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   options<FK = never, FV = never>(
     config: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = this
       .#optionsConfigDefaults as any
-  ): EnumOption<K | FK, V | FV>[] {
+  ): EnumItemOptionData<K | FK, V | FV>[] {
     const { firstOption = this.#optionsConfigDefaults.firstOption } = config;
     if (firstOption) {
       if (firstOption === true) {
@@ -111,14 +113,14 @@ export class EnumValuesArray<
   raw(value: unknown): T[K] | undefined;
   raw(value?: V | K): T | T[K] | undefined {
     if (value == null) {
-      // 返回整个对象
+      // Return the original initialization object
       return this.#raw;
     } else {
       if (Object.keys(this.#raw).includes(value as string)) {
-        // 当做key查找
+        // Find by key
         return this.#raw[value as K];
       }
-      // 当做value查找
+      // Find by value
       const itemByValue = this.find((i) => i.value === value);
       if (itemByValue) {
         return itemByValue.raw;
@@ -129,28 +131,28 @@ export class EnumValuesArray<
   }
 
   /**
-   * @deprecated Stub方法，不支持直接调用
+   * @deprecated Stub method, only for typing usages, not for runtime calling
    */
   get valueType(): V {
     throw new Error(
-      '枚举的valueType属性仅允许用来声明ts类型，不能在运行时访问! 在ts类型中请配合`typeof`运算符使用，例如: typeof Week.valueType'
+      'The valueType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.valueType'
     );
   }
   /**
-   * @deprecated Stub方法，不支持直接调用
+   * @deprecated Stub method, only for typing usages, not for runtime calling
    */
   get keyType(): K {
     throw new Error(
-      '枚举的keyType属性仅允许用来声明ts类型，不能在运行时访问! 在ts类型中请配合`typeof`运算符使用，例如: typeof Week.keyType'
+      'The keyType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.keyType'
     );
   }
 
   /**
-   * @deprecated Stub方法，不支持直接调用
+   * @deprecated Stub method, only for typing usages, not for runtime calling
    */
   get rawType(): T[K] {
     throw new Error(
-      '枚举的rawType属性仅允许用来声明ts类型，不能在运行时访问! 在ts类型中请配合`typeof`运算符使用，例如: typeof Week.rawType'
+      'The rawType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.rawType'
     );
   }
 }

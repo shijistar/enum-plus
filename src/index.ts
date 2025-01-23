@@ -101,6 +101,7 @@ export function Enum<
  * EN: Global localization function, used to convert enum item text to localized text. Only need to be set once, effective globally, need to be set at the project entry, before running any Enum instance
  *
  * CN: 全局本地化函数，用于把枚举项文本转换为本地化文本。只需要设置一次，全局生效，需要在项目入口处设置，在运行任何Enum实例之前
+ *
  * @param content Original text | 原始文本
  * @returns Localized text | 本地化文本
  */

@@ -8,26 +8,26 @@ import type {
 } from './types';
 
 /**
- * 枚举项类
- * @template V 枚举值的类型
- * @template K 枚举项的Key
- * @template T 枚举项的初始化对象
+ * Enum item class
+ * @template V General type of value
+ * @template K General type of key
+ * @template T Initialize object of enum item
  */
 export class EnumItemClass<
   T extends EnumItemInit<V>,
   K extends EnumKey<any> = string,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>
 > {
-  /** 枚举项的值 */
+  /** Enum item value */
   readonly value: V;
 
-  /** 枚举项的显示名称 */
+  /** Enum item label (or called display name) */
   readonly label: string;
 
-  /** 枚举项的Key */
+  /** Enum item key */
   readonly key: K;
 
-  /** 原始初始化对象 */
+  /** Original initialization object */
   readonly raw: T;
 
   #localize: NonNullable<EnumItemOptions['localize']>;
@@ -35,7 +35,7 @@ export class EnumItemClass<
     get: (target, prop) => {
       const origin = target[prop as keyof typeof this];
       if (prop === 'label') {
-        return target.#localize(target.label);
+        return target.toString();
       } else if (typeof origin === 'function') {
         return origin.bind(target);
       }
@@ -57,12 +57,12 @@ export class EnumItemClass<
   });
 
   /**
-   * 实例化一个枚举项
-   * @param key 枚举项的Key
-   * @param value 枚举值
-   * @param label 枚举项的显示名称
-   * @param raw 原始初始化对象
-   * @param options 构建选项
+   * Instantiate an enum item
+   * @param key Enum item key
+   * @param value Enum item value
+   * @param label Enum item display name
+   * @param raw Original initialization object
+   * @param options Construction options
    */
   constructor(key: K, value: V, label: string, raw: T, options?: EnumItemOptions) {
     const { localize = Enum.localize } = options ?? {};
@@ -77,36 +77,32 @@ export class EnumItemClass<
       return content;
     };
 
-    // 重写一些系统方法，不写在class声明上是因为会在ts中多一个Symbol的字段，开发时没必要看到
-    // @ts-ignore: 重写Object.toString方法，显示类型更友好
+    // Override some system methods
+    // @ts-ignore: Override Object.toString method to display type more friendly
     this[Symbol.toStringTag] = 'EnumItem';
-    // @ts-ignore: 重写Object.toPrimitive方法，返回枚举值
+    // @ts-ignore: Override Object.toPrimitive method to return enum value
     this[Symbol.toPrimitive] = (hint: 'number' | 'string' | 'default'): V | string => {
       if (hint === 'number') {
-        // Number(value), +value
+        // for cases like Number(value) or +value
         return this.valueOf();
       } else if (hint === 'string') {
-        // String(value), `${value}`
+        // for cases like String(value), `${value}`
         return this.toString();
       }
-      // '' + value, value == 1
+      // for cases like '' + value, value == 1
       return this.valueOf();
     };
     // Object.freeze(this);
   }
-
   readonly() {
     return this.#localizedProxy;
   }
-
   toString() {
     return this.#localize(this.label) ?? this.label;
   }
-
   toLocaleString() {
     return this.toString();
   }
-
   valueOf() {
     return this.value;
   }
