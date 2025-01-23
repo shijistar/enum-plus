@@ -1,10 +1,10 @@
 {
   "name": "enum-plus",
-  "version": "2.0.0",
-  "description": "A powerful enum library, like typescript enum but more than that",
+  "version": "2.0.0-alpha.2",
+  "description": "A drop-in replacement library for enum, tiny and powerful, like native enum but much more than that",
   "keywords": [
     "enum",
-    "typescript"
+    "typescript-library"
   ],
   "homepage": "https://github.com/shijistar/enum-plus",
   "bugs": {
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/shijistar/enum-plus.git"
   },
   "license": "MIT",
-  "author": "shijistar",
+  "author": "shijistar@gmail.com",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
