@@ -16,9 +16,10 @@ import {
   getStandardWeekData,
   getWeekDataHasKeyHasValueNoLabel,
   getWeekDataHasKeyNoValueHasLabel,
-  getWeekDataHasKeyNoValueNoLabel,
+  getWeekDataHasKeyEmptyObjectValueNoLabel,
   getWeekDataHasValueHasLabelNoKey,
   getWeekDataHasValueNoKeyNoLabel,
+  getWeekDataHasKeyAutoIncrementedValue,
 } from './data/week-data';
 
 describe('should be able to create an enum from object', () => {
@@ -41,7 +42,7 @@ describe('should be able to create an enum from object', () => {
 
   test('created weekdays enum with string', () => {
     const week = Enum(WeekStringConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyNoValueNoLabel());
+    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
   test('created weekdays enum with value-only config', () => {
@@ -59,14 +60,16 @@ describe('should be able to create an enum from object', () => {
         return acc;
       }, {} as Record<string, { label: string }>)
     );
-    expect(toPlainEnums(weekWithEmptyLabel.values)).toEqual(getWeekDataHasKeyNoValueNoLabel());
+    expect(toPlainEnums(weekWithEmptyLabel.values)).toEqual(
+      getWeekDataHasKeyEmptyObjectValueNoLabel()
+    );
   });
 
   test('created weekdays enum with compact config', () => {
     const week = Enum(WeekCompactConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyNoValueNoLabel());
+    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyAutoIncrementedValue());
     const week2 = Enum(WeekEmptyConfig);
-    expect(toPlainEnums(week2.values)).toEqual(getWeekDataHasKeyNoValueNoLabel());
+    expect(toPlainEnums(week2.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
   test('created weekdays enum with empty config', () => {
@@ -184,5 +187,116 @@ describe('should be able to create an enum from array', () => {
     expect(week.raw('Saturday').status).toEqual('error');
     expect(week.raw('Monday').status).toEqual('warning');
     expect(week.raw('Friday').status).toEqual('success');
+  });
+});
+
+describe('should support auto-incremented number enums', () => {
+  test('should create valid auto-incremented enums', () => {
+    const firstSeedEnum = Enum({
+      A: 1,
+      B: undefined as unknown as number,
+      C: undefined as unknown as number,
+    } as const);
+    expect(toPlainEnums(firstSeedEnum.values)).toEqual([
+      { value: 1, label: 'A', key: 'A' },
+      { value: 2, label: 'B', key: 'B' },
+      { value: 3, label: 'C', key: 'C' },
+    ]);
+
+    const noneInitializer = Enum({
+      A: undefined,
+      B: undefined,
+      C: undefined,
+    } as const);
+    expect(toPlainEnums(noneInitializer.values)).toEqual([
+      { value: 0, label: 'A', key: 'A' },
+      { value: 1, label: 'B', key: 'B' },
+      { value: 2, label: 'C', key: 'C' },
+    ]);
+
+    const withDiffInitializer = Enum({
+      A: undefined as unknown as number,
+      B: undefined as unknown as number,
+      C: undefined as unknown as number,
+      D: 5,
+      E: undefined as unknown as number,
+    } as const);
+    expect(toPlainEnums(withDiffInitializer.values)).toEqual([
+      { value: 0, label: 'A', key: 'A' },
+      { value: 1, label: 'B', key: 'B' },
+      { value: 2, label: 'C', key: 'C' },
+      { value: 5, label: 'D', key: 'D' },
+      { value: 6, label: 'E', key: 'E' },
+    ]);
+
+    const withDiffInitializer2 = Enum({
+      A: undefined as unknown as number,
+      B: undefined as unknown as number,
+      C: undefined as unknown as number,
+      D: 5,
+      E: undefined as unknown as number,
+      F: 9,
+      G: undefined as unknown as number,
+    } as const);
+    expect(toPlainEnums(withDiffInitializer2.values)).toEqual([
+      { value: 0, label: 'A', key: 'A' },
+      { value: 1, label: 'B', key: 'B' },
+      { value: 2, label: 'C', key: 'C' },
+      { value: 5, label: 'D', key: 'D' },
+      { value: 6, label: 'E', key: 'E' },
+      { value: 9, label: 'F', key: 'F' },
+      { value: 10, label: 'G', key: 'G' },
+    ]);
+  });
+
+  test('should be compatible with "wrong format" auto-incremented enums', () => {
+    const undefinedFollowString = Enum({
+      A: 'AAA',
+      B: undefined as unknown as string,
+      C: undefined as unknown as string,
+    } as const);
+    expect(toPlainEnums(undefinedFollowString.values)).toEqual([
+      { value: 'AAA', label: 'A', key: 'A' },
+      { value: 'B', label: 'B', key: 'B' },
+      { value: 'C', label: 'C', key: 'C' },
+    ]);
+
+    const mixed = Enum({
+      A: undefined as unknown as string,
+      B: undefined as unknown as string,
+      C: undefined as unknown as string,
+      D: 'DDD',
+      E: undefined as unknown as string,
+    } as const);
+    expect(toPlainEnums(mixed.values)).toEqual([
+      { value: 'A', label: 'A', key: 'A' },
+      { value: 'B', label: 'B', key: 'B' },
+      { value: 'C', label: 'C', key: 'C' },
+      { value: 'DDD', label: 'D', key: 'D' },
+      { value: 'E', label: 'E', key: 'E' },
+    ]);
+
+    const mixed2 = Enum({
+      A: undefined as unknown as number,
+      B: undefined as unknown as number,
+      C: undefined as unknown as number,
+      D: 5,
+      E: undefined as unknown as number,
+      F: 9,
+      G: undefined as unknown as number,
+      K: 'KKK' as unknown as number,
+      L: undefined as unknown as number,
+    } as const);
+    expect(toPlainEnums(mixed2.values)).toEqual([
+      { value: 'A', label: 'A', key: 'A' },
+      { value: 'B', label: 'B', key: 'B' },
+      { value: 'C', label: 'C', key: 'C' },
+      { value: 5, label: 'D', key: 'D' },
+      { value: 'E', label: 'E', key: 'E' },
+      { value: 9, label: 'F', key: 'F' },
+      { value: 'G', label: 'G', key: 'G' },
+      { value: 'KKK', label: 'K', key: 'K' },
+      { value: 'L', label: 'L', key: 'L' },
+    ]);
   });
 });

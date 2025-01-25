@@ -57,7 +57,7 @@ export type IEnum<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>
 > = IEnumValues<T, K, V> & {
   // 初始化对象里的枚举字段
-  [key in K]: ValueTypeFromSingleInit<T[key], key>;
+  [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
 } & (T extends { values: unknown }
     ? {
         // 防止values名称冲突
@@ -287,7 +287,7 @@ export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumVal
   | ValueOnlyEnumInit<K, V>
   | LabelOnlyEnumInit<K>
   | CompactEnumInit<K>
-  | OmitEnumInit<K>;
+  | AutoIncrementedEnumInit<K>;
 export type NumberEnumInit<K extends keyof any> = Record<K, number>;
 export type StringEnumInit<K extends keyof any> = Record<K, string>;
 export type StandardEnumInit<K extends keyof any, V extends EnumValue> = Record<
@@ -300,7 +300,9 @@ export type ValueOnlyEnumInit<K extends keyof any, V extends EnumValue> = Record
 >;
 export type LabelOnlyEnumInit<K extends keyof any> = Record<K, LabelOnlyEnumItemInit>;
 export type CompactEnumInit<K extends keyof any> = Record<K, CompactEnumItemInit>;
-export type OmitEnumInit<K extends keyof any> = Record<K, undefined>;
+export type AutoIncrementedEnumInit<K extends keyof any> = Record<K, undefined>;
+/** @deprecated Use `AutoIncrementedEnumInit` instead */
+export type OmitEnumInit<K extends keyof any> = AutoIncrementedEnumInit<K>;
 
 export type EnumItemInit<V extends EnumValue = EnumValue> =
   | EnumValue
@@ -390,18 +392,18 @@ export type EnumOptionConfig<K, V> = Omit<EnumOption<K, V>, 'key'> &
 //   : ValueTypeFromSingleInit<T>;
 
 /** 从枚举项的初始化对象推断value类型 */
-export type ValueTypeFromSingleInit<T, FB = string> = T extends EnumValue // literal类型
+export type ValueTypeFromSingleInit<T, Key = string, Fallback = Key> = T extends EnumValue // literal类型
   ? T
   : T extends StandardEnumItemInit<infer V> // {value, label}类型
   ? V
   : T extends ValueOnlyEnumItemInit<infer V> // {value}类型
   ? V
   : T extends LabelOnlyEnumItemInit // {label}类型
-  ? FB
+  ? Key
   : T extends CompactEnumItemInit // {}类型
-  ? FB
+  ? Key
   : T extends undefined // undefined类型
-  ? FB
+  ? Fallback // todo: 最好实现enum的行为，无初始化值时使用自增值，但暂时没有完美的办法，只能临时使用number
   : never;
 
 /** 从枚举集合初始化对象推断value类型 */
@@ -420,7 +422,7 @@ export type ValueTypeFromEnumInit<
   ? K
   : T extends CompactEnumInit<K> // 格式：{ foo:{}, bar:{} }
   ? K
-  : T extends OmitEnumInit<K> // 格式：{foo: undefined, bar: undefined}
+  : T extends AutoIncrementedEnumInit<K> // 格式：{foo: undefined, bar: undefined}
   ? K
   : K; // 未知格式
 // eslint-disable-next-line @typescript-eslint/ban-types

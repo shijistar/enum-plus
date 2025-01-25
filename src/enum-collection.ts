@@ -54,32 +54,34 @@ export class EnumCollectionClass<
   readonly keys!: K[];
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
-    const keys = Object.keys(init) as K[]; // 定义枚举项，可以通过key直接访问，例如 Week.Monday
-    keys.forEach((key) => {
-      const { value } = parseEnumItem<EnumItemInit<V>, K, V>(init[key], key);
-      // @ts-ignore: 把枚举项动态扩展到this上，方便使用
+    const keys = Object.keys(init) as K[];
+    const parsed = keys.map((key) =>
+      parseEnumItem<EnumItemInit<V>, K, V, T>(init[key], key, { typeInit: init, keys })
+    );
+    keys.forEach((key, index) => {
+      const { value } = parsed[index];
+      // @ts-expect-error: 动态定义属性
       this[key] = value;
     });
-    // @ts-ignore: 如果init包含values，则使用 VALUES 来避免命名冲突
+    // @ts-expect-error: 如果init包含keys，则使用 KEYS 来避免命名冲突
     this[Object.keys(init).includes('keys') ? KEYS : 'keys'] = keys;
 
     // 构建枚举项数据
-    // @ts-ignore: 如果init包含values，则使用 VALUES 来避免命名冲突
     const values = new EnumValuesArray<T, K, V>(
       init,
-      ...keys.map((key) => {
-        const { value, label } = parseEnumItem<EnumItemInit<V>, K, V>(init[key], key);
+      ...keys.map((key, index) => {
+        const { value, label } = parsed[index];
         return new EnumItemClass<T[K], K, V>(key, value, label, init[key], options).readonly();
       })
     );
-    // @ts-ignore: 如果init包含values，则使用 VALUES 来避免命名冲突
+    // @ts-expect-error: 如果init包含values，则使用 VALUES 来避免命名冲突
     this[Object.keys(init).includes('values') ? VALUES : 'values'] = values;
 
-    // 重写一些系统方法，不写在class声明上是因为会在ts中多一个Symbol的字段，在开发时没必要看到
-    // @ts-ignore: 重写Object.toString方法，显示类型更友好
+    // 重写一些系统方法，不写在type声明上是因为会在ts中多一个Symbol的字段，在开发时没必要看到
+    // @ts-expect-error: 重写Object.toString方法，显示类型更友好
     this[Symbol.toStringTag] = 'EnumCollection';
     // 重写 `instanceof` 操作符规则
-    // @ts-ignore: 重写 instanceof 操作符，以识别枚举类型
+    // @ts-expect-error: 重写 instanceof 操作符，以识别枚举类型
     this[Symbol.hasInstance] = (instance: any): boolean => {
       // value故意使用 ==，支持数字和字符创格式的value
       return this.values.some(
@@ -149,18 +151,28 @@ export class EnumCollectionClass<
   }
 }
 
-function parseEnumItem<T extends EnumItemInit<V>, K extends EnumKey<any>, V extends EnumValue>(
+function parseEnumItem<
+  T extends EnumItemInit<V>,
+  K extends EnumKey<any>,
+  V extends EnumValue,
+  TT extends EnumInit<K, V>
+>(
   init: T,
-  key: K
+  key: K,
+  options: {
+    typeInit: TT;
+    keys: (keyof TT)[];
+  }
 ): StandardEnumItemInit<V> {
   let value: V;
   let label: string;
-  if (init !== undefined) {
+  if (init != null) {
     if (typeof init === 'number' || typeof init === 'string' || typeof init === 'symbol') {
       // EnumValue类型
       value = init as V;
       label = key as string;
     } else if (typeof init === 'object') {
+      // 使用对象初始化
       if (Object.prototype.toString.call(init) === '[object Object]') {
         if ('value' in init /*TS assertion*/ && Object.keys(init).includes('value')) {
           // {value, label}类型
@@ -180,7 +192,7 @@ function parseEnumItem<T extends EnumItemInit<V>, K extends EnumKey<any>, V exte
           label = key as string;
         }
       } else {
-        // 可能是Date、RegExp等基元类型
+        // 可能是Date、RegExp等原始类型
         value = init as V;
         label = key as string;
       }
@@ -188,9 +200,49 @@ function parseEnumItem<T extends EnumItemInit<V>, K extends EnumKey<any>, V exte
       throw new Error(`Invalid enum item: ${JSON.stringify(init)}`);
     }
   } else {
-    // undefined类型
+    return inferFromNull(key, options);
+  }
+  return { value, label };
+}
+
+function inferFromNull<K extends EnumKey<any>, V extends EnumValue, TT extends EnumInit<K, V>>(
+  key: K,
+  options: {
+    typeInit: TT;
+    keys: (keyof TT)[];
+  }
+) {
+  const { typeInit, keys } = options;
+  let value: V;
+  const label: string = key as string;
+  // 如果value是空，则先优先检查数字自增枚举，否则使用key作为value
+  const index = keys.indexOf(key);
+  const prev = typeInit[keys[index - 1]];
+  // 只有纯数字和空的枚举才会自增
+  if (keys.some((k) => typeInit[k] != null && typeof typeInit[k] !== 'number')) {
     value = key as unknown as V;
-    label = key as string;
+  } else if (index === 0) {
+    value = 0 as V;
+  } else if (typeof prev === 'number') {
+    value = (prev + 1) as V;
+  } else {
+    // only nulls
+    let seed: number = 0;
+    let count = 0;
+    // find seed
+    for (let i = index - 1; i >= 0; i--) {
+      const val = typeInit[keys[i]];
+      if (typeof val === 'number') {
+        seed = val;
+        count++;
+        break;
+      } else {
+        // only nulls
+        count++;
+        continue;
+      }
+    }
+    value = (seed + count) as V;
   }
   return { value, label };
 }

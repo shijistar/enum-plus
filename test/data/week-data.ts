@@ -24,8 +24,8 @@ export const getWeekDataHasKeyHasValueNoLabel = () => [
   { key: 'Saturday', value: 6, label: 'Saturday' },
 ];
 
-/** Incomplete week data, with key only, no value (fallback to key) and label (fallback to key) */
-export const getWeekDataHasKeyNoValueNoLabel = () => [
+/** Incomplete week data, with key only, with value ({}) and label (fallback to key) */
+export const getWeekDataHasKeyEmptyObjectValueNoLabel = () => [
   { key: 'Sunday', value: 'Sunday', label: 'Sunday' },
   { key: 'Monday', value: 'Monday', label: 'Monday' },
   { key: 'Tuesday', value: 'Tuesday', label: 'Tuesday' },
@@ -33,6 +33,17 @@ export const getWeekDataHasKeyNoValueNoLabel = () => [
   { key: 'Thursday', value: 'Thursday', label: 'Thursday' },
   { key: 'Friday', value: 'Friday', label: 'Friday' },
   { key: 'Saturday', value: 'Saturday', label: 'Saturday' },
+];
+
+/** Incomplete week data, with key only, no value (auto-incremented number) and no label (fallback to key) */
+export const getWeekDataHasKeyAutoIncrementedValue = () => [
+  { key: 'Sunday', value: 0, label: 'Sunday' },
+  { key: 'Monday', value: 1, label: 'Monday' },
+  { key: 'Tuesday', value: 2, label: 'Tuesday' },
+  { key: 'Wednesday', value: 3, label: 'Wednesday' },
+  { key: 'Thursday', value: 4, label: 'Thursday' },
+  { key: 'Friday', value: 5, label: 'Friday' },
+  { key: 'Saturday', value: 6, label: 'Saturday' },
 ];
 
 /** Incomplete week data, with key and label, no value (fallback to key) */
