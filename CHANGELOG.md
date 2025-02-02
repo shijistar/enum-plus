@@ -2,9 +2,9 @@
 
 # enum-plus Changelog
 
-## 2.0.0
+## 2.0.1
 
-2025-1-23
+2025-2-2
 
 ### Features
 
