@@ -98,14 +98,34 @@ export function Enum<
 }
 
 /**
- * EN: Global localization function, used to convert enum item text to localized text. Only need to be set once, effective globally, need to be set at the project entry, before running any Enum instance
+ * **EN**: Default global localization function, only used to resolve built-in resources into English, does not provide actual localization functions
  *
- * CN: 全局本地化函数，用于把枚举项文本转换为本地化文本。只需要设置一次，全局生效，需要在项目入口处设置，在运行任何Enum实例之前
+ * **CN**: 默认的全局本地化函数，仅用于将内置资源解析为英文，并不提供实际的本地化功能
  *
- * @param content Original text | 原始文本
- * @returns Localized text | 本地化文本
+ * @summary
+ *
+ * - `enum-plus.options.all` => `All`
  */
-Enum.localize = undefined as EnumItemOptions['localize'];
+export const DefaultLocalize: NonNullable<EnumItemOptions['localize']> = (content) => {
+  if (content === 'enum-plus.options.all') {
+    return 'All';
+  }
+  return content;
+};
+/**
+ * EN: Global localization function, used to convert enum item text to localized text. Only need to be set once, effective globally. This method need to be set at the project entry, before running any Enum instance
+ *
+ * If you want to provide a custom localization function, be sure to resolve and localize the following built-in resources:
+ *
+ * - `enum-plus.options.all` => `All`
+ *
+ * CN: 全局本地化函数，用于把枚举项文本转换为本地化文本。只需要设置一次，全局生效。需要在项目入口处设置，且在运行任何Enum实例之前
+ *
+ * 如果要提供自定义的本地化函数，请务必解析并本地化以下内置资源：
+ *
+ * - `enum-plus.options.all` => `All`
+ */
+Enum.localize = DefaultLocalize;
 
 function getInitMapFromArray<
   T extends EnumInit<K, V>,

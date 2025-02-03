@@ -48,7 +48,11 @@ export function addEnumValuesTestSuite(
     // Add first-option by boolean flag
     const withDefaultFirstOption = weekEnum.options({ firstOption: true });
     expect(withDefaultFirstOption).toHaveLength(8);
-    expect(withDefaultFirstOption[0]).toEqual({ value: '', key: '', label: 'All' });
+    expect(withDefaultFirstOption[0]).toEqual({
+      value: '',
+      key: '',
+      label: 'All',
+    });
 
     // Add first-option by boolean flag with custom value
     const customDefaultOption = weekEnum.options({

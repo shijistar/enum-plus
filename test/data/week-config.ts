@@ -1,6 +1,7 @@
-import { Enum } from '../../src';
+import { DefaultLocalize, Enum, type BuiltInResources } from '../../src';
 
 export const localeEN = {
+  'enum-plus.options.all': 'All',
   Sunday: 'Sunday',
   Monday: 'Monday',
   Tuesday: 'Tuesday',
@@ -10,6 +11,7 @@ export const localeEN = {
   Saturday: 'Saturday',
 } as const;
 export const localeCN = {
+  'enum-plus.options.all': '全部',
   Sunday: '星期日',
   Monday: '星期一',
   Tuesday: '星期二',
@@ -19,6 +21,7 @@ export const localeCN = {
   Saturday: '星期六',
 } as const;
 export const noLocale = {
+  'enum-plus.options.all': 'enum-plus.options.all',
   Sunday: 'weekday.sunday',
   Monday: 'weekday.monday',
   Tuesday: 'weekday.tuesday',
@@ -111,16 +114,19 @@ export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce((acc, 
 }, {} as { [key in TKey]: { label: TConfig[key]['label'] } });
 
 export function genSillyLocalizer(language: typeof lang) {
-  if (!language) return undefined;
+  if (!language) return DefaultLocalize;
   const locales = getLocales(language);
   return function sillyLocalize(
     content:
+      | BuiltInResources
       | typeof StandardWeekConfig[keyof typeof StandardWeekConfig]['label']
       // eslint-disable-next-line @typescript-eslint/ban-types
       | (string & {})
       | undefined
   ): typeof content {
     switch (content) {
+      case 'enum-plus.options.all':
+        return locales['enum-plus.options.all'] as typeof content;
       case 'weekday.sunday':
         return locales.Sunday as typeof content;
       case 'weekday.monday':

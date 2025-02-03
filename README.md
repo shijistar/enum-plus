@@ -445,28 +445,87 @@ Week.raw('Sunday').active // true
 
 ---
 
-#### Optimization and syntactic sugars for [AntDesign](https://github.com/ant-design/ant-design)
+#### Convert to UI components
 
-- `values` as the data source for components like `Select`, `Checkbox`
+- `values` can be consumed as the data source (here uses Select as examples)
 
-```jsx
-import { Select } from 'antd';
-<Select options={Week.values} />;
-```
+  [AntDesign](https://ant.design/components/select-cn) Select
 
-- `options` method is similar to `values`, but can add a default option at the top
+  ```jsx
+  import { Select } from 'antd';
+  <Select options={Week.values} />;
+  ```
 
-```jsx
-<Select options={Week.options({ firstOption: true })} />
-// [
-//  { value: '', label: 'All' },
-//  { value: 0, label: 'Sunday' },
-//  { value: 1, label: 'Monday' }
-// ]
+  [Material-UI](https://mui.com/material-ui/react-select/) Select
 
-// Add custom option at the top
-<Select options={Week.options({ firstOption: { value: 0, label: 'Unlimited' } })} />
-```
+  ```jsx
+  import { Select, MenuItem } from '@mui/material';
+  <Select>
+    {Week.values.map((item) => (
+      <MenuItem key={item.value} value={item.value}>
+        {item.label}
+      </MenuItem>
+    ))}
+  </Select>;
+  ```
+
+  [Kendo UI](https://www.telerik.com/kendo-angular-ui/components/dropdowns/select/) Select
+
+  ```jsx
+  import { DropDownList } from '@progress/kendo-react-dropdowns';
+  <DropDownList data={Week.values} textField="label" dataItemKey="value" />;
+  ```
+
+  [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
+
+  ```jsx
+  <el-select>
+    <el-option v-for="item in Week.values" :key="item.value" :label="item.label" :value="item.value" />
+  </el-select>
+  ```
+
+  [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
+
+  ```jsx
+  <v-select :items="Week.values" item-title="label" item-value="value" />
+  ```
+
+  [Angular Material](https://material.angular.io/components/select/overview) Select
+
+  HTML
+
+  ```html
+  <mat-select>
+    <mat-option *ngFor="let item of Week.values" [value]="item.value">{{ item.label }}</mat-option>
+  </mat-select>
+  ```
+
+  [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
+
+  HTML
+
+  ```html
+  <nz-select>
+    <nz-option *ngFor="let item of Week.values" [nzValue]="item.value">{{ item.label }}</nz-option>
+  </nz-select>
+  ```
+
+- `options` method is similar to `values`, but is allowed to add a default option at the top. The default option can be a boolean value or a custom object.
+  - If set to a boolean value, the default option is `{ value: '', label: 'All' }`, the display name only supports English. If you need localization, please parse and process the built-in resource  key `enum-plus.options.all` in the localization method. For more details about localization, please refer to the [Localization](#localization) section
+  - If set to an object, you can customize the value and display text of the default option, and the display text will automatically support localization
+
+
+  ```jsx
+  <Select options={Week.options({ firstOption: true })} />
+  // [
+  //  { value: '', label: 'All' },
+  //  { value: 0, label: 'Sunday' },
+  //  { value: 1, label: 'Monday' }
+  // ]
+
+  // Add custom option at the top
+  <Select options={Week.options({ firstOption: { value: 0, label: 'Unlimited' } })} />
+  ```
 
 - `menus` method can generate data sources for [AntDesign](https://github.com/ant-design/ant-design) `Menu`, `Dropdown` components, the format is: `{ key: number|string, label: string }[]`
 

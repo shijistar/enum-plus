@@ -1,6 +1,14 @@
-<!-- markdownlint-disable MD009 -->
+<!-- markdownlint-disable MD009, MD024 -->
 
 # enum-plus Changelog
+
+## 2.0.2
+
+2025-2-3
+
+### Features
+
+- 🔥 The `firstOption` of `options` method supports localization
 
 ## 2.0.1
 

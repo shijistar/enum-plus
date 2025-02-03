@@ -443,28 +443,82 @@ Week.raw('Sunday').active // true
 
 ---
 
-#### 针对 [AntDesign](https://github.com/ant-design/ant-design) 组件库的优化和语法糖
+#### 转换成 UI 组件
 
-- `values`直接作为`Select`、`Checkbox`等组件的数据源
+- `values` 可以直接作为组件的数据源（以 Select 组件为例）
 
-```jsx
-import { Select } from 'antd';
-<Select options={Week.values} />;
-```
+  [AntDesign](https://ant.design/components/select-cn) Select
 
-- `options`方法与`values`类似，但可选在头部增加一个默认选项
+  ```jsx
+  import { Select } from 'antd';
+  <Select options={Week.values} />;
+  ```
 
-```jsx
-<Select options={Week.options({ firstOption: true })} />
-// [
-//  { value: '', label: 'All' },
-//  { value: 0, label: 'Sunday' },
-//  { value: 1, label: 'Monday' }
-// ]
+  [Material-UI](https://mui.com/material-ui/react-select/) Select
 
-// 自定义头部默认选项
-<Select options={Week.options({ firstOption: { value: 0, label: 'Unlimited' } })} />
-```
+  ```jsx
+  import { Select, MenuItem } from '@mui/material';
+  <Select>
+    { Week.values.map((item) => <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>) }
+  </Select>
+  ```
+
+  [Kendo UI](https://www.telerik.com/kendo-angular-ui/components/dropdowns/select/) Select
+
+  ```jsx
+  import { DropDownList } from '@progress/kendo-react-dropdowns';
+  <DropDownList data={Week.values} textField="label" dataItemKey="value" />;
+  ```
+
+  [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
+
+  ```jsx
+  <el-select>
+    <el-option v-for="item in Week.values" :key="item.value" :label="item.label" :value="item.value" />
+  </el-select>
+  ```
+
+  [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
+
+  ```jsx
+  <v-select :items="Week.values" item-title="label" item-value="value" />
+  ```
+
+  [Angular Material](https://material.angular.io/components/select/overview) Select
+
+  HTML
+
+  ```html
+  <mat-select>
+    <mat-option *ngFor="let item of Week.values" [value]="item.value">{{ item.label }}</mat-option>
+  </mat-select>
+  ```
+
+  [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
+
+  HTML
+
+  ```html
+  <nz-select>
+    <nz-option *ngFor="let item of Week.values" [nzValue]="item.value">{{ item.label }}</nz-option>
+  </nz-select>
+  ```
+
+- `options`方法与`values`类似，但允许在头部增加一个默认选项。默认选项可以是一个布尔值，也可以是一个自定义对象。
+  - 如果是布尔值，则默认选项为`{ value: '', label: 'All' }`，显示名称只支持英文。如果希望支持本地化，请在本地化方法中解析并处理`enum-plus.options.all`这个内置资源。关于本地化的更多详情，请参考[本地化](#本地化)章节
+  - 如果是一个对象，则可以自定义默认选项的值和显示文本，显示文本会自动支持本地化
+
+  ```jsx
+  <Select options={Week.options({ firstOption: true })} />
+  // [
+  //  { value: '', label: 'All' },
+  //  { value: 0, label: '星期日' },
+  //  { value: 1, label: '星期一' }
+  // ]
+
+  // 自定义头部默认选项
+  <Select options={Week.options({ firstOption: { value: 0, label: '不限' } })} />
+  ```
 
 - `menus`方法可以为 [AntDesign](https://github.com/ant-design/ant-design) `Menu`、`Dropdown` 等组件生成数据源，格式为：`{ key: number|string, label: string }[]`
 

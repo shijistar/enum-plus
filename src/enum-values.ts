@@ -1,4 +1,5 @@
 import type { EnumItemClass } from './enum-item';
+import { Enum } from '.';
 import type {
   BooleanFirstOptionConfig,
   ColumnFilterItem,
@@ -11,6 +12,8 @@ import type {
   ObjectFirstOptionConfig,
   OptionsConfig,
   ValueTypeFromSingleInit,
+  EnumItemOptions,
+  BuiltInResources,
 } from './types';
 
 /**
@@ -31,6 +34,7 @@ export class EnumValuesArray<
   implements IEnumValues<T, K, V>
 {
   #raw: T;
+  #localize: NonNullable<EnumItemOptions['localize']>;
 
   /**
    * Instantiate an enum items array
@@ -39,9 +43,16 @@ export class EnumValuesArray<
    * @param {...EnumItemClass<T[K], K, V>[]} items Enum item instance array
    * @memberof EnumValuesArray
    */
-  constructor(raw: T, ...items: EnumItemClass<T[K], K, V>[]) {
+  constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
+    const { localize = Enum.localize } = options ?? {};
     super(...items);
     this.#raw = raw;
+    this.#localize = (content: string | undefined) => {
+      if (typeof localize === 'function') {
+        return localize(content);
+      }
+      return content;
+    };
   }
 
   label(keyOrValue?: string | number): string | undefined {
@@ -75,11 +86,17 @@ export class EnumValuesArray<
         // 默认选项
         const value =
           ('firstOptionValue' in config ? config.firstOptionValue : undefined) ?? ('' as V);
-        const label = ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ?? 'All';
-        return [{ key: '' as K, value, label }, ...this];
+        const label =
+          ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ??
+          ('enum-plus.options.all' as BuiltInResources);
+        return [{ key: '' as K, value, label: this.#localize(label) as string }, ...this];
       } else {
         return [
-          { ...firstOption, key: firstOption.key ?? (firstOption.value as unknown as K) },
+          {
+            ...firstOption,
+            key: firstOption.key ?? (firstOption.value as unknown as K),
+            label: this.#localize(firstOption.label) as string,
+          },
           ...this,
         ];
       }

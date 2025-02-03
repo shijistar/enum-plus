@@ -40,7 +40,10 @@ export type EnumItemOptions = {
    * @param content Original text | 原始文本
    * @returns Localized text | 本地化文本
    */
-  localize?: <T extends string>(content: T | undefined) => T | string | undefined;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  localize?: <T extends BuiltInResources | (string & {})>(
+    content: T | undefined
+  ) => T | string | undefined;
 };
 /**
  * **EN:** Enum collection interface
@@ -410,6 +413,9 @@ export type ObjectFirstOptionConfig<K, V> = {
    */
   firstOptionLabel?: never;
 };
+
+/** Built-in resources */
+export type BuiltInResources = 'enum-plus.options.all';
 
 export type EnumOptionConfig<K, V> = Omit<EnumItemOptionData<K, V>, 'key'> &
   Partial<Pick<EnumItemOptionData<K, V>, 'key'>>;

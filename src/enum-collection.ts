@@ -47,6 +47,7 @@ export class EnumCollectionClass<
     // Build enum item data
     const values = new EnumValuesArray<T, K, V>(
       init,
+      options,
       ...keys.map((key, index) => {
         const { value, label } = parsed[index];
         return new EnumItemClass<T[K], K, V>(key, value, label, init[key], options).readonly();
