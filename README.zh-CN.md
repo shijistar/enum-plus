@@ -648,6 +648,8 @@ const setLang = (l: string) => {
 const sillyLocalize = (content: string) => {
   if (lang === 'zh-CN') {
     switch (content) {
+      case 'enum-plus.options.all':
+        return '全部';
       case 'week.sunday':
         return '星期日';
       case 'week.monday':
@@ -657,6 +659,8 @@ const sillyLocalize = (content: string) => {
     }
   } else {
     switch (content) {
+      case 'enum-plus.options.all':
+        return 'All';
       case 'week.sunday':
         return 'Sunday';
       case 'week.monday':
