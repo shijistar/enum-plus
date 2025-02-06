@@ -42,7 +42,7 @@ export class EnumCollectionClass<
       this[key] = value;
     });
     // @ts-expect-error: if init contains keys, use KEYS to avoid naming conflicts
-    this[Object.keys(init).includes('keys') ? KEYS : 'keys'] = keys;
+    this[Object.keys(init).some((k) => k === 'keys') ? KEYS : 'keys'] = keys;
 
     // Build enum item data
     const values = new EnumValuesArray<T, K, V>(
@@ -54,7 +54,7 @@ export class EnumCollectionClass<
       })
     );
     // @ts-expect-error: if init contains values, use VALUES to avoid naming conflicts
-    this[Object.keys(init).includes('values') ? VALUES : 'values'] = values;
+    this[Object.keys(init).some((k) => k === 'values') ? VALUES : 'values'] = values;
 
     // Override some system methods
     // @ts-expect-error: Override Object.toString method for better type display
@@ -154,15 +154,15 @@ function parseEnumItem<
     } else if (typeof init === 'object') {
       // Initialize using object
       if (Object.prototype.toString.call(init) === '[object Object]') {
-        if ('value' in init && Object.keys(init).includes('value')) {
+        if ('value' in init && Object.keys(init).some((k) => k === 'value')) {
           // type of {value, label}
           value = init.value ?? key;
-          if ('label' in init && Object.keys(init).includes('label')) {
+          if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
             label = init.label;
           } else {
             label = key as string;
           }
-        } else if ('label' in init && Object.keys(init).includes('label')) {
+        } else if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
           // typeof {label}
           value = key as unknown as V;
           label = init.label ?? key;

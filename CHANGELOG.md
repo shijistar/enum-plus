@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.0.3
+
+2025-2-6
+
+### Features
+
+- 🛠 Downgrade EcmaScript version to `ES2015`
+
 ## 2.0.2
 
 2025-2-3

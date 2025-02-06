@@ -511,9 +511,9 @@ Week.raw('Sunday').active // true
   ```
 
 - `options` method is similar to `values`, but is allowed to add a default option at the top. The default option can be a boolean value or a custom object.
-  - If set to a boolean value, the default option is `{ value: '', label: 'All' }`, the display name only supports English. If you need localization, please parse and process the built-in resource  key `enum-plus.options.all` in the localization method. For more details about localization, please refer to the [Localization](#localization) section
-  - If set to an object, you can customize the value and display text of the default option, and the display text will automatically support localization
 
+  - If set to a boolean value, the default option is `{ value: '', label: 'All' }`, the display name only supports English. If you need localization, please parse and process the built-in resource key `enum-plus.options.all` in the localization method. For more details about localization, please refer to the [Localization](#localization) section
+  - If set to an object, you can customize the value and display text of the default option, and the display text will automatically support localization
 
   ```jsx
   <Select options={Week.options({ firstOption: true })} />

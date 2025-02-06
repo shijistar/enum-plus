@@ -133,7 +133,7 @@ export class EnumValuesArray<
       // Return the original initialization object
       return this.#raw;
     } else {
-      if (Object.keys(this.#raw).includes(value as string)) {
+      if (Object.keys(this.#raw).some((k) => k === (value as string))) {
         // Find by key
         return this.#raw[value as K];
       }
