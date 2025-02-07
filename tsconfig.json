@@ -16,6 +16,5 @@
     "experimentalDecorators": true,
     "strict": true
   },
-  "include": ["./src"],
-  "exclude": ["./src/types.ts"]
+  "include": ["src"]
 }

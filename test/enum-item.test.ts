@@ -1,5 +1,5 @@
 import { Enum } from '../src';
-import { StandardWeekConfig, localeEN } from './data/week-config';
+import { localeEN, StandardWeekConfig } from './data/week-config';
 
 describe('the EnumItemClass api', () => {
   test('keyed enum item should be equal to its value', () => {
@@ -57,17 +57,17 @@ describe('the EnumItemClass api', () => {
 
     expect(saturday > friday).toBeTruthy();
     expect(monday < tuesday).toBeTruthy();
-    // @ts-expect-error: should be compatible with number
+    // @ts-expect-error: because should be compatible with number
     // eslint-disable-next-line eqeqeq
     expect(monday == 1).toBeTruthy();
-    // @ts-expect-error: should be compatible with number
+    // @ts-expect-error: because should be compatible with number
     expect(monday !== 2).toBeTruthy();
-    // @ts-expect-error: should be compatible with number
+    // @ts-expect-error: because should be compatible with number
     // eslint-disable-next-line eqeqeq
     expect(monday != 2).toBeTruthy();
-    // @ts-expect-error: should be compatible with number
+    // @ts-expect-error: because should be compatible with number
     expect(monday + 1).toBe(2);
-    // @ts-expect-error: should be compatible with number
+    // @ts-expect-error: because should be compatible with number
     expect(friday - 1).toBe(4);
 
     expect('' + sunday).toBe('0');
@@ -90,47 +90,47 @@ describe('the EnumItemClass api', () => {
     const sunday = week.values[0];
 
     /* ----------------- set ----------------- */
-    // @ts-expect-error: try to modify the property forcefully
+    // @ts-expect-error: because try to modify the property forcefully
     sunday.key = modifyValue;
     expect(sunday.key).toBe('Sunday');
-    // @ts-expect-error: try to modify the property forcefully
+    // @ts-expect-error: because try to modify the property forcefully
     sunday.value = modifyValue;
     expect(sunday.value).toBe(0);
-    // @ts-expect-error: try to modify the property forcefully
+    // @ts-expect-error: because try to modify the property forcefully
     sunday.label = modifyValue;
     expect(sunday.label).toBe(localeEN.Sunday);
-    // @ts-expect-error: try to modify the property forcefully
+    // @ts-expect-error: because try to modify the property forcefully
     sunday.raw = modifyValue;
     expect(sunday.raw).toEqual(StandardWeekConfig.Sunday);
 
     /* ----------------- delete ----------------- */
-    // @ts-expect-error: try to delete the property forcefully
+    // @ts-expect-error: because try to delete the property forcefully
     delete sunday.key;
     expect(sunday.key).toBe('Sunday');
-    // @ts-expect-error: try to delete the property forcefully
+    // @ts-expect-error: because try to delete the property forcefully
     delete sunday.value;
     expect(sunday.value).toBe(0);
-    // @ts-expect-error: try to delete the property forcefully
+    // @ts-expect-error: because try to delete the property forcefully
     delete sunday.label;
     expect(sunday.label).toBe(localeEN.Sunday);
-    // @ts-expect-error: try to delete the property forcefully
+    // @ts-expect-error: because try to delete the property forcefully
     delete sunday.raw;
     expect(sunday.raw).toEqual(StandardWeekConfig.Sunday);
 
     /* ----------------- defineProperty ----------------- */
     Object.defineProperty(sunday, 'sayHello', { value: () => modifyValue });
-    expect((sunday as any).sayHello).toBe(undefined);
+    expect((sunday as unknown as { readonly sayHello: string }).sayHello).toBe(undefined);
 
     /* ----------------- defineProperties ----------------- */
     Object.defineProperties(sunday, {
       sayHello: { value: () => modifyValue },
       sayHi: { value: () => modifyValue },
     });
-    expect((sunday as any).sayHello).toBe(undefined);
+    expect((sunday as unknown as { readonly sayHello: string }).sayHello).toBe(undefined);
 
     /* ----------------- setPrototypeOf ----------------- */
     Object.setPrototypeOf(sunday, { sayHello: () => modifyValue });
-    expect((sunday as any).sayHello).toBe(undefined);
+    expect((sunday as unknown as { readonly sayHello: string }).sayHello).toBe(undefined);
 
     // expect(Object.isExtensible(sunday)).toBe(false);
     expect(Object.isSealed(sunday)).toBe(false);

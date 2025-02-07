@@ -1,6 +1,18 @@
-<!-- markdownlint-disable MD009, MD024 -->
+<!-- markdownlint-disable MD009 MD024 -->
 
 # enum-plus Changelog
+
+## 2.1.0
+
+2025-2-8
+
+### Features
+
+- 🔥 Adds `toSelect` method, deprecated ~~`options`~~ method
+- 🔥 Adds `toMenu` method, deprecated ~~`menus`~~ method
+- 🔥 Adds `toFilter` method, deprecated ~~`filters`~~ method
+- 🔥 Adds `toValueMap` method, ~~`valuesEnum`~~ method
+- 🔥 Support global extending, you can add custom methods to Enums
 
 ## 2.0.3
 

@@ -1,4 +1,4 @@
-import { DefaultLocalize, Enum, type BuiltInResources } from '../../src';
+import { type BuiltInResources, defaultLocalize, Enum } from '../../src';
 
 export const localeEN = {
   'enum-plus.options.all': 'All',
@@ -57,11 +57,10 @@ export const StandardWeekConfig = {
 } as const;
 
 export const WeekConfigWithKey = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  // @ts-ignore TS7053: 对象无索引签名
-  acc[key] = {
+  acc[key as TKey] = {
     ...StandardWeekConfig[key as keyof typeof StandardWeekConfig],
     key: key as keyof TConfig,
-  };
+  } as never;
   return acc;
 }, {} as TConfigWithKey);
 
@@ -77,49 +76,61 @@ export const WeekStandardArray = Object.keys(StandardWeekConfig).map((key) => ({
   label: StandardWeekConfig[key as keyof typeof StandardWeekConfig].label,
 }));
 
-export const WeekNumberConfig = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  // @ts-ignore TS7053: 对象无索引签名
-  acc[key] = StandardWeekConfig[key].value;
-  return acc;
-}, {} as { [key in TKey]: TConfig[key]['value'] });
+export const WeekNumberConfig = Object.keys(StandardWeekConfig).reduce(
+  (acc, key) => {
+    acc[key as TKey] = StandardWeekConfig[key as TKey].value as never;
+    return acc;
+  },
+  {} as { [key in TKey]: TConfig[key]['value'] }
+);
 
-export const WeekStringConfig = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  // @ts-ignore TS7053: 对象无索引签名
-  acc[key] = key;
-  return acc;
-}, {} as { [key in TKey]: key });
+export const WeekStringConfig = Object.keys(StandardWeekConfig).reduce(
+  (acc, key) => {
+    acc[key as TKey] = key as never;
+    return acc;
+  },
+  {} as { [key in TKey]: key }
+);
 
-export const WeekCompactConfig = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  // @ts-ignore TS7053: 对象无索引签名
-  acc[key] = undefined;
-  return acc;
-}, {} as { [key in TKey]: undefined });
+export const WeekCompactConfig = Object.keys(StandardWeekConfig).reduce(
+  (acc, key) => {
+    acc[key as TKey] = undefined;
+    return acc;
+  },
+  {} as { [key in TKey]: undefined }
+);
 
-export const WeekEmptyConfig = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  // @ts-ignore TS7053: 对象无索引签名
-  acc[key] = {};
-  return acc;
-}, {} as { [key in TKey]: Record<string, never> });
+export const WeekEmptyConfig = Object.keys(StandardWeekConfig).reduce(
+  (acc, key) => {
+    acc[key as TKey] = {};
+    return acc;
+  },
+  {} as { [key in TKey]: Record<string, never> }
+);
 
-export const WeekValueOnlyConfig = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  // @ts-ignore TS7053: 对象无索引签名
-  acc[key] = { value: StandardWeekConfig[key].value };
-  return acc;
-}, {} as { [key in TKey]: { value: TConfig[key]['value'] } });
+export const WeekValueOnlyConfig = Object.keys(StandardWeekConfig).reduce(
+  (acc, key) => {
+    acc[key as TKey] = { value: StandardWeekConfig[key as TKey].value } as never;
+    return acc;
+  },
+  {} as { [key in TKey]: { value: TConfig[key]['value'] } }
+);
 
-export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  // @ts-ignore TS7053: 对象无索引签名
-  acc[key] = { label: StandardWeekConfig[key].label };
-  return acc;
-}, {} as { [key in TKey]: { label: TConfig[key]['label'] } });
+export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce(
+  (acc, key) => {
+    acc[key as TKey] = { label: StandardWeekConfig[key as TKey].label } as never;
+    return acc;
+  },
+  {} as { [key in TKey]: { label: TConfig[key]['label'] } }
+);
 
 export function genSillyLocalizer(language: typeof lang) {
-  if (!language) return DefaultLocalize;
+  if (!language) return defaultLocalize;
   const locales = getLocales(language);
   return function sillyLocalize(
     content:
       | BuiltInResources
-      | typeof StandardWeekConfig[keyof typeof StandardWeekConfig]['label']
+      | (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label']
       // eslint-disable-next-line @typescript-eslint/ban-types
       | (string & {})
       | undefined
@@ -149,14 +160,17 @@ export function genSillyLocalizer(language: typeof lang) {
 
 export function localizeConfigData(config: typeof StandardWeekConfig) {
   if (sillyLocalize) {
-    return Object.keys(config).reduce((acc, key) => {
-      // @ts-expect-error TS2540: Cannot assign to 'value' because it is a read-only property.
-      acc[key as keyof typeof config] = {
-        ...config[key as keyof typeof config],
-        label: sillyLocalize?.(config[key as keyof typeof config].label),
-      };
-      return acc;
-    }, {} as typeof config);
+    return Object.keys(config).reduce(
+      (acc, key) => {
+        // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
+        acc[key as keyof typeof config] = {
+          ...config[key as keyof typeof config],
+          label: sillyLocalize?.(config[key as keyof typeof config].label),
+        };
+        return acc;
+      },
+      {} as typeof config
+    );
   }
   return config;
 }

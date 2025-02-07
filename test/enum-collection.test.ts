@@ -1,9 +1,9 @@
-import { addEnumValuesTestSuite } from './enum-values.test';
 import { Enum, KEYS, VALUES } from '../src';
-import { locales, sillyLocalize, StandardWeekConfig } from './data/week-config';
-import { toPlainEnums } from './utils';
-import { getStandardWeekData } from './data/week-data';
 import { EnumValuesArray } from '../src/enum-values';
+import { locales, sillyLocalize, StandardWeekConfig } from './data/week-config';
+import { getStandardWeekData } from './data/week-data';
+import { addEnumValuesTestSuite } from './enum-values.test';
+import { toPlainEnums } from './utils';
 
 describe('the EnumCollectionClass api', () => {
   addEnumValuesTestSuite(Enum(StandardWeekConfig));
@@ -25,9 +25,13 @@ describe('the EnumCollectionClass api', () => {
     expect(week.key(1)).toBe(week.values.key(1));
     expect(week.has(1)).toBe(week.values.has(1));
     expect(week.raw()).toBe(week.values.raw());
+    expect(week.toSelect()).toEqual(week.values.toSelect());
     expect(week.options()).toEqual(week.values.options());
+    expect(week.toMenu()).toEqual(week.values.toMenu());
     expect(week.menus()).toEqual(week.values.menus());
+    expect(week.toFilter()).toEqual(week.values.toFilter());
     expect(week.filters()).toEqual(week.values.filters());
+    expect(week.toValueMap()).toEqual(week.values.toValueMap());
     expect(week.valuesEnum()).toEqual(week.values.valuesEnum());
   });
 
@@ -36,10 +40,10 @@ describe('the EnumCollectionClass api', () => {
       label: { value: 1, label: 'label' },
       key: { value: 2, label: 'key' },
       has: { value: 3, label: 'has' },
-      options: { value: 4, label: 'options' },
-      valuesEnum: { value: 5, label: 'valuesEnum' },
-      filters: { value: 6, label: 'filters' },
-      menus: { value: 7, label: 'menus' },
+      toSelect: { value: 4, label: 'toSelect' },
+      toValueMap: { value: 5, label: 'toValueMap' },
+      toFilter: { value: 6, label: 'toFilter' },
+      toMenu: { value: 7, label: 'toMenu' },
       raw: { value: 99, label: 'raw' },
       keys: { value: 101, label: 'foo' },
     };
@@ -50,14 +54,14 @@ describe('the EnumCollectionClass api', () => {
     expect(strangeEnum.values.key(2)).toBe('key');
     expect(strangeEnum.has).toBe(3);
     expect(strangeEnum.values.has(3)).toBe(true);
-    expect(strangeEnum.options).toBe(4);
-    expect(strangeEnum.values.options()).toHaveLength(Object.keys(strangeEnumConfig).length);
-    expect(strangeEnum.filters).toBe(6);
-    expect(strangeEnum.values.filters()).toHaveLength(Object.keys(strangeEnumConfig).length);
-    expect(strangeEnum.menus).toBe(7);
-    expect(strangeEnum.values.menus()).toHaveLength(Object.keys(strangeEnumConfig).length);
-    expect(strangeEnum.valuesEnum).toBe(5);
-    expect(Object.keys(strangeEnum.values.valuesEnum())).toEqual(
+    expect(strangeEnum.toSelect).toBe(4);
+    expect(strangeEnum.values.toSelect()).toHaveLength(Object.keys(strangeEnumConfig).length);
+    expect(strangeEnum.toFilter).toBe(6);
+    expect(strangeEnum.values.toFilter()).toHaveLength(Object.keys(strangeEnumConfig).length);
+    expect(strangeEnum.toMenu).toBe(7);
+    expect(strangeEnum.values.toMenu()).toHaveLength(Object.keys(strangeEnumConfig).length);
+    expect(strangeEnum.toValueMap).toBe(5);
+    expect(Object.keys(strangeEnum.values.toValueMap())).toEqual(
       Object.keys(strangeEnumConfig).map((key) =>
         strangeEnumConfig[key as keyof typeof strangeEnumConfig].value.toString()
       )
@@ -90,13 +94,13 @@ describe('the EnumCollectionClass api', () => {
 
   test('enum value/key/label should be success by the [instanceof] operator', () => {
     const week = Enum(StandardWeekConfig);
-    expect((0 as unknown) instanceof (week as any)).toBeTruthy();
-    expect(('Sunday' as unknown) instanceof (week as any)).toBeTruthy();
-    expect((sillyLocalize?.('weekday.sunday') as unknown) instanceof (week as any)).toBeTruthy();
-    expect((6 as unknown) instanceof (week as any)).toBeTruthy();
-    expect(('Saturday' as unknown) instanceof (week as any)).toBeTruthy();
-    expect((sillyLocalize?.('weekday.saturday') as unknown) instanceof (week as any)).toBeTruthy();
-    expect((7 as unknown) instanceof (week as any)).toBeFalsy();
-    expect(('[Not Exists]' as unknown) instanceof (week as any)).toBeFalsy();
+    expect((0 as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
+    expect(('Sunday' as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
+    expect((sillyLocalize?.('weekday.sunday') as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
+    expect((6 as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
+    expect(('Saturday' as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
+    expect((sillyLocalize?.('weekday.saturday') as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
+    expect((7 as unknown) instanceof (week as unknown as () => void)).toBeFalsy();
+    expect(('[Not Exists]' as unknown) instanceof (week as unknown as () => void)).toBeFalsy();
   });
 });

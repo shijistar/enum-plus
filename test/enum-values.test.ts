@@ -1,8 +1,8 @@
-import type { IEnumValues } from '../src';
-import { getOptionsData, pickArray } from './utils';
 import { Enum } from '../src';
+import type { IEnumValues } from '../src/types';
 import { locales, localizeConfigData, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
+import { getOptionsData, pickArray } from './utils';
 
 describe('the EnumValuesArray api', () => {
   addEnumValuesTestSuite(Enum(StandardWeekConfig).values);
@@ -12,7 +12,7 @@ export function addEnumValuesTestSuite(
   weekEnum: IEnumValues<
     typeof StandardWeekConfig,
     keyof typeof StandardWeekConfig,
-    typeof StandardWeekConfig[keyof typeof StandardWeekConfig]['value']
+    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
   >
 ) {
   test('[label] should be able to get enum label by key or value', () => {
@@ -38,15 +38,11 @@ export function addEnumValuesTestSuite(
   });
 
   test('[options] should be able to generate select options', () => {
-    expect(getOptionsData(weekEnum.options())).toEqual(
-      pickArray(getStandardWeekData(locales), ['label', 'value'])
-    );
-    expect(getOptionsData(weekEnum.options({}))).toEqual(
-      pickArray(getStandardWeekData(locales), ['label', 'value'])
-    );
+    expect(getOptionsData(weekEnum.toSelect())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
+    expect(getOptionsData(weekEnum.toSelect({}))).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
 
     // Add first-option by boolean flag
-    const withDefaultFirstOption = weekEnum.options({ firstOption: true });
+    const withDefaultFirstOption = weekEnum.toSelect({ firstOption: true });
     expect(withDefaultFirstOption).toHaveLength(8);
     expect(withDefaultFirstOption[0]).toEqual({
       value: '',
@@ -55,9 +51,9 @@ export function addEnumValuesTestSuite(
     });
 
     // Add first-option by boolean flag with custom value
-    const customDefaultOption = weekEnum.options({
+    const customDefaultOption = weekEnum.toSelect({
       firstOption: true,
-      firstOptionValue: 99 as any,
+      firstOptionValue: 99 as 1,
       firstOptionLabel: 'Select All',
     });
     expect(customDefaultOption).toHaveLength(8);
@@ -65,47 +61,59 @@ export function addEnumValuesTestSuite(
 
     // Add custom first-option
     const customOption = { value: 99, key: '99', label: 'WeekdayX' };
-    const withCustomFirstOption = weekEnum.options({
+    const withCustomFirstOption = weekEnum.toSelect({
       firstOption: customOption,
     });
     expect(withCustomFirstOption[0]).toEqual(customOption);
 
     // Add custom first-option using value as key
     const customOptionWithoutKey = { value: 99, label: 'WeekdayX' };
-    const withCustomFirstOptionUsingValueAsKey = weekEnum.options({
+    const withCustomFirstOptionUsingValueAsKey = weekEnum.toSelect({
       firstOption: customOptionWithoutKey,
     });
     expect(withCustomFirstOptionUsingValueAsKey[0]).toEqual({
       ...customOptionWithoutKey,
       key: customOptionWithoutKey.value,
     });
+
+    // options is deprecated, should be same as toSelect
+    expect(weekEnum.options()).toEqual(weekEnum.toSelect());
   });
 
   test('[valuesEnum] should be able to generate enum type for AntDesignPro', () => {
-    expect(weekEnum.valuesEnum()).toEqual(
-      Object.values(localizeConfigData(StandardWeekConfig)).reduce((acc, { value, label }) => {
-        acc[value] = { text: label };
-        return acc;
-      }, {} as Record<number, { text: string }>)
+    expect(weekEnum.toValueMap()).toEqual(
+      Object.values(localizeConfigData(StandardWeekConfig)).reduce(
+        (acc, { value, label }) => {
+          acc[value] = { text: label };
+          return acc;
+        },
+        {} as Record<number, { text: string }>
+      )
     );
+    // valuesEnum is deprecated, should be same as toValueMap
+    expect(weekEnum.valuesEnum()).toEqual(weekEnum.toValueMap());
   });
 
   test('[menus] should be able to generate data for AntDesign Menu', () => {
-    expect(weekEnum.menus()).toEqual(
+    expect(weekEnum.toMenu()).toEqual(
       Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
         key: value,
         label: label,
       }))
     );
+    // menus is deprecated, should be same as toMenu
+    expect(weekEnum.menus()).toEqual(weekEnum.toMenu());
   });
 
   test('[filters] should be able to generate filter items for AntDesign Table', () => {
-    expect(weekEnum.filters()).toEqual(
+    expect(weekEnum.toFilter()).toEqual(
       Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
         text: label,
         value,
       }))
     );
+    // filters is deprecated, should be same as toFilter
+    expect(weekEnum.filters()).toEqual(weekEnum.toFilter());
   });
 
   test('[raw] should be able to return the raw object used to initialize the enums', () => {

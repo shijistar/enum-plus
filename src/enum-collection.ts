@@ -1,47 +1,67 @@
-import { KEYS, VALUES } from './index';
 import { EnumItemClass } from './enum-item';
+import { EnumValuesArray } from './enum-values';
+import { KEYS, VALUES } from './index';
 import type {
   BooleanFirstOptionConfig,
-  IEnumValues,
-  ObjectFirstOptionConfig,
-  OptionsConfig,
+  ColumnFilterItem,
   EnumInit,
   EnumItemInit,
-  EnumKey,
   EnumItemOptionData,
+  EnumItemOptions,
+  EnumKey,
   EnumValue,
+  IEnumValues,
+  MenuItemOption,
+  ObjectFirstOptionConfig,
+  OptionsConfig,
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
-  ColumnFilterItem,
-  EnumItemOptions,
-  MenuItemOption,
 } from './types';
-import { EnumValuesArray } from './enum-values';
 
-/**
- * EN: Enum collection
- * CN: 枚举项集合
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface EnumExtension<
+    T extends EnumInit<K, V>,
+    K extends EnumKey<T> = EnumKey<T>,
+    V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  > {}
+} /**
+ * **EN:** Enum collection extension base class, used to extend the Enums
+ *
+ * **CN:** 枚举集合扩展基类，用于扩展枚举
  */
-export class EnumCollectionClass<
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+export class EnumExtensionClass<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>
-> implements IEnumValues<T, K, V>
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> implements EnumExtension<T, K, V> {}
+/**
+ * **EN:** Enum collection
+ *
+ * **CN:** 枚举项集合
+ */
+export class EnumCollectionClass<
+    T extends EnumInit<K, V>,
+    K extends EnumKey<T> = EnumKey<T>,
+    V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  >
+  extends EnumExtensionClass<T, K, V>
+  implements IEnumValues<T, K, V>
 {
   readonly values!: EnumValuesArray<T, K, V>;
   readonly keys!: K[];
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
+    super();
     const keys = Object.keys(init) as K[];
-    const parsed = keys.map((key) =>
-      parseEnumItem<EnumItemInit<V>, K, V, T>(init[key], key, { typeInit: init, keys })
-    );
+    const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V, T>(init[key], key, { typeInit: init, keys }));
     keys.forEach((key, index) => {
       const { value } = parsed[index];
-      // @ts-expect-error: dynamically define property
+      // @ts-expect-error: because of dynamically define property
       this[key] = value;
     });
-    // @ts-expect-error: if init contains keys, use KEYS to avoid naming conflicts
+    // @ts-expect-error: because use KEYS to avoid naming conflicts in case of 'keys' field name is taken
     this[Object.keys(init).some((k) => k === 'keys') ? KEYS : 'keys'] = keys;
 
     // Build enum item data
@@ -53,15 +73,15 @@ export class EnumCollectionClass<
         return new EnumItemClass<T[K], K, V>(key, value, label, init[key], options).readonly();
       })
     );
-    // @ts-expect-error: if init contains values, use VALUES to avoid naming conflicts
+    // @ts-expect-error: because use VALUES to avoid naming conflicts in case of 'values' field name is taken
     this[Object.keys(init).some((k) => k === 'values') ? VALUES : 'values'] = values;
 
     // Override some system methods
-    // @ts-expect-error: Override Object.toString method for better type display
+    // @ts-expect-error: because override Object.toString method for better type display
     this[Symbol.toStringTag] = 'EnumCollection';
     // Override the `instanceof` operator rule
-    // @ts-expect-error: Override the instanceof operator
-    this[Symbol.hasInstance] = (instance: any): boolean => {
+    // @ts-expect-error: because override the instanceof operator
+    this[Symbol.hasInstance] = (instance: unknown): boolean => {
       // intentionally use == to support both number and string format value
       return this.values.some(
         // eslint-disable-next-line eqeqeq
@@ -84,36 +104,62 @@ export class EnumCollectionClass<
     return this.values.has(keyOrValue);
   }
 
-  options(): EnumItemOptionData<K, V>[];
-  options(
-    config: OptionsConfig & BooleanFirstOptionConfig<V>
-  ): EnumItemOptionData<K | '', V | ''>[];
-  options<FK = never, FV = never>(
+  toSelect(): EnumItemOptionData<K, V>[];
+  toSelect(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  toSelect<FK = never, FV = never>(
     config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
+  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
+  toSelect<FK = never, FV = never>(
+    config?: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
+  ): EnumItemOptionData<K | FK, V | FV>[] {
+    return this.values.toSelect(config as OptionsConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
+      K | FK,
+      V | FV
+    >[];
+  }
+  /** @deprecated use `toSelect` instead */
+  options(): EnumItemOptionData<K, V>[];
+  options(config: object & BooleanFirstOptionConfig<V>): EnumItemOptionData<'' | K, '' | V>[];
+  options<FK, FV>(
+    config: object & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   options<FK = never, FV = never>(
     config?: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    // @ts-ignore: call the options method of values
-    return this.values.options(config);
+    return this.values.options(config as OptionsConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
+      K | FK,
+      V | FV
+    >[];
   }
 
-  valuesEnum() {
-    return this.values.valuesEnum();
+  toMenu(): MenuItemOption<V>[] {
+    return this.values.toMenu();
   }
-
+  /** @deprecated use `toMenu` instead */
   menus(): MenuItemOption<V>[] {
     return this.values.menus();
   }
 
+  toFilter(): ColumnFilterItem<V>[] {
+    return this.values.toFilter();
+  }
+  /** @deprecated use `toFilter` instead */
   filters(): ColumnFilterItem<V>[] {
     return this.values.filters();
+  }
+
+  toValueMap() {
+    return this.values.toValueMap();
+  }
+  /** @deprecated use `toValueMap` instead */
+  valuesEnum() {
+    return this.values.valuesEnum();
   }
 
   raw(): T;
   raw(keyOrValue: V | K): T[K];
   raw(value: unknown): T[K] | undefined;
-  raw(value?: any): T | T[K] | undefined {
+  raw(value?: unknown): T | T[K] | undefined {
     if (value !== undefined) {
       return this.values.raw(value);
     } else {
@@ -134,9 +180,10 @@ export class EnumCollectionClass<
 
 function parseEnumItem<
   T extends EnumItemInit<V>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   K extends EnumKey<any>,
   V extends EnumValue,
-  TT extends EnumInit<K, V>
+  TT extends EnumInit<K, V>,
 >(
   init: T,
   key: K,
@@ -185,6 +232,7 @@ function parseEnumItem<
   return { value, label };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function inferFromNull<K extends EnumKey<any>, V extends EnumValue, TT extends EnumInit<K, V>>(
   key: K,
   options: {
@@ -207,7 +255,7 @@ function inferFromNull<K extends EnumKey<any>, V extends EnumValue, TT extends E
     value = (prev + 1) as V;
   } else {
     // only nulls
-    let seed: number = 0;
+    let seed = 0;
     let count = 0;
     // find seed
     for (let i = index - 1; i >= 0; i--) {

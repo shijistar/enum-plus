@@ -1,7 +1,8 @@
 import type { EnumInit } from '../src';
 import { Enum } from '../src';
-import { toPlainEnums } from './utils';
 import {
+  locales,
+  StandardWeekConfig,
   WeekCompactConfig,
   WeekEmptyConfig,
   WeekLabelOnlyConfig,
@@ -9,18 +10,17 @@ import {
   WeekStandardArray,
   WeekStringConfig,
   WeekValueOnlyConfig,
-  StandardWeekConfig,
-  locales,
 } from './data/week-config';
 import {
   getStandardWeekData,
+  getWeekDataHasKeyAutoIncrementedValue,
+  getWeekDataHasKeyEmptyObjectValueNoLabel,
   getWeekDataHasKeyHasValueNoLabel,
   getWeekDataHasKeyNoValueHasLabel,
-  getWeekDataHasKeyEmptyObjectValueNoLabel,
   getWeekDataHasValueHasLabelNoKey,
   getWeekDataHasValueNoKeyNoLabel,
-  getWeekDataHasKeyAutoIncrementedValue,
 } from './data/week-data';
+import { toPlainEnums } from './utils';
 
 describe('should be able to create an enum from object', () => {
   test('should have a return', () => {
@@ -54,15 +54,16 @@ describe('should be able to create an enum from object', () => {
     const week = Enum(WeekLabelOnlyConfig);
     expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyNoValueHasLabel(locales));
     const weekWithEmptyLabel = Enum(
-      Object.keys(WeekLabelOnlyConfig).reduce((acc, key) => {
-        // clear label
-        acc[key] = { ...acc[key], label: undefined as unknown as string };
-        return acc;
-      }, {} as Record<string, { label: string }>)
+      Object.keys(WeekLabelOnlyConfig).reduce(
+        (acc, key) => {
+          // clear label
+          acc[key] = { ...acc[key], label: undefined as unknown as string };
+          return acc;
+        },
+        {} as Record<string, { label: string }>
+      )
     );
-    expect(toPlainEnums(weekWithEmptyLabel.values)).toEqual(
-      getWeekDataHasKeyEmptyObjectValueNoLabel()
-    );
+    expect(toPlainEnums(weekWithEmptyLabel.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
   test('created weekdays enum with compact config', () => {
@@ -83,10 +84,12 @@ describe('should be able to create an enum from object', () => {
   });
 
   test('created weekdays enum with some supported but invalid values', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(toPlainEnums(Enum({ foo: /regexp/ } as Record<string, any>).values)).toEqual([
       { key: 'foo', value: /regexp/, label: 'foo' },
     ]);
     const date = new Date();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(toPlainEnums(Enum({ foo: date } as Record<string, any>).values)).toEqual([
       { key: 'foo', value: date, label: 'foo' },
     ]);
@@ -94,6 +97,7 @@ describe('should be able to create an enum from object', () => {
 
   test('should throw error if enum value is invalid', () => {
     expect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Enum({ foo: () => void 0 } as Record<string, any>);
     }).toThrow();
   });

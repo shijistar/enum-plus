@@ -1,7 +1,9 @@
-import type { EnumItemInit, EnumItemOptionData, EnumValue, StandardEnumItemInit } from '../../src';
+import type { EnumItemInit, EnumItemOptionData, EnumValue } from '../../src';
 import type { EnumItemClass } from '../../src/enum-item';
+import type { StandardEnumItemInit } from '../../src/types';
 
 export function toPlainEnums<T extends EnumItemInit<EnumValue>>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   enums: EnumItemClass<any>[],
   fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label']
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
@@ -25,12 +27,12 @@ export function pickInitConfig<T extends Record<keyof T, StandardEnumItemInit<En
   fieldNames: (keyof T[keyof T])[] = ['value', 'label']
 ): T {
   return Object.keys(obj).reduce((acc, key) => {
-    // @ts-ignore TS7053: 对象无索引签名
-    (acc as Record<string, any>)[key] = pickObject(obj[key], fieldNames);
+    (acc as Record<string, unknown>)[key] = pickObject(obj[key as keyof T], fieldNames);
     return acc;
   }, {} as T);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function pickArray<T extends Record<string, any>>(
   array: T[],
   fieldNames: (keyof T)[] = Object.keys(array[0] || {}) as (keyof T)[]
@@ -42,12 +44,16 @@ export function getOptionsData<K, V>(options: EnumItemOptionData<K, V>[]) {
   return options.map(({ value, label }) => ({ value, label }));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function pickObject<T extends Record<string, any>, K extends keyof T>(
   obj: T,
   fieldNames: K[] = Object.keys(obj) as K[]
 ) {
-  return fieldNames.reduce((acc, key) => {
-    acc[key] = obj[key];
-    return acc;
-  }, {} as { [key in K]: T[key] });
+  return fieldNames.reduce(
+    (acc, key) => {
+      acc[key] = obj[key];
+      return acc;
+    },
+    {} as { [key in K]: T[key] }
+  );
 }

@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+. "node_modules/@tiny-codes/code-style-all-in-one/husky/hooks/pre-commit"

@@ -11,7 +11,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E)
 
-⬇️&nbsp;&nbsp; [简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [使用方法](#使用方法) | [本地化](#本地化) &nbsp;&nbsp;⬇️
+⬇️ &nbsp;&nbsp; [简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [使用方法](#使用方法) | [本地化](#本地化) | [全局扩展](#全局扩展) &nbsp;&nbsp; ⬇️
 
 ## 简介
 
@@ -26,10 +26,11 @@
 - 兼容原生 `enum` 的用法
 - 支持`number`、`string`等多种数据类型
 - 支持枚举项扩展显示文本
-- 显示文本支持本地化，可以使用任意国际化类库
+- 支持本地化显示文本，可以使用任意国际化类库
 - 支持枚举值转换为显示文本，代码更简洁
 - 枚举项支持扩展任意个自定义字段
-- 支持将枚举绑定到 [AntDesign](https://ant.design/components/overview-cn)、[ElementPlus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 或任意其它组件库，只要一行代码
+- 支持将枚举绑定到 [Ant Design](https://ant-design.antgroup.com/components/overview-cn)、[ElementPlus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 或任意其它组件库，只要一行代码
+- 支持 Node.js 环境，支持服务端渲染(SSR)
 - 零依赖，纯原生 JavaScript，可以应用在任意前端框架中
 - 100% TypeScript 实现，支持类型推断
 - 轻量(gzip 压缩后仅 2KB+)
@@ -155,7 +156,7 @@ Week.Sunday; // 0
 
 `{value, label, key, raw}[]`
 
-获取一个包含全部枚举项的只读数组，可以方便地遍历枚举项。由于符合 [AntDesign](https://github.com/ant-design/ant-design) 组件的数据规范，因此支持将枚举一键转换成下拉框、复选框等组件，只需要一行代码，更多详情可以参考后面的例子
+获取一个包含全部枚举项的只读数组，可以方便地遍历枚举项。由于符合 [Ant Design](https://github.com/ant-design/ant-design) 组件的数据规范，因此支持将枚举一键转换成下拉框、复选框等组件，只需要一行代码，更多详情可以参考后面的例子
 
 ---
 
@@ -207,36 +208,42 @@ Week.has('Birthday'); // false
 
 ---
 
-### options
+### toSelect
 
-<sup>**_[方法]_**</sup> `options(config?: OptionsConfig): {value, label}[]`
+<sup>**_[方法]_**</sup> `toSelect(config?: OptionsConfig): {value, label}[]`
 
-`options`与`values`相似，都是返回一个包含全部枚举项的数组。区别是，options 返回的元素只包含`label`和`value`两个字段，同时，options 方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
+`toSelect`与`values`相似，都是返回一个包含全部枚举项的数组。区别是，`toSelect`返回的元素只包含`label`和`value`两个字段，同时，`toSelect`方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
 
 ---
 
-### valuesEnum
+### toMenu
 
-<sup>**_[方法]_**</sup> `valuesEnum(): Record<V, { text: string }>`
+<sup>**_[方法]_**</sup> `toMenu(): { key, label }[]`
 
-生成一个符合 [AntDesignPro](https://procomponents.ant.design/components/schema#valueenum) 规范的枚举集合对象，可以传递给 `ProFormField`、`ProTable` 组件。
+生成一个对象数组，可以绑定给 [Ant Design](https://ant-design.antgroup.com/components/menu-cn) 的`Menu`、`Dropdown`等组件
+
+```js
+import { Menu } from 'antd';
+
+<Menu items={Week.toMenu()} />;
+```
 
 数据格式为：
 
 ```js
-{
-  0: { text: '星期日' },
-  1: { text: '星期一' },
-}
+[
+  { key: 0, label: '星期日' },
+  { key: 1, label: '星期一' },
+];
 ```
 
 ---
 
-### filters
+### toFilter
 
-<sup>**_[方法]_**</sup> `filters(): { text, value }[]`
+<sup>**_[方法]_**</sup> `toFilter(): { text, value }[]`
 
-生成一个 filters 数组，可以直接传递给 [AntDesign](https://ant.design/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
+生成一个 filters 数组，可以直接传递给 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
 
 数据格式为：
 
@@ -245,6 +252,23 @@ Week.has('Birthday'); // false
   { text: '星期日', value: 0 },
   { text: '星期一', value: 1 },
 ];
+```
+
+---
+
+### toValueMap
+
+<sup>**_[方法]_**</sup> `toValueMap(): Record<V, { text: string }>`
+
+生成一个符合 [Ant Design Pro](https://procomponents.ant.design/components/schema#valueenum) 规范的枚举集合对象，可以传递给 `ProFormField`、`ProTable` 等组件。
+
+数据格式为：
+
+```js
+{
+  0: { text: '星期日' },
+  1: { text: '星期一' },
+}
 ```
 
 ---
@@ -280,7 +304,7 @@ Week.raw('Monday'); // { value: 1, label: '星期一' }
 
 ```typescript
 const weekValue: typeof Week.valueType = 1;
-const weeks: typeof Week.valueType[] = [0, 1];
+const weeks: (typeof Week.valueType)[] = [0, 1];
 type WeekValues = typeof Week.valueType; // 0 | 1
 ```
 
@@ -296,7 +320,7 @@ type WeekValues = typeof Week.valueType; // 0 | 1
 
 ```typescript
 const weekKey: typeof Week.keyType = 'Monday';
-const weekKeys: typeof Week.keyType[] = ['Sunday', 'Monday'];
+const weekKeys: (typeof Week.keyType)[] = ['Sunday', 'Monday'];
 type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
 ```
 
@@ -316,7 +340,7 @@ type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
 
 ## 使用方法
 
-#### 访问枚举项，与原生枚举用法一致
+#### 拾取枚举值，与原生枚举用法一致
 
 ```js
 const Week = Enum({
@@ -330,7 +354,7 @@ Week.Sunday; // 0
 
 ---
 
-#### 可保留 Jsdoc 注释，代码提示更友好
+#### 支持添加 Jsdoc 注释，代码提示更友好
 
 在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 Jsdoc 注释，而不必再转到枚举定义处查看。另外，在输入`HttpCodes.`时，编辑器也会自动提示枚举项列表，通过键盘上下键切换枚举项，也可以展示详细信息
 
@@ -346,14 +370,14 @@ const HttpCodes = Enum({
   E404: { value: 1, label: 'Not Found' },
 } as const);
 
-HttpCodes.E404; // 将光标悬停在 E404 上，将显示Jsdoc文档注释
+HttpCodes.E404; // 将光标悬停在 E404 上，将显示完整的Jsdoc文档注释
 ```
 
 > 上面的代码示例中，Http 状态码的释义内容参考自 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
 
 ---
 
-#### 获取枚举项数组
+#### 获取包含全部枚举项的数组
 
 ```js
 Week.values; // 输出如下:
@@ -365,7 +389,7 @@ Week.values; // 输出如下:
 
 ---
 
-#### 获取第一个枚举项的值
+#### 获取第一个枚举值
 
 ```js
 Week.values[0].value; // 0
@@ -373,11 +397,11 @@ Week.values[0].value; // 0
 
 ---
 
-#### 判断枚举中是否包含某个值
+#### 检查一个值是否一个有效的枚举值
 
 ```js
-Week.values.some(item => item.value === 1); // true
 Week.has(1); // true
+Week.values.some(item => item.value === 1); // true
 1 instance of Week; // true
 ```
 
@@ -409,7 +433,7 @@ Week.values[0].label = 'foo'; // ❌ 不可修改
 
 ---
 
-#### 获取某个值的显示文本
+#### 枚举值(或Key)转换为显示文本
 
 ```js
 Week.label(1); // 星期一，
@@ -419,17 +443,17 @@ Week.label('Monday'); // 星期一
 
 ---
 
-#### 获取某个枚举项的 key
+#### 枚举值转换为Key
 
 ```js
 Week.key(1); // 'Monday'
 Week.key(Week.Monday); // 'Monday'
-Week.key(9); // undefined, 不存在
+Week.key(9); // undefined, 因为不存在
 ```
 
 ---
 
-#### 添加扩展字段
+#### 添加扩展字段，数量无限制
 
 ```js
 const Week = Enum({
@@ -447,17 +471,20 @@ Week.raw('Sunday').active // true
 
 - `values` 可以直接作为组件的数据源（以 Select 组件为例）
 
-  [AntDesign](https://ant.design/components/select-cn) Select
+  [Ant Design](https://ant-design.antgroup.com/components/select-cn) | [Arco Design](https://arco.design/react/components/select)
+  Select
 
-  ```jsx
+  ```tsx
   import { Select } from 'antd';
+
   <Select options={Week.values} />;
   ```
 
   [Material-UI](https://mui.com/material-ui/react-select/) Select
 
-  ```jsx
-  import { Select, MenuItem } from '@mui/material';
+  ```tsx
+  import { MenuItem, Select } from '@mui/material';
+
   <Select>
     {Week.values.map((item) => (
       <MenuItem key={item.value} value={item.value}>
@@ -467,25 +494,32 @@ Week.raw('Sunday').active // true
   </Select>;
   ```
 
-  [Kendo UI](https://www.telerik.com/kendo-angular-ui/components/dropdowns/select/) Select
+  [Kendo UI](https://www.telerik.com/kendo-react-ui/components/dropdowns/dropdownlist) Select
 
-  ```jsx
+  ```tsx
   import { DropDownList } from '@progress/kendo-react-dropdowns';
+
   <DropDownList data={Week.values} textField="label" dataItemKey="value" />;
   ```
 
   [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
 
-  ```jsx
+  ```tsx
   <el-select>
-    <el-option v-for="item in Week.values" :key="item.value" :label="item.label" :value="item.value" />
+    <el-option v-for="item in Week.values" v-bind="item" />
   </el-select>
   ```
 
-  [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
+  [Ant Design Vue](https://antdv.com/components/select-cn) | [Arc Design](https://arco.design/vue/component/select) Select
 
-  ```jsx
-  <v-select :items="Week.values" item-title="label" item-value="value" />
+  ```tsx
+  <a-select :options="Week.values" />
+  ```
+
+  [Vuetify](https://vuetifyjs.com/zh-Hans/components/selects) Select
+
+  ```tsx
+  <v-select :items="Week.values" item-title="label" />
   ```
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
@@ -508,13 +542,13 @@ Week.raw('Sunday').active // true
   </nz-select>
   ```
 
-- `options`方法与`values`类似，但允许在头部增加一个默认选项。默认选项可以是一个布尔值，也可以是一个自定义对象。
+- `toSelect`方法与`values`类似，但允许在头部增加一个默认选项。默认选项可以是一个布尔值，也可以是一个自定义对象。
 
   - 如果是布尔值，则默认选项为`{ value: '', label: 'All' }`，显示名称只支持英文。如果希望支持本地化，请在本地化方法中解析并处理`enum-plus.options.all`这个内置资源。关于本地化的更多详情，请参考[本地化](#本地化)章节
   - 如果是一个对象，则可以自定义默认选项的值和显示文本，显示文本会自动支持本地化
 
-  ```jsx
-  <Select options={Week.options({ firstOption: true })} />
+  ```tsx
+  <Select options={Week.toSelect({ firstOption: true })} />
   // [
   //  { value: '', label: 'All' },
   //  { value: 0, label: '星期日' },
@@ -522,36 +556,39 @@ Week.raw('Sunday').active // true
   // ]
 
   // 自定义头部默认选项
-  <Select options={Week.options({ firstOption: { value: 0, label: '不限' } })} />
+  <Select options={Week.toSelect({ firstOption: { value: 0, label: '不限' } })} />
   ```
 
-- `menus`方法可以为 [AntDesign](https://github.com/ant-design/ant-design) `Menu`、`Dropdown` 等组件生成数据源，格式为：`{ key: number|string, label: string }[]`
+- `toMenu`方法可以为 [Ant Design](https://github.com/ant-design/ant-design) `Menu`、`Dropdown` 等组件生成数据源，格式为：`{ key: number|string, label: string } []`
 
-```jsx
+```tsx
 import { Menu } from 'antd';
-<Menu items={Week.menus()} />;
+
+<Menu items={Week.toMenu()} />;
 ```
 
-- `filters`方法可以为 [AntDesign](https://github.com/ant-design/ant-design) `Table` 组件的`列筛选`功能生成数据源，格式为：`{ text: string, value: number|string }[]`
+- `toFilter`方法可以生成一个对象数组，为表格绑定`列筛选`功能，列头中显示一个下拉筛选框，用来过滤表格数据。对象结构遵循 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) 的数据规范，格式为：`{ text: string, value: number|string } []`
 
-```jsx
+```tsx
 import { Table } from 'antd';
+
 const columns = [
   {
     title: 'week',
     dataIndex: 'week',
-    filters: Week.filters(),
+    filters: Week.toFilter(),
   },
 ];
 // 在表头中显示下拉筛选项
 <Table columns={columns} />;
 ```
 
-- `valuesEnum`方法可以为 [AntDesignPro](https://github.com/ant-design/pro-components) 的`ProFormFields`、`ProTable`等组件生成数据源，这是一个类似 Map 的数据结构，格式为：`{ [key: number|string]: { text: string } }`
+- `toValueMap`方法可以为 [Ant Design Pro](https://github.com/ant-design/pro-components) 的`ProFormFields`、`ProTable`等组件生成数据源，这是一个类似 Map 的数据结构，格式为：`{ [key: number|string]: { text: string } }`
 
-```jsx
+```tsx
 import { ProTable } from '@ant-design/pro-components';
-<ProFormSelect valueEnum={Week.valuesEnum()} />;
+
+<ProFormSelect valueEnum={Week.toValueMap()} />;
 ```
 
 ---
@@ -584,7 +621,7 @@ const goodWeekName: typeof Week.keyType = 'Monday'; // ✅ 类型正确，'Monda
 
 type FooProps = {
   value?: typeof Week.valueType; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
-  names?: typeof Week.keyType[]; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
+  names?: (typeof Week.keyType)[]; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
 };
 ```
 
@@ -594,7 +631,7 @@ type FooProps = {
 
 这里为枚举使用添加一些边界情况，从上面的用例中可以看到，我们可以通过 `Week.XXX` 来快捷访问枚举项，但是万一枚举项的 key 与枚举方法命名冲突怎么办？
 
-我们知道枚举类型上还存在 `label`、`key`、`options` 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 `values` 下访问到它们。请参考下面的代码示例：
+我们知道枚举类型上还存在 `label`、`key`、`toSelect` 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 `values` 下访问到它们。请参考下面的代码示例：
 
 ```js
 const Week = Enum({
@@ -702,3 +739,48 @@ Week.label(1); // Monday
 ```js
 Enum.localize = sillyLocalize;
 ```
+
+---
+
+## 全局扩展
+
+`Enum`已经提供了一些常用的方法，但如果这些方法还不能满足你的需求，你可以通过 `Enum.extend` 方法来添加自定义扩展函数。这些扩展方法将会被添加到所有的枚举类型上，即便是在扩展之前已经创建的枚举类型，也会立即生效
+
+_**App.ts**_
+
+```tsx
+Enum.extend({
+  isWeekend() {
+    return this.value === 0 || this.value === 6;
+  },
+  reversedValues(this: ReturnType<typeof Enum>) {
+    return this.values.reverse();
+  },
+});
+```
+
+如果你在使用 TypeScript，你可能需要再扩展一下枚举类型声明，这样可以获得更好的类型提示。在你的项目中创建或编辑一个声明文件（例如 `global.d.ts`），并在其中扩展全局类型。此文件可以放在项目的根目录或任意目录下，只要确保 TypeScript 能够找到它
+
+_**global.d.ts**_
+
+```tsx
+import type { EnumItemInit } from 'enum-plus';
+import type { EnumItemClass } from 'enum-plus/lib/enum-item';
+
+declare global {
+  export interface EnumExtension<T, K, V> {
+    isWeekend: (value: number) => boolean;
+    reversedValues: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+  }
+}
+```
+
+请注意，你不是必须导入`EnumItemInit`和`EnumItemClass`这些类型，这些仅在这个示例中被使用，为了添加更友好的类型提示。
+
+`EnumExtension`接口是一个泛型接口，它接受三个类型参数，分别是：
+
+- `T`: 枚举类型的初始化对象
+- `K`: 枚举项的键值
+- `V`: 枚举项的值
+
+如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数。这些都是可选的，如果你的扩展方法像`isWeekend`这样简单，那么你完全可以忽略它们

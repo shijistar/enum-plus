@@ -1,22 +1,18 @@
 import { Enum } from '.';
-import type {
-  EnumItemInit,
-  EnumItemOptions,
-  EnumKey,
-  EnumValue,
-  ValueTypeFromSingleInit,
-} from './types';
+import type { EnumItemInit, EnumItemOptions, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
 
 /**
  * Enum item class
+ *
  * @template V General type of value
  * @template K General type of key
  * @template T Initialize object of enum item
  */
 export class EnumItemClass<
   T extends EnumItemInit<V>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   K extends EnumKey<any> = string,
-  V extends EnumValue = ValueTypeFromSingleInit<T, K>
+  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
 > {
   /** Enum item value */
   readonly value: V;
@@ -58,6 +54,7 @@ export class EnumItemClass<
 
   /**
    * Instantiate an enum item
+   *
    * @param key Enum item key
    * @param value Enum item value
    * @param label Enum item display name
@@ -78,9 +75,9 @@ export class EnumItemClass<
     };
 
     // Override some system methods
-    // @ts-ignore: Override Object.toString method to display type more friendly
+    // @ts-expect-error: because override Object.toString method to display type more friendly
     this[Symbol.toStringTag] = 'EnumItem';
-    // @ts-ignore: Override Object.toPrimitive method to return enum value
+    // @ts-expect-error: because override Object.toPrimitive method to return enum value
     this[Symbol.toPrimitive] = (hint: 'number' | 'string' | 'default'): V | string => {
       if (hint === 'number') {
         // for cases like Number(value) or +value

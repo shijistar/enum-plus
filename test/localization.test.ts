@@ -1,12 +1,6 @@
-import { DefaultLocalize, Enum, type IEnum } from '../src';
-import {
-  genSillyLocalizer,
-  localeCN,
-  localeEN,
-  noLocale,
-  setLang,
-  StandardWeekConfig,
-} from './data/week-config';
+import { defaultLocalize, Enum } from '../src';
+import { type IEnum } from '../src/types';
+import { genSillyLocalizer, localeCN, localeEN, noLocale, setLang, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { getOptionsData, pickArray } from './utils';
 
@@ -40,6 +34,7 @@ describe('should support localization', () => {
 
   test('should show original label if Enum.localize is explicitly set to undefined ', () => {
     setLang(undefined);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Enum.localize = undefined as any;
     const weekEnum = Enum(StandardWeekConfig);
     testEnum(weekEnum, noLocale);
@@ -72,6 +67,7 @@ describe('should support localization', () => {
   });
   test('should respect Enum options over global setting (both explicit undefined)', () => {
     setLang(undefined);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Enum.localize = undefined as any;
     const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
     testEnum(weekEnum, noLocale);
@@ -83,7 +79,7 @@ function testEnum(
   weekEnum: IEnum<
     typeof StandardWeekConfig,
     keyof typeof StandardWeekConfig,
-    typeof StandardWeekConfig[keyof typeof StandardWeekConfig]['value']
+    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
   >,
   locales: typeof localeEN | typeof localeCN | typeof noLocale
 ) {
@@ -91,29 +87,28 @@ function testEnum(
   expect(sunday.label).toBe(locales.Sunday);
   expect(sunday.toString()).toBe(locales.Sunday);
   expect(sunday.toLocaleString()).toBe(locales.Sunday);
-  expect(getOptionsData(weekEnum.values)).toEqual(
-    pickArray(getStandardWeekData(locales), ['label', 'value'])
-  );
-  expect(getOptionsData(weekEnum.options())).toEqual(
-    pickArray(getStandardWeekData(locales), ['label', 'value'])
-  );
-  expect(weekEnum.menus()).toEqual(
+  expect(getOptionsData(weekEnum.values)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
+  expect(getOptionsData(weekEnum.toSelect())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
+  expect(weekEnum.toMenu()).toEqual(
     pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
       key: item.value,
       label: item.label,
     }))
   );
-  expect(weekEnum.filters()).toEqual(
+  expect(weekEnum.toFilter()).toEqual(
     pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
       value: item.value,
       text: item.label,
     }))
   );
-  expect(weekEnum.valuesEnum()).toEqual(
-    getStandardWeekData(locales).reduce((acc, item) => {
-      acc[item.value] = { text: item.label };
-      return acc;
-    }, {} as Record<number, { text: string | undefined }>)
+  expect(weekEnum.toValueMap()).toEqual(
+    getStandardWeekData(locales).reduce(
+      (acc, item) => {
+        acc[item.value] = { text: item.label };
+        return acc;
+      },
+      {} as Record<number, { text: string | undefined }>
+    )
   );
 }
 
@@ -121,11 +116,11 @@ function testBuiltInResources(
   weekEnum: IEnum<
     typeof StandardWeekConfig,
     keyof typeof StandardWeekConfig,
-    typeof StandardWeekConfig[keyof typeof StandardWeekConfig]['value']
+    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
   >,
   locales: typeof localeEN | typeof localeCN | typeof noLocale
 ) {
-  const withDefaultFirstOption = weekEnum.options({ firstOption: true });
+  const withDefaultFirstOption = weekEnum.toSelect({ firstOption: true });
   expect(withDefaultFirstOption).toHaveLength(8);
   expect(withDefaultFirstOption[0]).toEqual({
     value: '',
@@ -138,14 +133,14 @@ function testBuildInResourcesWithDefaultImp(
   weekEnum: IEnum<
     typeof StandardWeekConfig,
     keyof typeof StandardWeekConfig,
-    typeof StandardWeekConfig[keyof typeof StandardWeekConfig]['value']
+    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
   >
 ) {
-  const withDefaultFirstOption = weekEnum.options({ firstOption: true });
+  const withDefaultFirstOption = weekEnum.toSelect({ firstOption: true });
   expect(withDefaultFirstOption).toHaveLength(8);
   expect(withDefaultFirstOption[0]).toEqual({
     value: '',
     key: '',
-    label: DefaultLocalize('enum-plus.options.all'),
+    label: defaultLocalize('enum-plus.options.all'),
   });
 }
