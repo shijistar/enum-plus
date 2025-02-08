@@ -6,7 +6,7 @@
 
 > Like native `enum`, but much better than that!
 
-[![npm version](https://img.shields.io/npm/v/enum-plus.svg)](https://www.npmjs.com/package/enum-plus)
+[![npm version](https://img.shields.io/npm/v/enum-plus.svg?color=red)](https://www.npmjs.com/package/enum-plus)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/enum-plus)](https://bundlephobia.com/result?p=enum-plus)
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E)

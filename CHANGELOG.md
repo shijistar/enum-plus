@@ -14,15 +14,15 @@
 
 2025-2-8
 
+> **Note:** this version has a typing issue, please use `v2.1.1`
+
 ### Features
 
-- 🔥 Adds `toSelect` method, deprecated ~~`options`~~ method
-- 🔥 Adds `toMenu` method, deprecated ~~`menus`~~ method
-- 🔥 Adds `toFilter` method, deprecated ~~`filters`~~ method
-- 🔥 Adds `toValueMap` method, ~~`valuesEnum`~~ method
-- 🔥 Support global extending, you can add custom methods to Enums
-
-> **Note:** this version has typing problem, please use `v2.1.1`
+- 🔥 Adds `toSelect` method, deprecated _`options`_ method
+- 🔥 Adds `toMenu` method, deprecated _`menus`_ method
+- 🔥 Adds `toFilter` method, deprecated _`filters`_ method
+- 🔥 Adds `toValueMap` method, _`valuesEnum`_ method
+- 🔥 Support global extension, custom methods can be added to Enums
 
 ## 2.0.3
 
