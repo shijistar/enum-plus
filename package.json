@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A drop-in replacement library for enum, tiny and powerful, like native enum but much more than that",
   "keywords": [
     "enum",

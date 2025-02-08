@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.1.1
+
+2025-2-8
+
+### Bug Fixes
+
+- 🐞 Fix typing error in `EnumExtension` interface
+
 ## 2.1.0
 
 2025-2-8
@@ -13,6 +21,8 @@
 - 🔥 Adds `toFilter` method, deprecated ~~`filters`~~ method
 - 🔥 Adds `toValueMap` method, ~~`valuesEnum`~~ method
 - 🔥 Support global extending, you can add custom methods to Enums
+
+> **Note:** this version has typing problem, please use `v2.1.1`
 
 ## 2.0.3
 

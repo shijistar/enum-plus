@@ -18,14 +18,7 @@ import type {
   ValueTypeFromSingleInit,
 } from './types';
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface EnumExtension<
-    T extends EnumInit<K, V>,
-    K extends EnumKey<T> = EnumKey<T>,
-    V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-  > {}
-} /**
+/**
  * **EN:** Enum collection extension base class, used to extend the Enums
  *
  * **CN:** 枚举集合扩展基类，用于扩展枚举

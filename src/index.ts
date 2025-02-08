@@ -151,6 +151,15 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   Object.setPrototypeOf(EnumExtensionClass.prototype, enumExtensions);
 };
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface EnumExtension<
+    T extends EnumInit<K, V>,
+    K extends EnumKey<T> = EnumKey<T>,
+    V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  > {}
+}
+
 function getInitMapFromArray<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
