@@ -13,7 +13,6 @@ import {
 } from './data/week-config';
 import {
   getStandardWeekData,
-  getWeekDataHasKeyAutoIncrementedValue,
   getWeekDataHasKeyEmptyObjectValueNoLabel,
   getWeekDataHasKeyHasValueNoLabel,
   getWeekDataHasKeyNoValueHasLabel,
@@ -68,7 +67,7 @@ describe('should be able to create an enum from object', () => {
 
   test('created weekdays enum with compact config', () => {
     const week = Enum(WeekCompactConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyAutoIncrementedValue());
+    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
     const week2 = Enum(WeekEmptyConfig);
     expect(toPlainEnums(week2.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
@@ -196,35 +195,38 @@ describe('should be able to create an enum from array', () => {
 
 describe('should support auto-incremented number enums', () => {
   test('should be able to create auto-incremented enums', () => {
-    const firstSeedEnum = Enum({
-      A: 1,
-      B: undefined as unknown as number,
-      C: undefined as unknown as number,
-    } as const);
+    enum firstSeedInit {
+      A = 1,
+      B,
+      C,
+    }
+    const firstSeedEnum = Enum(firstSeedInit);
     expect(toPlainEnums(firstSeedEnum.values)).toEqual([
       { value: 1, label: 'A', key: 'A' },
       { value: 2, label: 'B', key: 'B' },
       { value: 3, label: 'C', key: 'C' },
     ]);
 
-    const noneInitializer = Enum({
-      A: undefined,
-      B: undefined,
-      C: undefined,
-    } as const);
+    enum noneInitializerInit {
+      A,
+      B,
+      C,
+    }
+    const noneInitializer = Enum(noneInitializerInit);
     expect(toPlainEnums(noneInitializer.values)).toEqual([
       { value: 0, label: 'A', key: 'A' },
       { value: 1, label: 'B', key: 'B' },
       { value: 2, label: 'C', key: 'C' },
     ]);
 
-    const withDiffInitializer = Enum({
-      A: undefined as unknown as number,
-      B: undefined as unknown as number,
-      C: undefined as unknown as number,
-      D: 5,
-      E: undefined as unknown as number,
-    } as const);
+    enum withDiffInitializerInit {
+      A,
+      B,
+      C,
+      D = 5,
+      E,
+    }
+    const withDiffInitializer = Enum(withDiffInitializerInit);
     expect(toPlainEnums(withDiffInitializer.values)).toEqual([
       { value: 0, label: 'A', key: 'A' },
       { value: 1, label: 'B', key: 'B' },
@@ -233,15 +235,16 @@ describe('should support auto-incremented number enums', () => {
       { value: 6, label: 'E', key: 'E' },
     ]);
 
-    const withDiffInitializer2 = Enum({
-      A: undefined as unknown as number,
-      B: undefined as unknown as number,
-      C: undefined as unknown as number,
-      D: 5,
-      E: undefined as unknown as number,
-      F: 9,
-      G: undefined as unknown as number,
-    } as const);
+    enum withDiffInitializerInit2 {
+      A,
+      B,
+      C,
+      D = 5,
+      E,
+      F = 9,
+      G,
+    }
+    const withDiffInitializer2 = Enum(withDiffInitializerInit2);
     expect(toPlainEnums(withDiffInitializer2.values)).toEqual([
       { value: 0, label: 'A', key: 'A' },
       { value: 1, label: 'B', key: 'B' },
@@ -254,53 +257,52 @@ describe('should support auto-incremented number enums', () => {
   });
 
   test('should stop auto-increment starting from "non-number" enum item', () => {
-    const undefinedFollowString = Enum({
-      A: 'AAA',
-      B: undefined as unknown as string,
-      C: undefined as unknown as string,
-    } as const);
-    expect(toPlainEnums(undefinedFollowString.values)).toEqual([
+    enum stringIncrementInit {
+      A = 'AAA',
+      B = 1,
+      C,
+    }
+    const stringIncrement = Enum(stringIncrementInit);
+    expect(toPlainEnums(stringIncrement.values)).toEqual([
       { value: 'AAA', label: 'A', key: 'A' },
-      { value: 'B', label: 'B', key: 'B' },
-      { value: 'C', label: 'C', key: 'C' },
+      { value: 1, label: 'B', key: 'B' },
+      { value: 2, label: 'C', key: 'C' },
     ]);
 
-    const mixed = Enum({
-      A: undefined as unknown as string,
-      B: undefined as unknown as string,
-      C: undefined as unknown as string,
-      D: 'DDD',
-      E: undefined as unknown as string,
-    } as const);
+    enum mixedInit {
+      A,
+      B = 0,
+      C,
+      D = 'DDD',
+    }
+    const mixed = Enum(mixedInit);
     expect(toPlainEnums(mixed.values)).toEqual([
-      { value: 'A', label: 'A', key: 'A' },
-      { value: 'B', label: 'B', key: 'B' },
-      { value: 'C', label: 'C', key: 'C' },
+      { value: 0, label: 'A', key: 'A' },
+      { value: 0, label: 'B', key: 'B' },
+      { value: 1, label: 'C', key: 'C' },
       { value: 'DDD', label: 'D', key: 'D' },
-      { value: 'E', label: 'E', key: 'E' },
     ]);
 
-    const mixed2 = Enum({
-      A: undefined as unknown as number,
-      B: undefined as unknown as number,
-      C: undefined as unknown as number,
-      D: 5,
-      E: undefined as unknown as number,
-      F: 9,
-      G: undefined as unknown as number,
-      K: 'KKK' as unknown as number,
-      L: undefined as unknown as number,
-    } as const);
+    enum mixedInit2 {
+      A = -1,
+      B,
+      C,
+      D = 5,
+      E,
+      F = 9,
+      G,
+      K = 'KKK',
+    }
+    const mixed2 = Enum(mixedInit2);
     expect(toPlainEnums(mixed2.values)).toEqual([
-      { value: 'A', label: 'A', key: 'A' },
-      { value: 'B', label: 'B', key: 'B' },
-      { value: 'C', label: 'C', key: 'C' },
+      { value: -1, label: 'A', key: 'A' },
+      { value: 0, label: 'B', key: 'B' },
+      { value: 1, label: 'C', key: 'C' },
       { value: 5, label: 'D', key: 'D' },
-      { value: 'E', label: 'E', key: 'E' },
+      { value: 6, label: 'E', key: 'E' },
       { value: 9, label: 'F', key: 'F' },
-      { value: 'G', label: 'G', key: 'G' },
+      { value: 10, label: 'G', key: 'G' },
       { value: 'KKK', label: 'K', key: 'K' },
-      { value: 'L', label: 'L', key: 'L' },
     ]);
   });
 });

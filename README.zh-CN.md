@@ -1,4 +1,4 @@
-<!-- markdownlint-disable MD009 -->
+<!-- markdownlint-disable MD009 MD001 -->
 
 # enum-plus
 
@@ -137,6 +137,27 @@ Week.values; // 输出如下:
 //     { value: 3, label: '兔子', key: 'rabbit' }   ]
 ```
 
+#### 示例 6：支持原生枚举初始化，相当于给原生枚举添加一些扩展方法
+
+```ts
+import { Enum } from 'enum-plus';
+
+enum init {
+  Sunday = 0,
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+}
+const Week = Enum(init);
+Week.Sunday; // 0
+Week.Monday; // 1
+Week.Saturday; // 6
+Week.label('Sunday'); // Sunday
+```
+
 ## API
 
 ### 拾取枚举值
@@ -243,7 +264,7 @@ import { Menu } from 'antd';
 
 <sup>**_[方法]_**</sup> `toFilter(): { text, value }[]`
 
-生成一个 filters 数组，可以直接传递给 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
+生成一个对象数组，可以直接传递给 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
 
 数据格式为：
 
@@ -750,13 +771,15 @@ _**App.ts**_
 
 ```tsx
 Enum.extend({
-  isWeekend() {
-    return this.value === 0 || this.value === 6;
+  getLabels(this: ReturnType<typeof Enum>) {
+    return this.values.map((item) => item.label);
   },
   reversedValues(this: ReturnType<typeof Enum>) {
     return this.values.reverse();
   },
 });
+
+Week.getLabels(); // ['星期日', '星期一']
 ```
 
 如果你在使用 TypeScript，你可能需要再扩展一下枚举类型声明，这样可以获得更好的类型提示。在你的项目中创建或编辑一个声明文件（例如 `global.d.ts`），并在其中扩展全局类型。此文件可以放在项目的根目录或任意目录下，只要确保 TypeScript 能够找到它
@@ -769,7 +792,7 @@ import type { EnumItemClass } from 'enum-plus/lib/enum-item';
 
 declare global {
   export interface EnumExtension<T, K, V> {
-    isWeekend: (value: number) => boolean;
+    getLabels: () => string[];
     reversedValues: () => EnumItemClass<EnumItemInit<V>, K, V>[];
   }
 }
@@ -783,4 +806,4 @@ declare global {
 - `K`: 枚举项的键值
 - `V`: 枚举项的值
 
-如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数。这些都是可选的，如果你的扩展方法像`isWeekend`这样简单，那么你完全可以忽略它们
+如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数。这些都是可选的，如果你的扩展方法像`getLabels`这样简单，那么你完全可以忽略它们

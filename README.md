@@ -117,8 +117,6 @@ Week.label(/*key*/ 'Monday'); // Monday, output display text
 
 #### Example 5: Create an enum dynamically
 
-````js
-
 Sometimes we need to create an enum dynamically using data returned by an api, in this case, we can use an array to initialize the enum
 
 ```js
@@ -137,7 +135,28 @@ Week.values; // Output is:
 // [   { value: 1, label: 'Dog', key: 'dog' },
 //     { value: 2, label: 'Cat', key: 'cat' },
 //     { value: 3, label: 'Rabbit', key: 'rabbit' }   ]
-````
+```
+
+#### Example 6: initialized from native enum (extend native enum with additional methods)
+
+```ts
+import { Enum } from 'enum-plus';
+
+enum init {
+  Sunday = 0,
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+}
+const Week = Enum(init);
+Week.Sunday; // 0
+Week.Monday; // 1
+Week.Saturday; // 6
+Week.label('Sunday'); // Sunday
+```
 
 ## API
 
@@ -752,13 +771,15 @@ _**App.ts**_
 
 ```tsx
 Enum.extend({
-  isWeekend() {
-    return this.value === 0 || this.value === 6;
+  getLabels(this: ReturnType<typeof Enum>) {
+    return this.values.map((item) => item.label);
   },
   reversedValues(this: ReturnType<typeof Enum>) {
     return this.values.reverse();
   },
 });
+
+Week.getLabels(); // ['Sunday', 'Monday']
 ```
 
 If you are using TypeScript, you probably need to further extend the enum type declaration to get better type hints. Create or edit a declaration file in your project (e.g. `global.d.ts`) and extend the global type. This file can be placed in the root directory of the project or any other directory, just make sure TypeScript can find it
@@ -771,7 +792,7 @@ import type { EnumItemClass } from 'enum-plus/lib/enum-item';
 
 declare global {
   export interface EnumExtension<T, K, V> {
-    isWeekend: (value: number) => boolean;
+    getLabels: () => string[];
     reversedValues: () => EnumItemClass<EnumItemInit<V>, K, V>[];
   }
 }
@@ -785,4 +806,4 @@ Please note that you are not required to import types such as `EnumItemInit` and
 - `K`: Key value of the enum item
 - `V`: Value of the enum item
 
-If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. These are all optional, if your extension method is as simple as `isWeekend`, you can completely ignore them
+If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. These are all optional, if your extension method is as simple as `getLabels`, you can completely ignore them

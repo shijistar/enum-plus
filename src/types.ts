@@ -353,6 +353,7 @@ export interface IEnumValues<
 export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumValue> =
   | NumberEnumInit<K>
   | StringEnumInit<K>
+  | StringNumberEnumInit<K>
   | StandardEnumInit<K, V>
   | ValueOnlyEnumInit<K, V>
   | LabelOnlyEnumInit<K>
@@ -362,6 +363,8 @@ export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumVal
 export type NumberEnumInit<K extends keyof any> = Record<K, number>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type StringEnumInit<K extends keyof any> = Record<K, string>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type StringNumberEnumInit<K extends keyof any> = Record<K, string | number>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type StandardEnumInit<K extends keyof any, V extends EnumValue> = Record<K, StandardEnumItemInit<V>>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

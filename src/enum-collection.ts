@@ -47,13 +47,17 @@ export class EnumCollectionClass<
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
-    const keys = Object.keys(init) as K[];
+    // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
+    const keys = Object.keys(init).filter(
+      (k) => !(/^-?\d+$/.test(k) && k === `${init[init[k as K] as K] ?? ''}`)
+    ) as K[];
     const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V, T>(init[key], key, { typeInit: init, keys }));
     keys.forEach((key, index) => {
       const { value } = parsed[index];
       // @ts-expect-error: because of dynamically define property
       this[key] = value;
     });
+    Object.freeze(keys);
     // @ts-expect-error: because use KEYS to avoid naming conflicts in case of 'keys' field name is taken
     this[Object.keys(init).some((k) => k === 'keys') ? KEYS : 'keys'] = keys;
 
@@ -220,49 +224,8 @@ function parseEnumItem<
       throw new Error(`Invalid enum item: ${JSON.stringify(init)}`);
     }
   } else {
-    return inferFromNull(key, options);
-  }
-  return { value, label };
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function inferFromNull<K extends EnumKey<any>, V extends EnumValue, TT extends EnumInit<K, V>>(
-  key: K,
-  options: {
-    typeInit: TT;
-    keys: (keyof TT)[];
-  }
-) {
-  const { typeInit, keys } = options;
-  let value: V;
-  const label: string = key as string;
-  // If the value is empty, first check the number incrementing enumeration, otherwise use the key as the value
-  const index = keys.indexOf(key);
-  const prev = typeInit[keys[index - 1]];
-  // Only pure number and empty enumeration will be incremented
-  if (keys.some((k) => typeInit[k] != null && typeof typeInit[k] !== 'number')) {
     value = key as unknown as V;
-  } else if (index === 0) {
-    value = 0 as V;
-  } else if (typeof prev === 'number') {
-    value = (prev + 1) as V;
-  } else {
-    // only nulls
-    let seed = 0;
-    let count = 0;
-    // find seed
-    for (let i = index - 1; i >= 0; i--) {
-      const val = typeInit[keys[i]];
-      count++;
-      if (typeof val === 'number') {
-        seed = val;
-        break;
-      } else {
-        // only nulls
-        continue;
-      }
-    }
-    value = (seed + count) as V;
+    label = key as string;
   }
   return { value, label };
 }
