@@ -26,32 +26,36 @@ describe('should be able to create an enum from object', () => {
     const week = Enum(StandardWeekConfig);
     expect(week).toBeDefined();
     expect(week).not.toBeNull();
-    expect(week?.values?.length).toBe(7);
+    expect(week?.items?.length).toBe(7);
+  });
+  test('values is deprecated to items', () => {
+    const week = Enum(StandardWeekConfig);
+    expect(week.values).toBe(week.items);
   });
 
   test('created weekdays enum with normal config', () => {
     const week = Enum(StandardWeekConfig);
-    expect(toPlainEnums(week.values)).toEqual(getStandardWeekData(locales));
+    expect(toPlainEnums(week.items)).toEqual(getStandardWeekData(locales));
   });
 
   test('created weekdays enum with number', () => {
     const week = Enum(WeekNumberConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyHasValueNoLabel());
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
   });
 
   test('created weekdays enum with string', () => {
     const week = Enum(WeekStringConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
   test('created weekdays enum with value-only config', () => {
     const week = Enum(WeekValueOnlyConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyHasValueNoLabel());
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
   });
 
   test('created weekdays enum with label-only config', () => {
     const week = Enum(WeekLabelOnlyConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyNoValueHasLabel(locales));
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyNoValueHasLabel(locales));
     const weekWithEmptyLabel = Enum(
       Object.keys(WeekLabelOnlyConfig).reduce(
         (acc, key) => {
@@ -62,34 +66,34 @@ describe('should be able to create an enum from object', () => {
         {} as Record<string, { label: string }>
       )
     );
-    expect(toPlainEnums(weekWithEmptyLabel.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
+    expect(toPlainEnums(weekWithEmptyLabel.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
   test('created weekdays enum with compact config', () => {
     const week = Enum(WeekCompactConfig);
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
     const week2 = Enum(WeekEmptyConfig);
-    expect(toPlainEnums(week2.values)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
+    expect(toPlainEnums(week2.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
   test('created weekdays enum with empty config', () => {
     const week = Enum({});
-    expect(week.values.length).toBe(0);
+    expect(week.items.length).toBe(0);
   });
 
   test('created weekdays enum with undefined', () => {
     const week = Enum(undefined as unknown as EnumInit);
-    expect(week.values.length).toBe(0);
+    expect(week.items.length).toBe(0);
   });
 
   test('created weekdays enum with some supported but invalid values', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(toPlainEnums(Enum({ foo: /regexp/ } as Record<string, any>).values)).toEqual([
+    expect(toPlainEnums(Enum({ foo: /regexp/ } as Record<string, any>).items)).toEqual([
       { key: 'foo', value: /regexp/, label: 'foo' },
     ]);
     const date = new Date();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(toPlainEnums(Enum({ foo: date } as Record<string, any>).values)).toEqual([
+    expect(toPlainEnums(Enum({ foo: date } as Record<string, any>).items)).toEqual([
       { key: 'foo', value: date, label: 'foo' },
     ]);
   });
@@ -107,24 +111,24 @@ describe('should be able to create an enum from array', () => {
     const week = Enum(WeekStandardArray);
     expect(week).toBeDefined();
     expect(week).not.toBeNull();
-    expect(week?.values?.length).toBe(7);
+    expect(week?.items?.length).toBe(7);
   });
 
   test('created weekdays enum with normal config items array', () => {
     const weekWithDefaultFields = Enum(WeekStandardArray);
-    expect(toPlainEnums(weekWithDefaultFields.values)).toEqual(getStandardWeekData(locales));
+    expect(toPlainEnums(weekWithDefaultFields.items)).toEqual(getStandardWeekData(locales));
     const week = Enum(WeekStandardArray, {
       getValue: 'value',
       getLabel: 'label',
       getKey: 'key',
     });
-    expect(toPlainEnums(week.values)).toEqual(getStandardWeekData(locales));
+    expect(toPlainEnums(week.items)).toEqual(getStandardWeekData(locales));
     const weekWithFieldFunctions = Enum(WeekStandardArray, {
       getValue: (item) => item.value,
       getLabel: (item) => item.label,
       getKey: (item) => item.key as 'key',
     });
-    expect(toPlainEnums(weekWithFieldFunctions.values)).toEqual(getStandardWeekData(locales));
+    expect(toPlainEnums(weekWithFieldFunctions.items)).toEqual(getStandardWeekData(locales));
   });
 
   test('created weekdays enum with normal config items array, but without key', () => {
@@ -133,13 +137,13 @@ describe('should be able to create an enum from array', () => {
       getLabel: 'label',
       getKey: '' as 'key',
     });
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasValueHasLabelNoKey(locales));
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasValueHasLabelNoKey(locales));
     const weekWithDefaultKey = Enum(WeekStandardArray, {
       getValue: 'value',
       getLabel: 'label',
       getKey: undefined,
     });
-    expect(toPlainEnums(weekWithDefaultKey.values)).toEqual(getStandardWeekData(locales));
+    expect(toPlainEnums(weekWithDefaultKey.items)).toEqual(getStandardWeekData(locales));
   });
 
   test('created weekdays enum with normal config items array, but without label', () => {
@@ -148,12 +152,12 @@ describe('should be able to create an enum from array', () => {
       getLabel: '' as 'label',
       getKey: 'key',
     });
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasKeyHasValueNoLabel());
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
     const weekWithDefaultLabel = Enum(WeekStandardArray, {
       getValue: 'value',
       getKey: 'key',
     });
-    expect(toPlainEnums(weekWithDefaultLabel.values)).toEqual(getStandardWeekData(locales));
+    expect(toPlainEnums(weekWithDefaultLabel.items)).toEqual(getStandardWeekData(locales));
   });
 
   test('created weekdays enum with normal config items array, but without key and label', () => {
@@ -162,13 +166,13 @@ describe('should be able to create an enum from array', () => {
       getLabel: '' as 'label',
       getKey: '' as 'key',
     });
-    expect(toPlainEnums(week.values)).toEqual(getWeekDataHasValueNoKeyNoLabel());
+    expect(toPlainEnums(week.items)).toEqual(getWeekDataHasValueNoKeyNoLabel());
     const weekWithNoting = Enum(WeekStandardArray, {
       getValue: '' as 'value',
       getLabel: '' as 'label',
       getKey: '' as 'key',
     });
-    expect(toPlainEnums(weekWithNoting.values)).toEqual([
+    expect(toPlainEnums(weekWithNoting.items)).toEqual([
       {
         key: 'undefined', // why 'undefined' string? key is always in string form, even it's undefined.
         value:
@@ -201,7 +205,7 @@ describe('should support auto-incremented number enums', () => {
       C,
     }
     const firstSeedEnum = Enum(firstSeedInit);
-    expect(toPlainEnums(firstSeedEnum.values)).toEqual([
+    expect(toPlainEnums(firstSeedEnum.items)).toEqual([
       { value: 1, label: 'A', key: 'A' },
       { value: 2, label: 'B', key: 'B' },
       { value: 3, label: 'C', key: 'C' },
@@ -213,7 +217,7 @@ describe('should support auto-incremented number enums', () => {
       C,
     }
     const noneInitializer = Enum(noneInitializerInit);
-    expect(toPlainEnums(noneInitializer.values)).toEqual([
+    expect(toPlainEnums(noneInitializer.items)).toEqual([
       { value: 0, label: 'A', key: 'A' },
       { value: 1, label: 'B', key: 'B' },
       { value: 2, label: 'C', key: 'C' },
@@ -227,7 +231,7 @@ describe('should support auto-incremented number enums', () => {
       E,
     }
     const withDiffInitializer = Enum(withDiffInitializerInit);
-    expect(toPlainEnums(withDiffInitializer.values)).toEqual([
+    expect(toPlainEnums(withDiffInitializer.items)).toEqual([
       { value: 0, label: 'A', key: 'A' },
       { value: 1, label: 'B', key: 'B' },
       { value: 2, label: 'C', key: 'C' },
@@ -245,7 +249,7 @@ describe('should support auto-incremented number enums', () => {
       G,
     }
     const withDiffInitializer2 = Enum(withDiffInitializerInit2);
-    expect(toPlainEnums(withDiffInitializer2.values)).toEqual([
+    expect(toPlainEnums(withDiffInitializer2.items)).toEqual([
       { value: 0, label: 'A', key: 'A' },
       { value: 1, label: 'B', key: 'B' },
       { value: 2, label: 'C', key: 'C' },
@@ -263,7 +267,7 @@ describe('should support auto-incremented number enums', () => {
       C,
     }
     const stringIncrement = Enum(stringIncrementInit);
-    expect(toPlainEnums(stringIncrement.values)).toEqual([
+    expect(toPlainEnums(stringIncrement.items)).toEqual([
       { value: 'AAA', label: 'A', key: 'A' },
       { value: 1, label: 'B', key: 'B' },
       { value: 2, label: 'C', key: 'C' },
@@ -276,7 +280,7 @@ describe('should support auto-incremented number enums', () => {
       D = 'DDD',
     }
     const mixed = Enum(mixedInit);
-    expect(toPlainEnums(mixed.values)).toEqual([
+    expect(toPlainEnums(mixed.items)).toEqual([
       { value: 0, label: 'A', key: 'A' },
       { value: 0, label: 'B', key: 'B' },
       { value: 1, label: 'C', key: 'C' },
@@ -294,7 +298,7 @@ describe('should support auto-incremented number enums', () => {
       K = 'KKK',
     }
     const mixed2 = Enum(mixedInit2);
-    expect(toPlainEnums(mixed2.values)).toEqual([
+    expect(toPlainEnums(mixed2.items)).toEqual([
       { value: -1, label: 'A', key: 'A' },
       { value: 0, label: 'B', key: 'B' },
       { value: 1, label: 'C', key: 'C' },

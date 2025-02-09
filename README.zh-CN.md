@@ -131,7 +131,7 @@ const PetTypes = Enum(petTypes, {
   getLabel: 'name',
   getKey: 'code', // getKey可选，如果忽略则默认使用value作为Key
 });
-Week.values; // 输出如下:
+Week.items; // 输出如下:
 // [   { value: 1, label: '狗', key: 'dog' },
 //     { value: 2, label: '猫', key: 'cat' },
 //     { value: 3, label: '兔子', key: 'rabbit' }   ]
@@ -173,7 +173,7 @@ Week.Sunday; // 0
 
 ---
 
-### values
+### items
 
 `{value, label, key, raw}[]`
 
@@ -233,7 +233,7 @@ Week.has('Birthday'); // false
 
 <sup>**_[方法]_**</sup> `toSelect(config?: OptionsConfig): {value, label}[]`
 
-`toSelect`与`values`相似，都是返回一个包含全部枚举项的数组。区别是，`toSelect`返回的元素只包含`label`和`value`两个字段，同时，`toSelect`方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
+`toSelect`与`items`相似，都是返回一个包含全部枚举项的数组。区别是，`toSelect`返回的元素只包含`label`和`value`两个字段，同时，`toSelect`方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
 
 ---
 
@@ -401,7 +401,7 @@ HttpCodes.E404; // 将光标悬停在 E404 上，将显示完整的Jsdoc文档�
 #### 获取包含全部枚举项的数组
 
 ```js
-Week.values; // 输出如下:
+Week.items; // 输出如下:
 // [
 //  { value: 0, label: '星期日', key: 'Sunday', raw: { value: 0, label: '星期日' } },
 //  { value: 1, label: '星期一', key: 'Monday', raw: { value: 1, label: '星期一' } }
@@ -413,7 +413,7 @@ Week.values; // 输出如下:
 #### 获取第一个枚举值
 
 ```js
-Week.values[0].value; // 0
+Week.items[0].value; // 0
 ```
 
 ---
@@ -422,7 +422,7 @@ Week.values[0].value; // 0
 
 ```js
 Week.has(1); // true
-Week.values.some(item => item.value === 1); // true
+Week.items.some(item => item.value === 1); // true
 1 instance of Week; // true
 ```
 
@@ -441,15 +441,15 @@ Week.values.some(item => item.value === 1); // true
 #### 支持遍历枚举项数组，但不支持修改
 
 ```js
-Week.values.length; // 2
-Week.values.map((item) => item.value); // [0, 1]，✅ 可遍历
-Week.values.forEach((item) => {}); // ✅ 可遍历
-for (let item of Week.values) {
+Week.items.length; // 2
+Week.items.map((item) => item.value); // [0, 1]，✅ 可遍历
+Week.items.forEach((item) => {}); // ✅ 可遍历
+for (let item of Week.items) {
   // ✅ 可遍历
 }
-Week.values.push({ value: 2, label: '星期二' }); // ❌ 不可修改
-Week.values.splice(0, 1); // ❌ 不可修改
-Week.values[0].label = 'foo'; // ❌ 不可修改
+Week.items.push({ value: 2, label: '星期二' }); // ❌ 不可修改
+Week.items.splice(0, 1); // ❌ 不可修改
+Week.items[0].label = 'foo'; // ❌ 不可修改
 ```
 
 ---
@@ -490,7 +490,7 @@ Week.raw('Sunday').active // true
 
 #### 转换成 UI 组件
 
-- `values` 可以直接作为组件的数据源（以 Select 组件为例）
+- `items` 可以直接作为组件的数据源（以 Select 组件为例）
 
   [Ant Design](https://ant-design.antgroup.com/components/select-cn) | [Arco Design](https://arco.design/react/components/select)
   Select
@@ -498,7 +498,7 @@ Week.raw('Sunday').active // true
   ```tsx
   import { Select } from 'antd';
 
-  <Select options={Week.values} />;
+  <Select options={Week.items} />;
   ```
 
   [Material-UI](https://mui.com/material-ui/react-select/) Select
@@ -507,7 +507,7 @@ Week.raw('Sunday').active // true
   import { MenuItem, Select } from '@mui/material';
 
   <Select>
-    {Week.values.map((item) => (
+    {Week.items.map((item) => (
       <MenuItem key={item.value} value={item.value}>
         {item.label}
       </MenuItem>
@@ -520,27 +520,27 @@ Week.raw('Sunday').active // true
   ```tsx
   import { DropDownList } from '@progress/kendo-react-dropdowns';
 
-  <DropDownList data={Week.values} textField="label" dataItemKey="value" />;
+  <DropDownList data={Week.items} textField="label" dataItemKey="value" />;
   ```
 
   [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
 
   ```tsx
   <el-select>
-    <el-option v-for="item in Week.values" v-bind="item" />
+    <el-option v-for="item in Week.items" v-bind="item" />
   </el-select>
   ```
 
   [Ant Design Vue](https://antdv.com/components/select-cn) | [Arc Design](https://arco.design/vue/component/select) Select
 
   ```tsx
-  <a-select :options="Week.values" />
+  <a-select :options="Week.items" />
   ```
 
   [Vuetify](https://vuetifyjs.com/zh-Hans/components/selects) Select
 
   ```tsx
-  <v-select :items="Week.values" item-title="label" />
+  <v-select :items="Week.items" item-title="label" />
   ```
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
@@ -549,7 +549,7 @@ Week.raw('Sunday').active // true
 
   ```html
   <mat-select>
-    <mat-option *ngFor="let item of Week.values" [value]="item.value">{{ item.label }}</mat-option>
+    <mat-option *ngFor="let item of Week.items" [value]="item.value">{{ item.label }}</mat-option>
   </mat-select>
   ```
 
@@ -559,11 +559,11 @@ Week.raw('Sunday').active // true
 
   ```html
   <nz-select>
-    <nz-option *ngFor="let item of Week.values" [nzValue]="item.value">{{ item.label }}</nz-option>
+    <nz-option *ngFor="let item of Week.items" [nzValue]="item.value">{{ item.label }}</nz-option>
   </nz-select>
   ```
 
-- `toSelect`方法与`values`类似，但允许在头部增加一个默认选项。默认选项可以是一个布尔值，也可以是一个自定义对象。
+- `toSelect`方法与`items`类似，但允许在头部增加一个默认选项。默认选项可以是一个布尔值，也可以是一个自定义对象。
 
   - 如果是布尔值，则默认选项为`{ value: '', label: 'All' }`，显示名称只支持英文。如果希望支持本地化，请在本地化方法中解析并处理`enum-plus.options.all`这个内置资源。关于本地化的更多详情，请参考[本地化](#本地化)章节
   - 如果是一个对象，则可以自定义默认选项的值和显示文本，显示文本会自动支持本地化
@@ -652,7 +652,7 @@ type FooProps = {
 
 这里为枚举使用添加一些边界情况，从上面的用例中可以看到，我们可以通过 `Week.XXX` 来快捷访问枚举项，但是万一枚举项的 key 与枚举方法命名冲突怎么办？
 
-我们知道枚举类型上还存在 `label`、`key`、`toSelect` 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 `values` 下访问到它们。请参考下面的代码示例：
+我们知道枚举类型上还存在 `label`、`key`、`toSelect` 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 `items` 下访问到它们。请参考下面的代码示例：
 
 ```js
 const Week = Enum({
@@ -663,30 +663,30 @@ const Week = Enum({
 } as const);
 Week.keys; // 3，枚举项优先级更高，会覆盖掉方法
 Week.label; // 4，枚举项优先级更高，会覆盖掉方法
-// 可以通过 values 访问到这些方法 🙂
-Week.values.keys // ['foo', 'bar', 'keys', 'label']
-Week.values.label(1); // 'foo'
+// 可以通过 items 访问到这些方法 🙂
+Week.items.keys // ['foo', 'bar', 'keys', 'label']
+Week.items.label(1); // 'foo'
 ```
 
-更极端一些，万一`values`与枚举项命名冲突怎么办？放心，你仍然可以通过别名字段访问到`values`数组。参考下面的示例：
+更极端一些，万一`items`与枚举项命名冲突怎么办？放心，你仍然可以通过别名字段访问到`items`数组。参考下面的示例：
 
 ```js
-import { VALUES } from 'enum-plus';
+import { ITEMS } from 'enum-plus';
 
 const Week = Enum({
   foo: { value: 1 },
   bar: { value: 2 },
-  values: { value: 3 }, // 命名冲突
+  items: { value: 3 }, // 命名冲突
 } as const);
 
-Week.values; // 3，枚举项优先级更高，会覆盖掉 values
-Week[VALUES]; // VALUES 是一个别名Symbol
+Week.items; // 3，枚举项优先级更高，会覆盖掉 items
+Week[ITEMS]; // ITEMS 是一个别名Symbol
 // [
 //  { value: 1, key: 'foo', label: 'foo' },
 //  { value: 2, key: 'bar', label: 'bar' },
-//  { value: 3, key: 'values', label: 'values' }
+//  { value: 3, key: 'items', label: 'items' }
 // ]
-// 等价于原来的 Week.values 🙂
+// 等价于原来的 Week.items 🙂
 ```
 
 ---
@@ -772,10 +772,10 @@ _**App.ts**_
 ```tsx
 Enum.extend({
   getLabels(this: ReturnType<typeof Enum>) {
-    return this.values.map((item) => item.label);
+    return this.items.map((item) => item.label);
   },
   reversedValues(this: ReturnType<typeof Enum>) {
-    return this.values.reverse();
+    return this.items.reverse();
   },
 });
 

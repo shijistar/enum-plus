@@ -1,5 +1,5 @@
 import type { EnumItemClass } from './enum-item';
-import type { KEYS, VALUES } from './index';
+import type { ITEMS, KEYS, VALUES } from './index';
 
 /**
  * **EN:** Enum initialization options
@@ -66,10 +66,11 @@ export type IEnum<
 > = IEnumValues<T, K, V> & {
   // 初始化对象里的枚举字段
   [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
-} & (T extends { values: unknown }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} & (T extends { items: any }
     ? {
         // 防止values名称冲突
-        [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
+        [ITEMS]: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
       }
     : {
         /**
@@ -83,6 +84,16 @@ export type IEnum<
          *
          * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
          */
+        items: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
+      }) &
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (T extends { values: any }
+    ? {
+        // 防止values名称冲突
+        [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
+      }
+    : {
+        /** @deprecated Use `items` instead */
         values: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -184,7 +195,7 @@ export interface IEnumValues<
    * @see https://ant.design/components/checkbox-cn#option
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  toSelect(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  toSelect(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   /**
    * **EN:** Generate an array of objects that can be bound to those `options like` of components
    * such as Select, Radio, and Checkbox, following the data specification of ant-design
@@ -203,16 +214,16 @@ export interface IEnumValues<
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   toSelect<FK, FV>(
-    config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
+    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
 
   /** @deprecated Use `toSelect` instead */
   options(): EnumItemOptionData<K, V>[];
   /** @deprecated Use `toSelect` instead */
-  options(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  options(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   /** @deprecated Use `toSelect` instead */
   options<FK, FV>(
-    config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
+    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
 
   /**
@@ -432,7 +443,7 @@ export type EnumValue = keyof any;
 export type EnumKey<T> = keyof T;
 
 /** More options for the options method */
-export type OptionsConfig = object;
+export type ToSelectConfig = object;
 
 export interface BooleanFirstOptionConfig<V> {
   /**

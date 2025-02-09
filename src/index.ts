@@ -34,6 +34,14 @@ export type {
 export const VALUES = Symbol('[values]');
 
 /**
+ * **EN:** Alias of `items`. If the enum contains a field with the same name as `items`, you can
+ * access it by this Symbol as the field name
+ *
+ * **CN:** 枚举`items`集合的别名。如果枚举中包含了`items`的同名字段，可以通过此Symbol作为字段名来访问
+ */
+export const ITEMS = Symbol('[items]');
+
+/**
  * **EN:** Alias of `keys`. If the enum contains a field with the same name as `keys`, you can
  * access it by this Symbol as the field name
  *

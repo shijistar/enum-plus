@@ -12,7 +12,7 @@ import type {
   IEnumValues,
   MenuItemOption,
   ObjectFirstOptionConfig,
-  OptionsConfig,
+  ToSelectConfig,
   ValueTypeFromSingleInit,
 } from './types';
 
@@ -39,7 +39,7 @@ export class EnumValuesArray<
 {
   #raw: T;
   #localize: NonNullable<EnumItemOptions['localize']>;
-  #optionsConfigDefaults: OptionsConfig & BooleanFirstOptionConfig<V> = {
+  #optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = {
     firstOption: false,
   };
 
@@ -77,12 +77,12 @@ export class EnumValuesArray<
   }
 
   toSelect(): EnumItemOptionData<K, V>[];
-  toSelect(config?: OptionsConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  toSelect(config?: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   toSelect<FK = never, FV = never>(
-    config?: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
+    config?: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   toSelect<FK = never, FV = never>(
-    config: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = this
+    config: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = this
       .#optionsConfigDefaults
   ): EnumItemOptionData<K | FK, V | FV>[] {
     const { firstOption = this.#optionsConfigDefaults.firstOption } = config;
@@ -111,16 +111,19 @@ export class EnumValuesArray<
   /** @deprecated Use `toSelect` instead */
   options(): EnumItemOptionData<K, V>[];
   /** @deprecated Use `toSelect` instead */
-  options(config?: OptionsConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  options(config?: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   /** @deprecated Use `toSelect` instead */
   options<FK = never, FV = never>(
-    config?: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
+    config?: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   /** @deprecated Use `toSelect` instead */
   options<FK = never, FV = never>(
-    config?: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
+    config?: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    return this.toSelect(config as OptionsConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<K | FK, V | FV>[];
+    return this.toSelect(config as ToSelectConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
+      K | FK,
+      V | FV
+    >[];
   }
 
   toValueMap() {

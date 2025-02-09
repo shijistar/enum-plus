@@ -2,6 +2,15 @@
 
 # enum-plus Changelog
 
+## 2.2.0
+
+2025-2-9
+
+### Features
+
+- 🔥 Support initializing Enum with native enums
+- 🔥 Adds `items` array, deprecated the _`values`_ array. Reduces package size.
+
 ## 2.1.1
 
 2025-2-8
@@ -18,10 +27,10 @@
 
 ### Features
 
-- 🔥 Adds `toSelect` method, deprecated _`options`_ method
-- 🔥 Adds `toMenu` method, deprecated _`menus`_ method
-- 🔥 Adds `toFilter` method, deprecated _`filters`_ method
-- 🔥 Adds `toValueMap` method, _`valuesEnum`_ method
+- 🔥 Adds `toSelect` method, deprecated the _`options`_ method
+- 🔥 Adds `toMenu` method, deprecated the _`menus`_ method
+- 🔥 Adds `toFilter` method, deprecated the _`filters`_ method
+- 🔥 Adds `toValueMap` method, the _`valuesEnum`_ method
 - 🔥 Support global extension, custom methods can be added to Enums
 
 ## 2.0.3

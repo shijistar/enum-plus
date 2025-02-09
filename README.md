@@ -131,7 +131,7 @@ const PetTypes = Enum(petTypes, {
   getLabel: 'name',
   getKey: 'code', // Optional, if omitted, value is used as Key as fallback
 });
-Week.values; // Output is:
+Week.items; // Output is:
 // [   { value: 1, label: 'Dog', key: 'dog' },
 //     { value: 2, label: 'Cat', key: 'cat' },
 //     { value: 3, label: 'Rabbit', key: 'rabbit' }   ]
@@ -173,7 +173,7 @@ Week.Sunday; // 0
 
 ---
 
-### values
+### items
 
 `{value, label, key, raw}[]`
 
@@ -233,7 +233,7 @@ Week.has('Birthday'); // false
 
 <sup>**_[Function]_**</sup> `toSelect(config?: OptionsConfig): {value, label}[]`
 
-`toSelect` is similar to `values`, both return an array containing all enum items. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields. At the same time, the `toSelect` method supports inserting a default element at the beginning of the array, which is generally used for the default option of components such as dropdowns, representing all, none, or unlimited, etc., of course, you can also customize this default option
+`toSelect` is similar to `items`, both return an array containing all enum items. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields. At the same time, the `toSelect` method supports inserting a default element at the beginning of the array, which is generally used for the default option of components such as dropdowns, representing all, none, or unlimited, etc., of course, you can also customize this default option
 
 ---
 
@@ -401,7 +401,7 @@ HttpCodes.E404; // Hover over E404 to display full Jsdoc comments
 #### Get an array of all enum items
 
 ```js
-Week.values; // Output is:
+Week.items; // Output is:
 // [
 //  { value: 0, label: 'Sunday', key: 'Sunday', raw: { value: 0, label: 'Sunday' } },
 //  { value: 1, label: 'Monday', key: 'Monday', raw: { value: 1, label: 'Monday' } },
@@ -413,7 +413,7 @@ Week.values; // Output is:
 #### Get the first enum value
 
 ```js
-Week.values[0].value; // 0
+Week.items[0].value; // 0
 ```
 
 ---
@@ -422,7 +422,7 @@ Week.values[0].value; // 0
 
 ```js
 Week.has(1); // true
-Week.values.some(item => item.value === 1); // true
+Week.items.some(item => item.value === 1); // true
 1 instance of Week; // true
 ```
 
@@ -441,15 +441,15 @@ Week.values.some(item => item.value === 1); // true
 #### Support traversing enum items array, readonly
 
 ```js
-Week.values.length; // 2
-Week.values.map((item) => item.value); // [0, 1], ✅ Traversable
-Week.values.forEach((item) => {}); // ✅ Traversable
-for (let item of Week.values) {
+Week.items.length; // 2
+Week.items.map((item) => item.value); // [0, 1], ✅ Traversable
+Week.items.forEach((item) => {}); // ✅ Traversable
+for (let item of Week.items) {
   // ✅ Traversable
 }
-Week.values.push({ value: 2, label: 'Tuesday' }); // ❌ Not modifiable
-Week.values.splice(0, 1); // ❌ Not modifiable
-Week.values[0].label = 'foo'; // ❌ Not modifiable
+Week.items.push({ value: 2, label: 'Tuesday' }); // ❌ Not modifiable
+Week.items.splice(0, 1); // ❌ Not modifiable
+Week.items[0].label = 'foo'; // ❌ Not modifiable
 ```
 
 ---
@@ -490,7 +490,7 @@ Week.raw('Sunday').active // true
 
 #### Convert to UI components
 
-- `values` can be consumed as the data source (here uses Select as examples)
+- `items` can be consumed as the data source (here uses Select as examples)
 
   [Ant Design](https://ant.design/components/select) | [Arco Design](https://arco.design/react/en-US/components/select)
   Select
@@ -498,7 +498,7 @@ Week.raw('Sunday').active // true
   ```tsx
   import { Select } from 'antd';
 
-  <Select options={Week.values} />;
+  <Select options={Week.items} />;
   ```
 
   [Material-UI](https://mui.com/material-ui/react-select/) Select
@@ -507,7 +507,7 @@ Week.raw('Sunday').active // true
   import { MenuItem, Select } from '@mui/material';
 
   <Select>
-    {Week.values.map((item) => (
+    {Week.items.map((item) => (
       <MenuItem key={item.value} value={item.value}>
         {item.label}
       </MenuItem>
@@ -520,27 +520,27 @@ Week.raw('Sunday').active // true
   ```tsx
   import { DropDownList } from '@progress/kendo-react-dropdowns';
 
-  <DropDownList data={Week.values} textField="label" dataItemKey="value" />;
+  <DropDownList data={Week.items} textField="label" dataItemKey="value" />;
   ```
 
   [ElementPlus](https://element-plus.org/en-US/component/select.html) Select
 
   ```tsx
   <el-select>
-    <el-option v-for="item in Week.values" v-bind="item" />
+    <el-option v-for="item in Week.items" v-bind="item" />
   </el-select>
   ```
 
   [Ant Design Vue](https://antdv.com/components/select) | [Arc Design](https://arco.design/vue/en-US/component/select) Select
 
   ```tsx
-  <a-select :options="Week.values" />
+  <a-select :options="Week.items" />
   ```
 
   [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
 
   ```tsx
-  <v-select :items="Week.values" item-title="label" />
+  <v-select :items="Week.items" item-title="label" />
   ```
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
@@ -549,7 +549,7 @@ Week.raw('Sunday').active // true
 
   ```html
   <mat-select>
-    <mat-option *ngFor="let item of Week.values" [value]="item.value">{{ item.label }}</mat-option>
+    <mat-option *ngFor="let item of Week.items" [value]="item.value">{{ item.label }}</mat-option>
   </mat-select>
   ```
 
@@ -559,11 +559,11 @@ Week.raw('Sunday').active // true
 
   ```html
   <nz-select>
-    <nz-option *ngFor="let item of Week.values" [nzValue]="item.value">{{ item.label }}</nz-option>
+    <nz-option *ngFor="let item of Week.items" [nzValue]="item.value">{{ item.label }}</nz-option>
   </nz-select>
   ```
 
-- `toSelect` method is similar to `values`, but is allowed to add a default option at the top. The default option can be a boolean value or a custom object.
+- `toSelect` method is similar to `items`, but is allowed to add a default option at the top. The default option can be a boolean value or a custom object.
 
   - If set to a boolean value, the default option is `{ value: '', label: 'All' }`, the display name only supports English. If you need localization, please parse and process the built-in resource key `enum-plus.options.all` in the localization method. For more details about localization, please refer to the [Localization](#localization) section
   - If set to an object, you can customize the value and display text of the default option, and the display text will automatically support localization
@@ -609,7 +609,7 @@ const columns = [
 ```tsx
 import { ProTable } from '@ant-design/pro-components';
 
-<ProFormSelect valueEnum={Week.valuesEnum()} />;
+<ProFormSelect valueEnum={Week.toValueMap()} />;
 ```
 
 ---
@@ -652,7 +652,7 @@ type FooProps = {
 
 Here are some edge cases for using enums. As seen from the above examples, we can quickly access enum items through `Week.XXX`, but what if the key of an enum item conflicts with the name of an enum method?
 
-We know that there are methods like `label`, `key`, `toSelect` on the enum type. If they have the same name as an enum item, the enum item's value has a higher priority and will override these methods. But don't worry, you can access them under `values`. Please refer to the code example below:
+We know that there are methods like `label`, `key`, `toSelect` on the enum type. If they have the same name as an enum item, the enum item's value has a higher priority and will override these methods. But don't worry, you can access them under `items`. Please refer to the code example below:
 
 ```js
 const Week = Enum({
@@ -663,30 +663,30 @@ const Week = Enum({
 } as const);
 Week.keys; // 3, enum item has higher priority and will override the method
 Week.label; // 4, enum item has higher priority and will override the method
-// You can access these methods through values 🙂
-Week.values.keys // ['foo', 'bar', 'keys', 'label']
-Week.values.label(1); // 'foo'
+// You can access these methods through items 🙂
+Week.items.keys // ['foo', 'bar', 'keys', 'label']
+Week.items.label(1); // 'foo'
 ```
 
-An even more extreme case, what if `values` conflicts with the name of an enum item? Don't worry, you can still access the `values` array through an alias field. Refer to the example below:
+An even more extreme case, what if `items` conflicts with the name of an enum item? Don't worry, you can still access the `items` array through an alias field. Refer to the example below:
 
 ```js
-import { VALUES } from 'enum-plus';
+import { ITEMS } from 'enum-plus';
 
 const Week = Enum({
   foo: { value: 1 },
   bar: { value: 2 },
-  values: { value: 3 }, // Naming conflict
+  items: { value: 3 }, // Naming conflict
 } as const);
 
-Week.values; // 3, enum item has higher priority and will override values
-Week[VALUES]; // VALUES is an alias Symbol
+Week.items; // 3, enum item has higher priority and will override items
+Week[ITEMS]; // ITEMS is an alias Symbol
 // [
 //  { value: 1, key: 'foo', label: 'foo' },
 //  { value: 2, key: 'bar', label: 'bar' },
-//  { value: 3, key: 'values', label: 'values' }
+//  { value: 3, key: 'items', label: 'items' }
 // ]
-// Equivalent to the original Week.values 🙂
+// Equivalent to the original Week.items 🙂
 ```
 
 ---
@@ -772,10 +772,10 @@ _**App.ts**_
 ```tsx
 Enum.extend({
   getLabels(this: ReturnType<typeof Enum>) {
-    return this.values.map((item) => item.label);
+    return this.items.map((item) => item.label);
   },
   reversedValues(this: ReturnType<typeof Enum>) {
-    return this.values.reverse();
+    return this.items.reverse();
   },
 });
 

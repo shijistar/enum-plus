@@ -1,6 +1,6 @@
 import { EnumItemClass } from './enum-item';
 import { EnumValuesArray } from './enum-values';
-import { KEYS, VALUES } from './index';
+import { ITEMS, KEYS, VALUES } from './index';
 import type {
   BooleanFirstOptionConfig,
   ColumnFilterItem,
@@ -13,8 +13,8 @@ import type {
   IEnumValues,
   MenuItemOption,
   ObjectFirstOptionConfig,
-  OptionsConfig,
   StandardEnumItemInit,
+  ToSelectConfig,
   ValueTypeFromSingleInit,
 } from './types';
 
@@ -42,7 +42,7 @@ export class EnumCollectionClass<
   extends EnumExtensionClass<T, K, V>
   implements IEnumValues<T, K, V>
 {
-  readonly values!: EnumValuesArray<T, K, V>;
+  readonly items!: EnumValuesArray<T, K, V>;
   readonly keys!: K[];
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
@@ -62,7 +62,7 @@ export class EnumCollectionClass<
     this[Object.keys(init).some((k) => k === 'keys') ? KEYS : 'keys'] = keys;
 
     // Build enum item data
-    const values = new EnumValuesArray<T, K, V>(
+    const items = new EnumValuesArray<T, K, V>(
       init,
       options,
       ...keys.map((key, index) => {
@@ -70,8 +70,10 @@ export class EnumCollectionClass<
         return new EnumItemClass<T[K], K, V>(key, value, label, init[key], options).readonly();
       })
     );
+    // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
+    this[Object.keys(init).some((k) => k === 'items') ? ITEMS : 'items'] = items;
     // @ts-expect-error: because use VALUES to avoid naming conflicts in case of 'values' field name is taken
-    this[Object.keys(init).some((k) => k === 'values') ? VALUES : 'values'] = values;
+    this[Object.keys(init).some((k) => k === 'values') ? VALUES : 'values'] = items;
 
     // Override some system methods
     // @ts-expect-error: because override Object.toString method for better type display
@@ -80,36 +82,36 @@ export class EnumCollectionClass<
     // @ts-expect-error: because override the instanceof operator
     this[Symbol.hasInstance] = (instance: unknown): boolean => {
       // intentionally use == to support both number and string format value
-      return this.values.some(
+      return this.items.some(
         // eslint-disable-next-line eqeqeq
         (i) => instance == i.value || instance === i.key
       );
     };
 
     Object.freeze(this);
-    Object.freeze(this.values);
+    Object.freeze(this.items);
     Object.freeze(this.keys);
   }
 
   key(value?: string | number) {
-    return this.values.key(value);
+    return this.items.key(value);
   }
   label(keyOrValue?: string | number): string | undefined {
-    return this.values.label(keyOrValue);
+    return this.items.label(keyOrValue);
   }
   has(keyOrValue?: string | number) {
-    return this.values.has(keyOrValue);
+    return this.items.has(keyOrValue);
   }
 
   toSelect(): EnumItemOptionData<K, V>[];
-  toSelect(config: OptionsConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  toSelect(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   toSelect<FK = never, FV = never>(
-    config: OptionsConfig & ObjectFirstOptionConfig<FK, FV>
+    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   toSelect<FK = never, FV = never>(
-    config?: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
+    config?: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    return this.values.toSelect(config as OptionsConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
+    return this.items.toSelect(config as ToSelectConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
       K | FK,
       V | FV
     >[];
@@ -121,36 +123,36 @@ export class EnumCollectionClass<
     config: object & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   options<FK = never, FV = never>(
-    config?: OptionsConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
+    config?: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    return this.values.options(config as OptionsConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
+    return this.items.options(config as ToSelectConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
       K | FK,
       V | FV
     >[];
   }
 
   toMenu(): MenuItemOption<V>[] {
-    return this.values.toMenu();
+    return this.items.toMenu();
   }
   /** @deprecated use `toMenu` instead */
   menus(): MenuItemOption<V>[] {
-    return this.values.menus();
+    return this.items.menus();
   }
 
   toFilter(): ColumnFilterItem<V>[] {
-    return this.values.toFilter();
+    return this.items.toFilter();
   }
   /** @deprecated use `toFilter` instead */
   filters(): ColumnFilterItem<V>[] {
-    return this.values.filters();
+    return this.items.filters();
   }
 
   toValueMap() {
-    return this.values.toValueMap();
+    return this.items.toValueMap();
   }
   /** @deprecated use `toValueMap` instead */
   valuesEnum() {
-    return this.values.valuesEnum();
+    return this.items.valuesEnum();
   }
 
   raw(): T;
@@ -158,20 +160,20 @@ export class EnumCollectionClass<
   raw(value: unknown): T[K] | undefined;
   raw(value?: unknown): T | T[K] | undefined {
     if (value !== undefined) {
-      return this.values.raw(value);
+      return this.items.raw(value);
     } else {
-      return this.values.raw();
+      return this.items.raw();
     }
   }
 
   get valueType() {
-    return this.values.valueType;
+    return this.items.valueType;
   }
   get keyType() {
-    return this.values.keyType;
+    return this.items.keyType;
   }
   get rawType() {
-    return this.values.rawType;
+    return this.items.rawType;
   }
 }
 

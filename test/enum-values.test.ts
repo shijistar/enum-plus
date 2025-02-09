@@ -5,7 +5,7 @@ import { getStandardWeekData } from './data/week-data';
 import { getOptionsData, pickArray } from './utils';
 
 describe('the EnumValuesArray api', () => {
-  addEnumValuesTestSuite(Enum(StandardWeekConfig).values);
+  addEnumValuesTestSuite(Enum(StandardWeekConfig).items);
 });
 
 export function addEnumValuesTestSuite(
