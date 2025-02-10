@@ -1,10 +1,17 @@
-<!-- markdownlint-disable MD009 MD001 -->
-
-# enum-plus
+<!-- markdownlint-disable MD001 MD009 MD033 MD041 -->
 
 [English](./README.md) | [中文](./README.zh-CN.md)
 
-> 与原生`enum`一样容易，但更强大得多
+<p align="center">
+  <a href="https://github.com/shijistar/enum-plus" target="blank">
+    <img src="./public/enum-plus.svg" width="240" alt="enum-plus" />
+  </a>
+</p>
+
+<p align="center">
+  <strong>像原生 enum 一样容易，但更强大！</strong>
+</p>
+<br/>
 
 [![npm version](https://img.shields.io/npm/v/enum-plus.svg?color=red)](https://www.npmjs.com/package/enum-plus)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/enum-plus)](https://bundlephobia.com/result?p=enum-plus)

@@ -93,6 +93,7 @@ describe('the EnumCollectionClass api', () => {
   test('[toString] should return a friendly name', () => {
     const week = Enum(StandardWeekConfig);
     expect(week.toString()).toBe('[object EnumCollection]');
+    expect(Object.prototype.toString.call(week)).toBe('[object EnumCollection]');
   });
 
   test('enum value/key/label should be success by the [instanceof] operator', () => {

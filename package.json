@@ -1,7 +1,7 @@
 {
   "name": "enum-plus",
   "version": "2.2.1",
-  "description": "A drop-in replacement library for enum, tiny and powerful, like native enum but much more than that",
+  "description": "A drop-in replacement for enum, like native enum but much better!",
   "keywords": [
     "enum",
     "enumeration",
@@ -26,6 +26,7 @@
   "files": [
     "lib",
     "es",
+    "public",
     "CHANGELOG.md"
   ],
   "scripts": {
