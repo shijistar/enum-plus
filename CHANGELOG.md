@@ -2,6 +2,12 @@
 
 # enum-plus Changelog
 
+## 2.2.1
+
+2025-2-10
+
+- 📖 update docs
+
 ## 2.2.0
 
 2025-2-9
