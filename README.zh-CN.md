@@ -65,7 +65,7 @@ yarn add enum-plus
 
 构造一个枚举，枚举值支持 `number` 和 `string` 两种类型
 
-#### 示例 1：基础用法，与原生枚举用法基本一致
+- ### 示例 1：基础用法，与原生枚举用法基本一致
 
 ```js
 import { Enum } from 'enum-plus';
@@ -77,7 +77,7 @@ const Week = Enum({
 Week.Monday; // 1
 ```
 
-#### 示例 2：值类型使用 string
+- ### 示例 2：值类型使用 string
 
 ```js
 import { Enum } from 'enum-plus';
@@ -89,20 +89,22 @@ const Week = Enum({
 Week.Monday; // 'Mon'
 ```
 
-#### 👍👍 【推荐】 示例 3（标准用法）：包含 Key、Value，以及显示文本
+- ### 👍👍 【推荐】 示例 3（标准用法）：包含 Key、Value，以及显示文本
 
 ```js
 import { Enum } from 'enum-plus';
 
 const Week = Enum({
-  Sunday: { value: 0, label: '星期日' }, // 此示例不包含本地化
-  Monday: { value: 1, label: '星期一' }, // 此示例不包含本地化
+  Sunday: { value: 0, label: '星期日' }, // 此示例不考虑本地化
+  Monday: { value: 1, label: '星期一' }, // 此示例不考虑本地化
 } as const);
 Week.Monday; // 1
 Week.label(1); // 星期一
 ```
 
-#### 👍 示例 4：如果 Key 与 Value 相同，可以采用省略写法
+- ### 👍 示例 4：省略 value 字段
+
+如果 `value` 与 Key 相同，可以考虑省略 `value` 字段，使用 Key 作为枚举值
 
 ```js
 import { Enum } from 'enum-plus';
@@ -115,7 +117,7 @@ Week.Monday; // 'Monday'
 Week.label('Monday'); // 星期一
 ```
 
-#### 示例 5：动态创建枚举
+- ### 示例 5：动态数组构建枚举
 
 有时候我们需要使用接口返回的数据，动态创建一个枚举，这时可以采用数组的方式来初始化枚举
 
@@ -123,21 +125,15 @@ Week.label('Monday'); // 星期一
 import { Enum } from 'enum-plus';
 
 const petTypes = await getPetsData();
-// [   { id: 1, code: 'dog', name: '狗' },
-//     { id: 2, code: 'cat', name: '猫' },
-//     { id: 3, code: 'rabbit', name: '兔子' }   ];
-const PetTypes = Enum(petTypes, {
-  getValue: 'id',
-  getLabel: 'name',
-  getKey: 'code', // getKey可选，如果忽略则默认使用value作为Key
-});
-Week.items; // 输出如下:
-// [   { value: 1, label: '狗', key: 'dog' },
-//     { value: 2, label: '猫', key: 'cat' },
-//     { value: 3, label: '兔子', key: 'rabbit' }   ]
+// [   { value: 1, key: 'dog', label: '狗' },
+//     { value: 2, key: 'cat', label: '猫' },
+//     { value: 3, key: 'rabbit', label: '兔子' }   ];
+const PetTypes = Enum(petTypes);
 ```
 
-#### 示例 6：支持原生枚举初始化，相当于给原生枚举添加一些扩展方法
+关于更高级的用法，请参考 [自定义初始化选项](#自定义初始化选项) 章节
+
+- ### 示例 6：支持原生枚举初始化，相当于给原生枚举添加一些扩展方法
 
 ```ts
 import { Enum } from 'enum-plus';
@@ -164,18 +160,18 @@ Week.label('Sunday'); // Sunday
 
 `Enum.XXX`
 
-像原生`enum`一样，从枚举类型中拾取一个枚举项的值
+像原生`enum`一样，直接拾取一个枚举值
 
 ```js
-Week.Monday; // 1
 Week.Sunday; // 0
+Week.Monday; // 1
 ```
 
 ---
 
 ### items
 
-`{value, label, key, raw}[]`
+`{ value, label, key, raw }[]`
 
 获取一个包含全部枚举项的只读数组，可以方便地遍历枚举项。由于符合 [Ant Design](https://github.com/ant-design/ant-design) 组件的数据规范，因此支持将枚举一键转换成下拉框、复选框等组件，只需要一行代码，更多详情可以参考后面的例子
 
@@ -191,7 +187,7 @@ Week.Sunday; // 0
 
 ### label
 
-<sup>**_[方法]_**</sup> `label(keyOrValue?: string | number): string | undefined`
+<sup>**_[方法]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
 根据某个枚举值或枚举 Key，获取该枚举项的显示文本。如果设置了本地化，则会返回本地化后的文本。
 
@@ -204,7 +200,7 @@ Week.label('Monday'); // 星期一
 
 ### key
 
-<sup>**_[方法]_**</sup> `key(value?: string | number): string | undefined`
+<sup>**_[方法]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
 根据枚举值获取该枚举项的 Key，如果不存在则返回`undefined`
 
@@ -216,7 +212,7 @@ Week.key(1); // 'Monday'
 
 ### has
 
-<sup>**_[方法]_**</sup> `has(keyOrValue?: string | number): boolean`
+<sup>**_[方法]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
 判断某个枚举项（值或 Key）是否存在
 
@@ -231,7 +227,7 @@ Week.has('Birthday'); // false
 
 ### toSelect
 
-<sup>**_[方法]_**</sup> `toSelect(config?: OptionsConfig): {value, label}[]`
+<sup>**_[方法]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
 `toSelect`与`items`相似，都是返回一个包含全部枚举项的数组。区别是，`toSelect`返回的元素只包含`label`和`value`两个字段，同时，`toSelect`方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
 
@@ -239,7 +235,7 @@ Week.has('Birthday'); // false
 
 ### toMenu
 
-<sup>**_[方法]_**</sup> `toMenu(): { key, label }[]`
+<sup>**_[方法]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
 生成一个对象数组，可以绑定给 [Ant Design](https://ant-design.antgroup.com/components/menu-cn) 的`Menu`、`Dropdown`等组件
 
@@ -262,7 +258,7 @@ import { Menu } from 'antd';
 
 ### toFilter
 
-<sup>**_[方法]_**</sup> `toFilter(): { text, value }[]`
+<sup>**_[方法]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
 生成一个对象数组，可以直接传递给 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
 
@@ -279,7 +275,7 @@ import { Menu } from 'antd';
 
 ### toValueMap
 
-<sup>**_[方法]_**</sup> `toValueMap(): Record<V, { text: string }>`
+<sup>**_[方法]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
 
 生成一个符合 [Ant Design Pro](https://procomponents.ant.design/components/schema#valueenum) 规范的枚举集合对象，可以传递给 `ProFormField`、`ProTable` 等组件。
 
@@ -296,9 +292,9 @@ import { Menu } from 'antd';
 
 ### raw
 
-<sup>**_[方法重载^1]_**</sup> `raw(): Record<K, T[K]>`
+<sup>**_[方法重载^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
 <br/>
-<sup>**_[方法重载^2]_**</sup> `raw(keyOrValue: V | K): T[K]`
+<sup>**_[方法重载^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
 第一个无参数的重载，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
 
@@ -317,7 +313,7 @@ Week.raw('Monday'); // { value: 1, label: '星期一' }
 
 ---
 
-### valueType <sup>**_[Type-ONLY]_**</sup>
+### valueType &nbsp; <sup>**_[Type-ONLY]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -333,7 +329,7 @@ type WeekValues = typeof Week.valueType; // 0 | 1
 
 ---
 
-### keyType <sup>**_[Type-ONLY]_**</sup>
+### keyType &nbsp; <sup>**_[Type-ONLY]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -349,7 +345,7 @@ type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
 
 ---
 
-### rawType <sup>**_[Type-ONLY]_**</sup>
+### rawType &nbsp; <sup>**_[Type-ONLY]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
@@ -369,8 +365,8 @@ const Week = Enum({
   Monday: { value: 1, label: '星期一' },
 } as const);
 
-Week.Monday; // 1
 Week.Sunday; // 0
+Week.Monday; // 1
 ```
 
 ---
@@ -394,7 +390,7 @@ const HttpCodes = Enum({
 HttpCodes.E404; // 将光标悬停在 E404 上，将显示完整的Jsdoc文档注释
 ```
 
-> 上面的代码示例中，Http 状态码的释义内容参考自 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
+> Http 状态码的释义内容参考自 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
 
 ---
 
@@ -626,24 +622,58 @@ const myWeek = Enum({
 
 ---
 
-#### 使用枚举值序列来缩小数据类型 &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
+#### 使用枚举值序列来缩小`number`类型 &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
 
-使用 `valueType` 类型约束，可以将字段类型从宽泛的`number`或`string`类型缩小为有限的枚举值序列，这不但能减少错误赋值的可能性，还能提高代码的可读性。
+使用 `valueType` 类型约束，可以将数据类型从宽泛的`number`或`string`类型缩小为有限的枚举值序列，这不但能减少错误赋值的可能性，还能提高代码的可读性
 
 ```typescript
 const weekValue: number = 8; // 👎 任意数字都可以赋值给周枚举，即使错误的
 const weekName: string = 'Birthday'; // 👎 任意字符串都可以赋值给周枚举，即使错误的
 
-const badWeekValue: typeof Week.valueType = 8; // ❌ 类型错误，8 不是一个有效的周枚举值
-const badWeekName: typeof Week.keyType = 'Birthday'; // ❌ 类型错误，'Birthday' 不是一个有效的周枚举名
-
 const goodWeekValue: typeof Week.valueType = 1; // ✅ 类型正确，1 是一个有效的周枚举值
 const goodWeekName: typeof Week.keyType = 'Monday'; // ✅ 类型正确，'Monday' 是一个有效的周枚举名
+
+const badWeekValue: typeof Week.valueType = 8; // ❌ 类型错误，8 不是一个有效的周枚举值
+const badWeekName: typeof Week.keyType = 'Birthday'; // ❌ 类型错误，'Birthday' 不是一个有效的周枚举名
 
 type FooProps = {
   value?: typeof Week.valueType; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
   names?: (typeof Week.keyType)[]; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
 };
+```
+
+---
+
+#### 自定义初始化选项
+
+在 [示例 5：动态数组构建枚举](#示例-5动态数组构建枚举) 章节中，介绍了可以通过后端动态数据来构建枚举，但是很可能动态数据的字段名并不是`value`、`label`、`key`，而是其它的字段名。这时你可以传入一个自定义选项，把这些映射到其它字段名上
+
+```js
+import { Enum } from 'enum-plus';
+
+const petTypes = await getPetsData();
+// [   { id: 1, code: 'dog', name: '狗' },
+//     { id: 2, code: 'cat', name: '猫' },
+//     { id: 3, code: 'rabbit', name: '兔子' }   ];
+const PetTypes = Enum(petTypes, {
+  getValue: 'id',
+  getLabel: 'name',
+  getKey: 'code', // getKey可选
+});
+Week.items; // 输出如下:
+// [   { value: 1, label: '狗', key: 'dog' },
+//     { value: 2, label: '猫', key: 'cat' },
+//     { value: 3, label: '兔子', key: 'rabbit' }   ]
+```
+
+在上面的例子中，`getValue`、`getLabel`、`getKey` 还可以是一个函数，用来处理更复杂的业务逻辑，比如：
+
+```js
+const PetTypes = Enum(petTypes, {
+  getValue: (item) => item.id,
+  getLabel: (item) => `${item.name} (${item.code})`,
+  getKey: (item) => item.code,
+});
 ```
 
 ---
@@ -771,15 +801,15 @@ _**App.ts**_
 
 ```tsx
 Enum.extend({
-  getLabels(this: ReturnType<typeof Enum>) {
-    return this.items.map((item) => item.label);
+  toMySelect(this: ReturnType<typeof Enum>) {
+    return this.items.map((item) => ({ value: item.value, title: item.label }));
   },
-  reversedValues(this: ReturnType<typeof Enum>) {
+  reversedItems(this: ReturnType<typeof Enum>) {
     return this.items.reverse();
   },
 });
 
-Week.getLabels(); // ['星期日', '星期一']
+Week.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: '星期一' }]
 ```
 
 如果你在使用 TypeScript，你可能需要再扩展一下枚举类型声明，这样可以获得更好的类型提示。在你的项目中创建或编辑一个声明文件（例如 `global.d.ts`），并在其中扩展全局类型。此文件可以放在项目的根目录或任意目录下，只要确保 TypeScript 能够找到它
@@ -792,8 +822,8 @@ import type { EnumItemClass } from 'enum-plus/lib/enum-item';
 
 declare global {
   export interface EnumExtension<T, K, V> {
-    getLabels: () => string[];
-    reversedValues: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+    toMySelect: () => { value: V; title: string }[];
+    reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
   }
 }
 ```
@@ -806,4 +836,4 @@ declare global {
 - `K`: 枚举项的键值
 - `V`: 枚举项的值
 
-如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数。这些都是可选的，如果你的扩展方法像`getLabels`这样简单，那么你完全可以忽略它们
+如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数，但这些都是可选的，如果你不需要，可以直接省略掉它们

@@ -1,6 +1,4 @@
 import { Enum } from '../src';
-import type { EnumItemClass } from '../src/enum-item';
-import type { EnumItemInit } from '../src/types';
 import { StandardWeekConfig } from './data/week-config';
 
 describe('Enum should be extensible', () => {
@@ -9,8 +7,8 @@ describe('Enum should be extensible', () => {
       isWeekend(value: number) {
         return value === 6 || value === 0;
       },
-      toArray(this: ReturnType<typeof Enum>) {
-        return this.values;
+      toMySelect(this: ReturnType<typeof Enum>) {
+        return this.items.map((item) => ({ value: item.value, title: item.label }));
       },
     });
     const weekEnum = Enum(StandardWeekConfig);
@@ -18,7 +16,7 @@ describe('Enum should be extensible', () => {
     expect(weekEnum.isWeekend(weekEnum.Friday)).toBe(false);
     expect(weekEnum.isWeekend(weekEnum.Saturday)).toBe(true);
     expect(weekEnum.isWeekend(weekEnum.Sunday)).toBe(true);
-    expect(weekEnum.toArray()).toEqual(weekEnum.values);
+    expect(weekEnum.toMySelect()).toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
   });
   test('clear global extension', () => {
     Enum.extends({
@@ -55,6 +53,6 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface EnumExtension<T, K, V> {
     isWeekend(value: number): boolean;
-    toArray(): EnumItemClass<EnumItemInit<V>, K, V>[];
+    toMySelect: () => { value: V; title: string }[];
   }
 }

@@ -65,7 +65,7 @@ yarn add enum-plus
 
 Create an enum, enum values support both `number` and `string` types
 
-#### Example 1: Basic usage, almost the same as native enum
+- ### Example 1: Basic usage, almost the same as native enum
 
 ```js
 import { Enum } from 'enum-plus';
@@ -77,7 +77,7 @@ const Week = Enum({
 Week.Monday; // 1
 ```
 
-#### Example 2: string value type
+- ### Example 2: string enum values
 
 ```js
 import { Enum } from 'enum-plus';
@@ -89,7 +89,7 @@ const Week = Enum({
 Week.Monday; // 'Mon'
 ```
 
-#### 👍👍 [Recommended] Example 3 (standard usage): With key, value, and display text
+- ### 👍👍 [Recommended] Example 3 (standard usage): with Key, Value, and Display text
 
 ```js
 import { Enum } from 'enum-plus';
@@ -99,10 +99,12 @@ const Week = Enum({
   Monday: { value: 1, label: 'Monday' }, // this example does not consider localization
 } as const);
 Week.Monday; // 1
-Week.label(1); // Monday (this is display text, not key)
+Week.label(1); // Monday (here is display text, not key)
 ```
 
-#### 👍 Example 4: Omit the value field, automatically degrade to use the key field
+- ### 👍 Example 4: omit the value field
+
+If the `value` is the same as the Key, you can consider omitting the `value` field and using the Key instead
 
 ```js
 import { Enum } from 'enum-plus';
@@ -115,7 +117,7 @@ Week.Monday; // 'Monday'
 Week.label(/*key*/ 'Monday'); // Monday, output display text
 ```
 
-#### Example 5: Create an enum dynamically
+- ### Example 5: Create from dynamic array
 
 Sometimes we need to create an enum dynamically using data returned by an api, in this case, we can use an array to initialize the enum
 
@@ -123,21 +125,15 @@ Sometimes we need to create an enum dynamically using data returned by an api, i
 import { Enum } from 'enum-plus';
 
 const petTypes = await getPetsData();
-// [   { id: 1, code: 'dog', name: 'Dog' },
-//     { id: 2, code: 'cat', name: 'Cat' },
-//     { id: 3, code: 'rabbit', name: 'Rabbit' }   ];
-const PetTypes = Enum(petTypes, {
-  getValue: 'id',
-  getLabel: 'name',
-  getKey: 'code', // Optional, if omitted, value is used as Key as fallback
-});
-Week.items; // Output is:
-// [   { value: 1, label: 'Dog', key: 'dog' },
-//     { value: 2, label: 'Cat', key: 'cat' },
-//     { value: 3, label: 'Rabbit', key: 'rabbit' }   ]
+// [   { value: 1, key: 'dog', label: 'Dog' },
+//     { value: 2, key: 'cat', label: 'Cat' },
+//     { value: 3, key: 'rabbit', label: 'Rabbit' }   ];
+const PetTypes = Enum(petTypes);
 ```
 
-#### Example 6: initialized from native enum (extend native enum with additional methods)
+For more advanced usages, please refer to the [Custom initialization options](#custom-initialization-options) section
+
+- ### Example 6: initialized from native enum (i.e. extend native enum with additional methods)
 
 ```ts
 import { Enum } from 'enum-plus';
@@ -160,24 +156,24 @@ Week.label('Sunday'); // Sunday
 
 ## API
 
-### Pick enum value
+### Pick an enum value
 
 `Enum.XXX`
 
-Like native `enum`, pick a value of an enum item from the enum type
+Like native `enum`, just pick an enum value
 
 ```js
-Week.Monday; // 1
 Week.Sunday; // 0
+Week.Monday; // 1
 ```
 
 ---
 
 ### items
 
-`{value, label, key, raw}[]`
+`{ value, label, key, raw }[]`
 
-Get a read-only array containing all enum items, which can be easily traversed. Since it conforms to the data specification of [AntDesign](https://github.com/ant-design/ant-design) components, it supports one-click conversion of enums into components such as dropdowns and checkboxes, with just a single line of code. For more details, please refer to the examples below.
+Get a read-only array containing all enum items, which can be easily traversed. Since it conforms to the data specification of [Ant Design](https://github.com/ant-design/ant-design) components, it supports one-click conversion of enums into components such as dropdowns and checkboxes, with just a single line of code. For more details, please refer to the examples below.
 
 ---
 
@@ -191,32 +187,32 @@ Get a read-only array containing all `Key` of the enum items
 
 ### label
 
-<sup>**_[Function]_**</sup> `label(keyOrValue?: string | number): string | undefined`
+<sup>**_[Function]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
 Get the display text of an enum item based on a certain enum value or Key. If localization is setup, the localized text will be returned.
 
 ```js
 Week.label(1); // Monday
-Week.label('Monday'); // Monday (this is label, not key)
+Week.label('Monday'); // Monday (here is label, not key)
 ```
 
 ---
 
 ### key
 
-<sup>**_[Function]_**</sup> `key(value?: string | number): string | undefined`
+<sup>**_[Function]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
 Get the Key of an enum item based on the enum value, if the Key is not found, return `undefined`.
 
 ```js
-Week.key(1); // Monday (this is key, not label)
+Week.key(1); // Monday (here is key, not label)
 ```
 
 ---
 
 ### has
 
-<sup>**_[Function]_**</sup> `has(keyOrValue?: string | number): boolean`
+<sup>**_[Function]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
 Determine whether a certain enum item (value or Key) exists
 
@@ -231,7 +227,7 @@ Week.has('Birthday'); // false
 
 ### toSelect
 
-<sup>**_[Function]_**</sup> `toSelect(config?: OptionsConfig): {value, label}[]`
+<sup>**_[Function]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
 `toSelect` is similar to `items`, both return an array containing all enum items. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields. At the same time, the `toSelect` method supports inserting a default element at the beginning of the array, which is generally used for the default option of components such as dropdowns, representing all, none, or unlimited, etc., of course, you can also customize this default option
 
@@ -239,7 +235,7 @@ Week.has('Birthday'); // false
 
 ### toMenu
 
-<sup>**_[Function]_**</sup> `toMenu(): { key, label }[]`
+<sup>**_[Function]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
 Generate an object array that can be bound to the `Menu`, `Dropdown` components of [Ant Design](https://ant.design/components/menu)
 
@@ -262,7 +258,7 @@ The data format is:
 
 ### toFilter
 
-<sup>**_[Function]_**</sup> `toFilter(): { text, value }[]`
+<sup>**_[Function]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
 Generate an array of filters that can be passed directly to the `Column.filters` of the [Ant Design](https://ant.design/components/table#table-demo-head) Table component as a list of filtered items for the column, displaying a dropdown filter box in the table header to filter table data
 
@@ -279,7 +275,7 @@ The data format is:
 
 ### toValueMap
 
-<sup>**_[Function]_**</sup> `toValueMap(): Record<V, { text: string }>`
+<sup>**_[Function]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
 
 Generate an enum collection object that conforms to the [Ant Design Pro](https://procomponents.ant.design/en-US/components/schema) specification, which can be passed to components like `ProFormField`, `ProTable`
 
@@ -296,9 +292,9 @@ The data format is:
 
 ### raw
 
-<sup>**_[Override^1]_**</sup> `raw(): Record<K, T[K]>`
+<sup>**_[Override^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
 <br/>
-<sup>**_[Override^2]_**</sup> `raw(keyOrValue: V | K): T[K]`
+<sup>**_[Override^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
 The first overload without parameters returns the initialization object of the enum collection, which is used to initialize the Enum original init object.
 
@@ -317,7 +313,7 @@ Week.raw('Monday'); // { value: 1, label: 'Monday' }
 
 ---
 
-### valueType <sup>**_[Type-ONLY]_**</sup>
+### valueType &nbsp; <sup>**_[Type-ONLY]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -329,11 +325,11 @@ const weeks: (typeof Week.valueType)[] = [0, 1];
 type WeekValues = typeof Week.valueType; // 0 | 1
 ```
 
-> Note that this is only a TypeScript type, which can only be used to constrain types and cannot be called at runtime, calling at runtime will throw an exception
+> Note that here is only a TypeScript type, which can only be used to constrain types and cannot be called at runtime, calling at runtime will throw an exception
 
 ---
 
-### keyType <sup>**_[Type-ONLY]_**</sup>
+### keyType &nbsp; <sup>**_[Type-ONLY]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -345,17 +341,17 @@ const weekKeys: (typeof Week.keyType)[] = ['Sunday', 'Monday'];
 type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
 ```
 
-> Note that this is only a TypeScript type, which can only be used to constrain types and cannot be called at runtime, calling at runtime will throw an exception
+> Note that here is only a TypeScript type, which can only be used to constrain types and cannot be called at runtime, calling at runtime will throw an exception
 
 ---
 
-### rawType <sup>**_[Type-ONLY]_**</sup>
+### rawType &nbsp; <sup>**_[Type-ONLY]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
 Similar to the `raw` method without parameters, but the `raw` method supports runtime calls, while `rawType` can only be used to constrain types
 
-> Note that this is only a TypeScript type, which can only be used to constrain types and cannot be called at runtime, calling at runtime will throw an exception
+> Note that here is only a TypeScript type, which can only be used to constrain types and cannot be called at runtime, calling at runtime will throw an exception
 
 ---
 
@@ -369,8 +365,8 @@ const Week = Enum({
   Monday: { value: 1, label: 'Monday' },
 } as const);
 
-Week.Monday; // 1
 Week.Sunday; // 0
+Week.Monday; // 1
 ```
 
 ---
@@ -394,7 +390,7 @@ const HttpCodes = Enum({
 HttpCodes.E404; // Hover over E404 to display full Jsdoc comments
 ```
 
-> In the above example, the interpretation of Http status is referenced from [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
+> The interpretation of Http status is referenced from [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
 
 ---
 
@@ -467,14 +463,14 @@ Week.label('Monday'); // Monday
 #### Get enum key by value
 
 ```js
-Week.key(1); // 'Monday', this is label, not key
-Week.key(Week.Monday); // 'Monday', this is label, not key
+Week.key(1); // 'Monday', here is label, not key
+Week.key(Week.Monday); // 'Monday', here is label, not key
 Week.key(9); // undefined, because it does not exist
 ```
 
 ---
 
-#### Extend custom fields, unlimited
+#### Extend custom fields with unlimited numbers
 
 ```js
 const Week = Enum({
@@ -626,24 +622,58 @@ const myWeek = Enum({
 
 ---
 
-#### Narrowing data types with enum value sequences &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
+#### Narrowing the `number` type to enum value sequences &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
 
-By using the `valueType` type constraint, you can narrow the field type from the broad `number` or `string` type to a limited sequence of enum values, which not only reduces the possibility of erroneous assignments, but also improves the readability of the code.
+By using the `valueType` type constraint, you can narrow the field type from the broad `number` or `string` type to a limited sequence of enum values, which not only reduces the possibility of erroneous assignments, but also improves the readability of the code
 
 ```typescript
 const weekValue: number = 8; // 👎 Any number can be assigned to the week enum, even if it is wrong
 const weekName: string = 'Birthday'; // 👎 Any string can be assigned to the week enum, even if it is wrong
 
-const badWeekValue: typeof Week.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
-const badWeekName: typeof Week.keyType = 'Birthday'; // ❌ Type error, 'Birthday' is not a valid week enum name
-
 const goodWeekValue: typeof Week.valueType = 1; // ✅ Type correct, 1 is a valid week enum value
 const goodWeekName: typeof Week.keyType = 'Monday'; // ✅ Type correct, 'Monday' is a valid week enum name
 
+const badWeekValue: typeof Week.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
+const badWeekName: typeof Week.keyType = 'Birthday'; // ❌ Type error, 'Birthday' is not a valid week enum name
+
 type FooProps = {
-  value?: typeof Week.valueType; // 👍 Component property type constraint, prevent erroneous assignment, and also prompt which values are valid
-  names?: (typeof Week.keyType)[]; // 👍 Component property type constraint, prevent erroneous assignment, and also prompt which values are valid
+  value?: typeof Week.valueType; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
+  names?: (typeof Week.keyType)[]; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
 };
+```
+
+---
+
+#### Custom initialization options
+
+In [Example 5: Create from dynamic array](#example-5-create-from-dynamic-array) section, we know that you can build an enum from dynamic data from the backend, but it is very likely that the field names of dynamic data are not `value`, `label`, `key`, but other field names. In this case, you can pass in a custom option to map these to other field names
+
+```js
+import { Enum } from 'enum-plus';
+
+const petTypes = await getPetsData();
+// [   { id: 1, code: 'dog', name: 'Dog' },
+//     { id: 2, code: 'cat', name: 'Cat' },
+//     { id: 3, code: 'rabbit', name: 'Rabbit' }   ];
+const PetTypes = Enum(petTypes, {
+  getValue: 'id',
+  getLabel: 'name',
+  getKey: 'code', // getKey is optional
+});
+Week.items; // Output is:
+// [   { value: 1, label: 'Dot', key: 'dog' },
+//     { value: 2, label: 'Cat', key: 'cat' },
+//     { value: 3, label: 'Rabbit', key: 'rabbit' }   ]
+```
+
+`getValue`, `getLabel`, `getKey` can also be a function to handle more complex business logic, for example:
+
+```js
+const PetTypes = Enum(petTypes, {
+  getValue: (item) => item.id,
+  getLabel: (item) => `${item.name} (${item.code})`,
+  getKey: (item) => item.code,
+});
 ```
 
 ---
@@ -771,15 +801,15 @@ _**App.ts**_
 
 ```tsx
 Enum.extend({
-  getLabels(this: ReturnType<typeof Enum>) {
-    return this.items.map((item) => item.label);
+  toMySelect(this: ReturnType<typeof Enum>) {
+    return this.items.map((item) => ({ value: item.value, title: item.label }));
   },
-  reversedValues(this: ReturnType<typeof Enum>) {
+  reversedItems(this: ReturnType<typeof Enum>) {
     return this.items.reverse();
   },
 });
 
-Week.getLabels(); // ['Sunday', 'Monday']
+Week.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
 ```
 
 If you are using TypeScript, you probably need to further extend the enum type declaration to get better type hints. Create or edit a declaration file in your project (e.g. `global.d.ts`) and extend the global type. This file can be placed in the root directory of the project or any other directory, just make sure TypeScript can find it
@@ -792,8 +822,8 @@ import type { EnumItemClass } from 'enum-plus/lib/enum-item';
 
 declare global {
   export interface EnumExtension<T, K, V> {
-    getLabels: () => string[];
-    reversedValues: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+    toMySelect: () => { value: V; title: string }[];
+    reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
   }
 }
 ```
@@ -806,4 +836,4 @@ Please note that you are not required to import types such as `EnumItemInit` and
 - `K`: Key value of the enum item
 - `V`: Value of the enum item
 
-If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. These are all optional, if your extension method is as simple as `getLabels`, you can completely ignore them
+If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. However these are all optional, if you don't need them, you can omit them.
