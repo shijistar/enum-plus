@@ -28,6 +28,10 @@ After extending the display name of the enum item, it can be used to generate dr
 
 What other exciting features are there? Please continue to explore the technical documentation below!
 
+<p align="center">
+  <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
+</p>
+
 ## Features
 
 - Fully compatible with native `enum` usage

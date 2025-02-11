@@ -28,6 +28,10 @@
 
 还有哪些令人兴奋的特性呢？请继续探索下面的技术文档吧！
 
+<p align="center">
+  <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
+</p>
+
 ## 特性
 
 - 兼容原生 `enum` 的用法
