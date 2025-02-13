@@ -2,6 +2,15 @@
 
 # enum-plus Changelog
 
+## 2.2.2
+
+2025-2-10
+
+### Features
+
+- 🛠 Change the return type of `Enum.options.getKey`
+- 📖 update docs
+
 ## 2.2.1
 
 2025-2-10

@@ -31,7 +31,7 @@ export type EnumInitOptions<
    *
    * **CN:** 枚举项的key字段名，或者获取key值的函数，默认为 `key`
    */
-  getKey?: keyof T | ((item: T) => K);
+  getKey?: keyof T | ((item: T) => string);
 } & EnumItemOptions;
 
 export interface EnumItemOptions {

@@ -179,7 +179,7 @@ function getInitMapFromArray<
     const label = typeof getLabel === 'function' ? getLabel(item) : item[getLabel];
     let key: K | undefined = undefined;
     if (getKey) {
-      key = typeof getKey === 'function' ? getKey(item) : (item[getKey] as K);
+      key = typeof getKey === 'function' ? (getKey(item) as K) : (item[getKey] as K);
     }
     acc[(key ?? value) as unknown as K] = {
       ...item,
