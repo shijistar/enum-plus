@@ -53,6 +53,13 @@ describe('should support localization', () => {
     testEnum(weekEnum, localeEN);
     testBuiltInResources(weekEnum, localeEN);
   });
+  test('should respect Enum options over global setting (undefined over English), support delayed assign', () => {
+    setLang(undefined);
+    const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
+    setLang('en-US');
+    testEnum(weekEnum, localeEN);
+    testBuiltInResources(weekEnum, localeEN);
+  });
   test('should respect Enum options over global setting (Chinese over undefined)', () => {
     setLang(undefined);
     const weekEnum = Enum(StandardWeekConfig, { localize: genSillyLocalizer('zh-CN') });

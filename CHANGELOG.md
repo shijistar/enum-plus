@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.2.3
+
+2025-2-19
+
+### Features
+
+- 🛠 `Enum.localize` supports delayed assignment, i.e. sets the function after the enum is created
+
 ## 2.2.2
 
 2025-2-10

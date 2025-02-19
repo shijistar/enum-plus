@@ -2,7 +2,6 @@ import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type {
   EnumInit,
   EnumInitOptions,
-  EnumItemOptions,
   EnumKey,
   EnumValue,
   IEnum,
@@ -10,6 +9,7 @@ import type {
   StandardEnumInit,
   ValueTypeFromSingleInit,
 } from './types';
+import { defaultLocalize } from './utils';
 
 export type {
   EnumInit,
@@ -48,6 +48,8 @@ export const ITEMS = Symbol('[items]');
  * **CN:** 枚举keys集合的别名。如果枚举中包含了`keys`的同名字段，可以通过此Symbol作为字段名来访问
  */
 export const KEYS = Symbol('[keys]');
+
+export { defaultLocalize };
 
 let enumExtensions: Record<string, unknown> | undefined;
 
@@ -110,22 +112,6 @@ export function Enum<
   }
 }
 
-/**
- * **EN:** Default global localization function, only used to resolve built-in resources into
- * English, does not provide actual localization functions
- *
- * **CN:** 默认的全局本地化函数，仅用于将内置资源解析为英文，并不提供实际的本地化功能
- *
- * @summary
- *
- * - `enum-plus.options.all` => `All`
- */
-export const defaultLocalize: NonNullable<EnumItemOptions['localize']> = (content) => {
-  if (content === 'enum-plus.options.all') {
-    return 'All';
-  }
-  return content;
-};
 /**
  * **EN:** Global localization function, used to convert enum item text to localized text. Only need
  * to be set once, effective globally. This method need to be set at the project entry, before

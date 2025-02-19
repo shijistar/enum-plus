@@ -52,10 +52,10 @@ export class EnumValuesArray<
    * @param {...EnumItemClass<T[K], K, V>[]} items Enum item instance array
    */
   constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
-    const { localize = Enum.localize } = options ?? {};
     super(...items);
     this.#raw = raw;
     this.#localize = (content: string | undefined) => {
+      const localize = options?.localize ?? Enum.localize;
       if (typeof localize === 'function') {
         return localize(content);
       }

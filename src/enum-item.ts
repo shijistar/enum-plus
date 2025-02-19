@@ -62,12 +62,12 @@ export class EnumItemClass<
    * @param options Construction options
    */
   constructor(key: K, value: V, label: string, raw: T, options?: EnumItemOptions) {
-    const { localize = Enum.localize } = options ?? {};
     this.key = key;
     this.value = value;
     this.label = label;
     this.raw = raw;
     this.#localize = (content: string | undefined) => {
+      const localize = options?.localize ?? Enum.localize;
       if (typeof localize === 'function') {
         return localize(content);
       }
