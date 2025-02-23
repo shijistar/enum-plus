@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="./public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="https://cdn.jsdelivr.net/npm/enum-plus@2.2.3/public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -29,7 +29,7 @@ After extending the display name of the enum item, it can be used to generate dr
 What other exciting features are there? Please continue to explore the technical documentation below!
 
 <p align="center">
-  <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
+  <img src="https://cdn.jsdelivr.net/npm/enum-plus@2.2.3/public/usage-screenshot.gif" width="500" alt="usage video" />
 </p>
 
 ## Features
@@ -748,7 +748,7 @@ const setLang = (l: string) => {
   lang = l;
 };
 
-// ❌ This is not a good example, just to demonstrate basic functionality, please use other methods later
+// 👎 This is not a good example, just to demonstrate basic functionality, please use other methods later
 const sillyLocalize = (content: string) => {
   if (lang === 'zh-CN') {
     switch (content) {
@@ -774,9 +774,9 @@ const sillyLocalize = (content: string) => {
     }
   }
 };
-// ✅ Recommended to use i18next or other internationalization libraries
+// 👍 Recommended to use i18next or other internationalization libraries
 const i18nLocalize = (content: string | undefined) => i18next.t(content);
-// ✅ Or encapsulate it into a basic component
+// 👍 Or encapsulate it into a basic component
 const componentLocalize = (content: string | undefined) => <Localize value={content} />;
 
 const Week = Enum(

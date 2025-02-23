@@ -748,7 +748,7 @@ const setLang = (l: string) => {
   lang = l;
 };
 
-// ❌ 这不是一个好例子，仅为了演示基础功能，请采用后面其它的方式
+// 👎 这不是一个好例子，仅为了演示基础功能，请采用后面其它的方式
 const sillyLocalize = (content: string) => {
   if (lang === 'zh-CN') {
     switch (content) {
@@ -774,9 +774,9 @@ const sillyLocalize = (content: string) => {
     }
   }
 };
-// ✅ 建议使用 i18next 或其他国际化库
+// 👍 建议使用 i18next 或其他国际化库
 const i18nLocalize = (content: string | undefined) => i18next.t(content);
-// ✅ 或者封装成一个基础组件
+// 👍 或者封装成一个基础组件
 const componentLocalize = (content: string | undefined) => <Localize value={content} />;
 
 const Week = Enum(
