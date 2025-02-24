@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.2.4
+
+2025-2-24
+
+### Features
+
+- 🛠 Supports global type extension for enum localization keys, providing better editor intelligence awareness
+
 ## 2.2.3
 
 2025-2-19

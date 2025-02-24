@@ -2,7 +2,7 @@ import { Enum } from '.';
 import type { EnumItemClass } from './enum-item';
 import type {
   BooleanFirstOptionConfig,
-  BuiltInResources,
+  BuiltInLocaleKeys,
   ColumnFilterItem,
   EnumInit,
   EnumItemOptionData,
@@ -92,7 +92,7 @@ export class EnumValuesArray<
         const value = ('firstOptionValue' in config ? config.firstOptionValue : undefined) ?? ('' as V);
         const label =
           ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ??
-          ('enum-plus.options.all' as BuiltInResources);
+          ('enum-plus.options.all' as BuiltInLocaleKeys);
         return [{ key: '' as K, value, label: this.#localize(label) as string }, ...this];
       } else {
         return [

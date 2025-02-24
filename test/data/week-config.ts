@@ -1,4 +1,4 @@
-import { type BuiltInResources, defaultLocalize, Enum } from '../../src';
+import { type BuiltInLocaleKeys, defaultLocalize, Enum } from '../../src';
 
 export const localeEN = {
   'enum-plus.options.all': 'All',
@@ -129,7 +129,7 @@ export function genSillyLocalizer(language: typeof lang) {
   const locales = getLocales(language);
   return function sillyLocalize(
     content:
-      | BuiltInResources
+      | BuiltInLocaleKeys
       | (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label']
       // eslint-disable-next-line @typescript-eslint/ban-types
       | (string & {})

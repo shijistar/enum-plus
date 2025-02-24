@@ -43,10 +43,10 @@ export interface EnumItemOptions {
    *
    * @param content Original text | 原始文本
    *
-   * @returns Localized text | 本地化文本
+   * @returns Localized text, can return any type | 本地化文本，可以返回任意类型
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  localize?: <T extends BuiltInResources | (string & {})>(content: T | undefined) => T | string | undefined;
+  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
+  localize?: (content: EnumLocaleExtends['LocaleKeys'] | (string & {}) | undefined) => any;
 }
 
 /**
@@ -360,6 +360,9 @@ export interface IEnumValues<
   rawType: T[K];
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'] | (string & {});
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumValue> =
   | NumberEnumInit<K>
@@ -369,7 +372,7 @@ export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumVal
   | ValueOnlyEnumInit<K, V>
   | LabelOnlyEnumInit<K>
   | CompactEnumInit<K>
-  | AutoIncrementedEnumInit<K>;
+  | OmitEnumInit<K>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type NumberEnumInit<K extends keyof any> = Record<K, number>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -385,10 +388,7 @@ export type LabelOnlyEnumInit<K extends keyof any> = Record<K, LabelOnlyEnumItem
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CompactEnumInit<K extends keyof any> = Record<K, CompactEnumItemInit>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AutoIncrementedEnumInit<K extends keyof any> = Record<K, undefined>;
-/** @deprecated Use `AutoIncrementedEnumInit` instead */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type OmitEnumInit<K extends keyof any> = AutoIncrementedEnumInit<K>;
+export type OmitEnumInit<K extends keyof any> = Record<K, undefined>;
 
 export type EnumItemInit<V extends EnumValue = EnumValue> =
   | EnumValue
@@ -399,13 +399,13 @@ export type EnumItemInit<V extends EnumValue = EnumValue> =
   | undefined;
 export interface StandardEnumItemInit<V extends EnumValue> {
   value: V;
-  label: string;
+  label: EnumItemLabel;
 }
 export interface ValueOnlyEnumItemInit<V extends EnumValue> {
   value: V;
 }
 export interface LabelOnlyEnumItemInit {
-  label: string;
+  label: EnumItemLabel;
 }
 export type CompactEnumItemInit = Record<string, never>; // 等价于{}
 
@@ -500,7 +500,7 @@ export interface ObjectFirstOptionConfig<K, V> {
 }
 
 /** Built-in resources */
-export type BuiltInResources = 'enum-plus.options.all';
+export type BuiltInLocaleKeys = 'enum-plus.options.all';
 
 export type EnumOptionConfig<K, V> = Omit<EnumItemOptionData<K, V>, 'key'> &
   Partial<Pick<EnumItemOptionData<K, V>, 'key'>>;
@@ -524,16 +524,16 @@ export type ValueTypeFromSingleInit<T, Key = string, Fallback = Key> = T extends
 export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
   T extends NumberEnumInit<K> // format: { foo:1, bar:2 }
     ? number
-    : T extends StringEnumInit<K> // format:{ foo:'foo', bar:'bar' }
+    : T extends StringEnumInit<K> // format: { foo:'foo', bar:'bar' }
       ? string
-      : T extends StandardEnumInit<K, infer V> // format:{ foo:{value:1, label:'foo'}, bar:{value:2, label:'bar'} }
+      : T extends StandardEnumInit<K, infer V> // format: { foo:{value:1, label:'foo'}, bar:{value:2, label:'bar'} }
         ? V
-        : T extends ValueOnlyEnumInit<K, infer V> // format:{ foo:{value:1}, bar:{value:2} }
+        : T extends ValueOnlyEnumInit<K, infer V> // format: { foo:{value:1}, bar:{value:2} }
           ? V
-          : T extends LabelOnlyEnumInit<K> // format:{ foo:{label:'foo'}, bar:{label:'bar'} }
+          : T extends LabelOnlyEnumInit<K> // format: { foo:{label:'foo'}, bar:{label:'bar'} }
             ? K
-            : T extends CompactEnumInit<K> // format:{ foo:{}, bar:{} }
+            : T extends CompactEnumInit<K> // format: { foo:{}, bar:{} }
               ? K
-              : T extends AutoIncrementedEnumInit<K> // format:{foo: undefined, bar: undefined}
+              : T extends OmitEnumInit<K> // format: {foo: undefined, bar: undefined}
                 ? K
                 : K; // Unknown format, use key as value
