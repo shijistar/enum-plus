@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="./public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="https://cdn.jsdelivr.net/npm/enum-plus@2.2.3/public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -29,7 +29,7 @@
 还有哪些令人兴奋的特性呢？请继续探索下面的技术文档吧！
 
 <p align="center">
-  <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
+   <img src="https://cdn.jsdelivr.net/npm/enum-plus@2.2.3/public/usage-screenshot.gif" width="500" alt="usage video" />
 </p>
 
 ## 特性
