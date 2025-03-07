@@ -9,6 +9,10 @@ export const localeEN = {
   Thursday: 'Thursday',
   Friday: 'Friday',
   Saturday: 'Saturday',
+  Yes: 'Yes',
+  No: 'No',
+  FirstDay: 'First Day',
+  LastDay: 'Last Day',
 } as const;
 export const localeCN = {
   'enum-plus.options.all': '全部',
@@ -19,6 +23,10 @@ export const localeCN = {
   Thursday: '星期四',
   Friday: '星期五',
   Saturday: '星期六',
+  Yes: '是',
+  No: '否',
+  FirstDay: '第一天',
+  LastDay: '最后一天',
 } as const;
 export const noLocale = {
   'enum-plus.options.all': 'enum-plus.options.all',
@@ -29,6 +37,10 @@ export const noLocale = {
   Thursday: 'weekday.thursday',
   Friday: 'weekday.friday',
   Saturday: 'weekday.saturday',
+  Yes: 'boolean.yes',
+  No: 'boolean.no',
+  FirstDay: 'date.firstDay',
+  LastDay: 'date.lastDay',
 } as const;
 
 export let locales: typeof localeEN | typeof localeCN | typeof noLocale = localeEN;
@@ -54,6 +66,16 @@ export const StandardWeekConfig = {
   Thursday: { value: 4, label: 'weekday.thursday', status: 'success' },
   Friday: { value: 5, label: 'weekday.friday', status: 'success' },
   Saturday: { value: 6, label: 'weekday.saturday', status: 'error' },
+} as const;
+
+export const BooleanStandardConfig = {
+  Yes: { value: true, label: 'boolean.yes' },
+  No: { value: false, label: 'boolean.no' },
+} as const;
+
+export const DateStandardConfig = {
+  FirstDay: { value: new Date(2001, 1, 1), label: 'date.firstDay' },
+  LastDay: { value: new Date(2001, 12, 31), label: 'date.lastDay' },
 } as const;
 
 export const WeekConfigWithKey = Object.keys(StandardWeekConfig).reduce((acc, key) => {
@@ -152,6 +174,14 @@ export function genSillyLocalizer(language: typeof lang) {
         return locales.Friday as typeof content;
       case 'weekday.saturday':
         return locales.Saturday as typeof content;
+      case 'boolean.yes':
+        return locales.Yes as typeof content;
+      case 'boolean.no':
+        return locales.No as typeof content;
+      case 'date.firstDay':
+        return locales.FirstDay as typeof content;
+      case 'date.lastDay':
+        return locales.LastDay as typeof content;
       default:
         return content;
     }

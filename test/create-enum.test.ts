@@ -1,6 +1,8 @@
 import type { EnumInit } from '../src';
 import { Enum } from '../src';
 import {
+  BooleanStandardConfig,
+  DateStandardConfig,
   locales,
   StandardWeekConfig,
   WeekCompactConfig,
@@ -12,6 +14,8 @@ import {
   WeekValueOnlyConfig,
 } from './data/week-config';
 import {
+  getStandardBooleanData,
+  getStandardDateData,
   getStandardWeekData,
   getWeekDataHasKeyEmptyObjectValueNoLabel,
   getWeekDataHasKeyHasValueNoLabel,
@@ -33,27 +37,27 @@ describe('should be able to create an enum from object', () => {
     expect(week.values).toBe(week.items);
   });
 
-  test('created weekdays enum with normal config', () => {
+  test('create weekdays enum with normal config', () => {
     const week = Enum(StandardWeekConfig);
     expect(toPlainEnums(week.items)).toEqual(getStandardWeekData(locales));
   });
 
-  test('created weekdays enum with number', () => {
+  test('create weekdays enum with number', () => {
     const week = Enum(WeekNumberConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
   });
 
-  test('created weekdays enum with string', () => {
+  test('create weekdays enum with string', () => {
     const week = Enum(WeekStringConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
-  test('created weekdays enum with value-only config', () => {
+  test('create weekdays enum with value-only config', () => {
     const week = Enum(WeekValueOnlyConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
   });
 
-  test('created weekdays enum with label-only config', () => {
+  test('create weekdays enum with label-only config', () => {
     const week = Enum(WeekLabelOnlyConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyNoValueHasLabel(locales));
     const weekWithEmptyLabel = Enum(
@@ -69,24 +73,34 @@ describe('should be able to create an enum from object', () => {
     expect(toPlainEnums(weekWithEmptyLabel.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
-  test('created weekdays enum with compact config', () => {
+  test('create weekdays enum with compact config', () => {
     const week = Enum(WeekCompactConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
     const week2 = Enum(WeekEmptyConfig);
     expect(toPlainEnums(week2.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
-  test('created weekdays enum with empty config', () => {
+  test('create weekdays enum with boolean values', () => {
+    const week = Enum(BooleanStandardConfig);
+    expect(toPlainEnums(week.items)).toEqual(getStandardBooleanData(locales));
+  });
+
+  test('create weekdays enum with date values', () => {
+    const week = Enum(DateStandardConfig);
+    expect(toPlainEnums(week.items)).toEqual(getStandardDateData(locales));
+  });
+
+  test('create weekdays enum with empty config', () => {
     const week = Enum({});
     expect(week.items.length).toBe(0);
   });
 
-  test('created weekdays enum with undefined', () => {
+  test('create weekdays enum with undefined', () => {
     const week = Enum(undefined as unknown as EnumInit);
     expect(week.items.length).toBe(0);
   });
 
-  test('created weekdays enum with some supported but invalid values', () => {
+  test('create weekdays enum with some supported but invalid values', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(toPlainEnums(Enum({ foo: /regexp/ } as Record<string, any>).items)).toEqual([
       { key: 'foo', value: /regexp/, label: 'foo' },

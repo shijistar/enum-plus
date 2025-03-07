@@ -51,7 +51,7 @@ export class EnumCollectionClass<
     const keys = Object.keys(init).filter(
       (k) => !(/^-?\d+$/.test(k) && k === `${init[init[k as K] as K] ?? ''}`)
     ) as K[];
-    const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V, T>(init[key], key, { typeInit: init, keys }));
+    const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V>(init[key], key));
     keys.forEach((key, index) => {
       const { value } = parsed[index];
       // @ts-expect-error: because of dynamically define property
@@ -182,15 +182,7 @@ function parseEnumItem<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   K extends EnumKey<any>,
   V extends EnumValue,
-  TT extends EnumInit<K, V>,
->(
-  init: T,
-  key: K,
-  options: {
-    typeInit: TT;
-    keys: (keyof TT)[];
-  }
-): StandardEnumItemInit<V> {
+>(init: T, key: K): StandardEnumItemInit<V> {
   let value: V;
   let label: string;
   if (init != null) {

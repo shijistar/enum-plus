@@ -1,5 +1,5 @@
 import type { EnumItemClass } from './enum-item';
-import type { ITEMS, KEYS, VALUES } from './index';
+import { type ITEMS, type KEYS, type VALUES } from './index';
 
 /**
  * **EN:** Enum initialization options
@@ -281,11 +281,12 @@ export interface IEnumValues<
    * @see https://procomponents.ant.design/components/schema#valueenum-1
    * @see https://procomponents.ant.design/components/field-set#proformselect
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  toValueMap(): Record<V, { text: string }>;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style, @typescript-eslint/no-explicit-any
+  toValueMap(): ValueMap<V>;
 
   /** @deprecated Use `toValueMap` instead */
-  valuesEnum(): Record<V, { text: string }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  valuesEnum(): ValueMap<V>;
 
   /**
    * **EN:** Get the enumeration item by key or value
@@ -368,6 +369,9 @@ export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumVal
   | NumberEnumInit<K>
   | StringEnumInit<K>
   | StringNumberEnumInit<K>
+  | BooleanEnumInit<K>
+  | DateEnumInit<K>
+  | RegExpEnumInit<K>
   | StandardEnumInit<K, V>
   | ValueOnlyEnumInit<K, V>
   | LabelOnlyEnumInit<K>
@@ -379,6 +383,12 @@ export type NumberEnumInit<K extends keyof any> = Record<K, number>;
 export type StringEnumInit<K extends keyof any> = Record<K, string>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type StringNumberEnumInit<K extends keyof any> = Record<K, string | number>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type BooleanEnumInit<K extends keyof any> = Record<K, boolean>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type DateEnumInit<K extends keyof any> = Record<K, Date>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RegExpEnumInit<K extends keyof any> = Record<K, RegExp>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type StandardEnumInit<K extends keyof any, V extends EnumValue> = Record<K, StandardEnumItemInit<V>>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -435,9 +445,11 @@ export interface MenuItemOption<V> {
   label: string;
 }
 
+export type ValueMap<V extends EnumValue> = Record<`${Exclude<V, symbol | RegExp | Date>}`, { text: string }>;
+
 /** Enum value type, support number, string, symbol */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type EnumValue = keyof any;
+export type EnumValue = keyof any | bigint | boolean | Date | RegExp;
 
 /** Enum key collection */
 export type EnumKey<T> = keyof T;
@@ -517,7 +529,7 @@ export type ValueTypeFromSingleInit<T, Key = string, Fallback = Key> = T extends
         : T extends CompactEnumItemInit // typeof {}
           ? Key
           : T extends undefined // typeof undefined
-            ? Fallback // todo: 最好实现enum的行为，无初始化值时使用自增值，但暂时没有完美的办法，只能临时使用number
+            ? Fallback
             : never;
 
 /** Infer the value type from the initialization object of the enumeration collection */
@@ -526,14 +538,18 @@ export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
     ? number
     : T extends StringEnumInit<K> // format: { foo:'foo', bar:'bar' }
       ? string
-      : T extends StandardEnumInit<K, infer V> // format: { foo:{value:1, label:'foo'}, bar:{value:2, label:'bar'} }
-        ? V
-        : T extends ValueOnlyEnumInit<K, infer V> // format: { foo:{value:1}, bar:{value:2} }
-          ? V
-          : T extends LabelOnlyEnumInit<K> // format: { foo:{label:'foo'}, bar:{label:'bar'} }
-            ? K
-            : T extends CompactEnumInit<K> // format: { foo:{}, bar:{} }
-              ? K
-              : T extends OmitEnumInit<K> // format: {foo: undefined, bar: undefined}
+      : T extends BooleanEnumInit<K> // format: { foo:true, bar:false }
+        ? string
+        : T extends StringNumberEnumInit<K> // format: { foo:'foo', bar:2 }
+          ? string | number
+          : T extends StandardEnumInit<K, infer V> // format: { foo:{ value:1, label:'foo'}, bar:{value:2, label:'bar'} }
+            ? V
+            : T extends ValueOnlyEnumInit<K, infer V> // format: { foo:{value:1}, bar:{value:2} }
+              ? V
+              : T extends LabelOnlyEnumInit<K> // format: { foo:{label:'foo'}, bar:{label:'bar'} }
                 ? K
-                : K; // Unknown format, use key as value
+                : T extends CompactEnumInit<K> // format: { foo:{}, bar:{} }
+                  ? K
+                  : T extends OmitEnumInit<K> // format: {foo: undefined, bar: undefined}
+                    ? K
+                    : K; // Unknown format, use key as value

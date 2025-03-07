@@ -1,9 +1,7 @@
 import { type localeCN, type localeEN, type noLocale } from './week-config';
 
 /** Standard week data, with key, value and label */
-export const getStandardWeekData = (
-  locales: typeof localeEN | typeof localeCN | typeof noLocale
-) => [
+export const getStandardWeekData = (locales: typeof localeEN | typeof localeCN | typeof noLocale) => [
   { key: 'Sunday', value: 0, label: locales.Sunday },
   { key: 'Monday', value: 1, label: locales.Monday },
   { key: 'Tuesday', value: 2, label: locales.Tuesday },
@@ -35,7 +33,10 @@ export const getWeekDataHasKeyEmptyObjectValueNoLabel = () => [
   { key: 'Saturday', value: 'Saturday', label: 'Saturday' },
 ];
 
-/** Incomplete week data, with key only, no value (auto-incremented number) and no label (fallback to key) */
+/**
+ * Incomplete week data, with key only, no value (auto-incremented number) and no label (fallback to
+ * key)
+ */
 export const getWeekDataHasKeyAutoIncrementedValue = () => [
   { key: 'Sunday', value: 0, label: 'Sunday' },
   { key: 'Monday', value: 1, label: 'Monday' },
@@ -47,9 +48,7 @@ export const getWeekDataHasKeyAutoIncrementedValue = () => [
 ];
 
 /** Incomplete week data, with key and label, no value (fallback to key) */
-export const getWeekDataHasKeyNoValueHasLabel = (
-  locales: typeof localeEN | typeof localeCN | typeof noLocale
-) => [
+export const getWeekDataHasKeyNoValueHasLabel = (locales: typeof localeEN | typeof localeCN | typeof noLocale) => [
   { key: 'Sunday', value: 'Sunday', label: locales.Sunday },
   { key: 'Monday', value: 'Monday', label: locales.Monday },
   { key: 'Tuesday', value: 'Tuesday', label: locales.Tuesday },
@@ -60,9 +59,7 @@ export const getWeekDataHasKeyNoValueHasLabel = (
 ];
 
 /** Incomplete week data, with value and label, no key (fallback to value) */
-export const getWeekDataHasValueHasLabelNoKey = (
-  locales: typeof localeEN | typeof localeCN | typeof noLocale
-) => [
+export const getWeekDataHasValueHasLabelNoKey = (locales: typeof localeEN | typeof localeCN | typeof noLocale) => [
   { key: '0', value: 0, label: locales.Sunday },
   { key: '1', value: 1, label: locales.Monday },
   { key: '2', value: 2, label: locales.Tuesday },
@@ -81,4 +78,14 @@ export const getWeekDataHasValueNoKeyNoLabel = () => [
   { key: '4', value: 4, label: '4' },
   { key: '5', value: 5, label: '5' },
   { key: '6', value: 6, label: '6' },
+];
+
+export const getStandardBooleanData = (locales: typeof localeEN | typeof localeCN | typeof noLocale) => [
+  { key: 'Yes', value: true, label: locales.Yes },
+  { key: 'No', value: false, label: locales.No },
+];
+
+export const getStandardDateData = (locales: typeof localeEN | typeof localeCN | typeof noLocale) => [
+  { key: 'FirstDay', value: new Date(2001, 1, 1), label: locales.FirstDay },
+  { key: 'LastDay', value: new Date(2001, 12, 31), label: locales.LastDay },
 ];

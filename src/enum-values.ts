@@ -13,6 +13,7 @@ import type {
   MenuItemOption,
   ObjectFirstOptionConfig,
   ToSelectConfig,
+  ValueMap,
   ValueTypeFromSingleInit,
 } from './types';
 
@@ -127,10 +128,10 @@ export class EnumValuesArray<
   }
 
   toValueMap() {
-    const itemsMap = {} as Record<V, { text: string }>;
+    const itemsMap = {} as ValueMap<V>;
     for (let i = 0; i < this.length; i++) {
       const { value, label } = this[i];
-      itemsMap[value] = { text: label };
+      itemsMap[value as keyof typeof itemsMap] = { text: label };
     }
     return itemsMap;
   }

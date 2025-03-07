@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.2.5
+
+2025-3-7
+
+### Features
+
+- 🛠 Improve Enum typing, support `boolean` and `Date` as enum values
+
 ## 2.2.4
 
 2025-2-24
