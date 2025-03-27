@@ -848,3 +848,109 @@ declare global {
 - `V`: 枚举项的值
 
 如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数，但这些都是可选的，如果你不需要，可以直接省略掉它们
+
+---
+
+## 兼容性
+
+对于浏览器环境，`enum-plus` 默认支持到 `ES2020`，即 `Chrome>=80`。如果你希望兼容更低版本的浏览器，你可以在构建时使用 `@babel/preset-env` 来转换成更低版本的语法。
+
+对于 Node.js 环境，`enum-plus` 默认支持到 `ES2016`，最低兼容到 `Node.js 7.x`。
+
+---
+
+## Q&A
+
+### 1. 如何基于 i18next 实现国际化？
+
+main.tsx
+
+```tsx
+import { createRoot } from 'react-dom/client';
+import { Enum } from 'enum-plus';
+import i18next from 'i18next';
+import App from './App';
+import Locale from './components/Locale';
+import LocaleProvider from './components/LocaleProvider';
+import enUS from './locales/en-US';
+import zhCN from './locales/zh-CN';
+
+i18next.init({
+  lng: localStorage.getItem('my_lang'),
+  fallbackLng: 'en-US',
+  supportedLngs: ['en-US', 'zh-CN'],
+  resources: {
+    'en-US': { translation: enUS },
+    'zh-CN': { translation: zhCN },
+  },
+});
+i18next.on('languageChanged', (lang) => {
+  localStorage.setItem('my_lang', lang);
+});
+
+// 👀 这里是关键代码，通过 Enum.localize 方法全局设置，使用 Locale 组件来输出本地化文本
+Enum.localize = (key?: string) => <Locale value={key} />;
+
+const root = createRoot(document.getElementById('root'));
+root.render(
+  <LocaleProvider>
+    <App />
+  </LocaleProvider>
+);
+```
+
+components/LocaleProvider.tsx
+
+```tsx
+import type { FC, ReactNode } from 'react';
+import { createContext, useEffect, useState } from 'react';
+import i18next from 'i18next';
+
+export const LocaleContext = createContext<{
+  lang: string;
+  setLang: (lang: string) => void;
+}>({});
+
+const LocaleProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [lang, setLang] = useState(i18next.language);
+
+  useEffect(() => {
+    i18next.changeLanguage(lang);
+  }, [lang]);
+  return <LocaleContext.Provider value={{ lang, setLang }}>{children}</LocaleContext.Provider>;
+};
+export default LocaleProvider;
+```
+
+components/Locale.tsx
+
+```tsx
+import { useContext } from 'react';
+import i18next from 'i18next';
+import { LocaleContext } from './LocaleProvider';
+
+export default function Localize({ value }: { value: string }) {
+  const { lang } = useContext(LocaleContext);
+  return <>{i18next.t(value, { lng: lang })}</>;
+}
+```
+
+### 2. 实现国际化后，为什么antd下拉框的搜索功能失效了？
+
+这是因为 antd 下拉框的搜索功能是基于 `label` 来实现的，而支持了国际化后，`label` 返回的是一个组件，而不是常规字符串，因此 Antd 无法正确进行字符串匹配。解决方法是可以给枚举扩展一个 `filterOption` 方法，帮助Select组件自定义搜索功能，这样就可以正确地支持搜索功能了
+
+参考下面的示例代码：
+
+```tsx
+import { Select } from 'antd';
+import { Enum, type EnumItemClass } from 'enum-plus';
+
+Enum.extends({
+  filterOption: (search?: string, option?: EnumItemClass<number | string>) => {
+    const label = $t(option?.raw?.label ?? '') ?? option?.value;
+    return !search || label?.toUpperCase().includes(search.toUpperCase());
+  },
+});
+
+// <Select options={WeekEnum.items} filterOption={WeekEnum.filterOption} />;
+```

@@ -26,6 +26,8 @@ export type {
   EnumInitOptions,
 } from './types';
 
+export type { EnumItemClass } from './enum-item';
+
 /**
  * **EN:** Alias of `values`. If the enum contains a field with the same name as `values`, you can
  * access it by this Symbol as the field name

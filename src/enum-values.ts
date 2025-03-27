@@ -40,9 +40,7 @@ export class EnumValuesArray<
 {
   #raw: T;
   #localize: NonNullable<EnumItemOptions['localize']>;
-  #optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = {
-    firstOption: false,
-  };
+  #optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = { firstOption: false };
 
   /**
    * Instantiate an enum items array
