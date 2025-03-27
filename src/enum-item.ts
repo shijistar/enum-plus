@@ -26,8 +26,8 @@ export class EnumItemClass<
   /** Original initialization object */
   readonly raw: T;
 
-  #localize: NonNullable<EnumItemOptions['localize']>;
-  #localizedProxy = new Proxy(this, {
+  private _localize: NonNullable<EnumItemOptions['localize']>;
+  private _localizedProxy = new Proxy(this, {
     get: (target, prop) => {
       const origin = target[prop as keyof typeof this];
       if (prop === 'label') {
@@ -66,7 +66,7 @@ export class EnumItemClass<
     this.value = value;
     this.label = label;
     this.raw = raw;
-    this.#localize = (content: string | undefined) => {
+    this._localize = (content: string | undefined) => {
       const localize = options?.localize ?? Enum.localize;
       if (typeof localize === 'function') {
         return localize(content);
@@ -92,10 +92,10 @@ export class EnumItemClass<
     // Object.freeze(this);
   }
   readonly() {
-    return this.#localizedProxy;
+    return this._localizedProxy;
   }
   toString() {
-    return this.#localize(this.label) ?? this.label;
+    return this._localize(this.label) ?? this.label;
   }
   toLocaleString() {
     return this.toString();

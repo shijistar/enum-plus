@@ -848,3 +848,99 @@ Please note that you are not required to import types such as `EnumItemInit` and
 - `V`: Value of the enum item
 
 If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. However these are all optional, if you don't need them, you can omit them.
+
+## Q&A
+
+### 1. How to implement internationalization based on i18next?
+
+main.tsx
+
+```tsx
+import { createRoot } from 'react-dom/client';
+import { Enum } from 'enum-plus';
+import i18next from 'i18next';
+import App from './App';
+import Locale from './components/Locale';
+import LocaleProvider from './components/LocaleProvider';
+import enUS from './locales/en-US';
+import zhCN from './locales/zh-CN';
+
+i18next.init({
+  lng: localStorage.getItem('my_lang'),
+  fallbackLng: 'en-US',
+  supportedLngs: ['en-US', 'zh-CN'],
+  resources: {
+    'en-US': { translation: enUS },
+    'zh-CN': { translation: zhCN },
+  },
+});
+i18next.on('languageChanged', (lang) => {
+  localStorage.setItem('my_lang', lang);
+});
+
+// 👀 Here is the key code, set globally through Enum.localize method, use Locale component to output localized text
+Enum.localize = (key?: string) => <Locale value={key} />;
+
+const root = createRoot(document.getElementById('root'));
+root.render(
+  <LocaleProvider>
+    <App />
+  </LocaleProvider>
+);
+```
+
+components/LocaleProvider.tsx
+
+```tsx
+import type { FC, ReactNode } from 'react';
+import { createContext, useEffect, useState } from 'react';
+import i18next from 'i18next';
+
+export const LocaleContext = createContext<{
+  lang: string;
+  setLang: (lang: string) => void;
+}>({});
+
+const LocaleProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [lang, setLang] = useState(i18next.language);
+
+  useEffect(() => {
+    i18next.changeLanguage(lang);
+  }, [lang]);
+  return <LocaleContext.Provider value={{ lang, setLang }}>{children}</LocaleContext.Provider>;
+};
+export default LocaleProvider;
+```
+
+components/Locale.tsx
+
+```tsx
+import { useContext } from 'react';
+import i18next from 'i18next';
+import { LocaleContext } from './LocaleProvider';
+
+export default function Localize({ value }: { value: string }) {
+  const { lang } = useContext(LocaleContext);
+  return <>{i18next.t(value, { lng: lang })}</>;
+}
+```
+
+### 2. Why does the search function of the antd dropdown not work after localization?
+
+This is because the search function of the antd dropdown is based on `label`, and after supporting internationalization, `label` returns a component instead of a regular string, so Antd cannot perform string matching correctly. The solution is to extend the enum with a `filterOption` method to help the Select component customize the search function, which will allow it to support the search function correctly.
+
+You can refer to the code example below:
+
+```tsx
+import { Select } from 'antd';
+import { Enum, type EnumItemClass } from 'enum-plus';
+
+Enum.extends({
+  filterOption: (search?: string, option?: EnumItemClass<number | string>) => {
+    const label = $t(option?.raw?.label ?? '') ?? option?.value;
+    return !search || label?.toUpperCase().includes(search.toUpperCase());
+  },
+});
+
+// <Select options={WeekEnum.items} filterOption={WeekEnum.filterOption} />;
+```

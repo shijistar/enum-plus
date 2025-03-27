@@ -2,6 +2,17 @@
 
 # enum-plus Changelog
 
+## 2.2.6
+
+2025-3-29
+
+### Features
+
+- 🛠 Change compile transformer
+- 👀 Support `ES2020` and `Chrome>=80`, if you need to support legacy browsers, please use use a modern bundler like `webpack` or `vite` and use `babel` to include proper polyfills on-demand.
+- 🛠 Generate better sourcemaps
+- 🛠 Package size reduces by 0.1k
+
 ## 2.2.5
 
 2025-3-7
