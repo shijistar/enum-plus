@@ -853,9 +853,12 @@ If you want to provide more friendly type hints in the extension methods, you ma
 
 ## Compatibility
 
-For the browser environment, `enum-plus` defaults to support `ES2020`, i.e. `Chrome>=80`. If you want to support lower versions of browsers, you can use `@babel/preset-env` to convert to lower version syntax during the build process.
+For browser environments, enum-plus provides good compatibility support
 
-For the Node.js environment, `enum-plus` defaults to support `ES2016`, and is compatible with a minimum of `Node.js 7.x`.
+- For modern packaging tool supports parsing the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (such as Webpack 5+, Vite, Rollup, etc.), enum-plus outputs version `ES2020`. If you want to be compatible with lower versions of browsers, you can use `@babel/preset-env` to convert to lower version syntax during the build process
+- For legacy version of packaging tools (such as Webpack 4), enum-plus outputs version `ES2016`.
+
+For Node.js environments, `enum-plus` is compatible with `ES2016`, which corresponds to Node.js version `v7.x`. The latest version of `enum-plus` is compatible with Node.js version `v18.x` and above.
 
 ---
 

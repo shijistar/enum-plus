@@ -1,5 +1,6 @@
 lib
 es
+es-legacy
 node_modules
 npm-debug.log
 coverage/

@@ -21,5 +21,6 @@
     "resolveJsonModule": true,
     "allowJs": false
   },
-  "include": ["./src"]
+  "include": ["./src", "./plugins"],
+  "exclude": ["node_modules", "es", "lib"]
 }

@@ -853,9 +853,12 @@ declare global {
 
 ## 兼容性
 
-对于浏览器环境，`enum-plus` 默认支持到 `ES2020`，即 `Chrome>=80`。如果你希望兼容更低版本的浏览器，你可以在构建时使用 `@babel/preset-env` 来转换成更低版本的语法。
+对于浏览器环境，enum-plus 提供了良好的兼容性支持
 
-对于 Node.js 环境，`enum-plus` 默认支持到 `ES2016`，最低兼容到 `Node.js 7.x`。
+- 如果打包工具支持解析 [exports](https://nodejs.org/api/packages.html#exports-sugar) 配置（例如 Webpack 5+、Vite、Rollup 等），enum-plus 输出版本为 `ES2020`。如果你希望兼容更低版本的浏览器，你可以在构建时使用 `@babel/preset-env` 来转换成更低版本的语法
+- 如果是旧版的打包工具（例如 Webpack 4），enum-plus 输出版本为 `ES2016`。
+
+对于 Node.js 环境，`enum-plus` 最低向下兼容到 `ES2016` 版本，对应 Node.js 版本为 `v7.x`。
 
 ---
 

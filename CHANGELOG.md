@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.2.7
+
+2025-3-30
+
+### Features
+
+- 🛠 Provide different versions of ESModule output for modern browsers and legacy browsers
+
 ## 2.2.6
 
 2025-3-29
