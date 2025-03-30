@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "description": "A drop-in replacement for enum, like native enum but much better!",
   "keywords": [
     "enum",
@@ -24,43 +24,18 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "import": {
-        "types": "./es/index.d.ts",
-        "default": "./es/index.js"
-      },
-      "require": {
-        "types": "./lib/index.d.ts",
-        "default": "./lib/index.js"
-      }
-    },
-    "./types": {
-      "import": {
-        "types": "./es/types.d.ts"
-      },
-      "require": {
-        "types": "./lib/types.d.ts"
-      }
+      "types": "./es/index.d.ts",
+      "default": "./es/index.js"
     },
     "./enum-collection": {
-      "import": {
-        "types": "./es/enum-collection.d.ts",
-        "default": "./es/enum-collection.js"
-      },
-      "require": {
-        "types": "./lib/enum-collection.d.ts",
-        "default": "./lib/enum-collection.js"
-      }
+      "types": "./es/enum-collection.d.ts",
+      "default": "./es/enum-collection.js"
     },
     "./enum-item": {
-      "import": {
-        "types": "./es/enum-item.d.ts",
-        "default": "./es/enum-item.js"
-      },
-      "require": {
-        "types": "./lib/enum-item.d.ts",
-        "default": "./lib/enum-item.js"
-      }
+      "types": "./es/enum-item.d.ts",
+      "default": "./es/enum-item.js"
     },
+    "./types": "./es/types.d.ts",
     "./package.json": "./package.json"
   },
   "main": "lib/index.js",

@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.2.8
+
+2025-3-30
+
+### Bug Fixes
+
+- 🐞 fix `exports` configuration for moduleResolution `ESNext`
+
 ## 2.2.7
 
 2025-3-30
