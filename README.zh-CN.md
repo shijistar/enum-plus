@@ -44,7 +44,7 @@
 - 支持 Node.js 环境，支持服务端渲染(SSR)
 - 零依赖，纯原生 JavaScript，可以应用在任意前端框架中
 - 100% TypeScript 实现，支持类型推断
-- 轻量(gzip 压缩后仅 2KB+)
+- 轻量(gzip 压缩后仅 1KB+)
 
 ## 安装
 
@@ -100,7 +100,7 @@ const Week = Enum({
 Week.Monday; // 'Mon'
 ```
 
-- ### 👍👍 【推荐】 示例 3（标准用法）：包含 Key、Value，以及显示文本
+- ### 👍 【推荐】 示例 3（标准用法）：包含 Key、Value，以及显示文本
 
 ```js
 import { Enum } from 'enum-plus';
@@ -113,7 +113,7 @@ Week.Monday; // 1
 Week.label(1); // 星期一
 ```
 
-- ### 👍 示例 4：省略 value 字段
+- ### 示例 4：省略 value 字段
 
 如果 `value` 与 Key 相同，可以考虑省略 `value` 字段，使用 Key 作为枚举值
 
@@ -866,7 +866,9 @@ declare global {
 
 ### 1. 如何基于 i18next 实现国际化？
 
-main.tsx
+请参考下面的示例代码：
+
+_main.tsx_
 
 ```tsx
 import { createRoot } from 'react-dom/client';
@@ -902,7 +904,7 @@ root.render(
 );
 ```
 
-components/LocaleProvider.tsx
+_components/LocaleProvider.tsx_
 
 ```tsx
 import type { FC, ReactNode } from 'react';
@@ -925,7 +927,7 @@ const LocaleProvider: FC<{ children: ReactNode }> = ({ children }) => {
 export default LocaleProvider;
 ```
 
-components/Locale.tsx
+_components/Locale.tsx_
 
 ```tsx
 import { useContext } from 'react';

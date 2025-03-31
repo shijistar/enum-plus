@@ -44,7 +44,7 @@ What other exciting features are there? Please continue to explore the technical
 - Supports Node.js environment, supports server-side rendering (SSR)
 - Zero dependencies, pure native JavaScript, can be applied to any front-end framework
 - 100% TypeScript implementation, good support for type inference
-- Lightweight (only 2KB+ gzipped)
+- Lightweight (only 1KB+ gzipped)
 
 ## Installation
 
@@ -100,7 +100,7 @@ const Week = Enum({
 Week.Monday; // 'Mon'
 ```
 
-- ### 👍👍 [Recommended] Example 3 (standard usage): with Key, Value, and Display text
+- ### 👍 [Recommended] Example 3 (standard usage): with Key, Value, and Display text
 
 ```js
 import { Enum } from 'enum-plus';
@@ -113,7 +113,7 @@ Week.Monday; // 1
 Week.label(1); // Monday (here is display text, not key)
 ```
 
-- ### 👍 Example 4: omit the value field
+- ### Example 4: omit the value field
 
 If the `value` is the same as the Key, you can consider omitting the `value` field and using the Key instead
 
@@ -866,7 +866,9 @@ For Node.js environments, `enum-plus` is compatible with `ES2016`, which corresp
 
 ### 1. How to implement internationalization based on i18next?
 
-main.tsx
+Please refer to the code example below:
+
+_main.tsx_
 
 ```tsx
 import { createRoot } from 'react-dom/client';
@@ -902,7 +904,7 @@ root.render(
 );
 ```
 
-components/LocaleProvider.tsx
+_components/LocaleProvider.tsx_
 
 ```tsx
 import type { FC, ReactNode } from 'react';
@@ -925,7 +927,7 @@ const LocaleProvider: FC<{ children: ReactNode }> = ({ children }) => {
 export default LocaleProvider;
 ```
 
-components/Locale.tsx
+_components/Locale.tsx_
 
 ```tsx
 import { useContext } from 'react';
