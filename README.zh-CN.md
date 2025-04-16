@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <strong>像原生 enum 一样容易，但更强大！</strong>
+  <strong>像原生 enum 一样，但更强大！</strong>
 </p>
 <br/>
 
@@ -18,7 +18,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E)
 
-⬇️ &nbsp;&nbsp; [简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [使用方法](#使用方法) | [本地化](#本地化) | [全局扩展](#全局扩展) &nbsp;&nbsp; ⬇️
+⬇️ &nbsp;&nbsp; [简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [用法](#用法) | [本地化](#本地化) | [全局扩展](#全局扩展) | [兼容性](#兼容性) | [常见问题](#常见问题) &nbsp;&nbsp; ⬇️
 
 ## 简介
 
@@ -26,7 +26,7 @@
 
 枚举项扩展了显示名称后，可以与枚举值用来一键生成下拉框、复选框等组件。通过枚举的扩展方法，可以轻松遍历枚举项数组，获取某个枚举值的显示文本，判断某个值是否存在等。枚举项的显示文本支持本地化，可以根据当前语言环境返回对应的文本，这样可以使得枚举项的显示文本更加灵活，更加符合用户的需求。
 
-还有哪些令人兴奋的特性呢？请继续探索下面的技术文档吧！
+还有哪些令人兴奋的特性呢？请继续探索吧！或者不妨先看下这个使用视频。
 
 <p align="center">
    <img src="https://cdn.jsdelivr.net/npm/enum-plus@2.2.3/public/usage-screenshot.gif" width="500" alt="usage video" />
@@ -109,7 +109,7 @@ const Week = Enum({
   Sunday: { value: 0, label: '星期日' }, // 此示例不考虑本地化
   Monday: { value: 1, label: '星期一' }, // 此示例不考虑本地化
 } as const);
-Week.Monday; // 1
+Week.Sunday; // 0
 Week.label(1); // 星期一
 ```
 
@@ -167,7 +167,7 @@ Week.label('Sunday'); // Sunday
 
 ## API
 
-### 拾取枚举值
+### 💎 拾取枚举值
 
 `Enum.XXX`
 
@@ -180,7 +180,7 @@ Week.Monday; // 1
 
 ---
 
-### items
+### 💎 items
 
 `{ value, label, key, raw }[]`
 
@@ -188,7 +188,7 @@ Week.Monday; // 1
 
 ---
 
-### keys
+### 💎 keys
 
 `string[]`
 
@@ -196,7 +196,7 @@ Week.Monday; // 1
 
 ---
 
-### label
+### 💎 label
 
 <sup>**_[方法]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
@@ -209,7 +209,7 @@ Week.label('Monday'); // 星期一
 
 ---
 
-### key
+### 💎 key
 
 <sup>**_[方法]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
@@ -221,7 +221,7 @@ Week.key(1); // 'Monday'
 
 ---
 
-### has
+### 💎 has
 
 <sup>**_[方法]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
@@ -236,7 +236,7 @@ Week.has('Birthday'); // false
 
 ---
 
-### toSelect
+### 💎 toSelect
 
 <sup>**_[方法]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
@@ -244,7 +244,7 @@ Week.has('Birthday'); // false
 
 ---
 
-### toMenu
+### 💎 toMenu
 
 <sup>**_[方法]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
@@ -267,7 +267,7 @@ import { Menu } from 'antd';
 
 ---
 
-### toFilter
+### 💎 toFilter
 
 <sup>**_[方法]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
@@ -284,7 +284,7 @@ import { Menu } from 'antd';
 
 ---
 
-### toValueMap
+### 💎 toValueMap
 
 <sup>**_[方法]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
 
@@ -301,30 +301,33 @@ import { Menu } from 'antd';
 
 ---
 
-### raw
+### 💎 raw
 
 <sup>**_[方法重载^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
 <br/>
 <sup>**_[方法重载^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
-第一个无参数的重载，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
+第一个重载方法，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
 
-第二个重载方法用来处理单个枚举项，根据枚举值或枚举 Key 获取该枚举项的原始初始化对象，也就是说第二个方法是第一个方法返回值的一部分。另外，如果在枚举项上添加了额外的扩展字段的话，也可以用这种方式获取到
+第二个重载方法，用来处理单个枚举项，根据获取单个枚举项的原始初始化对象。
+
+这个方法主要作用是，用来获取枚举项的自定义字段，支持无限扩展字段
 
 ```js
 const Week = Enum({
-  Sunday: { value: 0, label: '星期日' },
-  Monday: { value: 1, label: '星期一' },
+  Sunday: { value: 0, label: '星期日', happy: true },
+  Monday: { value: 1, label: '星期一', happy: false },
 } as const);
 
-Week.raw(); // { Sunday: { value: 0, label: '星期日' }, Monday: { value: 1, label: '星期一' } }
-Week.raw(0); // { value: 0, label: '星期日' }
-Week.raw('Monday'); // { value: 1, label: '星期一' }
+Week.raw(0).happy // true
+Week.raw(0); // { value: 0, label: '星期日', happy: true }
+Week.raw('Monday'); // { value: 1, label: '星期一', happy: false }
+Week.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Monday: { value: 1, label: '星期一', happy: false } }
 ```
 
 ---
 
-### valueType &nbsp; <sup>**_[Type-ONLY]_**</sup>
+### ⚡️ valueType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -340,7 +343,7 @@ type WeekValues = typeof Week.valueType; // 0 | 1
 
 ---
 
-### keyType &nbsp; <sup>**_[Type-ONLY]_**</sup>
+### ⚡️ keyType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -356,7 +359,7 @@ type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
 
 ---
 
-### rawType &nbsp; <sup>**_[Type-ONLY]_**</sup>
+### ⚡️ rawType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
@@ -366,7 +369,7 @@ type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
 
 ---
 
-## 使用方法
+## 用法
 
 #### 拾取枚举值，与原生枚举用法一致
 
@@ -384,24 +387,22 @@ Week.Monday; // 1
 
 #### 支持添加 Jsdoc 注释，代码提示更友好
 
-在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 Jsdoc 注释，而不必再转到枚举定义处查看。另外，在输入`HttpCodes.`时，编辑器也会自动提示枚举项列表，通过键盘上下键切换枚举项，也可以展示详细信息
+在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 Jsdoc 注释，而不必再转到枚举定义处查看
 
 ```js
-const HttpCodes = Enum({
-  /** Code400: 错误的请求语法。由于被认为是客户端错误（例如，错误的请求语法、无效的请求消息帧或欺骗性的请求路由），服务器无法或不会处理请求 */
-  E400: { value: 400, label: 'Bad Request' },
-  /** Code400: 未经授权。客户端必须对自身进行身份验证才能获得请求的响应 */
-  E401: { value: 401, label: 'Unauthorized' },
-  /** Code403: 禁止访问。客户端没有访问内容的权限；也就是说，它是未经授权的，因此服务器拒绝提供请求的资源。与 401 Unauthorized 不同，服务器知道客户端的身份 */
-  E403: { value: 0, label: 'Forbidden' },
-  /** Code404: 未找到。服务器找不到请求的资源。在浏览器中，这意味着无法识别 URL */
-  E404: { value: 1, label: 'Not Found' },
+const Week = Enum({
+  /** 星期日 */
+  Sunday: { value: 0, label: '星期日' },
+  /** 星期一 */
+  Monday: { value: 1, label: '星期一' },
 } as const);
 
-HttpCodes.E404; // 将光标悬停在 E404 上，将显示完整的Jsdoc文档注释
+Week.Monday; // 将光标悬浮在 Monday 上
 ```
 
-> Http 状态码的释义内容参考自 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
+![jsdoc](./public/jsdoc-chs.png)
+
+可以看到，不但提示了枚举项的释义，还有枚举项的值，在阅读代码时非常方便
 
 ---
 
@@ -445,7 +446,7 @@ Week.items.some(item => item.value === 1); // true
 
 ---
 
-#### 支持遍历枚举项数组，但不支持修改
+#### 支持遍历枚举项数组，但不可修改
 
 ```js
 Week.items.length; // 2
@@ -476,12 +477,12 @@ Week.label('Monday'); // 星期一
 ```js
 Week.key(1); // 'Monday'
 Week.key(Week.Monday); // 'Monday'
-Week.key(9); // undefined, 因为不存在
+Week.key(9); // undefined, 不存在此枚举项
 ```
 
 ---
 
-#### 添加扩展字段，数量无限制
+#### 添加扩展字段，不限数量
 
 ```js
 const Week = Enum({
@@ -499,8 +500,8 @@ Week.raw('Sunday').active // true
 
 - `items` 可以直接作为组件的数据源（以 Select 组件为例）
 
-  [Ant Design](https://ant-design.antgroup.com/components/select-cn) | [Arco Design](https://arco.design/react/components/select)
-  Select
+  - [Ant Design](https://ant-design.antgroup.com/components/select-cn) | [Arco Design](https://arco.design/react/components/select)
+    Select
 
   ```tsx
   import { Select } from 'antd';
@@ -508,7 +509,7 @@ Week.raw('Sunday').active // true
   <Select options={Week.items} />;
   ```
 
-  [Material-UI](https://mui.com/material-ui/react-select/) Select
+  - [Material-UI](https://mui.com/material-ui/react-select/) Select
 
   ```tsx
   import { MenuItem, Select } from '@mui/material';
@@ -522,7 +523,7 @@ Week.raw('Sunday').active // true
   </Select>;
   ```
 
-  [Kendo UI](https://www.telerik.com/kendo-react-ui/components/dropdowns/dropdownlist) Select
+  - [Kendo UI](https://www.telerik.com/kendo-react-ui/components/dropdowns/dropdownlist) Select
 
   ```tsx
   import { DropDownList } from '@progress/kendo-react-dropdowns';
@@ -530,7 +531,7 @@ Week.raw('Sunday').active // true
   <DropDownList data={Week.items} textField="label" dataItemKey="value" />;
   ```
 
-  [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
+  - [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
 
   ```tsx
   <el-select>
@@ -538,21 +539,19 @@ Week.raw('Sunday').active // true
   </el-select>
   ```
 
-  [Ant Design Vue](https://antdv.com/components/select-cn) | [Arc Design](https://arco.design/vue/component/select) Select
+  - [Ant Design Vue](https://antdv.com/components/select-cn) | [Arc Design](https://arco.design/vue/component/select) Select
 
   ```tsx
   <a-select :options="Week.items" />
   ```
 
-  [Vuetify](https://vuetifyjs.com/zh-Hans/components/selects) Select
+  - [Vuetify](https://vuetifyjs.com/zh-Hans/components/selects) Select
 
   ```tsx
   <v-select :items="Week.items" item-title="label" />
   ```
 
-  [Angular Material](https://material.angular.io/components/select/overview) Select
-
-  HTML
+  - [Angular Material](https://material.angular.io/components/select/overview) Select
 
   ```html
   <mat-select>
@@ -560,9 +559,7 @@ Week.raw('Sunday').active // true
   </mat-select>
   ```
 
-  [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
-
-  HTML
+  - [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
 
   ```html
   <nz-select>
@@ -614,9 +611,12 @@ const columns = [
 - `toValueMap`方法可以为 [Ant Design Pro](https://github.com/ant-design/pro-components) 的`ProFormFields`、`ProTable`等组件生成数据源，这是一个类似 Map 的数据结构，格式为：`{ [key: number|string]: { text: string } }`
 
 ```tsx
-import { ProTable } from '@ant-design/pro-components';
+import { ProFormCheckbox, ProFormRadio, ProFormSelect, ProFormTreeSelect } from '@ant-design/pro-components';
 
-<ProFormSelect valueEnum={Week.toValueMap()} />;
+<ProFormSelect valueEnum={Week.toValueMap()} />; // 下拉框
+<ProFormCheckbox valueEnum={Week.toValueMap()} />; // 复选框
+<ProFormRadio.Group valueEnum={Week.toValueMap()} />; // 单选框
+<ProFormTreeSelect valueEnum={Week.toValueMap()} />; // 树选择
 ```
 
 ---
@@ -633,7 +633,7 @@ const myWeek = Enum({
 
 ---
 
-#### 使用枚举值序列来缩小`number`类型 &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
+#### 使用枚举值序列来缩小 `number` 取值范围 &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
 
 使用 `valueType` 类型约束，可以将数据类型从宽泛的`number`或`string`类型缩小为有限的枚举值序列，这不但能减少错误赋值的可能性，还能提高代码的可读性
 
@@ -736,7 +736,7 @@ Week[ITEMS]; // ITEMS 是一个别名Symbol
 
 `enum-plus` 本身不提供国际化功能，但支持通过设置 `localize` 可选自定义方法来实现本地化文本。你可以在项目内声明一个本地化方法，把输入的枚举`label`转换成对应的本地化文本。你需要自己维护语言，并且在 `localize` 方法中针对当前语言返回对应的文本。如果可能的话，强烈建议你使用一个流行的国际化库，比如 `i18next`
 
-下面是一个简单的示例，但第一种方式并不是一个好的实践，因为它不够灵活，仅用于演示基本功能
+下面是一个简单的示例。请注意，第一种方式其实并不是很好，因为它不够灵活，仅用于演示基本功能，请考虑使用第二种及后面的示例
 
 ```tsx
 import { Enum } from 'enum-plus';
@@ -748,7 +748,7 @@ const setLang = (l: string) => {
   lang = l;
 };
 
-// 👎 这不是一个好例子，仅为了演示基础功能，请采用后面其它的方式
+// 👎 这不是一个好例子，仅供演示，请采用后面其它的方式
 const sillyLocalize = (content: string) => {
   if (lang === 'zh-CN') {
     switch (content) {
@@ -853,16 +853,17 @@ declare global {
 
 ## 兼容性
 
-对于浏览器环境，enum-plus 提供了良好的兼容性支持
+- 对于浏览器环境，enum-plus 提供了良好的兼容性支持
 
-- 如果打包工具支持解析 [exports](https://nodejs.org/api/packages.html#exports-sugar) 配置（例如 Webpack 5+、Vite、Rollup 等），enum-plus 输出版本为 `ES2020`。如果你希望兼容更低版本的浏览器，你可以在构建时使用 `@babel/preset-env` 来转换成更低版本的语法
-- 如果是旧版的打包工具（例如 Webpack 4），enum-plus 输出版本为 `ES2016`。
+  - 如果使用现代打包工具（例如 Webpack 5+、Vite、Rollup 等），支持解析 package.json 中的 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段，enum-plus 输出 EcmaScript 版本为 `ES2020`。另外，如果你希望进一步兼容更低版本的浏览器，你可以在构建时使用 `@babel/preset-env` 来转换成更低版本的语法
 
-对于 Node.js 环境，`enum-plus` 最低向下兼容到 `ES2016` 版本，对应 Node.js 版本为 `v7.x`。
+  - 如果是旧版的打包工具（例如 Webpack 4），enum-plus 会自动降级，输出 EcmaScript 版本为 `ES2016`。
+
+- 对于 Node.js 环境，`enum-plus` 最低向下兼容到 EcmaScript `ES2016`，对应 Node.js 版本为 `v7.x`。
 
 ---
 
-## Q&A
+## 常见问题
 
 ### 1. 如何基于 i18next 实现国际化？
 
@@ -942,7 +943,7 @@ export default function Localize({ value }: { value: string }) {
 
 ### 2. 实现国际化后，为什么antd下拉框的搜索功能失效了？
 
-这是因为 antd 下拉框的搜索功能是基于 `label` 来实现的，而支持了国际化后，`label` 返回的是一个组件，而不是常规字符串，因此 Antd 无法正确进行字符串匹配。解决方法是可以给枚举扩展一个 `filterOption` 方法，帮助Select组件自定义搜索功能，这样就可以正确地支持搜索功能了
+这是因为 antd 下拉框的内置搜索功能是基于 `label` 值来实现的，只能支持常规字符串。而支持了国际化后，`label` 实际返回的是一个组件，而不是常规字符串，因此 antd 无法正确进行字符串匹配。解决方法是可以给枚举扩展一个 `filterOption` 方法，帮助 Select 组件自定义搜索功能，这样就可以正确地支持搜索功能了。
 
 参考下面的示例代码：
 

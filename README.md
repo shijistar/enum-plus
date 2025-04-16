@@ -18,7 +18,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E)
 
-⬇️ &nbsp;&nbsp; [Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Definition](#enum-definition) | [API](#api) | [Usage](#usage) | [Localization](#localization) | [Global Extension](#global-extension) &nbsp;&nbsp; ⬇️
+⬇️ &nbsp;&nbsp; [Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Definition](#enum-definition) | [API](#api) | [Usage](#usage) | [Localization](#localization) | [Global Extension](#global-extension) | [Q&A](#qa) &nbsp;&nbsp; ⬇️
 
 ## Introduction
 
@@ -26,7 +26,7 @@
 
 After extending the display name of the enum item, it can be used to generate dropdowns, checkboxes, and other components with a single line of code. By using the extension methods of the enum, you can easily traverse the array of enum items, get the display text of a certain enum value, determine whether a value exists, etc. The display text of the enum item supports localization, which can return the corresponding text according to the current language environment, making the display text of the enum item more flexible and more in line with user needs.
 
-What other exciting features are there? Please continue to explore the technical documentation below!
+What other exciting features are there? Please continue to explore! Or you can check out this usage video first.
 
 <p align="center">
   <img src="https://cdn.jsdelivr.net/npm/enum-plus@2.2.3/public/usage-screenshot.gif" width="500" alt="usage video" />
@@ -109,7 +109,7 @@ const Week = Enum({
   Sunday: { value: 0, label: 'Sunday' }, // this example does not consider localization
   Monday: { value: 1, label: 'Monday' }, // this example does not consider localization
 } as const);
-Week.Monday; // 1
+Week.Sunday; // 0
 Week.label(1); // Monday (here is display text, not key)
 ```
 
@@ -167,7 +167,7 @@ Week.label('Sunday'); // Sunday
 
 ## API
 
-### Pick an enum value
+### 💎 Pick an enum value
 
 `Enum.XXX`
 
@@ -180,7 +180,7 @@ Week.Monday; // 1
 
 ---
 
-### items
+### 💎 items
 
 `{ value, label, key, raw }[]`
 
@@ -188,7 +188,7 @@ Get a read-only array containing all enum items, which can be easily traversed. 
 
 ---
 
-### keys
+### 💎 keys
 
 `string[]`
 
@@ -196,7 +196,7 @@ Get a read-only array containing all `Key` of the enum items
 
 ---
 
-### label
+### 💎 label
 
 <sup>**_[Function]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
@@ -209,7 +209,7 @@ Week.label('Monday'); // Monday (here is label, not key)
 
 ---
 
-### key
+### 💎 key
 
 <sup>**_[Function]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
@@ -221,7 +221,7 @@ Week.key(1); // Monday (here is key, not label)
 
 ---
 
-### has
+### 💎 has
 
 <sup>**_[Function]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
@@ -236,7 +236,7 @@ Week.has('Birthday'); // false
 
 ---
 
-### toSelect
+### 💎 toSelect
 
 <sup>**_[Function]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
@@ -244,7 +244,7 @@ Week.has('Birthday'); // false
 
 ---
 
-### toMenu
+### 💎 toMenu
 
 <sup>**_[Function]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
@@ -267,7 +267,7 @@ The data format is:
 
 ---
 
-### toFilter
+### 💎 toFilter
 
 <sup>**_[Function]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
@@ -284,7 +284,7 @@ The data format is:
 
 ---
 
-### toValueMap
+### 💎 toValueMap
 
 <sup>**_[Function]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
 
@@ -301,30 +301,39 @@ The data format is:
 
 ---
 
-### raw
+### 💎 raw
 
 <sup>**_[Override^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
 <br/>
 <sup>**_[Override^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
-The first overload without parameters returns the initialization object of the enum collection, which is used to initialize the Enum original init object.
+<!-- 第一个重载方法，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
 
-The second overload method is used to process a single enum item. Get the original initialization object of the enum item based on the enum value or enum Key, that is, the return value of the first method is part of the return value of the second method. In addition, if additional extension fields are added to the enum item, they can also be obtained in this way
+第二个重载方法，用来处理单个枚举项，根据获取单个枚举项的原始初始化对象。
+
+这个方法主要作用是，用来获取给枚举项额外扩展的自定义字段，支持无限扩展字段 -->
+
+The `raw` method is used to get the original initialization object of the enum collection, which is the object used to initialize the enum.
+
+The second overload method is used to process a single enum item, which is used to get the original initialization object of a single enum item.
+
+The `raw` method is mainly used to get the custom fields that are extended to the enum items, and it supports unlimited extension fields
 
 ```js
 const Week = Enum({
-  Sunday: { value: 0, label: 'Sunday' },
-  Monday: { value: 1, label: 'Monday' },
+  Sunday: { value: 0, label: 'Sunday', happy: true },
+  Monday: { value: 1, label: 'Monday', happy: false },
 } as const);
 
-Week.raw(); // { Sunday: { value: 0, label: 'Sunday' }, Monday: { value: 1, label: 'Monday' } }
-Week.raw(0); // { value: 0, label: 'Sunday' }
-Week.raw('Monday'); // { value: 1, label: 'Monday' }
+Week.raw(0).happy; // true
+Week.raw(0); // { value: 0, label: 'Sunday', happy: true }
+Week.raw('Monday'); // { value: 1, label: 'Monday', happy: false }
+Week.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { value: 1, label: 'Monday', happy: false } }
 ```
 
 ---
 
-### valueType &nbsp; <sup>**_[Type-ONLY]_**</sup>
+### ⚡️ valueType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -340,7 +349,7 @@ type WeekValues = typeof Week.valueType; // 0 | 1
 
 ---
 
-### keyType &nbsp; <sup>**_[Type-ONLY]_**</sup>
+### ⚡️ keyType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -356,7 +365,7 @@ type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
 
 ---
 
-### rawType &nbsp; <sup>**_[Type-ONLY]_**</sup>
+### ⚡️ rawType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
@@ -384,24 +393,22 @@ Week.Monday; // 1
 
 #### Support Jsdoc comments, more friendly code hints
 
-In the code editor, hover over an enum item to display detailed Jsdoc comments about the enum item, without having to go back to the enum definition. In addition, when entering `HttpCodes.`, the editor will automatically prompt the enum item list, switch enum items through the up and down keys, and you can also see the detailed Jsdoc comments of each one.
+In the code editor, hover the cursor over the enum item to display detailed Jsdoc comments about that enum item, without having to go to the enum definition to view it
 
 ```js
-const HttpCodes = Enum({
-  /** Code400: Bad Request. The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing) */
-  E400: { value: 400, label: 'Bad Request' },
-  /** Code400: Unauthorized. The client must authenticate itself to get the requested response */
-  E401: { value: 401, label: 'Unauthorized' },
-  /** Code403: Forbidden. The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. Unlike 401 Unauthorized, the server knows the client's identity */
-  E403: { value: 0, label: 'Forbidden' },
-  /** Code404: Not Found. The server can not find the requested resource. In a browser, this means the URL is not recognized */
-  E404: { value: 1, label: 'Not Found' },
+const Week = Enum({
+  /** Sunday */
+  Sunday: { value: 0, label: 'Sunday' },
+  /** Monday */
+  Monday: { value: 1, label: 'Monday' },
 } as const);
 
-HttpCodes.E404; // Hover over E404 to display full Jsdoc comments
+Week.Monday; // Hover over Monday
 ```
 
-> The interpretation of Http status is referenced from [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
+![jsdoc](./public/jsdoc-en.png)
+
+You can see that it not only prompts the explanation of the enum item, but also the value of the enum item, which is very convenient when reading the code
 
 ---
 
@@ -499,8 +506,8 @@ Week.raw('Sunday').active // true
 
 - `items` can be consumed as the data source (here uses Select as examples)
 
-  [Ant Design](https://ant.design/components/select) | [Arco Design](https://arco.design/react/en-US/components/select)
-  Select
+  - [Ant Design](https://ant.design/components/select) | [Arco Design](https://arco.design/react/en-US/components/select)
+    Select
 
   ```tsx
   import { Select } from 'antd';
@@ -508,7 +515,7 @@ Week.raw('Sunday').active // true
   <Select options={Week.items} />;
   ```
 
-  [Material-UI](https://mui.com/material-ui/react-select/) Select
+  - [Material-UI](https://mui.com/material-ui/react-select/) Select
 
   ```tsx
   import { MenuItem, Select } from '@mui/material';
@@ -522,7 +529,7 @@ Week.raw('Sunday').active // true
   </Select>;
   ```
 
-  [Kendo UI](https://www.telerik.com/kendo-react-ui/components/dropdowns/dropdownlist) Select
+  - [Kendo UI](https://www.telerik.com/kendo-react-ui/components/dropdowns/dropdownlist) Select
 
   ```tsx
   import { DropDownList } from '@progress/kendo-react-dropdowns';
@@ -530,7 +537,7 @@ Week.raw('Sunday').active // true
   <DropDownList data={Week.items} textField="label" dataItemKey="value" />;
   ```
 
-  [ElementPlus](https://element-plus.org/en-US/component/select.html) Select
+  - [ElementPlus](https://element-plus.org/en-US/component/select.html) Select
 
   ```tsx
   <el-select>
@@ -538,21 +545,19 @@ Week.raw('Sunday').active // true
   </el-select>
   ```
 
-  [Ant Design Vue](https://antdv.com/components/select) | [Arc Design](https://arco.design/vue/en-US/component/select) Select
+  - [Ant Design Vue](https://antdv.com/components/select) | [Arc Design](https://arco.design/vue/en-US/component/select) Select
 
   ```tsx
   <a-select :options="Week.items" />
   ```
 
-  [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
+  - [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
 
   ```tsx
   <v-select :items="Week.items" item-title="label" />
   ```
 
-  [Angular Material](https://material.angular.io/components/select/overview) Select
-
-  HTML
+  - [Angular Material](https://material.angular.io/components/select/overview) Select
 
   ```html
   <mat-select>
@@ -560,9 +565,7 @@ Week.raw('Sunday').active // true
   </mat-select>
   ```
 
-  [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
-
-  HTML
+  - [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
 
   ```html
   <nz-select>
@@ -614,9 +617,12 @@ const columns = [
 - `toValueMap` method can generate data sources for `ProFormFields`, `ProTable` components of [Ant Design Pro](https://github.com/ant-design/pro-components), which is a data structure similar to `Map`, the format is: `{ [key: number|string]: { text: string } }`
 
 ```tsx
-import { ProTable } from '@ant-design/pro-components';
+import { ProFormCheckbox, ProFormRadio, ProFormSelect, ProFormTreeSelect } from '@ant-design/pro-components';
 
-<ProFormSelect valueEnum={Week.toValueMap()} />;
+<ProFormSelect valueEnum={Week.toValueMap()} />; // Select
+<ProFormCheckbox valueEnum={Week.toValueMap()} />; // Checkbox
+<ProFormRadio.Group valueEnum={Week.toValueMap()} />; // Radio
+<ProFormTreeSelect valueEnum={Week.toValueMap()} />; // TreeSelect
 ```
 
 ---
@@ -853,12 +859,12 @@ If you want to provide more friendly type hints in the extension methods, you ma
 
 ## Compatibility
 
-For browser environments, enum-plus provides good compatibility support
+- For browser environments, enum-plus provides good compatibility support:
 
-- For modern packaging tool supports parsing the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (such as Webpack 5+, Vite, Rollup, etc.), enum-plus outputs version `ES2020`. If you want to be compatible with lower versions of browsers, you can use `@babel/preset-env` to convert to lower version syntax during the build process
-- For legacy version of packaging tools (such as Webpack 4), enum-plus outputs version `ES2016`.
+  - For modern packaging tools (such as Webpack 5+, Vite, Rollup, etc.), it supports parsing the `exports` field in package.json. enum-plus ships with a minimum compatibility of EcmaScript `ES2020`. Additionally, if you want to further support lower versions of browsers, you can use `@babel/preset-env` during the build process to convert to lower version syntax.
+  - For legacy version of packaging tools (such as Webpack 4), enum-plus will automatically downgrade and ships with a minimum compatibility of EcmaScript `ES2016`.
 
-For Node.js environments, `enum-plus` is compatible with `ES2016`, which corresponds to Node.js version `v7.x`. The latest version of `enum-plus` is compatible with Node.js version `v18.x` and above.
+- For Node.js environments, `enum-plus` ships with a minimum compatibility of EcmaScript `ES2016`, which corresponds to Node.js version `v7.x`.
 
 ---
 
@@ -942,7 +948,7 @@ export default function Localize({ value }: { value: string }) {
 
 ### 2. Why does the search function of the antd dropdown not work after localization?
 
-This is because the search function of the antd dropdown is based on `label`, and after supporting internationalization, `label` returns a component instead of a regular string, so Antd cannot perform string matching correctly. The solution is to extend the enum with a `filterOption` method to help the Select component customize the search function, which will allow it to support the search function correctly.
+This is because the built-in search function of the antd dropdown is based on the `label` value, which only supports regular strings. However, after localization, the `label` actually returns a component instead of a regular string, so antd cannot perform string matching correctly. The solution is to extend an enum with a `filterOption` method to help the Select component customize the search function, which will allow it to support the search functionality correctly.
 
 You can refer to the code example below:
 
