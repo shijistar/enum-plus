@@ -430,8 +430,8 @@ Week.items[0].value; // 0
 
 ```js
 Week.has(1); // true
-Week.items.some(item => item.value === 1); // true
-1 instance of Week; // true
+Week.items.some((item) => item.value === 1); // true
+1 instanceof Week; // true
 ```
 
 ---
@@ -439,9 +439,9 @@ Week.items.some(item => item.value === 1); // true
 #### `instanceof` 操作符
 
 ```js
-1 instance of Week // true
-"1" instance of Week // true
-"Monday" instance of Week // true
+1 instanceof Week; // true
+'1' instanceof Week; // true
+'Monday' instanceof Week; // true
 ```
 
 ---
