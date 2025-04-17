@@ -38,16 +38,26 @@ export class EnumItemClass<
       return origin;
     },
     // Not allowed to edit
-    set: () => {
+    set: (_, prop) => {
+      console.error(
+        `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
+      );
       return true;
     },
-    defineProperty: () => {
+    defineProperty: (_, prop) => {
+      console.error(
+        `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
+      );
       return true;
     },
-    deleteProperty: () => {
+    deleteProperty: (_, prop) => {
+      console.error(
+        `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
+      );
       return true;
     },
     setPrototypeOf: () => {
+      console.error('Cannot change prototype of EnumItem. EnumItem instances are immutable.');
       return true;
     },
   });
