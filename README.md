@@ -862,7 +862,7 @@ If you want to provide more friendly type hints in the extension methods, you ma
 - For browser environments, enum-plus provides good compatibility support:
 
   - For modern packaging tools (such as Webpack 5+, Vite, Rollup, etc.), it supports parsing the `exports` field in package.json. enum-plus ships with a minimum compatibility of EcmaScript `ES2020`. Additionally, if you want to further support lower versions of browsers, you can use `@babel/preset-env` during the build process to convert to lower version syntax.
-  - For legacy version of packaging tools (such as Webpack 4), enum-plus will automatically downgrade and ships with a minimum compatibility of EcmaScript `ES2016`.
+  - For legacy packaging tools (such as Webpack 4), which do not support the [exports](https://nodejs.org/api/packages.html#exports-sugar) field, enum-plus will automatically downgrade to output EcmaScript version `ES2016`.
 
 - For Node.js environments, `enum-plus` ships with a minimum compatibility of EcmaScript `ES2016`, which corresponds to Node.js version `v7.x`.
 
