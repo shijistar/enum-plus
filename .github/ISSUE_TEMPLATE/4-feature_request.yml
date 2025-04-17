@@ -1,0 +1,99 @@
+name: '🚀 Feature Request'
+description: 'Suggest a new feature or improvement'
+title: '[Request]: '
+labels: ['enhancement']
+
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement | 需求背景
+      description: |
+        Why do you need this feature? What problem does it solve?
+        <br/>
+        你为什么需要这个功能？它解决了什么问题？
+      placeholder: |
+        Problem Statement
+        需求背景
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature
+    attributes:
+      label: Feature Description | 功能描述
+      description: |
+        Describe in detail the feature you'd like to see. Be as specific as possible
+        <br/>
+        详细描述你期望的功能。越具体越好
+      placeholder: |
+        Please describe the feature in detail
+        请详细描述这个功能
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Use Cases | 使用场景
+      description: |
+        Provide some specific scenarios of how this feature would be used. 
+        <br/>
+        提供一些这个功能被如何使用的具体场景
+      placeholder: |
+        List specific use cases for this feature
+        列出这个功能的具体使用场景
+    validations:
+      required: true
+
+  - type: textarea
+    id: importance
+    attributes:
+      label: Importance | 重要性评估
+      description: |
+        Describe why this feature is important and its impact.
+        <br/>
+        描述这个功能的重要性和影响
+      placeholder: |
+        This feature will help us to ... 
+        这个特性实现后，我们可以...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: feature-level
+    attributes:
+      label: Feature Level | 特性级别
+      description: |
+        Please consider the generality of this feature. Should it be part of the `enum-plus` core library, or implemented as a plugin? If you recommend implementing it as a plugin, please further specify whether it should be added to the official ``enum-plus-plugin`` plugin library or released as an independent external plugin?
+        - `Core Library`: This is a generic feature that is simple and has no external dependencies, and should be part of the `enum-plus` core library
+        - `Official Plugin`: This may be a generic feature that applies to most scenarios, but is more complex or has external dependencies, and should be part of the `enum-plus-plugin` official plugin library
+        - `External Plugin`: This may not be a generic feature, or only suitable for a specific scenario, and may not be suitable for the core library or official plugin library, and should be released as an independent plugin library
+
+        请评估该特性的通用性：此功能是否应作为 `enum-plus` 核心库的一部分，还是更适合作为插件实现？如果建议以插件形式实现，请进一步说明应将其纳入 `enum-plus-plugin` 官方插件库，还是作为独立的外部插件发布？
+
+        - `核心库`：这是一个通用特性，代码简单且没有外部依赖项，建议作为 `enum-plus` 核心库的一部分
+        - `官方插件`：这可能是一个通用特性，适用大部分场景，但代码比较复杂或者存在外部依赖项，建议作为 `enum-plus-plugin` 官方插件库的一部分
+        - `外部插件`：这可能不是一个通用特性，或者只适合一部分场景，可能不适合放到核心库或官方插件库，建议发布为一个独立的插件库
+        ---
+      options:
+        - Please select
+        - Core Library (核心库)
+        - Official Plugin (官方插件)
+        - External Plugin (外部插件)
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution (Optional) | 建议方案(可选)
+      description: |
+        If you have a specific solution in mind, please describe it here. 
+        <br/>
+        如果你有特定的解决方案建议，请在此描述
+      placeholder: |
+        Please describe your proposed solution, but don't worry if you can't
+        请尝试描述你建议的解决方案，但别担心，如果你没有提供也没关系
+    validations:
+      required: false

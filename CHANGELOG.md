@@ -2,9 +2,7 @@
 
 # enum-plus Changelog
 
-## 2.2.?
-
-????-?-?
+## Unreleased
 
 ### Features
 

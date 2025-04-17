@@ -36,7 +36,7 @@ jobs:
               - Make sure the CI checks pass
               - Respond to any review comments promptly
               - If you added a new feature, please add unit tests and ensure 100% code coverage. If an exception is thrown, please also add tests to cover this exception case
-              - If you think your changes should appear in the changelog, please update it accordingly. For unreleased versions, we can add an UNDETERMINED VERSION at top with question marks (?) for version number and date
+              - If you think your changes should appear in the changelog, please update it accordingly. For unreleased versions, we can add an [Unreleased] section at top
               - Don't hesitate to ask questions if something is unclear
 
               Thanks again for your contribution, and we look forward to seeing more from you!

@@ -1,0 +1,121 @@
+name: '❓ Ask a Question'
+description: 'Need help? Ask a question about usage, implementation, etc.'
+title: '[Question]: '
+labels: ['question']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for reaching out!
+
+        Before asking your question, please make sure you've checked:
+        - The documentation
+        - The Issues list (both open and closed)
+
+        Providing as much detail as possible will help us answer your question more effectively.
+
+        ---
+
+        在提问之前，请确保你已经检查过：
+        - 项目文档
+        - Issues 问题列表（包括打开的和已经关闭的）
+
+        提供尽可能多的细节，这将帮助我们更有效地回答你的问题。
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question ┆ 问题描述
+      description: |
+        What would you like to know?
+        <br/>
+        你想知道什么？
+      placeholder: |
+        I'd like to understand how to ...
+        我想了解如何...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context ┆ 背景信息
+      description: |
+        Provide some background about your use case or what you're trying to achieve
+        <br/>
+        提供一些关于您的用例或您想要实现的内容的背景信息
+      placeholder: |
+        I'm trying to implement... / I'm working on a project that...
+        我正在尝试实现... / 我正在进行一个项目...
+    validations:
+      required: false
+
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What I've Tried ┆ 我已尝试过
+      description: |
+        Describe what you've already tried to solve your problem
+        <br/>
+        描述您已经尝试过的解决问题的方法
+      placeholder: |
+        I've looked at the documentation and tried...
+        我已经查看了文档，并尝试过...
+    validations:
+      required: false
+
+  - type: textarea
+    id: code-example
+    attributes:
+      label: Code Example ┆ 代码示例
+      description: |
+        Provide a minimal code example to reproduce your issue, if you wish. Please paste your code directly in the box below, it will be automatically formatted as TypeScript code when displayed.
+        <br/>
+        提供一段最小代码示例，用于重现您的问题，如果你愿意的话。请直接在下面的代码块中粘贴代码，展示时会自动格式化为TypeScript代码。
+      placeholder: |
+        console.log('Hello, enum-plus!');
+      render: typescript
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: enum-plus version
+      description: |
+        Which version of enum-plus are you using?
+        <br/>
+        您正在使用 enum-plus 的哪个版本？
+      placeholder: e.g. 2.2.8
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information ┆ 补充信息
+      description: |
+        Any other details that might help us answer your question, if applicable
+        <br/>
+        任何其他可能帮助我们回答您问题的细节，如果有的话
+      placeholder: |
+        Additional information, screenshots, error messages, etc.
+        补充信息、屏幕截图、错误消息等
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct ┆ 行为准则
+      description: |
+        By submitting this issue, you agree to follow our Code of Conduct
+        <br/>
+        提交此问题即表示您同意遵循我们的行为准则
+      options:
+        - label: I have checked the documentation ┆ 我已经查看了项目文档
+          required: true
+        - label: I have searched existing issues and confirmed this is not a duplicate ┆ 我已经搜索过现有问题列表，并确认这不是一个重复的问题
+          required: true
+        - label: I have removed any sensitive information (personal data, access tokens, etc.) ┆ 我已经删除了任何敏感信息（个人数据、访问令牌等）
+          required: true

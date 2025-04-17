@@ -1,0 +1,185 @@
+name: '🐞 Bug Report'
+description: Report a verified and reproducible bug
+title: '[BUG]: '
+labels: ['bug', 'Status: Unconfirmed']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+        Please provide a clear and concise description of what the bug is. 
+        It's important to include the steps to reproduce the issue, as well as any relevant code examples or screenshots if needed. If its' difficult to describe the issue, or reproduce it, it's appreciated to provide a minimal project that demonstrates the issue.
+
+        Before submitting a bug report, please make sure to check the following:
+
+        1. Please make sure you have tried to reproduce this issue with the latest version of enum-plus.
+        2. Please check existing open or closed issues to ensure this issue is not a duplicate or has already been fixed.
+
+  # Issue description
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please provide a clear and concise description of what the bug is. Include any error messages or unexpected behavior if applicable.
+      placeholder: Please provide a clear and concise description of what the bug is
+    validations:
+      required: true
+
+  # Reproduction steps
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide the detailed steps of how to reproduce the bug. It should be reproducible by anyone. Include any relevant code examples or screenshots if needed.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  # Current behavior
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current Behavior
+      description: Please describe the current behavior of enum-plus that you are experiencing. Include any error messages or unexpected behavior if applicable. If you are experiencing a crash, please provide the stack trace or any relevant logs.
+      placeholder: e.g. The enum label is not localized
+    validations:
+      required: true
+
+  # Expected behavior
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Please describe the expected behavior of enum-plus. What do you expect to happen when using enum-plus?
+      placeholder: e.g. The enum label should be localized
+    validations:
+      required: true
+
+  # How to fix
+  - type: textarea
+    id: how-to-fix
+    attributes:
+      label: How to Fix
+      description: If you have a suggestion for a fix or improvement, please describe it here. This is optional but can be helpful for the maintainers.
+      placeholder: It's is optional, please do your best to describe it, but don't worry if you can't
+    validations:
+      required: false
+
+  # Current version of enum-plus
+  - type: input
+    id: version
+    attributes:
+      label: enum-plus version
+      description: What version of enum-plus are you running?
+      placeholder: e.g. 2.2.8
+    validations:
+      required: true
+
+  # Operating system
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Please select
+        - Windows
+        - macOS
+        - Linux
+        - iOS
+        - Android
+        - Other
+    validations:
+      required: true
+
+  # System environment
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where does this issue occur?
+      options:
+        - Please select
+        - Browser (Chrome)
+        - Browser (Firefox)
+        - Browser (Safari)
+        - Browser (Edge)
+        - Node.js
+        - Other
+    validations:
+      required: true
+
+  # Version of environment
+  - type: input
+    id: environment-version
+    attributes:
+      label: Environment Version
+      description: Specify version of browser/Node.js/OS/etc.
+      placeholder: e.g. Node.js 18.15.0, Chrome 112, etc.
+    validations:
+      required: true
+
+  # Choose a framework
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Web Framework
+      description: What web framework are you using?
+      options:
+        - I'm not using a framework
+        - React
+        - Vue
+        - Angular
+        - Svelte
+        - Solid.js
+        - Preact
+        - Remix
+        - Astro
+        - Next.js
+        - Nuxt.js
+        - Ember.js
+        - Backbone.js
+        - jQuery
+        - Other
+    validations:
+      required: true
+
+  # Framework version
+  - type: input
+    id: framework-version
+    attributes:
+      label: Web Framework Version
+      description: Specify version of the framework you are using
+      placeholder: e.g. 17.0.2, 3.2.26, etc.
+    validations:
+      required: false
+
+  # Additional context
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: (Optional) any additional context or information that may be helpful for the maintainers.
+    validations:
+      required: false
+
+  # Code of Conduct
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our contributing guidelines
+      options:
+        - label: I have tested this issue with the latest version of enum-plus
+          required: true
+        - label: I have searched existing issues and confirmed this is not a duplicate
+          required: true
+        - label: I have included all the information needed to reproduce this bug
+          required: true
+        - label: I have removed any sensitive information (personal data, access tokens, etc.)
+          required: true
