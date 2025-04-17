@@ -1,0 +1,45 @@
+name: First Time Contributor Greeting
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  greet-first-time-contributor:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    # Only run for first-time contributors
+    if: github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    steps:
+      - name: Send Greeting Comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body: `# 👋 Welcome to enum-plus project!
+
+              Thank you for submitting your first pull request to our project, @${context.payload.pull_request.user.login}!
+
+              We really appreciate your contribution and are excited to have you join our community. Your efforts help make this project better for everyone.
+
+              ## What happens next?
+              
+              Our team will review your changes soon. We might suggest some adjustments or ask questions to better understand your implementation.
+
+              ## Tips for a smooth review process:
+              
+              - Make sure the CI checks pass
+              - Respond to any review comments promptly
+              - If you added a new feature, please add unit tests and ensure 100% code coverage. If an exception is thrown, please also add tests to cover this exception case
+              - If you think your changes should appear in the changelog, please update it accordingly. For unreleased versions, we can add an UNDETERMINED VERSION at top with question marks (?) for version number and date
+              - Don't hesitate to ask questions if something is unclear
+
+              Thanks again for your contribution, and we look forward to seeing more from you!
+
+              Happy coding! 🚀`
+            });
