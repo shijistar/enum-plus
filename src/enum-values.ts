@@ -1,4 +1,4 @@
-import { Enum } from '.';
+import { Enum } from './enum';
 import type { EnumItemClass } from './enum-item';
 import type {
   BooleanFirstOptionConfig,

@@ -1,4 +1,4 @@
-import { Enum } from '.';
+import { Enum } from './enum';
 import type { EnumItemInit, EnumItemOptions, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
 
 /**
@@ -39,25 +39,37 @@ export class EnumItemClass<
     },
     // Not allowed to edit
     set: (_, prop) => {
-      console.error(
-        `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
-      );
+      /* istanbul ignore if */
+      if (!process.env.JEST_WORKER_ID) {
+        console.warn(
+          `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
+        );
+      }
       return true;
     },
     defineProperty: (_, prop) => {
-      console.error(
-        `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
-      );
+      /* istanbul ignore if */
+      if (!process.env.JEST_WORKER_ID) {
+        console.warn(
+          `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
+        );
+      }
       return true;
     },
     deleteProperty: (_, prop) => {
-      console.error(
-        `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
-      );
+      /* istanbul ignore if */
+      if (!process.env.JEST_WORKER_ID) {
+        console.warn(
+          `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
+        );
+      }
       return true;
     },
     setPrototypeOf: () => {
-      console.error('Cannot change prototype of EnumItem. EnumItem instances are immutable.');
+      /* istanbul ignore if */
+      if (!process.env.JEST_WORKER_ID) {
+        console.warn('Cannot change prototype of EnumItem. EnumItem instances are immutable.');
+      }
       return true;
     },
   });

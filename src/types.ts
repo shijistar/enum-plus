@@ -1,5 +1,5 @@
 import type { EnumItemClass } from './enum-item';
-import { type ITEMS, type KEYS, type VALUES } from './index';
+import type { ITEMS, KEYS, VALUES } from './utils';
 
 /**
  * **EN:** Enum initialization options

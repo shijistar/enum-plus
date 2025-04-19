@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "2.2.8",
+  "version": "2.2.9-alpha.1",
   "description": "A drop-in replacement for enum, like native enum but much better!",
   "keywords": [
     "enum",
@@ -51,9 +51,12 @@
     "build:es": "father build",
     "build:es-legacy": "cross-env LEGACY=1 father build",
     "build:lib": "tsc -p tsconfig.lib.json",
-    "prepublishOnly": "npm run test && npm run build",
+    "prepublishOnly": "npm run build && npm run test",
     "test": "jest",
-    "prepare": "husky"
+    "test-legacy": "jest -c jest-legacy.config.js",
+    "prepare": "husky",
+    "prepare-legacy-node13": "node ./scripts/prepare-legacy.js node13",
+    "prepare-legacy-node15": "node ./scripts/prepare-legacy.js node15"
   },
   "devDependencies": {
     "@swc/core": "^1.3.53",

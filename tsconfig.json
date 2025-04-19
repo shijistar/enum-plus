@@ -19,8 +19,12 @@
     "noUnusedParameters": false,
     "noImplicitAny": true,
     "resolveJsonModule": true,
-    "allowJs": false
+    "allowJs": false,
+    "paths": {
+      "@enum-plus": ["./src"],
+      "@enum-plus/*": ["./src/*"]
+    }
   },
-  "include": ["./src", "./plugins"],
+  "include": ["./src", "./plugins", "./test"],
   "exclude": ["node_modules", "es", "lib"]
 }

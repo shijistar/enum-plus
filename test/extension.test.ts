@@ -1,4 +1,4 @@
-import { Enum } from '../src';
+import { Enum } from '@enum-plus';
 import { StandardWeekConfig } from './data/week-config';
 
 describe('Enum should be extensible', () => {

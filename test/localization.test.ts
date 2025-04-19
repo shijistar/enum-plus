@@ -1,5 +1,5 @@
-import { defaultLocalize, Enum } from '../src';
-import { type IEnum } from '../src/types';
+import { defaultLocalize, Enum } from '@enum-plus';
+import { type IEnum } from '@enum-plus/types';
 import { genSillyLocalizer, localeCN, localeEN, noLocale, setLang, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { getOptionsData, pickArray } from './utils';

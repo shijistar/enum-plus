@@ -1,4 +1,4 @@
-import { Enum } from '../src';
+import { Enum } from '@enum-plus';
 import { localeEN, StandardWeekConfig } from './data/week-config';
 
 describe('the EnumItemClass api', () => {

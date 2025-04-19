@@ -1,5 +1,5 @@
-import type { EnumInit } from '../src';
-import { Enum } from '../src';
+import type { EnumInit } from '@enum-plus';
+import { Enum } from '@enum-plus';
 import {
   BooleanStandardConfig,
   DateStandardConfig,

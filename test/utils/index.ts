@@ -1,6 +1,6 @@
-import type { EnumItemInit, EnumItemOptionData, EnumValue } from '../../src';
-import type { EnumItemClass } from '../../src/enum-item';
-import type { StandardEnumItemInit } from '../../src/types';
+import type { EnumItemInit, EnumItemOptionData, EnumValue } from '@enum-plus';
+import type { EnumItemClass } from '@enum-plus/enum-item';
+import type { StandardEnumItemInit } from '@enum-plus/types';
 
 export function toPlainEnums<T extends EnumItemInit<EnumValue>>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

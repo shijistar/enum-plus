@@ -1,6 +1,5 @@
 import { EnumItemClass } from './enum-item';
 import { EnumValuesArray } from './enum-values';
-import { ITEMS, KEYS, VALUES } from './index';
 import type {
   BooleanFirstOptionConfig,
   ColumnFilterItem,
@@ -17,12 +16,14 @@ import type {
   ToSelectConfig,
   ValueTypeFromSingleInit,
 } from './types';
+import { ITEMS, KEYS, VALUES } from './utils';
 
 /**
  * **EN:** Enum collection extension base class, used to extend the Enums
  *
  * **CN:** 枚举集合扩展基类，用于扩展枚举
  */
+// @ts-expect-error: because of typing extend in tests
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class EnumExtensionClass<
   T extends EnumInit<K, V>,

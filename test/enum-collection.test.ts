@@ -1,5 +1,4 @@
-import { Enum, ITEMS, KEYS, VALUES } from '../src';
-import { EnumValuesArray } from '../src/enum-values';
+import { Enum, ITEMS, KEYS, VALUES } from '@enum-plus';
 import { locales, sillyLocalize, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { addEnumValuesTestSuite } from './enum-values.test';
@@ -78,16 +77,15 @@ describe('the EnumCollectionClass api', () => {
     expect(strangerEnum.items).toBe(101);
     expect(strangerEnum.values).toBe(102);
     expect(strangerEnum[KEYS]).toEqual(Object.keys(strangerEnumConfig));
-    expect(strangerEnum[ITEMS]).toBeInstanceOf(EnumValuesArray);
-    expect(strangerEnum[VALUES]).toBeInstanceOf(EnumValuesArray);
+    const standardEnumItems = Object.keys(strangerEnumConfig).map((key) => ({
+      key,
+      value: strangerEnumConfig[key as keyof typeof strangerEnumConfig].value,
+      label: strangerEnumConfig[key as keyof typeof strangerEnumConfig].label,
+    }));
     expect(Array.isArray(strangerEnum[ITEMS])).toBeTruthy();
-    expect(toPlainEnums(strangerEnum[ITEMS])).toEqual(
-      Object.keys(strangerEnumConfig).map((key) => ({
-        key,
-        value: strangerEnumConfig[key as keyof typeof strangerEnumConfig].value,
-        label: strangerEnumConfig[key as keyof typeof strangerEnumConfig].label,
-      }))
-    );
+    expect(Array.isArray(strangerEnum[VALUES])).toBeTruthy();
+    expect(toPlainEnums(strangerEnum[ITEMS])).toEqual(standardEnumItems);
+    expect(toPlainEnums(strangerEnum[VALUES])).toEqual(standardEnumItems);
   });
 
   test('[toString] should return a friendly name', () => {

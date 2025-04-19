@@ -1,5 +1,5 @@
-import { Enum } from '../src';
-import type { IEnumValues } from '../src/types';
+import { Enum } from '@enum-plus';
+import type { IEnumValues } from '@enum-plus/types';
 import { locales, localizeConfigData, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { getOptionsData, pickArray } from './utils';
