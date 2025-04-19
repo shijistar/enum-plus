@@ -49,8 +49,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - run: npm install -g npm@6.9.0
+
       - name: Install dependencies
-        run: npm install
+        run: npm install --ignore-scripts
 
       - name: Run tests
         run: npm test
