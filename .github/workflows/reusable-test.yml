@@ -1,0 +1,56 @@
+name: Reusable Tests
+on:
+  workflow_call: # This workflow can be called by other workflows
+    inputs:
+      node-version:
+        required: false
+        type: string
+        description: 'Specific Node.js version for single test'
+        default: ''
+      use-matrix:
+        required: false
+        type: boolean
+        description: 'Whether to run tests on multiple Node.js versions'
+        default: false
+
+jobs:
+  # Run tests on single specified Node.js version
+  single-test:
+    if: ${{ inputs.use-matrix == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version || '22.x' }} # Default to 20.x if not specified
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  # Run tests on multiple matrix Node.js versions
+  matrix-test:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [7.x, 10.x, 12.x, 16.x, 18.x, 20.x, 22.x]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
