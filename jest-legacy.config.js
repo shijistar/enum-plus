@@ -5,11 +5,11 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   collectCoverage: true,
-  collectCoverageFrom: ['lib/src/**/*.js'],
-  coveragePathIgnorePatterns: ['lib/src/types.js'],
-  setupFiles: ['./lib/test/jest.setup.js'],
+  collectCoverageFrom: ['tslib/src/**/*.js'],
+  coveragePathIgnorePatterns: ['tslib/src/types.js'],
+  setupFiles: ['./tslib/test/jest.setup.js'],
   moduleNameMapper: {
-    '^@enum-plus': '<rootDir>/lib/src',
-    '^@enum-plus/(.*)$': '<rootDir>/lib/src/$1',
+    '^@enum-plus': '<rootDir>/tslib/src',
+    '^@enum-plus/(.*)$': '<rootDir>/tslib/src/$1',
   },
 };

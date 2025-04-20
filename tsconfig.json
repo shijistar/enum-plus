@@ -6,6 +6,7 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2016"],
     "sourceMap": true,
+    "sourceRoot": ".",
     "jsx": "react-jsx",
     "strict": true,
     "skipLibCheck": true,

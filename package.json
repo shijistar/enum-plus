@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "2.2.9-alpha.1",
+  "version": "2.2.9-alpha.3",
   "description": "A drop-in replacement for enum, like native enum but much better!",
   "keywords": [
     "enum",
@@ -50,7 +50,9 @@
     "build": "run-p build:es build:es-legacy build:lib",
     "build:es": "father build",
     "build:es-legacy": "cross-env LEGACY=1 father build",
-    "build:lib": "tsc -p tsconfig.lib.json",
+    "build:lib": "run-s ts2lib copy-lib",
+    "ts2lib": "tsc -p tsconfig.lib.json",
+    "copy-lib": "shx cp -r tslib/src lib",
     "prepublishOnly": "npm run build && npm run test",
     "test": "jest",
     "test-legacy": "jest -c jest-legacy.config.js",
@@ -66,6 +68,7 @@
     "father": "^4.5.2",
     "jest": "^29.7.0",
     "npm-run-all2": "^7.0.2",
+    "shx": "^0.4.0",
     "ts-jest": "^29.3.0",
     "typescript": "^5.8.2"
   },

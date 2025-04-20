@@ -6,7 +6,19 @@
 
 ### Features
 
-- 🛠 emit a warning while trying to write an EnumItem
+-
+
+## 2.2.9
+
+2025-4-20
+
+### Features
+
+- 🛠 emit a warning while trying to modify an `EnumItem`
+
+### Bug Fixes
+
+- 🐞 The output `lib` directory structure is incorrect. This will break legacy Node.js applications using the `CommonJS` module spec, while modern Node.js applications using the `NodeNext` module spec remain unaffected. This issue was introduced in v2.2.7. For node.js applications, it's strongly recommended to upgrade.
 
 ## 2.2.8
 

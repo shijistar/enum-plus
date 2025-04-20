@@ -1,6 +1,7 @@
 lib
 es
 es-legacy
+tslib
 node_modules
 npm-debug.log
 coverage/
