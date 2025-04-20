@@ -11,10 +11,11 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testMatch: ['<rootDir>/test/**/*.{spec,test}.{ts,tsx}'],
+  setupFiles: ['./test/jest.setup.ts'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: ['src/types.ts'],
-  setupFiles: ['./test/jest.setup.ts'],
   moduleNameMapper: {
     '^@enum-plus': '<rootDir>/src',
     '^@enum-plus/(.*)$': '<rootDir>/src/$1',

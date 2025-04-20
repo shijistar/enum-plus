@@ -4,7 +4,7 @@
     "target": "ES2016",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "lib": ["ES2016"],
+    "lib": ["ES2016", "DOM"],
     "sourceMap": true,
     "sourceRoot": ".",
     "jsx": "react-jsx",
@@ -26,6 +26,6 @@
       "@enum-plus/*": ["./src/*"]
     }
   },
-  "include": ["./src", "./plugins", "./test"],
+  "include": ["./src", "./plugins", "./test", "./test-browser", "./playwright.config.ts", "./global.d.ts"],
   "exclude": ["node_modules", "es", "lib"]
 }

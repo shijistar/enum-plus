@@ -18,7 +18,7 @@
 
 ### Bug Fixes
 
-- 🐞 The output `lib` directory structure is incorrect. This will break legacy Node.js applications using the `CommonJS` module spec, while modern Node.js applications using the `NodeNext` module spec remain unaffected. This issue was introduced in v2.2.7. For node.js applications, it's strongly recommended to upgrade.
+- 🐞 The output `lib` directory structure is incorrect. This will break legacy Node.js applications using the `CommonJS` module spec, while modern Node.js applications using the `NodeNext` module spec remain unaffected. This issue was introduced in `v2.2.7`. For node.js applications, it's strongly recommended to upgrade.
 
 ## 2.2.8
 

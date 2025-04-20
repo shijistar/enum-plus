@@ -856,8 +856,11 @@ declare global {
 - 对于浏览器环境，enum-plus 提供了良好的兼容性支持
 
   - 如果使用现代打包工具（例如 Webpack 5+、Vite、Rollup 等），支持解析 package.json 中的 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段，enum-plus 输出 EcmaScript 版本为 `ES2020`。另外，如果你希望进一步兼容更低版本的浏览器，你可以在构建时使用 `@babel/preset-env` 来转换成更低版本的语法
-
   - 如果是旧版的打包工具（例如 Webpack 4），不支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段，enum-plus 会自动降级，输出 EcmaScript 版本为 `ES2016`。
+  - enum-plus 不包含 polyfills。如果需要支持旧浏览器，建议使用:
+    - `core-js`
+    - `@babel/preset-env` 的 useBuiltIns 选项
+    - 或其他 polyfill 解决方案
 
 - 对于 Node.js 环境，`enum-plus` 最低向下兼容到 EcmaScript `ES2016`，对应 Node.js 版本为 `v7.x`。
 

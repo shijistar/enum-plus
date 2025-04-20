@@ -4,7 +4,10 @@ es-legacy
 tslib
 node_modules
 npm-debug.log
+test-browser/fixtures/es-modern-bundle.js
+test-browser/fixtures/es-legacy-bundle.js
 coverage/
+test-results
 run
 .DS_Store
 .cache
