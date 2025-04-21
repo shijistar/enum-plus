@@ -1,34 +1,37 @@
 import { Enum } from '@enum-plus';
 import { StandardWeekConfig } from './data/week-config';
 
-describe('Enum should be extensible', () => {
-  test('Add global extension', () => {
-    Enum.extends({
+describe('Enum extends', () => {
+  test('Should allow extend new methods', () => {
+    const extend = {
       isWeekend(value: number) {
         return value === 6 || value === 0;
       },
       toMySelect(this: ReturnType<typeof Enum>) {
         return this.items.map((item) => ({ value: item.value, title: item.label }));
       },
-    });
+    };
+    Enum.extends(extend);
     const weekEnum = Enum(StandardWeekConfig);
     expect(weekEnum.isWeekend(weekEnum.Monday)).toBe(false);
     expect(weekEnum.isWeekend(weekEnum.Friday)).toBe(false);
     expect(weekEnum.isWeekend(weekEnum.Saturday)).toBe(true);
     expect(weekEnum.isWeekend(weekEnum.Sunday)).toBe(true);
-    expect(weekEnum.toMySelect()).toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
+    expect(weekEnum.isWeekend).toBe(extend.isWeekend);
+    expect(weekEnum.toMySelect).toBe(extend.toMySelect);
+    expect(weekEnum.toMySelect?.()).toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
   });
-  test('clear global extension', () => {
+  test('Should allow clearing global extension', () => {
     Enum.extends({
       isWeekend(value: number) {
         return value === 6 || value === 7;
       },
     });
-    Enum.extends(undefined);
+    Enum.extends({ isWeekend: undefined });
     const weekEnum = Enum(StandardWeekConfig);
     expect(weekEnum.isWeekend).toBeUndefined();
   });
-  test('Only allow extends type of object', () => {
+  test('Should allow extends for objects only', () => {
     expect(() => {
       // @ts-expect-error: because want to simulate wrong type
       Enum.extends(1);
@@ -46,12 +49,36 @@ describe('Enum should be extensible', () => {
       Enum.extends(true);
     }).toThrow();
   });
+
+  test('Should allow extending multiple times', () => {
+    const firstExtends = {
+      isWeekend(value: number) {
+        return value === 6 || value === 0;
+      },
+    };
+    Enum.extends(firstExtends);
+    const weekEnum = Enum(StandardWeekConfig);
+    expect(weekEnum.isWeekend).toBe(firstExtends.isWeekend);
+    expect(weekEnum.isWeekend?.(weekEnum.Monday)).toBe(false);
+    expect(weekEnum.isWeekend?.(weekEnum.Friday)).toBe(false);
+    expect(weekEnum.isWeekend?.(weekEnum.Saturday)).toBe(true);
+    expect(weekEnum.isWeekend?.(weekEnum.Sunday)).toBe(true);
+
+    const secondExtends = {
+      toMySelect(this: ReturnType<typeof Enum>) {
+        return this.items.map((item) => ({ value: item.value, title: item.label }));
+      },
+    };
+    Enum.extends(secondExtends);
+    expect(weekEnum.toMySelect).toBe(secondExtends.toMySelect);
+    expect(weekEnum.toMySelect?.()).toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
+  });
 });
 
 // Enum extensions
-declare global {
+declare module 'enum-plus-extend' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  export interface EnumExtension<T, K, V> {
+  interface EnumExtension<T, K, V> {
     isWeekend(value: number): boolean;
     toMySelect: () => { value: V; title: string }[];
   }
