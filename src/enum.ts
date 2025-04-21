@@ -1,4 +1,6 @@
+import type { EnumExtension } from 'enum-plus-extend';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
+import './extension.d.ts';
 import type {
   EnumInit,
   EnumInitOptions,
@@ -11,8 +13,8 @@ import type {
 } from './types';
 import { defaultLocalize } from './utils';
 
-let enumExtensions: Record<string, unknown> | undefined;
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// let enumExtensions: any;
 /**
  * **EN:** Generate an enum collection, the enum value supports `number` and `string` types, and the
  * enum name supports localization solutions
@@ -66,11 +68,9 @@ export function Enum<
 >(init: T | T[], options?: EnumInitOptions<T, K, V>): IEnum<T, K, V> & EnumExtension<T, K, V> {
   if (Array.isArray(init)) {
     const initMap = getInitMapFromArray<T, K, V>(init, options);
-    // @ts-expect-error: because of typing extend in tests
-    return new EnumCollectionClass<T, K, V>(initMap, options) as unknown as IEnum<T, K, V>;
+    return new EnumCollectionClass<T, K, V>(initMap, options) as unknown as IEnum<T, K, V> & EnumExtension<T, K, V>;
   } else {
-    // @ts-expect-error: because of typing extend in tests
-    return new EnumCollectionClass<T, K, V>(init, options) as unknown as IEnum<T, K, V>;
+    return new EnumCollectionClass<T, K, V>(init, options) as unknown as IEnum<T, K, V> & EnumExtension<T, K, V>;
   }
 }
 
@@ -103,9 +103,27 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
-  enumExtensions = obj !== undefined ? obj : {};
-  Object.setPrototypeOf(EnumExtensionClass.prototype, enumExtensions);
+  // enumExtensions = obj !== undefined ? obj : {};
+  // Object.setPrototypeOf(EnumExtensionClass.prototype, enumExtensions);
+
+  if (obj) {
+    Object.assign(EnumExtensionClass.prototype, obj);
+  }
 };
+/**
+ * **EN:** Install a plugin that enhances the functionality of the Enum class by adding new methods
+ * or properties.
+ *
+ * **CN:** 安装一个插件，通过添加新的方法或属性来增强Enum类的功能
+ *
+ * @param plugin The plugin to install | 要安装的插件
+ * @param options The options for the plugin | 插件的选项
+ */
+Enum.install = <T = unknown>(plugin: PluginFunc<T>, options?: T) => {
+  plugin(options, Enum);
+};
+const EnumAlias = Enum;
+
 function getInitMapFromArray<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
@@ -127,3 +145,14 @@ function getInitMapFromArray<
     return acc;
   }, {} as T);
 }
+
+/**
+ * **EN:** Represent the Enum plugin that enhances the functionality of the global Enum by adding
+ * new methods or properties.
+ *
+ * **CN:** 表示增强Enum类功能的插件，通过添加新方法或属性
+ *
+ * @param option The options for the plugin | 插件的选项
+ * @param Enum The Enum global method | Enum全局方法
+ */
+export type PluginFunc<T = unknown> = (option: T | undefined, Enum: typeof EnumAlias) => void;

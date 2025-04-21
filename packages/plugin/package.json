@@ -1,0 +1,83 @@
+{
+  "name": "enum-plus-plugin",
+  "version": "1.0.0-alpha.0",
+  "description": "The official plugin library for enum-plus, extending it with additional features and functionality",
+  "keywords": [
+    "enum",
+    "enumeration",
+    "plugin",
+    "typescript",
+    "localization",
+    "node.js",
+    "ssr"
+  ],
+  "homepage": "https://github.com/shijistar/enum-plus",
+  "bugs": {
+    "url": "https://github.com/shijistar/enum-plus/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shijistar/enum-plus.git"
+  },
+  "license": "MIT",
+  "author": "李凤宝(Leo) <shijistar@gmail.com>",
+  "sideEffects": false,
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./es/index.js",
+      "require": "./lib/index.js",
+      "browser-legacy": "./es-legacy/index.js",
+      "default": "./lib/index.js"
+    },
+    "./searchItems": {
+      "types": "./lib/searchItems.d.ts",
+      "import": "./es/searchItems.js",
+      "require": "./lib/searchItems.js",
+      "browser-legacy": "./es-legacy/searchItems.js",
+      "default": "./lib/searchItems.js"
+    },
+    "./es-legacy": {
+      "types": "./es-legacy/index.d.ts",
+      "import": "./es-legacy/index.js",
+      "require": "./es-legacy/index.js",
+      "default": "./es-legacy/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "lib/index.js",
+  "module": "es-legacy/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "es",
+    "es-legacy",
+    "LICENSE",
+    "CHANGELOG.md",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "scripts": {
+    "build": "run-p build:es build:es-legacy build:lib",
+    "build:es": "father build",
+    "build:es-legacy": "cross-env LEGACY=1 father build",
+    "build:lib": "run-s ts2lib copy-lib",
+    "copy-lib": "shx cp ./tslib/src/* ./lib",
+    "prepublishOnly": "npm run build && npm run test",
+    "test": "jest",
+    "test-legacy": "jest -c jest-legacy.config.js",
+    "test:browser": "npm run test:browser:bundle && playwright test",
+    "test:browser:bundle": "node scripts/browser-test-bundle.js",
+    "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
+    "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
+    "ts2lib": "tsc -p tsconfig.lib.json"
+  },
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": ">=7.10.1"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}
