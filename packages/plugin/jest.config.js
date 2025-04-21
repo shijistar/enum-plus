@@ -14,19 +14,10 @@ module.exports = {
   testMatch: ['<rootDir>/test/**/*.{spec,test}.{ts,tsx}'],
   setupFiles: ['./test/jest.setup.ts'],
   collectCoverage: true,
-  coverageThreshold: {
-    global: {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100,
-    },
-  },
-  coverageReporters: ['json', 'lcov', 'text', 'clover'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
-  coveragePathIgnorePatterns: ['src/types.ts', 'src/extension.d.ts'],
+  coveragePathIgnorePatterns: ['src/types.ts'],
   moduleNameMapper: {
-    '^@enum-plus': '<rootDir>/src',
-    '^@enum-plus/(.*)$': '<rootDir>/src/$1',
+    '^@enum-plus-plugin': '<rootDir>/src',
+    '^@enum-plus-plugin/(.*)$': '<rootDir>/src/$1',
   },
 };

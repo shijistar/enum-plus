@@ -25,39 +25,31 @@ import {
 } from './data/week-data';
 import { toPlainEnums } from './utils';
 
-describe('should be able to create an enum from object', () => {
-  test('should have a return', () => {
+describe('Create Enum using static init data', () => {
+  test('Should be created with standard init data', () => {
     const week = Enum(StandardWeekConfig);
     expect(week).toBeDefined();
     expect(week).not.toBeNull();
     expect(week?.items?.length).toBe(7);
-  });
-  test('values is deprecated to items', () => {
-    const week = Enum(StandardWeekConfig);
-    expect(week.values).toBe(week.items);
-  });
-
-  test('create weekdays enum with normal config', () => {
-    const week = Enum(StandardWeekConfig);
     expect(toPlainEnums(week.items)).toEqual(getStandardWeekData(locales));
   });
 
-  test('create weekdays enum with number', () => {
+  test('Should be created with number values', () => {
     const week = Enum(WeekNumberConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
   });
 
-  test('create weekdays enum with string', () => {
+  test('Should be created with string values', () => {
     const week = Enum(WeekStringConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
-  test('create weekdays enum with value-only config', () => {
+  test('Should be created with value-only config', () => {
     const week = Enum(WeekValueOnlyConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
   });
 
-  test('create weekdays enum with label-only config', () => {
+  test('Should be created with label-only config', () => {
     const week = Enum(WeekLabelOnlyConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyNoValueHasLabel(locales));
     const weekWithEmptyLabel = Enum(
@@ -73,34 +65,34 @@ describe('should be able to create an enum from object', () => {
     expect(toPlainEnums(weekWithEmptyLabel.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
-  test('create weekdays enum with compact config', () => {
+  test('Should be created with compact config', () => {
     const week = Enum(WeekCompactConfig);
     expect(toPlainEnums(week.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
     const week2 = Enum(WeekEmptyConfig);
     expect(toPlainEnums(week2.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
   });
 
-  test('create weekdays enum with boolean values', () => {
+  test('Should be created with boolean values', () => {
     const week = Enum(BooleanStandardConfig);
     expect(toPlainEnums(week.items)).toEqual(getStandardBooleanData(locales));
   });
 
-  test('create weekdays enum with date values', () => {
+  test('Should be created with date values', () => {
     const week = Enum(DateStandardConfig);
     expect(toPlainEnums(week.items)).toEqual(getStandardDateData(locales));
   });
 
-  test('create weekdays enum with empty config', () => {
+  test('Should be created with empty config', () => {
     const week = Enum({});
     expect(week.items.length).toBe(0);
   });
 
-  test('create weekdays enum with undefined', () => {
+  test('Should be created with undefined', () => {
     const week = Enum(undefined as unknown as EnumInit);
     expect(week.items.length).toBe(0);
   });
 
-  test('create weekdays enum with some supported but invalid values', () => {
+  test('Should be created with supported but invalid values', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(toPlainEnums(Enum({ foo: /regexp/ } as Record<string, any>).items)).toEqual([
       { key: 'foo', value: /regexp/, label: 'foo' },
@@ -112,7 +104,7 @@ describe('should be able to create an enum from object', () => {
     ]);
   });
 
-  test('should throw error if enum value is invalid', () => {
+  test('Should throw error if init data is invalid', () => {
     expect(() => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Enum({ foo: () => void 0 } as Record<string, any>);
@@ -120,15 +112,15 @@ describe('should be able to create an enum from object', () => {
   });
 });
 
-describe('should be able to create an enum from array', () => {
-  test('should have a return', () => {
+describe('Create Enum with dynamic array', () => {
+  test('Should have a return', () => {
     const week = Enum(WeekStandardArray);
     expect(week).toBeDefined();
     expect(week).not.toBeNull();
     expect(week?.items?.length).toBe(7);
   });
 
-  test('created weekdays enum with normal config items array', () => {
+  test('Should be created with standard array', () => {
     const weekWithDefaultFields = Enum(WeekStandardArray);
     expect(toPlainEnums(weekWithDefaultFields.items)).toEqual(getStandardWeekData(locales));
     const week = Enum(WeekStandardArray, {
@@ -145,7 +137,7 @@ describe('should be able to create an enum from array', () => {
     expect(toPlainEnums(weekWithFieldFunctions.items)).toEqual(getStandardWeekData(locales));
   });
 
-  test('created weekdays enum with normal config items array, but without key', () => {
+  test('Should be created with standard items array, but without providing getKey', () => {
     const week = Enum(WeekStandardArray, {
       getValue: 'value',
       getLabel: 'label',
@@ -160,7 +152,7 @@ describe('should be able to create an enum from array', () => {
     expect(toPlainEnums(weekWithDefaultKey.items)).toEqual(getStandardWeekData(locales));
   });
 
-  test('created weekdays enum with normal config items array, but without label', () => {
+  test('Should be created with standard items array, but without providing getLabel', () => {
     const week = Enum(WeekStandardArray, {
       getValue: 'value',
       getLabel: '' as 'label',
@@ -174,7 +166,7 @@ describe('should be able to create an enum from array', () => {
     expect(toPlainEnums(weekWithDefaultLabel.items)).toEqual(getStandardWeekData(locales));
   });
 
-  test('created weekdays enum with normal config items array, but without key and label', () => {
+  test('Should be created with standard items array, but without providing getKey and getLabel', () => {
     const week = Enum(WeekStandardArray, {
       getValue: 'value',
       getLabel: '' as 'label',
@@ -196,7 +188,7 @@ describe('should be able to create an enum from array', () => {
     ]);
   });
 
-  test('[raw] should be able to return the raw object used to initialize the enums', () => {
+  test('enums.raw should return the raw array used to initialize the enums', () => {
     const WeekConfig = StandardWeekConfig;
     const week = Enum(WeekConfig);
     expect(week.raw()).toBe(WeekConfig);
@@ -211,8 +203,8 @@ describe('should be able to create an enum from array', () => {
   });
 });
 
-describe('should support auto-incremented number enums', () => {
-  test('should be able to create auto-incremented enums', () => {
+describe('Create Enum with native enum', () => {
+  test('should be created with native enums, and the key and value should be consistent with the native enum', () => {
     enum firstSeedInit {
       A = 1,
       B,
@@ -274,7 +266,7 @@ describe('should support auto-incremented number enums', () => {
     ]);
   });
 
-  test('should stop auto-increment starting from "non-number" enum item', () => {
+  test('Should stop auto-increment starting from "non-number" enum item', () => {
     enum stringIncrementInit {
       A = 'AAA',
       B = 1,

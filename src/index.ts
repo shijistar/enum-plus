@@ -7,7 +7,7 @@ export type {
   EnumValue,
   ValueTypeFromSingleInit,
   EnumOptionConfig,
-  BuiltInLocaleKeys,
+  EnumItemOptions,
   EnumItemOptionData,
   MenuItemOption,
   ColumnFilterItem,
@@ -19,7 +19,8 @@ export type { LocalizeInterface } from './localize-interface';
 export type { EnumItemClass } from './enum-item';
 export type { IEnum, EnumInterface } from './enum';
 
-export { KEYS, ITEMS, VALUES, ENUM_ITEM, ENUM_ITEMS, ENUM_COLLECTION, defaultLocalize } from './utils';
+export { KEYS, ITEMS, ENUM_ITEM, ENUM_ITEMS, ENUM_COLLECTION, defaultLocalize } from './utils';
+export type { PluginFunc } from './enum';
 export { Enum } from './enum';
 
 declare global {
