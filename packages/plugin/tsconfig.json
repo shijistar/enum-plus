@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@enum-plus-plugin": ["./src"],
+      "@enum-plus-plugin/*": ["./src/*"]
+    }
+  },
+  "include": ["./src", "./test", "./test-browser", "./playwright.config.ts", "./global.d.ts"],
+  "exclude": ["node_modules", "es", "lib"]
+}
