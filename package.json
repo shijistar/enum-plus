@@ -80,6 +80,10 @@
     "README.md",
     "README.zh-CN.md"
   ],
+  "workspaces": [
+    ".",
+    "packages/*"
+  ],
   "scripts": {
     "add-umd-header": "tsx scripts/add-umd-header-comments.ts",
     "build": "run-p build:*",
@@ -124,6 +128,7 @@
     "tsx": "^4.19.4",
     "typescript": "^5.8.2"
   },
+  "packageManager": "npm@10.9.2",
   "engines": {
     "node": ">=7.10.1"
   },

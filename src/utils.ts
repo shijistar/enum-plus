@@ -1,14 +1,6 @@
 import type { EnumItemOptions } from './types';
 
 /**
- * **EN:** Alias of `values`. If the enum contains a field with the same name as `values`, you can
- * access it by this Symbol as the field name
- *
- * **CN:** 枚举`values`集合的别名。如果枚举中包含了`values`的同名字段，可以通过此Symbol作为字段名来访问
- */
-export const VALUES = Symbol.for('[values]');
-
-/**
  * **EN:** Alias of `items`. If the enum contains a field with the same name as `items`, you can
  * access it by this Symbol as the field name
  *
