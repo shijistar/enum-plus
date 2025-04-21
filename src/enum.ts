@@ -1,5 +1,7 @@
+import type { EnumExtension } from 'enum-plus-extend';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemClass } from './enum-item';
+import './extension.d.ts';
 import { localizer } from './localize';
 import type { LocalizeInterface } from './localize-interface';
 import type {
@@ -12,9 +14,7 @@ import type {
   LabelOnlyEnumItemInit,
   ValueTypeFromSingleInit,
 } from './types';
-import type { ITEMS, KEYS, VALUES } from './utils';
-
-let enumExtensions: Record<string, unknown> | undefined;
+import type { ITEMS, KEYS } from './utils';
 
 export interface EnumInterface {
   /**
@@ -95,6 +95,15 @@ export interface EnumInterface {
    * @param obj Extension content, must be an object | 扩展内容，必须是一个对象
    */
   extends: (obj: Record<string, unknown> | undefined) => void;
+  /**
+   * - **EN:** Install a plugin that enhances the functionality of the Enum class by adding new
+   *   methods or properties.
+   * - **CN:** 安装一个插件，通过添加新的方法或属性来增强Enum类的功能
+   *
+   * @param plugin The plugin to install | 要安装的插件
+   * @param options The options for the plugin | 插件的选项
+   */
+  install: <T = unknown>(plugin: PluginFunc<T>, options?: T) => void;
 }
 
 /**
@@ -134,16 +143,6 @@ export type IEnum<
          * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
          */
         readonly items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { values: any }
-    ? {
-        // Prevent conflict with `items` name
-        readonly [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }
-    : {
-        /** @deprecated Use `items` instead */
-        readonly values: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (T extends { keys: any }
@@ -196,8 +195,16 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
-  enumExtensions = obj !== undefined ? obj : {};
-  Object.setPrototypeOf(EnumExtensionClass.prototype, enumExtensions);
+  // enumExtensions = obj !== undefined ? obj : {};
+  // Object.setPrototypeOf(EnumExtensionClass.prototype, enumExtensions);
+
+  if (obj) {
+    Object.assign(EnumExtensionClass.prototype, obj);
+  }
+};
+
+Enum.install = <T = unknown>(plugin: PluginFunc<T>, options?: T) => {
+  plugin(options, Enum);
 };
 
 function getInitMapFromArray<
@@ -221,3 +228,14 @@ function getInitMapFromArray<
     return acc;
   }, {} as T);
 }
+
+/**
+ * **EN:** Represent the Enum plugin that enhances the functionality of the global Enum by adding
+ * new methods or properties.
+ *
+ * **CN:** 表示增强Enum类功能的插件，通过添加新方法或属性
+ *
+ * @param option The options for the plugin | 插件的选项
+ * @param Enum The Enum global method | Enum全局方法
+ */
+export type PluginFunc<T = unknown> = (option: T | undefined, Enum: EnumInterface) => void;

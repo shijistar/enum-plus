@@ -1,3 +1,4 @@
+import type { EnumExtension } from 'enum-plus-extend';
 import { EnumItemClass } from './enum-item';
 import { EnumItemsArray } from './enum-values';
 import { localizer } from './localize';
@@ -19,14 +20,14 @@ import type {
   ToSelectConfig,
   ValueTypeFromSingleInit,
 } from './types';
-import { ENUM_COLLECTION, ITEMS, KEYS, VALUES } from './utils';
+import { ENUM_COLLECTION, ITEMS, KEYS } from './utils';
 
 /**
  * **EN:** Enum collection extension base class, used to extend the Enums
  *
  * **CN:** 枚举集合扩展基类，用于扩展枚举
  */
-// @ts-expect-error: because of typing extend in tests
+// @ts-expect-error: because don't know which methods are added
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class EnumExtensionClass<
   T extends EnumInit<K, V>,
@@ -101,8 +102,6 @@ export class EnumCollectionClass<
     );
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[Object.keys(init).some((k) => k === 'items') ? ITEMS : 'items'] = items;
-    // @ts-expect-error: because use VALUES to avoid naming conflicts in case of 'values' field name is taken
-    this[Object.keys(init).some((k) => k === 'values') ? VALUES : 'values'] = items;
 
     // Override the `instanceof` operator rule
     // @ts-expect-error: because override the instanceof operator
@@ -156,43 +155,17 @@ export class EnumCollectionClass<
       V | FV
     >[];
   }
-  /** @deprecated use `toSelect` instead */
-  options(): EnumItemOptionData<K, V>[];
-  options(config: object & BooleanFirstOptionConfig<V>): EnumItemOptionData<'' | K, '' | V>[];
-  options<FK, FV>(
-    config: object & ObjectFirstOptionConfig<FK, FV>
-  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  options<FK = never, FV = never>(
-    config?: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
-  ): EnumItemOptionData<K | FK, V | FV>[] {
-    return this.items.options(config as ToSelectConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
-      K | FK,
-      V | FV
-    >[];
-  }
 
   toMenu(): MenuItemOption<V>[] {
     return this.items.toMenu();
-  }
-  /** @deprecated use `toMenu` instead */
-  menus(): MenuItemOption<V>[] {
-    return this.items.menus();
   }
 
   toFilter(): ColumnFilterItem<V>[] {
     return this.items.toFilter();
   }
-  /** @deprecated use `toFilter` instead */
-  filters(): ColumnFilterItem<V>[] {
-    return this.items.filters();
-  }
 
   toValueMap() {
     return this.items.toValueMap();
-  }
-  /** @deprecated use `toValueMap` instead */
-  valuesEnum() {
-    return this.items.valuesEnum();
   }
 
   get valueType() {

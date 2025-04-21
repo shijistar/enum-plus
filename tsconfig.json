@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "baseUrl": ".",
     "target": "ES2016",
     "module": "NodeNext",
@@ -26,6 +27,6 @@
       "@enum-plus/*": ["./src/*"]
     }
   },
-  "include": ["src", "plugins", "scripts", "test", "test-browser", "playwright.config.ts", "global.d.ts"],
+  "include": ["src", "plugins", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
   "exclude": ["node_modules", "es", "lib"]
 }

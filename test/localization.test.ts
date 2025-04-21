@@ -142,11 +142,11 @@ function testEnum(
   >,
   locales: typeof localeEN | typeof localeCN | typeof noLocale
 ) {
-  const sunday = weekEnum.values[0];
+  const sunday = weekEnum.items[0];
   expect(sunday.label).toBe(locales.Sunday);
   expect(sunday.toString()).toBe(locales.Sunday);
   expect(sunday.toLocaleString()).toBe(locales.Sunday);
-  expect(getOptionsData(weekEnum.values)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
+  expect(getOptionsData(weekEnum.items)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
   expect(getOptionsData(weekEnum.toSelect())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
   expect(Array.from(weekEnum.toMenu())).toEqual(
     pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
