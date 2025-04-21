@@ -1,8 +1,8 @@
 import { Enum } from '@enum-plus';
 import { localeEN, StandardWeekConfig } from './data/week-config';
 
-describe('the EnumItemClass api', () => {
-  test('keyed enum item should be equal to its value', () => {
+describe('The EnumItemClass api', () => {
+  test('Should be able to pick Enum values', () => {
     const week = Enum(StandardWeekConfig);
     expect(week.Sunday).toBe(0);
     expect(week.Monday).toBe(1);
@@ -20,36 +20,36 @@ describe('the EnumItemClass api', () => {
     expect(week.Friday - 1).toBe(4);
   });
 
-  test('[toString] should return enum label', () => {
+  test('item.toString should return enum label', () => {
     const week = Enum(StandardWeekConfig);
-    const sunday = week.values[0];
+    const sunday = week.items[0];
     expect(sunday.toString()).toBe(localeEN.Sunday);
     expect(sunday.toLocaleString()).toBe(localeEN.Sunday);
-    expect(week.values[6].toString()).toBe(localeEN.Saturday);
-    expect(week.values[6].toLocaleString()).toBe(localeEN.Saturday);
+    expect(week.items[6].toString()).toBe(localeEN.Saturday);
+    expect(week.items[6].toLocaleString()).toBe(localeEN.Saturday);
   });
 
-  test('[toStringTag] should return a friendly name', () => {
+  test('item.toStringTag should return a friendly name', () => {
     const week = Enum(StandardWeekConfig);
-    week.values.forEach((item) => {
+    week.items.forEach((item) => {
       expect(Object.prototype.toString.call(item)).toBe('[object EnumItem]');
     });
   });
 
-  test('[valueOf] should return the enum value', () => {
+  test('item.valueOf should return the enum value', () => {
     const week = Enum(StandardWeekConfig);
-    const sunday = week.values[0];
+    const sunday = week.items[0];
     expect(sunday.valueOf()).toBe(0);
-    expect(week.values[6].valueOf()).toBe(6);
+    expect(week.items[6].valueOf()).toBe(6);
   });
 
-  test('[toPrimitive] should be auto converted to a correct primitive type', () => {
+  test('item.toPrimitive should be auto converted to a correct primitive type', () => {
     const week = Enum(StandardWeekConfig);
-    const sunday = week.values[0];
-    const monday = week.values[1];
-    const tuesday = week.values[2];
-    const friday = week.values[5];
-    const saturday = week.values[6];
+    const sunday = week.items[0];
+    const monday = week.items[1];
+    const tuesday = week.items[2];
+    const friday = week.items[5];
+    const saturday = week.items[6];
     expect(Number(sunday)).toBe(0);
     expect(String(sunday)).toBe(localeEN.Sunday);
     // expect(Boolean(sunday)).toBe(false);
@@ -84,10 +84,10 @@ describe('the EnumItemClass api', () => {
   });
 
   // should be readonly
-  test('EnumItem should be readonly', () => {
+  test('Should be readonly', () => {
     const week = Enum(StandardWeekConfig);
     const modifyValue = 'SHOULD NOT BE MODIFIED';
-    const sunday = week.values[0];
+    const sunday = week.items[0];
 
     /* ----------------- set ----------------- */
     // @ts-expect-error: because try to modify the property forcefully

@@ -15,9 +15,9 @@ module.exports = {
   setupFiles: ['./test/jest.setup.ts'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
-  coveragePathIgnorePatterns: ['src/types.ts', 'src/extension.d.ts'],
+  coveragePathIgnorePatterns: ['src/types.ts'],
   moduleNameMapper: {
-    '^@enum-plus': '<rootDir>/src',
-    '^@enum-plus/(.*)$': '<rootDir>/src/$1',
+    '^@enum-plus-plugin': '<rootDir>/src',
+    '^@enum-plus-plugin/(.*)$': '<rootDir>/src/$1',
   },
 };
