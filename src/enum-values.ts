@@ -171,23 +171,6 @@ export class EnumItemsArray<
       return this;
     }
   }
-  /** @deprecated Use `toSelect` instead */
-  options(): EnumItemOptionData<K, V>[];
-  /** @deprecated Use `toSelect` instead */
-  options(config?: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
-  /** @deprecated Use `toSelect` instead */
-  options<FK = never, FV = never>(
-    config?: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
-  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  /** @deprecated Use `toSelect` instead */
-  options<FK = never, FV = never>(
-    config?: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
-  ): EnumItemOptionData<K | FK, V | FV>[] {
-    return this.toSelect(config as ToSelectConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
-      K | FK,
-      V | FV
-    >[];
-  }
 
   toValueMap() {
     const itemsMap = {} as ValueMap;
@@ -197,41 +180,29 @@ export class EnumItemsArray<
     }
     return itemsMap;
   }
-  /** @deprecated Use `toValueMap` instead */
-  valuesEnum() {
-    return this.toValueMap();
-  }
 
   toMenu(): MenuItemOption<V>[] {
     return this.map(({ value, label }) => ({ key: value, label }));
-  }
-  /** @deprecated Use `toMenu` instead */
-  menus() {
-    return this.toMenu();
   }
 
   toFilter(): ColumnFilterItem<V>[] {
     return this.map(({ value, label }) => ({ text: label, value }));
   }
-  /** @deprecated Use `toFilter` instead */
-  filters() {
-    return this.toFilter();
-  }
 
-  /** @deprecated Stub method, only for typing usages, not for runtime calling */
+  /** Stub method, only for typing usages, not for runtime calling */
   get valueType(): V {
     throw new Error(
       'The valueType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.valueType'
     );
   }
-  /** @deprecated Stub method, only for typing usages, not for runtime calling */
+  /** Stub method, only for typing usages, not for runtime calling */
   get keyType(): K {
     throw new Error(
       'The keyType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.keyType'
     );
   }
 
-  /** @deprecated Stub method, only for typing usages, not for runtime calling */
+  /** Stub method, only for typing usages, not for runtime calling */
   get rawType(): T[K] {
     throw new Error(
       'The rawType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.rawType'
