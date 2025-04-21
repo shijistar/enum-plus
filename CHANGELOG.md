@@ -2,6 +2,29 @@
 
 # enum-plus Changelog
 
+## 3.0.0
+
+2025-4-24
+
+**enum-plus v3** is coming! 🎉
+
+### Features
+
+- 🔥 add `Enum.install` method which introduces a new plugin system. The plugin system allows you to add new methods or properties to all enums. While similar to `Enum.extends`, the plugin system enables features to be packaged as `shareable` plugins, making it more flexible and widely applicable.
+- 🔥 introduce an official plugin `enum-plus-plugin` that provides a collection of highly shareable plugins.
+  - These plugins are designed to work in all scenarios and environments (including browser and Node.js), without introducing dependencies on third-party frameworks, component libraries, or platforms.
+  - If you have a good idea that might be specific to a certain framework or platform rather than universally applicable, we recommend creating a new plugin project (e.g., `enum-plus-plugin-xxx`). We are happy to see that, and hope that you submit a PR to `enum-plus-plugin` to link your project back.
+
+### Breaking Changes
+
+- 💣 the following deprecated methods are removed:
+  - `enums.values`
+  - `enums.options`
+  - `enums.menus`
+  - `enums.filters`
+  - `enums.valuesEnum`
+- Please use the new methods `Enum.items`, `Enum.toSelect`, `Enum.toMenu`, `Enum.toFilter`, and `Enum.toValueMap` instead, which are introduced since `v2.1.0`.
+
 ## 2.3.0
 
 2025-5-23
@@ -48,7 +71,7 @@
 
 ### Bug Fixes
 
-- 🐞 The output `lib` directory structure is incorrect. This will break legacy Node.js applications using the `CommonJS` module spec, while modern Node.js applications using the `NodeNext` module spec remain unaffected. This issue was introduced in `v2.2.7`. For node.js applications, it's strongly recommended to upgrade.
+- 🐞 the output `lib` directory structure is incorrect. This will break legacy Node.js applications using the `CommonJS` module spec, while modern Node.js applications using the `NodeNext` module spec remain unaffected. This issue was introduced in `v2.2.7`. For node.js applications, it's strongly recommended to upgrade.
 
 ## 2.2.8
 
@@ -64,7 +87,7 @@
 
 ### Features
 
-- 🛠 Provide different versions of ESModule output for modern browsers and legacy browsers
+- 🛠 provide different versions of ESModule output for modern browsers and legacy browsers
 
 ## 2.2.6
 
@@ -72,11 +95,11 @@
 
 ### Features
 
-- 🛠 Change compile transformer
-- 👀 Support `ES2020` and `Chrome>=80`, if you need to support legacy browsers, please use use a modern bundler like `webpack` or `vite` and use `babel` to include proper polyfills on-demand.
-- 👀 For the Node.js environment, backward compatible down to ES2016.
-- 🛠 Generate better sourcemaps
-- 🛠 Package size reduces by 0.1k
+- 🛠 change compile transformer
+- 👀 support `ES2020` and `Chrome>=80`, if you need to support legacy browsers, please use use a modern bundler like `webpack` or `vite` and use `babel` to include proper polyfills on-demand.
+- 👀 for the Node.js environment, backward compatible down to ES2016.
+- 🛠 generate better sourcemaps
+- 🛠 package size reduces by 0.1k
 
 ## 2.2.5
 
@@ -84,7 +107,7 @@
 
 ### Features
 
-- 🛠 Improve Enum typing, support `boolean` and `Date` as enum values
+- 🛠 improve Enum typing, support `boolean` and `Date` as enum values
 
 ## 2.2.4
 

@@ -1,5 +1,9 @@
+import type { EnumLocaleExtends } from 'enum-plus-extend';
 import type { EnumItemClass } from './enum-item';
-import type { ITEMS, KEYS, VALUES } from './utils';
+import './extension.d.ts';
+import type { ITEMS, KEYS } from './utils';
+
+export type { BuiltInLocaleKeys } from 'enum-plus-extend';
 
 /**
  * **EN:** Enum initialization options
@@ -85,16 +89,6 @@ export type IEnum<
          * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
          */
         items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { values: any }
-    ? {
-        // 防止values名称冲突
-        [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }
-    : {
-        /** @deprecated Use `items` instead */
-        values: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (T extends { keys: any }
@@ -215,15 +209,6 @@ export interface IEnumItems<
     config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
 
-  /** @deprecated Use `toSelect` instead */
-  options(): EnumItemOptionData<K, V>[];
-  /** @deprecated Use `toSelect` instead */
-  options(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
-  /** @deprecated Use `toSelect` instead */
-  options<FK, FV>(
-    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
-  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-
   /**
    * **EN:** Generate an object array that can be bound to the data source of components such as
    * Menu and Dropdown, following the data specification of ant-design
@@ -239,9 +224,6 @@ export interface IEnumItems<
    * @see https://ant.design/components/menu-cn#itemtype
    */
   toMenu(): MenuItemOption<V>[];
-
-  /** @deprecated Use `toMenu` instead */
-  menus(): MenuItemOption<V>[];
 
   /**
    * **EN:** Generate an object array that can add filtering function to table columns, following
@@ -261,9 +243,6 @@ export interface IEnumItems<
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   toFilter(): ColumnFilterItem<V>[];
 
-  /** @deprecated Use `toFilter` instead */
-  filters(): ColumnFilterItem<V>[];
-
   /**
    * **EN:** Generate a Map object that can be used to bind Select, Checkbox and other form
    * components, following the data specification of ant-design-pro
@@ -281,10 +260,6 @@ export interface IEnumItems<
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style, @typescript-eslint/no-explicit-any
   toValueMap(): ValueMap<V>;
-
-  /** @deprecated Use `toValueMap` instead */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  valuesEnum(): ValueMap<V>;
 
   /**
    * **EN:** Get the enumeration item by key or value
@@ -515,9 +490,6 @@ export interface ObjectFirstOptionConfig<K, V> {
    */
   firstOptionLabel?: never;
 }
-
-/** Built-in resources */
-export type BuiltInLocaleKeys = 'enum-plus.options.all';
 
 export type EnumOptionConfig<K, V> = Omit<EnumItemOptionData<K, V>, 'key'> &
   Partial<Pick<EnumItemOptionData<K, V>, 'key'>>;

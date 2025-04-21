@@ -80,13 +80,18 @@
     "README.md",
     "README.zh-CN.md"
   ],
+  "workspaces": [
+    ".",
+    "packages/*"
+  ],
   "scripts": {
     "build": "run-p build:*",
-    "build:lib": "run-s ts2lib copy-lib",
+    "build:lib": "run-s ts2lib copy-dts copy-lib",
     "build:es-legacy": "cross-env LEGACY=1 father build",
     "build:es": "run-s build-es-only add-umd-header",
     "build-es-only": "father build",
     "ts2lib": "tsc -p tsconfig.lib.json",
+    "copy-dts": "shx cp ./src/*.d.ts ./lib",
     "copy-lib": "mkdir -p lib && shx cp -r tslib/src/* lib",
     "add-umd-header": "tsx scripts/add-umd-header-comments.ts",
     "prepublishOnly": "npm run build && npm run test",
@@ -121,6 +126,7 @@
     "tsx": "^4.19.4",
     "typescript": "^5.8.2"
   },
+  "packageManager": "npm@10.9.2",
   "engines": {
     "node": ">=7.10.1"
   },

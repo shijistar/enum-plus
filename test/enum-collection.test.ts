@@ -1,40 +1,36 @@
-import { Enum, ENUM_COLLECTION, ITEMS, KEYS, VALUES } from '@enum-plus';
+import { Enum, ENUM_COLLECTION, ITEMS, KEYS } from '@enum-plus';
 import { locales, sillyLocalize, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { addEnumValuesTestSuite } from './enum-values.test';
 import { toPlainEnums } from './utils';
 
-describe('the EnumCollectionClass api', () => {
+describe('The EnumCollectionClass api', () => {
   addEnumValuesTestSuite(Enum(StandardWeekConfig));
 
-  test('[keys] should be able to return all enum keys', () => {
+  test('enums.keys should return all enum keys', () => {
     const week = Enum(StandardWeekConfig);
     expect(week.keys).toEqual(Object.keys(StandardWeekConfig));
   });
 
-  test('[values] should be able to return an array of enum items', () => {
+  test('enums.items should return an array of enum items', () => {
     const week = Enum(StandardWeekConfig);
     expect(Array.isArray(week.items)).toBeTruthy();
     expect(toPlainEnums(week.items)).toEqual(getStandardWeekData(locales));
   });
 
-  test('api methods should be same as EnumValuesArray', () => {
+  test('the methods should be same as EnumValuesArray', () => {
     const week = Enum(StandardWeekConfig);
     expect(week.label(1)).toBe(week.items.label(1));
     expect(week.key(1)).toBe(week.items.key(1));
     expect(week.has(1)).toBe(week.items.has(1));
     expect(week.raw()).toBe(week.items.raw());
     expect(week.toSelect()).toEqual(week.items.toSelect());
-    expect(week.options()).toEqual(week.items.options());
     expect(week.toMenu()).toEqual(week.items.toMenu());
-    expect(week.menus()).toEqual(week.items.menus());
     expect(week.toFilter()).toEqual(week.items.toFilter());
-    expect(week.filters()).toEqual(week.items.filters());
     expect(week.toValueMap()).toEqual(week.items.toValueMap());
-    expect(week.valuesEnum()).toEqual(week.items.valuesEnum());
   });
 
-  test('[keys,values] should be able to auto renaming to a non-conflicting name', () => {
+  test('enums.keys and enums.items should be auto renamed to fallback names once they are conflicted with Enum keys', () => {
     const strangeEnumConfig = {
       label: { value: 1, label: 'label' },
       key: { value: 2, label: 'key' },
@@ -83,9 +79,7 @@ describe('the EnumCollectionClass api', () => {
       label: strangerEnumConfig[key as keyof typeof strangerEnumConfig].label,
     }));
     expect(Array.isArray(strangerEnum[ITEMS])).toBeTruthy();
-    expect(Array.isArray(strangerEnum[VALUES])).toBeTruthy();
     expect(toPlainEnums(strangerEnum[ITEMS])).toEqual(standardEnumItems);
-    expect(toPlainEnums(strangerEnum[VALUES])).toEqual(standardEnumItems);
   });
 
   test('should have [ENUM_COLLECTION] property to indicate that this is an enum collection', () => {
@@ -96,7 +90,7 @@ describe('the EnumCollectionClass api', () => {
     expect(week[Symbol.for('[EnumCollection]')]).toBe(true);
   });
 
-  test('enum value/key/label should be success by the [instanceof] operator', () => {
+  test('enums.value/enums.key/enums.label should be applicable to "instanceof" operator', () => {
     const week = Enum(StandardWeekConfig);
     expect((0 as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
     expect(('Sunday' as unknown) instanceof (week as unknown as () => void)).toBeTruthy();

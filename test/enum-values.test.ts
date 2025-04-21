@@ -4,7 +4,7 @@ import { locales, localizeConfigData, StandardWeekConfig } from './data/week-con
 import { getStandardWeekData } from './data/week-data';
 import { getOptionsData, pickArray } from './utils';
 
-describe('the EnumValuesArray api', () => {
+describe('The EnumValuesArray api', () => {
   addEnumValuesTestSuite(Enum(StandardWeekConfig).items);
 });
 
@@ -15,7 +15,7 @@ export function addEnumValuesTestSuite(
     (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
   >
 ) {
-  test('[label] should be able to get enum label by key or value', () => {
+  test('enums.label should be able to get enum label by key or value', () => {
     expect(weekEnum.label(0)).toBe(locales.Sunday);
     expect(weekEnum.label('Sunday')).toBe(locales.Sunday);
     expect(weekEnum.label(6)).toBe(locales.Saturday);
@@ -23,13 +23,13 @@ export function addEnumValuesTestSuite(
     expect(weekEnum.label(7)).toBeUndefined();
   });
 
-  test('[key] should be able to get enum key by value', () => {
+  test('enums.key should be able to get enum key by value', () => {
     expect(weekEnum.key(0)).toBe('Sunday');
     expect(weekEnum.key(6)).toBe('Saturday');
     expect(weekEnum.key(7)).toBeUndefined();
   });
 
-  test('[has] should be able to check enum item exist or not', () => {
+  test('enums.has should be able to check enum item exist or not', () => {
     expect(weekEnum.has(0)).toBe(true);
     expect(weekEnum.has('Sunday')).toBe(true);
     expect(weekEnum.has(6)).toBe(true);
@@ -37,7 +37,7 @@ export function addEnumValuesTestSuite(
     expect(weekEnum.has(7)).toBe(false);
   });
 
-  test('[options] should be able to generate select options', () => {
+  test('enums.toSelect should generate an object array for AntDesign Select', () => {
     expect(getOptionsData(weekEnum.toSelect())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
     expect(getOptionsData(weekEnum.toSelect({}))).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
 
@@ -75,12 +75,9 @@ export function addEnumValuesTestSuite(
       ...customOptionWithoutKey,
       key: customOptionWithoutKey.value,
     });
-
-    // options is deprecated, should be same as toSelect
-    expect(weekEnum.options()).toEqual(weekEnum.toSelect());
   });
 
-  test('[valuesEnum] should be able to generate enum type for AntDesignPro', () => {
+  test('enums.toValueMap should generate an object array for AntDesignPro', () => {
     expect(weekEnum.toValueMap()).toEqual(
       Object.values(localizeConfigData(StandardWeekConfig)).reduce(
         (acc, { value, label }) => {
@@ -90,33 +87,27 @@ export function addEnumValuesTestSuite(
         {} as Record<number, { text: string }>
       )
     );
-    // valuesEnum is deprecated, should be same as toValueMap
-    expect(weekEnum.valuesEnum()).toEqual(weekEnum.toValueMap());
   });
 
-  test('[menus] should be able to generate data for AntDesign Menu', () => {
-    expect(Array.from(weekEnum.toMenu())).toEqual(
+  test('enums.toMenu should generate an object array for AntDesign Menu', () => {
+    expect(weekEnum.toMenu()).toEqual(
       Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
         key: value,
         label: label,
       }))
     );
-    // menus is deprecated, should be same as toMenu
-    expect(weekEnum.menus()).toEqual(weekEnum.toMenu());
   });
 
-  test('[filters] should be able to generate filter items for AntDesign Table', () => {
-    expect(Array.from(weekEnum.toFilter())).toEqual(
+  test('enums.toFilter should generate an object array for AntDesign Table', () => {
+    expect(weekEnum.toFilter()).toEqual(
       Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
         text: label,
         value,
       }))
     );
-    // filters is deprecated, should be same as toFilter
-    expect(weekEnum.filters()).toEqual(weekEnum.toFilter());
   });
 
-  test('[raw] should be able to return the raw object used to initialize the enums', () => {
+  test('enums.raw should return the raw object used to initialize the Enum', () => {
     const WeekConfig = StandardWeekConfig;
     expect(weekEnum.raw()).toEqual(WeekConfig);
     expect(weekEnum.raw(0)).toEqual(WeekConfig.Sunday);
@@ -137,15 +128,15 @@ export function addEnumValuesTestSuite(
     expect(week.items[Symbol.for('[EnumItems]')]).toBe(true);
   });
 
-  test('[valueType] should throw error when valueType accessor is called at runtime', () => {
+  test('enums.valueType should throw error when called at runtime', () => {
     expect(() => weekEnum.valueType).toThrow();
   });
 
-  test('[keyType] should throw error when keyType accessor is called at runtime', () => {
+  test('enums.keyType should throw error when called at runtime', () => {
     expect(() => weekEnum.keyType).toThrow();
   });
 
-  test('[rawType] should throw error when rawType accessor is called at runtime', () => {
+  test('enums.rawType should throw error when called at runtime', () => {
     expect(() => weekEnum.rawType).toThrow();
   });
 }
