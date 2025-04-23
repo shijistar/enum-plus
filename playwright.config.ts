@@ -1,8 +1,11 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
-  testDir: './test-browser/specs',
+  testDir: './e2e/specs',
   testMatch: '**/*.spec.ts',
+  outputDir: './e2e/test-results',
+  globalSetup: require.resolve('./e2e/global.setup.ts'),
+  globalTeardown: require.resolve('./e2e/global.teardown.ts'),
   use: {
     headless: true,
   },
@@ -33,7 +36,7 @@ const config: PlaywrightTestConfig = {
     },
   ],
   webServer: {
-    command: 'npx http-server ./test-browser/fixtures -p 7080',
+    command: 'npx http-server ./e2e/fixtures -p 7080',
     port: 7080,
     reuseExistingServer: !process.env.CI,
   },

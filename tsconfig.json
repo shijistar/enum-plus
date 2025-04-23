@@ -27,6 +27,6 @@
       "@enum-plus/*": ["./src/*"]
     }
   },
-  "include": ["src", "plugins", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
+  "include": ["src", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
   "exclude": ["node_modules", "es", "lib"]
 }

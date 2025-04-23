@@ -48,6 +48,15 @@ export class EnumCollectionClass<
   readonly items!: EnumValuesArray<T, K, V>;
   readonly keys!: K[];
 
+  [Symbol.toStringTag] = 'EnumCollection';
+  [Symbol.hasInstance] = function (this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
+    // intentionally use == to support both number and string format value
+    return this.items.some(
+      // eslint-disable-next-line eqeqeq
+      (i) => instance == i.value || instance === i.key
+    );
+  };
+
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
@@ -75,19 +84,6 @@ export class EnumCollectionClass<
     );
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[Object.keys(init).some((k) => k === 'items') ? ITEMS : 'items'] = items;
-
-    // Override some system methods
-    // @ts-expect-error: because override Object.toString method for better type display
-    this[Symbol.toStringTag] = 'EnumCollection';
-    // Override the `instanceof` operator rule
-    // @ts-expect-error: because override the instanceof operator
-    this[Symbol.hasInstance] = (instance: unknown): boolean => {
-      // intentionally use == to support both number and string format value
-      return this.items.some(
-        // eslint-disable-next-line eqeqeq
-        (i) => instance == i.value || instance === i.key
-      );
-    };
 
     Object.freeze(this);
     Object.freeze(this.items);

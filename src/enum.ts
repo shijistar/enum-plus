@@ -1,6 +1,5 @@
 import type { EnumExtension } from 'enum-plus-extend';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
-import './extension.d.ts';
 import type {
   EnumInit,
   EnumInitOptions,

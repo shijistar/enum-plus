@@ -25,15 +25,46 @@ export class EnumItemClass<
 
   /** Original initialization object */
   readonly raw: T;
+  /** This property is used to customize the default string description of an object. */
+  [Symbol.toStringTag] = 'EnumItem';
+  /**
+   * Auto convert to a correct primitive type. This method is called when the object is used in a
+   * context that requires a primitive value.
+   *
+   * The priority of this method is higher than both `valueOf` and `toString` methods.
+   *
+   * @param hint 'number' | 'string' | 'default'
+   *
+   * @returns V | string
+   */
+  [Symbol.toPrimitive] = function (this: EnumItemClass<T, K, V>, hint: 'number' | 'string' | 'default'): V | string {
+    if (hint === 'number') {
+      // for cases like Number(value) or +value
+      return this.valueOf();
+    } else if (hint === 'string') {
+      // for cases like String(value), `${value}`
+      return this.toString();
+    }
+    // for cases like '' + value, value == 1
+    return this.valueOf();
+  };
 
-  #localize: NonNullable<EnumItemOptions['localize']>;
-  #localizedProxy = new Proxy(this, {
+  private _options: EnumItemOptions | undefined;
+  // should use function here to avoid closure. this is important for the e2e test cases.
+  private _localize(content: string | undefined) {
+    const localize = this._options?.localize ?? Enum.localize;
+    if (typeof localize === 'function') {
+      return localize(content);
+    }
+    return content;
+  }
+  private readonlyPropMsg = (name: string) =>
+    `Cannot modify property "${name}" on EnumItem. EnumItem instances are readonly and should not be mutated.`;
+  private _localizedProxy = new Proxy(this, {
     get: (target, prop) => {
       const origin = target[prop as keyof typeof this];
       if (prop === 'label') {
         return target.toString();
-      } else if (typeof origin === 'function') {
-        return origin.bind(target);
       }
       return origin;
     },
@@ -41,27 +72,21 @@ export class EnumItemClass<
     set: (_, prop) => {
       /* istanbul ignore if */
       if (!process.env.JEST_WORKER_ID) {
-        console.warn(
-          `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
-        );
+        console.warn(this.readonlyPropMsg(String(prop)));
       }
       return true;
     },
     defineProperty: (_, prop) => {
       /* istanbul ignore if */
       if (!process.env.JEST_WORKER_ID) {
-        console.warn(
-          `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
-        );
+        console.warn(this.readonlyPropMsg(String(prop)));
       }
       return true;
     },
     deleteProperty: (_, prop) => {
       /* istanbul ignore if */
       if (!process.env.JEST_WORKER_ID) {
-        console.warn(
-          `Cannot modify property "${String(prop)}" on EnumItem. EnumItem instances are readonly and should not be mutated.`
-        );
+        console.warn(this.readonlyPropMsg(String(prop)));
       }
       return true;
     },
@@ -88,40 +113,20 @@ export class EnumItemClass<
     this.value = value;
     this.label = label;
     this.raw = raw;
-    this.#localize = (content: string | undefined) => {
-      const localize = options?.localize ?? Enum.localize;
-      if (typeof localize === 'function') {
-        return localize(content);
-      }
-      return content;
-    };
-
-    // Override some system methods
-    // @ts-expect-error: because override Object.toString method to display type more friendly
-    this[Symbol.toStringTag] = 'EnumItem';
-    // @ts-expect-error: because override Object.toPrimitive method to return enum value
-    this[Symbol.toPrimitive] = (hint: 'number' | 'string' | 'default'): V | string => {
-      if (hint === 'number') {
-        // for cases like Number(value) or +value
-        return this.valueOf();
-      } else if (hint === 'string') {
-        // for cases like String(value), `${value}`
-        return this.toString();
-      }
-      // for cases like '' + value, value == 1
-      return this.valueOf();
-    };
+    this._options = options;
     // Object.freeze(this);
   }
   readonly() {
-    return this.#localizedProxy;
+    return this._localizedProxy;
   }
+  // The priority of the toString method is lower than the valueOf method
   toString() {
-    return this.#localize(this.label) ?? this.label;
+    return this._localize(this.label) ?? this.label;
   }
   toLocaleString() {
     return this.toString();
   }
+  // The priority of the valueOf method is lower than Symbol.toPrimitive method
   valueOf() {
     return this.value;
   }
