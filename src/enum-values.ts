@@ -24,11 +24,9 @@ import { ENUM_ITEMS } from './utils';
  *
  * @template T Type of the initialization data of the enum collection
  *
- * @class EnumValuesArray
+ * @class EnumItemsArray
  *
  * @extends {EnumItemClass<T, K, V>[]}
- *
- * @export
  *
  * @implements {IEnumValues<T, K, V>}
  */
@@ -40,29 +38,8 @@ export class EnumItemsArray<
   extends Array<EnumItemClass<T[K], K, V>>
   implements IEnumItems<T, K, V>
 {
-  #raw: T;
-  #localize: NonNullable<EnumItemOptions['localize']>;
-  #optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = { firstOption: false };
-
-  /**
-   * Instantiate an enum items array
-   *
-   * @memberof EnumValuesArray
-   *
-   * @param {T} raw Original initialization data object
-   * @param {...EnumItemClass<T[K], K, V>[]} items Enum item instance array
-   */
-  constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
-    super(...items);
-    this.#raw = raw;
-    this.#localize = (content: string | undefined) => {
-      const localize = options?.localize ?? Enum.localize;
-      if (typeof localize === 'function') {
-        return localize(content);
-      }
-      return content;
-    };
-  }
+  private _raw: T;
+  private _options: EnumItemOptions | undefined;
   /**
    * **EN:** A boolean value indicates that this is an enum items array.
    *
@@ -70,8 +47,22 @@ export class EnumItemsArray<
    */
   readonly [ENUM_ITEMS] = true;
 
+  /**
+   * Instantiate an enum items array
+   *
+   * @memberof EnumItemsArray
+   *
+   * @param {T} raw Original initialization data object
+   * @param {...EnumItemClass<T[K], K, V>[]} items Enum item instance array
+   */
+  constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
+    super(...items);
+    this._raw = raw;
+    this._options = options;
+  }
+
   label(keyOrValue?: string | number): string | undefined {
-    //  First find by value, then find by key
+    // First find by value, then find by key
     return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue))?.label;
   }
 
@@ -86,27 +77,26 @@ export class EnumItemsArray<
   toSelect(): EnumItemOptionData<K, V>[];
   toSelect(config?: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   toSelect<FK = never, FV = never>(
-    config?: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
+    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   toSelect<FK = never, FV = never>(
-    config: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = this
-      .#optionsConfigDefaults
+    config: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = {}
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    const { firstOption = this.#optionsConfigDefaults.firstOption } = config;
+    const { firstOption = false } = config;
     if (firstOption) {
       if (firstOption === true) {
-        // 默认选项
+        // the first option
         const value = ('firstOptionValue' in config ? config.firstOptionValue : undefined) ?? ('' as V);
         const label =
           ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ??
           ('enum-plus.options.all' as BuiltInLocaleKeys);
-        return [{ key: '' as K, value, label: this.#localize(label) as string }, ...this];
+        return [{ key: '' as K, value, label: this._localize(label) as string }, ...this];
       } else {
         return [
           {
             ...firstOption,
             key: firstOption.key ?? (firstOption.value as unknown as K),
-            label: this.#localize(firstOption.label) as string,
+            label: this._localize(firstOption.label) as string,
           },
           ...this,
         ];
@@ -118,10 +108,9 @@ export class EnumItemsArray<
 
   toValueMap() {
     const itemsMap = {} as ValueMap<V>;
-    for (let i = 0; i < this.length; i++) {
-      const { value, label } = this[i];
-      itemsMap[value as keyof typeof itemsMap] = { text: label };
-    }
+    this.forEach((item) => {
+      itemsMap[item.value as keyof typeof itemsMap] = { text: item.label };
+    });
     return itemsMap;
   }
 
@@ -136,16 +125,16 @@ export class EnumItemsArray<
   raw(): T;
   // eslint-disable-next-line @typescript-eslint/ban-types
   raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
-    keyOrValue: IK
+    keyOrValue: IK | undefined
   ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
   raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
     if (value == null) {
       // Return the original initialization object
-      return this.#raw;
+      return this._raw;
     } else {
-      if (Object.keys(this.#raw).some((k) => k === (value as string))) {
+      if (Object.keys(this._raw).some((k) => k === (value as string))) {
         // Find by key
-        return this.#raw[value as K];
+        return this._raw[value as K];
       }
       // Find by value
       const itemByValue = this.find((i) => i.value === value);
@@ -159,22 +148,28 @@ export class EnumItemsArray<
 
   /** Stub method, only for typing usages, not for runtime calling */
   get valueType(): V {
-    throw new Error(
-      'The valueType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.valueType'
-    );
+    throw new Error(this._runtimeError('valueType'));
   }
+
   /** Stub method, only for typing usages, not for runtime calling */
   get keyType(): K {
-    throw new Error(
-      'The keyType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.keyType'
-    );
+    throw new Error(this._runtimeError('keyType'));
   }
 
   /** Stub method, only for typing usages, not for runtime calling */
   get rawType(): T[K] {
-    throw new Error(
-      'The rawType property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the `typeof` operator in the ts type, for example: typeof Week.rawType'
-    );
+    throw new Error(this._runtimeError('rawType'));
+  }
+
+  private _runtimeError(name: string) {
+    return `The ${name} property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the typeof operator in the ts type, for example: typeof Week.${name}`;
+  }
+  _localize(content: string | undefined) {
+    const localize = this._options?.localize ?? Enum.localize;
+    if (typeof localize === 'function') {
+      return localize(content);
+    }
+    return content;
   }
 }
 

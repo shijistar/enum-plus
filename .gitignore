@@ -5,10 +5,9 @@ umd
 tslib
 node_modules
 npm-debug.log
-test-browser/fixtures/es-modern-bundle.js
-test-browser/fixtures/es-legacy-bundle.js
+e2e/fixtures/scripts
+e2e/test-results
 coverage/
-test-results
 run
 .DS_Store
 .cache

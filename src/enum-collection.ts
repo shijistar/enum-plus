@@ -53,6 +53,13 @@ export class EnumCollectionClass<
    * **CN:** 布尔值，表示这是一个枚举集合实例
    */
   readonly [ENUM_COLLECTION] = true;
+  readonly [Symbol.hasInstance] = function (this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
+    // intentionally use == to support both number and string format value
+    return this.items.some(
+      // eslint-disable-next-line eqeqeq
+      (i) => instance == i.value || instance === i.key
+    );
+  };
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
@@ -81,16 +88,6 @@ export class EnumCollectionClass<
     );
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[Object.keys(init).some((k) => k === 'items') ? ITEMS : 'items'] = items;
-
-    // Override the `instanceof` operator rule
-    // @ts-expect-error: because override the instanceof operator
-    this[Symbol.hasInstance] = (instance: unknown): boolean => {
-      // intentionally use == to support both number and string format value
-      return this.items.some(
-        // eslint-disable-next-line eqeqeq
-        (i) => instance == i.value || instance === i.key
-      );
-    };
 
     Object.freeze(this);
     Object.freeze(this.items);
@@ -136,7 +133,7 @@ export class EnumCollectionClass<
   raw(): T;
   // eslint-disable-next-line @typescript-eslint/ban-types
   raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
-    keyOrValue: IK
+    keyOrValue: IK | undefined
   ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
   raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
     if (value != null) {

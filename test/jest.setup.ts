@@ -1,3 +1,13 @@
-import { setLang } from './data/week-config';
+import { defaultLocalize, Enum } from '@enum-plus';
+import { getLocales, setLang } from './data/week-config';
 
-setLang('en-US');
+beforeAll(() => {
+  setLang('en-US', Enum, getLocales, defaultLocalize);
+  jest.spyOn(console, 'warn').mockImplementation(() => {
+    // Mock console.warn to suppress warnings during tests
+  });
+});
+
+afterAll(() => {
+  jest.clearAllMocks();
+});
