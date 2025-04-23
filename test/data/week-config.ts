@@ -1,4 +1,4 @@
-import { type BuiltInLocaleKeys, defaultLocalize, Enum } from '@enum-plus';
+import type { BuiltInLocaleKeys, defaultLocalize as defaultLocalizeType, Enum as EnumType } from '@enum-plus';
 
 export const localeEN = {
   'enum-plus.options.all': 'All',
@@ -46,19 +46,31 @@ export const noLocale = {
   LastDay: 'date.lastDay',
 } as const;
 
-export let locales: typeof localeEN | typeof localeCN | typeof noLocale = localeEN;
+export let locales: typeof localeEN | typeof localeCN | typeof noLocale = noLocale;
 
-export let lang: 'en-US' | 'zh-CN' | undefined = 'en-US';
-export let sillyLocalize = genSillyLocalizer(lang);
+export let lang: 'en-US' | 'zh-CN' | undefined = undefined;
 
-function getLocales(language: typeof lang) {
-  return language === 'zh-CN' ? localeCN : language ? localeEN : noLocale;
+export function getLocales(language: typeof lang) {
+  return language === 'zh-CN' ? getLocales.localeCN : language ? getLocales.localeEN : noLocale;
 }
-export const setLang = (value: typeof lang | undefined) => {
+getLocales.localeCN = localeCN;
+getLocales.localeEN = localeEN;
+
+type getLocalesType = typeof getLocales;
+export const setLang = (
+  value: typeof lang | undefined,
+  Enum: typeof EnumType,
+  getLocales: getLocalesType,
+  defaultLocalize: typeof defaultLocalizeType
+) => {
   lang = value;
   locales = getLocales(value);
-  sillyLocalize = genSillyLocalizer(value);
-  Enum.localize = sillyLocalize;
+  Enum.localize = genSillyLocalizer(value, getLocales, defaultLocalize);
+};
+export const clearLang = (Enum: typeof EnumType) => {
+  lang = undefined;
+  locales = noLocale;
+  Enum.localize = undefined!;
 };
 
 export const StandardWeekConfig = {
@@ -149,16 +161,22 @@ export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce(
   {} as { [key in TKey]: { label: TConfig[key]['label'] } }
 );
 
-export function genSillyLocalizer(language: typeof lang) {
+export function genSillyLocalizer(
+  language: typeof lang,
+  getLocales: getLocalesType,
+  defaultLocalize: typeof defaultLocalizeType
+) {
   if (!language) return defaultLocalize;
-  const locales = getLocales(language);
-  return function sillyLocalize(
+
+  // should use function here to avoid closure. this is important for the e2e test cases.
+  function sillyLocalize(
     content:
       | BuiltInLocaleKeys
       | (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label']
       | NonNullable<string>
       | undefined
   ): typeof content {
+    const locales = sillyLocalize.locales;
     switch (content) {
       case 'enum-plus.options.all':
         return locales['enum-plus.options.all'] as typeof content;
@@ -189,22 +207,26 @@ export function genSillyLocalizer(language: typeof lang) {
       default:
         return content;
     }
-  };
+  }
+  sillyLocalize.locales = getLocales(language);
+  return sillyLocalize;
 }
 
-export function localizeConfigData(config: typeof StandardWeekConfig) {
-  if (sillyLocalize) {
-    return Object.keys(config).reduce(
-      (acc, key) => {
-        // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
-        acc[key as keyof typeof config] = {
-          ...config[key as keyof typeof config],
-          label: sillyLocalize?.(config[key as keyof typeof config].label),
-        };
-        return acc;
-      },
-      {} as typeof config
-    );
-  }
-  return config;
+export function localizeConfigData(
+  config: typeof StandardWeekConfig,
+  getLocales: getLocalesType,
+  defaultLocalize: typeof defaultLocalizeType
+) {
+  const sillyLocalize = genSillyLocalizer(lang, getLocales, defaultLocalize);
+  return Object.keys(config).reduce(
+    (acc, key) => {
+      // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
+      acc[key as keyof typeof config] = {
+        ...config[key as keyof typeof config],
+        label: sillyLocalize?.(config[key as keyof typeof config].label),
+      };
+      return acc;
+    },
+    {} as typeof config
+  );
 }

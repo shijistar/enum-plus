@@ -10,7 +10,7 @@ _UNRELEASED_
 
 ### Features
 
-- 🔥 add `Enum.install` method which introduces a new plugin system. The plugin system allows you to add new methods or properties to all enums. While similar to `Enum.extends`, the plugin system enables features to be packaged as `shareable` plugins, making it more flexible and widely applicable.
+- 🔥 Introduces the new plugin system. Plugins are registered using `Enum.install`. The plugin system allows you to add new methods or properties to all enums. While similar to `Enum.extends`, the plugin system enables features to be packaged as `shareable` plugins, making it more flexible and widely applicable.
 - 🔥 introduce an official plugin `enum-plus-plugin` that provides a collection of highly shareable plugins.
   - These plugins are designed to work in all scenarios and environments (including browser and Node.js), without introducing dependencies on third-party frameworks, component libraries, or platforms.
   - If you have a good idea that might be specific to a certain framework or platform rather than universally applicable, we recommend creating a new plugin project (e.g., `enum-plus-plugin-xxx`). We are happy to see that, and hope that you submit a PR to `enum-plus-plugin` to link your project back.
