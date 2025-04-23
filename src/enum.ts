@@ -3,7 +3,6 @@ import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemClass } from './enum-item';
 import './extension.d.ts';
 import { localizer } from './localize';
-import type { LocalizeInterface } from './localize-interface';
 import type {
   ArrayToMap,
   EnumInit,
@@ -12,6 +11,7 @@ import type {
   EnumValue,
   IEnumItems,
   LabelOnlyEnumItemInit,
+  LocalizeInterface,
   ValueTypeFromSingleInit,
 } from './types';
 import type { ITEMS, KEYS } from './utils';
@@ -195,9 +195,6 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
-  // enumExtensions = obj !== undefined ? obj : {};
-  // Object.setPrototypeOf(EnumExtensionClass.prototype, enumExtensions);
-
   if (obj) {
     Object.assign(EnumExtensionClass.prototype, obj);
   }

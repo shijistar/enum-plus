@@ -1,10 +1,14 @@
-import type { EnumItemInit, EnumItemOptionData, EnumValue } from '@enum-plus';
+import type { EnumItemOptionData, EnumValue } from '@enum-plus';
 import type { EnumItemClass } from '@enum-plus/enum-item';
-import type { StandardEnumItemInit } from '@enum-plus/types';
+import type { EnumInit, EnumKey, IEnumValues, StandardEnumItemInit, ValueTypeFromSingleInit } from '@enum-plus/types';
 
-export function toPlainEnums<T extends EnumItemInit<EnumValue>>(
+export function toPlainEnums<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  enums: EnumItemClass<any>[],
+  enums: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>,
   fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label']
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
   return Array.from(enums).map((item) => {

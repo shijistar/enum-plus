@@ -1,4 +1,7 @@
+import type { EnumLocaleExtends } from 'enum-plus-extend';
 import type { LocalizeInterface } from './localize-interface';
+
+export type { BuiltInLocaleKeys } from 'enum-plus-extend';
 
 export * from './localize-interface';
 /**
