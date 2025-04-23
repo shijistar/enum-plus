@@ -1,6 +1,5 @@
 import type { EnumLocaleExtends } from 'enum-plus-extend';
 import type { EnumItemClass } from './enum-item';
-import './extension.d.ts';
 import type { ITEMS, KEYS } from './utils';
 
 export type { BuiltInLocaleKeys } from 'enum-plus-extend';
@@ -282,7 +281,7 @@ export interface IEnumItems<
    */
   // eslint-disable-next-line @typescript-eslint/ban-types
   raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
-    keyOrValue: IK
+    keyOrValue: IK | undefined
   ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
 
   /**
