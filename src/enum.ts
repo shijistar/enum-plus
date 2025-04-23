@@ -1,6 +1,5 @@
 import type { EnumExtension } from 'enum-plus-extend';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
-import './extension.d.ts';
 import type {
   ArrayToMap,
   EnumInit,
@@ -101,9 +100,6 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
-  // enumExtensions = obj !== undefined ? obj : {};
-  // Object.setPrototypeOf(EnumExtensionClass.prototype, enumExtensions);
-
   if (obj) {
     Object.assign(EnumExtensionClass.prototype, obj);
   }
