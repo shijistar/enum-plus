@@ -12,7 +12,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/test/**/*.{spec,test}.{ts,tsx}'],
-  setupFiles: ['./test/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/test/jest.setup.ts'],
   collectCoverage: true,
   coverageThreshold: {
     global: {

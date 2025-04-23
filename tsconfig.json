@@ -7,7 +7,6 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2016", "DOM"],
     "sourceMap": true,
-    "sourceRoot": ".",
     "jsx": "react-jsx",
     "strict": true,
     "skipLibCheck": true,
@@ -27,6 +26,6 @@
       "@enum-plus/*": ["./src/*"]
     }
   },
-  "include": ["src", "plugins", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
-  "exclude": ["node_modules", "es", "lib"]
+  "include": ["src", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
+  "exclude": ["node_modules", "es", "es-legacy", "lib", "tslib"]
 }
