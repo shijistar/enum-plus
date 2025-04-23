@@ -1,4 +1,4 @@
-import { type BuiltInLocaleKeys, defaultLocalize, Enum } from '@enum-plus';
+import type { BuiltInLocaleKeys, defaultLocalize as defaultLocalizeType, Enum as EnumType } from '@enum-plus';
 
 export const localeEN = {
   'enum-plus.options.all': 'All',
@@ -46,16 +46,18 @@ export const noLocale = {
 export let locales: typeof localeEN | typeof localeCN | typeof noLocale = localeEN;
 
 export let lang: 'en-US' | 'zh-CN' | undefined = 'en-US';
-export let sillyLocalize = genSillyLocalizer(lang);
 
 function getLocales(language: typeof lang) {
   return language === 'zh-CN' ? localeCN : language ? localeEN : noLocale;
 }
-export const setLang = (value: typeof lang | undefined) => {
+export const setLang = (
+  value: typeof lang | undefined,
+  Enum: typeof EnumType,
+  defaultLocalize: typeof defaultLocalizeType
+) => {
   lang = value;
   locales = getLocales(value);
-  sillyLocalize = genSillyLocalizer(value);
-  Enum.localize = sillyLocalize;
+  Enum.localize = genSillyLocalizer(value, defaultLocalize);
 };
 
 export const StandardWeekConfig = {
@@ -146,7 +148,7 @@ export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce(
   {} as { [key in TKey]: { label: TConfig[key]['label'] } }
 );
 
-export function genSillyLocalizer(language: typeof lang) {
+export function genSillyLocalizer(language: typeof lang, defaultLocalize: typeof defaultLocalizeType) {
   if (!language) return defaultLocalize;
   const locales = getLocales(language);
   return function sillyLocalize(
@@ -188,19 +190,17 @@ export function genSillyLocalizer(language: typeof lang) {
   };
 }
 
-export function localizeConfigData(config: typeof StandardWeekConfig) {
-  if (sillyLocalize) {
-    return Object.keys(config).reduce(
-      (acc, key) => {
-        // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
-        acc[key as keyof typeof config] = {
-          ...config[key as keyof typeof config],
-          label: sillyLocalize?.(config[key as keyof typeof config].label),
-        };
-        return acc;
-      },
-      {} as typeof config
-    );
-  }
-  return config;
+export function localizeConfigData(config: typeof StandardWeekConfig, defaultLocalize: typeof defaultLocalizeType) {
+  const sillyLocalize = genSillyLocalizer(lang, defaultLocalize);
+  return Object.keys(config).reduce(
+    (acc, key) => {
+      // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
+      acc[key as keyof typeof config] = {
+        ...config[key as keyof typeof config],
+        label: sillyLocalize?.(config[key as keyof typeof config].label),
+      };
+      return acc;
+    },
+    {} as typeof config
+  );
 }

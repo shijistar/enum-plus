@@ -1,6 +1,5 @@
 import type { EnumLocaleExtends } from 'enum-plus-extend';
 import type { EnumItemClass } from './enum-item';
-import './extension.d.ts';
 import type { ITEMS, KEYS } from './utils';
 
 export type { BuiltInLocaleKeys } from 'enum-plus-extend';

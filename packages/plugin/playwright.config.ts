@@ -1,7 +1,7 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
-  testDir: './test-browser/specs',
+  testDir: './e2er/specs',
   testMatch: '**/*.spec.ts',
   use: {
     headless: true,
@@ -33,7 +33,7 @@ const config: PlaywrightTestConfig = {
     },
   ],
   webServer: {
-    command: 'npx http-server ./test-browser/fixtures -p 7081',
+    command: 'npx http-server ./e2e/fixtures -p 7081',
     port: 7081,
     reuseExistingServer: !process.env.CI,
   },
