@@ -7,3 +7,4 @@ public
 coverage
 .DS_Store
 .vscode
+*.md
