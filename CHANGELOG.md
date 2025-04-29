@@ -14,6 +14,7 @@ _UNRELEASED_
 - 🔥 introduce an official plugin `enum-plus-plugin` that provides a collection of highly shareable plugins.
   - These plugins are designed to work in all scenarios and environments (including browser and Node.js), without introducing dependencies on third-party frameworks, component libraries, or platforms.
   - If you have a good idea that might be specific to a certain framework or platform rather than universally applicable, we recommend creating a new plugin project (e.g., `enum-plus-plugin-xxx`). We are happy to see that, and hope that you submit a PR to `enum-plus-plugin` to link your project back.
+- ✨ Includes the `UMD` module format in this release, which allows you to use `enum-plus` in a browser environment without the need for a module bundler. This is particularly useful for quick prototyping or when working with legacy codebases that do not support modern module systems. You can find them in the `umd` directory of the package. They can also be downloaded in [github release](https://github.com/shijistar/enum-plus/releases) assets.
 
 ### Breaking Changes
 
@@ -127,10 +128,6 @@ _UNRELEASED_
 ### Features
 
 - ✨ Enhance the type inference of the `raw` method. When the input value matches a specific enum item, it only returns the raw object of that enum item instead of returning the raw objects of all enum items.
-
-### Bug Fixes
-
-- 🐞 The output `lib` directory structure is incorrect. This will break legacy Node.js applications using the `CommonJS` module spec, while modern Node.js applications using the `NodeNext` module spec remain unaffected. This issue was introduced in `v2.2.7`. For node.js applications, it's strongly recommended to upgrade.
 
 ## 2.2.9
 
