@@ -73,6 +73,27 @@ Or using yarn:
 yarn add enum-plus
 ```
 
+**Install in a browser**:
+
+- The specific version:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
+```
+
+- The latest version:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+```
+
+⬇️ **Download**:
+
+- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz) (~2kB gzipped)
+- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (Full package with sourcemap)
+
+> You can also download them in [github release](https://github.com/shijistar/enum-plus/releases) assets
+
 ## Enum Initialization
 
 This section shows the various ways to initialize enums using the `Enum` function. Understanding these different initialization formats allows you to choose the most convenient approach for your specific use case.
