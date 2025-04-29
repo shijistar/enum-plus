@@ -77,7 +77,7 @@ yarn add enum-plus
 - The specific version:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
 ```
 
 - The latest version:
@@ -89,9 +89,9 @@ yarn add enum-plus
 ⬇️ **Download**:
 
 - [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz) (~2kB gzipped)
-- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (including sourcemap)
+- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (Full package with sourcemap)
 
-> You can also download them in github release assets
+> You can also download them in [github release](https://github.com/shijistar/enum-plus/releases) assets
 
 ## Enum Initialization
 

@@ -77,7 +77,7 @@ yarn add enum-plus
 - 特定版本:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
 ```
 
 - 最新版本:
@@ -89,9 +89,9 @@ yarn add enum-plus
 ⬇️ **下载文件**:
 
 - [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz) (~2kB gzipped)
-- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (including sourcemap)
+- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (完整包，包含 sourcemap)
 
-> 你也可以去 Github 发布中下载这些文件
+> 你也可以去 [Github 发布](https://github.com/shijistar/enum-plus/releases) 中下载这些文件
 
 ## 枚举定义
 
