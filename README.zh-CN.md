@@ -83,6 +83,27 @@ bun add enum-plus
 yarn add enum-plus
 ```
 
+**在浏览器中使用**:
+
+- 特定版本:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
+```
+
+- 最新版本:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+```
+
+⬇️ **下载文件**:
+
+- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz) (~2kB gzipped)
+- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (完整包，包含 sourcemap)
+
+> 你也可以去 [Github 发布](https://github.com/shijistar/enum-plus/releases) 中下载这些文件
+
 ## 枚举定义
 
 本节展示了使用 `Enum` 函数初始化枚举的多种方式，你可以根据不同的使用场景选择最合适的方法
