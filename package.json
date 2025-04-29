@@ -75,6 +75,7 @@
     "lib",
     "es",
     "es-legacy",
+    "umd",
     "LICENSE",
     "CHANGELOG.md",
     "README.md",
