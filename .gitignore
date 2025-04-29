@@ -1,6 +1,7 @@
 lib
 es
 es-legacy
+umd
 tslib
 node_modules
 npm-debug.log

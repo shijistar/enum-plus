@@ -16,6 +16,7 @@ export default (api: IApi) => {
       if (memo.esm) {
         memo.esm.output = 'es-legacy';
       }
+      delete memo.umd;
       memo.targets = {
         ie: 11,
       };

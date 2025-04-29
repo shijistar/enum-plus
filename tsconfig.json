@@ -26,6 +26,6 @@
       "@enum-plus/*": ["./src/*"]
     }
   },
-  "include": ["./src", "./plugins", "./test", "./test-browser", "./playwright.config.ts", "./global.d.ts"],
+  "include": ["src", "plugins", "scripts", "test", "test-browser", "playwright.config.ts", "global.d.ts"],
   "exclude": ["node_modules", "es", "lib"]
 }

@@ -19,8 +19,104 @@ jobs:
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm run build
-      - run: npm publish --ignore-scripts --access=public
+      - name: Install dependencies
+        run: npm ci
+      - name: Build package
+        run: npm run build
+
+      - name: Gzip umd files
+        run: |
+          cp -r umd/ umd-zip/
+          mv umd-zip/enum-plus.min.js umd-zip/enum-plus.umd.min.js
+          gzip -9 umd-zip/enum-plus.umd.min.js
+          cp -r umd/ umd-zip-full/
+          cd umd-zip-full
+          tar -cvf ../enum-plus.umd.tar.gz *
+          cd ..
+
+      - name: Add Assets to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            umd-zip/enum-plus.umd.min.js.gz
+            enum-plus.umd.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Replace download url to the releasing version
+        uses: ./.github/actions/replace-url
+        with:
+          version: ${{ github.event.release.tag_name }}
+
+      - name: Request the latest version of enum-plus
+        id: get_latest_version_before_publish
+        run: |
+          LATEST_VERSION=$(npm view enum-plus version)
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Publish a prerelease version to npm
+        run: npm publish --tag beta --ignore-scripts --access=public
+        if: github.event.release.prerelease
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Publish a regular version to npm
+        run: npm publish --ignore-scripts --access=public
+        if: github.event.release.prerelease == false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - uses: madhead/semver-utils@latest
+        id: compare_versions
+        with:
+          version: ${{ github.event.release.tag_name }}
+          compare-to: ${{ steps.get_latest_version_before_publish.outputs.LATEST_VERSION }}
+
+      - name: Add npm dist-tag for "next"
+        if: github.event.release.prerelease
+        run: |
+          if [ "${{ steps.compare_versions.outputs.comparison-result }}" = ">" ]; then
+            npm dist-tag add enum-plus@${{ github.event.release.tag_name }} next --access=public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Remove npm dist-tag for "next"
+        if: github.event.release.prerelease == false
+        run: |
+          if [ "${{ steps.compare_versions.outputs.comparison-result }}" = ">" ]; then
+            npm dist-tag rm enum-plus next --access=public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Request the latest version of enum-plus
+        id: get_latest_version_after_publish
+        run: |
+          LATEST_VERSION=$(npm view enum-plus version)
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Prepare local master branch
+        if: github.event.release.prerelease == false
+        run: |
+          git add .
+          git reset --hard
+          git checkout -b master
+          git fetch
+          git branch -u origin/master
+          git pull origin master
+
+      - name: Replace download url to the NPM latest version
+        if: github.event.release.prerelease == false
+        uses: ./.github/actions/replace-url
+        with:
+          version: ${{ steps.get_latest_version_after_publish.outputs.LATEST_VERSION }}
+
+      - name: Commit and push changes
+        if: github.event.release.prerelease == false
+        run: |
+          if [ -n "$(git diff -- README.zh-CN.md README.md)" ]; then
+            git config --local user.name "${{ vars.COMMIT_USER }}"
+            git config --local user.email "${{ vars.COMMIT_EMAIL }}"
+            git commit -am "docs: update download url for release ${{ github.event.release.tag_name }}"
+            git push origin master
+          fi

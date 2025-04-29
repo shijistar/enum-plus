@@ -1,5 +1,5 @@
-const { rollup } = require('rollup');
-const resolve = require('@rollup/plugin-node-resolve');
+import resolve from '@rollup/plugin-node-resolve';
+import { rollup } from 'rollup';
 
 async function build() {
   // Bundle modern browsers

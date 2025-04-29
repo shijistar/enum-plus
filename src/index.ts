@@ -26,6 +26,8 @@ declare global {
    *
    * **CN:** 枚举的全局扩展，可以用来添加全局扩展方法
    */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: TS2428: All declarations of 'EnumExtension' must have identical type parameters
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface EnumExtension<
     T extends EnumInit<K, V>,
