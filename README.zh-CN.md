@@ -18,7 +18,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E)
 
-⬇️ &nbsp;&nbsp; [简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [用法](#用法) | [本地化](#本地化) | [全局扩展](#全局扩展) | [兼容性](#兼容性) | [常见问题](#常见问题) &nbsp;&nbsp; ⬇️
+⬇️ &nbsp;&nbsp; [简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [用法](#用法) | [本地化](#本地化) | [全局扩展](#全局扩展) | [兼容性](#兼容性) | [常见问题](#常见问题) | [贡献](#贡献) &nbsp;&nbsp; ⬇️
 
 ## 简介
 
