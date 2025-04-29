@@ -993,3 +993,11 @@ Enum.extends({
 
 // <Select options={WeekEnum.items} filterOption={WeekEnum.filterOption} />;
 ```
+
+## 贡献
+
+如果你想为这个项目做出贡献，请遵循仓库中的 [CONTRIBUTING](CONTRIBUTING.md) 指南。 欢迎提交问题、拉取请求或改进建议。我们非常感谢你的贡献！
+
+如果你发现安全问题，请遵循 [安全策略](SECURITY.md) 来负责任地报告。
+
+如果你觉得这个项目有用，请考虑在 GitHub 上给它一个星标 ⭐️。这有助于其他人发现这个项目，并鼓励我们继续开发。
