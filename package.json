@@ -94,6 +94,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.15.3",
     "cross-env": "^7.0.3",
+    "esbuild": "^0.25.0",
     "father": "^4.5.2",
     "jest": "^29.7.0",
     "npm-run-all2": "^7.0.2",
@@ -109,5 +110,8 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "overrides": {
+    "esbuild": "^0.25.0"
   }
 }
