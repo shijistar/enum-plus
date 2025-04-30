@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="./public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -29,7 +29,7 @@ With the extended display text capability, enum items can be used to generate dr
 What other exciting features are there? Please continue to explore! Or you can check out this usage video first.
 
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/usage-screenshot.gif" width="500" alt="usage video" />
+  <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
 </p>
 
 ## Features
@@ -418,7 +418,7 @@ const Week = Enum({
 Week.Monday; // Hover over Monday
 ```
 
-![jsdoc](https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/jsdoc-en.png)
+![jsdoc](./public/jsdoc-en.png)
 
 You can see that this hover functionality reveals both documentation and enum values simultaneously, without leaving your current position in the code.
 

@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="./public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -29,7 +29,7 @@
 还有哪些令人兴奋的特性呢？请继续探索吧！或者不妨先看下这个使用视频。
 
 <p align="center">
-   <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/usage-screenshot.gif" width="500" alt="usage video" />
+   <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
 </p>
 
 ## 特性
@@ -416,7 +416,7 @@ const Week = Enum({
 Week.Monday; // 将光标悬浮在 Monday 上
 ```
 
-![jsdoc](https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/jsdoc-chs.png)
+![jsdoc](./public/jsdoc-chs.png)
 
 可以看到，不但提示了枚举项的释义，还有枚举项的值，无需跳转离开当前光标位置，在阅读代码时非常方便
 
