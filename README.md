@@ -13,10 +13,10 @@
 </p>
 <br/>
 
-[![npm version](https://img.shields.io/npm/v/enum-plus.svg?color=red)](https://www.npmjs.com/package/enum-plus)
-[![npm bundle size](https://img.shields.io/bundlephobia/minzip/enum-plus)](https://bundlephobia.com/result?p=enum-plus)
-[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg)](https://www.npmjs.com/package/enum-plus)
-![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E)
+[![npm version](https://img.shields.io/npm/v/enum-plus.svg?color=red&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/enum-plus?cacheSeconds=86400)](https://bundlephobia.com/result?p=enum-plus)
+[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
+![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E&cacheSeconds=86400)
 
 ⬇️ &nbsp;&nbsp; [Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Localization](#localization) | [Extensibility](#extensibility) | [Q&A](#qa) &nbsp;&nbsp; ⬇️
 
