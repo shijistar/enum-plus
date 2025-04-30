@@ -1,7 +1,11 @@
-import { writeFileSync } from 'fs';
-import pkg from '../package.json';
-import tsconfig from '../tsconfig.json';
-import libTsconfig from '../tsconfig.lib.json';
+/*----------------------------------------------------------------------------*/
+/* WARNING: THIS FILE MUST BE MAINTAINED AS JAVASCRIPT (NOT TYPESCRIPT),       */
+/*          AND REMAIN COMPATIBLE WITH NODE.JS V13                            */
+/*----------------------------------------------------------------------------*/
+const { writeFileSync } = require('fs');
+const pkg = require('../package.json');
+const tsconfig = require('../tsconfig.json');
+const libTsconfig = require('../tsconfig.lib.json');
 
 const versionFile = process.argv[2];
 // eslint-disable-next-line @typescript-eslint/no-var-requires

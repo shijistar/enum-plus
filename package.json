@@ -83,8 +83,8 @@
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
     "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
     "prepare": "husky",
-    "prepare-legacy-node13": "tsx ./scripts/prepare-legacy.ts node13",
-    "prepare-legacy-node15": "tsx ./scripts/prepare-legacy.ts node15"
+    "prepare-legacy-node13": "node ./scripts/prepare-legacy.js node13",
+    "prepare-legacy-node15": "node ./scripts/prepare-legacy.js node15"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
