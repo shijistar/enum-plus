@@ -1,5 +1,3 @@
-import { setLang } from '../test/data/week-config';
-
 // Extend global assertions
 // expect.extend({
 //   toBeValidEnum(received) {
@@ -14,11 +12,11 @@ import { setLang } from '../test/data/week-config';
 // Set up global helper functions
 global.createWeekEnum = (values) => {
   // Test helper function implementation
-  const { Enum } = window.EnumPlus;
+  const { Enum } = globalThis.EnumPlus;
   return Enum(values);
 };
 
 // Set up environment before all tests
 global.beforeAll = async () => {
-  setLang('en-US', window.EnumPlus.Enum, window.EnumPlus.defaultLocalize);
+  globalThis.WeekConfig.setLang('en-US', globalThis.EnumPlus.Enum, globalThis.EnumPlus.defaultLocalize);
 };

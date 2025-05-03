@@ -1,5 +1,6 @@
 import type * as EnumPlusNamespace from '@enum-plus';
 import type * as WeekConfigNamespace from '../data/week-config';
+import type * as WeekDataNamespace from '../data/week-data';
 import type { TestFramework } from './config';
 import type { MakeMatchers } from './playwright-types';
 
@@ -27,6 +28,7 @@ abstract class TestAdapterBase {
 export interface PrepareContext {
   EnumPlus: typeof EnumPlusNamespace;
   WeekConfig: typeof WeekConfigNamespace;
+  WeekData: typeof WeekDataNamespace;
   [key: string]: unknown;
 }
 export default TestAdapterBase;

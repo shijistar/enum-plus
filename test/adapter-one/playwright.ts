@@ -21,11 +21,12 @@ export class PlaywrightAdapter extends TestAdapterBase {
       const resultStr = await page.evaluate((argsStr) => {
         const EnumPlus = window.EnumPlus;
         const WeekConfig = window.WeekConfig;
+        const WeekData = window.WeekData;
         const { serializeJavascript: serialize, deserializeJavascript: deserialize } = window.SerializeJavascript;
 
         const args = deserialize(argsStr) as { prepareFn: typeof prepare };
         const { prepareFn, ...rest } = args;
-        const prepareResult = prepareFn({ EnumPlus, WeekConfig, ...rest });
+        const prepareResult = prepareFn({ EnumPlus, WeekConfig, WeekData, ...rest });
         // console.log('prepareResult');
         // console.log(prepareResult);
         const serializeResult = serialize(prepareResult as object);

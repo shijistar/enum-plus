@@ -11,7 +11,10 @@ export function serializeJavascript(obj: object) {
   // console.log('serializeJavascript', fullObj, Object.keys(fullObj.weekEnum ?? {}));
   return JSON.stringify(fullObj, (key, value) => {
     if (typeof value === 'function') {
-      let funcStr = value.toString();
+      let funcStr: string = value.toString();
+      if (funcStr.includes('{ [native code] }')) {
+        return undefined;
+      }
       if (
         !funcStr.startsWith('function') &&
         !funcStr.startsWith('async function') &&
@@ -57,7 +60,7 @@ export function deserializeJavascript(str: string, closure?: Record<string, unkn
 
 /** Get full object with prototype properties. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getFullObjectWithPrototype<T = any>(obj: T): T {
+function getFullObjectWithPrototype<T = any>(obj: T, paths: any[] = []): T {
   // console.log('getFullObjectWithPrototype', obj, Object.prototype.toString.call(obj));
   const typeName = Object.prototype.toString.call(obj);
   if (
@@ -66,19 +69,28 @@ function getFullObjectWithPrototype<T = any>(obj: T): T {
     typeName === '[object EnumCollection]' ||
     typeName === '[object EnumItem]'
   ) {
+    if (paths.includes(obj)) {
+      return undefined as T;
+    }
     const result = (Array.isArray(obj) ? [] : {}) as T;
-    for (const key in obj) {
-      // console.log(`> ${key}`);
-      // console.log(obj[key]);
-      const child = getFullObjectWithPrototype(obj[key]);
-      if (key.match(/^\d+$/)) {
-        const numberKey = parseInt(key, 10);
-        if (numberKey >= 0) {
-          (result as unknown[])[numberKey] = child;
+    for (const key of Object.keys(obj as object)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (result as any)[key] = getFullObjectWithPrototype((obj as any)[key], [...paths, obj]);
+    }
+    let prototype = Object.getPrototypeOf(obj);
+    while (prototype !== null) {
+      const descriptors = Object.getOwnPropertyDescriptors(prototype);
+      for (const [key] of Object.entries(descriptors)) {
+        if (!(key in (result as object))) {
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (result as any)[key] = (prototype as any)[key];
+          } catch (error) {
+            // console.error(error);
+          }
         }
-      } else {
-        (result as Record<string, unknown>)[key] = child;
       }
+      prototype = Object.getPrototypeOf(prototype);
     }
     return result;
   } else {
