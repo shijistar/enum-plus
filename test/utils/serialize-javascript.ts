@@ -1,3 +1,5 @@
+import type { EnumItemClass } from '@enum-plus/enum-item';
+
 /**
  * Serialize JavaScript object to string, support functions. Should including all fields of both
  * object and prototype.
@@ -8,6 +10,7 @@
  */
 export function serializeJavascript(obj: object) {
   const fullObj = getFullObjectWithPrototype(obj);
+  console.log('fullObj', fullObj);
   // console.log('serializeJavascript', fullObj, Object.keys(fullObj.weekEnum ?? {}));
   return JSON.stringify(fullObj, (key, value) => {
     if (typeof value === 'function') {
@@ -18,7 +21,10 @@ export function serializeJavascript(obj: object) {
       if (
         !funcStr.startsWith('function') &&
         !funcStr.startsWith('async function') &&
-        !funcStr.replace(/\s/g, '').match(/^\(.*\)=>/)
+        !funcStr.startsWith('class') &&
+        !funcStr.startsWith('function*') &&
+        !funcStr.startsWith('async function*') &&
+        !funcStr.replace(/\s/g, '').match(/^\(?[^)]+\)?=>/)
       ) {
         funcStr = `function ${value}`;
       }
@@ -50,7 +56,23 @@ export function deserializeJavascript(str: string, closure?: Record<string, unkn
     .replace(/\\n/g, '\n');
   // console.log('deserializeJavascript', str, code);
   const closureCode = closure ? `const { ${Object.keys(closure ?? {}).join(', ')} } = context || {};` : '';
-  const content = `${closureCode} return (\n${code}\n)`;
+  const content = `${closureCode}
+const result = (\n${code}\n);
+const tryMergeItems = (obj, paths=[]) => {
+  if(obj && !paths.includes(obj)) {
+    if (obj.items && obj._itemsExtends) {
+      Object.assign(obj.items, obj._itemsExtends);
+      delete obj._itemsExtends;
+    }
+    else {
+      for (const key of Object.keys(obj)) {
+        tryMergeItems(obj[key], [obj]);
+      }
+    }
+  }
+};
+tryMergeItems(result);
+return result;`;
   console.log(
     'deserializeJavascript',
     `new Function('context', \`${content.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\`)()`
@@ -60,31 +82,66 @@ export function deserializeJavascript(str: string, closure?: Record<string, unkn
 
 /** Get full object with prototype properties. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getFullObjectWithPrototype<T = any>(obj: T, paths: any[] = []): T {
+function getFullObjectWithPrototype(obj: any, paths: any[] = []): any {
   // console.log('getFullObjectWithPrototype', obj, Object.prototype.toString.call(obj));
   const typeName = Object.prototype.toString.call(obj);
-  if (
+  if (typeName === '[object EnumItem]') {
+    const enumItem = obj as EnumItemClass<string, string, string>;
+    return {
+      key: enumItem.key,
+      label: enumItem.label,
+      value: enumItem.value,
+      raw: enumItem.raw,
+      valueOf() {
+        return this.value;
+      },
+      toString() {
+        return this.label;
+      },
+      toLocaleString() {
+        return this.label;
+      },
+    } as EnumItemClass<string, string, string>;
+  } else if (
     typeName === '[object Object]' ||
     typeName === '[object Array]' ||
-    typeName === '[object EnumCollection]' ||
-    typeName === '[object EnumItem]'
+    typeName === '[object EnumCollection]'
   ) {
     if (paths.includes(obj)) {
-      return undefined as T;
+      return undefined;
     }
-    const result = (Array.isArray(obj) ? [] : {}) as T;
+    const ignoredKeys = ['constructor'].filter(Boolean);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = Array.isArray(obj) ? [] : {};
     for (const key of Object.keys(obj as object)) {
+      result[key] = getFullObjectWithPrototype(obj[key], [...paths, obj]);
+    }
+    if (typeName === '[object EnumCollection]') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (result as any)[key] = getFullObjectWithPrototype((obj as any)[key], [...paths, obj]);
+      const itemsExtends: any = {};
+      Object.keys(obj.items).forEach((key) => {
+        if (!key.match(/^\d+$/)) {
+          itemsExtends[key] = obj.items[key];
+        }
+      });
+      const proto = Object.getPrototypeOf(obj.items);
+      const protoKeys = Object.getOwnPropertyNames(proto);
+      for (const key of protoKeys) {
+        try {
+          itemsExtends[key] = proto[key];
+        } catch (error) {
+          // console.error(error);
+        }
+      }
+      result._itemsExtends = itemsExtends;
     }
     let prototype = Object.getPrototypeOf(obj);
-    while (prototype !== null) {
-      const descriptors = Object.getOwnPropertyDescriptors(prototype);
-      for (const [key] of Object.entries(descriptors)) {
-        if (!(key in (result as object))) {
+    while (prototype !== null && prototype !== Object.prototype && prototype !== Array.prototype) {
+      const protoKeys = Object.getOwnPropertyNames(prototype);
+      for (const key of protoKeys) {
+        if (!Object.keys(result as object).includes(key) && !ignoredKeys.includes(key)) {
           try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (result as any)[key] = (prototype as any)[key];
+            result[key] = prototype[key];
           } catch (error) {
             // console.error(error);
           }

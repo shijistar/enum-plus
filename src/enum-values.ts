@@ -38,9 +38,9 @@ export class EnumValuesArray<
   extends Array<EnumItemClass<T[K], K, V>>
   implements IEnumValues<T, K, V>
 {
-  #raw: T;
-  #localize: NonNullable<EnumItemOptions['localize']>;
-  #optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = { firstOption: false };
+  private _raw: T;
+  private _localize: NonNullable<EnumItemOptions['localize']>;
+  private _optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = { firstOption: false };
 
   /**
    * Instantiate an enum items array
@@ -52,8 +52,8 @@ export class EnumValuesArray<
    */
   constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
     super(...items);
-    this.#raw = raw;
-    this.#localize = (content: string | undefined) => {
+    this._raw = raw;
+    this._localize = (content: string | undefined) => {
       const localize = options?.localize ?? Enum.localize;
       if (typeof localize === 'function') {
         return localize(content);
@@ -82,9 +82,9 @@ export class EnumValuesArray<
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   toSelect<FK = never, FV = never>(
     config: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = this
-      .#optionsConfigDefaults
+      ._optionsConfigDefaults
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    const { firstOption = this.#optionsConfigDefaults.firstOption } = config;
+    const { firstOption = this._optionsConfigDefaults.firstOption } = config;
     if (firstOption) {
       if (firstOption === true) {
         // 默认选项
@@ -92,13 +92,13 @@ export class EnumValuesArray<
         const label =
           ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ??
           ('enum-plus.options.all' as BuiltInLocaleKeys);
-        return [{ key: '' as K, value, label: this.#localize(label) as string }, ...this];
+        return [{ key: '' as K, value, label: this._localize(label) as string }, ...this];
       } else {
         return [
           {
             ...firstOption,
             key: firstOption.key ?? (firstOption.value as unknown as K),
-            label: this.#localize(firstOption.label) as string,
+            label: this._localize(firstOption.label) as string,
           },
           ...this,
         ];
@@ -131,11 +131,11 @@ export class EnumValuesArray<
   raw(value?: V | K): T | T[K] | undefined {
     if (value == null) {
       // Return the original initialization object
-      return this.#raw;
+      return this._raw;
     } else {
-      if (Object.keys(this.#raw).some((k) => k === (value as string))) {
+      if (Object.keys(this._raw).some((k) => k === (value as string))) {
         // Find by key
-        return this.#raw[value as K];
+        return this._raw[value as K];
       }
       // Find by value
       const itemByValue = this.find((i) => i.value === value);
