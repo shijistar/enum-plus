@@ -40,7 +40,7 @@ export class EnumValuesArray<
 {
   private _raw: T;
   private _localize: NonNullable<EnumItemOptions['localize']>;
-  private _optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = { firstOption: false };
+  private _options: EnumItemOptions | undefined;
 
   /**
    * Instantiate an enum items array
@@ -53,8 +53,10 @@ export class EnumValuesArray<
   constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
     super(...items);
     this._raw = raw;
-    this._localize = (content: string | undefined) => {
-      const localize = options?.localize ?? Enum.localize;
+    this._options = options;
+    // should use function here to avoid closure. this is important for the e2e test cases.
+    this._localize = function (content: string | undefined) {
+      const localize = this._options?.localize ?? Enum.localize;
       if (typeof localize === 'function') {
         return localize(content);
       }
@@ -78,16 +80,15 @@ export class EnumValuesArray<
   toSelect(): EnumItemOptionData<K, V>[];
   toSelect(config?: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   toSelect<FK = never, FV = never>(
-    config?: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
+    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
   toSelect<FK = never, FV = never>(
-    config: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = this
-      ._optionsConfigDefaults
+    config: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = {}
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    const { firstOption = this._optionsConfigDefaults.firstOption } = config;
+    const { firstOption = false } = config;
     if (firstOption) {
       if (firstOption === true) {
-        // 默认选项
+        // the first option
         const value = ('firstOptionValue' in config ? config.firstOptionValue : undefined) ?? ('' as V);
         const label =
           ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ??
@@ -110,10 +111,9 @@ export class EnumValuesArray<
 
   toValueMap() {
     const itemsMap = {} as ValueMap<V>;
-    for (let i = 0; i < this.length; i++) {
-      const { value, label } = this[i];
-      itemsMap[value as keyof typeof itemsMap] = { text: label };
-    }
+    this.forEach((item) => {
+      itemsMap[item.value as keyof typeof itemsMap] = { text: item.label };
+    });
     return itemsMap;
   }
 

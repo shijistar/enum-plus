@@ -1,7 +1,7 @@
-import type { Enum as EnumType } from '@enum-plus';
+import { defaultLocalize, type Enum as EnumType } from '@enum-plus';
 import type { IEnumValues } from '@enum-plus/types';
 import type TestAdapterBase from 'test/adapter-one/base';
-import { locales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
+import { getLocales, locales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import { getOptionsData, pickArray } from '../utils';
 
@@ -87,7 +87,7 @@ export function addEnumValuesTestSuite(
 
   adapter.test('enums.toValueMap should generate an object array for AntDesignPro', () => {
     adapter.expect(weekEnum.toValueMap()).toEqual(
-      Object.values(localizeConfigData(StandardWeekConfig)).reduce(
+      Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).reduce(
         (acc, { value, label }) => {
           acc[value] = { text: label };
           return acc;
@@ -99,7 +99,7 @@ export function addEnumValuesTestSuite(
 
   adapter.test('enums.toMenu should generate an object array for AntDesign Menu', () => {
     adapter.expect(weekEnum.toMenu()).toEqual(
-      Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
+      Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).map(({ value, label }) => ({
         key: value,
         label: label,
       }))
@@ -108,7 +108,7 @@ export function addEnumValuesTestSuite(
 
   adapter.test('enums.toFilter should generate an object array for AntDesign Table', () => {
     adapter.expect(weekEnum.toFilter()).toEqual(
-      Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
+      Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).map(({ value, label }) => ({
         text: label,
         value,
       }))

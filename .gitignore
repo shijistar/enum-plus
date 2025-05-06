@@ -6,8 +6,8 @@ tslib
 node_modules
 npm-debug.log
 e2e/fixtures/scripts
+e2e/test-results
 coverage/
-test-results
 run
 .DS_Store
 .cache

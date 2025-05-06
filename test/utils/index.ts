@@ -41,7 +41,7 @@ export function pickArray<T extends Record<string, any>>(
 }
 
 export function getOptionsData<K, V>(options: EnumItemOptionData<K, V>[]) {
-  return options.map(({ value, label }) => ({ value, label }));
+  return Array.from(options).map(({ value, label }) => ({ value, label }));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -10,7 +10,6 @@ import type { EnumItemClass } from '@enum-plus/enum-item';
  */
 export function serializeJavascript(obj: object) {
   const fullObj = getFullObjectWithPrototype(obj);
-  console.log('fullObj', fullObj);
   // console.log('serializeJavascript', fullObj, Object.keys(fullObj.weekEnum ?? {}));
   return JSON.stringify(fullObj, (key, value) => {
     if (typeof value === 'function') {
@@ -28,11 +27,30 @@ export function serializeJavascript(obj: object) {
       ) {
         funcStr = `function ${value}`;
       }
+
+      let contextStr = '';
+      if (Object.keys(value).length > 0) {
+        const context: Record<string, unknown> = {};
+        Object.keys(value).forEach((key) => {
+          if (key !== 'prototype') {
+            context[key] = value[key];
+          }
+        });
+        contextStr = JSON.stringify(context);
+      }
+      if (contextStr) {
+        funcStr = `(function() {
+const func = (${value});
+Object.assign(func, ${contextStr.replace(/"/g, "'")});
+return func;
+})()`;
+      }
       return '$(QS)$(' + funcStr + ')$(QE)$';
     } else if (value instanceof RegExp) {
-      return `$(QS)0$new RegExp(${value.source}, '${value.flags}')$(QE)$`;
-    } else if (value instanceof Date) {
-      return `$(QS)$new Date(${value.getTime()})$(QE)$`;
+      return `$(QS)$new RegExp('${value.source.replace(/\\\\/g, '\\')}', '${value.flags}')$(QE)$`;
+      // } else if (value instanceof Date) { // will never be instanceof Date
+    } else if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {
+      return `$(QS)$new Date('${value}')$(QE)$`;
     } else if (value === null) {
       return '$(QS)$null$(QE)$';
     }
@@ -59,7 +77,7 @@ export function deserializeJavascript(str: string, closure?: Record<string, unkn
   const content = `${closureCode}
 const result = (\n${code}\n);
 const tryMergeItems = (obj, paths=[]) => {
-  if(obj && !paths.includes(obj)) {
+  if (obj && !paths.includes(obj)) {
     if (obj.items && obj._itemsExtends) {
       Object.assign(obj.items, obj._itemsExtends);
       delete obj._itemsExtends;
@@ -75,14 +93,16 @@ tryMergeItems(result);
 return result;`;
   console.log(
     'deserializeJavascript',
-    `new Function('context', \`${content.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\`)()`
+    `new Function('context', \`${content.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\`)(${closure ? 'closure' : ''});`,
+    'closure=',
+    closure
   );
   return new Function('context', content)(closure);
 }
 
 /** Get full object with prototype properties. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getFullObjectWithPrototype(obj: any, paths: any[] = []): any {
+export function getFullObjectWithPrototype(obj: any, paths: any[] = []): any {
   // console.log('getFullObjectWithPrototype', obj, Object.prototype.toString.call(obj));
   const typeName = Object.prototype.toString.call(obj);
   if (typeName === '[object EnumItem]') {
@@ -110,6 +130,7 @@ function getFullObjectWithPrototype(obj: any, paths: any[] = []): any {
     if (paths.includes(obj)) {
       return undefined;
     }
+    // copy own properties
     const ignoredKeys = ['constructor'].filter(Boolean);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = Array.isArray(obj) ? [] : {};
@@ -127,6 +148,7 @@ function getFullObjectWithPrototype(obj: any, paths: any[] = []): any {
       const proto = Object.getPrototypeOf(obj.items);
       const protoKeys = Object.getOwnPropertyNames(proto);
       for (const key of protoKeys) {
+        if (ignoredKeys.includes(key)) continue;
         try {
           itemsExtends[key] = proto[key];
         } catch (error) {
@@ -135,6 +157,8 @@ function getFullObjectWithPrototype(obj: any, paths: any[] = []): any {
       }
       result._itemsExtends = itemsExtends;
     }
+
+    // copy prototype properties
     let prototype = Object.getPrototypeOf(obj);
     while (prototype !== null && prototype !== Object.prototype && prototype !== Array.prototype) {
       const protoKeys = Object.getOwnPropertyNames(prototype);

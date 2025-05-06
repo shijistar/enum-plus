@@ -3,6 +3,9 @@ import type { PlaywrightTestConfig } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   testDir: './e2e/specs',
   testMatch: '**/*.spec.ts',
+  outputDir: './e2e/test-results',
+  globalSetup: require.resolve('./e2e/global.setup.ts'),
+  globalTeardown: require.resolve('./e2e/global.teardown.ts'),
   use: {
     headless: true,
   },

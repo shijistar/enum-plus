@@ -26,6 +26,7 @@ export class EnumItemClass<
   /** Original initialization object */
   readonly raw: T;
 
+  private _options: EnumItemOptions | undefined;
   private _localize: NonNullable<EnumItemOptions['localize']>;
   private _localizedProxy = new Proxy(this, {
     get: (target, prop) => {
@@ -88,8 +89,10 @@ export class EnumItemClass<
     this.value = value;
     this.label = label;
     this.raw = raw;
-    this._localize = (content: string | undefined) => {
-      const localize = options?.localize ?? Enum.localize;
+    this._options = options;
+    // should use function here to avoid closure. this is important for the e2e test cases.
+    this._localize = function (content: string | undefined) {
+      const localize = this._options?.localize ?? Enum.localize;
       if (typeof localize === 'function') {
         return localize(content);
       }

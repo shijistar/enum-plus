@@ -11,10 +11,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should show English by default',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN },
+        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang('en-US', Enum, defaultLocalize);
+        setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum, localeEN, getStandardWeekData };
       },
@@ -28,10 +28,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should show Chinese after changing lang',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN },
+        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang('zh-CN', Enum, defaultLocalize);
+        setLang('zh-CN', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum, localeCN, getStandardWeekData };
       },
@@ -45,10 +45,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should show English after changing back',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN },
+        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang('en-US', Enum, defaultLocalize);
+        setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum, localeEN, getStandardWeekData };
       },
@@ -62,10 +62,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should show original label if no localization found',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale },
+        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang(undefined, Enum, defaultLocalize);
+        setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum, defaultLocalize, noLocale, getStandardWeekData };
       },
@@ -79,10 +79,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should show original label if Enum.localize is explicitly set to undefined ',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale },
+        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang(undefined, Enum, defaultLocalize);
+        setLang(undefined, Enum, getLocales, defaultLocalize);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Enum.localize = undefined as any;
         const weekEnum = Enum(StandardWeekConfig);
@@ -98,11 +98,13 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should respect Enum options over global setting (Chinese over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, genSillyLocalizer },
+        WeekConfig: { StandardWeekConfig, setLang, localeCN, genSillyLocalizer, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang('en-US', Enum, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, { localize: genSillyLocalizer('zh-CN', defaultLocalize) });
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+        });
         return { weekEnum, localeCN, getStandardWeekData };
       },
       ({ weekEnum, localeCN, getStandardWeekData }) => {
@@ -114,10 +116,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should respect Enum options over global setting (undefined over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN },
+        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang('en-US', Enum, defaultLocalize);
+        setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
         return { weekEnum, localeEN, getStandardWeekData };
       },
@@ -130,12 +132,12 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should respect Enum options over global setting (undefined over English), support delayed assign',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN },
+        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang(undefined, Enum, defaultLocalize);
+        setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        setLang('en-US', Enum, defaultLocalize);
+        setLang('en-US', Enum, getLocales, defaultLocalize);
         return { weekEnum, localeEN, getStandardWeekData };
       },
       ({ weekEnum, localeEN, getStandardWeekData }) => {
@@ -147,11 +149,13 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should respect Enum options over global setting (Chinese over undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, genSillyLocalizer },
+        WeekConfig: { StandardWeekConfig, setLang, localeCN, genSillyLocalizer, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang(undefined, Enum, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, { localize: genSillyLocalizer('zh-CN', defaultLocalize) });
+        setLang(undefined, Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+        });
         return { weekEnum, localeCN, getStandardWeekData };
       },
       ({ weekEnum, localeCN, getStandardWeekData }) => {
@@ -163,10 +167,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should respect Enum options over global setting (both undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale },
+        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang(undefined, Enum, defaultLocalize);
+        setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
         return { weekEnum, defaultLocalize, noLocale, getStandardWeekData };
       },
@@ -179,10 +183,10 @@ const testLocalization = (adapter: TestAdapterBase) => {
       'should respect Enum options over global setting (both explicit undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale },
+        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
-        setLang(undefined, Enum, defaultLocalize);
+        setLang(undefined, Enum, getLocales, defaultLocalize);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Enum.localize = undefined as any;
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
@@ -212,13 +216,13 @@ const testLocalization = (adapter: TestAdapterBase) => {
     adapter
       .expect(getOptionsData(weekEnum.toSelect()))
       .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
-    adapter.expect(weekEnum.toMenu()).toEqual(
+    adapter.expect(Array.from(weekEnum.toMenu())).toEqual(
       pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
         key: item.value,
         label: item.label,
       }))
     );
-    adapter.expect(weekEnum.toFilter()).toEqual(
+    adapter.expect(Array.from(weekEnum.toFilter())).toEqual(
       pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
         value: item.value,
         text: item.label,
