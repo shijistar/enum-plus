@@ -354,11 +354,6 @@ const testCreatingEnum = (adapter: TestAdapterBase) => {
           C,
         }
         const noneInitializer = Enum(noneInitializerInit);
-        adapter.expect(toPlainEnums(noneInitializer.items)).toEqual([
-          { value: 0, label: 'A', key: 'A' },
-          { value: 1, label: 'B', key: 'B' },
-          { value: 2, label: 'C', key: 'C' },
-        ]);
 
         enum withDiffInitializerInit {
           A,
@@ -381,15 +376,21 @@ const testCreatingEnum = (adapter: TestAdapterBase) => {
         const withDiffInitializer2 = Enum(withDiffInitializerInit2);
         return {
           firstSeedEnum,
+          noneInitializer,
           withDiffInitializer,
           withDiffInitializer2,
         };
       },
-      ({ firstSeedEnum, withDiffInitializer, withDiffInitializer2 }) => {
+      ({ firstSeedEnum, noneInitializer, withDiffInitializer, withDiffInitializer2 }) => {
         adapter.expect(toPlainEnums(firstSeedEnum.items)).toEqual([
           { value: 1, label: 'A', key: 'A' },
           { value: 2, label: 'B', key: 'B' },
           { value: 3, label: 'C', key: 'C' },
+        ]);
+        adapter.expect(toPlainEnums(noneInitializer.items)).toEqual([
+          { value: 0, label: 'A', key: 'A' },
+          { value: 1, label: 'B', key: 'B' },
+          { value: 2, label: 'C', key: 'C' },
         ]);
         adapter.expect(toPlainEnums(withDiffInitializer.items)).toEqual([
           { value: 0, label: 'A', key: 'A' },

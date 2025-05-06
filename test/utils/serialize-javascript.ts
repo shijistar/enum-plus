@@ -27,6 +27,7 @@ export function serializeJavascript(obj: object) {
       ) {
         funcStr = `function ${value}`;
       }
+      funcStr = funcStr.replace(/"/g, "'");
 
       let contextStr = '';
       if (Object.keys(value).length > 0) {

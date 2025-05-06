@@ -1,4 +1,4 @@
-import TestAdapterBase from './base';
+import TestAdapterBase, { type PrepareContext } from './base';
 
 export class JestAdapter extends TestAdapterBase {
   constructor() {
@@ -8,11 +8,12 @@ export class JestAdapter extends TestAdapterBase {
 
   override test<Data>(
     name: string,
-    prepare: (() => Data) | (() => Promise<Data>),
-    assertion: (data: Data) => void
+    prepare: (context: PrepareContext) => Data,
+    assertion: (data: Data) => void,
+    prepareContext?: Record<string, unknown>
   ): void {
     test(name, () => {
-      const result = prepare();
+      const result = prepare(prepareContext as PrepareContext);
       if (result instanceof Promise) {
         result.then(assertion);
       } else {
