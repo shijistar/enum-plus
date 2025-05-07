@@ -1,4 +1,4 @@
-import { jest } from './adapter-one';
+import { jest } from './engines';
 import testLocalization from './test-suites/localization';
 
 testLocalization(jest);

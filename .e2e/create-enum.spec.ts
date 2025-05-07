@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { playwright } from '../test/adapter-one';
+import { playwright } from '../test/engines';
 import testCreatingEnum from '../test/test-suites/create-enum';
 
 // testCreatingEnum(playwright);

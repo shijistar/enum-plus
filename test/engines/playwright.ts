@@ -2,10 +2,10 @@ import { defaultLocalize, Enum } from '@enum-plus';
 import { expect, test } from '../../e2e/fixtures/EnumTest';
 import { getLocales, setLang } from '../data/week-config';
 import { deserializeJavascript, serializeJavascript } from '../utils/serialize-javascript.js';
-import TestAdapterBase, { type PrepareContext } from './base';
+import TestEngineBase, { type RuntimeContext } from './base';
 import type { MakeMatchers } from './playwright-types';
 
-export class PlaywrightAdapter extends TestAdapterBase {
+export class PlaywrightEngine extends TestEngineBase {
   constructor() {
     super();
     this._type = 'playwright';
@@ -13,7 +13,7 @@ export class PlaywrightAdapter extends TestAdapterBase {
 
   override test<Data = unknown>(
     name: string,
-    prepare: (context: PrepareContext) => Data,
+    prepare: (context: RuntimeContext) => Data,
     assertion: (data: Data) => void,
     prepareContext?: Record<string, unknown>
   ): void {
@@ -23,17 +23,25 @@ export class PlaywrightAdapter extends TestAdapterBase {
         const EnumPlus = window.EnumPlus;
         const WeekConfig = window.WeekConfig;
         const WeekData = window.WeekData;
-        const { serializeJavascript: serialize, deserializeJavascript: deserialize } = window.SerializeJavascript;
-
+        const SerializeJavascript = window.SerializeJavascript;
+        const runtimeContext = {
+          EnumPlus,
+          WeekConfig,
+          WeekData,
+          SerializeJavascript,
+        };
+        const {
+          SerializeJavascript: { serializeJavascript: serialize, deserializeJavascript: deserialize },
+        } = runtimeContext;
         const args = deserialize(contextStr) as { prepareFn: typeof prepare };
         const { prepareFn, ...rest } = args;
-        const prepareResult = prepareFn({ EnumPlus, WeekConfig, WeekData, ...rest });
+        const prepareResult = prepareFn({ ...runtimeContext, ...rest });
         // console.log('prepareResult');
         // console.log(prepareResult);
         // save the current lang to the result
         const serializeResult = serialize({
-          EnumLocalize: EnumPlus.Enum.localize,
-          lang: WeekConfig.lang,
+          EnumLocalize: runtimeContext.EnumPlus.Enum.localize,
+          lang: runtimeContext.WeekConfig.lang,
           ...prepareResult,
         });
         // console.log('serialize result');

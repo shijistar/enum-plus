@@ -1,9 +1,9 @@
 import type { Enum as EnumType, PluginFunc } from '@enum-plus';
-import type TestAdapterBase from 'test/adapter-one/base';
+import type TestEngineBase from '../engines/base';
 
-const testPlugin = (adapter: TestAdapterBase) => {
-  adapter.describe('Enum plugin', () => {
-    adapter.test(
+const testPlugin = (engine: TestEngineBase) => {
+  engine.describe('Enum plugin', () => {
+    engine.test(
       'Should be able to install custom plugin',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, myPlugin }) => {
         const options: PluginOptions = { name: 'enum-plus' };
@@ -12,10 +12,10 @@ const testPlugin = (adapter: TestAdapterBase) => {
         return { weekEnum, options };
       },
       ({ weekEnum, options }) => {
-        adapter.expect(typeof weekEnum.sayHello).toBe('function');
-        adapter.expect(weekEnum.sayHello?.()).toEqual('Hi, enum-plus!');
-        adapter.expect(typeof weekEnum.getOptions).toBe('function');
-        adapter.expect(weekEnum.getOptions?.()).toEqual(options);
+        engine.expect(typeof weekEnum.sayHello).toBe('function');
+        engine.expect(weekEnum.sayHello?.()).toEqual('Hi, enum-plus!');
+        engine.expect(typeof weekEnum.getOptions).toBe('function');
+        engine.expect(weekEnum.getOptions?.()).toEqual(options);
       },
       {
         myPlugin,

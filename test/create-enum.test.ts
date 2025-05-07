@@ -1,4 +1,4 @@
-import { jest } from './adapter-one';
+import { jest } from './engines';
 import testCreatingEnum from './test-suites/create-enum';
 
 testCreatingEnum(jest);

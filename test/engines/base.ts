@@ -1,11 +1,12 @@
 import type * as EnumPlusNamespace from '@enum-plus';
 import type * as WeekConfigNamespace from '../data/week-config';
 import type * as WeekDataNamespace from '../data/week-data';
-import type { TestFramework } from './config';
+import type * as SerializeJavascriptNamespace from '../utils/serialize-javascript.js';
+import type { TestEngine } from './config';
 import type { MakeMatchers } from './playwright-types';
 
-abstract class TestAdapterBase {
-  protected _type?: TestFramework;
+abstract class TestEngineBase {
+  protected _type?: TestEngine;
 
   get type() {
     return this._type;
@@ -13,7 +14,7 @@ abstract class TestAdapterBase {
 
   abstract test<Data = unknown>(
     name: string,
-    prepare: (context: PrepareContext) => Data,
+    prepare: (context: RuntimeContext) => Data,
     assertion: (data: Data) => void,
     prepareContext?: Record<string, unknown>
   ): void;
@@ -25,10 +26,11 @@ abstract class TestAdapterBase {
   abstract describe(name: string, fn: () => void): void;
 }
 
-export interface PrepareContext {
+export interface RuntimeContext {
   EnumPlus: typeof EnumPlusNamespace;
   WeekConfig: typeof WeekConfigNamespace;
   WeekData: typeof WeekDataNamespace;
+  SerializeJavascript: typeof SerializeJavascriptNamespace;
   [key: string]: unknown;
 }
-export default TestAdapterBase;
+export default TestEngineBase;

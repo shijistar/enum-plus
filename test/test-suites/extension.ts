@@ -1,8 +1,8 @@
-import type TestAdapterBase from 'test/adapter-one/base';
+import type TestEngineBase from '../engines/base';
 
-const testExtension = (adapter: TestAdapterBase) => {
-  adapter.describe('Enum extends', () => {
-    adapter.test(
+const testExtension = (engine: TestEngineBase) => {
+  engine.describe('Enum extends', () => {
+    engine.test(
       'Should allow extend new methods',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const extend = {
@@ -18,20 +18,20 @@ const testExtension = (adapter: TestAdapterBase) => {
         return { weekEnum, extend };
       },
       ({ weekEnum, extend }) => {
-        adapter.expect(weekEnum.isWeekend(weekEnum.Monday)).toBe(false);
-        adapter.expect(weekEnum.isWeekend(weekEnum.Friday)).toBe(false);
-        adapter.expect(weekEnum.isWeekend(weekEnum.Saturday)).toBe(true);
-        adapter.expect(weekEnum.isWeekend(weekEnum.Sunday)).toBe(true);
-        adapter.expect(typeof weekEnum.isWeekend).toBe('function');
-        adapter.expect(typeof weekEnum.toMySelect).toBe('function');
-        adapter.expect(weekEnum.isWeekend?.toString()).toBe(extend.isWeekend?.toString());
-        adapter.expect(weekEnum.toMySelect?.toString()).toBe(extend.toMySelect?.toString());
-        adapter
+        engine.expect(weekEnum.isWeekend(weekEnum.Monday)).toBe(false);
+        engine.expect(weekEnum.isWeekend(weekEnum.Friday)).toBe(false);
+        engine.expect(weekEnum.isWeekend(weekEnum.Saturday)).toBe(true);
+        engine.expect(weekEnum.isWeekend(weekEnum.Sunday)).toBe(true);
+        engine.expect(typeof weekEnum.isWeekend).toBe('function');
+        engine.expect(typeof weekEnum.toMySelect).toBe('function');
+        engine.expect(weekEnum.isWeekend?.toString()).toBe(extend.isWeekend?.toString());
+        engine.expect(weekEnum.toMySelect?.toString()).toBe(extend.toMySelect?.toString());
+        engine
           .expect(weekEnum.toMySelect?.())
           .toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
       }
     );
-    adapter.test(
+    engine.test(
       'Should allow clearing global extension',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.extends({
@@ -44,34 +44,34 @@ const testExtension = (adapter: TestAdapterBase) => {
         return { weekEnum };
       },
       ({ weekEnum }) => {
-        adapter.expect(weekEnum.isWeekend).toBeUndefined();
+        engine.expect(weekEnum.isWeekend).toBeUndefined();
       }
     );
-    adapter.test(
+    engine.test(
       'Should allow extends for objects only',
       ({ EnumPlus: { Enum } }) => {
         return { Enum };
       },
       ({ Enum }) => {
-        adapter
+        engine
           .expect(() => {
             // @ts-expect-error: because want to simulate wrong type
             Enum.extends(1);
           })
           .toThrow();
-        adapter
+        engine
           .expect(() => {
             // @ts-expect-error: because want to simulate wrong type
             Enum.extends('string');
           })
           .toThrow();
-        adapter
+        engine
           .expect(() => {
             // @ts-expect-error: because want to simulate wrong type
             Enum.extends(null);
           })
           .toThrow();
-        adapter
+        engine
           .expect(() => {
             // @ts-expect-error: because want to simulate wrong type
             Enum.extends(true);
@@ -80,7 +80,7 @@ const testExtension = (adapter: TestAdapterBase) => {
       }
     );
 
-    adapter.test(
+    engine.test(
       'Should allow extending multiple times',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const firstExtends = {
@@ -100,16 +100,16 @@ const testExtension = (adapter: TestAdapterBase) => {
         return { weekEnumFirst, weekEnumSecond, firstExtends, secondExtends };
       },
       ({ weekEnumFirst, weekEnumSecond, firstExtends, secondExtends }) => {
-        adapter.expect(typeof weekEnumFirst.isWeekend).toBe('function');
-        adapter.expect(weekEnumFirst.isWeekend?.toString()).toBe(firstExtends.isWeekend?.toString());
-        adapter.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Monday)).toBe(false);
-        adapter.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Friday)).toBe(false);
-        adapter.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Saturday)).toBe(true);
-        adapter.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Sunday)).toBe(true);
+        engine.expect(typeof weekEnumFirst.isWeekend).toBe('function');
+        engine.expect(weekEnumFirst.isWeekend?.toString()).toBe(firstExtends.isWeekend?.toString());
+        engine.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Monday)).toBe(false);
+        engine.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Friday)).toBe(false);
+        engine.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Saturday)).toBe(true);
+        engine.expect(weekEnumFirst.isWeekend?.(weekEnumFirst.Sunday)).toBe(true);
 
-        adapter.expect(typeof weekEnumSecond.isWeekend).toBe('function');
-        adapter.expect(weekEnumSecond.toMySelect?.toString()).toBe(secondExtends.toMySelect?.toString());
-        adapter
+        engine.expect(typeof weekEnumSecond.isWeekend).toBe('function');
+        engine.expect(weekEnumSecond.toMySelect?.toString()).toBe(secondExtends.toMySelect?.toString());
+        engine
           .expect(weekEnumSecond.toMySelect?.())
           .toEqual(weekEnumSecond.items.map((item) => ({ value: item.value, title: item.label })));
       }
