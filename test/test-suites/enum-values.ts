@@ -1,3 +1,6 @@
+import { defaultLocalize } from '@enum-plus';
+import { getLocales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
+import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
 import { getOptionsData, pickArray } from '../utils';
 
@@ -53,11 +56,11 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
 
   engine.test(
     'enums.toSelect should generate an object array for AntDesign Select',
-    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales }, WeekData: { getStandardWeekData } }) => {
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum, locales, getStandardWeekData };
+      return { weekEnum, locales };
     },
-    ({ weekEnum, locales, getStandardWeekData }) => {
+    ({ weekEnum, locales }) => {
       engine
         .expect(getOptionsData(weekEnum.toSelect()))
         .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
@@ -104,11 +107,11 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
 
   engine.test(
     'enums.toValueMap should generate an object array for AntDesignPro',
-    ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, getLocales, localizeConfigData } }) => {
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum, StandardWeekConfig, localizeConfigData, getLocales, defaultLocalize };
+      return { weekEnum };
     },
-    ({ weekEnum, StandardWeekConfig, localizeConfigData, getLocales, defaultLocalize }) => {
+    ({ weekEnum }) => {
       engine.expect(weekEnum.toValueMap()).toEqual(
         Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).reduce(
           (acc, { value, label }) => {
@@ -123,11 +126,11 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
 
   engine.test(
     'enums.toMenu should generate an object array for AntDesign Menu',
-    ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, localizeConfigData, getLocales } }) => {
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum, StandardWeekConfig, localizeConfigData, getLocales, defaultLocalize };
+      return { weekEnum };
     },
-    ({ weekEnum, StandardWeekConfig, localizeConfigData, getLocales, defaultLocalize }) => {
+    ({ weekEnum }) => {
       engine.expect(weekEnum.toMenu()).toEqual(
         Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).map(({ value, label }) => ({
           key: value,
@@ -139,11 +142,11 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
 
   engine.test(
     'enums.toFilter should generate an object array for AntDesign Table',
-    ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, getLocales, localizeConfigData } }) => {
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum, getLocales, StandardWeekConfig, defaultLocalize, localizeConfigData };
+      return { weekEnum };
     },
-    ({ weekEnum, getLocales, StandardWeekConfig, defaultLocalize, localizeConfigData }) => {
+    ({ weekEnum }) => {
       engine.expect(weekEnum.toFilter()).toEqual(
         Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).map(({ value, label }) => ({
           text: label,
@@ -177,10 +180,16 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
     'enums.valueType should throw error when called at runtime',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
+      let error: Error | undefined;
+      try {
+        weekEnum.valueType;
+      } catch (e) {
+        error = e as Error;
+      }
+      return { weekEnum, error };
     },
-    ({ weekEnum }) => {
-      engine.expect(() => weekEnum.valueType).toThrow();
+    ({ error }) => {
+      engine.expect(error).toBeDefined();
     }
   );
 
@@ -188,10 +197,16 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
     'enums.keyType should throw error when called at runtime',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
+      let error: Error | undefined;
+      try {
+        weekEnum.keyType;
+      } catch (e) {
+        error = e as Error;
+      }
+      return { weekEnum, error };
     },
-    ({ weekEnum }) => {
-      engine.expect(() => weekEnum.keyType).toThrow();
+    ({ error }) => {
+      engine.expect(error).toBeDefined();
     }
   );
 
@@ -199,10 +214,16 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
     'enums.rawType should throw error when called at runtime',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
+      let error: Error | undefined;
+      try {
+        weekEnum.rawType;
+      } catch (e) {
+        error = e as Error;
+      }
+      return { weekEnum, error };
     },
-    ({ weekEnum }) => {
-      engine.expect(() => weekEnum.rawType).toThrow();
+    ({ error }) => {
+      engine.expect(error).toBeDefined();
     }
   );
 }

@@ -30,23 +30,22 @@ export class PlaywrightEngine extends TestEngineBase {
           WeekData,
           SerializeJavascript,
         };
-        const {
-          SerializeJavascript: { serializeJavascript: serialize, deserializeJavascript: deserialize },
-        } = runtimeContext;
+        console.log('SerializeJavascript', SerializeJavascript);
+        const { serializeJavascript: serialize, deserializeJavascript: deserialize } = SerializeJavascript;
         const args = deserialize(contextStr) as { prepareFn: typeof prepare };
         const { prepareFn, ...rest } = args;
         const prepareResult = prepareFn({ ...runtimeContext, ...rest });
         // console.log('prepareResult');
         // console.log(prepareResult);
         // save the current lang to the result
-        const serializeResult = serialize({
-          EnumLocalize: runtimeContext.EnumPlus.Enum.localize,
-          lang: runtimeContext.WeekConfig.lang,
+        const serializedStr = serialize({
+          EnumLocalize: EnumPlus.Enum.localize,
+          lang: WeekConfig.lang,
           ...prepareResult,
         });
         // console.log('serialize result');
         // console.log(serializeResult);
-        return serializeResult;
+        return serializedStr;
       }, prepareContextStr);
 
       const initialState = deserializeJavascript(resultStr);

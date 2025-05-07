@@ -1,4 +1,14 @@
 import type { EnumInit } from '@enum-plus';
+import {
+  getStandardBooleanData,
+  getStandardDateData,
+  getStandardWeekData,
+  getWeekDataHasKeyEmptyObjectValueNoLabel,
+  getWeekDataHasKeyHasValueNoLabel,
+  getWeekDataHasKeyNoValueHasLabel,
+  getWeekDataHasValueHasLabelNoKey,
+  getWeekDataHasValueNoKeyNoLabel,
+} from '../data/week-data';
 import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils';
 
@@ -6,11 +16,11 @@ const testCreatingEnum = (engine: TestEngineBase) => {
   engine.describe('Create Enum using static init data', () => {
     engine.test(
       'Should be created with standard init data',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales }, WeekData: { getStandardWeekData } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
         const weekEnum = Enum(StandardWeekConfig);
-        return { weekEnum, getStandardWeekData, locales };
+        return { weekEnum, locales };
       },
-      ({ weekEnum, getStandardWeekData, locales }) => {
+      ({ weekEnum, locales }) => {
         engine.expect(weekEnum).toBeDefined();
         engine.expect(weekEnum).not.toBeNull();
         engine.expect(weekEnum?.items?.length).toBe(7);
@@ -20,48 +30,40 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
     engine.test(
       'Should be created with number values',
-      ({ EnumPlus: { Enum }, WeekConfig: { WeekNumberConfig }, WeekData: { getWeekDataHasKeyHasValueNoLabel } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekNumberConfig } }) => {
         const weekEnum = Enum(WeekNumberConfig);
-        return { weekEnum, getWeekDataHasKeyHasValueNoLabel };
+        return { weekEnum };
       },
-      ({ weekEnum, getWeekDataHasKeyHasValueNoLabel }) => {
+      ({ weekEnum }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
       }
     );
 
     engine.test(
       'Should be created with string values',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { WeekStringConfig },
-        WeekData: { getWeekDataHasKeyEmptyObjectValueNoLabel },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekStringConfig } }) => {
         const weekEnum = Enum(WeekStringConfig);
-        return { weekEnum, getWeekDataHasKeyEmptyObjectValueNoLabel };
+        return { weekEnum };
       },
-      ({ weekEnum, getWeekDataHasKeyEmptyObjectValueNoLabel }) => {
+      ({ weekEnum }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
       }
     );
 
     engine.test(
       'Should be created with value-only config',
-      ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig }, WeekData: { getWeekDataHasKeyHasValueNoLabel } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig } }) => {
         const weekEnum = Enum(WeekValueOnlyConfig);
-        return { weekEnum, getWeekDataHasKeyHasValueNoLabel };
+        return { weekEnum };
       },
-      ({ weekEnum, getWeekDataHasKeyHasValueNoLabel }) => {
+      ({ weekEnum }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
       }
     );
 
     engine.test(
       'Should be created with label-only config',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { locales, WeekLabelOnlyConfig },
-        WeekData: { getWeekDataHasKeyEmptyObjectValueNoLabel, getWeekDataHasKeyNoValueHasLabel },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekLabelOnlyConfig } }) => {
         const weekEnum = Enum(WeekLabelOnlyConfig);
         const weekWithEmptyLabel = Enum(
           Object.keys(WeekLabelOnlyConfig).reduce(
@@ -77,17 +79,9 @@ const testCreatingEnum = (engine: TestEngineBase) => {
           weekEnum,
           weekWithEmptyLabel,
           locales,
-          getWeekDataHasKeyNoValueHasLabel,
-          getWeekDataHasKeyEmptyObjectValueNoLabel,
         };
       },
-      ({
-        weekEnum,
-        weekWithEmptyLabel,
-        locales,
-        getWeekDataHasKeyNoValueHasLabel,
-        getWeekDataHasKeyEmptyObjectValueNoLabel,
-      }) => {
+      ({ weekEnum, weekWithEmptyLabel, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyNoValueHasLabel(locales));
         engine.expect(toPlainEnums(weekWithEmptyLabel.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
       }
@@ -95,16 +89,12 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
     engine.test(
       'Should be created with compact config',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { WeekCompactConfig, WeekEmptyConfig },
-        WeekData: { getWeekDataHasKeyEmptyObjectValueNoLabel },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekCompactConfig, WeekEmptyConfig } }) => {
         const weekEnum = Enum(WeekCompactConfig);
         const weekEnum2 = Enum(WeekEmptyConfig);
-        return { weekEnum, weekEnum2, getWeekDataHasKeyEmptyObjectValueNoLabel };
+        return { weekEnum, weekEnum2 };
       },
-      ({ weekEnum, weekEnum2, getWeekDataHasKeyEmptyObjectValueNoLabel }) => {
+      ({ weekEnum, weekEnum2 }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
         engine.expect(toPlainEnums(weekEnum2.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
       }
@@ -112,26 +102,22 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
     engine.test(
       'Should be created with boolean values',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { locales, BooleanStandardConfig },
-        WeekData: { getStandardBooleanData },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { locales, BooleanStandardConfig } }) => {
         const weekEnum = Enum(BooleanStandardConfig);
-        return { weekEnum, locales, getStandardBooleanData };
+        return { weekEnum, locales };
       },
-      ({ weekEnum, locales, getStandardBooleanData }) => {
+      ({ weekEnum, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardBooleanData(locales));
       }
     );
 
     engine.test(
       'Should be created with date values',
-      ({ EnumPlus: { Enum }, WeekConfig: { locales, DateStandardConfig }, WeekData: { getStandardDateData } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { locales, DateStandardConfig } }) => {
         const weekEnum = Enum(DateStandardConfig);
-        return { weekEnum, locales, getStandardDateData };
+        return { weekEnum, locales };
       },
-      ({ weekEnum, locales, getStandardDateData }) => {
+      ({ weekEnum, locales }) => {
         console.log('weekEnum', weekEnum);
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardDateData(locales));
       }
@@ -212,7 +198,7 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
     engine.test(
       'Should be created with standard array',
-      ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekStandardArray }, WeekData: { getStandardWeekData } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekStandardArray } }) => {
         const weekWithDefaultFields = Enum(WeekStandardArray);
         const weekEnum = Enum(WeekStandardArray, {
           getValue: 'value',
@@ -224,9 +210,9 @@ const testCreatingEnum = (engine: TestEngineBase) => {
           getLabel: (item) => item.label,
           getKey: (item) => item.key as 'key',
         });
-        return { weekEnum, weekWithDefaultFields, weekWithFieldFunctions, locales, getStandardWeekData };
+        return { weekEnum, weekWithDefaultFields, weekWithFieldFunctions, locales };
       },
-      ({ weekEnum, weekWithDefaultFields, weekWithFieldFunctions, locales, getStandardWeekData }) => {
+      ({ weekEnum, weekWithDefaultFields, weekWithFieldFunctions, locales }) => {
         engine.expect(toPlainEnums(weekWithDefaultFields.items)).toEqual(getStandardWeekData(locales));
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardWeekData(locales));
         engine.expect(toPlainEnums(weekWithFieldFunctions.items)).toEqual(getStandardWeekData(locales));
@@ -235,11 +221,7 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
     engine.test(
       'Should be created with standard items array, but without providing getKey',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { locales, WeekStandardArray },
-        WeekData: { getStandardWeekData, getWeekDataHasValueHasLabelNoKey },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekStandardArray } }) => {
         const weekEnum = Enum(WeekStandardArray, {
           getValue: 'value',
           getLabel: 'label',
@@ -250,9 +232,9 @@ const testCreatingEnum = (engine: TestEngineBase) => {
           getLabel: 'label',
           getKey: undefined,
         });
-        return { weekEnum, weekWithDefaultKey, locales, getWeekDataHasValueHasLabelNoKey, getStandardWeekData };
+        return { weekEnum, weekWithDefaultKey, locales };
       },
-      ({ weekEnum, weekWithDefaultKey, locales, getWeekDataHasValueHasLabelNoKey, getStandardWeekData }) => {
+      ({ weekEnum, weekWithDefaultKey, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasValueHasLabelNoKey(locales));
         engine.expect(toPlainEnums(weekWithDefaultKey.items)).toEqual(getStandardWeekData(locales));
       }
@@ -260,11 +242,7 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
     engine.test(
       'Should be created with standard items array, but without providing getLabel',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { locales, WeekStandardArray },
-        WeekData: { getStandardWeekData, getWeekDataHasKeyHasValueNoLabel },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekStandardArray } }) => {
         const weekEnum = Enum(WeekStandardArray, {
           getValue: 'value',
           getLabel: '' as 'label',
@@ -278,11 +256,9 @@ const testCreatingEnum = (engine: TestEngineBase) => {
           weekEnum,
           weekWithDefaultLabel,
           locales,
-          getStandardWeekData,
-          getWeekDataHasKeyHasValueNoLabel,
         };
       },
-      ({ weekEnum, weekWithDefaultLabel, locales, getStandardWeekData, getWeekDataHasKeyHasValueNoLabel }) => {
+      ({ weekEnum, weekWithDefaultLabel, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
         engine.expect(toPlainEnums(weekWithDefaultLabel.items)).toEqual(getStandardWeekData(locales));
       }
@@ -290,7 +266,7 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
     engine.test(
       'Should be created with standard items array, but without providing getKey and getLabel',
-      ({ EnumPlus: { Enum }, WeekConfig: { WeekStandardArray }, WeekData: { getWeekDataHasValueNoKeyNoLabel } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekStandardArray } }) => {
         const weekEnum = Enum(WeekStandardArray, {
           getValue: 'value',
           getLabel: '' as 'label',
@@ -301,9 +277,9 @@ const testCreatingEnum = (engine: TestEngineBase) => {
           getLabel: '' as 'label',
           getKey: '' as 'key',
         });
-        return { weekEnum, weekWithNoting, getWeekDataHasValueNoKeyNoLabel };
+        return { weekEnum, weekWithNoting };
       },
-      ({ weekEnum, weekWithNoting, getWeekDataHasValueNoKeyNoLabel }) => {
+      ({ weekEnum, weekWithNoting }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasValueNoKeyNoLabel());
         engine.expect(toPlainEnums(weekWithNoting.items)).toEqual([
           {

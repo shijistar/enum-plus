@@ -48,10 +48,17 @@ return func;
       }
       return '$(QS)$(' + funcStr + ')$(QE)$';
     } else if (value instanceof RegExp) {
-      return `$(QS)$new RegExp('${value.source.replace(/\\\\/g, '\\')}', '${value.flags}')$(QE)$`;
-      // } else if (value instanceof Date) { // will never be instanceof Date
-    } else if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {
+      return `$(QS)$new RegExp('${value.source.replace(/\\\\/g, '\\')}', '${value.flags ?? ''}')$(QE)$`;
+      // } else if (value instanceof Date) { // will never be instanceof Date, test date format instead
+    } else if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {
       return `$(QS)$new Date('${value}')$(QE)$`;
+    } else if (typeof value === 'bigint') {
+      return `$(QS)$BigInt('${value.toString()}')$(QE)$`;
+    } else if (typeof value === 'symbol') {
+      if (Symbol.keyFor(value)) {
+        return `$(QS)$Symbol.for('${Symbol.keyFor(value)}')$(QE)$`;
+      }
+      return `$(QS)$Symbol('${value.description}')$(QE)$`;
     } else if (value === null) {
       return '$(QS)$null$(QE)$';
     }

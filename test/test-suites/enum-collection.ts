@@ -70,9 +70,15 @@ const testEnumCollection = (engine: TestEngineBase) => {
           values: { value: 102, label: 'baz' },
         } as const;
         const strangerEnum = Enum(strangerEnumConfig);
-        return { strangeEnumConfig, strangeEnum, strangerEnum, strangerEnumConfig, KEYS, ITEMS };
+        return {
+          strangeEnumConfig,
+          strangeEnum,
+          strangerEnum,
+          strangerEnumConfig,
+          unserializable: { KEYS: strangerEnum[KEYS], ITEMS: strangerEnum[ITEMS] },
+        };
       },
-      ({ strangeEnumConfig, strangeEnum, strangerEnum, strangerEnumConfig, KEYS, ITEMS }) => {
+      ({ strangeEnumConfig, strangeEnum, strangerEnum, strangerEnumConfig, unserializable: { KEYS, ITEMS } }) => {
         engine.expect(strangeEnum.label).toBe(1);
         engine.expect(strangeEnum.items.label(1)).toBe('label');
         engine.expect(strangeEnum.key).toBe(2);
@@ -98,17 +104,14 @@ const testEnumCollection = (engine: TestEngineBase) => {
 
         engine.expect(strangerEnum.items).toBe(101);
         engine.expect(strangerEnum.values).toBe(102);
-        // @ts-expect-error: because of type missing
-        engine.expect(strangerEnum[KEYS]).toEqual(Object.keys(strangerEnumConfig));
+        engine.expect(KEYS).toEqual(Object.keys(strangerEnumConfig));
         const standardEnumItems = Object.keys(strangerEnumConfig).map((key) => ({
           key,
           value: strangerEnumConfig[key as keyof typeof strangerEnumConfig].value,
           label: strangerEnumConfig[key as keyof typeof strangerEnumConfig].label,
         }));
-        // @ts-expect-error: because of type missing
-        engine.expect(Array.isArray(strangerEnum[ITEMS])).toBeTruthy();
-        // @ts-expect-error: because of type missing
-        engine.expect(toPlainEnums(strangerEnum[ITEMS])).toEqual(standardEnumItems);
+        engine.expect(Array.isArray(ITEMS)).toBeTruthy();
+        engine.expect(toPlainEnums(ITEMS)).toEqual(standardEnumItems);
       }
     );
 
