@@ -25,6 +25,29 @@ export class EnumItemClass<
 
   /** Original initialization object */
   readonly raw: T;
+  /** This property is used to customize the default string description of an object. */
+  [Symbol.toStringTag] = 'EnumItem';
+  /**
+   * Auto convert to a correct primitive type. This method is called when the object is used in a
+   * context that requires a primitive value.
+   *
+   * The priority of this method is higher than both `valueOf` and `toString` methods.
+   *
+   * @param hint 'number' | 'string' | 'default'
+   *
+   * @returns V | string
+   */
+  [Symbol.toPrimitive] = (hint: 'number' | 'string' | 'default'): V | string => {
+    if (hint === 'number') {
+      // for cases like Number(value) or +value
+      return this.valueOf();
+    } else if (hint === 'string') {
+      // for cases like String(value), `${value}`
+      return this.toString();
+    }
+    // for cases like '' + value, value == 1
+    return this.valueOf();
+  };
 
   private _options: EnumItemOptions | undefined;
   private _localize: NonNullable<EnumItemOptions['localize']>;
@@ -98,33 +121,19 @@ export class EnumItemClass<
       }
       return content;
     };
-
-    // Override some system methods
-    // @ts-expect-error: because override Object.toString method to display type more friendly
-    this[Symbol.toStringTag] = 'EnumItem';
-    // @ts-expect-error: because override Object.toPrimitive method to return enum value
-    this[Symbol.toPrimitive] = (hint: 'number' | 'string' | 'default'): V | string => {
-      if (hint === 'number') {
-        // for cases like Number(value) or +value
-        return this.valueOf();
-      } else if (hint === 'string') {
-        // for cases like String(value), `${value}`
-        return this.toString();
-      }
-      // for cases like '' + value, value == 1
-      return this.valueOf();
-    };
     // Object.freeze(this);
   }
   readonly() {
     return this._localizedProxy;
   }
+  // The priority of the toString method is lower than the valueOf method
   toString() {
     return this._localize(this.label) ?? this.label;
   }
   toLocaleString() {
     return this.toString();
   }
+  // The priority of the valueOf method is lower than Symbol.toPrimitive method
   valueOf() {
     return this.value;
   }

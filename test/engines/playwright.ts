@@ -20,17 +20,19 @@ export class PlaywrightEngine extends TestEngineBase {
     const prepareContextStr = serializeJavascript({ ...prepareContext, prepareFn: prepare });
     test(`${name} in modern browsers`, async ({ page }) => {
       const resultStr = await page.evaluate((contextStr) => {
+        const _ = window._;
         const EnumPlus = window.EnumPlus;
         const WeekConfig = window.WeekConfig;
         const WeekData = window.WeekData;
         const SerializeJavascript = window.SerializeJavascript;
         const runtimeContext = {
+          _,
           EnumPlus,
           WeekConfig,
           WeekData,
           SerializeJavascript,
         };
-        console.log('SerializeJavascript', SerializeJavascript);
+        console.log('window', runtimeContext);
         const { serializeJavascript: serialize, deserializeJavascript: deserialize } = SerializeJavascript;
         const args = deserialize(contextStr) as { prepareFn: typeof prepare };
         const { prepareFn, ...rest } = args;
@@ -57,7 +59,9 @@ export class PlaywrightEngine extends TestEngineBase {
       // the Enum object is used to "help" the localize function of EnumItem and EnumValuesArray,
       // because the code is like `const localize = this._options?.localize ?? Enum.localize;`,
       // it seems that Enum is a global variable, but actually it is not, we simulate it as a closure context.
-      const testResult = deserializeJavascript(resultStr, { Enum, ...initialState });
+      const testResult = deserializeJavascript(resultStr, {
+        closure: { Enum, ...initialState },
+      });
       // console.log('deserialize result');
       // console.log(testResult);
       assertion(testResult as Data);

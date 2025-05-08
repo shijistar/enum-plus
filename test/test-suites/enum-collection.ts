@@ -75,10 +75,10 @@ const testEnumCollection = (engine: TestEngineBase) => {
           strangeEnum,
           strangerEnum,
           strangerEnumConfig,
-          unserializable: { KEYS: strangerEnum[KEYS], ITEMS: strangerEnum[ITEMS] },
+          keysUnserializable: { KEYS: strangerEnum[KEYS], ITEMS: strangerEnum[ITEMS] },
         };
       },
-      ({ strangeEnumConfig, strangeEnum, strangerEnum, strangerEnumConfig, unserializable: { KEYS, ITEMS } }) => {
+      ({ strangeEnumConfig, strangeEnum, strangerEnum, strangerEnumConfig, keysUnserializable: { KEYS, ITEMS } }) => {
         engine.expect(strangeEnum.label).toBe(1);
         engine.expect(strangeEnum.items.label(1)).toBe('label');
         engine.expect(strangeEnum.key).toBe(2);
@@ -116,7 +116,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'enums.toString should return a friendly name',
+      'enums.toString should show the type of EnumCollection',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
         return { week };
