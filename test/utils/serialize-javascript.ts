@@ -14,6 +14,7 @@ import { get } from 'lodash-es';
 export function serializeJavascript(obj: any) {
   const patches: Patch[] = [];
   const fullObj = getFullObjectWithPrototype(obj, patches);
+  console.log(fullObj);
   // console.log('serializeJavascript', fullObj);
   const sourceStr = JSON.stringify(fullObj, (key, value) => {
     if (value === null) {
@@ -205,6 +206,8 @@ export function getFullObjectWithPrototype(
       toLocaleString(this: EnumItemClass<string, string, string>) {
         return this.label;
       },
+      [Symbol.toStringTag]: enumItem[Symbol.toStringTag],
+      [Symbol.toPrimitive]: enumItem[Symbol.toPrimitive],
     };
   } else if (
     Array.isArray(source) ||
@@ -230,7 +233,7 @@ export function getFullObjectWithPrototype(
     const ignoredKeys = ['constructor'].filter(Boolean);
     result = Array.isArray(data) ? [] : {};
 
-    for (const key of Object.keys(data)) {
+    for (const key of Object.getOwnPropertyNames(data)) {
       result[key] = getFullObjectWithPrototype(
         data[key],
         patches,
