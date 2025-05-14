@@ -307,10 +307,10 @@ export interface IEnumValues<
    *
    * @param keyOrValue Enum key or value | 枚举key或value
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  raw(keyOrValue: V | K): T[K];
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  raw(value: unknown): T[K] | undefined;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
+    keyOrValue: IK
+  ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
 
   /**
    * **EN:** The data type of all enumeration values
@@ -553,3 +553,24 @@ export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
                   : T extends OmitEnumInit<K> // format: {foo: undefined, bar: undefined}
                     ? K
                     : K; // Unknown format, use key as value
+
+export type FindEnumKeyByValue<T, V extends EnumValue> = {
+  // ValueOnly { foo:1, bar:2 }
+  [K in keyof T]: T[K] extends V
+    ? K
+    : // Standard: { foo:{ value:1 }, bar:{ value:2 } }
+      // @ts-expect-error: because need to force check T[K]['value'], event value field does not exist
+      T[K]['value'] extends V
+      ? K
+      : // LabelOnly: { foo:{ label: 'foo' }, bar:{ label: 'bar' } }
+        object extends T[K]
+        ? K extends V
+          ? K
+          : never
+        : // KeyOnly: { foo: undefined, bar: undefined }
+          undefined extends T[K]
+          ? K extends V
+            ? K
+            : never
+          : never;
+}[keyof T];

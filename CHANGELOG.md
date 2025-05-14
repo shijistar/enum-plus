@@ -2,11 +2,17 @@
 
 # enum-plus Changelog
 
-## Unreleased
+## 2.2.10
+
+2025-5-14
 
 ### Features
 
--
+- ✨ Enhance the type inference of the `raw` method. When the input value matches a specific enum item, it only returns the raw object of that enum item instead of returning the raw objects of all enum items.
+
+### Bug Fixes
+
+- 🐞 The output `lib` directory structure is incorrect. This will break legacy Node.js applications using the `CommonJS` module spec, while modern Node.js applications using the `NodeNext` module spec remain unaffected. This issue was introduced in `v2.2.7`. For node.js applications, it's strongly recommended to upgrade.
 
 ## 2.2.9
 
@@ -14,7 +20,7 @@
 
 ### Features
 
-- 🛠 emit a warning while trying to modify an `EnumItem`
+- 🛠 Emit a warning while trying to modify an `EnumItem`
 
 ### Bug Fixes
 
@@ -26,7 +32,7 @@
 
 ### Bug Fixes
 
-- 🐞 fix `exports` configuration for moduleResolution `ESNext`
+- 🐞 Fix `exports` configuration for moduleResolution `ESNext`
 
 ## 2.2.7
 
@@ -62,7 +68,7 @@
 
 ### Features
 
-- 🛠 supports global type extension for enum localization keys, providing better editor intelligence awareness
+- 🛠 Support global type extension for enum localization keys, providing better editor intelligence awareness
 
 ## 2.2.3
 
@@ -78,14 +84,14 @@
 
 ### Features
 
-- 🛠 change the return type of `Enum.options.getKey`
-- 📖 update docs
+- 🛠 Change the return type of `Enum.options.getKey`
+- 📖 Update docs
 
 ## 2.2.1
 
 2025-2-10
 
-- 📖 update docs
+- 📖 Update docs
 
 ## 2.2.0
 
@@ -93,8 +99,8 @@
 
 ### Features
 
-- 🔥 support initializing Enum with native enums
-- 🔥 adds `items` array, deprecated the _`values`_ array. Reduces package size.
+- 🔥 Support initializing Enum with native enums
+- 🔥 Add `items` array, deprecated the _`values`_ array. Reduces package size.
 
 ## 2.1.1
 
@@ -102,21 +108,21 @@
 
 ### Bug Fixes
 
-- 🐞 fix typing error in `EnumExtension` interface
+- 🐞 Fix typing error in `EnumExtension` interface
 
 ## 2.1.0
 
 2025-2-8
 
-> **Note:** this version has a typing issue, please use `v2.1.1`
+> **Note:** This version has a typing issue, please use `v2.1.1`
 
 ### Features
 
-- 🔥 add `toSelect` method, deprecated the _`options`_ method
-- 🔥 add `toMenu` method, deprecated the _`menus`_ method
-- 🔥 add `toFilter` method, deprecated the _`filters`_ method
-- 🔥 add `toValueMap` method, the _`valuesEnum`_ method
-- 🔥 support global extension, custom methods can be added to Enums
+- 🔥 Add `toSelect` method, deprecated the _`options`_ method
+- 🔥 Add `toMenu` method, deprecated the _`menus`_ method
+- 🔥 Add `toFilter` method, deprecated the _`filters`_ method
+- 🔥 Add `toValueMap` method, the _`valuesEnum`_ method
+- 🔥 Support global extension, custom methods can be added to Enums
 
 ## 2.0.3
 
@@ -124,7 +130,7 @@
 
 ### Features
 
-- 🛠 downgrade EcmaScript version to `ES2015`
+- 🛠 Downgrade EcmaScript version to `ES2015`
 
 ## 2.0.2
 
@@ -132,7 +138,7 @@
 
 ### Features
 
-- 🔥 the `firstOption` of `options` method supports localization
+- 🔥 The `firstOption` of `options` method supports localization
 
 ## 2.0.1
 
@@ -140,35 +146,35 @@
 
 ### Features
 
-- 🔥 support for enum text localization
+- 🔥 Support for enum text localization
   - the `Enum` method now accepts a `localize` option that can be used to localize the enum text
   - you can also set the `Enum.localize` static method to localize all enums in a lower priority
-- 🔥 add `menus` method
+- 🔥 Add `menus` method
 
 ### Breaking Changes
 
-- 💣 all parameters after the first of the `Enum` method has been changed to an `options` object
+- 💣 All parameters after the first of the `Enum` method has been changed to an `options` object
 
 ## 1.0.3
 
 2023-11-14
 
-- 🛠 if an enum is created from array, both the `enum.raw` or `enumItem.raw` methods return the original array item
+- 🛠 Both the `enum.raw` or `enumItem.raw` methods return the original array item, if an enum is created from array,
 
 ## 1.0.2
 
 2023-07-31
 
-- 🆕 added `rawType` accessor
+- 🆕 Add `rawType` accessor
 
 ## 1.0.1
 
 2023-03-09
 
-- 🆕 added a new `filters` method that returns an array of enumerated items that can be passed directly to the `Column.filters` of the AntDesign Table component as a list of filtered items for the column
+- 🆕 Add a new `filters` method that returns an array of enumerated items that can be passed directly to the `Column.filters` of the AntDesign Table component as a list of filtered items for the column
 
 - ## 1.0.0
 
 2022-10-08
 
-- 🆕 the first release of `enum-plus` library
+- 🆕 The first release of `enum-plus` library

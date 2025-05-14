@@ -9,6 +9,7 @@ import type {
   EnumItemOptions,
   EnumKey,
   EnumValue,
+  FindEnumKeyByValue,
   IEnumValues,
   MenuItemOption,
   ObjectFirstOptionConfig,
@@ -157,11 +158,13 @@ export class EnumCollectionClass<
   }
 
   raw(): T;
-  raw(keyOrValue: V | K): T[K];
-  raw(value: unknown): T[K] | undefined;
-  raw(value?: unknown): T | T[K] | undefined {
-    if (value !== undefined) {
-      return this.items.raw(value);
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
+    keyOrValue: IK
+  ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
+  raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
+    if (value != null) {
+      return this.items.raw(value as keyof T | EnumValue) as T[K];
     } else {
       return this.items.raw();
     }
