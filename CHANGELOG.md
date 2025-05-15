@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.2.11
+
+2025-5-15
+
+### Features
+
+- 🛠 Remove `"type": "commonjs"` from package.json, which may breaks webpack bundling.
+
 ## 2.2.10
 
 2025-5-14

@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
@@ -22,7 +22,6 @@
   "license": "MIT",
   "author": "李凤宝(Leo) <shijistar@gmail.com>",
   "sideEffects": false,
-  "type": "commonjs",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
