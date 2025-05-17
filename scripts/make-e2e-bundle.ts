@@ -25,22 +25,9 @@ async function build() {
     name: 'EnumPlus',
   });
 
-  // Bundle lodash
-  const lodashBundle = await rollup({
-    input: 'lodash-es/lodash.js',
-    plugins: [nodeResolve()],
-  });
-  await lodashBundle.write({
-    file: 'e2e/fixtures/scripts/lodash-bundle.js',
-    format: 'iife',
-    name: '_',
-  });
-
   // Bundle serialize-javascript
   const serializePath = './e2e/fixtures/scripts/serialize-javascript.js';
-  changeFormat('./tslib/test/utils/serialize-javascript.js', serializePath, 'SerializeJavascript', (content) => {
-    return content.replace('require("lodash-es")', 'window._');
-  });
+  changeFormat('./tslib/test/utils/serialize-javascript.js', serializePath, 'SerializeJavascript');
   const serializeJavascript = await rollup({
     input: serializePath,
     plugins: [nodeResolve()],

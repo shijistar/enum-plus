@@ -118,7 +118,6 @@ const testCreatingEnum = (engine: TestEngineBase) => {
         return { weekEnum, locales };
       },
       ({ weekEnum, locales }) => {
-        console.log('weekEnum', weekEnum);
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardDateData(locales));
       }
     );
@@ -315,7 +314,7 @@ const testCreatingEnum = (engine: TestEngineBase) => {
 
   engine.describe('Create Enum with native enum', () => {
     engine.test(
-      'should be created with native enums, and the key and value should be consistent with the native enum',
+      'Should be created with native enums, and the key and value should be consistent with the native enum',
       ({ EnumPlus: { Enum } }) => {
         enum firstSeedInit {
           A = 1,

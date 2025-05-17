@@ -8,7 +8,7 @@ import { getOptionsData, pickArray } from '../utils';
 const testLocalization = (engine: TestEngineBase) => {
   engine.describe('Enum localization', () => {
     engine.test(
-      'should show English by default',
+      'Should show English by default',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
@@ -25,7 +25,7 @@ const testLocalization = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'should show Chinese after changing lang',
+      'Should show Chinese after changing lang',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales },
@@ -42,7 +42,7 @@ const testLocalization = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'should show English after changing back',
+      'Should show English after changing back',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
@@ -59,7 +59,7 @@ const testLocalization = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'should show original label if no localization found',
+      'Should show original label if no localization found',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
@@ -76,7 +76,7 @@ const testLocalization = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'should show original label if Enum.localize is explicitly set to undefined ',
+      'Should show original label if Enum.localize is explicitly set to undefined ',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
@@ -95,7 +95,7 @@ const testLocalization = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'should respect Enum options over global setting (Chinese over English)',
+      'Should respect Enum options over global setting (Chinese over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
@@ -113,7 +113,7 @@ const testLocalization = (engine: TestEngineBase) => {
       }
     );
     engine.test(
-      'should respect Enum options over global setting (undefined over English)',
+      'Should respect Enum options over global setting (undefined over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
@@ -129,7 +129,7 @@ const testLocalization = (engine: TestEngineBase) => {
       }
     );
     engine.test(
-      'should respect Enum options over global setting (undefined over English), support delayed assign',
+      'Should respect Enum options over global setting (undefined over English), support delayed assign',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeEN, localeCN, noLocale, getLocales },
@@ -146,7 +146,7 @@ const testLocalization = (engine: TestEngineBase) => {
       }
     );
     engine.test(
-      'should respect Enum options over global setting (Chinese over undefined)',
+      'Should respect Enum options over global setting (Chinese over undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
@@ -164,7 +164,7 @@ const testLocalization = (engine: TestEngineBase) => {
       }
     );
     engine.test(
-      'should respect Enum options over global setting (both undefined)',
+      'Should respect Enum options over global setting (both undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
@@ -180,7 +180,7 @@ const testLocalization = (engine: TestEngineBase) => {
       }
     );
     engine.test(
-      'should respect Enum options over global setting (both explicit undefined)',
+      'Should respect Enum options over global setting (both explicit undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, localeEN, localeCN, noLocale, getLocales },

@@ -1,5 +1,4 @@
 import { defaultLocalize, Enum } from '@enum-plus';
-import { get } from 'lodash-es';
 import { expect, test } from '../../e2e/fixtures/EnumTest';
 import { getLocales, setLang } from '../data/week-config';
 import { deserializeJavascript, serializeJavascript } from '../utils/serialize-javascript.js';
@@ -21,13 +20,11 @@ export class PlaywrightEngine extends TestEngineBase {
     const prepareContextStr = serializeJavascript({ ...prepareContext, prepareFn: prepare });
     test(`${name} in modern browsers`, async ({ page }) => {
       const resultStr = await page.evaluate((contextStr) => {
-        const _ = window._;
         const EnumPlus = window.EnumPlus;
         const WeekConfig = window.WeekConfig;
         const WeekData = window.WeekData;
         const SerializeJavascript = window.SerializeJavascript;
         const runtimeContext = {
-          _,
           EnumPlus,
           WeekConfig,
           WeekData,
@@ -35,7 +32,7 @@ export class PlaywrightEngine extends TestEngineBase {
         };
         console.log('window', runtimeContext);
         const { serializeJavascript: serialize, deserializeJavascript: deserialize } = SerializeJavascript;
-        const args = deserialize(contextStr, { get: _.get }) as { prepareFn: typeof prepare };
+        const args = deserialize(contextStr) as { prepareFn: typeof prepare };
         const { prepareFn, ...rest } = args;
         const prepareResult = prepareFn({ ...runtimeContext, ...rest });
         // console.log('prepareResult');
@@ -51,9 +48,7 @@ export class PlaywrightEngine extends TestEngineBase {
         return serializedStr;
       }, prepareContextStr);
 
-      const initialState = deserializeJavascript(resultStr, {
-        get,
-      });
+      const initialState = deserializeJavascript(resultStr);
       // restore the lang to the Enum.localize
       setLang(initialState.lang, Enum, getLocales, defaultLocalize);
       if (!initialState.EnumLocalize) {
@@ -63,7 +58,6 @@ export class PlaywrightEngine extends TestEngineBase {
       // because the code is like `const localize = this._options?.localize ?? Enum.localize;`,
       // it seems that Enum is a global variable, but actually it is not, we simulate it as a closure context.
       const testResult = deserializeJavascript(resultStr, {
-        get,
         closure: { Enum, ...initialState },
       });
       // console.log('deserialize result');

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import type { EnumItemClass } from '@enum-plus/enum-item';
 import type { EnumItemClass } from '@enum-plus';
-import { get as lodashGet } from 'lodash-es';
 
 /**
  * Notes:
@@ -27,40 +26,49 @@ import { get as lodashGet } from 'lodash-es';
  *
  * @returns The serialized string.
  */
-export function serializeJavascript(obj: any) {
-  return serializeJavascriptRecursively(obj, { patches: [], refs: [] });
+export function serializeJavascript(
+  obj: any,
+  options?: Omit<SerializeOptions, 'parentPath' | 'patches' | 'refs' | 'sourceOnly'>
+): string {
+  return serializeJavascriptRecursively(obj, { ...options, patches: [], refs: [] });
 }
 
-export function serializeJavascriptRecursively(
-  obj: any,
-  options: { parentPath?: PathType[]; patches: Patch[]; refs: ValueRef[] }
-): string {
-  const { parentPath, patches, refs } = options ?? { patches: [], refs: [] };
+function serializeJavascriptRecursively(obj: any, options: SerializeOptions): string {
+  const {
+    tokenStart: TS = '$(SJS)$',
+    tokenEnd: TE = '$(SJE)$',
+    variablePrefix: VP = '$SJV$',
+    parentPath,
+    patches,
+    refs,
+    sourceOnly,
+    preserveClassConstructor,
+  } = options ?? { patches: [], refs: [] };
   const fullObj = expandPrototypeChain(obj, { parentPath, patches });
   // console.log('serializeJavascript', parentPath, obj);
-  const sourceStr = JSON.stringify(fullObj, (key, value) => {
+  const sourceStr = JSON.stringify(fullObj, (_key, value) => {
     if (value === null) {
-      return '$(QS)$null$(QE)$';
+      return `${TS}null${TE}`;
     } else if (value === undefined) {
       return undefined;
     } else if (value instanceof RegExp) {
-      return `$(QS)$new RegExp('${value.source.replace(/\\\\/g, '\\')}', '${value.flags ?? ''}')$(QE)$`;
+      return `${TS}new RegExp('${value.source.replace(/\\\\/g, '\\')}', '${value.flags ?? ''}')${TE}`;
       // `value instanceof Date` will never work, try testing date format instead
     } else if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(value)) {
-      return `$(QS)$new Date('${value}')$(QE)$`;
+      return `${TS}new Date('${value}')${TE}`;
     } else if (typeof value === 'bigint') {
-      return `$(QS)$BigInt('${value.toString()}')$(QE)$`;
+      return `${TS}BigInt('${value.toString()}')${TE}`;
     } else if (typeof value === 'symbol') {
       if (Symbol.keyFor(value)) {
-        return `$(QS)$Symbol.for('${Symbol.keyFor(value)}')$(QE)$`;
+        return `${TS}Symbol.for('${Symbol.keyFor(value)}')${TE}`;
       }
-      return `$(QS)$Symbol('${value.description}')$(QE)$`;
+      return `${TS}Symbol('${value.description}')${TE}`;
     } else if (value instanceof Error) {
-      return `$(QS)$new Error('${value.message}')$(QE)$`;
+      return `${TS}new Error('${value.message}')${TE}`;
     } else if (typeof value === 'object') {
-      // Save the symbol keys to a string property, because they are not serializable.
+      // Save the symbol keys to a string property, because symbol keys are not serializable.
       // They will be restored in the deserialization process.
-      const fullWithProto = { ...pickPrototype(value), ...value };
+      const fullWithProto = { ...pickPrototype(value, { preserveClassConstructor }), ...value };
       const predefinedSymbols = Object.keys(Object.getOwnPropertyDescriptors(Symbol))
         .map((key) => {
           if (typeof Symbol[key as keyof typeof Symbol] === 'symbol') {
@@ -86,13 +94,17 @@ export function serializeJavascriptRecursively(
         if (typeof protoValue !== 'string' && typeof protoValue !== 'number' && typeof protoValue !== 'boolean') {
           const path = findPath(fullObj, value);
           // console.log('call serializeJavascriptRecursively with Symbol', path, symbol, protoValue);
-          const code = serializeJavascriptRecursively(protoValue, { parentPath: path, patches, refs });
+          const code = serializeJavascriptRecursively(protoValue, {
+            ...options,
+            parentPath: path,
+            sourceOnly: true,
+          });
           const ref: ValueRef = {
-            variable: `ref${refs.length + 1}`,
+            variable: `${VP}ref${refs.length + 1}`,
             code,
           };
           refs.push(ref);
-          protoValue = `$(QS)$${ref.variable}$(QE)$`;
+          protoValue = `${TS}${ref.variable}${TE}`;
         }
         value[symbolKey] = protoValue;
       }
@@ -113,31 +125,40 @@ export function serializeJavascriptRecursively(
         funcStr = `function ${value}`;
       }
       funcStr = funcStr.replace(/"/g, "'");
-      return '$(QS)$(' + funcStr + ')$(QE)$';
+      return `${TS}(${funcStr})${TE}`;
     }
     return value;
   });
 
-  patches.forEach((patch) => {
-    if (!patch.ref) {
-      const ref: ValueRef = {
-        variable: `ref${refs.length + 1}`,
-        code: '',
-      };
-      // delete patch.context;
-      patch.ref = `$(QS)$${ref.variable}$(QE)$`;
-      const code = serializeJavascriptRecursively(patch.context, { parentPath: patch.path, patches, refs });
-      // todo: serialize过程中可能引入新的patches和refs，需要递归循环，直至没有新的patch和ref引入
-      ref.code = code;
-      refs.push(ref);
-    }
-  });
+  let prevPatches = [];
+  while (prevPatches.length !== patches.length) {
+    prevPatches = [...patches];
+    patches.forEach((patch) => {
+      if (!patch.ref) {
+        const ref: ValueRef = {
+          variable: `${VP}ref${refs.length + 1}`,
+          code: '',
+        };
+        refs.push(ref);
+        patch.ref = `${TS}${ref.variable}${TE}`;
+        const code = serializeJavascriptRecursively(patch.context, {
+          ...options,
+          parentPath: patch.path,
+          sourceOnly: true,
+        });
+        ref.code = code;
+        delete patch.context;
+      }
+    });
+  }
+  // console.log(refs[0]);
 
   const result: SerializedResult = {
     source: sourceStr,
-    patches,
-    refs,
+    patches: sourceOnly ? undefined! : patches,
+    refs: sourceOnly ? undefined! : refs,
   };
+  // console.log('serializeJavascript', JSON.stringify(result));
   return JSON.stringify(result);
 }
 
@@ -151,8 +172,8 @@ export function serializeJavascriptRecursively(
  *
  * @returns The deserialized object.
  */
-export function deserializeJavascript(str: string, options: DeserializeOptions) {
-  const { closure } = options ?? {};
+export function deserializeJavascript(str: string, options?: DeserializeOptions) {
+  const { variablePrefix = '$SJV$', closure } = options ?? {};
   if (!str) {
     return undefined;
   }
@@ -161,12 +182,17 @@ export function deserializeJavascript(str: string, options: DeserializeOptions) 
   result.refs.forEach((ref) => {
     const { variable, code } = ref;
     const refResult = JSON.parse(code) as SerializedResult;
-    const refValue = directDeserialize(refResult, { ...options, enablePatches: false });
+    const refValue = directDeserialize(refResult, { ...options, variablePrefix, enablePatches: false });
     refMap[variable] = refValue;
   });
   // console.log('refMap', refMap, result.refs);
   try {
-    return directDeserialize(result, { ...options, closure: { ...closure, ...refMap }, enablePatches: true });
+    return directDeserialize(result, {
+      ...options,
+      closure: { ...closure, ...refMap },
+      variablePrefix,
+      enablePatches: true,
+    });
   } catch (error) {
     console.error(error);
     throw error;
@@ -174,17 +200,16 @@ export function deserializeJavascript(str: string, options: DeserializeOptions) 
 }
 
 function directDeserialize(result: SerializedResult, options: InternalDeserializeOptions) {
-  const { closure, get = lodashGet } = options ?? {};
+  const { variablePrefix: VP, get = defaultGet } = options ?? {};
   const code = getDeserializeJavascriptCode(result, options);
-  console.log(
-    'deserializeJavascript',
-    `new Function('context', 'options', \`\n${code.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\`)(${closure ? 'closure' : 'undefined'}, { get: _.get });`,
-    'closure=',
-    closure
-  );
+  // console.log(
+  //   'deserializeJavascript',
+  //   `new Function('${VP}context', '${VP}options', \`\n${code.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\`)(${closure ? 'closure' : 'undefined'});`,
+  //   'closure=',
+  //   closure
+  // );
   try {
-    const deserializeResult = new Function('context', 'options', code)(options.closure, { get });
-    console.log(deserializeResult);
+    const deserializeResult = new Function(`${VP}context`, `${VP}options`, code)(options.closure, { get });
     return deserializeResult;
   } catch (error) {
     console.error(error);
@@ -193,12 +218,18 @@ function directDeserialize(result: SerializedResult, options: InternalDeserializ
 }
 
 function getDeserializeJavascriptCode(result: SerializedResult, options: InternalDeserializeOptions) {
-  const { closure, enablePatches = true } = options ?? {};
+  const {
+    tokenStart = '$(SJS)$',
+    tokenEnd = '$(SJE)$',
+    variablePrefix: VP,
+    closure,
+    enablePatches = true,
+  } = options ?? {};
   const { source: sourceCode, patches } = result;
   // console.log('deserializeJavascript', str, sourceCode);
-  const content = `${closure ? `const { ${Object.keys(closure ?? {}).join(', ')} } = context || {};` : ''}
-const { get } = options;
-const deserializeResult = (\n${decodeFormat(sourceCode)}\n);
+  const content = `${closure ? `const { ${Object.keys(closure ?? {}).join(', ')} } = ${VP}context || {};` : ''}
+const { get } = ${VP}options;
+const deserializeResult = (\n${decodeFormat(sourceCode, { tokenStart, tokenEnd })}\n);
 const patches = ${
     enablePatches
       ? decodeFormat(
@@ -210,7 +241,8 @@ const patches = ${
                 context: ref,
               };
             })
-          )
+          ),
+          { tokenStart, tokenEnd }
         )
       : '[]'
   };
@@ -257,18 +289,21 @@ return deserializeResult;`;
 /** Get full object with prototype properties. */
 export function expandPrototypeChain(
   source: any,
-  options?: { parentPath?: PathType[]; patches?: Patch[] }
+  options?: { parentPath?: PathType[]; patches?: Patch[] } & Pick<SerializeOptions, 'preserveClassConstructor'>
 ): typeof source {
-  const { parentPath, patches = [] } = options ?? {};
-  return expandPrototypeChainRecursively(source, patches, parentPath, []);
+  const { parentPath, patches = [], preserveClassConstructor } = options ?? {};
+  return expandPrototypeChainRecursively(source, { patches, paths: parentPath, parents: [], preserveClassConstructor });
 }
 
 function expandPrototypeChainRecursively(
   source: any,
-  patches: Patch[],
-  paths: PathType[] = [],
-  parents: any[] = []
+  options: {
+    patches: Patch[];
+    paths?: PathType[];
+    parents?: any[];
+  } & Pick<SerializeOptions, 'preserveClassConstructor'>
 ): typeof source {
+  const { patches, paths = [], parents = [] } = options ?? {};
   // console.log('getFullObjectWithPrototype', obj, Object.prototype.toString.call(obj));
   if (source == null) {
     return source;
@@ -315,20 +350,20 @@ function expandPrototypeChainRecursively(
     } else if (source instanceof Set) {
       data = Array.from(source);
     }
-    // copy own properties
+    // Copy own properties
     result = Array.isArray(data) ? [] : {};
 
-    // copy own properties
+    // Copy own properties
     for (const key of [...Object.getOwnPropertyNames(data), ...Object.getOwnPropertySymbols(data)]) {
-      result[key] = expandPrototypeChainRecursively(
-        data[key],
+      result[key] = expandPrototypeChainRecursively(data[key], {
+        ...options,
         patches,
-        [...paths, typeof key === 'string' && key.match(/^\d+$/) ? Number(key) : key],
-        [...parents, source]
-      );
+        paths: [...paths, typeof key === 'string' && key.match(/^\d+$/) ? Number(key) : key],
+        parents: [...parents, source],
+      });
     }
-    // copy prototype properties
-    const prototype = pickPrototype(source);
+    // Copy prototype properties
+    const prototype = pickPrototype(source, options);
     [...Object.getOwnPropertyNames(prototype), ...Object.getOwnPropertySymbols(prototype)].forEach((key) => {
       if (!(key in result)) {
         result[key] = prototype[key];
@@ -336,7 +371,7 @@ function expandPrototypeChainRecursively(
     });
   }
 
-  // copy extra context, only for function and array, which can't hold custom properties
+  // Copy extra context, only for function and array, which can't hold custom properties in JSON format
   if (Array.isArray(result) || typeof result === 'function') {
     if (Object.keys(result).length > 0) {
       const context: Record<string, unknown> = {};
@@ -353,20 +388,43 @@ function expandPrototypeChainRecursively(
       }
     }
   }
-
   return result;
 }
 
-function decodeFormat(s: string | undefined) {
+function decodeFormat(
+  s: string | undefined,
+  options: Pick<SerializeOptions, 'tokenStart' | 'tokenEnd'> = {}
+): string | undefined {
+  const { tokenStart = '', tokenEnd = '' } = options ?? {};
+  const escapedTS = escapeRegExp(tokenStart);
+  const escapedTE = escapeRegExp(tokenEnd);
+  // return s
+  //   ?.replace(/\\?['"]\$\(SJS\)\$/g, '')
+  //   .replace(/\$\(SJE\)\$\\?['"]/g, '')
+  //   .replace(/\\n/g, '\n');
   return s
-    ?.replace(/\\?['"]\$\(QS\)\$/g, '')
-    .replace(/\$\(QE\)\$\\?['"]/g, '')
+    ?.replace(new RegExp(`\\\\?['"]${escapedTS}`, 'g'), '')
+    .replace(new RegExp(`${escapedTE}\\\\?['"]`, 'g'), '')
     .replace(/\\n/g, '\n');
 }
 
-function pickPrototype(source: any) {
+/**
+ * Escapes special characters in a string for use in a regular expression.
+ *
+ * @param string - The string to escape
+ *
+ * @returns The escaped string that can be safely used in a RegExp constructor
+ */
+export function escapeRegExp(string: string, options?: { escapeTwice?: boolean }): string {
+  const { escapeTwice = false } = options ?? {};
+  // $& Indicates the entire matched string
+  return string.replace(/[.*+?^${}()|[\]\\]/g, escapeTwice ? '\\\\$&' : '\\$&');
+}
+
+function pickPrototype(source: any, options?: { preserveClassConstructor?: boolean }) {
+  const { preserveClassConstructor } = options ?? {};
   const target: Record<string | symbol, any> = {};
-  const ignoredKeys = ['constructor'].filter(Boolean);
+  const ignoredKeys = [preserveClassConstructor ? undefined : 'constructor'].filter(Boolean);
   let prototype = Object.getPrototypeOf(source);
   while (prototype !== null && prototype !== Object.prototype && prototype !== Array.prototype) {
     const protoKeys = [...Object.getOwnPropertyNames(prototype), ...Object.getOwnPropertySymbols(prototype)];
@@ -400,6 +458,37 @@ function findPath(parent: any, target: any, path: PathType[] = []): PathType[] |
   return undefined;
 }
 
+/**
+ * Gets the value at path of object. If the resolved value is undefined, the defaultValue is
+ * returned in its place.
+ *
+ * @param obj - The object to query
+ * @param path - The path of the property to get (accepts strings, numbers, and symbols)
+ * @param defaultValue - The value returned for undefined resolved values
+ *
+ * @returns The resolved value
+ */
+export function defaultGet(obj: any, path: (string | number | symbol)[], defaultValue?: any): any {
+  // Handle null/undefined objects
+  if (obj == null) {
+    return defaultValue;
+  }
+
+  // Handle empty path
+  if (!path || path.length === 0) {
+    return obj;
+  }
+
+  let current = obj;
+  for (const key of path) {
+    if (current == null) {
+      return defaultValue;
+    }
+    current = current[key];
+  }
+  return current === undefined ? defaultValue : current;
+}
+
 type PathType = string | number | symbol;
 interface Patch {
   path: PathType[];
@@ -416,19 +505,38 @@ interface SerializedResult {
   refs: ValueRef[];
 }
 
-export interface DeserializeOptions {
+export interface SerializeOptions {
+  /** The start token to mark the start of the serialized string. Default is `$(SJS)$`. */
+  tokenStart?: string;
+  /** The end token to mark the end of the serialized string. Default is `$(SJE)$`. */
+  tokenEnd?: string;
+  /** The prefix of the variable name to be used in the serialized string. Default is `$SJV$`. */
+  variablePrefix?: string;
+  /**
+   * Whether to serialize the source of the object only, and ignore the `patches` and `refs`.
+   * Default is `false`.
+   */
+  sourceOnly?: boolean;
+  /** Whether to preserve the code of class constructor during serialization. Default is `false`. */
+  preserveClassConstructor?: boolean;
+  parentPath?: PathType[];
+  patches: Patch[];
+  refs: ValueRef[];
+}
+
+export type DeserializeOptions = Pick<SerializeOptions, 'tokenStart' | 'tokenEnd' | 'variablePrefix'> & {
   /**
    * The function to get a child value from source object. It's used to restore the patched values.
    *
    * Strongly recommended to use `lodash.get` method
    */
-  get: GetFunc;
+  get?: GetFunc;
   /**
    * The global closure variables for deserialization. If the deserialization code contains
    * functions which use some global variables or modules, it's a good idea to pass them here.
    */
   closure?: Record<string, unknown>;
-}
+};
 
 interface InternalDeserializeOptions extends DeserializeOptions {
   enablePatches?: boolean;
