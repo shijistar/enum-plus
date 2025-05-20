@@ -16,7 +16,7 @@ export type {
 } from './types';
 export type { EnumItemClass } from './enum-item';
 
-export { KEYS, ITEMS, VALUES } from './utils';
+export { KEYS, ITEMS, VALUES, ENUM_ITEM, ENUM_ITEMS, ENUM_COLLECTION } from './utils';
 export { defaultLocalize };
 export { Enum } from './enum';
 

@@ -1,5 +1,5 @@
 import { EnumItemClass } from './enum-item';
-import { EnumValuesArray } from './enum-values';
+import { EnumItemsArray } from './enum-values';
 import type {
   BooleanFirstOptionConfig,
   ColumnFilterItem,
@@ -10,14 +10,14 @@ import type {
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
-  IEnumValues,
+  IEnumItems,
   MenuItemOption,
   ObjectFirstOptionConfig,
   StandardEnumItemInit,
   ToSelectConfig,
   ValueTypeFromSingleInit,
 } from './types';
-import { ITEMS, KEYS, VALUES } from './utils';
+import { ENUM_COLLECTION, ITEMS, KEYS, VALUES } from './utils';
 
 /**
  * **EN:** Enum collection extension base class, used to extend the Enums
@@ -42,10 +42,16 @@ export class EnumCollectionClass<
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   >
   extends EnumExtensionClass<T, K, V>
-  implements IEnumValues<T, K, V>
+  implements IEnumItems<T, K, V>
 {
-  readonly items!: EnumValuesArray<T, K, V>;
+  readonly items!: EnumItemsArray<T, K, V>;
   readonly keys!: K[];
+  /**
+   * **EN:** A boolean value indicates that this is an enum collection instance.
+   *
+   * **CN:** 布尔值，表示这是一个枚举集合实例
+   */
+  readonly [ENUM_COLLECTION] = true;
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
@@ -64,7 +70,7 @@ export class EnumCollectionClass<
     this[Object.keys(init).some((k) => k === 'keys') ? KEYS : 'keys'] = keys;
 
     // Build enum item data
-    const items = new EnumValuesArray<T, K, V>(
+    const items = new EnumItemsArray<T, K, V>(
       init,
       options,
       ...keys.map((key, index) => {
@@ -77,9 +83,6 @@ export class EnumCollectionClass<
     // @ts-expect-error: because use VALUES to avoid naming conflicts in case of 'values' field name is taken
     this[Object.keys(init).some((k) => k === 'values') ? VALUES : 'values'] = items;
 
-    // Override some system methods
-    // @ts-expect-error: because override Object.toString method for better type display
-    this[Symbol.toStringTag] = 'EnumCollection';
     // Override the `instanceof` operator rule
     // @ts-expect-error: because override the instanceof operator
     this[Symbol.hasInstance] = (instance: unknown): boolean => {

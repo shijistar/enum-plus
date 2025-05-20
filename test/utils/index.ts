@@ -7,7 +7,7 @@ export function toPlainEnums<T extends EnumItemInit<EnumValue>>(
   enums: EnumItemClass<any>[],
   fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label']
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
-  return enums.map((item) => {
+  return Array.from(enums).map((item) => {
     const obj: { value?: EnumValue; key?: keyof T; label?: string } = {};
     if (fieldNames.includes('key')) {
       obj.key = item.key as keyof T;
@@ -41,7 +41,7 @@ export function pickArray<T extends Record<string, any>>(
 }
 
 export function getOptionsData<K, V>(options: EnumItemOptionData<K, V>[]) {
-  return options.map(({ value, label }) => ({ value, label }));
+  return Array.from(options).map(({ value, label }) => ({ value, label }));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

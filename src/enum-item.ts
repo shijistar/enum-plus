@@ -1,5 +1,6 @@
 import { Enum } from './enum';
 import type { EnumItemInit, EnumItemOptions, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
+import { ENUM_ITEM } from './utils';
 
 /**
  * Enum item class
@@ -25,6 +26,12 @@ export class EnumItemClass<
 
   /** Original initialization object */
   readonly raw: T;
+  /**
+   * **EN:** A boolean value indicates that this is an enum item instance.
+   *
+   * **CN:** 布尔值，表示这是一个枚举项实例
+   */
+  [ENUM_ITEM] = true;
 
   #localize: NonNullable<EnumItemOptions['localize']>;
   #localizedProxy = new Proxy(this, {
@@ -96,9 +103,6 @@ export class EnumItemClass<
       return content;
     };
 
-    // Override some system methods
-    // @ts-expect-error: because override Object.toString method to display type more friendly
-    this[Symbol.toStringTag] = 'EnumItem';
     // @ts-expect-error: because override Object.toPrimitive method to return enum value
     this[Symbol.toPrimitive] = (hint: 'number' | 'string' | 'default'): V | string => {
       if (hint === 'number') {

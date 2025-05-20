@@ -1,4 +1,4 @@
-import { Enum, ITEMS, KEYS, VALUES } from '@enum-plus';
+import { Enum, ENUM_COLLECTION, ITEMS, KEYS, VALUES } from '@enum-plus';
 import { locales, sillyLocalize, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { addEnumValuesTestSuite } from './enum-values.test';
@@ -66,7 +66,7 @@ describe('the EnumCollectionClass api', () => {
       )
     );
     expect(strangeEnum.keys).toBe(101);
-    expect(strangeEnum.items.map((i) => i.key)).toEqual(Object.keys(strangeEnumConfig));
+    expect(Array.from(strangeEnum.items).map((i) => i.key)).toEqual(Object.keys(strangeEnumConfig));
 
     const strangerEnumConfig = {
       ...strangeEnumConfig,
@@ -88,10 +88,12 @@ describe('the EnumCollectionClass api', () => {
     expect(toPlainEnums(strangerEnum[VALUES])).toEqual(standardEnumItems);
   });
 
-  test('[toString] should return a friendly name', () => {
+  test('should have [ENUM_COLLECTION] property to indicate that this is an enum collection', () => {
     const week = Enum(StandardWeekConfig);
-    expect(week.toString()).toBe('[object EnumCollection]');
-    expect(Object.prototype.toString.call(week)).toBe('[object EnumCollection]');
+    // @ts-expect-error: because ENUM_COLLECTION is hidden by the interface, but it actually exists
+    expect(week[ENUM_COLLECTION]).toBe(true);
+    // @ts-expect-error: because ENUM_COLLECTION equals Symbol.for('[EnumCollection]')
+    expect(week[Symbol.for('[EnumCollection]')]).toBe(true);
   });
 
   test('enum value/key/label should be success by the [instanceof] operator', () => {

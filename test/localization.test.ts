@@ -96,13 +96,13 @@ function testEnum(
   expect(sunday.toLocaleString()).toBe(locales.Sunday);
   expect(getOptionsData(weekEnum.values)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
   expect(getOptionsData(weekEnum.toSelect())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
-  expect(weekEnum.toMenu()).toEqual(
+  expect(Array.from(weekEnum.toMenu())).toEqual(
     pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
       key: item.value,
       label: item.label,
     }))
   );
-  expect(weekEnum.toFilter()).toEqual(
+  expect(Array.from(weekEnum.toFilter())).toEqual(
     pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
       value: item.value,
       text: item.label,

@@ -2,6 +2,22 @@
 
 # enum-plus Changelog
 
+## 2.2.12
+
+2025-5-21
+
+### Features
+
+- ✨ Exports three new symbols `ENUM_ITEM`，`ENUM_ITEMS` and `ENUM_COLLECTION`.
+- ✨ Add `[ENUM_COLLECTION] = true` to the `Enum` class, which is used to indicates that this is as an enum collection.
+- ✨ Add `[ENUM_ITEM] = true` to the `EnumItem` class, which is used to indicates that this is as an enum item.
+- ✨ Add `[ENUM_ITEMS] = true` to the `Enum.items`, which is used to indicates that this is as an enum items array.
+
+### Breaking Changes
+
+- 💣 Remove `[Symbol.toStringTag] = "EnumItem"` from `EnumItem` class. The value of `Object.prototype.toString.call(enumItem)` is changed from `[object EnumItem]` to `[object Object]`. If you are relying on this, please use `enumItem[ENUM_ITEM] === true` instead.
+- 💣 Remove `[Symbol.toStringTag] = "EnumCollection"` from `Enum` class. The value of `Object.prototype.toString.call(enum)` is changed from `[object EnumCollection]` to `[object Array]`. If you are relying on this, please use `enum[ENUM_COLLECTION] === true` instead.
+
 ## 2.2.11
 
 2025-5-15

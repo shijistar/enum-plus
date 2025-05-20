@@ -63,14 +63,14 @@ export type IEnum<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-> = IEnumValues<T, K, V> & {
+> = IEnumItems<T, K, V> & {
   // 初始化对象里的枚举字段
   [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } & (T extends { items: any }
     ? {
         // 防止values名称冲突
-        [ITEMS]: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
+        [ITEMS]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }
     : {
         /**
@@ -84,17 +84,17 @@ export type IEnum<
          *
          * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
          */
-        items: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
+        items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (T extends { values: any }
     ? {
         // 防止values名称冲突
-        [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
+        [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }
     : {
         /** @deprecated Use `items` instead */
-        values: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>;
+        values: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (T extends { keys: any }
@@ -123,11 +123,9 @@ export type IEnum<
  *
  * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
  *
- * @export
- *
- * @interface IEnumValues
+ * @interface IEnumItems
  */
-export interface IEnumValues<
+export interface IEnumItems<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
@@ -360,6 +358,13 @@ export interface IEnumValues<
    */
   rawType: T[K];
 }
+
+/** @deprecated use `IEnumItems` instead */
+export type IEnumValues<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> = IEnumItems<T, K, V>;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'] | (string & {});

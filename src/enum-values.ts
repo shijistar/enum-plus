@@ -10,13 +10,14 @@ import type {
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
-  IEnumValues,
+  IEnumItems,
   MenuItemOption,
   ObjectFirstOptionConfig,
   ToSelectConfig,
   ValueMap,
   ValueTypeFromSingleInit,
 } from './types';
+import { ENUM_ITEMS } from './utils';
 
 /**
  * Enum items array, mostly are simple wrappers for EnumCollectionClass
@@ -31,13 +32,13 @@ import type {
  *
  * @implements {IEnumValues<T, K, V>}
  */
-export class EnumValuesArray<
+export class EnumItemsArray<
     T extends EnumInit<K, V>,
     K extends EnumKey<T> = EnumKey<T>,
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   >
   extends Array<EnumItemClass<T[K], K, V>>
-  implements IEnumValues<T, K, V>
+  implements IEnumItems<T, K, V>
 {
   #raw: T;
   #localize: NonNullable<EnumItemOptions['localize']>;
@@ -62,6 +63,12 @@ export class EnumValuesArray<
       return content;
     };
   }
+  /**
+   * **EN:** A boolean value indicates that this is an enum items array.
+   *
+   * **CN:** 布尔值，表示这是一个枚举项数组
+   */
+  [ENUM_ITEMS] = true;
 
   label(keyOrValue?: string | number): string | undefined {
     //  First find by value, then find by key
@@ -199,3 +206,10 @@ export class EnumValuesArray<
     );
   }
 }
+
+/** @deprecated Use `EnumItemsArray` instead */
+export class EnumValuesArray<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> extends EnumItemsArray<T, K, V> {}

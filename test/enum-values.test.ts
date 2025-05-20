@@ -1,5 +1,5 @@
-import { Enum } from '@enum-plus';
-import type { IEnumValues } from '@enum-plus/types';
+import { Enum, ENUM_ITEMS } from '@enum-plus';
+import type { IEnumItems } from '@enum-plus/types';
 import { locales, localizeConfigData, StandardWeekConfig } from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { getOptionsData, pickArray } from './utils';
@@ -9,7 +9,7 @@ describe('the EnumValuesArray api', () => {
 });
 
 export function addEnumValuesTestSuite(
-  weekEnum: IEnumValues<
+  weekEnum: IEnumItems<
     typeof StandardWeekConfig,
     keyof typeof StandardWeekConfig,
     (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
@@ -95,7 +95,7 @@ export function addEnumValuesTestSuite(
   });
 
   test('[menus] should be able to generate data for AntDesign Menu', () => {
-    expect(weekEnum.toMenu()).toEqual(
+    expect(Array.from(weekEnum.toMenu())).toEqual(
       Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
         key: value,
         label: label,
@@ -106,7 +106,7 @@ export function addEnumValuesTestSuite(
   });
 
   test('[filters] should be able to generate filter items for AntDesign Table', () => {
-    expect(weekEnum.toFilter()).toEqual(
+    expect(Array.from(weekEnum.toFilter())).toEqual(
       Object.values(localizeConfigData(StandardWeekConfig)).map(({ value, label }) => ({
         text: label,
         value,
@@ -127,6 +127,14 @@ export function addEnumValuesTestSuite(
     expect(weekEnum.raw('Monday').status).toEqual('warning');
     expect(weekEnum.raw('Friday').status).toEqual('success');
     expect(weekEnum.raw(7)).toBeUndefined();
+  });
+
+  test('should have [ENUM_ITEMS] property to indicate that this is an enum items array', () => {
+    const week = Enum(StandardWeekConfig);
+    // @ts-expect-error: because ENUM_ITEMS is hidden by the interface, but it actually exists
+    expect(week.items[ENUM_ITEMS]).toBe(true);
+    // @ts-expect-error: because ENUM_ITEMS equals Symbol.for('[EnumItems]')
+    expect(week.items[Symbol.for('[EnumItems]')]).toBe(true);
   });
 
   test('[valueType] should throw error when valueType accessor is called at runtime', () => {

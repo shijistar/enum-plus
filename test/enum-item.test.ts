@@ -1,4 +1,4 @@
-import { Enum } from '@enum-plus';
+import { Enum, ENUM_ITEM } from '@enum-plus';
 import { localeEN, StandardWeekConfig } from './data/week-config';
 
 describe('the EnumItemClass api', () => {
@@ -29,11 +29,16 @@ describe('the EnumItemClass api', () => {
     expect(week.values[6].toLocaleString()).toBe(localeEN.Saturday);
   });
 
-  test('[toStringTag] should return a friendly name', () => {
+  test('should have [ENUM_ITEM] property to indicate that this is an enum item', () => {
     const week = Enum(StandardWeekConfig);
-    week.values.forEach((item) => {
-      expect(Object.prototype.toString.call(item)).toBe('[object EnumItem]');
-    });
+    const firstItem = week.items[0];
+    const lastItem = week.items[week.items.length - 1];
+    expect(firstItem[ENUM_ITEM]).toBe(true);
+    // @ts-expect-error: because ENUM_ITEM equals Symbol.for('[EnumItem]')
+    expect(firstItem[Symbol.for('[EnumItem]')]).toBe(true);
+    expect(lastItem[ENUM_ITEM]).toBe(true);
+    // @ts-expect-error: because ENUM_ITEM equals Symbol.for('[EnumItem]')
+    expect(lastItem[Symbol.for('[EnumItem]')]).toBe(true);
   });
 
   test('[valueOf] should return the enum value', () => {
