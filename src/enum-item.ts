@@ -31,7 +31,7 @@ export class EnumItemClass<
    *
    * **CN:** 布尔值，表示这是一个枚举项实例
    */
-  [ENUM_ITEM] = true;
+  readonly [ENUM_ITEM] = true;
 
   #localize: NonNullable<EnumItemOptions['localize']>;
   #localizedProxy = new Proxy(this, {

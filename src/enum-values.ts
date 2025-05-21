@@ -68,7 +68,7 @@ export class EnumItemsArray<
    *
    * **CN:** 布尔值，表示这是一个枚举项数组
    */
-  [ENUM_ITEMS] = true;
+  readonly [ENUM_ITEMS] = true;
 
   label(keyOrValue?: string | number): string | undefined {
     //  First find by value, then find by key
