@@ -13,18 +13,19 @@
 </p>
 <br/>
 
-[![npm version](https://img.shields.io/npm/v/enum-plus.svg?color=red&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
-[![npm bundle size](https://img.shields.io/bundlejs/size/enum-plus?cacheSeconds=86400&label=minzipped%20size)](https://bundlephobia.com/result?p=enum-plus)
-[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
+[![npm latest version](https://img.shields.io/npm/v/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
+[![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/enum-plus?label=minzipped%20size&color=44cc11&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus?activeTab=code)
+[![code coverage](https://codecov.io/gh/shijistar/enum-plus/graph/badge.svg?token=JMCDJKLT0B)](https://codecov.io/gh/shijistar/enum-plus)
+[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?color=007ec6&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E&cacheSeconds=86400)
 
-⬇️ &nbsp;&nbsp; [Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Localization](#localization) | [Extensibility](#extensibility) | [Q&A](#qa) &nbsp;&nbsp; ⬇️
+⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Naming Conventions](#naming-convention-best-practices) | [Localization](#localization) | [Extensibility](#extensibility) | [Q&A](#qa)&nbsp; ⬇️
 
 ## Introduction
 
-`enum-plus` is an enhanced enum library that is fully compatible with the native `enum` and extends it with powerful features such as display text, localization, UI control binding, enum items traversal, and more useful extension methods. This lightweight, zero-dependency, TypeScript library works with any front-end framework.
+`enum-plus` is an enhanced enum library that is fully compatible with the native `enum` and extends it with powerful features such as display text, localization, UI control binding, enum members traversal, and more useful extension methods. This lightweight, zero-dependency, TypeScript library works with any front-end framework.
 
-With the extended display text capability, enum items can be used to generate dropdowns, checkboxes, and other UI controls with a single line of code. By using the extension methods of the enum, you can easily traverse the array of enum items, get the display text of a certain enum value, determine whether a value exists, etc. The display text of the enum item supports localization, which can return the corresponding text according to the current language environment, making the display text of the enum item more flexible and more in line with user needs.
+With the extended display text capability, enum members can be used to generate dropdowns, checkboxes, and other UI controls with a single line of code. By using the extension methods of the enum, you can easily traverse the array of enum members, get the display text of a certain enum value, determine whether a value exists, etc. The display text of the enum member supports localization, which can return the corresponding text according to the current language environment, making the display text of the enum member more flexible and more in line with user needs.
 
 What other exciting features are there? Please continue to explore! Or you can check out this usage video first.
 
@@ -36,10 +37,10 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 - Full compatibility with native `enum` behavior
 - Support for multiple data types including `number` and `string`
-- Enhanced enum items with customizable display text
+- Enhanced enum members with customizable display text
 - Built-in localization capabilities that integrate with any i18n library
 - Streamlined conversion from enum values to human-readable display text
-- Extensible design allowing unlimited custom fields on enum items
+- Extensible design allowing unlimited custom fields on enum members
 - Seamless integration with any UI libraries like [Ant Design](https://ant.design/components/overview), [ElementPlus](https://element-plus.org/en-US/component/overview.html), [Material-UI](https://mui.com/material-ui), in a single line of code
 - Complete Node.js compatibility with SSR support
 - Zero dependencies - pure JavaScript implementation usable in any front-end framework
@@ -110,7 +111,7 @@ Week.Monday; // 'Mon'
 
 ### 3. Standard Format (Recommended)
 
-The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display text for each enum item, which can be used in UI components.
+The standard format includes both a `value` and a `label` for each enum member. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display text for each enum member, which can be used in UI components.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -197,7 +198,7 @@ Week.Monday; // 1
 
 `{ value, label, key, raw }[]`
 
-Returns a read-only array of all enum items. The array structure conforms to [Ant Design](https://ant.design/components/select#usage-upgrade) component specifications, which makes it possible to generate dropdown menus, checkboxes, and other UI controls with just one line of code. For more details, please refer to the usage examples below.
+Returns a read-only array of all enum members. The array structure conforms to [Ant Design](https://ant.design/components/select#usage-upgrade) component specifications, which makes it possible to generate dropdown menus, checkboxes, and other UI controls with just one line of code. For more details, please refer to the usage examples below.
 
 ---
 
@@ -205,7 +206,7 @@ Returns a read-only array of all enum items. The array structure conforms to [An
 
 `string[]`
 
-Returns a read-only array of all enum item `key`(s)
+Returns a read-only array of all enum member `key`(s)
 
 ---
 
@@ -213,7 +214,7 @@ Returns a read-only array of all enum item `key`(s)
 
 <sup>**_\[Function]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-Gets the display text of an enum item based on a certain value or key. If localization has been set up, the localized text will be returned.
+Gets the display text of an enum member based on a certain value or key. If localization has been set up, the localized text will be returned.
 
 ```js
 Week.label(1); // Monday
@@ -227,7 +228,7 @@ Week.label('Monday'); // 星期日, or show localized text if localization is se
 
 <sup>**_\[Function]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
-Get the key of an enum item based on the enum value, if the key is not found, return `undefined`.
+Get the key of an enum member based on the enum value, if the key is not found, return `undefined`.
 
 ```js
 Week.key(1); // Monday (here is key, not label)
@@ -239,7 +240,7 @@ Week.key(1); // Monday (here is key, not label)
 
 <sup>**_\[Function]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
-Determine whether a certain enum item (value or key) exists.
+Determine whether a certain enum member (value or key) exists.
 
 ```js
 Week.has(1); // true
@@ -254,7 +255,7 @@ Week.has('Birthday'); // false
 
 <sup>**_\[Function]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
-`toSelect` is similar to `items`, both return an array of all enum items. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields, no other extra fields. At the same time, the `toSelect` method allows inserting a default element at the beginning of the array, which is generally used for the default option (which means _all_, _none_, or _unlimited_, etc) of select control. Of course, you can customize this default option.
+`toSelect` is similar to `items`, both return an array of all enum members. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields, no other extra fields. At the same time, the `toSelect` method allows inserting a default element at the beginning of the array, which is generally used for the default option (which means _all_, _none_, or _unlimited_, etc) of select control. Of course, you can customize this default option.
 
 ---
 
@@ -262,7 +263,7 @@ Week.has('Birthday'); // false
 
 <sup>**_\[Function]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
-Returns an array of all enum items that conforms to [Ant Design](https://ant.design/components/menu) specifications. It's used to generate the `Menu`, `Dropdown` controls, in a single line of code.
+Returns an array of all enum members that conforms to [Ant Design](https://ant.design/components/menu) specifications. It's used to generate the `Menu`, `Dropdown` controls, in a single line of code.
 
 ```js
 import { Menu } from 'antd';
@@ -285,7 +286,7 @@ The data format is:
 
 <sup>**_\[Function]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
-Returns an array of enum items that can pass directly to the [Ant Design](https://ant.design/components/table#table-demo-head) Table component as `filters` property of a column. This is used to add a dropdown filter box in the table header to filter table data.
+Returns an array of enum members that can pass directly to the [Ant Design](https://ant.design/components/table#table-demo-head) Table component as `filters` property of a column. This is used to add a dropdown filter box in the table header to filter table data.
 
 The data format is:
 
@@ -323,9 +324,9 @@ The data format is:
 
 The `raw` method is used to return the original initialization object of the enum collection, which is the object used to create the enum.
 
-The second overload method is used to return the original initialization object of a single enum item.
+The second overload method is used to return the original initialization object of a single enum member.
 
-The main purpose of the `raw` method is to get the extended custom fields of the enum items. Unlimited number of custom fields are allowed.
+The main purpose of the `raw` method is to get the extended custom fields of the enum members. Unlimited number of custom fields are allowed.
 
 ```js
 const Week = Enum({
@@ -403,7 +404,7 @@ Week.Monday; // 1
 
 ---
 
-#### Supports JSDoc comments on enum items
+#### Supports JSDoc comments on enum members
 
 Supports inline documentation through JSDoc, allowing developers to view detailed comments by simply hovering over enum values in the editor.
 
@@ -424,7 +425,7 @@ You can see that this hover functionality reveals both documentation and enum va
 
 ---
 
-#### Gets a read-only enum items array
+#### Gets a read-only enum members array
 
 ```js
 Week.items; // The output is:
@@ -464,7 +465,7 @@ Week.items.some((item) => item.value === 1); // true
 
 ---
 
-#### Supports traversing enum items array
+#### Supports traversing enum members array
 
 ```js
 Week.items.length; // 2
@@ -716,9 +717,9 @@ const PetTypes = Enum(petTypes, {
 
 #### Handling Name Conflicts?
 
-When working with enums, a common edge case occurs when an enum item's key conflicts with built-in method names. While we typically access enum values through `Week.XXX` notation, complications arise when these keys overlap with enum methods.
+When working with enums, a common edge case occurs when an enum member's key conflicts with built-in method names. While we typically access enum values through `Week.XXX` notation, complications arise when these keys overlap with enum methods.
 
-The enum library provides several utility methods like `label`, `key`, and `toSelect`. When an enum item shares a name with these methods, the enum item takes precedence, effectively overriding the utility method. However, this doesn't mean you lose access to those methods - they remain available through the `items` collection, ensuring all functionality is preserved regardless of naming conflicts. Please refer to the code example below:
+The enum library provides several utility methods like `label`, `key`, and `toSelect`. When an enum member shares a name with these methods, the enum member takes precedence, effectively overriding the utility method. However, this doesn't mean you lose access to those methods - they remain available through the `items` collection, ensuring all functionality is preserved regardless of naming conflicts. Please refer to the code example below:
 
 ```js
 const Week = Enum({
@@ -728,14 +729,14 @@ const Week = Enum({
   label: { value: 4 }, // Naming conflict
 } as const);
 
-Week.keys; // 3, enum item has higher priority and will override the method
-Week.label; // 4, enum item has higher priority and will override the method
+Week.keys; // 3, enum member has higher priority and will override the method
+Week.label; // 4, enum member has higher priority and will override the method
 // You can still access these methods through Enum.items 🙂
 Week.items.keys; // ['foo', 'bar', 'keys', 'label']
 Week.items.label(1); // 'foo'
 ```
 
-For an even more extreme edge case where the items property itself conflicts with an enum item name, a solution is still available. In such scenarios, you can access the items array through a Symbol-based alias field that guarantees access regardless of naming conflicts. Consider the following example:
+For an even more extreme edge case where the items property itself conflicts with an enum member name, a solution is still available. In such scenarios, you can access the items array through a Symbol-based alias field that guarantees access regardless of naming conflicts. Consider the following example:
 
 ```js
 import { ITEMS } from 'enum-plus';
@@ -746,7 +747,7 @@ const Week = Enum({
   items: { value: 3 }, // Naming conflict
 } as const);
 
-Week.items; // 3, enum item has higher priority and will override items
+Week.items; // 3, enum member has higher priority and will override items
 Week[ITEMS]; // ITEMS is an alias Symbol
 // [
 //  { value: 1, key: 'foo', label: 'foo' },
@@ -755,6 +756,17 @@ Week[ITEMS]; // ITEMS is an alias Symbol
 // ]
 // Equivalent to the original Week.items 🙂
 ```
+
+---
+
+## Naming Convention Best Practices
+
+1. **Enum Type Naming:** Use `PascalCase` and append with the `Enum` suffix (e.g., _WeekEnum_, _ColorEnum_).
+2. **Enum Member Naming:** Use `PascalCase` for enum members(e.g., _WeekEnum.Sunday_, _ColorEnum.Red_). This naming style highlights the immutability and static nature of enum members, and ensures they appear at the top in IDE IntelliSense suggestions for easier selection.
+3. **Semantic Clarity:** Ensure enum and member names have clear semantics. Good semantic naming serves as self-documentation, making code intent explicit and reducing cognitive overhead.
+4. **Single Responsibility Principle:** Each enum type should represent a single, cohesive set of related constants. Avoiding overlapping responsibilities between different enum types.
+5. **Provide JSDoc Comments:** Provide JSDoc comments for each enum member and the enum type itself, explaining their purpose and usage. Comprehensive documentation enables IDE hover tooltips and improves code readability and maintainability.
+6. **Internationalization Architecture:** Plan for internationalization from the outset by leveraging the library’s built-in [localization](#localization) features. A well-designed internationalization architecture minimizes future refactoring and facilitates global scalability.
 
 ---
 
@@ -870,8 +882,8 @@ Please note that you are not required to import types such as `EnumItemInit` and
 `EnumExtension` is a generic interface that accepts three type parameters, which are:
 
 - `T`: Initialization object of the enum type (e.g., the object passed to `Enum()`)
-- `K`: Key of the enum item (e.g., Sunday, Monday)
-- `V`: Value of the enum items
+- `K`: Key of the enum member (e.g., Sunday, Monday)
+- `V`: Value of the enum members
 
 If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. However these are all optional, if you don't need them, you can omit them.
 
