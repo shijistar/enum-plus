@@ -75,7 +75,7 @@
     "copy-lib": "mkdir -p lib && shx cp -r tslib/src/* lib",
     "add-umd-header": "tsx scripts/add-umd-header-comments.ts",
     "prepublishOnly": "npm run build && npm run test",
-    "test": "run-p jest jest:legacy",
+    "test": "npm run jest",
     "jest": "jest --coverage",
     "jest:legacy": "jest --coverage -c jest-legacy.config.js",
     "test:browser:bundle": "tsx scripts/browser-test-bundle.ts",

@@ -14,6 +14,15 @@ module.exports = {
   testMatch: ['<rootDir>/test/**/*.{spec,test}.{ts,tsx}'],
   setupFiles: ['./test/jest.setup.ts'],
   collectCoverage: true,
+  coverageThreshold: {
+    global: {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100,
+    },
+  },
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: ['src/types.ts'],
   moduleNameMapper: {

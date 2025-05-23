@@ -31,7 +31,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test
+        run: npm run jest
 
   # Run legacy tests on multiple matrix Node.js versions
   run-tests-legacy-node13:
@@ -59,8 +59,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Build typescript to tslib
+        run: npm run ts2lib
+
       - name: Run tests
-        run: npm run test-legacy
+        run: npm run jest:legacy
 
   # Run legacy tests on multiple matrix Node.js versions
   run-tests-legacy-node15:
@@ -88,8 +91,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Build typescript to tslib
+        run: npm run ts2lib
+
       - name: Run tests
-        run: npm run test-legacy
+        run: npm run jest:legacy
 
   # Run tests on multiple matrix Node.js versions
   run-tests-modern-nodes:
@@ -117,7 +123,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Run tests
-        run: npm test
+        run: npm run jest
 
   # This job is used to run tests on legacy Node.js versions
   # 1. Use default Node.js
