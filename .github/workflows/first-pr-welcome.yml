@@ -1,4 +1,4 @@
-name: First Time Contributor Greeting
+name: First Contribution Welcome Workflow
 
 on:
   pull_request_target:
