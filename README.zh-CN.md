@@ -14,7 +14,7 @@
 <br/>
 
 [![npm version](https://img.shields.io/npm/v/enum-plus.svg?color=red&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
-[![npm bundle size](https://img.shields.io/bundlephobia/minzip/enum-plus?cacheSeconds=86400)](https://bundlephobia.com/result?p=enum-plus)
+[![npm bundle size](https://img.shields.io/bundlejs/size/enum-plus?cacheSeconds=86400&label=minzipped%20size)](https://bundlephobia.com/result?p=enum-plus)
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E&cacheSeconds=86400)
 
@@ -209,7 +209,7 @@ Week.Monday; // 1
 
 ### 💎 &nbsp; label
 
-<sup>**_[方法]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
+<sup>**_\[方法]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
 根据某个枚举值或枚举 key，获取该枚举项的显示文本。如果设置了本地化，则会返回本地化后的文本。
 
@@ -222,7 +222,7 @@ Week.label('Monday'); // 星期一
 
 ### 💎 &nbsp; key
 
-<sup>**_[方法]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
+<sup>**_\[方法]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
 根据枚举值获取该枚举项的 key，如果不存在则返回`undefined`
 
@@ -234,7 +234,7 @@ Week.key(1); // 'Monday'
 
 ### 💎 &nbsp; has
 
-<sup>**_[方法]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
+<sup>**_\[方法]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
 判断某个枚举项（值或 key）是否存在
 
@@ -249,7 +249,7 @@ Week.has('Birthday'); // false
 
 ### 💎 &nbsp; toSelect
 
-<sup>**_[方法]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
+<sup>**_\[方法]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
 `toSelect`与`items`相似，都是返回一个包含全部枚举项的数组。区别是，`toSelect`返回的元素只包含`label`和`value`两个字段，同时，`toSelect`方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
 
@@ -257,7 +257,7 @@ Week.has('Birthday'); // false
 
 ### 💎 &nbsp; toMenu
 
-<sup>**_[方法]_**</sup> &nbsp; `toMenu(): { key, label }[]`
+<sup>**_\[方法]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
 生成一个对象数组，可以绑定给 [Ant Design](https://ant-design.antgroup.com/components/menu-cn#itemtype) 的`Menu`、`Dropdown`等组件
 
@@ -280,7 +280,7 @@ import { Menu } from 'antd';
 
 ### 💎 &nbsp; toFilter
 
-<sup>**_[方法]_**</sup> &nbsp; `toFilter(): { text, value }[]`
+<sup>**_\[方法]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
 生成一个对象数组，可以直接传递给 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
 
@@ -297,7 +297,7 @@ import { Menu } from 'antd';
 
 ### 💎 &nbsp; toValueMap
 
-<sup>**_[方法]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
+<sup>**_\[方法]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
 
 生成一个符合 [Ant Design Pro](https://pro-components.antdigital.dev/components/schema#valueenum) 规范的枚举集合对象，可以传递给 `ProFormField`、`ProTable` 等组件。
 
@@ -314,9 +314,9 @@ import { Menu } from 'antd';
 
 ### 💎 &nbsp; raw
 
-<sup>**_[方法重载^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
+<sup>**_\[方法重载^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
 <br/>
-<sup>**_[方法重载^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
+<sup>**_\[方法重载^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
 第一个重载方法，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
 
@@ -338,7 +338,7 @@ Week.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Monday: 
 
 ---
 
-### ⚡️ &nbsp; valueType &nbsp;&nbsp;&nbsp; <sup>**_[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; valueType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -357,7 +357,7 @@ const badWeeks: (typeof Week.valueType)[] = [0, 8]; // ❌ 类型错误，8 不�
 
 ---
 
-### ⚡️ &nbsp; keyType &nbsp;&nbsp;&nbsp; <sup>**_[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; keyType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -373,7 +373,7 @@ const weekKeys: (typeof Week.keyType)[] = ['Sunday', 'Monday'];
 
 ---
 
-### ⚡️ &nbsp; rawType &nbsp;&nbsp;&nbsp; <sup>**_[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; rawType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
@@ -656,7 +656,7 @@ const myWeek = Enum({
 
 ---
 
-#### 使用枚举值序列来缩小 `number` 取值范围 &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
+#### 使用枚举值序列来缩小 `number` 取值范围 &nbsp;&nbsp;<sup>_\[TypeScript ONLY]_</sup>
 
 使用`valueType`类型约束，你可以将变量类型从宽泛的基本类型（如`number`或`string`）精确缩小为枚举值的联合类型。这种类型缩窄不仅能在编译时防止无效赋值，还能增强代码的可读性和自文档化能力，同时提供更强的类型安全保障
 

@@ -14,7 +14,7 @@
 <br/>
 
 [![npm version](https://img.shields.io/npm/v/enum-plus.svg?color=red&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
-[![npm bundle size](https://img.shields.io/bundlephobia/minzip/enum-plus?cacheSeconds=86400)](https://bundlephobia.com/result?p=enum-plus)
+[![npm bundle size](https://img.shields.io/bundlejs/size/enum-plus?cacheSeconds=86400&label=minzipped%20size)](https://bundlephobia.com/result?p=enum-plus)
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E&cacheSeconds=86400)
 
@@ -211,7 +211,7 @@ Returns a read-only array of all enum item `key`(s)
 
 ### 💎 &nbsp; label
 
-<sup>**_[Function]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
+<sup>**_\[Function]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
 Gets the display text of an enum item based on a certain value or key. If localization has been set up, the localized text will be returned.
 
@@ -225,7 +225,7 @@ Week.label('Monday'); // 星期日, or show localized text if localization is se
 
 ### 💎 &nbsp; key
 
-<sup>**_[Function]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
+<sup>**_\[Function]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
 Get the key of an enum item based on the enum value, if the key is not found, return `undefined`.
 
@@ -237,7 +237,7 @@ Week.key(1); // Monday (here is key, not label)
 
 ### 💎 &nbsp; has
 
-<sup>**_[Function]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
+<sup>**_\[Function]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
 Determine whether a certain enum item (value or key) exists.
 
@@ -252,7 +252,7 @@ Week.has('Birthday'); // false
 
 ### 💎 &nbsp; toSelect
 
-<sup>**_[Function]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
+<sup>**_\[Function]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
 `toSelect` is similar to `items`, both return an array of all enum items. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields, no other extra fields. At the same time, the `toSelect` method allows inserting a default element at the beginning of the array, which is generally used for the default option (which means _all_, _none_, or _unlimited_, etc) of select control. Of course, you can customize this default option.
 
@@ -260,7 +260,7 @@ Week.has('Birthday'); // false
 
 ### 💎 &nbsp; toMenu
 
-<sup>**_[Function]_**</sup> &nbsp; `toMenu(): { key, label }[]`
+<sup>**_\[Function]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
 Returns an array of all enum items that conforms to [Ant Design](https://ant.design/components/menu) specifications. It's used to generate the `Menu`, `Dropdown` controls, in a single line of code.
 
@@ -283,7 +283,7 @@ The data format is:
 
 ### 💎 &nbsp; toFilter
 
-<sup>**_[Function]_**</sup> &nbsp; `toFilter(): { text, value }[]`
+<sup>**_\[Function]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
 Returns an array of enum items that can pass directly to the [Ant Design](https://ant.design/components/table#table-demo-head) Table component as `filters` property of a column. This is used to add a dropdown filter box in the table header to filter table data.
 
@@ -300,7 +300,7 @@ The data format is:
 
 ### 💎 &nbsp; toValueMap
 
-<sup>**_[Function]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
+<sup>**_\[Function]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
 
 Returns a value-to-text mapping object, which maps enum values to their display text, conforming to the [Ant Design Pro](https://procomponents.ant.design/en-US/components/schema#valueenum-1) specification. This is used to generate data sources for `ProFormField` series controls, and `ProTable`.
 
@@ -317,9 +317,9 @@ The data format is:
 
 ### 💎 &nbsp; raw
 
-<sup>**_[Override^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
+<sup>**_\[Override^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
 <br/>
-<sup>**_[Override^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
+<sup>**_\[Override^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
 The `raw` method is used to return the original initialization object of the enum collection, which is the object used to create the enum.
 
@@ -341,7 +341,7 @@ Week.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { v
 
 ---
 
-### ⚡️ &nbsp; valueType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; valueType &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -360,7 +360,7 @@ const badWeeks: (typeof Week.valueType)[] = [0, 8]; // ❌ Type error, 8 is not 
 
 ---
 
-### ⚡️ &nbsp; keyType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; keyType &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -377,7 +377,7 @@ const weekKeys: (typeof Week.keyType)[] = ['Sunday', 'Monday'];
 
 ---
 
-### ⚡️ &nbsp; rawType &nbsp; <sup>**_[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; rawType &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
@@ -658,7 +658,7 @@ const myWeek = Enum({
 
 ---
 
-#### Narrowing the `number` type to enum value sequences &nbsp;&nbsp;<sup>_[TypeScript ONLY]_</sup>
+#### Narrowing the `number` type to enum value sequences &nbsp;&nbsp;<sup>_\[TypeScript ONLY]_</sup>
 
 By leveraging the `valueType` type constraint, you can narrow variable types from broad primitives like `number` or `string` to precise enum value unions. This type narrowing not only prevents invalid assignments at compile time, but also enhances code readability and self-documentation while providing stronger type safety guarantees.
 
