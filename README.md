@@ -84,12 +84,12 @@ The simplest format is a direct mapping of keys to values. This is similar to th
 ```js
 import { Enum } from 'enum-plus';
 
-const Week = Enum({
+const WeekEnum = Enum({
   Sunday: 0,
   Monday: 1,
 } as const);
 
-Week.Monday; // 1
+WeekEnum.Monday; // 1
 ```
 
 > The `as const` type assertion is used to ensure that the enum values are treated as `literal` types, otherwise they will be treated as `number` types. If you are using JavaScript, please remove the `as const`.
@@ -101,12 +101,12 @@ This format is similar to the first one, allowing you to use `string` values.
 ```js
 import { Enum } from 'enum-plus';
 
-const Week = Enum({
+const WeekEnum = Enum({
   Sunday: 'Sun',
   Monday: 'Mon',
 } as const);
 
-Week.Monday; // 'Mon'
+WeekEnum.Monday; // 'Mon'
 ```
 
 ### 3. Standard Format (Recommended)
@@ -116,13 +116,13 @@ The standard format includes both a `value` and a `label` for each enum member. 
 ```js
 import { Enum } from 'enum-plus';
 
-const Week = Enum({
+const WeekEnum = Enum({
   Sunday: { value: 0, label: 'I love Sunday' },
   Monday: { value: 1, label: 'I hate Monday' },
 } as const);
 
-Week.Sunday; // 0
-Week.label(0); // I love Sunday
+WeekEnum.Sunday; // 0
+WeekEnum.label(0); // I love Sunday
 ```
 
 ### 4. Label-Only Format
@@ -132,13 +132,13 @@ This is useful when you want to use the key as the value.
 ```js
 import { Enum } from 'enum-plus';
 
-const Week = Enum({
+const WeekEnum = Enum({
   Sunday: { label: 'I love Sunday' },
   Monday: { label: 'I hate Monday' },
 } as const);
 
-Week.Sunday; // 'Sunday'
-Week.label('Sunday'); // I love Sunday
+WeekEnum.Sunday; // 'Sunday'
+WeekEnum.label('Sunday'); // I love Sunday
 ```
 
 ### 5. Array Format
@@ -171,12 +171,12 @@ enum init {
   Friday,
   Saturday,
 }
-const Week = Enum(init);
+const WeekEnum = Enum(init);
 
-Week.Sunday; // 0
-Week.Monday; // 1
-Week.Saturday; // 6
-Week.label('Sunday'); // Sunday
+WeekEnum.Sunday; // 0
+WeekEnum.Monday; // 1
+WeekEnum.Saturday; // 6
+WeekEnum.label('Sunday'); // Sunday
 ```
 
 ## API
@@ -188,8 +188,8 @@ Week.label('Sunday'); // Sunday
 Works like native `enum`, allowing you to access enum values directly.
 
 ```js
-Week.Sunday; // 0
-Week.Monday; // 1
+WeekEnum.Sunday; // 0
+WeekEnum.Monday; // 1
 ```
 
 ---
@@ -217,9 +217,9 @@ Returns a read-only array of all enum member `key`(s)
 Gets the display text of an enum member based on a certain value or key. If localization has been set up, the localized text will be returned.
 
 ```js
-Week.label(1); // Monday
-Week.label('Monday'); // Monday, here is label, not key
-Week.label('Monday'); // 星期日, or show localized text if localization is set up
+WeekEnum.label(1); // Monday
+WeekEnum.label('Monday'); // Monday, here is label, not key
+WeekEnum.label('Monday'); // 星期日, or show localized text if localization is set up
 ```
 
 ---
@@ -231,7 +231,7 @@ Week.label('Monday'); // 星期日, or show localized text if localization is se
 Get the key of an enum member based on the enum value, if the key is not found, return `undefined`.
 
 ```js
-Week.key(1); // Monday (here is key, not label)
+WeekEnum.key(1); // Monday (here is key, not label)
 ```
 
 ---
@@ -243,10 +243,10 @@ Week.key(1); // Monday (here is key, not label)
 Determine whether a certain enum member (value or key) exists.
 
 ```js
-Week.has(1); // true
-Week.has('Sunday'); // true
-Week.has(9); // false
-Week.has('Birthday'); // false
+WeekEnum.has(1); // true
+WeekEnum.has('Sunday'); // true
+WeekEnum.has(9); // false
+WeekEnum.has('Birthday'); // false
 ```
 
 ---
@@ -268,7 +268,7 @@ Returns an array of all enum members that conforms to [Ant Design](https://ant.d
 ```js
 import { Menu } from 'antd';
 
-<Menu items={Week.toMenu()} />;
+<Menu items={WeekEnum.toMenu()} />;
 ```
 
 The data format is:
@@ -329,15 +329,15 @@ The second overload method is used to return the original initialization object 
 The main purpose of the `raw` method is to get the extended custom fields of the enum members. Unlimited number of custom fields are allowed.
 
 ```js
-const Week = Enum({
+const WeekEnum = Enum({
   Sunday: { value: 0, label: 'Sunday', happy: true },
   Monday: { value: 1, label: 'Monday', happy: false },
 } as const);
 
-Week.raw(0).happy; // true
-Week.raw(0); // { value: 0, label: 'Sunday', happy: true }
-Week.raw('Monday'); // { value: 1, label: 'Monday', happy: false }
-Week.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { value: 1, label: 'Monday', happy: false } }
+WeekEnum.raw(0).happy; // true
+WeekEnum.raw(0); // { value: 0, label: 'Sunday', happy: true }
+WeekEnum.raw('Monday'); // { value: 1, label: 'Monday', happy: false }
+WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { value: 1, label: 'Monday', happy: false } }
 ```
 
 ---
@@ -349,12 +349,12 @@ Week.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { v
 In TypeScript, provides a union type containing all enum values, enabling precise type constraints for variables and component properties. This replaces broad primitive types like `number` or `string` with exact value sets, preventing invalid assignments while enhancing both code readability and compile-time type safety.
 
 ```typescript
-type WeekValues = typeof Week.valueType; // 0 | 1
+type WeekValues = typeof WeekEnum.valueType; // 0 | 1
 
-const weekValue: typeof Week.valueType = 1; // ✅ Type correct, 1 is a valid week enum value
-const weeks: (typeof Week.valueType)[] = [0, 1]; // ✅ Type correct, 0 and 1 are valid week enum values
-const badWeekValue: typeof Week.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
-const badWeeks: (typeof Week.valueType)[] = [0, 8]; // ❌ Type error, 8 is not a valid week enum value
+const weekValue: typeof WeekEnum.valueType = 1; // ✅ Type correct, 1 is a valid week enum value
+const weeks: (typeof WeekEnum.valueType)[] = [0, 1]; // ✅ Type correct, 0 and 1 are valid week enum values
+const badWeekValue: typeof WeekEnum.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
+const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ Type error, 8 is not a valid week enum value
 ```
 
 > Note: This is a TypeScript type only and cannot be called at runtime. Calling it at runtime will throw an exception.
@@ -368,10 +368,10 @@ const badWeeks: (typeof Week.valueType)[] = [0, 8]; // ❌ Type error, 8 is not 
 Similar to `valueType`, provides an union type of all enum `key`(s)
 
 ```typescript
-type WeekKeys = typeof Week.keyType; // 'Sunday' | 'Monday'
+type WeekKeys = typeof WeekEnum.keyType; // 'Sunday' | 'Monday'
 
-const weekKey: typeof Week.keyType = 'Monday';
-const weekKeys: (typeof Week.keyType)[] = ['Sunday', 'Monday'];
+const weekKey: typeof WeekEnum.keyType = 'Monday';
+const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 ```
 
 > Note: This is a TypeScript type only and cannot be called at runtime. Calling it at runtime will throw an exception.
@@ -393,13 +393,13 @@ Provides a type of the original initialization object of the Enum collection.
 #### Picks enum values, consistent with native enums
 
 ```js
-const Week = Enum({
+const WeekEnum = Enum({
   Sunday: { value: 0, label: 'Sunday' },
   Monday: { value: 1, label: 'Monday' },
 } as const);
 
-Week.Sunday; // 0
-Week.Monday; // 1
+WeekEnum.Sunday; // 0
+WeekEnum.Monday; // 1
 ```
 
 ---
@@ -409,14 +409,14 @@ Week.Monday; // 1
 Supports inline documentation through JSDoc, allowing developers to view detailed comments by simply hovering over enum values in the editor.
 
 ```js
-const Week = Enum({
+const WeekEnum = Enum({
   /** Represents Sunday */
   Sunday: { value: 0, label: 'Sunday' },
   /** Represents Monday */
   Monday: { value: 1, label: 'Monday' },
 } as const);
 
-Week.Monday; // Hover over Monday
+WeekEnum.Monday; // Hover over Monday
 ```
 
 ![jsdoc](./public/jsdoc-en.png)
@@ -428,7 +428,7 @@ You can see that this hover functionality reveals both documentation and enum va
 #### Gets a read-only enum members array
 
 ```js
-Week.items; // The output is:
+WeekEnum.items; // The output is:
 // [
 //  { value: 0, label: 'Sunday', key: 'Sunday', raw: { value: 0, label: 'Sunday' } },
 //  { value: 1, label: 'Monday', key: 'Monday', raw: { value: 1, label: 'Monday' } },
@@ -440,7 +440,7 @@ Week.items; // The output is:
 #### Gets the first enum value
 
 ```js
-Week.items[0].value; // 0
+WeekEnum.items[0].value; // 0
 ```
 
 ---
@@ -448,9 +448,9 @@ Week.items[0].value; // 0
 #### Checks if a value is a valid enum value
 
 ```js
-Week.has(1); // true
-Week.items.some((item) => item.value === 1); // true
-1 instanceof Week; // true
+WeekEnum.has(1); // true
+WeekEnum.items.some((item) => item.value === 1); // true
+1 instanceof WeekEnum; // true
 ```
 
 ---
@@ -458,9 +458,9 @@ Week.items.some((item) => item.value === 1); // true
 #### `instanceof` operator
 
 ```js
-1 instanceof Week; // true
-'1' instanceof Week; // true
-'Monday' instanceof Week; // true
+1 instanceof WeekEnum; // true
+'1' instanceof WeekEnum; // true
+'Monday' instanceof WeekEnum; // true
 ```
 
 ---
@@ -468,15 +468,15 @@ Week.items.some((item) => item.value === 1); // true
 #### Supports traversing enum members array
 
 ```js
-Week.items.length; // 2
-Week.items.map((item) => item.value); // [0, 1], ✅ Traversable
-Week.items.forEach((item) => {}); // ✅ Traversable
-for (const item of Week.items) {
+WeekEnum.items.length; // 2
+WeekEnum.items.map((item) => item.value); // [0, 1], ✅ Traversable
+WeekEnum.items.forEach((item) => {}); // ✅ Traversable
+for (const item of WeekEnum.items) {
   // ✅ Traversable
 }
-Week.items.push({ value: 2, label: 'Tuesday' }); // ❌ Not allowed, read-only
-Week.items.splice(0, 1); // ❌ Not allowed, read-only
-Week.items[0].label = 'foo'; // ❌ Not allowed, read-only
+WeekEnum.items.push({ value: 2, label: 'Tuesday' }); // ❌ Not allowed, read-only
+WeekEnum.items.splice(0, 1); // ❌ Not allowed, read-only
+WeekEnum.items[0].label = 'foo'; // ❌ Not allowed, read-only
 ```
 
 ---
@@ -484,9 +484,9 @@ Week.items[0].label = 'foo'; // ❌ Not allowed, read-only
 #### Gets enum display text by value (or key)
 
 ```js
-Week.label(1); // Monday, here is label, not key
-Week.label(Week.Monday); // Monday, here is label, not key
-Week.label('Monday'); // Monday, get display text by key
+WeekEnum.label(1); // Monday, here is label, not key
+WeekEnum.label(WeekEnum.Monday); // Monday, here is label, not key
+WeekEnum.label('Monday'); // Monday, get display text by key
 ```
 
 ---
@@ -494,9 +494,9 @@ Week.label('Monday'); // Monday, get display text by key
 #### Gets enum key by value
 
 ```js
-Week.key(1); // 'Monday'
-Week.key(Week.Monday); // 'Monday'
-Week.key(9); // undefined, because it does not exist
+WeekEnum.key(1); // 'Monday'
+WeekEnum.key(WeekEnum.Monday); // 'Monday'
+WeekEnum.key(9); // undefined, because it does not exist
 ```
 
 ---
@@ -504,14 +504,14 @@ Week.key(9); // undefined, because it does not exist
 #### Extends custom fields with unlimited numbers
 
 ```js
-const Week = Enum({
+const WeekEnum = Enum({
   Sunday: { value: 0, label: 'Sunday', active: true, disabled: false },
   Monday: { value: 1, label: 'Monday', active: false, disabled: true },
 } as const);
 
-Week.raw(0).active; // true
-Week.raw(Week.Sunday).active; // true
-Week.raw('Sunday').active; // true
+WeekEnum.raw(0).active; // true
+WeekEnum.raw(WeekEnum.Sunday).active; // true
+WeekEnum.raw('Sunday').active; // true
 ```
 
 ---
@@ -527,7 +527,7 @@ Week.raw('Sunday').active; // true
   ```tsx
   import { Select } from 'antd';
 
-  <Select options={Week.items} />;
+  <Select options={WeekEnum.items} />;
   ```
 
   [Material-UI](https://mui.com/material-ui/react-select/) Select
@@ -536,7 +536,7 @@ Week.raw('Sunday').active; // true
   import { MenuItem, Select } from '@mui/material';
 
   <Select>
-    {Week.items.map((item) => (
+    {WeekEnum.items.map((item) => (
       <MenuItem key={item.value} value={item.value}>
         {item.label}
       </MenuItem>
@@ -549,7 +549,7 @@ Week.raw('Sunday').active; // true
   ```tsx
   import { DropDownList } from '@progress/kendo-react-dropdowns';
 
-  <DropDownList data={Week.items} textField="label" dataItemKey="value" />;
+  <DropDownList data={WeekEnum.items} textField="label" dataItemKey="value" />;
   ```
 
   **Vue-based UI libraries**
@@ -558,20 +558,20 @@ Week.raw('Sunday').active; // true
 
   ```tsx
   <el-select>
-    <el-option v-for="item in Week.items" v-bind="item" />
+    <el-option v-for="item in WeekEnum.items" v-bind="item" />
   </el-select>
   ```
 
   [Ant Design Vue](https://antdv.com/components/select) | [Arc Design](https://arco.design/vue/en-US/component/select) Select
 
   ```tsx
-  <a-select :options="Week.items" />
+  <a-select :options="WeekEnum.items" />
   ```
 
   [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
 
   ```tsx
-  <v-select :items="Week.items" item-title="label" />
+  <v-select :items="WeekEnum.items" item-title="label" />
   ```
 
   **Angular-based UI libraries**
@@ -580,7 +580,7 @@ Week.raw('Sunday').active; // true
 
   ```html
   <mat-select>
-    <mat-option *ngFor="let item of Week.items" [value]="item.value">{{ item.label }}</mat-option>
+    <mat-option *ngFor="let item of WeekEnum.items" [value]="item.value">{{ item.label }}</mat-option>
   </mat-select>
   ```
 
@@ -588,7 +588,7 @@ Week.raw('Sunday').active; // true
 
   ```html
   <nz-select>
-    <nz-option *ngFor="let item of Week.items" [nzValue]="item.value">{{ item.label }}</nz-option>
+    <nz-option *ngFor="let item of WeekEnum.items" [nzValue]="item.value">{{ item.label }}</nz-option>
   </nz-select>
   ```
 
@@ -598,7 +598,7 @@ Week.raw('Sunday').active; // true
   - If set to an object, you can customize the value and display text of the default option, and the display text will automatically support localization.
 
   ```tsx
-  <Select options={Week.toSelect({ firstOption: true })} />
+  <Select options={WeekEnum.toSelect({ firstOption: true })} />
   // [
   //  { value: '', label: 'All' },
   //  { value: 0, label: 'Sunday' },
@@ -606,7 +606,7 @@ Week.raw('Sunday').active; // true
   // ]
 
   // Add custom option at the top
-  <Select options={Week.toSelect({ firstOption: { value: 0, label: 'Unlimited' } })} />
+  <Select options={WeekEnum.toSelect({ firstOption: { value: 0, label: 'Unlimited' } })} />
   ```
 
 - `toMenu` method is used to generate data sources for [Ant Design](https://ant.design/components/menu#itemtype) `Menu`, `Dropdown` components.
@@ -614,7 +614,7 @@ Week.raw('Sunday').active; // true
 ```tsx
 import { Menu } from 'antd';
 
-<Menu items={Week.toMenu()} />;
+<Menu items={WeekEnum.toMenu()} />;
 ```
 
 - `toFilter` method is used to add a dropdown filter box in the [Ant Design](https://ant.design/components/table#table-demo-head) `Table` header to filter table data.
@@ -626,7 +626,7 @@ const columns = [
   {
     title: 'week',
     dataIndex: 'week',
-    filters: Week.toFilter(),
+    filters: WeekEnum.toFilter(),
   },
 ];
 // Add column filter at table header
@@ -638,11 +638,11 @@ const columns = [
 ```tsx
 import { ProFormCheckbox, ProFormRadio, ProFormSelect, ProFormTreeSelect, ProTable } from '@ant-design/pro-components';
 
-<ProFormSelect valueEnum={Week.toValueMap()} />; // Select
-<ProFormCheckbox valueEnum={Week.toValueMap()} />; // Checkbox
-<ProFormRadio.Group valueEnum={Week.toValueMap()} />; // Radio
-<ProFormTreeSelect valueEnum={Week.toValueMap()} />; // TreeSelect
-<ProTable columns={[{ dataIndex: 'week', valueEnum: Week.toValueMap() }]} />; // ProTable
+<ProFormSelect valueEnum={WeekEnum.toValueMap()} />; // Select
+<ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />; // Checkbox
+<ProFormRadio.Group valueEnum={WeekEnum.toValueMap()} />; // Radio
+<ProFormTreeSelect valueEnum={WeekEnum.toValueMap()} />; // TreeSelect
+<ProTable columns={[{ dataIndex: 'week', valueEnum: WeekEnum.toValueMap() }]} />; // ProTable
 ```
 
 ---
@@ -651,7 +651,7 @@ import { ProFormCheckbox, ProFormRadio, ProFormSelect, ProFormTreeSelect, ProTab
 
 ```js
 const myWeek = Enum({
-  ...Week.raw(),
+  ...WeekEnum.raw(),
   Friday: { value: 5, label: 'Friday' },
   Saturday: { value: 6, label: 'Saturday' },
 });
@@ -667,15 +667,15 @@ By leveraging the `valueType` type constraint, you can narrow variable types fro
 const weekValue: number = 8; // 👎 Any number can be assigned to the week enum, even if it is wrong
 const weekName: string = 'Birthday'; // 👎 Any string can be assigned to the week enum, even if it is wrong
 
-const goodWeekValue: typeof Week.valueType = 1; // ✅ Type correct, 1 is a valid week enum value
-const goodWeekName: typeof Week.keyType = 'Monday'; // ✅ Type correct, 'Monday' is a valid week enum name
+const goodWeekValue: typeof WeekEnum.valueType = 1; // ✅ Type correct, 1 is a valid week enum value
+const goodWeekName: typeof WeekEnum.keyType = 'Monday'; // ✅ Type correct, 'Monday' is a valid week enum name
 
-const badWeekValue: typeof Week.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
-const badWeekName: typeof Week.keyType = 'Birthday'; // ❌ Type error, 'Birthday' is not a valid week enum name
+const badWeekValue: typeof WeekEnum.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
+const badWeekName: typeof WeekEnum.keyType = 'Birthday'; // ❌ Type error, 'Birthday' is not a valid week enum name
 
 type FooProps = {
-  value?: typeof Week.valueType; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
-  names?: (typeof Week.keyType)[]; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
+  value?: typeof WeekEnum.valueType; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
+  names?: (typeof WeekEnum.keyType)[]; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
 };
 ```
 
@@ -697,7 +697,7 @@ const PetTypes = Enum(petTypes, {
   getLabel: 'name',
   getKey: 'code', // getKey is optional
 });
-Week.items; // The output is:
+WeekEnum.items; // The output is:
 // [   { value: 1, label: 'Dot', key: 'dog' },
 //     { value: 2, label: 'Cat', key: 'cat' },
 //     { value: 3, label: 'Rabbit', key: 'rabbit' }   ]
@@ -717,23 +717,23 @@ const PetTypes = Enum(petTypes, {
 
 #### Handling Name Conflicts?
 
-When working with enums, a common edge case occurs when an enum member's key conflicts with built-in method names. While we typically access enum values through `Week.XXX` notation, complications arise when these keys overlap with enum methods.
+When working with enums, a common edge case occurs when an enum member's key conflicts with built-in method names. While we typically access enum values through `WeekEnum.XXX` notation, complications arise when these keys overlap with enum methods.
 
 The enum library provides several utility methods like `label`, `key`, and `toSelect`. When an enum member shares a name with these methods, the enum member takes precedence, effectively overriding the utility method. However, this doesn't mean you lose access to those methods - they remain available through the `items` collection, ensuring all functionality is preserved regardless of naming conflicts. Please refer to the code example below:
 
 ```js
-const Week = Enum({
+const WeekEnum = Enum({
   foo: { value: 1 },
   bar: { value: 2 },
   keys: { value: 3 }, // Naming conflict
   label: { value: 4 }, // Naming conflict
 } as const);
 
-Week.keys; // 3, enum member has higher priority and will override the method
-Week.label; // 4, enum member has higher priority and will override the method
+WeekEnum.keys; // 3, enum member has higher priority and will override the method
+WeekEnum.label; // 4, enum member has higher priority and will override the method
 // You can still access these methods through Enum.items 🙂
-Week.items.keys; // ['foo', 'bar', 'keys', 'label']
-Week.items.label(1); // 'foo'
+WeekEnum.items.keys; // ['foo', 'bar', 'keys', 'label']
+WeekEnum.items.label(1); // 'foo'
 ```
 
 For an even more extreme edge case where the items property itself conflicts with an enum member name, a solution is still available. In such scenarios, you can access the items array through a Symbol-based alias field that guarantees access regardless of naming conflicts. Consider the following example:
@@ -741,20 +741,20 @@ For an even more extreme edge case where the items property itself conflicts wit
 ```js
 import { ITEMS } from 'enum-plus';
 
-const Week = Enum({
+const WeekEnum = Enum({
   foo: { value: 1 },
   bar: { value: 2 },
   items: { value: 3 }, // Naming conflict
 } as const);
 
-Week.items; // 3, enum member has higher priority and will override items
-Week[ITEMS]; // ITEMS is an alias Symbol
+WeekEnum.items; // 3, enum member has higher priority and will override items
+WeekEnum[ITEMS]; // ITEMS is an alias Symbol
 // [
 //  { value: 1, key: 'foo', label: 'foo' },
 //  { value: 2, key: 'bar', label: 'bar' },
 //  { value: 3, key: 'items', label: 'items' }
 // ]
-// Equivalent to the original Week.items 🙂
+// Equivalent to the original WeekEnum.items 🙂
 ```
 
 ---
@@ -817,7 +817,7 @@ const i18nLocalize = (content: string | undefined) => i18next.t(content);
 // 👍 Or encapsulate it into a basic component
 const componentLocalize = (content: string | undefined) => <Localize value={content} />;
 
-const Week = Enum(
+const WeekEnum = Enum(
   {
     Sunday: { value: 0, label: 'week.sunday' },
     Monday: { value: 1, label: 'week.monday' },
@@ -829,9 +829,9 @@ const Week = Enum(
   }
 );
 setLang('zh-CN');
-Week.label(1); // 星期一
+WeekEnum.label(1); // 星期一
 setLang('en-US');
-Week.label(1); // Monday
+WeekEnum.label(1); // Monday
 ```
 
 For applications with consistent localization needs, the `Enum.localize` method offers a convenient way to set localization globally rather than configuring each enum individually. When enum-specific localization options are provided during initialization, these will override the global settings.
@@ -858,7 +858,7 @@ Enum.extends({
   },
 });
 
-Week.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
+WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
 ```
 
 If you are using TypeScript, you probably need to further extend the enum type declaration to get better type hints. Create or edit a declaration file in your project (e.g., `global.d.ts`) and extend the global type. This file can be placed in the root directory of the project or any other directory, just make sure TypeScript can find it.

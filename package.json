@@ -5,11 +5,24 @@
   "keywords": [
     "enum",
     "enumeration",
+    "tool",
+    "javascript",
     "typescript",
-    "localization",
+    "frontend",
+    "ui binding",
+    "ui integration",
     "node.js",
     "ssr",
-    "tool"
+    "localization",
+    "plugin system",
+    "react",
+    "vue",
+    "angular",
+    "ant-design",
+    "arco-design",
+    "material-ui",
+    "vuetify",
+    "ng-zorro"
   ],
   "homepage": "https://github.com/shijistar/enum-plus",
   "bugs": {
