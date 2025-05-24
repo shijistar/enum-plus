@@ -4,6 +4,12 @@ on:
   release:
     types: [created]
 
+permissions:
+  contents: write
+  packages: write
+  actions: read
+  statuses: write
+
 jobs:
   test:
     uses: ./.github/workflows/reusable-test.yml
