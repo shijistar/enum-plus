@@ -5,5 +5,5 @@ export default defineConfig({
   umd: { entry: 'src', output: 'umd' },
   sourcemap: true,
   targets: { chrome: 80 },
-  plugins: ['./scripts/legacy-mode.ts'],
+  plugins: ['./scripts/plugin-legacy-mode.ts'],
 });

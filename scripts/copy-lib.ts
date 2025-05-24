@@ -1,6 +1,4 @@
-// This script copies the contents of the `tslib/src` directory to the `lib` directory.
-// 遍历lib目录下的所有的.map文件，把"sources":["../../src/*.ts"]替换为"sources":["../src/*.ts"]
-import { copySync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs-extra';
+import { cpSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const libDir = 'lib';
@@ -10,8 +8,9 @@ rmSync(libDir, {
   force: true,
 });
 
-copySync('tslib/src', libDir, {
-  overwrite: true,
+cpSync('tslib/src', libDir, {
+  recursive: true,
+  force: true,
   errorOnExist: false,
 });
 
