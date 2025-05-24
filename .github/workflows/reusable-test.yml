@@ -1,4 +1,6 @@
 name: Reusable Tests
+permissions:
+  contents: read
 on:
   workflow_call: # This workflow can be called by other workflows
     inputs:
