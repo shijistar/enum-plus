@@ -16,7 +16,7 @@ const config = {
 };
 if (nodeVersion < 14) {
   // @ts-expect-error: because setupTestFrameworkScriptFile is a deprecated API
-  config.setupTestFrameworkScriptFile = ['<rootDir>/tslib/test/jest.setup.js'];
+  config.setupTestFrameworkScriptFile = '<rootDir>/tslib/test/jest.setup.js';
 } else {
   config.setupFilesAfterEnv = ['<rootDir>/tslib/test/jest.setup.js'];
 }
