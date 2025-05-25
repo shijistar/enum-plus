@@ -68,7 +68,7 @@ export class PlaywrightEngine extends TestEngineBase {
   // eslint-disable-next-line @typescript-eslint/ban-types
   override expect<ActualType = unknown>(actual: ActualType): MakeMatchers<void, ActualType, {}> {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    return expect(actual) as MakeMatchers<void, ActualType, {}>;
+    return expect(actual) as unknown as MakeMatchers<void, ActualType, {}>;
   }
   override describe(name: string, fn: () => void): void {
     test.describe(name, fn);
