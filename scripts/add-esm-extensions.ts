@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
+const directory = process.argv[2];
 /*
  * This script adds .js extensions to `import` paths in output javascript files.
  *
@@ -8,8 +9,9 @@ import { join } from 'path';
  * So changed to a post-build processing approach instead.
  */
 
-processDir('./es');
-processDir('./es-legacy');
+if (directory) {
+  processDir(directory);
+}
 
 function processDir(dir: string) {
   for (const file of readdirSync(dir)) {

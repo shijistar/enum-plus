@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "3.0.0",
+  "version": "3.0.0-alpha.0",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
@@ -90,8 +90,8 @@
   ],
   "scripts": {
     "build": "run-p build:*",
-    "build:es": "run-s task:build-es task:add-umd-header task:add-esm-extensions",
-    "build:es-legacy": "cross-env LEGACY=1 father build",
+    "build:es": "run-s task:build-es task:add-umd-banner task:add-es-extensions",
+    "build:es-legacy": "cross-env LEGACY=1 run-s task:build-es-legacy task:add-umd-banner task:add-es-legacy-extensions",
     "build:lib": "run-s ts2lib task:copy-dts task:copy-lib",
     "e2e": "run-s task:bundle-e2e task:run-e2e",
     "e2e:debug": "run-s task:bundle-e2e task:run-e2e-debug",
@@ -100,9 +100,11 @@
     "prepare-legacy-node13": "node ./scripts/prepare-legacy.js node13",
     "prepare-legacy-node15": "node ./scripts/prepare-legacy.js node15",
     "prepublishOnly": "run-s build test",
-    "task:add-esm-extensions": "tsx scripts/add-esm-extensions.ts",
-    "task:add-umd-header": "tsx scripts/add-umd-header-comments.ts",
+    "task:add-es-extensions": "tsx scripts/add-esm-extensions.ts es",
+    "task:add-es-legacy-extensions": "tsx scripts/add-esm-extensions.ts es-legacy",
+    "task:add-umd-banner": "tsx scripts/add-umd-banner.ts",
     "task:build-es": "father build",
+    "task:build-es-legacy": "father build",
     "task:bundle-e2e": "tsx scripts/make-e2e-bundle.ts",
     "task:copy-dts": "shx cp ./src/*.d.ts ./lib",
     "task:copy-lib": "tsx scripts/copy-lib.ts",

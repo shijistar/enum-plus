@@ -1,14 +1,16 @@
 import { defineConfig } from 'father';
 
+const legacy = process.env.LEGACY === '1';
 export default defineConfig({
-  esm: {
-    input: 'src',
-    output: 'es',
-    transformer: 'babel',
-    // extraBabelPlugins: [['babel-plugin-add-import-extension', { extension: '.js' }]],
+  esm: { input: 'src', output: legacy ? 'es-legacy' : 'es', transformer: 'babel' },
+  umd: {
+    entry: 'src',
+    name: 'EnumPlus',
+    output: {
+      path: 'umd',
+      filename: legacy ? 'enum-plus-legacy.min' : 'enum-plus.min',
+    },
   },
-  umd: { entry: 'src', output: 'umd' },
   sourcemap: true,
-  targets: { chrome: 80 },
-  plugins: ['./scripts/plugin-legacy-mode.ts'],
+  targets: legacy ? { ie: 11 } /* ES2015 */ : { chrome: 80 } /* ES2020 */,
 });
