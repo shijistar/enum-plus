@@ -14,7 +14,12 @@
 - 🔥 introduce an official plugin `enum-plus-plugin` that provides a collection of highly shareable plugins.
   - These plugins are designed to work in all scenarios and environments (including browser and Node.js), without introducing dependencies on third-party frameworks, component libraries, or platforms.
   - If you have a good idea that might be specific to a certain framework or platform rather than universally applicable, we recommend creating a new plugin project (e.g., `enum-plus-plugin-xxx`). We are happy to see that, and hope that you submit a PR to `enum-plus-plugin` to link your project back.
-- ✨ Includes the `UMD` module format in this release, which allows you to use `enum-plus` in a browser environment without the need for a module bundler. This is particularly useful for quick prototyping or when working with legacy codebases that do not support modern module systems. You can find them in the `umd` directory of the package. They can also be downloaded in [github release](https://github.com/shijistar/enum-plus/releases) assets.
+- ✨ Introduced **UMD module format** support, enabling direct browser usage without requiring a module bundler. Two variants are now available:
+
+  - `enum-plus.min.js` (ES2020) optimized for modern browsers.
+  - `enum-plus-legacy.min.js` (ES2015) for maximum compatibility.
+
+  This addition is ideal for rapid prototyping and integration with legacy systems that don't support contemporary module resolution. The UMD builds are accessible in the `umd` directory of the npm package or can be directly downloaded from [Github Releases](https://github.com/shijistar/enum-plus/releases).
 
 ### Breaking Changes
 
@@ -25,6 +30,10 @@
   - `enums.filters`
   - `enums.valuesEnum`
 - Please use the new methods `Enum.items`, `Enum.toSelect`, `Enum.toMenu`, `Enum.toFilter`, and `Enum.toValueMap` instead, which are introduced since `v2.1.0`.
+
+### Bug Fixes
+
+- 🐞 Fix sourcemap resolution issues in CommonJS mode
 
 ## 2.3.0
 
