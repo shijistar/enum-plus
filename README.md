@@ -966,11 +966,12 @@ enum-plus is designed to be compatible with a wide range of environments, includ
 
 ### Browser Environments
 
-- **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) field (such as webpack 5+, vite, rollup), `es` directory is imported, which targets `ES2020`. For broader browser support, you can transpile to earlier syntax using `@babel/preset-env` during your build process.
+- **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) field (such as webpack 5+, vite, rollup), `es` directory is imported, which targets `ES2020`. If you need to support earlier browsers, you can use `@babel/preset-env` to transpile to earlier syntax during the build process.
 
 - **Legacy Bundlers**: For bundlers without [exports](https://nodejs.org/api/packages.html#exports-sugar) field support (like Webpack 4), this library automatically falls back to the `main` field entry point, and `es-legacy` directory is imported, which targets `ES2015`.
 
-- **UMD Version**: For direct browser usage or static projects without bundlers, enum-plus provides UMD version that can be included via a `<script>` tag. The `umd` directory contains two versions:
+- **UMD Version**: For direct browser usage or static projects without bundlers, enum-plus provides UMD format files in the `umd` directory. These can be included via a `<script>` tag and accessed through `window.EnumPlus`. The UMD directory offers two versions:
+
   - `enum-plus.min.js`: Targets **`ES2020`**, suitable for modern browsers.
   - `enum-plus-legacy.min.js`: Targets **`ES2015`**, suitable for older browsers.
 
@@ -982,7 +983,7 @@ enum-plus is designed to be compatible with a wide range of environments, includ
 
 ### **Node.js Environments**
 
-enum-plus requires a minimum of `ES2016` features, compatible with Node.js `v7.x` and above
+In Node.js environments, the default import path is the `lib` directory, which targets **`ES2016`**. This is compatible with Node.js `v7.x` and above.
 
 ---
 

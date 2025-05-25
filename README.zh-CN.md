@@ -964,16 +964,16 @@ enum-plus 设计之初就考虑了广泛的兼容性需求，可无缝运行于�
 
 ### 浏览器环境
 
-- **现代打包工具**：对于支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段的打包工具（如 webpack 5+、vite、rollup），引入的是`es`目录，对应的 EcmaScript 版本是 **`ES2020`**。如果需要更广泛的浏览器支持，可以在构建过程中使用 `@babel/preset-env` 转译为更早期的语法。
+- **现代打包工具**：对于支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段的打包工具（如 webpack 5+、vite、rollup），引入的是 `es` 目录，对应的 EcmaScript 版本是 **`ES2020`**。如果需要支持更早期的浏览器，可以在构建过程中使用 `@babel/preset-env` 转译为更早期的语法。
 
-- **旧版打包工具**：对于不支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段的工具（如 webpack 4），enum-plus 会自动回退到 `main` 字段的入口点，引入的是`es-legacy`目录，对应的 EcmaScript 版本是 **`ES2015`**。
+- **旧版打包工具**：对于不支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段的工具（如 webpack 4），enum-plus 会自动回退到 `main` 字段的入口点，引入的是 `es-legacy` 目录，对应的 EcmaScript 版本是 **`ES2015`**。
 
-- **UMD版本**：为了方便在浏览器中直接使用，或者方便在没有打包工具的静态项目中使用，enum-plus 还提供了 UMD 版本，可以通过 `<script>` 标签引入。`umd` 目录下提供了两种版本：
+- **UMD版本**：为了方便在浏览器中直接使用，或者方便在没有打包工具的静态项目中使用，enum-plus 还提供了 UMD 版本，存放在 `umd` 目录下。UMD 格式的文件可以通过 `<script>` 标签直接引入，通过 `window.EnumPlus` 获取类库内容。umd 目录提供了两种版本：
 
   - `enum-plus.min.js`：对应的 EcmaScript 版本是 **`ES2020`**，适用于现代浏览器
   - `enum-plus-legacy.min.js`：对应的 EcmaScript 版本是 **`ES2015`**，适用于旧版浏览器
 
-> **Polyfill 策略**：为了最小化包的体积，enum-plus 不包含任何 polyfill。如果需要支持旧版浏览器，可以自行引入以下工具：
+> **Polyfill 策略**：为了最小化包的体积，除了 UMD 格式，enum-plus 不包含任何 polyfill。如果需要支持旧版浏览器，可以自行引入以下工具：
 >
 > - `core-js`
 > - 配置适当的 `@babel/preset-env` 和 `useBuiltIns` 设置
@@ -981,7 +981,7 @@ enum-plus 设计之初就考虑了广泛的兼容性需求，可无缝运行于�
 
 ### Node.js 环境
 
-在 Node.js 环境下，enum-plus 提供的 EcmaScript 版本是 **`ES2016`**，可以兼容 Node.js `v7.x` 及以上版本
+在 Node.js 环境下，默认引入的是 `lib` 目录，对应的 EcmaScript 版本是 **`ES2016`**，可以兼容 Node.js `v7.x` 及以上版本
 
 ---
 
