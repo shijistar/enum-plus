@@ -1,8 +1,7 @@
 'use strict';
 
-/** @type {import('ts-jest').JestConfigWithTsJest} */
+/** @type {import('jest').Config} */
 module.exports = {
-  preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/tslib/test/**/*.{spec,test}.js'],
   setupFilesAfterEnv: ['<rootDir>/tslib/test/jest.setup.js'],
