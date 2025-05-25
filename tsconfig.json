@@ -26,8 +26,8 @@
     "resolveJsonModule": true,
     "allowJs": false,
     "paths": {
-      "@enum-plus": ["./src"],
-      "@enum-plus/*": ["./src/*"]
+      "@enum-plus/*": ["./src/*"],
+      "@enum-plus": ["./src"]
     }
   },
   "include": ["src", "scripts", "test", "test-browser", "*.ts", ".*.ts"],

@@ -21,7 +21,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?label=Downloads&color=007ec6&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=ff8000&cacheSeconds=86400)
 
-⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Naming Conventions](#naming-convention-best-practices) | [Localization](#localization) | [Extensibility](#extensibility) | [Compatibility](#compatibility) | [Q&A](#qa)&nbsp; ⬇️
+⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Naming Conventions](#naming-convention-best-practices) | [Localization](#localization) | [Extensibility](#extensibility) | [Compatibility](#compatibility) | [Q&A](#qa) | [Contributing](#contributing)&nbsp; ⬇️
 
 ## Introduction
 
