@@ -141,7 +141,7 @@ jobs:
           cache: 'npm'
 
       - name: Downgrade legacy dependencies
-        run: npm run prepare-legacy-node7to13
+        run: npm run prepare-legacy-node13
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps --ignore-scripts --no-package-lock
@@ -178,7 +178,7 @@ jobs:
           cache: 'npm'
 
       - name: Downgrade legacy dependencies
-        run: npm run prepare-legacy-node14to15
+        run: npm run prepare-legacy-node15
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps --ignore-scripts --no-package-lock
