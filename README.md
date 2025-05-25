@@ -80,19 +80,27 @@ yarn add enum-plus
 - The specific version:
 
 ```html
+<!-- ES2020 modern version -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
+<!-- ES2015 legacy version -->
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - The latest version:
 
 ```html
+<!-- ES2020 modern version -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+<!-- ES2015 legacy version -->
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
 ```
 
 ⬇️ **Download**:
 
-- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz) (~2kB gzipped)
+- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz)
 - [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (Full package with sourcemap)
+- [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.min.js.gz)
+- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (Full package with sourcemap)
 
 > You can also download them in [github release](https://github.com/shijistar/enum-plus/releases) assets
 
@@ -948,19 +956,27 @@ If you want to provide more friendly type hints in the extension methods, you ma
 
 ## Compatibility
 
-- **Browser Environments**:
+enum-plus is designed to be compatible with a wide range of environments, including modern browsers, Node.js, and various build tools. Below are the compatibility details for different environments:
 
-  - **Modern Bundlers**: With bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) field (Webpack 5+, Vite, Rollup), enum-plus targets `ES2020`. For broader browser support, transpile to earlier syntax using `@babel/preset-env` during your build process.
+### Browser Environments
 
-  - **Legacy Bundlers**: For tools without `exports` field support (like Webpack 4), enum-plus automatically falls back to the `main` field entry point, which targets `ES2016`.
+- **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) field (such as webpack 5+, vite, rollup), `es` directory is imported, which targets `ES2020`. For broader browser support, you can transpile to earlier syntax using `@babel/preset-env` during your build process.
 
-  - **Polyfill Strategy**: enum-plus ships without polyfills to minimize bundle size. For legacy browser support, incorporate:
+- **Legacy Bundlers**: For bundlers without [exports](https://nodejs.org/api/packages.html#exports-sugar) field support (like Webpack 4), this library automatically falls back to the `main` field entry point, and `es-legacy` directory is imported, which targets `ES2015`.
 
-    - `core-js`
-    - `@babel/preset-env` with appropriate `useBuiltIns` settings
-    - Alternative polyfill implementations
+- **UMD Version**: For direct browser usage or static projects without bundlers, enum-plus provides UMD version that can be included via a `<script>` tag. The `umd` directory contains two versions:
+  - `enum-plus.min.js`: Targets **`ES2020`**, suitable for modern browsers.
+  - `enum-plus-legacy.min.js`: Targets **`ES2015`**, suitable for older browsers.
 
-- **Node.js Compatibility**: enum-plus requires a minimum of `ES2016` features, compatible with Node.js `v7.x` and above.
+> **Polyfill Strategy**: enum-plus ships without polyfills to minimize bundle size. For legacy browser support, you can include the following tools as needed:
+>
+> - `core-js`
+> - `@babel/preset-env` with appropriate `useBuiltIns` settings
+> - Alternative polyfill implementations
+
+### **Node.js Environments**
+
+enum-plus requires a minimum of `ES2016` features, compatible with Node.js `v7.x` and above
 
 ---
 
