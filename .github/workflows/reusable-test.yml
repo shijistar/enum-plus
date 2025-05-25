@@ -54,8 +54,6 @@ jobs:
             tslib
             lib
           key: ${{ runner.os }}-build-node7-13-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-node7-13-
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -84,8 +82,6 @@ jobs:
             tslib
             lib
           key: ${{ runner.os }}-build-node14-15-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-node14-15-
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -112,8 +108,6 @@ jobs:
           path: |
             node_modules
           key: ${{ runner.os }}-build-modern-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-modern-
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -157,8 +151,6 @@ jobs:
             tslib
             lib
           key: ${{ runner.os }}-build-node7-13-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-node7-13-
 
   # This job is used to run tests on legacy Node.js versions
   # 1. Use default Node.js
@@ -194,8 +186,6 @@ jobs:
             tslib
             lib
           key: ${{ runner.os }}-build-node14-15-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-node14-15-
 
   # This job is used to run tests on modern Node.js versions
   # 1. Use default Node.js
@@ -222,5 +212,3 @@ jobs:
           path: |
             node_modules
           key: ${{ runner.os }}-build-modern-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-modern-
