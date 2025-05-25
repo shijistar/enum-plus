@@ -1,4 +1,4 @@
-import type { BuiltInLocaleKeys, defaultLocalize as defaultLocalizeType, Enum as EnumType } from '../../src';
+import type { BuiltInLocaleKeys, defaultLocalize as defaultLocalizeType, Enum as EnumType } from '@enum-plus';
 
 export const localeEN = {
   'enum-plus.options.all': 'All',
