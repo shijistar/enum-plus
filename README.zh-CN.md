@@ -80,21 +80,29 @@ yarn add enum-plus
 - 特定版本:
 
 ```html
+<!-- ES2020 现代版本 -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
+<!-- ES2015 兼容版本 -->
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - 最新版本:
 
 ```html
+<!-- ES2020 现代版本 -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+<!-- ES2015 兼容版本 -->
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
 ```
 
 ⬇️ **下载文件**:
 
-- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz) (~2kB gzipped)
+- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz)
 - [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (完整包，包含 sourcemap)
+- [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.min.js.gz)
+- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (完整包，包含 sourcemap)
 
-> 你也可以去 [Github 发布](https://github.com/shijistar/enum-plus/releases) 中下载这些文件
+> 你也可以在 [Github 发布](https://github.com/shijistar/enum-plus/releases) 中下载这些文件
 
 ## 枚举定义
 
@@ -946,22 +954,28 @@ declare global {
 
 ## 兼容性
 
-enum-plus 提供了完善的兼容性支持。
+enum-plus 设计之初就考虑了广泛的兼容性需求，可无缝运行于各类环境，包括现代浏览器、Node.js 以及多种构建工具。下面详细说明各环境的兼容性情况：
 
-- **浏览器环境**：
+### 浏览器环境
 
-  - **现代打包工具**：对于支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段的打包工具（如 Webpack 5+、Vite、Rollup），enum-plus 的目标是 **`ES2020`**。如果需要更广泛的浏览器支持，可以在构建过程中使用 `@babel/preset-env` 转译为更早期的语法。
+- **现代打包工具**：对于支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段的打包工具（如 webpack 5+、vite、rollup），引入的是`es`目录，对应的 EcmaScript 版本是 **`ES2020`**。如果需要更广泛的浏览器支持，可以在构建过程中使用 `@babel/preset-env` 转译为更早期的语法。
 
-  - **旧版打包工具**：对于不支持 `exports` 字段的工具（如 Webpack 4），enum-plus 会自动回退到 `main` 字段的入口点，其目标是 **`ES2016`**。
+- **旧版打包工具**：对于不支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 字段的工具（如 webpack 4），enum-plus 会自动回退到 `main` 字段的入口点，引入的是`es-legacy`目录，对应的 EcmaScript 版本是 **`ES2015`**。
 
-  - **Polyfill 策略**：为了最小化包的体积，enum-plus 不包含任何 polyfill。如果需要支持旧版浏览器，可以引入以下内容：
+- **UMD版本**：为了方便在浏览器中直接使用，或者方便在没有打包工具的静态项目中使用，enum-plus 还提供了 UMD 版本，可以通过 `<script>` 标签引入。`umd` 目录下提供了两种版本：
 
-    - `core-js`
-    - 配置适当的 `@babel/preset-env` 和 `useBuiltIns` 设置
-    - 其他替代的 polyfill 实现
-    -
+  - `enum-plus.min.js`：对应的 EcmaScript 版本是 **`ES2020`**，适用于现代浏览器
+  - `enum-plus-legacy.min.js`：对应的 EcmaScript 版本是 **`ES2015`**，适用于旧版浏览器
 
-- **Node.js 兼容性**：enum-plus 需要至少 **`ES2016`** 的特性，兼容 Node.js `v7.x` 及以上版本。
+> **Polyfill 策略**：为了最小化包的体积，enum-plus 不包含任何 polyfill。如果需要支持旧版浏览器，可以自行引入以下工具：
+>
+> - `core-js`
+> - 配置适当的 `@babel/preset-env` 和 `useBuiltIns` 设置
+> - 其他替代的 polyfill 实现
+
+### Node.js 环境
+
+在 Node.js 环境下，enum-plus 提供的 EcmaScript 版本是 **`ES2016`**，可以兼容 Node.js `v7.x` 及以上版本
 
 ---
 
