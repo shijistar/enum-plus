@@ -81,8 +81,8 @@ jobs:
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
 
-      - name: Run modern jest tests
-        run: npm run task:jest
+      - name: Install playwright browsers
+        run: npx playwright install
 
       - name: Build package
         run: npm run build
