@@ -4,7 +4,7 @@
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/tslib/test/**/*.{spec,test}.js'],
-  setupFilesAfterEnv: ['<rootDir>/tslib/test/jest.setup.js'],
+  setupFiles: ['<rootDir>/tslib/test/jest.setup.js'],
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/lib/**/*.js'],
   coveragePathIgnorePatterns: ['<rootDir>/lib/types.js'],
