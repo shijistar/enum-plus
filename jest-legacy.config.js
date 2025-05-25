@@ -1,7 +1,9 @@
 'use strict';
 
+const nodeVersion = process.versions.node.split('.').map(Number)[0];
+
 /** @type {import('jest').Config} */
-module.exports = {
+const config = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/tslib/test/**/*.{spec,test}.js'],
   setupFiles: ['<rootDir>/tslib/test/jest.setup.js'],
@@ -14,3 +16,10 @@ module.exports = {
     '^@enum-plus': '<rootDir>/lib',
   },
 };
+if (nodeVersion < 14) {
+  config.setupFiles = ['<rootDir>/tslib/test/jest.setup.js'];
+} else {
+  config.setupFilesAfterEnv = ['<rootDir>/tslib/test/jest.setup.js'];
+}
+
+module.exports = config;
