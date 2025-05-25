@@ -159,6 +159,7 @@ jobs:
           path: |
             node_modules
             tslib
+            lib
           key: ${{ runner.os }}-build-node13-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-node13-
@@ -195,6 +196,7 @@ jobs:
           path: |
             node_modules
             tslib
+            lib
           key: ${{ runner.os }}-build-node15-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-node15-
