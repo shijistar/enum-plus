@@ -9,7 +9,7 @@ module.exports = {
   collectCoverageFrom: ['<rootDir>/lib/**/*.js'],
   coveragePathIgnorePatterns: ['<rootDir>/lib/types.js'],
   moduleNameMapper: {
-    '^@enum-plus': '<rootDir>/lib',
     '^@enum-plus/(.*)$': '<rootDir>/lib/$1',
+    '^@enum-plus': '<rootDir>/lib',
   },
 };
