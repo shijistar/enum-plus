@@ -51,24 +51,6 @@ jobs:
             node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
-      # - name: Try to restore playwright browsers cache
-      #   id: cache-playwright
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.cache/ms-playwright
-      #     key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-
-      # - name: Install Playwright browsers
-      #   if: steps.cache-playwright.outputs.cache-hit != 'true'
-      #   run: npx playwright install
-
-      # - name: Cache Playwright browsers
-      #   if: steps.cache-playwright.outputs.cache-hit != 'true'
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.cache/ms-playwright
-      #     key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-
       - name: Build package
         run: npm run build
 
@@ -201,19 +183,21 @@ jobs:
       - name: Restore modern node_modules cache
         uses: actions/cache@v4
         with:
+          # use absolute workspace path, as Playwright container mounts workspace to /github/workspace
           path: |
-            node_modules
+            /github/workspace/node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Restore modern build output cache
         uses: actions/cache@v4
         with:
+          # use absolute workspace path, as Playwright container mounts workspace to /github/workspace
           path: |
-            tslib
-            lib
-            es
-            es-legacy
-            umd
+            /github/workspace/tslib
+            /github/workspace/lib
+            /github/workspace/es
+            /github/workspace/es-legacy
+            /github/workspace/umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
       - name: Run e2e tests
