@@ -11,22 +11,35 @@ permissions:
   statuses: write
 
 jobs:
-  test:
+  run-unit-tests:
     uses: ./.github/workflows/reusable-test.yml
     with:
       use-matrix: true
 
   publish-npm:
-    needs: test
+    needs: run-unit-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-          registry-url: https://registry.npmjs.org/
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Try to restore modern node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
+
       - name: Build package
         run: npm run build
 
