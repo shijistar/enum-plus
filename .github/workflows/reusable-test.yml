@@ -43,6 +43,10 @@ jobs:
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
 
+      - name: Show available Playwright images
+        run: |
+          docker search mcr.microsoft.com/playwright --limit 100
+
       - name: Cache modern node_modules
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
