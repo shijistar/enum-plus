@@ -43,10 +43,6 @@ jobs:
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Show available Playwright images
-        run: |
-          docker search mcr.microsoft.com/playwright --limit 100
-
       - name: Cache modern node_modules
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
@@ -208,7 +204,7 @@ jobs:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     # Use Playwright container for E2E tests, which has all dependencies and all browsers installed
-    container: mcr.microsoft.com/playwright:v1.51.0-focal
+    container: mcr.microsoft.com/playwright:v1.52.0-jammy
     steps:
       - uses: actions/checkout@v4
 
