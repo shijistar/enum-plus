@@ -103,12 +103,12 @@
     "task:copy-dts": "shx cp ./src/*.d.ts ./lib",
     "task:copy-lib": "tsx scripts/copy-lib.ts",
     "task:jest": "jest --coverage",
-    "task:jest:legacy": "jest --coverage -c jest-legacy.config.js",
+    "task:jest:lib": "jest --coverage -c jest-lib.config.js",
     "task:run-e2e": "playwright test",
     "task:run-e2e-debug": "playwright test --debug",
     "task:run-e2e-ui": "playwright test --ui",
     "test": "npm run task:jest",
-    "test-legacy": "run-s ts2lib task:jest:legacy",
+    "test-lib": "run-s ts2lib task:jest:lib",
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "overrides": {

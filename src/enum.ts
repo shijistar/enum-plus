@@ -102,9 +102,7 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
-  if (obj) {
-    Object.assign(EnumExtensionClass.prototype, obj);
-  }
+  Object.assign(EnumExtensionClass.prototype, obj);
 };
 /**
  * **EN:** Install a plugin that enhances the functionality of the Enum class by adding new methods

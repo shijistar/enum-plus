@@ -101,7 +101,7 @@ jobs:
           key: ${{ runner.os }}-legacy-node-modules-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('package-legacy-node.json') }}
 
   # Run tests on multiple matrix Node.js versions
-  run-modern-jest-nodes:
+  run-jest-lib-modern:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     needs: build-modern-node
@@ -124,11 +124,11 @@ jobs:
             node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Run modern jest tests
-        run: npm run task:jest
+      - name: Run jest tests from lib directory
+        run: npm run task:jest:lib
 
   # Run legacy tests on multiple matrix Node.js versions
-  run-legacy-jest-tests:
+  run-jest-lib-legacy:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     needs: build-legacy-node
@@ -162,8 +162,32 @@ jobs:
             umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
-      - name: Run legacy jest tests
-        run: npm run task:jest:legacy
+      - name: Run jest tests from lib directory
+        run: npm run task:jest:lib
+
+  # Run ts-tests on default Node.js version
+  run-jest-ts:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    needs: build-modern-node
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Restore modern node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Run jest tests from source codes
+        run: npm test
 
   run-e2e-tests:
     if: ${{ inputs.use-matrix == true }}
@@ -180,25 +204,11 @@ jobs:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
           cache: 'npm'
 
-      - name: Restore modern node_modules cache
-        uses: actions/cache@v4
-        with:
-          # use absolute workspace path, as Playwright container mounts workspace to /github/workspace
-          path: |
-            /github/workspace/node_modules
-          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Restore modern build output cache
-        uses: actions/cache@v4
-        with:
-          # use absolute workspace path, as Playwright container mounts workspace to /github/workspace
-          path: |
-            /github/workspace/tslib
-            /github/workspace/lib
-            /github/workspace/es
-            /github/workspace/es-legacy
-            /github/workspace/umd
-          key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
+      - name: Build package
+        run: npm run build
 
       - name: Run e2e tests
         run: npm run e2e

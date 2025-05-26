@@ -1,5 +1,3 @@
-'use strict';
-
 const nodeVersion = process.versions.node.split('.').map(Number)[0];
 
 /** @type {import('jest').Config} */
@@ -8,10 +6,19 @@ const config = {
   testMatch: ['<rootDir>/tslib/test/**/*.{spec,test}.js'],
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/lib/**/*.js'],
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
   coveragePathIgnorePatterns: ['<rootDir>/lib/types.js'],
   moduleNameMapper: {
     '^@enum-plus/(.*)$': '<rootDir>/lib/$1',
     '^@enum-plus': '<rootDir>/lib',
+  },
+  coverageThreshold: {
+    global: {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100,
+    },
   },
 };
 if (nodeVersion <= 15) {
