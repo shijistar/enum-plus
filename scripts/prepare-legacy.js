@@ -6,15 +6,8 @@ const { writeFileSync } = require('fs');
 const pkg = require('../package.json');
 const tsconfig = require('../tsconfig.json');
 const libTsconfig = require('../tsconfig.lib.json');
-
-const versionFile = process.argv[2];
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const legacyPkg = require(`../package-legacy-${versionFile}.json`);
-
-if (!versionFile) {
-  console.error('Please provide a version number as an argument.');
-  process.exit(1);
-}
+const legacyPkg = require(`../package-legacy-node.json`);
 
 // legacy package.json for node13 and previous
 Object.assign(pkg, legacyPkg);
