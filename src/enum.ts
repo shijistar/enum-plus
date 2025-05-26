@@ -195,9 +195,7 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
-  if (obj) {
-    Object.assign(EnumExtensionClass.prototype, obj);
-  }
+  Object.assign(EnumExtensionClass.prototype, obj);
 };
 
 Enum.install = <T = unknown>(plugin: PluginFunc<T>, options?: T) => {
