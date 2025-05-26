@@ -3,5 +3,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["Vuetify"]
+  "cSpell.words": ["shijistar", "Vuetify"]
 }
