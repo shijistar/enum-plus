@@ -11,13 +11,13 @@ permissions:
   statuses: write
 
 jobs:
-  test:
+  run-unit-tests:
     uses: ./.github/workflows/reusable-test.yml
     with:
       use-matrix: true
 
   publish-npm:
-    needs: test
+    needs: run-unit-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

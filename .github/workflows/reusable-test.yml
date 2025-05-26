@@ -204,7 +204,7 @@ jobs:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     # Use Playwright container for E2E tests, which has all dependencies and all browsers installed
-    container: mcr.microsoft.com/playwright:v1.52.0-focal
+    container: mcr.microsoft.com/playwright:v1.51.0-focal
     steps:
       - uses: actions/checkout@v4
 
