@@ -16,8 +16,211 @@ on:
         default: false
 
 jobs:
+  # This job is used to run tests on modern Node.js versions
+  # 1. Use default Node.js
+  # 2. Install latest dependencies
+  # 3. Cache node_modules
+  build-modern-node:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Try to restore modern node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Cache modern node_modules
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      # - name: Try to restore playwright browsers cache
+      #   id: cache-playwright
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.cache/ms-playwright
+      #     key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
+      # - name: Install Playwright browsers
+      #   if: steps.cache-playwright.outputs.cache-hit != 'true'
+      #   run: npx playwright install
+
+      # - name: Cache Playwright browsers
+      #   if: steps.cache-playwright.outputs.cache-hit != 'true'
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.cache/ms-playwright
+      #     key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Build package
+        run: npm run build
+
+      - name: Cache modern package build output
+        uses: actions/cache@v4
+        with:
+          path: |
+            tslib
+            lib
+            es
+            es-legacy
+            umd
+          key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
+
+  build-legacy-node:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
+
+      - name: Try to restore legacy node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-legacy-node-modules-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('package-legacy-node.json') }}
+          lookup-only: true
+
+      - name: Downgrade package.json legacy dependencies
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: npm run prepare-legacy-node
+
+      - name: Install dependencies
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: npm install --legacy-peer-deps --ignore-scripts --no-package-lock
+
+      - name: Cache legacy node_modules
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-legacy-node-modules-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('package-legacy-node.json') }}
+
+  # Run tests on multiple matrix Node.js versions
+  run-modern-jest-nodes:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    needs: build-modern-node
+    strategy:
+      matrix:
+        node-version: [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Restore modern node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Run modern jest tests
+        run: npm run task:jest
+
+  # Run legacy tests on multiple matrix Node.js versions
+  run-legacy-jest-tests:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    needs: build-legacy-node
+    strategy:
+      matrix:
+        node-version: [7.x, 8.x, 9.x, 10.x, 11.x, 12.x, 13.x, 14.x, 15.x]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Restore legacy node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-legacy-node-modules-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('package-legacy-node.json') }}
+
+      - name: Restore modern build output cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            tslib
+            lib
+            es
+            es-legacy
+            umd
+          key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
+
+      - name: Run legacy jest tests
+        run: npm run task:jest:legacy
+
+  run-e2e-tests:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    # Use Playwright container for E2E tests, which has all dependencies and all browsers installed
+    container: mcr.microsoft.com/playwright:v1.40.0-focal
+    needs: build-modern-node
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Restore modern node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Restore modern build output cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            tslib
+            lib
+            es
+            es-legacy
+            umd
+          key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
+
+      - name: Run e2e tests
+        run: npm run e2e
+
   # Run tests on single specified Node.js version
-  run-tests-single:
+  run-jest-single:
     if: ${{ inputs.use-matrix == false }}
     runs-on: ubuntu-latest
     steps:
@@ -33,214 +236,4 @@ jobs:
         run: npm ci
 
       - name: Run modern jest tests
-        run: npm run task:jest
-
-  # Run tests on multiple matrix Node.js versions
-  run-tests-modern-nodes:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    needs: build-modern
-    strategy:
-      matrix:
-        node-version: [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-build-modern-${{ github.sha }}
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Run modern jest tests
-        run: npm run task:jest
-
-  # Run e2e tests
-  run-e2e-tests:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    needs: build-modern
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-build-modern-${{ github.sha }}
-
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps webkit
-
-      - name: Install playwright browsers
-        run: npx playwright install
-
-      - name: Build package
-        run: npm run build
-
-      - name: Run e2e tests
-        run: npm run e2e
-
-  # Run legacy tests on multiple matrix Node.js versions
-  run-tests-legacy-node14-15:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    needs: build-node14-15
-    strategy:
-      matrix:
-        node-version: [14.x, 15.x]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            tslib
-            lib
-          key: ${{ runner.os }}-build-node14-15-${{ github.sha }}
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Run legacy jest tests
-        run: npm run task:jest:legacy
-
-  # Run legacy tests on multiple matrix Node.js versions
-  run-tests-legacy-node7-13:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    needs: build-node7-13
-    strategy:
-      matrix:
-        node-version: [7.x, 8.x, 9.x, 10.x, 11.x, 12.x, 13.x]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            tslib
-            lib
-          key: ${{ runner.os }}-build-node7-13-${{ github.sha }}
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Run legacy jest tests
-        run: npm run task:jest:legacy
-
-  # This job is used to run tests on legacy Node.js versions
-  # 1. Use default Node.js
-  # 2. Install older versions of jest and ts-jest
-  # 3. Build the project
-  # 4. Cache node_modules and tslib
-  build-node7-13:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Downgrade legacy dependencies
-        run: npm run prepare-legacy-node7-13
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps --ignore-scripts --no-package-lock
-
-      - name: Build lib
-        run: npm run build:lib
-
-      - name: Cache build output
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            tslib
-            lib
-          key: ${{ runner.os }}-build-node7-13-${{ github.sha }}
-
-  # This job is used to run tests on legacy Node.js versions
-  # 1. Use default Node.js
-  # 2. Install older versions of jest and ts-jest
-  # 3. Build the project
-  # 4. Cache node_modules and tslib
-  build-node14-15:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Downgrade legacy dependencies
-        run: npm run prepare-legacy-node14-15
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps --ignore-scripts --no-package-lock
-
-      - name: Build lib
-        run: npm run build:lib
-
-      - name: Cache build output
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            tslib
-            lib
-          key: ${{ runner.os }}-build-node14-15-${{ github.sha }}
-
-  # This job is used to run tests on modern Node.js versions
-  # 1. Use default Node.js
-  # 2. Install latest dependencies
-  # 3. Cache node_modules
-  build-modern:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Cache build output
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-build-modern-${{ github.sha }}
+        run: npm test

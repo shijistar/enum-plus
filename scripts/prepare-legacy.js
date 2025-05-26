@@ -9,7 +9,7 @@ const libTsconfig = require('../tsconfig.lib.json');
 
 const versionFile = process.argv[2];
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const legacyPkg = require(`../package-legacy-${versionFile}.json`);
+const legacyPkg = require(`../package-legacy-node.json`);
 
 if (!versionFile) {
   console.error('Please provide a version number as an argument.');

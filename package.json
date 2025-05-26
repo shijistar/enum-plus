@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-alpha.1",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
@@ -94,8 +94,7 @@
     "e2e:debug": "run-s task:bundle-e2e task:run-e2e-debug",
     "e2e:ui": "run-s task:bundle-e2e task:run-e2e-ui",
     "prepare": "husky",
-    "prepare-legacy-node14-15": "node ./scripts/prepare-legacy.js node14-15",
-    "prepare-legacy-node7-13": "node ./scripts/prepare-legacy.js node7-13",
+    "prepare-legacy-node": "node ./scripts/prepare-legacy.js",
     "prepublishOnly": "run-s build test",
     "task:add-umd-banner": "tsx scripts/add-umd-banner.ts",
     "task:build-es": "father build",
@@ -121,7 +120,6 @@
   "devDependencies": {
     "@playwright/test": "^1.52.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "@swc/core": "^1.11.29",
     "@tiny-codes/code-style-all-in-one": "^1.1.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.15.21",

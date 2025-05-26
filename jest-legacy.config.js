@@ -14,7 +14,7 @@ const config = {
     '^@enum-plus': '<rootDir>/lib',
   },
 };
-if (nodeVersion < 14) {
+if (nodeVersion <= 15) {
   // @ts-expect-error: because setupTestFrameworkScriptFile is a deprecated API
   config.setupTestFrameworkScriptFile = '<rootDir>/tslib/test/jest.setup.js';
 } else {
