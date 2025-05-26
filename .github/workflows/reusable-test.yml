@@ -124,6 +124,17 @@ jobs:
             node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
+      - name: Restore modern build output cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            tslib
+            lib
+            es
+            es-legacy
+            umd
+          key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
+
       - name: Run jest tests from lib directory
         run: npm run task:jest:lib
 
@@ -194,7 +205,6 @@ jobs:
     runs-on: ubuntu-latest
     # Use Playwright container for E2E tests, which has all dependencies and all browsers installed
     container: mcr.microsoft.com/playwright:v1.40.0-focal
-    needs: build-modern-node
     steps:
       - uses: actions/checkout@v4
 

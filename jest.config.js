@@ -1,7 +1,9 @@
 /** @type {import('jest').Config} */
 module.exports = {
+  preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/test/**/*.{spec,test}.{ts,tsx}'],
+  setupFilesAfterEnv: ['<rootDir>/test/jest.setup.ts'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
