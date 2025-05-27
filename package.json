@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.1",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
@@ -112,6 +112,11 @@
     "task:run-e2e": "playwright test",
     "task:run-e2e-debug": "playwright test --debug",
     "task:run-e2e-ui": "playwright test --ui",
+    "task:run-e2e:chrome": "playwright test --project=chrome",
+    "task:run-e2e:chromium-legacy": "playwright test --project=chromium-legacy",
+    "task:run-e2e:edge": "playwright test --project=edge",
+    "task:run-e2e:firefox": "playwright test --project=firefox",
+    "task:run-e2e:webkit": "playwright test --project=webkit",
     "test": "npm run task:jest",
     "test-lib": "run-s ts2lib task:jest:lib",
     "ts2lib": "tsc -p tsconfig.lib.json"
