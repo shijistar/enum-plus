@@ -18,4 +18,4 @@ jobs:
   test:
     uses: ./.github/workflows/reusable-test.yml
     with:
-      use-matrix: false
+      use-matrix: true
