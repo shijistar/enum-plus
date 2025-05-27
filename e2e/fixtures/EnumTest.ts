@@ -9,7 +9,8 @@ export const test = base.extend<{
   enumPage: async ({ page }, use) => {
     const enumPage = new EnumPage(page);
     await enumPage.gotoModern();
-
+    // delay to ensure the page is fully loaded
+    await page.waitForLoadState('domcontentloaded');
     await use(enumPage);
   },
 });

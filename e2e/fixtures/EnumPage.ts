@@ -4,12 +4,13 @@ export default class EnumPage {
   constructor(public readonly page: Page) {}
 
   async gotoModern() {
-    await this.page.goto('/modern.html');
+    await this.page.goto('/modern.html', { waitUntil: 'domcontentloaded' });
   }
   async gotoLegacy() {
-    await this.page.goto('/legacy.html');
+    await this.page.goto('/legacy.html', { waitUntil: 'domcontentloaded' });
   }
   async setupLang() {
+    await this.page.waitForLoadState('domcontentloaded');
     await this.page.evaluate(() => {
       const {
         EnumPlus: { Enum, defaultLocalize },
@@ -20,6 +21,7 @@ export default class EnumPage {
     });
   }
   async resetLang() {
+    await this.page.waitForLoadState('domcontentloaded');
     await this.page.evaluate(() => {
       const {
         EnumPlus: { Enum },
