@@ -30,7 +30,7 @@ export class PlaywrightEngine extends TestEngineBase {
           WeekData,
           SerializeJavascript,
         };
-        console.log('window', runtimeContext);
+        // console.log('window', runtimeContext);
         const { serializeJavascript: serialize, deserializeJavascript: deserialize } = SerializeJavascript;
         const args = deserialize(contextStr) as { evaluateFn: typeof evaluate };
         const { evaluateFn, ...rest } = args;
