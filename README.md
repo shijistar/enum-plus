@@ -580,7 +580,9 @@ WeekEnum.raw('Sunday').active; // true
 
   ```html
   <mat-select>
-    <mat-option *ngFor="let item of WeekEnum.items" [value]="item.value">{{ item.label }}</mat-option>
+    @for (item of WeekEnum.items; track item.value) {
+      <mat-option [value]="item.value">{{ item.label }}</mat-option>
+    }
   </mat-select>
   ```
 
@@ -588,7 +590,9 @@ WeekEnum.raw('Sunday').active; // true
 
   ```html
   <nz-select>
-    <nz-option *ngFor="let item of WeekEnum.items" [nzValue]="item.value">{{ item.label }}</nz-option>
+    @for (item of WeekEnum.items; track item.value) {
+      <nz-option [nzValue]="item.value">{{ item.label }}</nz-option>
+    }
   </nz-select>
   ```
 
