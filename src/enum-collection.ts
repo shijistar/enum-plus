@@ -53,13 +53,13 @@ export class EnumCollectionClass<
    * **CN:** 布尔值，表示这是一个枚举集合实例
    */
   readonly [ENUM_COLLECTION] = true;
-  readonly [Symbol.hasInstance] = function (this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
+  [Symbol.hasInstance](this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
     // intentionally use == to support both number and string format value
     return this.items.some(
       // eslint-disable-next-line eqeqeq
       (i) => instance == i.value || instance === i.key
     );
-  };
+  }
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();

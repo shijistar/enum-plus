@@ -42,10 +42,7 @@ export class EnumItemClass<
    *
    * @returns V | string
    */
-  readonly [Symbol.toPrimitive] = function (
-    this: EnumItemClass<T, K, V>,
-    hint: 'number' | 'string' | 'default'
-  ): V | string {
+  [Symbol.toPrimitive](this: EnumItemClass<T, K, V>, hint: 'number' | 'string' | 'default'): V | string {
     if (hint === 'number') {
       // for cases like Number(value) or +value
       return this.valueOf();
@@ -55,7 +52,7 @@ export class EnumItemClass<
     }
     // for cases like '' + value, value == 1
     return this.valueOf();
-  };
+  }
 
   private _options: EnumItemOptions | undefined;
   // should use function here to avoid closure. this is important for the e2e test cases.
