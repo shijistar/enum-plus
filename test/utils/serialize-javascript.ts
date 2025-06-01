@@ -25,6 +25,9 @@
 const TokenStart = '$SJS$';
 const TokenEnd = '$SJE$';
 const VariablePrefix = '$SJV$_';
+const SymbolKeyRegExps: [RegExp, RegExp] = [/\[Symbol\.\w+\]/, /\[Symbol\.for\([\u0027\u0022].+?[\u0027\u0022]\)\]/];
+const SymbolKeyPrefixRegExp = /\[/;
+const SymbolKeySuffixRegExp = /\]/;
 
 const predefinedSymbols = Object.keys(Object.getOwnPropertyDescriptors(Symbol))
   .map((key) => {
@@ -56,9 +59,12 @@ function serializeJavascriptRecursively(obj: any, options: InternalSerializeOpti
     patches,
     refs,
     sourceOnly,
+    debug,
   } = options ?? { patches: [], refs: [] };
   const fullObj = expandPrototypeChain(obj, { ...options, parentPath, patches });
-  // console.log('serializeJavascript', parentPath, obj);
+  if (debug) {
+    console.log('-------------- serializeJavascriptRecursively --------------', parentPath, obj);
+  }
   const sourceStr = JSON.stringify(fullObj, (_key, value) => {
     if (value === null) {
       return `${TS}null${TE}`;
@@ -105,7 +111,15 @@ function serializeJavascriptRecursively(obj: any, options: InternalSerializeOpti
             parentPath: path,
             sourceOnly: true,
           });
-          // console.log('call serializeJavascriptRecursively with Symbol', ref, path, symbol, symbolValue);
+          if (debug) {
+            console.log(
+              '-------------- serializeJavascriptRecursively(symbol) --------------',
+              path,
+              symbol,
+              symbolValue,
+              ref
+            );
+          }
           symbolValue = `${TS}${ref.variable}${TE}`;
         }
         value[symbolKey] = symbolValue;
@@ -124,7 +138,10 @@ function serializeJavascriptRecursively(obj: any, options: InternalSerializeOpti
         !funcStr.startsWith('async function*') &&
         !funcStr.replace(/\s/g, '').match(/^\(?[^)]+\)?=>/)
       ) {
-        funcStr = `function ${value}`;
+        // If it's a computed property function, for example: { [Symbol.toPrimitive]() { return 1; } }
+        // the funcStr is like: `[Symbol.toPrimitive]() { return 1; }`, so we can safely remove it.
+        funcStr = funcStr.replace(/^\[[^\]]+\]/, '');
+        funcStr = `function ${funcStr}`;
       }
       funcStr = funcStr.replace(/"/g, "'");
       return `${TS}(${funcStr})${TE}`;
@@ -143,7 +160,9 @@ function serializeJavascriptRecursively(obj: any, options: InternalSerializeOpti
         };
         refs.push(ref);
         patch.ref = `${TS}${ref.variable}${TE}`;
-        // console.log('serializeJavascript', patch.path, patch.context);
+        if (debug) {
+          console.log('-------------- serializeJavascriptRecursively(patch) --------------', patch.path, patch.context);
+        }
         ref.code = serializeJavascriptRecursively(patch.context, {
           ...options,
           parentPath: patch.path,
@@ -159,9 +178,9 @@ function serializeJavascriptRecursively(obj: any, options: InternalSerializeOpti
     patches: sourceOnly ? [] : patches,
     refs: sourceOnly ? [] : refs,
   };
-  // if (!sourceOnly) {
-  //   console.log('serializeJavascript', JSON.stringify(result));
-  // }
+  if (debug && !sourceOnly) {
+    console.log('-------------- serializeJavascript(final) --------------', JSON.stringify(result));
+  }
   return JSON.stringify(result);
 }
 
@@ -208,16 +227,25 @@ export function deserializeJavascript(input: string, options?: DeserializeOption
 }
 
 function directDeserialize(result: SerializedResult, options: InternalDeserializeOptions) {
-  const { variablePrefix: VP, closure, get = getByPath } = options ?? {};
+  const { variablePrefix: VP, closure, get = getByPath, debug, prettyPrint = true } = options ?? {};
   const code = getDeserializeJavascriptCode(result, options);
-  // console.log(
-  //   'directDeserialize',
-  //   `new Function('${VP}context', '${VP}options', \`\n${code.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\`)(${closure ? 'closure' : 'undefined'});`,
-  //   'closure=',
-  //   closure
-  // );
+  if (debug) {
+    const printSourceCode = getDeserializeJavascriptCode(result, { ...options, isPrint: true });
+    const prettyPrintCode = `\`${printSourceCode.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')}\``;
+    const realCode = `'${printSourceCode.replace(/\n/g, '\\n').replace(/'/g, "\\'")}'`;
+    const printCode = prettyPrint ? prettyPrintCode : realCode;
+    console.log(
+      '-------------- deserializeCode --------------\n',
+      `${getByPath.toString()}
+    new Function('${VP}context', '${VP}options', ${printCode})(${closure ? 'closure' : 'undefined'}, { get: getByPath });`,
+      'closure =',
+      closure
+    );
+  }
   try {
-    const deserializeResult = new Function(`${VP}context`, `${VP}options`, code)(closure, { get });
+    const deserializeResult = new Function(`${VP}context`, `${VP}options`, code)(closure, {
+      get,
+    });
     return deserializeResult;
   } catch (error) {
     console.error(error);
@@ -232,9 +260,11 @@ function getDeserializeJavascriptCode(result: SerializedResult, options: Interna
     variablePrefix: VP,
     closure,
     enablePatches = true,
+    isPrint,
   } = options ?? {};
   const { source: sourceCode, patches } = result;
   // console.log('deserializeJavascript', str, sourceCode);
+  const escapeSingleQuote = (str: string) => str.replace(/'/g, isPrint ? "\\\\'" : "\\'");
   const content = `${closure ? `const { ${Object.keys(closure ?? {}).join(', ')} } = ${VP}context || {};` : ''}
 const { get } = ${VP}options;
 const deserializeResult = (\n${decodeFormat(sourceCode, { tokenStart, tokenEnd })}\n);
@@ -259,8 +289,8 @@ const restoreSymbolKeys = (obj, paths=[]) => {
   if (obj && !paths.includes(obj)) {
     if (typeof obj === 'object') {
       Object.keys(obj).forEach((key) => {
-        if (key.match(/^\\[Symbol\\.\\w+\\]$/) || key.match(/^\\[Symbol\\.for\\('[^']+'\\)\\]$/)) {
-          obj[new Function('return ' + key.replace(/^\\[/, '').replace(/\\]$/, ''))()] = obj[key];
+        if (key.match(new RegExp('^${escapeRegExp(SymbolKeyRegExps[0], { escapeTwice: isPrint, format: escapeSingleQuote })}$')) || key.match(new RegExp('^${escapeRegExp(SymbolKeyRegExps[1], { escapeTwice: isPrint, format: escapeSingleQuote })}$'))) {
+          obj[new Function('return ' + key.replace(new RegExp('^${escapeRegExp(SymbolKeyPrefixRegExp, { escapeTwice: isPrint })}'), '').replace(new RegExp('${escapeRegExp(SymbolKeySuffixRegExp, { escapeTwice: isPrint })}$'), ''))()] = obj[key];
           delete obj[key];
         }
       });
@@ -400,14 +430,19 @@ function decodeFormat(
 /**
  * Escapes special characters in a string for use in a regular expression.
  *
- * @param string - The string to escape
+ * @param regExp - The string to escape
  *
  * @returns The escaped string that can be safely used in a RegExp constructor
  */
-export function escapeRegExp(string: string, options?: { escapeTwice?: boolean }): string {
-  const { escapeTwice = false } = options ?? {};
+export function escapeRegExp(
+  regExp: string | RegExp,
+  options?: { escapeTwice?: boolean; format?: (result: string) => string }
+): string {
+  const { escapeTwice = false, format } = options ?? {};
+  const content = typeof regExp === 'string' ? regExp : regExp.source;
   // $& Indicates the entire matched string
-  return string.replace(/[.*+?^${}()|[\]\\]/g, escapeTwice ? '\\\\$&' : '\\$&');
+  const result = content.replace(/[.*+?^${}()|[\]\\]/g, escapeTwice ? '\\\\$&' : '\\$&');
+  return format ? format(result) : result;
 }
 
 function getFullKeys(obj: any): (string | symbol)[] {
@@ -522,6 +557,8 @@ export interface SerializeOptions {
   variablePrefix?: string;
   /** Whether to preserve the code of class constructor during serialization. Default is `false`. */
   preserveClassConstructor?: boolean;
+  /** Whether to print debug information during serialization. Default is `false`. */
+  debug?: boolean;
 }
 
 type InternalSerializeOptions = SerializeOptions & {
@@ -535,7 +572,7 @@ type InternalSerializeOptions = SerializeOptions & {
   refs: ValueRef[];
 };
 
-export type DeserializeOptions = Pick<SerializeOptions, 'tokenStart' | 'tokenEnd' | 'variablePrefix'> & {
+export type DeserializeOptions = Pick<SerializeOptions, 'tokenStart' | 'tokenEnd' | 'variablePrefix' | 'debug'> & {
   /**
    * The function to get a child value from source object. It's used to restore the patched values.
    *
@@ -547,10 +584,20 @@ export type DeserializeOptions = Pick<SerializeOptions, 'tokenStart' | 'tokenEnd
    * functions which use some global variables or modules, it's a good idea to pass them here.
    */
   closure?: Record<string, unknown>;
+  /**
+   * Whether to pretty print the deserialized object. Default is `true`.
+   *
+   * - `true`: Pretty print the deserialized code with indentation and new lines, which is more
+   *   readable, but may be a little different from the real execution code.
+   * - `false` - Print the object in a single line, which is more compact and similar to the real
+   *   execution code.
+   */
+  prettyPrint?: boolean;
 };
 
 interface InternalDeserializeOptions extends DeserializeOptions {
   enablePatches?: boolean;
+  isPrint?: boolean;
 }
 
 /**
