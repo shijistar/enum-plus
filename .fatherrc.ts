@@ -12,5 +12,5 @@ export default defineConfig({
     },
   },
   sourcemap: true,
-  targets: legacy ? { ie: 11 } /* ES2015 */ : { chrome: 80 } /* ES2020 */,
+  targets: legacy ? /* ES2015 */ { ie: 11 } : /* ES2020 */ { chrome: 80 },
 });
