@@ -86,8 +86,8 @@ const testEnumItem = (engine: TestEngineBase) => {
       ({ localeEN, sunday, monday, tuesday, friday, saturday }) => {
         engine.expect(Number(sunday)).toBe(0);
         engine.expect(String(sunday)).toBe(localeEN.Sunday);
-        // engine.expect(Boolean(sunday)).toBe(false);
-        // engine.expect(Boolean(monday)).toBe(true);
+        engine.expect(Boolean(sunday)).toBe(true);
+        engine.expect(Boolean(monday)).toBe(true);
 
         engine.expect(saturday > friday).toBeTruthy();
         engine.expect(monday < tuesday).toBeTruthy();
