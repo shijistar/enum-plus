@@ -4,6 +4,7 @@ import { defaultLocalize } from './utils';
 export type {
   EnumInit,
   EnumItemInit,
+  IEnum,
   EnumKey,
   EnumValue,
   ValueTypeFromSingleInit,

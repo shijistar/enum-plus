@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.3.1
+
+2025-6-7
+
+### Features
+
+- ✨ Add `IEnum` to packages exports
+
 ## 2.3.0
 
 2025-5-23
