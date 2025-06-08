@@ -14,6 +14,18 @@ _UNRELEASED_
 - 🔥 introduce an official plugin `enum-plus-plugin` that provides a collection of highly shareable plugins.
   - These plugins are designed to work in all scenarios and environments (including browser and Node.js), without introducing dependencies on third-party frameworks, component libraries, or platforms.
   - If you have a good idea that might be specific to a certain framework or platform rather than universally applicable, we recommend creating a new plugin project (e.g., `enum-plus-plugin-xxx`). We are happy to see that, and hope that you submit a PR to `enum-plus-plugin` to link your project back.
+- 🛠 Add `const` modifier to Enum function to simplify the enum initialization. Inline initializations no longer requires `as const`. Thanks to @otomad.
+
+```diff
+import { Enum } from 'enum-plus';
+
+const MyEnum = Enum({
+  Foo: 1,
+  Bar: 2,
+- } as const);
++ });
+```
+
 - ✨ Introduced **UMD module format** support, enabling direct browser usage without requiring a module bundler. Two variants are now available:
 
   - `enum-plus.min.js` (ES2020) optimized for modern browsers.
