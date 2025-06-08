@@ -26,7 +26,7 @@ export interface EnumInterface {
    *   const Week = Enum({
    *     Sunday: { value: 0, label: 'Sunday' },
    *     Monday: { value: 1, label: 'Monday' },
-   *   } as const);
+   *   });
    *
    * @template T The type of enum initialization | 枚举初始化的类型
    * @template K The type of enum keys | 枚举键的类型
@@ -38,7 +38,11 @@ export interface EnumInterface {
    * @returns Enum collection | 枚举集合
    */
   // eslint-disable-next-line @typescript-eslint/prefer-function-type
-  <T extends EnumInit<K, V>, K extends EnumKey<T> = EnumKey<T>, V extends EnumValue = ValueTypeFromSingleInit<T[K], K>>(
+  <
+    const T extends EnumInit<K, V>,
+    K extends EnumKey<T> = EnumKey<T>,
+    V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  >(
     raw: T,
     options?: EnumInitOptions<T, K, V>
   ): IEnum<T, K, V>;
@@ -51,7 +55,7 @@ export interface EnumInterface {
    *   const Week = Enum([
    *     { value: 0, label: 'Sunday', key: 'Sun' },
    *     { value: 1, label: 'Monday', key: 'Mon' },
-   *   ] as const);
+   *   ]);
    *
    * @template A The type of the initialization object array | 初始化对象数组的类型
    * @template K The type of enum keys | 枚举键的类型
@@ -63,7 +67,7 @@ export interface EnumInterface {
    * @returns Enum collection | 枚举集合
    */
   <
-    A extends Record<string, unknown>[] | readonly Record<string, unknown>[],
+    const A extends Record<string, unknown>[] | readonly Record<string, unknown>[],
     K extends EnumKey<ArrayToMap<A>> = EnumKey<ArrayToMap<A>>,
     // @ts-expect-error: because no constraint on items of A, so ValueTypeFromSingleInit<ArrayToMap<A>[K], K> does not satisfy EnumValue
     V extends EnumValue = ValueTypeFromSingleInit<ArrayToMap<A>[K], K>,
