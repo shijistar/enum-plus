@@ -31,7 +31,7 @@ import { defaultLocalize } from './utils';
  * @returns Enum collection | 枚举集合
  */
 export function Enum<
-  T extends EnumInit<K, V>,
+  const T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(init: T, options?: EnumInitOptions<T, K, V>): IEnum<T, K, V> & EnumExtension<T, K, V>;
@@ -53,7 +53,7 @@ export function Enum<
  */
 export function Enum<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  T extends Record<string, any>,
+  const T extends Record<string, any>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(
@@ -61,7 +61,7 @@ export function Enum<
   options?: EnumInitOptions<T, K, V>
 ): IEnum<StandardEnumInit<string, V>, string, V> & EnumExtension<T, K, V>;
 export function Enum<
-  T extends EnumInit<K, V>,
+  const T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(init: T | T[], options?: EnumInitOptions<T, K, V>): IEnum<T, K, V> & EnumExtension<T, K, V> {
