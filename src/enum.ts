@@ -31,7 +31,7 @@ import { defaultLocalize } from './utils';
  * @returns Enum collection | 枚举集合
  */
 export function Enum<
-  T extends EnumInit<K, V>,
+  const T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(init: T, options?: EnumInitOptions<T, K, V>): IEnum<T, K, V> & EnumExtension<T, K, V>;
@@ -52,14 +52,14 @@ export function Enum<
  * @returns Enum collection | 枚举集合
  */
 export function Enum<
-  A extends Record<string, unknown>[] | readonly Record<string, unknown>[],
+  const A extends Record<string, unknown>[] | readonly Record<string, unknown>[],
   K extends EnumKey<ArrayToMap<A>> = EnumKey<ArrayToMap<A>>,
   // @ts-expect-error: because no constraint on items of A, so ValueTypeFromSingleInit<ArrayToMap<A>[K], K> does not satisfy EnumValue
   V extends EnumValue = ValueTypeFromSingleInit<ArrayToMap<A>[K], K>,
   // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
 >(init: A, options?: EnumInitOptions<A[number], K, V>): IEnum<ArrayToMap<A>, K, V> & EnumExtension<ArrayToMap<A>, K, V>;
 export function Enum<
-  T extends EnumInit<K, V>,
+  const T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(init: T | T[], options?: EnumInitOptions<T, K, V>): IEnum<T, K, V> & EnumExtension<T, K, V> {
