@@ -559,6 +559,14 @@ export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
                     ? K
                     : K; // Unknown format, use key as value
 
+/**
+ * **EN:** Find the key of the enumeration item by value
+ *
+ * **CN:** 通过值查找枚举项的key
+ *
+ * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
+ * @template V Enum value type | 枚举值的类型
+ */
 export type FindEnumKeyByValue<T, V extends EnumValue> = {
   // ValueOnly { foo:1, bar:2 }
   [K in keyof T]: T[K] extends V
@@ -579,3 +587,16 @@ export type FindEnumKeyByValue<T, V extends EnumValue> = {
             : never
           : never;
 }[keyof T];
+
+/**
+ * **EN:** Convert an array of objects to a Map-like object, where the key is the `key` field of the
+ * object, and the value is the `value` field of the object
+ *
+ * **CN:** 将对象数组转换为类似Map的对象，其中key为对象的`key`字段，value为对象的`value`字段
+ *
+ * @template A Array type | 数组类型
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ArrayToMap<A extends Record<string, any>[] | readonly Record<string, any>[]> = {
+  [K in A[number]['key']]: Extract<A[number], { key?: K }>;
+};

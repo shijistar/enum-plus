@@ -1,12 +1,12 @@
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type {
+  ArrayToMap,
   EnumInit,
   EnumInitOptions,
   EnumKey,
   EnumValue,
   IEnum,
   LabelOnlyEnumItemInit,
-  StandardEnumInit,
   ValueTypeFromSingleInit,
 } from './types';
 import { defaultLocalize } from './utils';
@@ -43,7 +43,7 @@ export function Enum<
  *   const Week = Enum([
  *     { value: 0, label: 'Sunday', key: 'Sun' },
  *     { value: 1, label: 'Monday', key: 'Mon' },
- *   ]);
+ *   ] as const);
  *
  * @param init Init objects array | 初始化对象数组
  * @param options Generate options | 生成选项
@@ -51,14 +51,12 @@ export function Enum<
  * @returns Enum collection | 枚举集合
  */
 export function Enum<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  T extends Record<string, any>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
->(
-  init: T[],
-  options?: EnumInitOptions<T, K, V>
-): IEnum<StandardEnumInit<string, V>, string, V> & EnumExtension<T, K, V>;
+  A extends Record<string, unknown>[] | readonly Record<string, unknown>[],
+  K extends EnumKey<ArrayToMap<A>> = EnumKey<ArrayToMap<A>>,
+  // @ts-expect-error: because no constraint on items of A, so ValueTypeFromSingleInit<ArrayToMap<A>[K], K> does not satisfy EnumValue
+  V extends EnumValue = ValueTypeFromSingleInit<ArrayToMap<A>[K], K>,
+  // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
+>(init: A, options?: EnumInitOptions<A[number], K, V>): IEnum<ArrayToMap<A>, K, V> & EnumExtension<ArrayToMap<A>, K, V>;
 export function Enum<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,

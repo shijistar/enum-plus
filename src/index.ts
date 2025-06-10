@@ -14,6 +14,8 @@ export type {
   MenuItemOption,
   ColumnFilterItem,
   EnumInitOptions,
+  FindEnumKeyByValue,
+  ArrayToMap,
 } from './types';
 export type { EnumItemClass } from './enum-item';
 

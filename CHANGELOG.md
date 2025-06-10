@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.3.2
+
+2025-6-10
+
+### Features
+
+- ✨ Improve type IntelliSense for array initialization Enums, allowing enum items to be listed as literals. Thanks to @mudoo.
+
 ## 2.3.1
 
 2025-6-7
