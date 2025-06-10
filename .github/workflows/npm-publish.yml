@@ -71,6 +71,12 @@ jobs:
           LATEST_VERSION=$(npm view enum-plus version)
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
 
+      - name: Request the next version of enum-plus
+        id: get_next_version_before_publish
+        run: |
+          NEXT_VERSION=$(npm view enum-plus@next version || npm view enum-plus version)
+          echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_OUTPUT
+
       - name: Publish a prerelease version to npm
         run: npm publish --tag beta --ignore-scripts --access=public
         if: github.event.release.prerelease
@@ -84,15 +90,21 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
       - uses: madhead/semver-utils@latest
-        id: compare_versions
+        id: new_vs_latest
         with:
           version: ${{ github.event.release.tag_name }}
           compare-to: ${{ steps.get_latest_version_before_publish.outputs.LATEST_VERSION }}
 
+      - uses: madhead/semver-utils@latest
+        id: new_vs_next
+        with:
+          version: ${{ github.event.release.tag_name }}
+          compare-to: ${{ steps.get_next_version_before_publish.outputs.NEXT_VERSION }}
+
       - name: Add npm dist-tag for "next"
         if: github.event.release.prerelease
         run: |
-          if [ "${{ steps.compare_versions.outputs.comparison-result }}" = ">" ]; then
+          if [ "${{ steps.new_vs_latest.outputs.comparison-result }}" = ">" ]; then
             npm dist-tag add enum-plus@${{ github.event.release.tag_name }} next --access=public
           fi
         env:
@@ -101,13 +113,13 @@ jobs:
       - name: Remove npm dist-tag for "next"
         if: github.event.release.prerelease == false
         run: |
-          if [ "${{ steps.compare_versions.outputs.comparison-result }}" = ">" ]; then
+          if [ "${{ steps.new_vs_next.outputs.comparison-result }}" = ">" ]; then
             npm dist-tag rm enum-plus next --access=public
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
 
-      - name: Request the latest version of enum-plus
+      - name: Request the latest stable version of enum-plus
         id: get_latest_version_after_publish
         run: |
           LATEST_VERSION=$(npm view enum-plus version)
