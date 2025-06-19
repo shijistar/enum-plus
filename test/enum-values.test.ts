@@ -20,13 +20,13 @@ export function addEnumValuesTestSuite(
     expect(weekEnum.label('Sunday')).toBe(locales.Sunday);
     expect(weekEnum.label(6)).toBe(locales.Saturday);
     expect(weekEnum.label('Saturday')).toBe(locales.Saturday);
-    expect(weekEnum.label(7)).toBeUndefined();
+    expect(weekEnum.label(7 as typeof weekEnum.valueType)).toBeUndefined();
   });
 
   test('[key] should be able to get enum key by value', () => {
     expect(weekEnum.key(0)).toBe('Sunday');
     expect(weekEnum.key(6)).toBe('Saturday');
-    expect(weekEnum.key(7)).toBeUndefined();
+    expect(weekEnum.key(7 as typeof weekEnum.valueType)).toBeUndefined();
   });
 
   test('[has] should be able to check enum item exist or not', () => {
@@ -34,7 +34,7 @@ export function addEnumValuesTestSuite(
     expect(weekEnum.has('Sunday')).toBe(true);
     expect(weekEnum.has(6)).toBe(true);
     expect(weekEnum.has('Saturday')).toBe(true);
-    expect(weekEnum.has(7)).toBe(false);
+    expect(weekEnum.has(7 as typeof weekEnum.valueType)).toBe(false);
   });
 
   test('[options] should be able to generate select options', () => {

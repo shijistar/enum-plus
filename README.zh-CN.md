@@ -577,7 +577,7 @@ WeekEnum.raw('Sunday').active // true
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
 
-  ```html
+  ```jsx
   <mat-select>
     @for (item of WeekEnum.items; track item.value) {
       <mat-option [value]="item.value">{{ item.label }}</mat-option>
@@ -587,7 +587,7 @@ WeekEnum.raw('Sunday').active // true
 
   [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
 
-  ```html
+  ```jsx
   <nz-select>
     @for (item of WeekEnum.items; track item.value) {
       <nz-option [nzValue]="item.value">{{ item.label }}</nz-option>
@@ -794,6 +794,8 @@ const sillyLocalize = (content: string) => {
     switch (content) {
       case 'enum-plus.options.all':
         return '全部';
+      case 'weekDays.name':
+        return '星期';
       case 'week.sunday':
         return '星期日';
       case 'week.monday':
@@ -805,6 +807,8 @@ const sillyLocalize = (content: string) => {
     switch (content) {
       case 'enum-plus.options.all':
         return 'All';
+      case 'weekDays.name':
+        return 'Week';
       case 'week.sunday':
         return 'Sunday';
       case 'week.monday':
@@ -828,12 +832,15 @@ const WeekEnum = Enum(
     localize: sillyLocalize,
     // localize: i18nLocalize, // 👍 推荐使用i18类库
     // localize: componentLocalize, // 👍 推荐使用组件形式
+    name: 'weekDays.name', // 可选，枚举类型的本地化名称，一般显示为表格列或表单字段标题
   }
 );
 setLang('zh-CN');
 WeekEnum.label(1); // 星期一
+WeekEnum.name; // 星期
 setLang('en-US');
 WeekEnum.label(1); // Monday
+WeekEnum.name; // Week
 ```
 
 当然，每个枚举类型都这样设置可能比较繁琐，`enum-plus` 提供了一种全局设置方案，可以通过 `Enum.localize` 全局方法，来全局设置本地化。如果两者同时存在，单个枚举的设置会覆盖全局设置。

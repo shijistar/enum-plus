@@ -45,7 +45,7 @@ export class EnumCollectionClass<
   extends EnumExtensionClass<T, K, V>
   implements IEnumItems<T, K, V>
 {
-  private _options: EnumItemOptions;
+  private _options: EnumItemOptions | undefined;
   readonly items!: EnumItemsArray<T, K, V>;
   readonly keys!: K[];
   /**
@@ -55,21 +55,26 @@ export class EnumCollectionClass<
    */
   readonly [ENUM_COLLECTION] = true;
   /**
-   * **EN:** The enum collection name, supports localization.
+   * The enum collection name, supports localization. Note that it usually returns a string, but if
+   * a custom `localize` function is set, the return value may vary depending on the implementation
+   * of the method.
    *
-   * **CN:** 枚举集合显示名称，支持本地化
+   * **CN:** 枚举集合显示名称，支持本地化。注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
+   *
+   * @returns {string | undefined} The localized name of the enum collection, or undefined if not
+   *   set.
    */
   get name(): string | undefined {
-    const localize = this._options.localize ?? Enum.localize;
+    const localize = this._options?.localize ?? Enum.localize;
     if (typeof localize === 'function') {
-      return localize(this._options.name);
+      return localize(this._options?.name);
     }
-    return this._options.name;
+    return this._options?.name;
   }
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
-    this._options = options || {};
+    this._options = options;
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
     const keys = Object.keys(init).filter(
       (k) => !(/^-?\d+$/.test(k) && k === `${init[init[k as K] as K] ?? ''}`)
@@ -113,13 +118,13 @@ export class EnumCollectionClass<
     Object.freeze(this.keys);
   }
 
-  key(value?: string | number) {
+  key(value?: string | V) {
     return this.items.key(value);
   }
-  label(keyOrValue?: string | number): string | undefined {
+  label(keyOrValue?: string | V): string | undefined {
     return this.items.label(keyOrValue);
   }
-  has(keyOrValue?: string | number) {
+  has(keyOrValue?: string | V) {
     return this.items.has(keyOrValue);
   }
 

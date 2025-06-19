@@ -76,7 +76,7 @@ export type IEnum<
 } & (T extends { items: any }
     ? {
         // 防止values名称冲突
-        [ITEMS]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
+        readonly [ITEMS]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }
     : {
         /**
@@ -90,23 +90,23 @@ export type IEnum<
          *
          * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
          */
-        items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
+        readonly items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (T extends { values: any }
     ? {
         // 防止values名称冲突
-        [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
+        readonly [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }
     : {
         /** @deprecated Use `items` instead */
-        values: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
+        readonly values: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (T extends { keys: any }
     ? {
         // 防止keys名称冲突
-        [KEYS]: K[];
+        readonly [KEYS]: K[];
       }
     : {
         /**
@@ -119,7 +119,7 @@ export type IEnum<
          *
          * 常在typescript作为类型声明使用，例如： `type Props = { week: typeof Week['keys'] }`
          */
-        keys: K[];
+        readonly keys: K[];
       });
 
 /**
@@ -137,11 +137,16 @@ export interface IEnumItems<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
   /**
-   * **EN:** The enum collection name, supports localization.
+   * The enum collection name, supports localization. Note that it usually returns a string, but if
+   * a custom `localize` function is set, the return value may vary depending on the implementation
+   * of the method.
    *
-   * **CN:** 枚举集合的显示名称，支持本地化
+   * **CN:** 枚举集合显示名称，支持本地化。注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
+   *
+   * @returns {string | undefined} The localized name of the enum collection, or undefined if not
+   *   set.
    */
-  name?: string;
+  readonly name?: string;
   /**
    * **EN:** Get the enumeration item by key or value
    *
@@ -152,7 +157,7 @@ export interface IEnumItems<
    * @returns {string | undefined} Display name of the enumeration item | 枚举项的label显示名称
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  label(keyOrValue?: string | number): string | undefined;
+  label(keyOrValue?: string | V): string | undefined;
 
   /**
    * **EN:** Get the key corresponding to a certain enumeration item
@@ -160,7 +165,7 @@ export interface IEnumItems<
    * **CN:** 获取某个枚举项对应的key
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  key(value?: string | number): K | undefined;
+  key(value?: string | V): K | undefined;
 
   /**
    * **EN:** Get the value corresponding to a certain enumeration item
@@ -170,7 +175,7 @@ export interface IEnumItems<
    * @param keyOrValue Enum item key or value | 枚举项的key或value
    */
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  has(keyOrValue?: string | number): boolean;
+  has(keyOrValue?: string | V): boolean;
 
   /**
    * **EN:** Generate an array of objects that can be bound to those `options like` of components

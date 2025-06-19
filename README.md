@@ -578,7 +578,7 @@ WeekEnum.raw('Sunday').active; // true
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
 
-  ```html
+  ```jsx
   <mat-select>
     @for (item of WeekEnum.items; track item.value) {
       <mat-option [value]="item.value">{{ item.label }}</mat-option>
@@ -588,7 +588,7 @@ WeekEnum.raw('Sunday').active; // true
 
   [NG-ZORRO](https://ng.ant.design/components/select/zh) Select
 
-  ```html
+  ```jsx
   <nz-select>
     @for (item of WeekEnum.items; track item.value) {
       <nz-option [nzValue]="item.value">{{ item.label }}</nz-option>
@@ -796,6 +796,8 @@ const sillyLocalize = (content: string) => {
     switch (content) {
       case 'enum-plus.options.all':
         return '全部';
+      case 'weekDays.name':
+        return '星期';
       case 'week.sunday':
         return '星期日';
       case 'week.monday':
@@ -807,6 +809,8 @@ const sillyLocalize = (content: string) => {
     switch (content) {
       case 'enum-plus.options.all':
         return 'All';
+      case 'weekDays.name':
+        return 'Week';
       case 'week.sunday':
         return 'Sunday';
       case 'week.monday':
@@ -830,12 +834,15 @@ const WeekEnum = Enum(
     localize: sillyLocalize,
     // localize: i18nLocalize, // 👍  Recommended to use i18n
     // localize: componentLocalize, // 👍  Recommended to use component
+    name: 'weekDays.name', // Optional, the localized name of the enum type, generally used as table title or form field title
   }
 );
 setLang('zh-CN');
 WeekEnum.label(1); // 星期一
+WeekEnum.name; // 星期
 setLang('en-US');
 WeekEnum.label(1); // Monday
+WeekEnum.name; // Week
 ```
 
 For applications with consistent localization needs, the `Enum.localize` method offers a convenient way to set localization globally rather than configuring each enum individually. When enum-specific localization options are provided during initialization, these will override the global settings.

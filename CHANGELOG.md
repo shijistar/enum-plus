@@ -2,6 +2,16 @@
 
 # enum-plus Changelog
 
+## 2.3.3
+
+2025-6-19
+
+### Features
+
+- 🔥 Allow naming Enum types, accept both plain text and localization keys, similar to the localization for enum members.
+- 🛠 Mark Enum collection fields as `readonly`.
+- 🛠 Improve the type of `Enum.label`、`Enum.key`、`Enum.raw` parameters, to accept the real value types.
+
 ## 2.3.2
 
 2025-6-10

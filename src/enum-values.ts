@@ -70,16 +70,16 @@ export class EnumItemsArray<
    */
   readonly [ENUM_ITEMS] = true;
 
-  label(keyOrValue?: string | number): string | undefined {
+  label(keyOrValue?: string | V): string | undefined {
     //  First find by value, then find by key
     return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue))?.label;
   }
 
-  key(value?: string | number): K | undefined {
+  key(value?: string | V): K | undefined {
     return this.find((i) => i.value === value)?.key;
   }
 
-  has(keyOrValue?: string | number): boolean {
+  has(keyOrValue?: string | V): boolean {
     return this.some((i) => i.value === keyOrValue || i.key === keyOrValue);
   }
 
