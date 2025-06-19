@@ -68,14 +68,14 @@ jobs:
       - name: Request the latest version of enum-plus
         id: get_latest_version_before_publish
         run: |
-          LATEST_VERSION=$(npm view enum-plus version)
-          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          VERSION=$(npm view enum-plus version)
+          echo "LATEST_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Request the next version of enum-plus
         id: get_next_version_before_publish
         run: |
-          NEXT_VERSION=$(npm view enum-plus@next version || npm view enum-plus version)
-          echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          VERSION=$(npm view enum-plus@next version || "0.0.0")
+          echo "NEXT_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish a prerelease version to npm
         run: npm publish --tag beta --ignore-scripts --access=public
@@ -113,7 +113,7 @@ jobs:
       - name: Remove npm dist-tag for "next"
         if: github.event.release.prerelease == false
         run: |
-          if [ "${{ steps.new_vs_next.outputs.comparison-result }}" = ">" ]; then
+          if [ "${{ steps.get_next_version_before_publish.outputs.NEXT_VERSION }}" != "0.0.0" ] && [ "${{ steps.new_vs_next.outputs.comparison-result }}" = ">" ]; then
             npm dist-tag rm enum-plus next --access=public
           fi
         env:
@@ -122,8 +122,8 @@ jobs:
       - name: Request the latest stable version of enum-plus
         id: get_latest_version_after_publish
         run: |
-          LATEST_VERSION=$(npm view enum-plus version)
-          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          VERSION=$(npm view enum-plus version)
+          echo "LATEST_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Prepare local master branch
         if: github.event.release.prerelease == false
