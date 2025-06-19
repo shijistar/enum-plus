@@ -339,6 +339,29 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Mond
 
 ---
 
+### 💎 &nbsp; name
+
+`string`
+
+枚举类型的显示名称。在创建枚举时，可以通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。关于本地化的更多详情，请参考[本地化](#本地化)章节。
+
+> 在UI组件中，枚举通常用来作为数据源，生成下拉框表单项，或在表格单元格中显式枚举成员文本。而对应的表单项标签或列标题就是枚举类型的名称。通过使用`name`，我们可以集中管理枚举名称，和枚举成员的名称，也更方便使用。
+
+```js
+const WeekEnum = Enum({
+  Sunday: { value: 0, label: '星期日', happy: true },
+  Monday: { value: 1, label: '星期一', happy: false },
+} as const, {
+  name: 'i18n.enums.week', // 可以是一个本地化键值
+});
+
+WeekEnum.name; // 周
+WeekEnum.label(0); // 星期日
+WeekEnum.label(1); // 星期一
+```
+
+---
+
 ### ⚡️ &nbsp; valueType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `value1 | value2 | ...`
@@ -795,7 +818,7 @@ const sillyLocalize = (content: string) => {
       case 'enum-plus.options.all':
         return '全部';
       case 'weekDays.name':
-        return '星期';
+        return '周';
       case 'week.sunday':
         return '星期日';
       case 'week.monday':
@@ -837,7 +860,7 @@ const WeekEnum = Enum(
 );
 setLang('zh-CN');
 WeekEnum.label(1); // 星期一
-WeekEnum.name; // 星期
+WeekEnum.name; // 周
 setLang('en-US');
 WeekEnum.label(1); // Monday
 WeekEnum.name; // Week

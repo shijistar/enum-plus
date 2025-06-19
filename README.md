@@ -342,6 +342,29 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday:
 
 ---
 
+### 💎 &nbsp; name
+
+`string`
+
+Display name for Enum types. When creating an enum, you can assign it a display name using the optional `name` parameter. This name can be either a plain string or a localization key to support internationalized text. For more details on localization, see the [Localization](#localization) section.
+
+> Usually Enums are used to generate dropdown menus in form, or show member text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its members' labels, simplifying maintenance and ensuring consistency across your application.
+
+```js
+const WeekEnum = Enum({
+  Sunday: { value: 0, label: 'Sunday', happy: true },
+  Monday: { value: 1, label: 'Monday', happy: false },
+} as const, {
+  name: 'i18n.enums.week', // A localization key
+});
+
+WeekEnum.name; // Week
+WeekEnum.label(0); // Sunday
+WeekEnum.label(1); // Monday
+```
+
+---
+
 ### ⚡️ &nbsp; valueType &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 `value1 | value2 | ...`
