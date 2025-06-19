@@ -1,3 +1,4 @@
+import { Enum } from './enum';
 import { EnumItemClass } from './enum-item';
 import { EnumItemsArray } from './enum-values';
 import type {
@@ -44,6 +45,7 @@ export class EnumCollectionClass<
   extends EnumExtensionClass<T, K, V>
   implements IEnumItems<T, K, V>
 {
+  private _options: EnumItemOptions;
   readonly items!: EnumItemsArray<T, K, V>;
   readonly keys!: K[];
   /**
@@ -52,9 +54,22 @@ export class EnumCollectionClass<
    * **CN:** 布尔值，表示这是一个枚举集合实例
    */
   readonly [ENUM_COLLECTION] = true;
+  /**
+   * **EN:** The enum collection name, supports localization.
+   *
+   * **CN:** 枚举集合显示名称，支持本地化
+   */
+  get name(): string | undefined {
+    const localize = this._options.localize ?? Enum.localize;
+    if (typeof localize === 'function') {
+      return localize(this._options.name);
+    }
+    return this._options.name;
+  }
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
+    this._options = options || {};
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
     const keys = Object.keys(init).filter(
       (k) => !(/^-?\d+$/.test(k) && k === `${init[init[k as K] as K] ?? ''}`)
@@ -72,10 +87,10 @@ export class EnumCollectionClass<
     // Build enum item data
     const items = new EnumItemsArray<T, K, V>(
       init,
-      options,
+      this._options,
       ...keys.map((key, index) => {
         const { value, label } = parsed[index];
-        return new EnumItemClass<T[K], K, V>(key, value, label, init[key], options).readonly();
+        return new EnumItemClass<T[K], K, V>(key, value, label, init[key], this._options).readonly();
       })
     );
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken

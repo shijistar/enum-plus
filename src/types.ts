@@ -47,6 +47,12 @@ export interface EnumItemOptions {
    */
   // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
   localize?: (content: EnumLocaleExtends['LocaleKeys'] | (string & {}) | undefined) => any;
+  /**
+   * **EN:** Set the display name of the enum collection, supports string or localized resource key
+   *
+   * **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
+   */
+  name?: string;
 }
 
 /**
@@ -130,6 +136,12 @@ export interface IEnumItems<
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
+  /**
+   * **EN:** The enum collection name, supports localization.
+   *
+   * **CN:** 枚举集合的显示名称，支持本地化
+   */
+  name?: string;
   /**
    * **EN:** Get the enumeration item by key or value
    *

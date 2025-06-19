@@ -2,6 +2,7 @@ import { type BuiltInLocaleKeys, defaultLocalize, Enum } from '@enum-plus';
 
 export const localeEN = {
   'enum-plus.options.all': 'All',
+  'weekDay.name': 'Week Days',
   Sunday: 'Sunday',
   Monday: 'Monday',
   Tuesday: 'Tuesday',
@@ -16,6 +17,7 @@ export const localeEN = {
 } as const;
 export const localeCN = {
   'enum-plus.options.all': '全部',
+  'weekDay.name': '星期',
   Sunday: '星期日',
   Monday: '星期一',
   Tuesday: '星期二',
@@ -30,6 +32,7 @@ export const localeCN = {
 } as const;
 export const noLocale = {
   'enum-plus.options.all': 'enum-plus.options.all',
+  'weekDay.name': 'weekDay.name',
   Sunday: 'weekday.sunday',
   Monday: 'weekday.monday',
   Tuesday: 'weekday.tuesday',
@@ -160,6 +163,8 @@ export function genSillyLocalizer(language: typeof lang) {
     switch (content) {
       case 'enum-plus.options.all':
         return locales['enum-plus.options.all'] as typeof content;
+      case 'weekDay.name':
+        return locales['weekDay.name'] as typeof content;
       case 'weekday.sunday':
         return locales.Sunday as typeof content;
       case 'weekday.monday':

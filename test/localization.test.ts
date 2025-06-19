@@ -80,6 +80,41 @@ describe('should support localization', () => {
     testEnum(weekEnum, noLocale);
     testBuiltInResources(weekEnum, noLocale);
   });
+
+  test('Enum name should allow normal text', () => {
+    const weekEnum = Enum(StandardWeekConfig, { name: 'Week Days' });
+    expect(weekEnum.name).toBe('Week Days');
+  });
+  test('Enum name should support global localization (English)', () => {
+    setLang('en-US');
+    const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+    expect(weekEnum.name).toBe(localeEN['weekDay.name']);
+  });
+  test('Enum name should support global localization (Chinese)', () => {
+    setLang('zh-CN');
+    const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+    expect(weekEnum.name).toBe(localeCN['weekDay.name']);
+  });
+  test('Enum name should support global localization (No Locale)', () => {
+    setLang(undefined);
+    const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+    expect(weekEnum.name).toBe(noLocale['weekDay.name']);
+  });
+  test('Enum name should support custom localization (English)', () => {
+    Enum.localize = undefined!;
+    const weekEnum = Enum(StandardWeekConfig, { localize: genSillyLocalizer('en-US'), name: 'weekDay.name' });
+    expect(weekEnum.name).toBe(localeEN['weekDay.name']);
+  });
+  test('Enum name should support custom localization (Chinese)', () => {
+    Enum.localize = undefined!;
+    const weekEnum = Enum(StandardWeekConfig, { localize: genSillyLocalizer('zh-CN'), name: 'weekDay.name' });
+    expect(weekEnum.name).toBe(localeCN['weekDay.name']);
+  });
+  test('Enum name should support custom localization (No Locale)', () => {
+    Enum.localize = undefined!;
+    const weekEnum = Enum(StandardWeekConfig, { localize: genSillyLocalizer(undefined), name: 'weekDay.name' });
+    expect(weekEnum.name).toBe(noLocale['weekDay.name']);
+  });
 });
 
 function testEnum(
