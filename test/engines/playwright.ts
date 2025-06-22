@@ -2,7 +2,7 @@ import { defaultLocalize, Enum } from '@enum-plus';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { getLocales, setLang } from '../data/week-config';
-import { deserializeJavascript, serializeJavascript } from '../utils/serialize-javascript';
+import { parse, stringify } from '../utils/serialize-javascript';
 import TestEngineBase, { type RuntimeContext } from './base';
 import type { MakeMatchers } from './playwright-types';
 
@@ -21,19 +21,17 @@ export class PlaywrightEngine extends TestEngineBase {
     assert: (data: Data) => void,
     evaluateContext?: Record<string, unknown>
   ): void {
-    const serializedEvaluateParams = serializeJavascript({ ...evaluateContext, evaluateFn: evaluate });
+    const serializedEvaluateParams = stringify({ ...evaluateContext, evaluateFn: evaluate });
 
-    // test(`(es) ${name}`, async ({ page }) => {
-    //   await page.goto('/modern.html', { waitUntil: 'domcontentloaded' });
-    //   await page.waitForLoadState('domcontentloaded');
-    //   await this.executeEvaluation({ page, assert, serializedEvaluateParams });
-    // });
-
-    test(`(es-legacy) ${name}`, async ({ page }) => {
-      await page.goto('/legacy.html', { waitUntil: 'domcontentloaded' });
-      await page.waitForLoadState('domcontentloaded');
+    test(`(es) ${name}`, async ({ page }) => {
+      await page.goto('/modern.html', { waitUntil: 'domcontentloaded' });
       await this.executeEvaluation({ page, assert, serializedEvaluateParams });
     });
+
+    // test(`(es-legacy) ${name}`, async ({ page }) => {
+    //   await page.goto('/legacy.html', { waitUntil: 'domcontentloaded' });
+    //   await this.executeEvaluation({ page, assert, serializedEvaluateParams });
+    // });
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -63,7 +61,7 @@ export class PlaywrightEngine extends TestEngineBase {
         SerializeJavascript,
       };
       // console.log('window', runtimeContext);
-      const { serializeJavascript: serialize, deserializeJavascript: deserialize } = SerializeJavascript;
+      const { stringify: serialize, parse: deserialize } = SerializeJavascript;
       const args = deserialize(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
       const { evaluateFn, ...rest } = args;
 
@@ -86,7 +84,7 @@ export class PlaywrightEngine extends TestEngineBase {
       return serializedStr;
     }, serializedEvaluateParams);
 
-    const initialState = deserializeJavascript(resultStr, { debug: true, prettyPrint: false });
+    const initialState = parse(resultStr, { /* debug: true, */ prettyPrint: false });
     // Restore the lang to the Enum.localize
     setLang(initialState.lang, Enum, getLocales, defaultLocalize);
     if (!initialState.EnumLocalize) {
@@ -96,7 +94,7 @@ export class PlaywrightEngine extends TestEngineBase {
     // the Enum object is used to "help" to access the Enum global function,
     // because the code is like `const localize = this._options?.localize ?? Enum.localize;`,
     // it seems that Enum is a global variable, but actually it is not, we simulate it as a closure context.
-    const testResult = deserializeJavascript(resultStr, {
+    const testResult = parse(resultStr, {
       closure: { Enum, ...initialState },
     });
     // console.log('deserialize result');
