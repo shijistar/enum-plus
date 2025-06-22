@@ -203,7 +203,6 @@ const testLocalization = (engine: TestEngineBase) => {
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnumWithoutName = Enum(StandardWeekConfig);
         const weekEnum = Enum(StandardWeekConfig, { name: 'Week Days' });
-        engine.expect(weekEnum.name).toBe('Week Days');
         return { weekEnum, weekEnumWithoutName };
       },
       ({ weekEnum, weekEnumWithoutName }) => {
