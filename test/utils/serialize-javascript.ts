@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import type { EnumItemClass } from '@enum-plus/enum-item';
-// import type { EnumItemClass } from '@enum-plus';
 
 /**
  * Notes:
@@ -46,11 +44,11 @@ const predefinedSymbols = Object.keys(Object.getOwnPropertyDescriptors(Symbol))
  *
  * @returns The serialized string.
  */
-export function serializeJavascript(obj: any, options?: SerializeOptions): string {
+export function stringify(obj: any, options?: StringifyOptions): string {
   return serializeJavascriptRecursively(obj, { ...options, patches: [], refs: [] });
 }
 
-function serializeJavascriptRecursively(obj: any, options: InternalSerializeOptions): string {
+function serializeJavascriptRecursively(obj: any, options: InternalStringifyOptions): string {
   const {
     tokenStart: TS = TokenStart,
     tokenEnd: TE = TokenEnd,
@@ -194,7 +192,7 @@ function serializeJavascriptRecursively(obj: any, options: InternalSerializeOpti
  *
  * @returns The deserialized object.
  */
-export function deserializeJavascript(input: string, options?: DeserializeOptions) {
+export function parse(input: string, options?: ParseOptions) {
   const { variablePrefix = VariablePrefix, closure } = options ?? {};
   if (!input) {
     return undefined;
@@ -205,7 +203,7 @@ export function deserializeJavascript(input: string, options?: DeserializeOption
   reversedRefs.forEach((ref) => {
     const { variable, code } = ref;
     const refData = JSON.parse(code) as SerializedResult;
-    const refValue = directDeserialize(refData, {
+    const refValue = executeDeserialize(refData, {
       ...options,
       closure: { ...refMap, ...closure },
       variablePrefix,
@@ -214,7 +212,7 @@ export function deserializeJavascript(input: string, options?: DeserializeOption
     refMap[variable] = refValue;
   });
   try {
-    return directDeserialize(inputObj, {
+    return executeDeserialize(inputObj, {
       ...options,
       closure: { ...closure, ...refMap },
       variablePrefix,
@@ -226,7 +224,7 @@ export function deserializeJavascript(input: string, options?: DeserializeOption
   }
 }
 
-function directDeserialize(result: SerializedResult, options: InternalDeserializeOptions) {
+function executeDeserialize(result: SerializedResult, options: InternalParseOptions) {
   const { variablePrefix: VP, closure, get = getByPath, debug, prettyPrint = true } = options ?? {};
   const code = getDeserializeJavascriptCode(result, options);
   if (debug) {
@@ -253,7 +251,7 @@ function directDeserialize(result: SerializedResult, options: InternalDeserializ
   }
 }
 
-function getDeserializeJavascriptCode(result: SerializedResult, options: InternalDeserializeOptions) {
+function getDeserializeJavascriptCode(result: SerializedResult, options: InternalParseOptions) {
   const {
     tokenStart = TokenStart,
     tokenEnd = TokenEnd,
@@ -314,11 +312,14 @@ return deserializeResult;`;
   return content;
 }
 
-/** Copy all prototype properties to the object its own */
-export function expandPrototypeChain(
-  source: any,
-  options?: { parentPath?: PathType[]; patches?: Patch[] } & Pick<SerializeOptions, 'preserveClassConstructor'>
-): typeof source {
+/**
+ * Expands the prototype chain of the source object, including all properties from the prototype
+ * chain.
+ *
+ * @param source - The source object to expand.
+ * @param options - Options to control the expansion behavior.
+ */
+export function expandPrototypeChain(source: any, options?: ExpandPrototypeChainOptions): typeof source {
   const { parentPath, patches = [] } = options ?? {};
   return expandPrototypeChainRecursively(source, { ...options, patches, paths: parentPath, parents: [] });
 }
@@ -329,7 +330,7 @@ function expandPrototypeChainRecursively(
     patches: Patch[];
     paths?: PathType[];
     parents?: any[];
-  } & Pick<SerializeOptions, 'preserveClassConstructor'>
+  } & Pick<StringifyOptions, 'preserveClassConstructor'>
 ): typeof source {
   const { patches, paths = [], parents = [] } = options ?? {};
   // console.log('getFullObjectWithPrototype', obj, Object.prototype.toString.call(obj));
@@ -412,7 +413,7 @@ function expandPrototypeChainRecursively(
 
 function decodeFormat(
   s: string | undefined,
-  options: Pick<SerializeOptions, 'tokenStart' | 'tokenEnd'> = {}
+  options: Pick<StringifyOptions, 'tokenStart' | 'tokenEnd'> = {}
 ): string | undefined {
   const { tokenStart = '', tokenEnd = '' } = options ?? {};
   const escapedTS = escapeRegExp(tokenStart);
@@ -461,9 +462,15 @@ function getSymbolFieldName(symbol: symbol): string | undefined {
   return undefined;
 }
 
+/**
+ * Picks all prototype properties from the source object, including those from its prototype chain.
+ *
+ * @param source - The source object to pick properties from.
+ * @param options - Options to control the behavior of the picking.
+ */
 export function pickPrototype(
   source: any,
-  options?: Pick<SerializeOptions, 'preserveClassConstructor'>
+  options?: Pick<StringifyOptions, 'preserveClassConstructor'>
 ): Record<string | symbol, any> {
   const { preserveClassConstructor } = options ?? {};
   const target: Record<string | symbol, any> = Object.create(null);
@@ -474,7 +481,9 @@ export function pickPrototype(
     for (const key of protoKeys) {
       if (!(key in target) && !ignoredKeys.includes(key)) {
         try {
-          target[key] = proto[key];
+          // should use source[key] instead of proto[key], because the member may be a getter which
+          // relies on some other members of source object
+          target[key] = source[key];
         } catch (error) {
           // console.error(error);
         }
@@ -548,7 +557,7 @@ interface SerializedResult {
   refs: ValueRef[];
 }
 
-export interface SerializeOptions {
+export interface StringifyOptions {
   /** The start token to mark the start of the serialized string. Default is `$<SJS>$`. */
   tokenStart?: string;
   /** The end token to mark the end of the serialized string. Default is `$<SJE>$`. */
@@ -561,7 +570,7 @@ export interface SerializeOptions {
   debug?: boolean;
 }
 
-type InternalSerializeOptions = SerializeOptions & {
+type InternalStringifyOptions = StringifyOptions & {
   /**
    * Whether to serialize the source of the object only, and ignore the `patches` and `refs`.
    * Default is `false`.
@@ -572,7 +581,7 @@ type InternalSerializeOptions = SerializeOptions & {
   refs: ValueRef[];
 };
 
-export type DeserializeOptions = Pick<SerializeOptions, 'tokenStart' | 'tokenEnd' | 'variablePrefix' | 'debug'> & {
+export type ParseOptions = Pick<StringifyOptions, 'tokenStart' | 'tokenEnd' | 'variablePrefix' | 'debug'> & {
   /**
    * The function to get a child value from source object. It's used to restore the patched values.
    *
@@ -595,10 +604,17 @@ export type DeserializeOptions = Pick<SerializeOptions, 'tokenStart' | 'tokenEnd
   prettyPrint?: boolean;
 };
 
-interface InternalDeserializeOptions extends DeserializeOptions {
+interface InternalParseOptions extends ParseOptions {
   enablePatches?: boolean;
   isPrint?: boolean;
 }
+
+export type ExpandPrototypeChainOptions = {
+  /** The parent path of the object */
+  parentPath?: PathType[];
+  /** The output patches to apply to the object after expanding the prototype chain. */
+  patches?: Patch[];
+} & Pick<StringifyOptions, 'preserveClassConstructor'>;
 
 /**
  * The function to get a child value from source object
