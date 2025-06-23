@@ -14,10 +14,12 @@
 <br/>
 
 [![npm latest version](https://img.shields.io/npm/v/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
-[![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/enum-plus?label=minzipped%20size&color=44cc11&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus?activeTab=code)
+[![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/enum-plus?label=minzipped%20size&color=44cc11&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
+[![Node compatibility](https://img.shields.io/node/v/enum-plus?label=Node&color=33a0ff&cacheSeconds=86400)](https://github.com/shijistar/enum-plus)
+[![Browser compatible](https://img.shields.io/badge/Browser-compatible-brightgreen?logo=googlechrome)](https://www.npmjs.com/package/enum-plus)
 [![code coverage](https://codecov.io/gh/shijistar/enum-plus/graph/badge.svg?token=JMCDJKLT0B)](https://codecov.io/gh/shijistar/enum-plus)
-[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?color=007ec6&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
-![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=%23F68F1E&cacheSeconds=86400)
+[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?label=Downloads&color=007ec6&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
+![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=ff8000&cacheSeconds=86400)
 
 ⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Naming Conventions](#naming-convention-best-practices) | [Localization](#localization) | [Extensibility](#extensibility) | [Q&A](#qa)&nbsp; ⬇️
 
