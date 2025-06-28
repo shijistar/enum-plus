@@ -10,7 +10,7 @@ const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./e2e/global.setup.ts'),
   globalTeardown: require.resolve('./e2e/global.teardown.ts'),
   forbidOnly: !!process.env.CI,
-  workers: 2,
+  workers: process.env.CI ? 2 : 4,
   retries: 2,
   use: {
     baseURL: `http://localhost:${port}`,
