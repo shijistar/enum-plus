@@ -24,12 +24,12 @@ export class PlaywrightEngine extends TestEngineBase {
     const serializedEvaluateParams = stringify({ ...evaluateContext, evaluateFn: evaluate });
 
     test(`(es) ${name}`, async ({ page }) => {
-      await page.goto('/modern.html', { waitUntil: 'domcontentloaded' });
+      await page.goto('/modern.html', { waitUntil: 'load' });
       await this.executeEvaluation({ page, assert, serializedEvaluateParams });
     });
 
     // test(`(es-legacy) ${name}`, async ({ page }) => {
-    //   await page.goto('/legacy.html', { waitUntil: 'domcontentloaded' });
+    //   await page.goto('/legacy.html', { waitUntil: 'load' });
     //   await this.executeEvaluation({ page, assert, serializedEvaluateParams });
     // });
   }
