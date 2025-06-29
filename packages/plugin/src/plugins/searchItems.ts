@@ -1,14 +1,15 @@
-import type { EnumItemClass, EnumItemOptions, EnumValue, PluginFunc } from 'enum-plus';
+import type {
+  EnumInit,
+  EnumItemClass,
+  EnumItemInit,
+  EnumItemOptions,
+  EnumKey,
+  EnumValue,
+  PluginFunc,
+  ValueTypeFromSingleInit,
+} from 'enum-plus';
 
 export interface PluginOptions {
-  /**
-   * **EN:** The localization function, used to localize the label of the list item. Or a function
-   * that returns a localization function, it's useful that you can get the latest `$t` after
-   * language is changed
-   *
-   * **CN:** 本地化函数，用于本地化列表项的标签，也可以是一个函数，返回一个本地化函数，这样可以在语言切换后获取最新的`$t`
-   */
-  $t?: EnumItemOptions['localize'] | (() => EnumItemOptions['localize']);
   /**
    * **EN:** The name of the field used for list item labels, used to search list items. Default is
    * `label`.
@@ -26,9 +27,16 @@ export interface PluginOptions {
 }
 
 const searchItemsPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
-  const { $t, labelField = 'label', ignoreCase = true } = options ?? {};
+  const { labelField = 'label', ignoreCase = true } = options ?? {};
   Enum.extends({
-    searchItems: (search?: string, item?: EnumValue | Record<string, unknown> | EnumItemClass<EnumValue>): boolean => {
+    searchItems: <
+      T extends EnumInit<K, V>,
+      K extends EnumKey<T> = EnumKey<T>,
+      V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+    >(
+      search?: string,
+      item?: V | Record<string, unknown> | EnumItemClass<EnumItemInit<V>, K, V>
+    ): boolean => {
       let label: string | undefined;
       if (
         typeof item === 'boolean' ||
@@ -55,8 +63,8 @@ const searchItemsPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
           }
         }
       }
-      if ($t) {
-        const result = $t(label);
+      if (Enum.localize) {
+        const result = Enum.localize(label);
         if (typeof result === 'function') {
           // if $t is a function, call it to get the latest $t
           label = result(label) ?? label;
@@ -77,7 +85,11 @@ export default searchItemsPlugin;
 
 declare module 'enum-plus-extend' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface EnumExtension<T, K, V> {
+  interface EnumExtension<
+    T extends EnumInit<K, V>,
+    K extends EnumKey<T> = EnumKey<T>,
+    V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  > {
     /**
      * **EN:** Search for list items, returns true if the item matches the search criteria, false
      * otherwise. The function supports searching by specific field that is specified in options. If
@@ -108,7 +120,7 @@ declare module 'enum-plus-extend' {
        *
        * **CN:** 待搜索的列表项
        */
-      item?: EnumValue | { value?: EnumValue; label?: string } | EnumItemClass<EnumValue>
+      item?: V | Record<string, unknown> | EnumItemClass<EnumItemInit<V>, K, V>
     ) => boolean;
   }
 }

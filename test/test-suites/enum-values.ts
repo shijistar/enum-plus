@@ -55,21 +55,21 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
   );
 
   engine.test(
-    'enums.toSelect should generate an object array for AntDesign Select',
+    'enums.toList should generate an object array for AntDesign Select',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum, locales };
     },
     ({ weekEnum, locales }) => {
       engine
-        .expect(getOptionsData(weekEnum.toSelect()))
+        .expect(getOptionsData(weekEnum.toList()))
         .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
       engine
-        .expect(getOptionsData(weekEnum.toSelect({})))
+        .expect(getOptionsData(weekEnum.toList({})))
         .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
 
       // Add first-option by boolean flag
-      const withDefaultFirstOption = weekEnum.toSelect({ firstOption: true });
+      const withDefaultFirstOption = weekEnum.toList({ firstOption: true });
       engine.expect(withDefaultFirstOption).toHaveLength(8);
       engine.expect(withDefaultFirstOption[0]).toEqual({
         value: '',
@@ -78,7 +78,7 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
       });
 
       // Add first-option by boolean flag with custom value
-      const customDefaultOption = weekEnum.toSelect({
+      const customDefaultOption = weekEnum.toList({
         firstOption: true,
         firstOptionValue: 99 as 1,
         firstOptionLabel: 'Select All',
@@ -88,14 +88,14 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
 
       // Add custom first-option
       const customOption = { value: 99, key: '99', label: 'WeekdayX' };
-      const withCustomFirstOption = weekEnum.toSelect({
+      const withCustomFirstOption = weekEnum.toList({
         firstOption: customOption,
       });
       engine.expect(withCustomFirstOption[0]).toEqual(customOption);
 
       // Add custom first-option using value as key
       const customOptionWithoutKey = { value: 99, label: 'WeekdayX' };
-      const withCustomFirstOptionUsingValueAsKey = weekEnum.toSelect({
+      const withCustomFirstOptionUsingValueAsKey = weekEnum.toList({
         firstOption: customOptionWithoutKey,
       });
       engine.expect(withCustomFirstOptionUsingValueAsKey[0]).toEqual({
