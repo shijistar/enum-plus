@@ -194,7 +194,7 @@ export interface IEnumItems<
    *
    * @see https://ant.design/components/checkbox-cn#option
    */
-  toSelect(): EnumItemOptionData<K, V>[];
+  toList(): EnumItemOptionData<K, V>[];
   /**
    * **EN:** Generate an array of objects that can be bound to those `options like` of components
    * such as Select, Radio, and Checkbox, following the data specification of ant-design
@@ -211,7 +211,7 @@ export interface IEnumItems<
    *
    * @see https://ant.design/components/checkbox-cn#option
    */
-  toSelect(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  toList(config: ToListConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   /**
    * **EN:** Generate an array of objects that can be bound to those `options like` of components
    * such as Select, Radio, and Checkbox, following the data specification of ant-design
@@ -228,8 +228,8 @@ export interface IEnumItems<
    *
    * @see https://ant.design/components/checkbox-cn#option
    */
-  toSelect<FK, FV>(
-    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
+  toList<FK, FV>(
+    config: ToListConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
 
   /**
@@ -432,7 +432,26 @@ export type EnumValue = keyof any | bigint | boolean | Date | RegExp;
 export type EnumKey<T> = keyof T;
 
 /** More options for the options method */
-export type ToSelectConfig = object;
+export interface ToListConfig<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> {
+  /**
+   * **EN:** The name of the value field in the output object, or a function to get the field name,
+   * default is `value`
+   *
+   * **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
+   */
+  valueField?: string | ((item: EnumItemClass<T[K], K, V>[]) => string);
+  /**
+   * **EN:** The name of the label field in the output object, or a function to get the field name,
+   * default is `label`
+   *
+   * **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
+   */
+  labelField?: string | ((item: EnumItemClass<T[K], K, V>[]) => string);
+}
 
 export interface BooleanFirstOptionConfig<V> {
   /**

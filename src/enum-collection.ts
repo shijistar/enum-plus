@@ -17,7 +17,7 @@ import type {
   ObjectFirstOptionConfig,
   PrimitiveOf,
   StandardEnumItemInit,
-  ToSelectConfig,
+  ToListConfig,
   ValueTypeFromSingleInit,
 } from './types';
 import { ENUM_COLLECTION, ITEMS, KEYS } from './utils';
@@ -139,15 +139,15 @@ export class EnumCollectionClass<
     return this.items.has(keyOrValue);
   }
 
-  toSelect(): EnumItemOptionData<K, V>[];
-  toSelect(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
-  toSelect<FK = never, FV = never>(
-    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
+  toList(): EnumItemOptionData<K, V>[];
+  toList(config: ToListConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  toList<FK = never, FV = never>(
+    config: ToListConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  toSelect<FK = never, FV = never>(
-    config?: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
+  toList<FK = never, FV = never>(
+    config?: ToListConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
   ): EnumItemOptionData<K | FK, V | FV>[] {
-    return this.items.toSelect(config as ToSelectConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
+    return this.items.toList(config as ToListConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
       K | FK,
       V | FV
     >[];

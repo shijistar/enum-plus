@@ -234,7 +234,7 @@ function getInitMapFromArray<
  *
  * **CN:** 表示增强Enum类功能的插件，通过添加新方法或属性
  *
- * @param option The options for the plugin | 插件的选项
+ * @param options The options for the plugin | 插件的选项
  * @param Enum The Enum global method | Enum全局方法
  */
 export type PluginFunc<T = unknown> = (option: T | undefined, Enum: EnumInterface) => void;

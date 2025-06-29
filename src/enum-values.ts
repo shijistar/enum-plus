@@ -15,7 +15,7 @@ import type {
   MenuItemOption,
   ObjectFirstOptionConfig,
   PrimitiveOf,
-  ToSelectConfig,
+  ToListConfig,
   ValueMap,
   ValueTypeFromSingleInit,
 } from './types';
@@ -61,6 +61,20 @@ export class EnumItemsArray<
     super(...items);
     this._raw = raw;
     this._options = options;
+  }
+  name?: string | undefined;
+  toSelect(): EnumItemOptionData<K, V>[];
+  toSelect(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<'' | K, '' | V>[];
+  toSelect<FK, FV>(
+    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
+  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
+  toSelect(
+    config?: unknown
+  ):
+    | EnumItemOptionData<K, V>[]
+    | EnumItemOptionData<'' | K, '' | V>[]
+    | EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[] {
+    throw new Error('Method not implemented.');
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
@@ -129,13 +143,13 @@ export class EnumItemsArray<
     return this.some((i) => i.value === keyOrValue || i.key === keyOrValue);
   }
 
-  toSelect(): EnumItemOptionData<K, V>[];
-  toSelect(config?: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
-  toSelect<FK = never, FV = never>(
-    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
+  toList(): EnumItemOptionData<K, V>[];
+  toList(config?: ToListConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
+  toList<FK = never, FV = never>(
+    config: ToListConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  toSelect<FK = never, FV = never>(
-    config: ToSelectConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = {}
+  toList<FK = never, FV = never>(
+    config: ToListConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = {}
   ): EnumItemOptionData<K | FK, V | FV>[] {
     const { firstOption = false } = config;
     if (firstOption) {
