@@ -41,7 +41,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(week.key(1)).toBe(week.items.key(1));
         engine.expect(week.has(1)).toBe(week.items.has(1));
         engine.expect(week.raw()).toBe(week.items.raw());
-        engine.expect(week.toSelect()).toEqual(week.items.toSelect());
+        engine.expect(week.toList()).toEqual(week.items.toList());
         engine.expect(week.toMenu()).toEqual(week.items.toMenu());
         engine.expect(week.toFilter()).toEqual(week.items.toFilter());
         engine.expect(week.toValueMap()).toEqual(week.items.toValueMap());
@@ -86,8 +86,8 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(strangeEnum.items.key(2)).toBe('key');
         engine.expect(strangeEnum.has).toBe(3);
         engine.expect(strangeEnum.items.has(3)).toBe(true);
-        engine.expect(strangeEnum.toSelect).toBe(4);
-        engine.expect(strangeEnum.items.toSelect()).toHaveLength(Object.keys(strangeEnumConfig).length);
+        engine.expect(strangeEnum.toList).toBe(4);
+        engine.expect(strangeEnum.items.toList()).toHaveLength(Object.keys(strangeEnumConfig).length);
         engine.expect(strangeEnum.toFilter).toBe(6);
         engine.expect(strangeEnum.items.toFilter()).toHaveLength(Object.keys(strangeEnumConfig).length);
         engine.expect(strangeEnum.toMenu).toBe(7);

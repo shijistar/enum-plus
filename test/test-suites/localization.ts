@@ -329,7 +329,7 @@ const testLocalization = (engine: TestEngineBase) => {
     engine.expect(sunday.toLocaleString()).toBe(locales.Sunday);
     engine.expect(getOptionsData(weekEnum.items)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
     engine
-      .expect(getOptionsData(weekEnum.toSelect()))
+      .expect(getOptionsData(weekEnum.toList()))
       .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
     engine.expect(Array.from(weekEnum.toMenu())).toEqual(
       pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
@@ -362,7 +362,7 @@ const testLocalization = (engine: TestEngineBase) => {
     >,
     locales: typeof localeEN | typeof localeCN | typeof noLocale
   ) {
-    const withDefaultFirstOption = weekEnum.toSelect({ firstOption: true });
+    const withDefaultFirstOption = weekEnum.toList({ firstOption: true });
     engine.expect(withDefaultFirstOption).toHaveLength(8);
     engine.expect(withDefaultFirstOption[0]).toEqual({
       value: '',
@@ -379,7 +379,7 @@ const testLocalization = (engine: TestEngineBase) => {
     >,
     { defaultLocalize }: { defaultLocalize: typeof defaultLocalizeInterface }
   ) {
-    const withDefaultFirstOption = weekEnum.toSelect({ firstOption: true });
+    const withDefaultFirstOption = weekEnum.toList({ firstOption: true });
     engine.expect(withDefaultFirstOption).toHaveLength(8);
     engine.expect(withDefaultFirstOption[0]).toEqual({
       value: '',
