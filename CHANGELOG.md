@@ -33,6 +33,17 @@ const MyEnum = Enum({
 
   This addition is ideal for rapid prototyping and integration with legacy systems that don't support contemporary module resolution. The UMD builds are accessible in the `umd` directory of the npm package or can be directly downloaded from [Github Releases](https://github.com/shijistar/enum-plus/releases).
 
+- The way of extending enums has been changed.
+
+```diff
+-declare global {
++declare module 'enum-plus-extend' {
+   interface EnumExtension<T, K, V> {
+     isWeekend(value: number): boolean;
+   }
+}
+```
+
 ### Breaking Changes
 
 - 💣 the following deprecated methods are removed:
