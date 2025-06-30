@@ -10,8 +10,7 @@ import type {
 } from 'enum-plus';
 import type { StandardEnumInit } from 'lib/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type PluginOptions = Pick<ToSelectConfig<any>, 'labelField' | 'valueField'>;
+export type PluginOptions = Pick<ToSelectConfig<EnumInit>, 'labelField' | 'valueField'>;
 
 const toSelectPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
   const { labelField: globalLabelField, valueField: globalValueField } = options ?? {};
