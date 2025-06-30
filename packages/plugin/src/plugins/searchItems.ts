@@ -2,7 +2,6 @@ import type {
   EnumInit,
   EnumItemClass,
   EnumItemInit,
-  EnumItemOptions,
   EnumKey,
   EnumValue,
   PluginFunc,
