@@ -181,42 +181,22 @@ export interface IEnumItems<
   has(keyOrValue?: string | V): boolean;
 
   /**
-   * **EN:** Generate an array of objects that can be bound to those `options like` of components
-   * such as Select, Radio, and Checkbox, following the data specification of ant-design
+   * **EN:** Generate an object array containing all enumeration items
    *
-   * **CN:** 生成一个对象数组，可以绑定到 Select、Radio、Checkbox 等组件的`options`，遵循 ant-design 的数据规范
+   * **CN:** 生成一个对象数组，包含所有的枚举项
    *
    * @example
    *   [
    *     { value: 0, label: 'Sunday' },
    *     { value: 1, label: 'Monday' },
    *   ];
-   *
-   * @see https://ant.design/components/checkbox-cn#option
    */
-  toList(): EnumItemOptionData<K, V>[];
+  toList(): EnumListItem<'label', 'value'>[];
   /**
-   * **EN:** Generate an array of objects that can be bound to those `options like` of components
-   * such as Select, Radio, and Checkbox, following the data specification of ant-design
+   * **EN:** Generate an object array containing all enumeration items, with customizable value and
+   * label field names
    *
-   * **CN:** 生成一个对象数组，可以绑定到 Select、Radio、Checkbox 等组件的`options`，遵循 ant-design 的数据规范
-   *
-   * @example
-   *   [
-   *     { value: 0, label: 'Sunday' },
-   *     { value: 1, label: 'Monday' },
-   *   ];
-   *
-   * @param config Custom options | 自定义选项
-   *
-   * @see https://ant.design/components/checkbox-cn#option
-   */
-  toList(config: ToListConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
-  /**
-   * **EN:** Generate an array of objects that can be bound to those `options like` of components
-   * such as Select, Radio, and Checkbox, following the data specification of ant-design
-   *
-   * **CN:** 生成一个对象数组，可以绑定到 Select、Radio、Checkbox 等组件的`options`，遵循 ant-design 的数据规范
+   * **CN:** 生成一个对象数组，包含所有的枚举项，可自定义值和标签字段名
    *
    * @example
    *   [
@@ -224,13 +204,21 @@ export interface IEnumItems<
    *     { value: 1, label: 'Monday' },
    *   ];
    *
-   * @param config Custom options | 自定义选项
-   *
-   * @see https://ant.design/components/checkbox-cn#option
+   * @param config Custom options, supports customizing value and label field names |
+   *   自定义选项，支持自定义值和标签字段名
    */
-  toList<FK, FV>(
-    config: ToListConfig & ObjectFirstOptionConfig<FK, FV>
-  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
+  toList<
+    OV extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
+    OL extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
+  >(
+    config: ToListConfig<T, OL, OV, K, V>
+  ): EnumListItem<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    OL extends (...args: any) => any ? ReturnType<OL> : OL,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    OV extends (...args: any) => any ? ReturnType<OV> : OV,
+    V
+  >[];
 
   /**
    * **EN:** Generate an object array that can be bound to the data source of components such as
@@ -396,15 +384,13 @@ export interface LabelOnlyEnumItemInit {
 }
 export type CompactEnumItemInit = Record<string, never>; // 等价于{}
 
-/** Data structure of ant-design Select options */
-export interface EnumItemOptionData<K, V> {
-  /** Option value */
-  value: V;
-  /** Option label */
-  label: string;
-  /** Option key, default is `value` */
-  key: K;
-}
+/**
+ * **EN:** Data structure of enumeration item options, used in `toList` method
+ *
+ * **CN:** 枚举项选项的数据结构，用于`toList`方法
+ */
+export type EnumListItem<FL extends string = string, FV extends string = string, V = EnumValue> = Record<FV, V> &
+  Record<FL, string>;
 
 /** Data structure of column filter items of ant-design Table */
 export interface ColumnFilterItem<V> {
@@ -434,6 +420,8 @@ export type EnumKey<T> = keyof T;
 /** More options for the options method */
 export interface ToListConfig<
   T extends EnumInit<K, V>,
+  OV extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
+  OL extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
@@ -443,72 +431,15 @@ export interface ToListConfig<
    *
    * **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
    */
-  valueField?: string | ((item: EnumItemClass<T[K], K, V>[]) => string);
+  valueField?: OV;
   /**
    * **EN:** The name of the label field in the output object, or a function to get the field name,
    * default is `label`
    *
    * **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
    */
-  labelField?: string | ((item: EnumItemClass<T[K], K, V>[]) => string);
+  labelField?: OL;
 }
-
-export interface BooleanFirstOptionConfig<V> {
-  /**
-   * **EN:** Add a default option at the top
-   *
-   * - `true`: the option uses the default value, `value` is `''`, `label` is `'All'`;
-   * - `false`: the default option is not added;
-   *
-   * **CN:** 在头部添加一个默认选项
-   *
-   * - `true`：选项使用默认值，`value`为`''`，`label`为`'全部'`
-   * - `false`：不添加默认选项
-   *
-   * @default false
-   */
-  firstOption: boolean;
-  /**
-   * **EN:** Default option value, default is `''`
-   *
-   * **CN:** 默认选项的值，默认为`''`
-   *
-   * @default ''
-   */
-  firstOptionValue?: V;
-  /**
-   * **EN:** Default option label, default is `'All'`. If a localization method is set, the
-   * localization method will be automatically called
-   *
-   * **CN:** 默认选项的显示文本，默认为`'All'`。如果设置了本地化方法，则会自动调用本地化方法
-   */
-  firstOptionLabel?: string;
-}
-
-export interface ObjectFirstOptionConfig<K, V> {
-  /**
-   * **EN:** Configuration of the first option
-   *
-   * **CN:** 首行选项的配置
-   */
-  firstOption?: EnumOptionConfig<K, V>;
-  /**
-   * **EN:** Add a default option at the top
-   *
-   * **CN:** 默认选项的值，默认为`''`
-   */
-  firstOptionValue?: never;
-  /**
-   * **EN:** Default option label, default is `'All'`. If a localization method is set, the
-   * localization method will be automatically called
-   *
-   * **CN:** 默认选项的显示文本，默认为`'All'`。如果设置了本地化方法，则会自动调用本地化方法
-   */
-  firstOptionLabel?: never;
-}
-
-export type EnumOptionConfig<K, V> = Omit<EnumItemOptionData<K, V>, 'key'> &
-  Partial<Pick<EnumItemOptionData<K, V>, 'key'>>;
 
 /** Infer the value type from the initialization object of the enumeration item */
 export type ValueTypeFromSingleInit<T, Key = string, Fallback = Key> = T extends EnumValue // literal类型
