@@ -217,10 +217,3 @@ export class EnumItemsArray<
     return content;
   }
 }
-
-/** @deprecated Use `EnumItemsArray` instead */
-export class EnumValuesArray<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-> extends EnumItemsArray<T, K, V> {}

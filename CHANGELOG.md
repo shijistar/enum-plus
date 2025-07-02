@@ -53,6 +53,8 @@ const MyEnum = Enum({
   - `enums.filters`
   - `enums.valuesEnum`
 - Please use the new methods `Enum.items`, `Enum.toSelect`, `Enum.toMenu`, `Enum.toFilter`, and `Enum.toValueMap` instead, which are introduced since `v2.1.0`.
+- `EnumValuesArray` interface is renamed to `EnumItemsArray`.
+- `IEnumValues` interface is renamed to `IEnumItems`.
 
 ### Bug Fixes
 
