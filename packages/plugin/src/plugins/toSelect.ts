@@ -1,58 +1,140 @@
-import type {
-  BuiltInLocaleKeys,
-  EnumInit,
-  EnumItemClass,
-  EnumKey,
-  EnumValue,
-  IEnum,
-  PluginFunc,
-  ValueTypeFromSingleInit,
+import {
+  type BuiltInLocaleKeys,
+  type EnumInit,
+  type EnumItemClass,
+  type EnumKey,
+  type EnumValue,
+  type IEnum,
+  type PluginFunc,
+  type ValueTypeFromSingleInit,
 } from 'enum-plus';
-import type { StandardEnumInit } from 'lib/types';
+import type { StandardEnumInit, StandardEnumItemInit } from 'lib/types';
 
-export type PluginOptions = Pick<ToSelectConfig<EnumInit>, 'labelField' | 'valueField'>;
+export type PluginOptions = Pick<ToSelectConfig<EnumInit, string, string>, 'labelField' | 'valueField'>;
 
 const toSelectPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
   const { labelField: globalLabelField, valueField: globalValueField } = options ?? {};
   Enum.extends({
-    toList<FL extends string = string, FV extends string = string>(
+    toSelect<
+      FOV extends
+        | ((item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => string)
+        | string,
+      FOL extends
+        | ((item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => string)
+        | string,
+    >(
       this: IEnum<StandardEnumInit<string, EnumValue>, string, EnumValue>,
-      config: ToSelectConfig<StandardEnumInit<string, EnumValue>, FL, FV, string, EnumValue> &
-        FirstOptionConfig<FL, FV, EnumValue> = {}
-    ): SelectItem<FL, FV, EnumValue>[] {
+      config?: ToSelectConfig<StandardEnumInit<string, EnumValue>, FOV, FOL, string, EnumValue> &
+        FirstOptionConfig<
+          EnumValue,
+          FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOV,
+          FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOL
+        >
+    ): SelectItem<
+      EnumValue,
+      FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+        ? R
+        : FOV,
+      FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+        ? R
+        : FOL
+    >[] {
       const {
         firstOption = false,
         labelField = globalLabelField ?? 'label',
         valueField = globalValueField ?? 'value',
-      } = config;
-      const selectItems = this.items.map(
-        (item) =>
-          ({
-            [valueField]: item.value,
-            [labelField]: item.label,
-          }) as SelectItem<FL, FV, EnumValue>
-      );
+      } = config ?? {};
+      const selectItems = this.items.map((item) => {
+        const valueFieldName = typeof valueField === 'function' ? valueField(item) : (valueField as string);
+        const labelFieldName = typeof labelField === 'function' ? labelField(item) : (labelField as string);
+        return {
+          [valueFieldName]: item.value,
+          [labelFieldName]: item.label,
+        } as SelectItem<
+          EnumValue,
+          FOV extends (...args: any[]) => infer R ? R : FOV,
+          FOL extends (...args: any[]) => infer R ? R : FOL
+        >;
+      });
       if (firstOption) {
+        const valueFieldName = typeof valueField === 'function' ? valueField(undefined) : (valueField as string);
+        const labelFieldName = typeof labelField === 'function' ? labelField(undefined) : (labelField as string);
         if (firstOption === true) {
           // the first option
           const value = '' as EnumValue;
           const label = Enum.localize
             ? Enum.localize('enum-plus.options.all' as BuiltInLocaleKeys)
             : 'enum-plus.options.all';
-          return [{ [valueField]: value, [labelField]: label } as SelectItem<FL, FV, EnumValue>, ...selectItems];
+          return [
+            {
+              [valueFieldName]: value,
+              [labelFieldName]: label,
+            },
+            ...selectItems,
+          ] as SelectItem<
+            EnumValue,
+            FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+              ? R
+              : FOV,
+            FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+              ? R
+              : FOL
+          >[];
         } else {
           return [
             {
               ...firstOption,
-              [labelField]: Enum.localize
-                ? Enum.localize(firstOption[labelField as FL])
-                : firstOption[labelField as FL],
+              [labelFieldName]: Enum.localize
+                ? Enum.localize(
+                    firstOption[
+                      labelFieldName as FOL extends (
+                        item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined
+                      ) => infer R
+                        ? R
+                        : FOL
+                    ]
+                  )
+                : firstOption[
+                    labelFieldName as FOL extends (
+                      item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined
+                    ) => infer R
+                      ? R
+                      : FOL
+                  ],
             },
             ...selectItems,
-          ];
+          ] as SelectItem<
+            EnumValue,
+            FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+              ? R
+              : FOV,
+            FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+              ? R
+              : FOL
+          >[];
         }
       } else {
-        return selectItems;
+        return selectItems as SelectItem<
+          EnumValue,
+          FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOV,
+          FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOL
+        >[] as SelectItem<
+          EnumValue,
+          FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOV,
+          FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOL
+        >[];
       }
     },
   });
@@ -61,8 +143,8 @@ const toSelectPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
 /** More options for the options method */
 export interface ToSelectConfig<
   T extends EnumInit<K, V>,
-  OV extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
-  OL extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
+  FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+  FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
@@ -72,17 +154,17 @@ export interface ToSelectConfig<
    *
    * **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
    */
-  valueField?: OV;
+  valueField?: FOV;
   /**
    * **EN:** The name of the label field in the output object, or a function to get the field name,
    * default is `label`
    *
    * **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
    */
-  labelField?: OL;
+  labelField?: FOL;
 }
 
-export interface FirstOptionConfig<FL extends string = string, FV extends string = string, V = EnumValue> {
+export interface FirstOptionConfig<V = EnumValue, FOV extends string = string, FOL extends string = string> {
   /**
    * **EN:** Add a default option at the top
    *
@@ -98,12 +180,12 @@ export interface FirstOptionConfig<FL extends string = string, FV extends string
    *
    * @default false
    */
-  firstOption?: boolean | SelectItem<FL, FV, V>;
+  firstOption?: boolean | SelectItem<V, FOL, FOV>;
 }
 
 /** Data structure of ant-design Select options */
-export type SelectItem<FL extends string = string, FV extends string = string, V = EnumValue> = Record<FV, V> &
-  Record<FL, string>;
+export type SelectItem<V = EnumValue, FOV extends string = 'value', FOL extends string = 'label'> = Record<FOV, V> &
+  Record<FOL, string>;
 
 export default toSelectPlugin;
 
@@ -113,26 +195,22 @@ declare module 'enum-plus-extend' {
     K extends EnumKey<T> = EnumKey<T>,
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   > {
-    toList(this: IEnum<T, K, V> & EnumExtension<T, K, V>): SelectItem<'label', 'value', V>[];
-    toList<
-      OV extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
-      OL extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
+    toSelect(this: IEnum<T, K, V> & EnumExtension<T, K, V>): SelectItem<V, 'value', 'label'>[];
+    toSelect<
+      FOV extends string | ((item: EnumItemClass<T[K], K, V> | undefined) => string),
+      FOL extends string | ((item: EnumItemClass<T[K], K, V> | undefined) => string),
     >(
       this: IEnum<T, K, V> & EnumExtension<T, K, V>,
-      config: ToSelectConfig<T, OV, OL, K, V> &
+      config: ToSelectConfig<T, FOV, FOL, K, V> &
         FirstOptionConfig<
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          OL extends (...args: any) => any ? ReturnType<OL> : OL,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          OV extends (...args: any) => any ? ReturnType<OV> : OV,
-          V
+          V,
+          FOV extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R ? R : FOV,
+          FOL extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R ? R : FOL
         >
     ): SelectItem<
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      OL extends (...args: any) => any ? ReturnType<OL> : OL,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      OV extends (...args: any) => any ? ReturnType<OV> : OV,
-      V
+      V,
+      FOV extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R ? R : FOV,
+      FOL extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R ? R : FOL
     >[];
   }
 }

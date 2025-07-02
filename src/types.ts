@@ -191,7 +191,7 @@ export interface IEnumItems<
    *     { value: 1, label: 'Monday' },
    *   ];
    */
-  toList(): EnumListItem<'label', 'value'>[];
+  toList(): ListItem<V, 'value', 'label'>[];
   /**
    * **EN:** Generate an object array containing all enumeration items, with customizable value and
    * label field names
@@ -199,25 +199,28 @@ export interface IEnumItems<
    * **CN:** 生成一个对象数组，包含所有的枚举项，可自定义值和标签字段名
    *
    * @example
+   *   Week.toList({
+   *     valueField: 'id',
+   *     labelField: 'name',
+   *   });
+   *
    *   [
-   *     { value: 0, label: 'Sunday' },
-   *     { value: 1, label: 'Monday' },
+   *     { id: 0, name: 'Sunday' },
+   *     { id: 1, name: 'Monday' },
    *   ];
    *
    * @param config Custom options, supports customizing value and label field names |
    *   自定义选项，支持自定义值和标签字段名
    */
   toList<
-    OV extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
-    OL extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
+    FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
   >(
-    config: ToListConfig<T, OL, OV, K, V>
-  ): EnumListItem<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    OL extends (...args: any) => any ? ReturnType<OL> : OL,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    OV extends (...args: any) => any ? ReturnType<OV> : OV,
-    V
+    config: ToListConfig<T, FOV, FOL, K, V>
+  ): ListItem<
+    V,
+    FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
   >[];
 
   /**
@@ -381,9 +384,16 @@ export type CompactEnumItemInit = Record<string, never>; // 等价于{}
  * **EN:** Data structure of enumeration item options, used in `toList` method
  *
  * **CN:** 枚举项选项的数据结构，用于`toList`方法
+ *
+ * @template V Value type of the enumeration item | 枚举项的值类型
+ * @template FOL Field name of the label, default is `label` | 标签字段名，默认为 `label`
+ * @template FOV Field name of the value, default is `value` | 值字段名，默认为 `value`
  */
-export type EnumListItem<FL extends string = string, FV extends string = string, V = EnumValue> = Record<FV, V> &
-  Record<FL, string>;
+export type ListItem<
+  V extends EnumValue = EnumValue,
+  FOV extends string = 'value',
+  FOL extends string = 'label',
+> = Record<FOV, V> & Record<FOL, string>;
 
 /** Data structure of column filter items of ant-design Table */
 export interface ColumnFilterItem<V> {
@@ -413,8 +423,8 @@ export type EnumKey<T> = keyof T;
 /** More options for the options method */
 export interface ToListConfig<
   T extends EnumInit<K, V>,
-  OV extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
-  OL extends string | ((item: EnumItemClass<T[K], K, V>) => string) = string,
+  FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+  FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
@@ -424,14 +434,14 @@ export interface ToListConfig<
    *
    * **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
    */
-  valueField?: OV;
+  valueField?: FOV;
   /**
    * **EN:** The name of the label field in the output object, or a function to get the field name,
    * default is `label`
    *
    * **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
    */
-  labelField?: OL;
+  labelField?: FOL;
 }
 
 /** Infer the value type from the initialization object of the enumeration item */
