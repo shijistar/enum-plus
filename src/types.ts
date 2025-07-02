@@ -320,13 +320,6 @@ export interface IEnumItems<
   rawType: T[K];
 }
 
-/** @deprecated use `IEnumItems` instead */
-export type IEnumValues<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-> = IEnumItems<T, K, V>;
-
 export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'] | NonNullable<string>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
