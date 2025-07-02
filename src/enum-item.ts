@@ -5,9 +5,9 @@ import { ENUM_ITEM } from './utils';
 /**
  * Enum item class
  *
- * @template V General type of value
- * @template K General type of key
- * @template T Initialize object of enum item
+ * @template V General type for item value
+ * @template K General type for item key
+ * @template T General type for item initialization object
  */
 export class EnumItemClass<
   T extends EnumItemInit<V>,
@@ -15,16 +15,34 @@ export class EnumItemClass<
   K extends EnumKey<any> = string,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
 > {
-  /** Enum item value */
+  /**
+   * **EN:** The value of the enum item
+   *
+   * **CN:** 枚举项的值
+   */
   readonly value: V;
 
-  /** Enum item label (or called display name) */
+  /**
+   * **EN:** The label of the enum item (also known as display name)
+   *
+   * **CN:** 枚举项的标签（亦称显示名称）
+   */
   readonly label: string;
 
-  /** Enum item key */
+  /**
+   * **EN:** The key of the enum item, which is the key in the initialization object when creating
+   * the enum collection.
+   *
+   * **CN:** 枚举项的键，即创建枚举集合时初始化对象中的键
+   */
   readonly key: K;
 
-  /** Original initialization object */
+  /**
+   * **EN:** The original initialization object of the enum item, which is the sub-object of a
+   * single enum item when creating the enum collection.
+   *
+   * **CN:** 枚举项的原始初始化对象，即创建枚举集合时单个枚举项的子对象
+   */
   readonly raw: T;
   /**
    * **EN:** A boolean value indicates that this is an enum item instance.
