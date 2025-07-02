@@ -51,8 +51,9 @@ export const ENUM_ITEMS = Symbol.for('[EnumItems]');
  * - `enum-plus.options.all` => `All`
  */
 export const defaultLocalize: LocalizeInterface = (content) => {
-  if (content === 'enum-plus.options.all') {
-    return 'All';
-  }
+  // todo: 移除该资源
+  // if (content === 'enum-plus.options.all') {
+  //   return 'All';
+  // }
   return content;
 };

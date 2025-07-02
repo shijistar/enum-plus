@@ -55,7 +55,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
           label: { value: 1, label: 'label' },
           key: { value: 2, label: 'key' },
           has: { value: 3, label: 'has' },
-          toSelect: { value: 4, label: 'toSelect' },
+          toList: { value: 4, label: 'toList' },
           toValueMap: { value: 5, label: 'toValueMap' },
           toFilter: { value: 6, label: 'toFilter' },
           toMenu: { value: 7, label: 'toMenu' },

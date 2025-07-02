@@ -2,7 +2,7 @@ import { defaultLocalize, ENUM_ITEMS as NODE_ENUM_ITEMS } from '@enum-plus';
 import { getLocales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
-import { getOptionsData, pickArray } from '../utils';
+import { copyList, pickArray } from '../utils';
 
 const testEnumValues = (engine: TestEngineBase) => {
   engine.describe('The EnumItemsArray api', () => {
@@ -55,53 +55,119 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
   );
 
   engine.test(
-    'enums.toList should generate an object array for AntDesign Select',
+    'enums.toList should generate an object array',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum, locales };
+      const defaultListItems = weekEnum.toList();
+      return { locales, defaultListItems };
     },
-    ({ weekEnum, locales }) => {
-      engine
-        .expect(getOptionsData(weekEnum.toList()))
-        .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
-      engine
-        .expect(getOptionsData(weekEnum.toList({})))
-        .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
+    ({ locales, defaultListItems }) => {
+      engine.expect(copyList(defaultListItems)).toEqual(pickArray(getStandardWeekData(locales), ['value', 'label']));
 
       // Add first-option by boolean flag
-      const withDefaultFirstOption = weekEnum.toList({ firstOption: true });
-      engine.expect(withDefaultFirstOption).toHaveLength(8);
-      engine.expect(withDefaultFirstOption[0]).toEqual({
-        value: '',
-        key: '',
-        label: 'All',
-      });
+      // const withDefaultFirstOption = weekEnum.toList({ firstOption: true });
+      // engine.expect(withDefaultFirstOption).toHaveLength(8);
+      // engine.expect(withDefaultFirstOption[0]).toEqual({
+      //   value: '',
+      //   key: '',
+      //   label: 'All',
+      // });
 
       // Add first-option by boolean flag with custom value
-      const customDefaultOption = weekEnum.toList({
-        firstOption: true,
-        firstOptionValue: 99 as 1,
-        firstOptionLabel: 'Select All',
-      });
-      engine.expect(customDefaultOption).toHaveLength(8);
-      engine.expect(customDefaultOption[0]).toEqual({ value: 99, key: '', label: 'Select All' });
+      // const customDefaultOption = weekEnum.toList({
+      //   firstOption: true,
+      //   firstOptionValue: 99 as 1,
+      //   firstOptionLabel: 'Select All',
+      // });
+      // engine.expect(customDefaultOption).toHaveLength(8);
+      // engine.expect(customDefaultOption[0]).toEqual({ value: 99, key: '', label: 'Select All' });
 
       // Add custom first-option
-      const customOption = { value: 99, key: '99', label: 'WeekdayX' };
-      const withCustomFirstOption = weekEnum.toList({
-        firstOption: customOption,
-      });
-      engine.expect(withCustomFirstOption[0]).toEqual(customOption);
+      // const customOption = { value: 99, key: '99', label: 'WeekdayX' };
+      // const withCustomFirstOption = weekEnum.toList({
+      //   firstOption: customOption,
+      // });
+      // engine.expect(withCustomFirstOption[0]).toEqual(customOption);
 
       // Add custom first-option using value as key
-      const customOptionWithoutKey = { value: 99, label: 'WeekdayX' };
-      const withCustomFirstOptionUsingValueAsKey = weekEnum.toList({
-        firstOption: customOptionWithoutKey,
+      // const customOptionWithoutKey = { value: 99, label: 'WeekdayX' };
+      // const withCustomFirstOptionUsingValueAsKey = weekEnum.toList({
+      //   firstOption: customOptionWithoutKey,
+      // });
+      // engine.expect(withCustomFirstOptionUsingValueAsKey[0]).toEqual({
+      //   ...customOptionWithoutKey,
+      //   key: customOptionWithoutKey.value,
+      // });
+    }
+  );
+
+  engine.test(
+    'enums.toList should generate an object array with custom field names',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
+      const weekEnum = Enum(StandardWeekConfig);
+      const idNameListItems = weekEnum.toList({
+        valueField: 'id',
+        labelField: 'name',
       });
-      engine.expect(withCustomFirstOptionUsingValueAsKey[0]).toEqual({
-        ...customOptionWithoutKey,
-        key: customOptionWithoutKey.value,
+      const valueNameListItems = weekEnum.toList({
+        valueField: 'value',
+        labelField: 'name',
       });
+      const idLabelListItems = weekEnum.toList({
+        valueField: 'id',
+        labelField: 'label',
+      });
+      return { locales, idNameListItems, valueNameListItems, idLabelListItems };
+    },
+    ({ locales, idNameListItems, valueNameListItems, idLabelListItems }) => {
+      engine.expect(Array.from(idNameListItems)).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          id: item.value,
+          name: item.label,
+        }))
+      );
+      engine.expect(Array.from(valueNameListItems)).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          value: item.value,
+          name: item.label,
+        }))
+      );
+      engine.expect(Array.from(idLabelListItems)).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          id: item.value,
+          label: item.label,
+        }))
+      );
+    }
+  );
+
+  engine.test(
+    'enums.toList should generate an object array with custom field names in function style',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
+      const weekEnum = Enum(StandardWeekConfig);
+      const staticFieldListItems = weekEnum.toList({
+        valueField: () => 'id' as const,
+        labelField: () => 'name' as const,
+      });
+      const dynamicFieldListItems = weekEnum.toList({
+        valueField: (item) => `id-${item.value}`,
+        labelField: (item) => `name-${item.value}`,
+      });
+      return { locales, staticFieldListItems, dynamicFieldListItems };
+    },
+    ({ locales, staticFieldListItems, dynamicFieldListItems }) => {
+      engine.expect(Array.from(staticFieldListItems)).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          id: item.value,
+          name: item.label,
+        }))
+      );
+      engine.expect(Array.from(dynamicFieldListItems)).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          ['id-' + item.value]: item.value,
+          ['name-' + item.value]: item.label,
+        }))
+      );
     }
   );
 

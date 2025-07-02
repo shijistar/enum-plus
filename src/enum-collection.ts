@@ -3,18 +3,16 @@ import { EnumItemClass } from './enum-item';
 import { EnumItemsArray } from './enum-values';
 import { localizer } from './localize';
 import type {
-  BooleanFirstOptionConfig,
   ColumnFilterItem,
   EnumInit,
   EnumItemInit,
-  EnumItemOptionData,
   EnumItemOptions,
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
   IEnumItems,
+  ListItem,
   MenuItemOption,
-  ObjectFirstOptionConfig,
   PrimitiveOf,
   StandardEnumItemInit,
   ToListConfig,
@@ -139,18 +137,30 @@ export class EnumCollectionClass<
     return this.items.has(keyOrValue);
   }
 
-  toList(): EnumItemOptionData<K, V>[];
-  toList(config: ToListConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
-  toList<FK = never, FV = never>(
-    config: ToListConfig & ObjectFirstOptionConfig<FK, FV>
-  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  toList<FK = never, FV = never>(
-    config?: ToListConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>)
-  ): EnumItemOptionData<K | FK, V | FV>[] {
-    return this.items.toList(config as ToListConfig & BooleanFirstOptionConfig<V>) as EnumItemOptionData<
-      K | FK,
-      V | FV
-    >[];
+  toList(): ListItem<V, 'value', 'label'>[];
+  toList<
+    FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+  >(
+    config: ToListConfig<T, FOV, FOL, K, V>
+  ): ListItem<
+    V,
+    FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+  >[];
+  toList<
+    FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+  >(
+    config?: ToListConfig<T, FOV, FOL, K, V>
+  ):
+    | ListItem<V, 'value', 'label'>[]
+    | ListItem<
+        V,
+        FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+      >[] {
+    return this.items.toList(config as ToListConfig<T, FOV, FOL, K, V>);
   }
 
   toMenu(): MenuItemOption<V>[] {

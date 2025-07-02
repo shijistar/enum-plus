@@ -1,19 +1,15 @@
 import type { EnumItemClass } from './enum-item';
-import { localizer } from './localize';
 import type {
-  BooleanFirstOptionConfig,
-  BuiltInLocaleKeys,
   ColumnFilterItem,
   EnumInit,
-  EnumItemOptionData,
   EnumItemOptions,
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
   FindLabelByValue,
   IEnumItems,
+  ListItem,
   MenuItemOption,
-  ObjectFirstOptionConfig,
   PrimitiveOf,
   ToListConfig,
   ValueMap,
@@ -41,7 +37,6 @@ export class EnumItemsArray<
   implements IEnumItems<T, K, V>
 {
   private _raw: T;
-  private _options: EnumItemOptions | undefined;
   /**
    * **EN:** A boolean value indicates that this is an enum items array.
    *
@@ -60,21 +55,6 @@ export class EnumItemsArray<
   constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
     super(...items);
     this._raw = raw;
-    this._options = options;
-  }
-  name?: string | undefined;
-  toSelect(): EnumItemOptionData<K, V>[];
-  toSelect(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<'' | K, '' | V>[];
-  toSelect<FK, FV>(
-    config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
-  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  toSelect(
-    config?: unknown
-  ):
-    | EnumItemOptionData<K, V>[]
-    | EnumItemOptionData<'' | K, '' | V>[]
-    | EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[] {
-    throw new Error('Method not implemented.');
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
@@ -143,35 +123,48 @@ export class EnumItemsArray<
     return this.some((i) => i.value === keyOrValue || i.key === keyOrValue);
   }
 
-  toList(): EnumItemOptionData<K, V>[];
-  toList(config?: ToListConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
-  toList<FK = never, FV = never>(
-    config: ToListConfig & ObjectFirstOptionConfig<FK, FV>
-  ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
-  toList<FK = never, FV = never>(
-    config: ToListConfig & (BooleanFirstOptionConfig<V> | ObjectFirstOptionConfig<FK, FV>) = {}
-  ): EnumItemOptionData<K | FK, V | FV>[] {
-    const { firstOption = false } = config;
-    if (firstOption) {
-      if (firstOption === true) {
-        // the first option
-        const value = ('firstOptionValue' in config ? config.firstOptionValue : undefined) ?? ('' as V);
-        const label =
-          ('firstOptionLabel' in config ? config.firstOptionLabel : undefined) ??
-          ('enum-plus.options.all' as BuiltInLocaleKeys);
-        return [{ key: '' as K, value, label: this._localize(label) as string }, ...this];
-      } else {
-        return [
-          {
-            ...firstOption,
-            key: firstOption.key ?? (firstOption.value as unknown as K),
-            label: this._localize(firstOption.label) as string,
-          },
-          ...this,
-        ];
-      }
-    } else {
+  toList(): ListItem<V, 'value', 'label'>[];
+  toList<
+    FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+  >(
+    config: ToListConfig<T, FOV, FOL, K, V>
+  ): ListItem<
+    V,
+    FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+  >[];
+  toList<
+    FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+  >(
+    config?: ToListConfig<T, FOV, FOL, K, V>
+  ):
+    | ListItem<V, 'value', 'label'>[]
+    | ListItem<
+        V,
+        FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+      >[] {
+    const { valueField = 'value' as FOV, labelField = 'label' as FOL } = config ?? {};
+    if (valueField === 'value' && labelField === 'label') {
       return this;
+    } else {
+      return this.map((item) => {
+        const valueFieldName = typeof valueField === 'function' ? valueField(item) : (valueField as string);
+        const labelFieldName = typeof labelField === 'function' ? labelField(item) : (labelField as string);
+        return {
+          [valueFieldName]: item.value,
+          // should use getter to preserve the localized label, as it may be dynamic content
+          get [labelFieldName]() {
+            return item.label;
+          },
+        } as ListItem<
+          V,
+          FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
+          FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+        >;
+      });
     }
   }
 
@@ -208,12 +201,5 @@ export class EnumItemsArray<
 
   private _runtimeError(name: string) {
     return `The ${name} property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the typeof operator in the ts type, for example: typeof Week.${name}`;
-  }
-  _localize(content: string | undefined) {
-    const localize = this._options?.localize ?? localizer.localize;
-    if (typeof localize === 'function') {
-      return localize(content);
-    }
-    return content;
   }
 }
