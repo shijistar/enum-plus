@@ -1,6 +1,6 @@
-import type { EnumItemOptionData, EnumValue } from '@enum-plus';
+import type { EnumValue } from '@enum-plus';
 import type { EnumItemClass } from '@enum-plus/enum-item';
-import type { EnumInit, EnumKey, IEnumValues, StandardEnumItemInit, ValueTypeFromSingleInit } from '@enum-plus/types';
+import type { EnumInit, EnumKey, IEnumItems, StandardEnumItemInit, ValueTypeFromSingleInit } from '@enum-plus/types';
 
 export function toPlainEnums<
   T extends EnumInit<K, V>,
@@ -8,7 +8,7 @@ export function toPlainEnums<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  enums: EnumItemClass<T[K], K, V>[] & IEnumValues<T, K, V>,
+  enums: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>,
   fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label']
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
   return Array.from(enums).map((item) => {
@@ -44,8 +44,19 @@ export function pickArray<T extends Record<string, any>>(
   return array.map((item) => pickObject(item, fieldNames));
 }
 
-export function getOptionsData<K, V>(options: EnumItemOptionData<K, V>[]) {
-  return Array.from(options).map(({ value, label }) => ({ value, label }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function copyList<T extends Record<string, any>>(
+  options: T[] | readonly T[],
+  valueField: keyof T = 'value',
+  labelField: keyof T = 'label'
+): T[] {
+  return Array.from(options).map(
+    (item) =>
+      ({
+        [valueField]: item[valueField],
+        [labelField]: item[labelField],
+      }) as T
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
