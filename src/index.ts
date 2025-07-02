@@ -9,7 +9,7 @@ export type {
   ValueTypeFromSingleInit,
   BuiltInLocaleKeys,
   EnumItemOptions,
-  EnumListItem,
+  ListItem,
   MenuItemOption,
   ColumnFilterItem,
   EnumInitOptions,
