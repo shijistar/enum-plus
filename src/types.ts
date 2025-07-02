@@ -45,8 +45,8 @@ export interface EnumItemOptions {
    *
    * @returns Localized text, can return any type | 本地化文本，可以返回任意类型
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any
-  localize?: (content: EnumLocaleExtends['LocaleKeys'] | (string & {}) | undefined) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  localize?: (content: EnumLocaleExtends['LocaleKeys'] | NonNullable<string> | undefined) => any;
   /**
    * **EN:** Set the display name of the enum collection, supports string or localized resource key
    *
@@ -148,33 +148,101 @@ export interface IEnumItems<
    */
   readonly name?: string;
   /**
-   * **EN:** Get the enumeration item by key or value
+   * **EN:** Get the label (also known as display name) of the enumeration item, supports getting by
+   * value or key
    *
-   * **CN:** 获取某个枚举项的label显示名称
+   * **CN:** 获取枚举项的标签（亦称显示名称），支持通过枚举项的 value 或 key 获取
    *
-   * @param value Enum item value or key | 枚举项的value或key
+   * @param keyOrValue - The value or key of the enumeration item | 枚举项的 value 或 key
    *
-   * @returns {string | undefined} Display name of the enumeration item | 枚举项的label显示名称
+   * @returns The label of the enumeration item or the key if the label is not defined | 枚举项的标签或
+   *   key（如果标签未定义）
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  label(keyOrValue?: string | V): string | undefined;
+  label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
+    keyOrValue: KV
+  ):
+    | (undefined extends KV ? undefined : never)
+    | (KV extends undefined
+        ? undefined
+        : NonNullable<KV> extends K
+          ? T[NonNullable<KV>] extends { label: unknown }
+            ? T[NonNullable<KV>]['label'] extends undefined
+              ? NonNullable<KV>
+              : string
+            : NonNullable<KV>
+          : NonNullable<KV> extends V
+            ? FindLabelByValue<T, NonNullable<KV>>
+            : PrimitiveOf<K> extends KV
+              ? string | undefined
+              : PrimitiveOf<V> extends KV
+                ? string | undefined
+                : undefined);
 
   /**
-   * **EN:** Get the key corresponding to a certain enumeration item
+   * **EN:** Get the key of the enumeration item by its value
    *
-   * **CN:** 获取某个枚举项对应的key
+   * **CN:** 根据枚举项的 value 获取其 key
+   *
+   * @param value The value of the enumeration item | 枚举项的 value
+   *
+   * @returns The key of the enumeration item, or undefined if not found | 枚举项的 key，如果未找到则返回
+   *   undefined
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  key(value?: string | V): K | undefined;
+  key<IV extends V | NonNullable<PrimitiveOf<V>> | undefined>(
+    value: IV
+  ):
+    | (undefined extends IV ? undefined : never)
+    | (IV extends undefined
+        ? undefined
+        : NonNullable<IV> extends V
+          ? FindEnumKeyByValue<T, NonNullable<IV>>
+          : PrimitiveOf<V> extends NonNullable<IV>
+            ? K | undefined
+            : undefined);
 
+  /**
+   * **EN:** Get the enumeration item by key or value
+   *
+   * **CN:** 获取枚举集合的初始化对象
+   *
+   * @returns {T} Enum collection initialization object | 初始化对象集合
+   */
+  raw(): T;
+  /**
+   * **EN:** Get the original initialization object of a certain enumeration item. If custom fields
+   * are added to the enumeration item, you can use this method to get them.
+   *
+   * **CN:** 获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
+   *
+   * @param keyOrValue Enum key or value | 枚举key或value
+   *
+   * @returns The original initialization object of the enumeration item, or undefined if not found
+   *   | 枚举项的原始初始化对象，如果未找到则返回 undefined
+   */
+  raw<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
+    keyOrValue: KV
+  ):
+    | (undefined extends KV ? undefined : never)
+    | (KV extends undefined
+        ? undefined
+        : NonNullable<KV> extends K
+          ? T[NonNullable<KV>]
+          : NonNullable<KV> extends V
+            ? T[FindEnumKeyByValue<T, NonNullable<KV>>]
+            : PrimitiveOf<K> extends KV
+              ? T[K] | undefined
+              : PrimitiveOf<V> extends KV
+                ? T[K] | undefined
+                : undefined);
   /**
    * **EN:** Get the value corresponding to a certain enumeration item
    *
    * **CN:** 判断某个枚举项是否存在
    *
    * @param keyOrValue Enum item key or value | 枚举项的key或value
+   *
+   * @returns {boolean} Whether the enumeration item exists | 枚举项是否存在
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
   has(keyOrValue?: string | V): boolean;
 
   /**
@@ -191,7 +259,6 @@ export interface IEnumItems<
    *
    * @see https://ant.design/components/checkbox-cn#option
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
   toSelect(): EnumItemOptionData<K, V>[];
   /**
    * **EN:** Generate an array of objects that can be bound to those `options like` of components
@@ -209,7 +276,6 @@ export interface IEnumItems<
    *
    * @see https://ant.design/components/checkbox-cn#option
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
   toSelect(config: ToSelectConfig & BooleanFirstOptionConfig<V>): EnumItemOptionData<K | '', V | ''>[];
   /**
    * **EN:** Generate an array of objects that can be bound to those `options like` of components
@@ -227,7 +293,6 @@ export interface IEnumItems<
    *
    * @see https://ant.design/components/checkbox-cn#option
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
   toSelect<FK, FV>(
     config: ToSelectConfig & ObjectFirstOptionConfig<FK, FV>
   ): EnumItemOptionData<K | (FK extends never ? FV : FK), V | (FV extends never ? V : FV)>[];
@@ -275,7 +340,6 @@ export interface IEnumItems<
    * @see https://ant.design/components/table-cn#components-table-demo-head
    * @see https://ant.design/components/table-cn#column
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
   toFilter(): ColumnFilterItem<V>[];
 
   /** @deprecated Use `toFilter` instead */
@@ -296,36 +360,12 @@ export interface IEnumItems<
    * @see https://procomponents.ant.design/components/schema#valueenum-1
    * @see https://procomponents.ant.design/components/field-set#proformselect
    */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style, @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toValueMap(): ValueMap<V>;
 
   /** @deprecated Use `toValueMap` instead */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   valuesEnum(): ValueMap<V>;
-
-  /**
-   * **EN:** Get the enumeration item by key or value
-   *
-   * **CN:** 获取枚举集合的初始化对象
-   *
-   * @memberof IEnumValues
-   *
-   * @returns {T} Enum collection initialization object | 初始化对象集合
-   */
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  raw(): T;
-  /**
-   * **EN:** Get the original initialization object of a certain enumeration item. If custom fields
-   * are added to the enumeration item, you can use this method to get them.
-   *
-   * **CN:** 获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
-   *
-   * @param keyOrValue Enum key or value | 枚举key或value
-   */
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
-    keyOrValue: IK
-  ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
 
   /**
    * **EN:** The data type of all enumeration values
@@ -383,8 +423,7 @@ export type IEnumValues<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > = IEnumItems<T, K, V>;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'] | (string & {});
+export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'] | NonNullable<string>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumValue> =
@@ -585,11 +624,11 @@ export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
  * @template V Enum value type | 枚举值的类型
  */
 export type FindEnumKeyByValue<T, V extends EnumValue> = {
-  // ValueOnly { foo:1, bar:2 }
+  // ValueOnly: { foo:1, bar:2 }
   [K in keyof T]: T[K] extends V
     ? K
-    : // Standard: { foo:{ value:1 }, bar:{ value:2 } }
-      // @ts-expect-error: because need to force check T[K]['value'], event value field does not exist
+    : // @ts-expect-error: because need to force check T[K]['value'], event value field does not exist
+      // Standard: { foo:{ value:1 }, bar:{ value:2 } }
       T[K]['value'] extends V
       ? K
       : // LabelOnly: { foo:{ label: 'foo' }, bar:{ label: 'bar' } }
@@ -604,6 +643,34 @@ export type FindEnumKeyByValue<T, V extends EnumValue> = {
             : never
           : never;
 }[keyof T];
+
+/**
+ * **EN:** Find the label of the enumeration item by value
+ *
+ * **CN:** 通过值查找枚举项的label显示名称
+ *
+ * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
+ * @template V Enum value type | 枚举值的类型
+ */
+export type FindLabelByValue<T, V extends EnumValue, RAW = T[FindEnumKeyByValue<T, V>]> = RAW extends { label: unknown }
+  ? string
+  : FindEnumKeyByValue<T, V>;
+
+export type PrimitiveOf<T> = T extends string
+  ? string
+  : T extends number
+    ? number
+    : T extends boolean
+      ? boolean
+      : T extends bigint
+        ? bigint
+        : T extends symbol
+          ? symbol
+          : T extends undefined
+            ? undefined
+            : T extends null
+              ? null
+              : never;
 
 /**
  * **EN:** Convert an array of objects to a Map-like object, where the key is the `key` field of the

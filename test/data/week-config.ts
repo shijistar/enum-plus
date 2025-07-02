@@ -156,8 +156,7 @@ export function genSillyLocalizer(language: typeof lang) {
     content:
       | BuiltInLocaleKeys
       | (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label']
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      | (string & {})
+      | NonNullable<string>
       | undefined
   ): typeof content {
     switch (content) {

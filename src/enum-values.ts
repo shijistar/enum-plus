@@ -10,9 +10,11 @@ import type {
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
+  FindLabelByValue,
   IEnumItems,
   MenuItemOption,
   ObjectFirstOptionConfig,
+  PrimitiveOf,
   ToSelectConfig,
   ValueMap,
   ValueTypeFromSingleInit,
@@ -70,13 +72,66 @@ export class EnumItemsArray<
    */
   readonly [ENUM_ITEMS] = true;
 
-  label(keyOrValue?: string | V): string | undefined {
-    //  First find by value, then find by key
-    return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue))?.label;
+  label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
+    keyOrValue: KV
+  ):
+    | (undefined extends KV ? undefined : never)
+    | (KV extends undefined
+        ? undefined
+        : NonNullable<KV> extends K
+          ? T[NonNullable<KV>] extends { label: unknown }
+            ? T[NonNullable<KV>]['label'] extends undefined
+              ? NonNullable<KV>
+              : string
+            : NonNullable<KV>
+          : NonNullable<KV> extends V
+            ? FindLabelByValue<T, NonNullable<KV>>
+            : PrimitiveOf<K> extends KV
+              ? string | undefined
+              : PrimitiveOf<V> extends KV
+                ? string | undefined
+                : undefined) {
+    // Find by value, then try key
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue))?.label as any;
   }
 
-  key(value?: string | V): K | undefined {
-    return this.find((i) => i.value === value)?.key;
+  key<IV extends V | NonNullable<PrimitiveOf<V>> | undefined>(
+    value?: IV
+  ):
+    | (undefined extends IV ? undefined : never)
+    | (IV extends undefined
+        ? undefined
+        : NonNullable<IV> extends V
+          ? FindEnumKeyByValue<T, NonNullable<IV>>
+          : PrimitiveOf<V> extends NonNullable<IV>
+            ? K | undefined
+            : undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return this.find((i) => i.value === value)?.key as any;
+  }
+
+  raw(): T;
+  raw<IK extends V | K | Exclude<EnumValue, string> | NonNullable<string>>(
+    keyOrValue: IK
+  ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
+  raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
+    if (value == null) {
+      // Return the original initialization object
+      return this.#raw;
+    } else {
+      if (Object.keys(this.#raw).some((k) => k === (value as string))) {
+        // Find by key
+        return this.#raw[value as K];
+      }
+      // Find by value
+      const itemByValue = this.find((i) => i.value === value);
+      if (itemByValue) {
+        return itemByValue.raw;
+      } else {
+        return undefined;
+      }
+    }
   }
 
   has(keyOrValue?: string | V): boolean {
@@ -160,30 +215,6 @@ export class EnumItemsArray<
   /** @deprecated Use `toFilter` instead */
   filters() {
     return this.toFilter();
-  }
-
-  raw(): T;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
-    keyOrValue: IK
-  ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
-  raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
-    if (value == null) {
-      // Return the original initialization object
-      return this.#raw;
-    } else {
-      if (Object.keys(this.#raw).some((k) => k === (value as string))) {
-        // Find by key
-        return this.#raw[value as K];
-      }
-      // Find by value
-      const itemByValue = this.find((i) => i.value === value);
-      if (itemByValue) {
-        return itemByValue.raw;
-      } else {
-        return undefined;
-      }
-    }
   }
 
   /** @deprecated Stub method, only for typing usages, not for runtime calling */

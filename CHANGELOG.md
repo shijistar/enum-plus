@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.3.4
+
+2025-7-2
+
+### Features
+
+- ✨ Enhance the type definitions for methods like `Enum.label`, `Enum.key`, and `Enum.raw` to ensure return types more accurately correspond to input values. When an input value can be matched within the enum, the return type will no longer include `undefined`.
+
 ## 2.3.3
 
 2025-6-19

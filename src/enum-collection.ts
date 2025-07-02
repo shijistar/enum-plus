@@ -14,6 +14,7 @@ import type {
   IEnumItems,
   MenuItemOption,
   ObjectFirstOptionConfig,
+  PrimitiveOf,
   StandardEnumItemInit,
   ToSelectConfig,
   ValueTypeFromSingleInit,
@@ -118,12 +119,26 @@ export class EnumCollectionClass<
     Object.freeze(this.keys);
   }
 
-  key(value?: string | V) {
-    return this.items.key(value);
-  }
-  label(keyOrValue?: string | V): string | undefined {
+  label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {
     return this.items.label(keyOrValue);
   }
+
+  key<IV extends V | NonNullable<PrimitiveOf<V>> | undefined>(value?: IV) {
+    return this.items.key(value);
+  }
+
+  raw(): T;
+  raw<IK extends V | K | Exclude<EnumValue, string> | NonNullable<string>>(
+    keyOrValue: IK
+  ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
+  raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
+    if (value != null) {
+      return this.items.raw(value as keyof T | EnumValue) as T[K];
+    } else {
+      return this.items.raw();
+    }
+  }
+
   has(keyOrValue?: string | V) {
     return this.items.has(keyOrValue);
   }
@@ -178,19 +193,6 @@ export class EnumCollectionClass<
   /** @deprecated use `toValueMap` instead */
   valuesEnum() {
     return this.items.valuesEnum();
-  }
-
-  raw(): T;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  raw<IK extends V | K | Exclude<EnumValue, string> | (string & {})>(
-    keyOrValue: IK
-  ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
-  raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
-    if (value != null) {
-      return this.items.raw(value as keyof T | EnumValue) as T[K];
-    } else {
-      return this.items.raw();
-    }
   }
 
   get valueType() {

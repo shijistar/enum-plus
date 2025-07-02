@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD001 MD009 MD033 MD041 -->
 
-[English](./README.md) | [中文](./README.zh-CN.md)
+[English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
