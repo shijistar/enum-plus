@@ -149,31 +149,26 @@ export interface ToSelectConfig<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
   /**
-   * **EN:** The name of the value field in the output object, or a function to get the field name,
-   * default is `value`
-   *
-   * **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
+   * - **EN:** The name of the value field in the output object, or a function to get the field name,
+   *   default is `value`
+   * - **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
    */
   valueField?: FOV;
   /**
-   * **EN:** The name of the label field in the output object, or a function to get the field name,
-   * default is `label`
-   *
-   * **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
+   * - **EN:** The name of the label field in the output object, or a function to get the field name,
+   *   default is `label`
+   * - **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
    */
   labelField?: FOL;
 }
 
 export interface FirstOptionConfig<V = EnumValue, FOV extends string = string, FOL extends string = string> {
   /**
-   * **EN:** Add a default option at the top
-   *
+   * - **EN:** Add a default option at the top
    * - `true`: the option uses the default value, `value` is `''`, `label` is `'All'`;
    * - `false`: the default option is not added;
    * - `object`: custom default option, must be an object with `key`, `value`, and `label` properties
-   *
-   * **CN:** 在头部添加一个默认选项
-   *
+   * - **CN:** 在头部添加一个默认选项
    * - `true`: 选项使用默认值，`value`为`''`，`label`为`'全部'`
    * - `false`: 不添加默认选项
    * - `object`: 自定义默认选项
