@@ -38,9 +38,8 @@ export class EnumItemsArray<
 {
   private _raw: T;
   /**
-   * **EN:** A boolean value indicates that this is an enum items array.
-   *
-   * **CN:** 布尔值，表示这是一个枚举项数组
+   * - **EN:** A boolean value indicates that this is an enum items array.
+   * - **CN:** 布尔值，表示这是一个枚举项数组
    */
   readonly [ENUM_ITEMS] = true;
 

@@ -21,9 +21,8 @@ import type {
 import { ENUM_COLLECTION, ITEMS, KEYS } from './utils';
 
 /**
- * **EN:** Enum collection extension base class, used to extend the Enums
- *
- * **CN:** 枚举集合扩展基类，用于扩展枚举
+ * - **EN:** Enum collection extension base class, used to extend the Enums
+ * - **CN:** 枚举集合扩展基类，用于扩展枚举
  */
 // @ts-expect-error: because don't know which methods are added
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
@@ -33,9 +32,8 @@ export class EnumExtensionClass<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > implements EnumExtension<T, K, V> {}
 /**
- * **EN:** Enum collection
- *
- * **CN:** 枚举项集合
+ * - **EN:** Enum collection
+ * - **CN:** 枚举项集合
  */
 export class EnumCollectionClass<
     T extends EnumInit<K, V>,
@@ -49,9 +47,8 @@ export class EnumCollectionClass<
   readonly items!: EnumItemsArray<T, K, V>;
   readonly keys!: K[];
   /**
-   * **EN:** A boolean value indicates that this is an enum collection instance.
-   *
-   * **CN:** 布尔值，表示这是一个枚举集合实例
+   * - **EN:** A boolean value indicates that this is an enum collection instance.
+   * - **CN:** 布尔值，表示这是一个枚举集合实例
    */
   readonly [ENUM_COLLECTION] = true;
   [Symbol.hasInstance](this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
@@ -66,7 +63,7 @@ export class EnumCollectionClass<
    * a custom `localize` function is set, the return value may vary depending on the implementation
    * of the method.
    *
-   * **CN:** 枚举集合显示名称，支持本地化。注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
+   * - **CN:** 枚举集合显示名称，支持本地化。注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
    *
    * @returns {string | undefined} The localized name of the enum collection, or undefined if not
    *   set.
