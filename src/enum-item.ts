@@ -16,38 +16,33 @@ export class EnumItemClass<
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
 > {
   /**
-   * **EN:** The value of the enum item
-   *
-   * **CN:** 枚举项的值
+   * - **EN:** The value of the enum item
+   * - **CN:** 枚举项的值
    */
   readonly value: V;
 
   /**
-   * **EN:** The label of the enum item (also known as display name)
-   *
-   * **CN:** 枚举项的标签（亦称显示名称）
+   * - **EN:** The label of the enum item (also known as display name)
+   * - **CN:** 枚举项的标签（亦称显示名称）
    */
   readonly label: string;
 
   /**
-   * **EN:** The key of the enum item, which is the key in the initialization object when creating
-   * the enum collection.
-   *
-   * **CN:** 枚举项的键，即创建枚举集合时初始化对象中的键
+   * - **EN:** The key of the enum item, which is the key in the initialization object when creating
+   *   the enum collection.
+   * - **CN:** 枚举项的键，即创建枚举集合时初始化对象中的键
    */
   readonly key: K;
 
   /**
-   * **EN:** The original initialization object of the enum item, which is the sub-object of a
-   * single enum item when creating the enum collection.
-   *
-   * **CN:** 枚举项的原始初始化对象，即创建枚举集合时单个枚举项的子对象
+   * - **EN:** The original initialization object of the enum item, which is the sub-object of a
+   *   single enum item when creating the enum collection.
+   * - **CN:** 枚举项的原始初始化对象，即创建枚举集合时单个枚举项的子对象
    */
   readonly raw: T;
   /**
-   * **EN:** A boolean value indicates that this is an enum item instance.
-   *
-   * **CN:** 布尔值，表示这是一个枚举项实例
+   * - **EN:** A boolean value indicates that this is an enum item instance.
+   * - **CN:** 布尔值，表示这是一个枚举项实例
    */
   readonly [ENUM_ITEM] = true;
   /**

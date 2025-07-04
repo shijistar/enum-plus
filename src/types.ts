@@ -5,9 +5,8 @@ import type { ITEMS, KEYS } from './utils';
 export type { BuiltInLocaleKeys } from 'enum-plus-extend';
 
 /**
- * **EN:** Enum initialization options
- *
- * **CN:** 枚举初始化选项
+ * - **EN:** Enum initialization options
+ * - **CN:** 枚举初始化选项
  */
 export type EnumInitOptions<
   T extends EnumInit<K, V>,
@@ -15,34 +14,30 @@ export type EnumInitOptions<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > = {
   /**
-   * **EN:** The name of the field in the enumeration item that stores the value, or the function to
-   * get the key value, default is `value`
-   *
-   * **CN:** 枚举项的value字段名，或者获取key值的函数，默认为 `value`
+   * - **EN:** The name of the field in the enumeration item that stores the value, or the function to
+   *   get the key value, default is `value`
+   * - **CN:** 枚举项的value字段名，或者获取key值的函数，默认为 `value`
    */
   getValue?: keyof T | ((item: T) => V);
   /**
-   * **EN:** The name of the field in the enumeration item that stores the label, or the function to
-   * get the key value, default is `label`
-   *
-   * **CN:** 枚举项的label字段名，或者获取key值的函数，默认为 `label`
+   * - **EN:** The name of the field in the enumeration item that stores the label, or the function to
+   *   get the key value, default is `label`
+   * - **CN:** 枚举项的label字段名，或者获取key值的函数，默认为 `label`
    */
   getLabel?: keyof T | ((item: T) => string);
   /**
-   * **EN:** The name of the field in the enumeration item that stores the key, or the function to
-   * get the key value, default is `key`
-   *
-   * **CN:** 枚举项的key字段名，或者获取key值的函数，默认为 `key`
+   * - **EN:** The name of the field in the enumeration item that stores the key, or the function to
+   *   get the key value, default is `key`
+   * - **CN:** 枚举项的key字段名，或者获取key值的函数，默认为 `key`
    */
   getKey?: keyof T | ((item: T) => string);
 } & EnumItemOptions;
 
 export interface EnumItemOptions {
   /**
-   * **EN:** Localization function, used to convert the text of the enumeration item to localized
-   * text
-   *
-   * **CN:** 本地化函数，用于把枚举项文本转换为本地化文本
+   * - **EN:** Localization function, used to convert the text of the enumeration item to localized
+   *   text
+   * - **CN:** 本地化函数，用于把枚举项文本转换为本地化文本
    *
    * @param content Original text | 原始文本
    *
@@ -51,22 +46,21 @@ export interface EnumItemOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   localize?: (content: EnumLocaleExtends['LocaleKeys'] | NonNullable<string> | undefined) => any;
   /**
-   * **EN:** Set the display name of the enum collection, supports string or localized resource key
-   *
-   * **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
+   * - **EN:** Set the display name of the enum collection, supports string or localized resource key
+   * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
    */
   name?: string;
 }
 
 /**
- * **EN:** Enum collection interface
+ * - **EN:** Enum collection interface
  *
- * Should directly use `EnumClass`, but TS does not allow custom index accessors in `class`, so you
- * can only use `type`
+ * > Should directly use `EnumClass`, but TS does not allow custom index accessors in `class`, so you
+ * > can only use `type`
  *
- * **CN:** 数组的类型声明
+ * - **CN:** 数组的类型声明
  *
- * 本来可以直接使用`EnumClass`, 但是TS不允许`class`中自定义索引访问器，只能使用`type`
+ * > 本来可以直接使用`EnumClass`, 但是TS不允许`class`中自定义索引访问器，只能使用`type`
  */
 export type IEnum<
   T extends EnumInit<K, V>,
@@ -83,15 +77,15 @@ export type IEnum<
       }
     : {
         /**
-         * **EN:** All enumeration items in the array, can be used directly as the data source of
-         * the AntDesign component
+         * - **EN:** All enumeration items in the array, can be used directly as the data source of
+         *   the AntDesign component
          *
-         * Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
-         * modification methods
+         * > Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
+         * > modification methods
          *
-         * **CN:** 所有枚举项的数组，可以直接作为AntDesign组件的数据源
+         * - **CN:** 所有枚举项的数组，可以直接作为AntDesign组件的数据源
          *
-         * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
+         * > 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
          */
         readonly items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
@@ -103,22 +97,21 @@ export type IEnum<
       }
     : {
         /**
-         * **EN:** Get the key list of the enumeration item
+         * - **EN:** Get the key list of the enumeration item
          *
-         * Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
-         * modification methods
+         * > Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
+         * > modification methods
          *
-         * **CN:** 获取枚举项的key列表
+         * - **CN:** 获取枚举项的key列表
          *
-         * 常在typescript作为类型声明使用，例如： `type Props = { week: typeof Week['keys'] }`
+         * > 常在typescript作为类型声明使用，例如： `type Props = { week: typeof Week['keys'] }`
          */
         readonly keys: K[];
       });
 
 /**
- * **EN:** Enum item collection interface, excluding members inherited from the array
- *
- * **CN:** 枚举项集合接口，不包含从数组集成的成员
+ * - **EN:** Enum item collection interface, excluding members inherited from the array
+ * - **CN:** 枚举项集合接口，不包含从数组集成的成员
  *
  * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
  *
@@ -130,21 +123,23 @@ export interface IEnumItems<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
   /**
-   * The enum collection name, supports localization. Note that it usually returns a string, but if
-   * a custom `localize` function is set, the return value may vary depending on the implementation
-   * of the method.
+   * - **EN:** The enum collection name, supports localization.
    *
-   * **CN:** 枚举集合显示名称，支持本地化。注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
+   * > Note that it usually returns a string, but if a custom `localize` function is set, the return
+   * > value may vary depending on the implementation of the method.
+   *
+   * - **CN:** 枚举集合显示名称，支持本地化。
+   *
+   * > 注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
    *
    * @returns {string | undefined} The localized name of the enum collection, or undefined if not
    *   set.
    */
   readonly name?: string;
   /**
-   * **EN:** Get the label (also known as display name) of the enumeration item, supports getting by
-   * value or key
-   *
-   * **CN:** 获取枚举项的标签（亦称显示名称），支持通过枚举项的 value 或 key 获取
+   * - **EN:** Get the label (also known as display name) of the enumeration item, supports getting by
+   *   value or key
+   * - **CN:** 获取枚举项的标签（亦称显示名称），支持通过枚举项的 value 或 key 获取
    *
    * @param keyOrValue - The value or key of the enumeration item | 枚举项的 value 或 key
    *
@@ -172,9 +167,8 @@ export interface IEnumItems<
                 : undefined);
 
   /**
-   * **EN:** Get the key of the enumeration item by its value
-   *
-   * **CN:** 根据枚举项的 value 获取其 key
+   * - **EN:** Get the key of the enumeration item by its value
+   * - **CN:** 根据枚举项的 value 获取其 key
    *
    * @param value The value of the enumeration item | 枚举项的 value
    *
@@ -194,18 +188,16 @@ export interface IEnumItems<
             : undefined);
 
   /**
-   * **EN:** Get the enumeration item by key or value
-   *
-   * **CN:** 获取枚举集合的初始化对象
+   * - **EN:** Get the enumeration item by key or value
+   * - **CN:** 获取枚举集合的初始化对象
    *
    * @returns {T} Enum collection initialization object | 初始化对象集合
    */
   raw(): T;
   /**
-   * **EN:** Get the original initialization object of a certain enumeration item. If custom fields
-   * are added to the enumeration item, you can use this method to get them.
-   *
-   * **CN:** 获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
+   * - **EN:** Get the original initialization object of a certain enumeration item. If custom fields
+   *   are added to the enumeration item, you can use this method to get them.
+   * - **CN:** 获取某个枚举项的原始初始化对象。如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
    *
    * @param keyOrValue Enum key or value | 枚举key或value
    *
@@ -228,9 +220,8 @@ export interface IEnumItems<
                 ? T[K] | undefined
                 : undefined);
   /**
-   * **EN:** Get the value corresponding to a certain enumeration item
-   *
-   * **CN:** 判断某个枚举项是否存在
+   * - **EN:** Get the value corresponding to a certain enumeration item
+   * - **CN:** 判断某个枚举项是否存在
    *
    * @param keyOrValue Enum item key or value | 枚举项的key或value
    *
@@ -239,9 +230,8 @@ export interface IEnumItems<
   has(keyOrValue?: string | V): boolean;
 
   /**
-   * **EN:** Generate an object array containing all enumeration items
-   *
-   * **CN:** 生成一个对象数组，包含所有的枚举项
+   * - **EN:** Generate an object array containing all enumeration items
+   * - **CN:** 生成一个对象数组，包含所有的枚举项
    *
    * @example
    *   [
@@ -251,10 +241,9 @@ export interface IEnumItems<
    */
   toList(): ListItem<V, 'value', 'label'>[];
   /**
-   * **EN:** Generate an object array containing all enumeration items, with customizable value and
-   * label field names
-   *
-   * **CN:** 生成一个对象数组，包含所有的枚举项，可自定义值和标签字段名
+   * - **EN:** Generate an object array containing all enumeration items, with customizable value and
+   *   label field names
+   * - **CN:** 生成一个对象数组，包含所有的枚举项，可自定义值和标签字段名
    *
    * @example
    *   Week.toList({
@@ -282,10 +271,9 @@ export interface IEnumItems<
   >[];
 
   /**
-   * **EN:** Generate an object array that can be bound to the data source of components such as
-   * Menu and Dropdown, following the data specification of ant-design
-   *
-   * **CN:** 生成一个对象数组，可以绑定到 Menu、Dropdown 等组件的数据源，遵循 ant-design 的数据规范
+   * - **EN:** Generate an object array that can be bound to the data source of components such as
+   *   Menu and Dropdown, following the data specification of ant-design
+   * - **CN:** 生成一个对象数组，可以绑定到 Menu、Dropdown 等组件的数据源，遵循 ant-design 的数据规范
    *
    * @example
    *   [
@@ -298,10 +286,9 @@ export interface IEnumItems<
   toMenu(): MenuItemOption<V>[];
 
   /**
-   * **EN:** Generate an object array that can add filtering function to table columns, following
-   * the data specification of ant-design Table component
-   *
-   * **CN:** 生成一个对象数组，可以给表格列增加筛选功能，遵循 ant-design Table 组件的数据规范
+   * - **EN:** Generate an object array that can add filtering function to table columns, following
+   *   the data specification of ant-design Table component
+   * - **CN:** 生成一个对象数组，可以给表格列增加筛选功能，遵循 ant-design Table 组件的数据规范
    *
    * @example
    *   [
@@ -315,10 +302,9 @@ export interface IEnumItems<
   toFilter(): ColumnFilterItem<V>[];
 
   /**
-   * **EN:** Generate a Map object that can be used to bind Select, Checkbox and other form
-   * components, following the data specification of ant-design-pro
-   *
-   * **CN:** 生成一个Map对象，可以用来绑定Select、Checkbox等表单组件，遵循 ant-design-pro 的数据规范
+   * - **EN:** Generate a Map object that can be used to bind Select, Checkbox and other form
+   *   components, following the data specification of ant-design-pro
+   * - **CN:** 生成一个Map对象，可以用来绑定Select、Checkbox等表单组件，遵循 ant-design-pro 的数据规范
    *
    * @example
    *   {
@@ -333,13 +319,13 @@ export interface IEnumItems<
   toValueMap(): ValueMap;
 
   /**
-   * **EN:** The data type of all enumeration values
+   * - **EN:** The data type of all enumeration values
    *
-   * 📣 Note: Can only be used as a type declaration, cannot be called at runtime
+   * > 📣 Note: Can only be used as a type declaration, cannot be called at runtime
    *
-   * **CN:** 所有枚举值的数据类型
+   * - **CN:** 所有枚举值的数据类型
    *
-   * 📣 注意：仅可作为类型声明使用，不可在运行时调用
+   * > 📣 注意：仅可作为类型声明使用，不可在运行时调用
    *
    * @example
    *   // Declare the type of the variable | 声明变量的类型
@@ -353,13 +339,13 @@ export interface IEnumItems<
   valueType: V;
 
   /**
-   * **EN:** The data type of all enumeration keys
+   * - **EN:** The data type of all enumeration keys
    *
-   * 📣 Note: Can only be used as a type declaration, cannot be called at runtime
+   * > 📣 Note: Can only be used as a type declaration, cannot be called at runtime
    *
-   * **CN:** 所有枚举key的数据类型
+   * - **CN:** 所有枚举key的数据类型
    *
-   * 📣 注意：仅可作为类型声明使用，不可在运行时调用
+   * > 📣 注意：仅可作为类型声明使用，不可在运行时调用
    *
    * @example
    *   // Declare the type of the variable | 声明变量的类型
@@ -373,10 +359,14 @@ export interface IEnumItems<
   keyType: K;
 
   /**
-   * **EN:** The type of the original initialization object of the enumeration item. If custom
-   * fields are added to the enumeration item, you can use this method to get them.
+   * - **EN:** The type of the original initialization object of the enumeration item. If custom
+   *   fields are added to the enumeration item, you can use this method to get them.
    *
-   * **CN:** 枚举项原始初始化对象的类型，如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
+   * > 📣 Note: Can only be used as a type declaration, cannot be called at runtime
+   *
+   * - **CN:** 枚举项原始初始化对象的类型，如果在枚举项上增加了自定义字段的话，可以用这种方式获取到。
+   *
+   * > 📣 注意：仅可作为类型声明使用，不可在运行时调用
    */
   rawType: T[K];
 }
@@ -439,9 +429,8 @@ export interface LabelOnlyEnumItemInit {
 export type CompactEnumItemInit = Record<string, never>; // 等价于{}
 
 /**
- * **EN:** Data structure of enumeration item options, used in `toList` method
- *
- * **CN:** 枚举项选项的数据结构，用于`toList`方法
+ * - **EN:** Data structure of enumeration item options, used in `toList` method
+ * - **CN:** 枚举项选项的数据结构，用于`toList`方法
  *
  * @template V Value type of the enumeration item | 枚举项的值类型
  * @template FOL Field name of the label, default is `label` | 标签字段名，默认为 `label`
@@ -487,17 +476,15 @@ export interface ToListConfig<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
   /**
-   * **EN:** The name of the value field in the output object, or a function to get the field name,
-   * default is `value`
-   *
-   * **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
+   * - **EN:** The name of the value field in the output object, or a function to get the field name,
+   *   default is `value`
+   * - **CN:** 输出对象的value字段名，或者获取字段名的函数，默认为 `value`
    */
   valueField?: FOV;
   /**
-   * **EN:** The name of the label field in the output object, or a function to get the field name,
-   * default is `label`
-   *
-   * **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
+   * - **EN:** The name of the label field in the output object, or a function to get the field name,
+   *   default is `label`
+   * - **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
    */
   labelField?: FOL;
 }
@@ -540,9 +527,8 @@ export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
                     : K; // Unknown format, use key as value
 
 /**
- * **EN:** Find the key of the enumeration item by value
- *
- * **CN:** 通过值查找枚举项的key
+ * - **EN:** Find the key of the enumeration item by value
+ * - **CN:** 通过值查找枚举项的key
  *
  * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
  * @template V Enum value type | 枚举值的类型
@@ -569,9 +555,8 @@ export type FindEnumKeyByValue<T, V extends EnumValue> = {
 }[keyof T];
 
 /**
- * **EN:** Find the label of the enumeration item by value
- *
- * **CN:** 通过值查找枚举项的label显示名称
+ * - **EN:** Find the label of the enumeration item by value
+ * - **CN:** 通过值查找枚举项的label显示名称
  *
  * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
  * @template V Enum value type | 枚举值的类型
@@ -597,10 +582,9 @@ export type PrimitiveOf<T> = T extends string
               : never;
 
 /**
- * **EN:** Convert an array of objects to a Map-like object, where the key is the `key` field of the
- * object, and the value is the `value` field of the object
- *
- * **CN:** 将对象数组转换为类似Map的对象，其中key为对象的`key`字段，value为对象的`value`字段
+ * - **EN:** Convert an array of objects to a Map-like object, where the key is the `key` field of the
+ *   object, and the value is the `value` field of the object
+ * - **CN:** 将对象数组转换为类似Map的对象，其中key为对象的`key`字段，value为对象的`value`字段
  *
  * @template A Array type | 数组类型
  */
