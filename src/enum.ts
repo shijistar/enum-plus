@@ -194,14 +194,12 @@ Object.defineProperty(Enum, 'localize', {
     localizer.localize = localize;
   },
 });
-
 Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
   Object.assign(EnumExtensionClass.prototype, obj);
 };
-
 Enum.install = <T = unknown>(plugin: PluginFunc<T>, options?: T) => {
   plugin(options, Enum);
 };
@@ -229,10 +227,9 @@ function getInitMapFromArray<
 }
 
 /**
- * **EN:** Represent the Enum plugin that enhances the functionality of the global Enum by adding
- * new methods or properties.
- *
- * **CN:** 表示增强Enum类功能的插件，通过添加新方法或属性
+ * - **EN:** Represent the Enum plugin that enhances the functionality of the global Enum by adding
+ *   new methods or properties.
+ * - **CN:** 表示增强Enum类功能的插件，通过添加新方法或属性
  *
  * @param options The options for the plugin | 插件的选项
  * @param Enum The Enum global method | Enum全局方法

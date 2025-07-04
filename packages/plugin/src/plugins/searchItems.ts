@@ -10,17 +10,15 @@ import type {
 
 export interface PluginOptions {
   /**
-   * **EN:** The name of the field used for list item labels, used to search list items. Default is
-   * `label`.
-   *
-   * **CN:** 列表项标签(名称)的字段名，用于搜索列表项，默认是`label`。
+   * - **EN:** The name of the field used for list item labels, used to search list items. Default is
+   *   `label`.
+   * - **CN:** 列表项标签(名称)的字段名，用于搜索列表项，默认是`label`。
    */
   labelField?: string;
 
   /**
-   * **EN:** Whether to ignore case when searching for list items. Default is `true`.
-   *
-   * **CN:** 搜索列表项时是否忽略大小写，默认是`true`。
+   * - **EN:** Whether to ignore case when searching for list items. Default is `true`.
+   * - **CN:** 搜索列表项时是否忽略大小写，默认是`true`。
    */
   ignoreCase?: boolean;
 }
@@ -90,16 +88,15 @@ declare module 'enum-plus-extend' {
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   > {
     /**
-     * **EN:** Search for list items, returns true if the item matches the search criteria, false
-     * otherwise. The function supports searching by specific field that is specified in options. If
-     * the search string is empty, it returns all items.
+     * - **EN:** Search for list items, returns true if the item matches the search criteria, false
+     *   otherwise. The function supports searching by specific field that is specified in options.
+     *   If the search string is empty, it returns all items.
      *
-     * This function is compatible with the `Ant Design` specification, and can be as `filterOption`
-     * property of components like `Select`, `AutoComplete`, `Transfer`, `Mentions`, etc.
+     *   This function is compatible with the `Ant Design` specification, and can be as `filterOption`
+     *   property of components like `Select`, `AutoComplete`, `Transfer`, `Mentions`, etc.
+     * - **CN:** 搜索列表项，如果项匹配搜索条件，则返回true，否则返回false。还可以在选项中设置搜索字段，支持按指定的字段进行搜索。如果搜索字符串为空，则返回所有项。
      *
-     * **CN:** 搜索列表项，如果项匹配搜索条件，则返回true，否则返回false。还可以在选项中设置搜索字段，支持按指定的字段进行搜索。如果搜索字符串为空，则返回所有项。
-     *
-     * 该函数兼容`Ant Design`规范，可以作为`Select`、`AutoComplete`、`Transfer`、`Mentions`等组件的`filterOption`属性。
+     *   该函数兼容`Ant Design`规范，可以作为`Select`、`AutoComplete`、`Transfer`、`Mentions`等组件的`filterOption`属性。
      *
      * @param search The search string | 搜索字符串
      * @param item The item to search for | 要搜索的项
@@ -109,15 +106,13 @@ declare module 'enum-plus-extend' {
      */
     searchItems: (
       /**
-       * **EN:** The search string, if empty, return all items
-       *
-       * **CN:** 搜索字符串，如果为空，则返回所有项
+       * - **EN:** The search string, if empty, return all items
+       * - **CN:** 搜索字符串，如果为空，则返回所有项
        */
       search?: string,
       /**
-       * **EN:** The item to search for
-       *
-       * **CN:** 待搜索的列表项
+       * - **EN:** The item to search for
+       * - **CN:** 待搜索的列表项
        */
       item?: V | Record<string, unknown> | EnumItemClass<EnumItemInit<V>, K, V>
     ) => boolean;
