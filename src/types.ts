@@ -361,11 +361,11 @@ export interface IEnumItems<
    * @see https://procomponents.ant.design/components/field-set#proformselect
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  toValueMap(): ValueMap<V>;
+  toValueMap(): ValueMap;
 
   /** @deprecated Use `toValueMap` instead */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  valuesEnum(): ValueMap<V>;
+  valuesEnum(): ValueMap;
 
   /**
    * **EN:** The data type of all enumeration values
@@ -506,7 +506,7 @@ export interface MenuItemOption<V> {
   label: string;
 }
 
-export type ValueMap<V extends EnumValue> = Record<`${Exclude<V, symbol | RegExp | Date>}`, { text: string }>;
+export type ValueMap = Record<string, { text: string }>;
 
 /** Enum value type, support number, string, symbol */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.3.5
+
+2025-7-6
+
+### Features
+
+- 🛠 Downgrade the requirement of TypeScript to `v3.8`
+
 ## 2.3.4
 
 2025-7-2

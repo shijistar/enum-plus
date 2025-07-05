@@ -189,7 +189,7 @@ export class EnumItemsArray<
   }
 
   toValueMap() {
-    const itemsMap = {} as ValueMap<V>;
+    const itemsMap = {} as ValueMap;
     for (let i = 0; i < this.length; i++) {
       const { value, label } = this[i];
       itemsMap[value as keyof typeof itemsMap] = { text: label };
