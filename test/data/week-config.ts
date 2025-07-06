@@ -1,7 +1,6 @@
-import type { BuiltInLocaleKeys, defaultLocalize as defaultLocalizeType, Enum as EnumType } from '@enum-plus';
+import type { defaultLocalize as defaultLocalizeType, Enum as EnumType } from '@enum-plus';
 
 export const localeEN = {
-  'enum-plus.options.all': 'All',
   'weekDay.name': 'Week Days',
   Sunday: 'Sunday',
   Monday: 'Monday',
@@ -16,7 +15,6 @@ export const localeEN = {
   LastDay: 'Last Day',
 } as const;
 export const localeCN = {
-  'enum-plus.options.all': '全部',
   'weekDay.name': '星期',
   Sunday: '星期日',
   Monday: '星期一',
@@ -31,7 +29,6 @@ export const localeCN = {
   LastDay: '最后一天',
 } as const;
 export const noLocale = {
-  'enum-plus.options.all': 'enum-plus.options.all',
   'weekDay.name': 'weekDay.name',
   Sunday: 'weekday.sunday',
   Monday: 'weekday.monday',
@@ -170,16 +167,10 @@ export function genSillyLocalizer(
 
   // should use function here to avoid closure. this is important for the e2e test cases.
   function sillyLocalize(
-    content:
-      | BuiltInLocaleKeys
-      | (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label']
-      | NonNullable<string>
-      | undefined
+    content: (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label'] | NonNullable<string> | undefined
   ): typeof content {
     const locales = sillyLocalize.locales;
     switch (content) {
-      case 'enum-plus.options.all':
-        return locales['enum-plus.options.all'] as typeof content;
       case 'weekDay.name':
         return locales['weekDay.name'] as typeof content;
       case 'weekday.sunday':

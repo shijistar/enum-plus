@@ -413,11 +413,6 @@ const testLocalization = (engine: TestEngineBase) => {
   // ) {
   //   const withDefaultFirstOption = weekEnum.toList({ firstOption: true });
   //   engine.expect(withDefaultFirstOption).toHaveLength(8);
-  //   engine.expect(withDefaultFirstOption[0]).toEqual({
-  //     value: '',
-  //     key: '',
-  //     label: locales['enum-plus.options.all'],
-  //   });
   // }
 
   // function testBuildInResourcesWithDefaultImp(
@@ -430,11 +425,6 @@ const testLocalization = (engine: TestEngineBase) => {
   // ) {
   //   const withDefaultFirstOption = weekEnum.toList({ firstOption: true });
   //   engine.expect(withDefaultFirstOption).toHaveLength(8);
-  //   engine.expect(withDefaultFirstOption[0]).toEqual({
-  //     value: '',
-  //     key: '',
-  //     label: defaultLocalize('enum-plus.options.all'),
-  //   });
   // }
 };
 

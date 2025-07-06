@@ -7,7 +7,7 @@ const config = {
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/lib/**/*.js'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
-  coveragePathIgnorePatterns: ['<rootDir>/lib/types.js'],
+  coveragePathIgnorePatterns: ['<rootDir>/lib/types.js', '<rootDir>/lib/localize-interface.js'],
   moduleNameMapper: {
     '^@enum-plus/(.*)$': '<rootDir>/lib/$1',
     '^@enum-plus': '<rootDir>/lib',

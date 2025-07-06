@@ -1,5 +1,4 @@
 import {
-  type BuiltInLocaleKeys,
   type EnumInit,
   type EnumItemClass,
   type EnumKey,
@@ -44,7 +43,7 @@ const toSelectPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
         : FOL
     >[] {
       const {
-        firstOption = false,
+        firstOption,
         labelField = globalLabelField ?? 'label',
         valueField = globalValueField ?? 'value',
       } = config ?? {};
@@ -56,85 +55,18 @@ const toSelectPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
           [labelFieldName]: item.label,
         } as SelectItem<
           EnumValue,
-          FOV extends (...args: any[]) => infer R ? R : FOV,
-          FOL extends (...args: any[]) => infer R ? R : FOL
+          FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOV,
+          FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
+            ? R
+            : FOL
         >;
       });
       if (firstOption) {
-        const valueFieldName = typeof valueField === 'function' ? valueField(undefined) : (valueField as string);
-        const labelFieldName = typeof labelField === 'function' ? labelField(undefined) : (labelField as string);
-        if (firstOption === true) {
-          // the first option
-          const value = '' as EnumValue;
-          const label = Enum.localize
-            ? Enum.localize('enum-plus.options.all' as BuiltInLocaleKeys)
-            : 'enum-plus.options.all';
-          return [
-            {
-              [valueFieldName]: value,
-              [labelFieldName]: label,
-            },
-            ...selectItems,
-          ] as SelectItem<
-            EnumValue,
-            FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-              ? R
-              : FOV,
-            FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-              ? R
-              : FOL
-          >[];
-        } else {
-          return [
-            {
-              ...firstOption,
-              [labelFieldName]: Enum.localize
-                ? Enum.localize(
-                    firstOption[
-                      labelFieldName as FOL extends (
-                        item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined
-                      ) => infer R
-                        ? R
-                        : FOL
-                    ]
-                  )
-                : firstOption[
-                    labelFieldName as FOL extends (
-                      item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined
-                    ) => infer R
-                      ? R
-                      : FOL
-                  ],
-            },
-            ...selectItems,
-          ] as SelectItem<
-            EnumValue,
-            FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-              ? R
-              : FOV,
-            FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-              ? R
-              : FOL
-          >[];
-        }
+        return [firstOption, ...selectItems];
       } else {
-        return selectItems as SelectItem<
-          EnumValue,
-          FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-            ? R
-            : FOV,
-          FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-            ? R
-            : FOL
-        >[] as SelectItem<
-          EnumValue,
-          FOV extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-            ? R
-            : FOV,
-          FOL extends (item: EnumItemClass<StandardEnumItemInit<EnumValue>, string, EnumValue> | undefined) => infer R
-            ? R
-            : FOL
-        >[];
+        return selectItems;
       }
     },
   });
@@ -164,18 +96,10 @@ export interface ToSelectConfig<
 
 export interface FirstOptionConfig<V = EnumValue, FOV extends string = string, FOL extends string = string> {
   /**
-   * - **EN:** Add a default option at the top
-   * - `true`: the option uses the default value, `value` is `''`, `label` is `'All'`;
-   * - `false`: the default option is not added;
-   * - `object`: custom default option, must be an object with `key`, `value`, and `label` properties
-   * - **CN:** 在头部添加一个默认选项
-   * - `true`: 选项使用默认值，`value`为`''`，`label`为`'全部'`
-   * - `false`: 不添加默认选项
-   * - `object`: 自定义默认选项
-   *
-   * @default false
+   * - **EN:** Add a default option at the top, the data structure is the same as `SelectItem`
+   * - **CN:** 在头部添加一个默认选项，数据结构与 `SelectItem` 相同
    */
-  firstOption?: boolean | SelectItem<V, FOL, FOV>;
+  firstOption?: SelectItem<V, FOL, FOV>;
 }
 
 /** Data structure of ant-design Select options */
