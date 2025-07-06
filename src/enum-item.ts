@@ -1,5 +1,5 @@
 import { localizer } from './localize';
-import type { EnumItemInit, EnumItemOptions, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
+import type { EnumItemInit, EnumKey, EnumValue, LocalizeInterface, ValueTypeFromSingleInit } from './types';
 import { ENUM_ITEM } from './utils';
 
 /**
@@ -137,4 +137,22 @@ export class EnumItemClass<
   valueOf() {
     return this.value;
   }
+}
+
+export interface EnumItemOptions {
+  /**
+   * - **EN:** Localization function, used to convert the text of the enumeration item to localized
+   *   text
+   * - **CN:** 本地化函数，用于把枚举项文本转换为本地化文本
+   *
+   * @param content Original text | 原始文本
+   *
+   * @returns Localized text, can return any type | 本地化文本，可以返回任意类型
+   */
+  localize?: LocalizeInterface;
+  /**
+   * - **EN:** Set the display name of the enum collection, supports string or localized resource key
+   * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
+   */
+  name?: string;
 }

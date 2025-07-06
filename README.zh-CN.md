@@ -657,7 +657,6 @@ WeekEnum.raw('Sunday').active // true
 
 - `toSelect`方法与`items`类似，但允许在头部增加一个默认选项。默认选项可以是一个布尔值，也可以是一个自定义对象。
 
-  - 如果是布尔值，则默认选项为`{ value: '', label: 'All' }`，显示名称只支持英文。如果希望支持本地化，请在本地化方法中解析并处理`enum-plus.options.all`这个内置资源。关于本地化的更多详情，请参考[本地化](#本地化)章节
   - 如果是一个对象，则可以自定义默认选项的值和显示文本，显示文本会自动支持本地化
 
   ```tsx
@@ -852,8 +851,6 @@ const setLang = (l: string) => {
 const sillyLocalize = (content: string) => {
   if (lang === 'zh-CN') {
     switch (content) {
-      case 'enum-plus.options.all':
-        return '全部';
       case 'weekDays.name':
         return '周';
       case 'week.sunday':
@@ -865,8 +862,6 @@ const sillyLocalize = (content: string) => {
     }
   } else {
     switch (content) {
-      case 'enum-plus.options.all':
-        return 'All';
       case 'weekDays.name':
         return 'Week';
       case 'week.sunday':

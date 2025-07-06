@@ -658,7 +658,6 @@ WeekEnum.raw('Sunday').active; // true
 
 - The `toSelect` method is similar to `items`, allows adding a default option at the beginning of the array. The default option can be a boolean value or a custom object.
 
-  - If set to a boolean value, the default option is `{ value: '', label: 'All' }`, the display name only supports English. If you need localization, please parse and process the built-in resource key `enum-plus.options.all` in the localization method. For more details about localization, please refer to the [Localization](#localization) section.
   - If set to an object, you can customize the value and display text of the default option, and the display text will automatically support localization.
 
   ```tsx
@@ -854,8 +853,6 @@ const setLang = (l: string) => {
 const sillyLocalize = (content: string) => {
   if (lang === 'zh-CN') {
     switch (content) {
-      case 'enum-plus.options.all':
-        return '全部';
       case 'weekDays.name':
         return '星期';
       case 'week.sunday':
@@ -867,8 +864,6 @@ const sillyLocalize = (content: string) => {
     }
   } else {
     switch (content) {
-      case 'enum-plus.options.all':
-        return 'All';
       case 'weekDays.name':
         return 'Week';
       case 'week.sunday':
