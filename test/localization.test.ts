@@ -1,10 +1,22 @@
 import { defaultLocalize, Enum } from '@enum-plus';
-import { type IEnum } from '@enum-plus/types';
-import { genSillyLocalizer, localeCN, localeEN, noLocale, setLang, StandardWeekConfig } from './data/week-config';
+import type { IEnum } from '@enum-plus';
+import {
+  genSillyLocalizer,
+  localeCN,
+  localeEN,
+  noLocale,
+  setLang,
+  sillyLocalize,
+  StandardWeekConfig,
+} from './data/week-config';
 import { getStandardWeekData } from './data/week-data';
 import { getOptionsData, pickArray } from './utils';
 
 describe('should support localization', () => {
+  test('should have default localize method', () => {
+    // expect(Enum.localize).toBe(defaultLocalize);
+    expect(Enum.localize).toBe(sillyLocalize);
+  });
   test('should show English by default', () => {
     const weekEnum = Enum(StandardWeekConfig);
     testEnum(weekEnum, localeEN);

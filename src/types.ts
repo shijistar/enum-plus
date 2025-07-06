@@ -1,6 +1,6 @@
-import type { EnumItemClass } from './enum-item';
-import type { ITEMS, KEYS, VALUES } from './utils';
+import type { LocalizeInterface } from './localize-interface';
 
+export * from './localize-interface';
 /**
  * **EN:** Enum initialization options
  *
@@ -45,8 +45,7 @@ export interface EnumItemOptions {
    *
    * @returns Localized text, can return any type | 本地化文本，可以返回任意类型
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  localize?: (content: EnumLocaleExtends['LocaleKeys'] | NonNullable<string> | undefined) => any;
+  localize?: LocalizeInterface;
   /**
    * **EN:** Set the display name of the enum collection, supports string or localized resource key
    *
@@ -54,73 +53,6 @@ export interface EnumItemOptions {
    */
   name?: string;
 }
-
-/**
- * **EN:** Enum collection interface
- *
- * Should directly use `EnumClass`, but TS does not allow custom index accessors in `class`, so you
- * can only use `type`
- *
- * **CN:** 数组的类型声明
- *
- * 本来可以直接使用`EnumClass`, 但是TS不允许`class`中自定义索引访问器，只能使用`type`
- */
-export type IEnum<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-> = IEnumItems<T, K, V> & {
-  // 初始化对象里的枚举字段
-  [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-} & (T extends { items: any }
-    ? {
-        // 防止values名称冲突
-        readonly [ITEMS]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }
-    : {
-        /**
-         * **EN:** All enumeration items in the array, can be used directly as the data source of
-         * the AntDesign component
-         *
-         * Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
-         * modification methods
-         *
-         * **CN:** 所有枚举项的数组，可以直接作为AntDesign组件的数据源
-         *
-         * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
-         */
-        readonly items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { values: any }
-    ? {
-        // 防止values名称冲突
-        readonly [VALUES]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }
-    : {
-        /** @deprecated Use `items` instead */
-        readonly values: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { keys: any }
-    ? {
-        // 防止keys名称冲突
-        readonly [KEYS]: K[];
-      }
-    : {
-        /**
-         * **EN:** Get the key list of the enumeration item
-         *
-         * Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
-         * modification methods
-         *
-         * **CN:** 获取枚举项的key列表
-         *
-         * 常在typescript作为类型声明使用，例如： `type Props = { week: typeof Week['keys'] }`
-         */
-        readonly keys: K[];
-      });
 
 /**
  * **EN:** Enum item collection interface, excluding members inherited from the array

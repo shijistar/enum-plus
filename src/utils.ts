@@ -1,4 +1,4 @@
-import type { EnumItemOptions } from './types';
+import type { LocalizeInterface } from './localize-interface';
 
 /**
  * **EN:** Alias of `values`. If the enum contains a field with the same name as `values`, you can
@@ -58,7 +58,7 @@ export const ENUM_ITEMS = Symbol.for('[EnumItems]');
  *
  * - `enum-plus.options.all` => `All`
  */
-export const defaultLocalize: NonNullable<EnumItemOptions['localize']> = (content) => {
+export const defaultLocalize: LocalizeInterface = (content) => {
   if (content === 'enum-plus.options.all') {
     return 'All';
   }

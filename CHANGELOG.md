@@ -2,6 +2,15 @@
 
 # enum-plus Changelog
 
+## 2.4.0
+
+2025-7-6
+
+### Features
+
+- 🛠 Support `Node.js ESM`
+- 🛠 Remove file circular dependencies
+
 ## 2.3.5
 
 2025-7-6

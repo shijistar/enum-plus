@@ -1,4 +1,5 @@
-import { Enum } from './enum';
+import { localizer } from './localize';
+import type { LocalizeInterface } from './localize-interface';
 import type { EnumItemInit, EnumItemOptions, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
 import { ENUM_ITEM } from './utils';
 
@@ -51,7 +52,7 @@ export class EnumItemClass<
    */
   readonly [ENUM_ITEM] = true;
 
-  #localize: NonNullable<EnumItemOptions['localize']>;
+  #localize: LocalizeInterface;
   #localizedProxy = new Proxy(this, {
     get: (target, prop) => {
       const origin = target[prop as keyof typeof this];
@@ -114,7 +115,7 @@ export class EnumItemClass<
     this.label = label;
     this.raw = raw;
     this.#localize = (content: string | undefined) => {
-      const localize = options?.localize ?? Enum.localize;
+      const localize = options?.localize ?? localizer.localize;
       if (typeof localize === 'function') {
         return localize(content);
       }

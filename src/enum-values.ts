@@ -1,5 +1,6 @@
-import { Enum } from './enum';
 import type { EnumItemClass } from './enum-item';
+import { localizer } from './localize';
+import type { LocalizeInterface } from './localize-interface';
 import type {
   BooleanFirstOptionConfig,
   BuiltInLocaleKeys,
@@ -43,7 +44,7 @@ export class EnumItemsArray<
   implements IEnumItems<T, K, V>
 {
   #raw: T;
-  #localize: NonNullable<EnumItemOptions['localize']>;
+  #localize: LocalizeInterface;
   #optionsConfigDefaults: ToSelectConfig & BooleanFirstOptionConfig<V> = { firstOption: false };
 
   /**
@@ -58,7 +59,7 @@ export class EnumItemsArray<
     super(...items);
     this.#raw = raw;
     this.#localize = (content: string | undefined) => {
-      const localize = options?.localize ?? Enum.localize;
+      const localize = options?.localize ?? localizer.localize;
       if (typeof localize === 'function') {
         return localize(content);
       }

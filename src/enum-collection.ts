@@ -1,6 +1,6 @@
-import { Enum } from './enum';
 import { EnumItemClass } from './enum-item';
 import { EnumItemsArray } from './enum-values';
+import { localizer } from './localize';
 import type {
   BooleanFirstOptionConfig,
   ColumnFilterItem,
@@ -66,7 +66,7 @@ export class EnumCollectionClass<
    *   set.
    */
   get name(): string | undefined {
-    const localize = this._options?.localize ?? Enum.localize;
+    const localize = this._options?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
       return localize(this._options?.name);
     }
