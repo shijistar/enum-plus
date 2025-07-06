@@ -25,11 +25,9 @@ The following methods are deprecated and permanently removed. However they both 
 - `EnumValuesArray` has has been deprecated and replaced with `EnumItemsArray`.
 - `IEnumValues` has been renamed to `IEnumItems`.
 
-## 🛠 Enum initialization no longer requires "as const" assertion
+## 🛠 Recommended to upgrade TypeScript to 5.0
 
-The `Enum` can now be initialized with literal objects without the need of `as const` assertion.
-
-> You can still use `as const` to initialize an enum, if you like.
+We recommend upgrading your TypeScript version to `5.0` or later, as we introduced the [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) feature to simplify Enum initializations by removing the need for `as const`. The `Enum` can now be initialized with literal objects without the need of `as const` assertion.
 
 ```js
 const WeekEnum = Enum({
@@ -37,3 +35,5 @@ const WeekEnum = Enum({
   Monday: 1,
 });
 ```
+
+> TypeScript `4.9` or earlier is still backward compatible. You will have to add `as const` manually, just like before.

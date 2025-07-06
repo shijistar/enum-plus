@@ -3,7 +3,7 @@ import { cpSync, readFileSync, writeFileSync } from 'fs';
 import { rollup } from 'rollup';
 
 async function build() {
-  // Bundle modern browsers
+  // Bundle es folder for modern browsers
   const modern = await rollup({
     input: 'es/index.js',
     plugins: [nodeResolve()],
@@ -14,7 +14,7 @@ async function build() {
     name: 'EnumPlus',
   });
 
-  // Bundle legacy browsers
+  // Bundle es-legacy folder for legacy browsers
   const legacy = await rollup({
     input: 'es-legacy/index.js',
     plugins: [nodeResolve()],

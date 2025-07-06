@@ -1,15 +1,13 @@
 import type { EnumExtension } from 'enum-plus-extend';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
-import type { EnumItemClass } from './enum-item';
-import './extension.d.ts';
+import type { EnumItemClass, EnumItemOptions } from './enum-item';
+import type { IEnumItems } from './enum-values';
 import { localizer } from './localize';
 import type {
   ArrayToMap,
   EnumInit,
-  EnumInitOptions,
   EnumKey,
   EnumValue,
-  IEnumItems,
   LabelOnlyEnumItemInit,
   LocalizeInterface,
   ValueTypeFromSingleInit,
@@ -91,10 +89,9 @@ export interface EnumInterface {
    */
   localize: LocalizeInterface | undefined;
   /**
-   * **EN:** Add global extension methods to the enum, and all enum instances will have these new
-   * extension methods
-   *
-   * **CN:** 为枚举增加全局扩展方法，所有枚举实例都会具有这些新扩展方法
+   * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
+   *   extension methods
+   * - **CN:** 为枚举增加全局扩展方法，所有枚举实例都会具有这些新扩展方法
    *
    * @param obj Extension content, must be an object | 扩展内容，必须是一个对象
    */
@@ -111,14 +108,9 @@ export interface EnumInterface {
 }
 
 /**
- * **EN:** Enum collection interface
- *
- * Should directly use `EnumClass`, but TS does not allow custom index accessors in `class`, so you
- * can only use `type`
- *
- * **CN:** 数组的类型声明
- *
- * 本来可以直接使用`EnumClass`, 但是TS不允许`class`中自定义索引访问器，只能使用`type`
+ * - **EN:** Represents an enumeration collection, which includes all the items in the enumeration and
+ *   provides methods to access them.
+ * - **CN:** 表示一个枚举集合，包含了枚举中的所有项，并提供访问它们的方法。
  */
 export type IEnum<
   T extends EnumInit<K, V>,
@@ -131,39 +123,46 @@ export type IEnum<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } & (T extends { items: any }
     ? {
-        // Prevent conflict with `values` name
+        /**
+         * - **EN:** Alias for the `items` array, when any enum key conflicts with `items`, you can
+         *   access all enum items through this alias
+         * - **CN:** `items`数组的别名，当任何枚举的key与`items`冲突时，可以通过此别名访问所有枚举项
+         */
         readonly [ITEMS]: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }
     : {
         /**
-         * **EN:** All enumeration items in the array, can be used directly as the data source of
-         * the AntDesign component
+         * - **EN:** All items in the enumeration as an array
          *
-         * Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
-         * modification methods
+         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
+         * > any modification methods
          *
-         * **CN:** 所有枚举项的数组，可以直接作为AntDesign组件的数据源
+         * - **CN:** 所有枚举项的数组
          *
-         * 仅支持 ReadonlyArray<T> 中的只读方法，不支持push、pop等任何修改的方法
+         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
          */
         readonly items: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>;
       }) &
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (T extends { keys: any }
     ? {
-        // 防止keys名称冲突
+        /**
+         * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can
+         *   access all enum keys through this alias
+         * - **CN:** `keys`数组的别名，当任何枚举的key与`keys`冲突时，可以通过此别名访问所有枚举项的keys
+         */
         readonly [KEYS]: K[];
       }
     : {
         /**
-         * **EN:** Get the key list of the enumeration item
+         * - **EN:** Get all keys of the enumeration items as an array
          *
-         * Only supports read-only methods in ReadonlyArray<T>, does not support push, pop, and any
-         * modification methods
+         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
+         * > any modification methods
          *
-         * **CN:** 获取枚举项的key列表
+         * - **CN:** 获取枚举项的全部keys列表
          *
-         * 常在typescript作为类型声明使用，例如： `type Props = { week: typeof Week['keys'] }`
+         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
          */
         readonly keys: K[];
       });
@@ -225,6 +224,34 @@ function getInitMapFromArray<
     return acc;
   }, {} as T);
 }
+/**
+ * - **EN:** Enum initialization options
+ * - **CN:** 枚举初始化选项
+ */
+export type EnumInitOptions<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> = {
+  /**
+   * - **EN:** The name of the field in the enumeration item that stores the value, or the function to
+   *   get the key value, default is `value`
+   * - **CN:** 枚举项的value字段名，或者获取key值的函数，默认为 `value`
+   */
+  getValue?: keyof T | ((item: T) => V);
+  /**
+   * - **EN:** The name of the field in the enumeration item that stores the label, or the function to
+   *   get the key value, default is `label`
+   * - **CN:** 枚举项的label字段名，或者获取key值的函数，默认为 `label`
+   */
+  getLabel?: keyof T | ((item: T) => string);
+  /**
+   * - **EN:** The name of the field in the enumeration item that stores the key, or the function to
+   *   get the key value, default is `key`
+   * - **CN:** 枚举项的key字段名，或者获取key值的函数，默认为 `key`
+   */
+  getKey?: keyof T | ((item: T) => string);
+} & EnumItemOptions;
 
 /**
  * - **EN:** Represent the Enum plugin that enhances the functionality of the global Enum by adding
