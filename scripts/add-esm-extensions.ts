@@ -4,9 +4,8 @@ import { join } from 'path';
 /*
  * This script adds .js extensions to `import` paths in output javascript files.
  *
- * Have attempted to use the babel-plugin-add-import-extension plugin,
- * but consistently encountered "Maximum call stack size exceeded" errors,
- * so changed to a post-build processing approach instead.
+ * Have tried the babel-plugin-add-import-extension plugin, but encountered "Maximum call stack size exceeded" error.
+ * So changed to a post-build processing approach instead.
  */
 
 processDir('./es');

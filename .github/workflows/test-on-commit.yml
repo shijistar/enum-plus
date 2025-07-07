@@ -1,4 +1,4 @@
-name: 🧪 Run unit test on commit
+name: Unit tests on commit
 
 on:
   push:
