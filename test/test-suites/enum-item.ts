@@ -1,4 +1,4 @@
-import { ENUM_ITEM as NODE_ENUM_ITEM } from '@enum-plus';
+import { ENUM_ITEM as NODE_ENUM_ITEM } from '../../src/index';
 import type TestEngineBase from '../engines/base';
 
 const testEnumItem = (engine: TestEngineBase) => {

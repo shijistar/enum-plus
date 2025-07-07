@@ -1,4 +1,4 @@
-import type { EnumInit } from '@enum-plus';
+import type { EnumInit } from '../../src/index';
 import {
   getStandardBooleanData,
   getStandardDateData,
@@ -10,7 +10,7 @@ import {
   getWeekDataHasValueNoKeyNoLabel,
 } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
-import { toPlainEnums } from '../utils';
+import { toPlainEnums } from '../utils/index';
 
 const testCreatingEnum = (engine: TestEngineBase) => {
   engine.describe('Create Enum using static init data', () => {

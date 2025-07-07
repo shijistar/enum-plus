@@ -1,4 +1,4 @@
-import * as EnumPlus from '@enum-plus';
+import * as EnumPlus from '../../src/index';
 import * as WeekConfig from '../data/week-config';
 import * as WeekData from '../data/week-data';
 import * as SerializeJavascript from '../utils/serialize-javascript';

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "tses",
+    "target": "ES2016",
+    "module": "esnext",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src", "test", "e2e-global.d.ts"]
+}

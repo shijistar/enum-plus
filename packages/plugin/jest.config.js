@@ -16,8 +16,4 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: ['src/types.ts'],
-  moduleNameMapper: {
-    '^@enum-plus-plugin': '<rootDir>/src',
-    '^@enum-plus-plugin/(.*)$': '<rootDir>/src/$1',
-  },
 };

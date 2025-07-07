@@ -101,6 +101,7 @@
     "prepublishOnly": "run-s build test",
     "task:add-es-extensions": "tsx scripts/add-esm-extensions.ts es",
     "task:add-es-legacy-extensions": "tsx scripts/add-esm-extensions.ts es-legacy",
+    "task:add-tses-extensions": "tsx scripts/add-esm-extensions.ts tses",
     "task:add-umd-banner": "tsx scripts/add-umd-banner.ts",
     "task:build-es": "father build",
     "task:build-es-legacy": "father build",
@@ -108,6 +109,7 @@
     "task:copy-dts": "shx cp ./src/*.d.ts ./lib",
     "task:copy-lib": "tsx scripts/copy-lib.ts",
     "task:jest": "jest --coverage",
+    "task:jest:es": "jest --coverage -c jest-es.config.js",
     "task:jest:lib": "jest --coverage -c jest-lib.config.js",
     "task:run-e2e": "playwright test",
     "task:run-e2e-debug": "playwright test --debug",
@@ -118,7 +120,9 @@
     "task:run-e2e:firefox": "playwright test --project=firefox",
     "task:run-e2e:webkit": "playwright test --project=webkit",
     "test": "npm run task:jest",
-    "test-lib": "run-s ts2lib task:jest:lib",
+    "test-node-cjs": "run-s ts2lib task:jest:lib",
+    "test-node-esm": "run-s ts2es task:add-tses-extensions task:jest:es",
+    "ts2es": "tsc -p tsconfig.es.json",
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "overrides": {

@@ -24,11 +24,7 @@
     "noUnusedParameters": false,
     "noImplicitAny": true,
     "resolveJsonModule": true,
-    "allowJs": false,
-    "paths": {
-      "@enum-plus/*": ["./src/*"],
-      "@enum-plus": ["./src"]
-    }
+    "allowJs": false
   },
   "include": ["src", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
   "exclude": ["node_modules", "es", "es-legacy", "lib", "tslib"]

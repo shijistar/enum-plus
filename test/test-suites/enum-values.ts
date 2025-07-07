@@ -1,8 +1,8 @@
-import { defaultLocalize, ENUM_ITEMS as NODE_ENUM_ITEMS } from '@enum-plus';
+import { defaultLocalize, ENUM_ITEMS as NODE_ENUM_ITEMS } from '../../src/index';
 import { getLocales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
-import { copyList, pickArray } from '../utils';
+import { copyList, pickArray } from '../utils/index';
 
 const testEnumValues = (engine: TestEngineBase) => {
   engine.describe('The EnumItemsArray api', () => {
