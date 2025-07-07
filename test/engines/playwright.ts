@@ -1,7 +1,7 @@
-import { defaultLocalize, Enum } from '@enum-plus';
-import { localizer } from '@enum-plus/localize';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
+import { defaultLocalize, Enum } from '../../src/index';
+import { localizer } from '../../src/localize';
 import { getLocales, setLang } from '../data/week-config';
 import { parse, stringify } from '../utils/serialize-javascript';
 import TestEngineBase, { type RuntimeContext } from './base';

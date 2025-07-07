@@ -1,4 +1,4 @@
-import type { Enum as EnumType, PluginFunc } from '@enum-plus';
+import type { Enum as EnumType, PluginFunc } from '../../src/index';
 import type TestEngineBase from '../engines/base';
 
 const testPlugin = (engine: TestEngineBase) => {

@@ -3,11 +3,15 @@ const nodeVersion = process.versions.node.split('.').map(Number)[0];
 /** @type {import('jest').Config} */
 const config = {
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/tslib/test/**/*.{spec,test}.js'],
+  extensionsToTreatAsEsm: ['.ts'],
+  testMatch: ['<rootDir>/tses/test/**/*.{spec,test}.js'],
   collectCoverage: true,
-  collectCoverageFrom: ['<rootDir>/tslib/src/**/*.js'],
+  collectCoverageFrom: ['<rootDir>/tses/src/**/*.js'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
-  coveragePathIgnorePatterns: ['<rootDir>/tslib/src/types.js', '<rootDir>/tslib/src/localize-interface.js'],
+  coveragePathIgnorePatterns: ['<rootDir>/es/types.js', '<rootDir>/es/localize-interface.js'],
+  transform: {
+    '^.+\\.(ts|js)$': ['ts-jest', { useESM: true }],
+  },
   coverageThreshold: {
     global: {
       branches: 100,
@@ -19,9 +23,9 @@ const config = {
 };
 if (nodeVersion <= 15) {
   // @ts-expect-error: because setupTestFrameworkScriptFile is a deprecated API
-  config.setupTestFrameworkScriptFile = '<rootDir>/tslib/test/jest.setup.js';
+  config.setupTestFrameworkScriptFile = '<rootDir>/tses/test/jest.setup.js';
 } else {
-  config.setupFilesAfterEnv = ['<rootDir>/tslib/test/jest.setup.js'];
+  config.setupFilesAfterEnv = ['<rootDir>/tses/test/jest.setup.js'];
 }
 
-module.exports = config;
+export default config;

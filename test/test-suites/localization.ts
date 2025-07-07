@@ -1,8 +1,8 @@
-import type { IEnum, ListItem } from '@enum-plus';
+import type { IEnum, ListItem } from '../../src/index';
 import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '../data/week-config';
 import type { getStandardWeekData as getStandardWeekDataInterface } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
-import { copyList, pickArray } from '../utils';
+import { copyList, pickArray } from '../utils/index';
 
 const testLocalization = (engine: TestEngineBase) => {
   engine.describe('Enum localization', () => {

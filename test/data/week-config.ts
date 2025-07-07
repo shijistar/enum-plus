@@ -1,4 +1,4 @@
-import type { defaultLocalize as defaultLocalizeType, Enum as EnumType } from '@enum-plus';
+import type { defaultLocalize as defaultLocalizeType, Enum as EnumType } from '../../src/index';
 
 export const localeEN = {
   'weekDay.name': 'Week Days',
