@@ -8,10 +8,6 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
   coveragePathIgnorePatterns: ['src/types.ts', 'src/localize-interface.ts', 'src/extension.d.ts'],
-  moduleNameMapper: {
-    '^@enum-plus/(.*)$': '<rootDir>/src/$1',
-    '^@enum-plus': '<rootDir>/src',
-  },
   coverageThreshold: {
     global: {
       branches: 100,

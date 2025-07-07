@@ -3,6 +3,7 @@ es
 es-legacy
 umd
 tslib
+tses
 node_modules
 npm-debug.log
 e2e/fixtures/scripts

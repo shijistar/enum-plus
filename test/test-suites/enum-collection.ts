@@ -1,6 +1,6 @@
-import { defaultLocalize, ENUM_COLLECTION as NODE_ENUM_COLLECTION } from '@enum-plus';
+import { defaultLocalize, ENUM_COLLECTION as NODE_ENUM_COLLECTION } from '../../src/index';
 import type TestEngineBase from '../engines/base';
-import { toPlainEnums } from '../utils';
+import { toPlainEnums } from '../utils/index';
 import { addEnumValuesTestSuite } from './enum-values';
 
 const testEnumCollection = (engine: TestEngineBase) => {

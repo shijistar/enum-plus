@@ -1,4 +1,4 @@
-import { defaultLocalize, Enum } from '@enum-plus';
+import { defaultLocalize, Enum } from '../src/index';
 import { getLocales, setLang } from './data/week-config';
 
 /*

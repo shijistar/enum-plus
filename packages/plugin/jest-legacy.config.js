@@ -9,8 +9,4 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['tslib/src/**/*.js'],
   coveragePathIgnorePatterns: ['tslib/src/types.js'],
-  moduleNameMapper: {
-    '^@enum-plus-plugin': '<rootDir>/tslib/src',
-    '^@enum-plus-plugin/(.*)$': '<rootDir>/tslib/src/$1',
-  },
 };

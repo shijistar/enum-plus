@@ -40,7 +40,7 @@ async function build() {
   // Bundle week-config
   const weekConfigPath = './e2e/fixtures/scripts/week-config.js';
   changeFormat('./tslib/test/data/week-config.js', weekConfigPath, 'WeekConfig', (content) => {
-    return content.replace('require("@enum-plus")', 'window.EnumPlus');
+    return content.replace('require("../src")', 'window.EnumPlus');
   });
   const weekConfig = await rollup({
     input: weekConfigPath,
