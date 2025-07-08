@@ -4,6 +4,7 @@ es-legacy
 umd
 tslib
 tses
+types-legacy/*/*.d.ts
 node_modules
 npm-debug.log
 e2e/fixtures/scripts

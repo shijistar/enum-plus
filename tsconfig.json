@@ -31,5 +31,5 @@
     }
   },
   "include": ["src", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
-  "exclude": ["node_modules", "es", "es-legacy", "lib", "tslib"]
+  "exclude": ["node_modules", "es", "es-legacy", "lib", "tslib", "tses", "types-legacy"]
 }

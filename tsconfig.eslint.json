@@ -5,5 +5,5 @@
     // ensure that nobody can accidentally use this config for a build
     "noEmit": true
   },
-  "include": ["src", "scripts", "test", "e2e", "packages", "*.ts", ".*.ts"]
+  "include": ["src", "scripts", "test", "e2e", "tslib", "tses", "types-legacy", "packages", "*.ts", ".*.ts"]
 }
