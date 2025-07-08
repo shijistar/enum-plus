@@ -1,4 +1,4 @@
-import type { EnumInit } from '../../src/index';
+import type { EnumInit } from '@enum-plus';
 import {
   getStandardBooleanData,
   getStandardDateData,

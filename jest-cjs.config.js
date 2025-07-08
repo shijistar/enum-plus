@@ -5,9 +5,13 @@ const config = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/tslib/test/**/*.{spec,test}.js'],
   collectCoverage: true,
-  collectCoverageFrom: ['<rootDir>/tslib/src/**/*.js'],
+  collectCoverageFrom: ['<rootDir>/lib/**/*.js'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
-  coveragePathIgnorePatterns: ['<rootDir>/tslib/src/types.js', '<rootDir>/tslib/src/localize-interface.js'],
+  coveragePathIgnorePatterns: ['<rootDir>/lib/types.js', '<rootDir>/lib/localize-interface.js'],
+  moduleNameMapper: {
+    '^@enum-plus/(.*)$': '<rootDir>/lib/$1',
+    '^@enum-plus': '<rootDir>/lib/index.js',
+  },
   coverageThreshold: {
     global: {
       branches: 100,

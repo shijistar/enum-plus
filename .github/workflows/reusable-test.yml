@@ -16,7 +16,12 @@ on:
         default: false
 
 jobs:
-  node-modules-cache:
+  # This job is used to cache node_modules and build output
+  # 1. Install latest dependencies
+  # 2. Cache node_modules
+  # 3. Build package
+  # 4. Cache build output
+  install-and-build:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     steps:
@@ -63,29 +68,6 @@ jobs:
           name: modern-node-modules-${{ hashFiles('**/package-lock.json') }}
           path: node_modules
 
-  # This job is used to run tests on modern Node.js versions
-  # 1. Use default Node.js
-  # 2. Install latest dependencies
-  # 3. Cache node_modules
-  build-modern-node:
-    if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
-    needs: node-modules-cache
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-
-      - name: Restore modern node_modules cache
-        id: node_modules_cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
-
       - name: Build package
         run: npm run build
 
@@ -94,6 +76,7 @@ jobs:
         with:
           path: |
             tslib
+            tses
             lib
             es
             es-legacy
@@ -106,12 +89,12 @@ jobs:
           name: ${{ runner.os }}-modern-build-output-${{ github.sha }}
           path: |
             tslib
+            tses
             lib
             es
             es-legacy
             umd
-
-  build-legacy-node:
+  node-modules-legacy-cache:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     steps:
@@ -137,14 +120,37 @@ jobs:
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm install --legacy-peer-deps --ignore-scripts --no-package-lock
 
-  # Run tests on multiple matrix Node.js versions
-  run-jest-lib-modern:
+  # Run ts-tests on default Node.js version
+  run-jest-ts:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
-    needs: build-modern-node
+    needs: install-and-build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
+
+      - name: Restore modern node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Run jest tests from source codes
+        run: npm test
+
+  # Run Node.js CJS unit tests on multiple modern node versions
+  run-jest-cjs:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    needs: install-and-build
     strategy:
       matrix:
-        node-version: [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x]
+        node-version: [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x, 24.x]
     steps:
       - uses: actions/checkout@v4
 
@@ -165,20 +171,21 @@ jobs:
         with:
           path: |
             tslib
+            tses
             lib
             es
             es-legacy
             umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
-      - name: Run jest tests from lib directory
-        run: npm run task:jest:lib
+      - name: Run jest tests from tslib directory
+        run: npm run task:jest-cjs
 
-  # Run legacy tests on multiple matrix Node.js versions
-  run-jest-lib-legacy:
+  # Run CJS unit tests on multiple legacy node versions
+  run-jest-cjs-legacy:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
-    needs: [build-modern-node, build-legacy-node]
+    needs: [install-and-build, node-modules-legacy-cache]
     strategy:
       matrix:
         node-version: [7.x, 8.x, 9.x, 10.x, 11.x, 12.x, 13.x, 14.x, 15.x]
@@ -202,27 +209,31 @@ jobs:
         with:
           path: |
             tslib
+            tses
             lib
             es
             es-legacy
             umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
-      - name: Run jest tests from lib directory
-        run: npm run task:jest:lib
+      - name: Run jest tests from tslib directory
+        run: npm run task:jest-cjs
 
-  # Run ts-tests on default Node.js version
-  run-jest-ts:
+  # Run ESM unit tests on node versions that support Node.js ESM
+  run-jest-esm:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
-    needs: build-modern-node
+    needs: install-and-build
+    strategy:
+      matrix:
+        node-version: [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x, 24.x]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Restore modern node_modules cache
         uses: actions/cache@v4
@@ -231,13 +242,25 @@ jobs:
             node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Run jest tests from source codes
-        run: npm test
+      - name: Restore modern build output cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            tslib
+            tses
+            lib
+            es
+            es-legacy
+            umd
+          key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
-  run-e2e-tests:
+      - name: Run jest tests from tses directory
+        run: npm run task:jest-esm
+
+  # Run e2e tests
+  run-e2e:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
-    # needs: build-modern-node
     steps:
       - uses: actions/checkout@v4
 
@@ -273,7 +296,7 @@ jobs:
           name: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
       - name: Build package
-        # if: steps.download_build_output.outcome != 'success'
+        if: steps.download_build_output.outcome != 'success'
         run: npm run build
 
       - name: Run e2e tests
