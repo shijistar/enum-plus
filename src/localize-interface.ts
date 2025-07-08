@@ -1,4 +1,4 @@
-import type { EnumLocaleExtends } from 'enum-plus-extend';
+import type { EnumLocaleExtends } from './extension';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type LocalizeInterface = (content: EnumLocaleExtends['LocaleKeys'] | NonNullable<string> | undefined) => any;

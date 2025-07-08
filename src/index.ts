@@ -1,3 +1,5 @@
+/// <reference types="./extension" />
+
 export type {
   EnumInit,
   EnumItemInit,
@@ -11,7 +13,7 @@ export type {
   ArrayToMap,
 } from './types';
 export type { LocalizeInterface } from './localize-interface';
-export type { ToListConfig, IEnumItems } from './enum-values';
+export type { ToListConfig, IEnumItems } from './enum-items';
 export type { EnumItemClass, EnumItemOptions } from './enum-item';
 export type { IEnum, EnumInterface, EnumInitOptions } from './enum';
 

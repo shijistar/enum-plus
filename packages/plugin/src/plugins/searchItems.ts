@@ -80,7 +80,7 @@ const searchItemsPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
 };
 export default searchItemsPlugin;
 
-declare module 'enum-plus-extend' {
+declare module 'enum-plus/extension' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface EnumExtension<
     T extends EnumInit<K, V>,

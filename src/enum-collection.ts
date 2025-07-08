@@ -1,8 +1,8 @@
-import type { EnumExtension } from 'enum-plus-extend';
 import type { EnumItemOptions } from './enum-item';
 import { EnumItemClass } from './enum-item';
-import type { IEnumItems, ToListConfig } from './enum-values';
-import { EnumItemsArray } from './enum-values';
+import type { IEnumItems, ToListConfig } from './enum-items';
+import { EnumItemsArray } from './enum-items';
+import type { EnumExtension } from './extension';
 import { localizer } from './localize';
 import type {
   ColumnFilterItem,
@@ -30,6 +30,7 @@ export class EnumExtensionClass<
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > implements EnumExtension<T, K, V> {}
+
 /**
  * - **EN:** Enum collection
  * - **CN:** 枚举项集合

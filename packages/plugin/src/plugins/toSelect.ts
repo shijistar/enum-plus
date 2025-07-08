@@ -1,11 +1,11 @@
-import {
-  type EnumInit,
-  type EnumItemClass,
-  type EnumKey,
-  type EnumValue,
-  type IEnum,
-  type PluginFunc,
-  type ValueTypeFromSingleInit,
+import type {
+  EnumInit,
+  EnumItemClass,
+  EnumKey,
+  EnumValue,
+  IEnum,
+  PluginFunc,
+  ValueTypeFromSingleInit,
 } from 'enum-plus';
 import type { StandardEnumInit, StandardEnumItemInit } from 'lib/types';
 
@@ -108,7 +108,7 @@ export type SelectItem<V = EnumValue, FOV extends string = 'value', FOL extends 
 
 export default toSelectPlugin;
 
-declare module 'enum-plus-extend' {
+declare module 'enum-plus/extension' {
   interface EnumExtension<
     T extends EnumInit<K, V>,
     K extends EnumKey<T> = EnumKey<T>,

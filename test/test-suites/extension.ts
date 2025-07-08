@@ -1,5 +1,7 @@
 import type TestEngineBase from '../engines/base';
 
+// import './extension-type';
+
 const testExtension = (engine: TestEngineBase) => {
   engine.describe('Enum extends', () => {
     engine.test(
@@ -117,8 +119,7 @@ const testExtension = (engine: TestEngineBase) => {
   });
 };
 
-// Enum extensions
-declare module 'enum-plus-extend' {
+declare module '../../src/extension.d.ts' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface EnumExtension<T, K, V> {
     isWeekend(value: number): boolean;

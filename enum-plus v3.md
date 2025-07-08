@@ -18,7 +18,7 @@
 - [x] Release the `UMD` module format of `enum-plus` in `umd` folder.
 - [x] Reuse one copy of testing code for both `Jest` and `e2e` testing.
 - [x] Remove `private member` syntax from the codebase.
-- [ ] Add `typesVersions` to `package.json` to support multiple TypeScript versions. Also add another copy to `exports` field to fix [Node16's bug](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#exports-is-prioritized-over-typesversions).
+- [x] Support graceful downgrade for multiple TypeScript versions. For `v5.0` and later, Enum initializations allows omitting the `as const` assertion. For earlier versions, will be automatically downgraded to the earlier syntax, just manually adding `as const` as needed.
 
 ### Plugin System
 
