@@ -2,17 +2,25 @@
 
 # enum-plus Changelog
 
+## 2.4.2
+
+2025-7-8
+
+### Bug Fixes
+
+- 🐞 Fix the issue where `lib/extension.d.ts` was missing, which caused all enum types to default to `any`.
+
 ## 2.4.1
 
 2025-7-7
 
 ### Bug Fixes
 
-- 🐞 Fix the issue where `lib/extension.d.ts` was missing, which caused all enum types to default to any.
+- 🐞 Fix `lib/extension.d.ts` missing issue, but failed. Please use `v2.4.2` instead.
 
 ## 2.4.0
 
-> ⚠️ This version has a critical issue, please use `v2.4.1` instead.
+> ⚠️ This version has a critical issue, please use `v2.4.2` instead.
 
 2025-7-6
 
