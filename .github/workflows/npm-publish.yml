@@ -91,6 +91,7 @@ jobs:
 
       - name: Request the next version of enum-plus
         id: get_next_version_before_publish
+        continue-on-error: true
         run: |
           VERSION=$(npm view enum-plus@next version || "0.0.0")
           echo "NEXT_VERSION=$VERSION" >> $GITHUB_OUTPUT
