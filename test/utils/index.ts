@@ -1,6 +1,6 @@
-import type { EnumItemClass } from '../../src/enum-item';
-import type { EnumValue, IEnumItems } from '../../src/index';
-import type { EnumInit, EnumKey, StandardEnumItemInit, ValueTypeFromSingleInit } from '../../src/types';
+import type { EnumInit, EnumKey, EnumValue, IEnumItems, ValueTypeFromSingleInit } from '@enum-plus';
+import type { EnumItemClass } from '@enum-plus/enum-item';
+import type { StandardEnumItemInit } from '@enum-plus/types';
 
 export function toPlainEnums<
   T extends EnumInit<K, V>,

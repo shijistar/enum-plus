@@ -1,4 +1,4 @@
-import type * as EnumPlusNamespace from '../../src/index';
+import type * as EnumPlusNamespace from '@enum-plus';
 import type * as WeekConfigNamespace from '../data/week-config';
 import type * as WeekDataNamespace from '../data/week-data';
 import type * as SerializeJavascriptNamespace from '../utils/serialize-javascript';
