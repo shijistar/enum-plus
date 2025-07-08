@@ -1,4 +1,4 @@
-import { defaultLocalize, ENUM_ITEMS as NODE_ENUM_ITEMS } from '../../src/index';
+import { defaultLocalize, ENUM_ITEMS as NODE_ENUM_ITEMS } from '@enum-plus';
 import { getLocales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
