@@ -99,7 +99,7 @@ export class EnumCollectionClass<
       this._options,
       ...keys.map((key, index) => {
         const { value, label } = parsed[index];
-        return new EnumItemClass<T[K], K, V>(key, value, label, init[key], this._options).readonly();
+        return new EnumItemClass<T[K], K, V>(key, value, label, init[key], this._options);
       })
     );
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
