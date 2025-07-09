@@ -12,6 +12,8 @@
 
 ## 2.4.1
 
+> ⚠️ This version is deprecated. Please use `v2.4.2` instead.
+
 2025-7-7
 
 ### Bug Fixes
