@@ -76,35 +76,9 @@ export class EnumItemClass<
     }
     return content;
   }
-  private _readonlyPropMsg(name: string) {
+  private _readonlyPropWarning(name: string) {
     return `Cannot modify property "${name}" on EnumItem. EnumItem instances are readonly and should not be mutated.`;
   }
-  private _localizedProxy = new Proxy(this, {
-    get: (target, prop) => {
-      const origin = target[prop as keyof typeof this];
-      if (prop === 'label') {
-        return target.toString();
-      }
-      return origin;
-    },
-    // Not allowed to edit
-    set: (_, prop) => {
-      console.warn(this._readonlyPropMsg(String(prop)));
-      return true;
-    },
-    defineProperty: (_, prop) => {
-      console.warn(this._readonlyPropMsg(String(prop)));
-      return true;
-    },
-    deleteProperty: (_, prop) => {
-      console.warn(this._readonlyPropMsg(String(prop)));
-      return true;
-    },
-    setPrototypeOf: () => {
-      console.warn('Cannot change prototype of EnumItem. EnumItem instances are immutable.');
-      return true;
-    },
-  });
 
   /**
    * Instantiate an enum item
@@ -121,14 +95,43 @@ export class EnumItemClass<
     this.label = label;
     this.raw = raw;
     this._options = options;
-    // Object.freeze(this);
-  }
-  readonly() {
-    return this._localizedProxy;
+    Object.defineProperties(this, {
+      value: {
+        get: () => value,
+        set: () => console.warn(this._readonlyPropWarning('value')),
+        enumerable: true,
+        configurable: false,
+      },
+      label: {
+        get: () => this._localize(label) ?? label,
+        set: () => console.warn(this._readonlyPropWarning('label')),
+        enumerable: true,
+        configurable: false,
+      },
+      key: {
+        get: () => key,
+        set: () => console.warn(this._readonlyPropWarning('key')),
+        enumerable: true,
+        configurable: false,
+      },
+      raw: {
+        get: () => raw,
+        set: () => console.warn(this._readonlyPropWarning('raw')),
+        enumerable: true,
+        configurable: false,
+      },
+      [ENUM_ITEM]: {
+        value: this[ENUM_ITEM],
+        writable: false,
+        enumerable: true,
+        configurable: false,
+      },
+    });
+    Object.freeze(this);
   }
   // The priority of the toString method is lower than the valueOf method
   toString() {
-    return this._localize(this.label) ?? this.label;
+    return this._localize(this.label);
   }
   toLocaleString() {
     return this.toString();

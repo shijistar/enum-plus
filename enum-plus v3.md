@@ -25,7 +25,7 @@
 
 - [x] Introduce a new plugin system for extending features and ship them as separate npm packages.
 - [x] Add `Enum.install` which is used to install plugins.
-- [ ] Implement `enum-plus-plugin-antd` project and move Ant Design oriented code into the plugin, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. Set the default value of `valueField` to `value` and `labelField` to `label` in the plugin.
+- [x] Implement `enum-plus-plugin-antd` project and move Ant Design oriented code into the plugin, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. Set the default value of `valueField` to `value` and `labelField` to `label` in the plugin.
 
 ### Github Actions
 

@@ -141,37 +141,67 @@ const testEnumItem = (engine: TestEngineBase) => {
         const sundayModifiedRaw = sunday.raw;
 
         /* ----------------- delete ----------------- */
-        // @ts-expect-error: because try to delete the property forcefully
-        delete sunday.key;
-        const sundayDeletedKey = sunday.key;
-        // @ts-expect-error: because try to delete the property forcefully
-        delete sunday.value;
-        const sundayDeletedValue = sunday.value;
-        // @ts-expect-error: because try to delete the property forcefully
-        delete sunday.label;
-        const sundayDeletedLabel = sunday.label;
-        // @ts-expect-error: because try to delete the property forcefully
-        delete sunday.raw;
-        const sundayDeletedRaw = sunday.raw;
+        let sundayDeletedKey: boolean;
+        try {
+          // @ts-expect-error: because try to delete the property forcefully
+          sundayDeletedKey = delete sunday.key;
+        } catch (error) {
+          sundayDeletedKey = false;
+        }
+        let sundayDeletedValue: boolean;
+        try {
+          // @ts-expect-error: because try to delete the property forcefully
+          sundayDeletedValue = delete sunday.value;
+        } catch (error) {
+          sundayDeletedValue = false;
+        }
+        let sundayDeletedLabel: boolean;
+        try {
+          // @ts-expect-error: because try to delete the property forcefully
+          sundayDeletedLabel = delete sunday.label;
+        } catch (error) {
+          sundayDeletedLabel = false;
+        }
+        let sundayDeletedRaw: boolean;
+        try {
+          // @ts-expect-error: because try to delete the property forcefully
+          sundayDeletedRaw = delete sunday.raw;
+        } catch (error) {
+          sundayDeletedRaw = false;
+        }
 
         /* ----------------- defineProperty ----------------- */
-        Object.defineProperty(sunday, 'sayHello', { value: () => modifyValue });
-        const sundaySayHello = (sunday as unknown as { readonly sayHello: string }).sayHello;
-
+        let sundaySayHello: string | undefined;
+        try {
+          Object.defineProperty(sunday, 'sayHello', { value: () => modifyValue });
+          sundaySayHello = (sunday as unknown as { readonly sayHello: string }).sayHello;
+        } catch (error) {
+          sundaySayHello = undefined;
+        }
         /* ----------------- defineProperties ----------------- */
-        Object.defineProperties(sunday, {
-          sayHello: { value: () => modifyValue },
-          sayHi: { value: () => modifyValue },
-        });
-        const sundaySayHello2 = (sunday as unknown as { readonly sayHello: string }).sayHello;
+        let sundaySayHello2: string | undefined;
+        try {
+          Object.defineProperties(sunday, {
+            sayHello: { value: () => modifyValue },
+            sayHi: { value: () => modifyValue },
+          });
+          sundaySayHello2 = (sunday as unknown as { readonly sayHello: string }).sayHello;
+        } catch (error) {
+          sundaySayHello2 = undefined;
+        }
 
         /* ----------------- setPrototypeOf ----------------- */
-        Object.setPrototypeOf(sunday, { sayHello: () => modifyValue });
-        const sundaySayHello3 = (sunday as unknown as { readonly sayHello: string }).sayHello;
+        let sundaySayHello3: string | undefined;
+        try {
+          Object.setPrototypeOf(sunday, { sayHello: () => modifyValue });
+          sundaySayHello3 = (sunday as unknown as { readonly sayHello: string }).sayHello;
+        } catch (error) {
+          sundaySayHello3 = undefined;
+        }
 
-        // engine.expect(Object.isExtensible(sunday)).toBe(false);
         const isSundaySealed = Object.isSealed(sunday);
         const isSundayFrozen = Object.isFrozen(sunday);
+        const isSundayExtensible = Object.isExtensible(sunday);
         return {
           StandardWeekConfig,
           localeEN,
@@ -188,6 +218,7 @@ const testEnumItem = (engine: TestEngineBase) => {
           sundaySayHello3,
           isSundaySealed,
           isSundayFrozen,
+          isSundayExtensible,
         };
       },
       ({
@@ -206,20 +237,22 @@ const testEnumItem = (engine: TestEngineBase) => {
         sundaySayHello3,
         isSundaySealed,
         isSundayFrozen,
+        isSundayExtensible,
       }) => {
         engine.expect(sundayModifiedKey).toBe('Sunday');
         engine.expect(sundayModifiedValue).toBe(0);
         engine.expect(sundayModifiedLabel).toBe(localeEN.Sunday);
         engine.expect(sundayModifiedRaw).toEqual(StandardWeekConfig.Sunday);
-        engine.expect(sundayDeletedKey).toBe('Sunday');
-        engine.expect(sundayDeletedValue).toBe(0);
-        engine.expect(sundayDeletedLabel).toBe(localeEN.Sunday);
-        engine.expect(sundayDeletedRaw).toEqual(StandardWeekConfig.Sunday);
+        engine.expect(sundayDeletedKey).toBe(false);
+        engine.expect(sundayDeletedValue).toBe(false);
+        engine.expect(sundayDeletedLabel).toBe(false);
+        engine.expect(sundayDeletedRaw).toEqual(false);
         engine.expect(sundaySayHello).toBe(undefined);
         engine.expect(sundaySayHello2).toBe(undefined);
         engine.expect(sundaySayHello3).toBe(undefined);
-        engine.expect(isSundaySealed).toBe(false);
-        engine.expect(isSundayFrozen).toBe(false);
+        engine.expect(isSundaySealed).toBe(true);
+        engine.expect(isSundayFrozen).toBe(true);
+        engine.expect(isSundayExtensible).toBe(false);
       }
     );
   });
