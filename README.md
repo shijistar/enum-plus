@@ -961,24 +961,29 @@ enum-plus is designed to be compatible with a wide range of environments, includ
 
 ### Browser Environments
 
-- **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) field (such as webpack 5+, vite, rollup), `es` directory is imported, which targets `ES2020`. If you need to support earlier browsers, you can use `@babel/preset-env` to transpile to earlier syntax during the build process.
+- **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (such as webpack 5+, vite, rollup), `es` directory is imported, which targets `ES2020`. If you need to support earlier browsers, you can use `@babel/preset-env` to transpile to earlier syntax during the build process.
 
-- **Legacy Bundlers**: For bundlers without [exports](https://nodejs.org/api/packages.html#exports-sugar) field support (like Webpack 4), this library automatically falls back to the `main` field entry point, and `es-legacy` directory is imported, which targets `ES2015`.
+- **Legacy Bundlers**: For bundlers without [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration support (like Webpack 4), this library automatically falls back to the `main` field entry point, and `es-legacy` directory is imported, which targets `ES2015`.
 
 - **UMD Version**: For direct browser usage or static projects without bundlers, enum-plus provides UMD format files in the `umd` directory. These can be included via a `<script>` tag and accessed through `window.EnumPlus`. The UMD directory offers two versions:
 
   - `enum-plus.min.js`: Targets **`ES2020`**, suitable for modern browsers.
   - `enum-plus-legacy.min.js`: Targets **`ES2015`**, suitable for older browsers.
 
-> **Polyfill Strategy**: enum-plus ships without polyfills to minimize bundle size. For legacy browser support, you can include the following tools as needed:
->
-> - `core-js`
-> - `@babel/preset-env` with appropriate `useBuiltIns` settings
-> - Alternative polyfill implementations
+- **Polyfill Strategy**: enum-plus ships no polyfills to minimize bundle size. For legacy browser support, you can include the following tools as needed:
+  - `core-js`
+  - `@babel/preset-env` with appropriate `useBuiltIns` settings
+  - Alternative polyfill implementations
 
 ### **Node.js Environments**
 
-In Node.js environments, the default import path is the `lib` directory, which targets **`ES2016`**. This is compatible with Node.js `v7.x` and above.
+In Node.js environments, the EcmaScript version provided is **`ES2016`**.
+
+Additionally, enum-plus supports both `CommonJS` and `ESModule` module formats.
+
+- For versions that support the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (e.g., Node 14+), you can choose to use either `require` or `import` syntax to import the module.
+- For earlier Node.js versions, the default import is from the `lib` directory, which only supports the `CommonJS` module format, meaning you can only use the `require` syntax.
+- The minimum compatible version of Node.js is `v7.x`.
 
 ---
 
