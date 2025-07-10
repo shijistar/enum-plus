@@ -19,7 +19,7 @@
 - [x] Reuse one copy of testing code for both `Jest` and `e2e` testing.
 - [x] Remove `private member` syntax from the codebase.
 - [x] Support graceful downgrade for multiple TypeScript versions. For `v5.0` and later, Enum initializations allows omitting the `as const` assertion. For earlier versions, will be automatically downgraded to the earlier syntax, just manually adding `as const` as needed.
-- [ ] Remove the internal `proxy` from `EnumItemClass`, and use `getter` instead. The reason is to avoid self-references to support `JSON.stringify` and to run in WeChat mini-programs.
+- [x] Remove the internal `proxy` from `EnumItemClass`, and use `getter` instead. The reason is to avoid self-references to support `JSON.stringify` and to run in WeChat mini-programs.
 
 ### Plugin System
 

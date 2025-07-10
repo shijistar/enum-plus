@@ -27,7 +27,7 @@ The following methods are deprecated and permanently removed. However they both 
 
 ## 🛠 Recommended to upgrade TypeScript to 5.0
 
-We recommend upgrading your TypeScript version to `5.0` or later, as we introduced the [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) feature to simplify Enum initializations by removing the need for `as const`. The `Enum` can now be initialized with literal objects without the need of `as const` assertion.
+We recommend upgrading your TypeScript version to `v5.0` or later, as we have introduced the [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) feature to simplify Enum initializations. You don't have to use `as const` anymore. The `Enum` can now be initialized with literal objects by default.
 
 ```js
 const WeekEnum = Enum({
@@ -36,4 +36,4 @@ const WeekEnum = Enum({
 });
 ```
 
-> TypeScript `4.9` or earlier is still backward compatible. You will have to add `as const` manually, just like before.
+> If you can't upgrade, don't worry. TypeScript `4.9` or earlier is still backward compatible. You will have to add `as const` manually, just like before.
