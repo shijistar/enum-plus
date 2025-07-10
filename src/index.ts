@@ -1,5 +1,3 @@
-/// <reference types="./extension" />
-
 export type {
   EnumInit,
   EnumItemInit,

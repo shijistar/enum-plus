@@ -89,10 +89,6 @@
       "types@>=5": "./lib/types.d.ts",
       "types": "./types-legacy/pre-v5/types.d.ts"
     },
-    "./extension": {
-      "types@>=5": "./lib/extension.d.ts",
-      "types": "./types-legacy/pre-v5/extension.d.ts"
-    },
     "./localize-interface": {
       "types@>=5": "./lib/localize-interface.d.ts",
       "types": "./types-legacy/pre-v5/localize-interface.d.ts"

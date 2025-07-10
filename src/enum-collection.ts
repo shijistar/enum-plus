@@ -1,8 +1,8 @@
+import type { EnumExtension } from 'enum-plus/extension';
 import type { EnumItemOptions } from './enum-item';
 import { EnumItemClass } from './enum-item';
 import type { IEnumItems, ToListConfig } from './enum-items';
 import { EnumItemsArray } from './enum-items';
-import type { EnumExtension } from './extension';
 import { localizer } from './localize';
 import type {
   ColumnFilterItem,
