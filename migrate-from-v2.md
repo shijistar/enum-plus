@@ -15,15 +15,29 @@ The following methods are removed from the core library and moved to the `enum-p
 
 The following methods are deprecated and permanently removed. However they both have alternatives, please use the alternative methods instead.
 
-- ~~`enum.options`~~ → `enum.toSelect`
-- ~~`enum.menus`~~ → `enum.toMenu`
-- ~~`enum.filters`~~ → `enum.toFilter`
-- ~~`enum.valuesEnum`~~ → `enum.toValueMap`
+- _`enum.options`_ → `enum.toSelect`
+- _`enum.menus`_ → `enum.toMenu`
+- _`enum.filters`_ → `enum.toFilter`
+- _`enum.valuesEnum`_ → `enum.toValueMap`
 
-## 🛠 Type Declaration Changes
+## 🛠 Type changes
 
 - `EnumValuesArray` has has been deprecated and replaced with `EnumItemsArray`.
 - `IEnumValues` has been renamed to `IEnumItems`.
+
+## 🛠 The way to extend the Enum type has changed
+
+```typescript
+declare module 'enum-plus/extension' {
+  interface EnumExtension<T, K, V> {
+    hello(): string;
+  }
+}
+```
+
+- `moduleResolution` in tsconfig.json
+  - `node` or `node10`, TypeScript version `>=3.8`. The [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) is not supported, should add `as const` manually to the Enum initializations.
+  - `node16` or `nodenext`, TypeScript version `>=5.0`
 
 ## 🛠 Recommended to upgrade TypeScript to 5.0
 

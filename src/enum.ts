@@ -1,7 +1,7 @@
+import type { EnumExtension } from 'enum-plus/extension';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
 import type { IEnumItems } from './enum-items';
-import type { EnumExtension } from './extension';
 import { localizer } from './localize';
 import type {
   ArrayToMap,

@@ -1,4 +1,4 @@
-import type { EnumLocaleExtends } from './extension';
+import type { EnumLocaleExtends } from 'enum-plus/extension';
 
 export type { LocalizeInterface } from './localize-interface';
 

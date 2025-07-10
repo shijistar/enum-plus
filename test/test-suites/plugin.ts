@@ -38,7 +38,7 @@ interface PluginOptions {
   name?: string;
 }
 
-declare module '../../src/extension.d.ts' {
+declare module 'enum-plus/extension' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface EnumExtension<T, K, V> {
     sayHello(): string;

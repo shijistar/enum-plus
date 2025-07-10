@@ -6,7 +6,11 @@ const config = {
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/es/**/*.js'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
-  coveragePathIgnorePatterns: ['<rootDir>/es/types.js', '<rootDir>/es/localize-interface.js'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/es/types.js',
+    '<rootDir>/es/localize-interface.js',
+    '<rootDir>/es/extension.js',
+  ],
   setupFilesAfterEnv: ['<rootDir>/tses/test/jest.setup.js'],
   moduleNameMapper: {
     '^@enum-plus/(.*)$': '<rootDir>/es/$1',
