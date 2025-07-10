@@ -166,8 +166,7 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@tiny-codes/code-style-all-in-one": "^1.1.5",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.15.21",
-    "codecov": "^3.8.3",
+    "@types/node": "^22.16.2",
     "cross-env": "^7.0.3",
     "esbuild": "^0.25.4",
     "father": "^4.5.5",
@@ -182,7 +181,7 @@
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
-  "packageManager": "npm@11.4.1",
+  "packageManager": "npm@11.4.2",
   "engines": {
     "node": ">=7.10.1"
   },
