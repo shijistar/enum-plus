@@ -12,7 +12,7 @@ import type {
   ValueMap,
   ValueTypeFromSingleInit,
 } from './types';
-import { ENUM_ITEMS } from './utils';
+import { IS_ENUM_ITEMS } from './utils';
 
 /**
  * Enum items array, mostly are simple wrappers for EnumCollectionClass
@@ -33,12 +33,12 @@ export class EnumItemsArray<
   extends Array<EnumItemClass<T[K], K, V>>
   implements IEnumItems<T, K, V>
 {
-  private _raw: T;
+  private __raw__: T;
   /**
    * - **EN:** A boolean value indicates that this is an enum items array.
    * - **CN:** 布尔值，表示这是一个枚举项数组
    */
-  readonly [ENUM_ITEMS] = true;
+  readonly [IS_ENUM_ITEMS] = true;
 
   /**
    * Instantiate an enum items array
@@ -50,7 +50,7 @@ export class EnumItemsArray<
    */
   constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
     super(...items);
-    this._raw = raw;
+    this.__raw__ = raw;
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
@@ -99,11 +99,11 @@ export class EnumItemsArray<
   raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
     if (value == null) {
       // Return the original initialization object
-      return this._raw;
+      return this.__raw__;
     } else {
-      if (Object.keys(this._raw).some((k) => k === (value as string))) {
+      if (Object.keys(this.__raw__).some((k) => k === (value as string))) {
         // Find by key
-        return this._raw[value as K];
+        return this.__raw__[value as K];
       }
       // Find by value
       const itemByValue = this.find((i) => i.value === value);
@@ -215,6 +215,11 @@ export interface IEnumItems<
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
+  /**
+   * - **EN:** A boolean value indicates that this is an enum items array.
+   * - **CN:** 布尔值，表示这是一个枚举项数组
+   */
+  [IS_ENUM_ITEMS]: true;
   /**
    * - **EN:** The enum collection name, supports localization.
    *

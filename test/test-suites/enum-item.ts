@@ -1,4 +1,4 @@
-import { ENUM_ITEM as NODE_ENUM_ITEM } from '@enum-plus';
+import { IS_ENUM_ITEM as IS_ENUM_ITEM_IN_NODE } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 
 const testEnumItem = (engine: TestEngineBase) => {
@@ -44,17 +44,17 @@ const testEnumItem = (engine: TestEngineBase) => {
 
     engine.test(
       'should have [ENUM_ITEM] property to indicate that this is an enum item',
-      ({ EnumPlus: { Enum, ENUM_ITEM }, WeekConfig: { StandardWeekConfig } }) => {
+      ({ EnumPlus: { Enum, IS_ENUM_ITEM }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig);
-        return { weekEnum, ENUM_ITEM };
+        return { weekEnum, IS_ENUM_ITEM };
       },
-      ({ weekEnum, ENUM_ITEM }) => {
+      ({ weekEnum, IS_ENUM_ITEM }) => {
         weekEnum.items.forEach((item) => {
-          engine.expect(item[NODE_ENUM_ITEM]).toBe(true);
-          // @ts-expect-error: because ENUM_ITEM equals Symbol.for('[EnumItem]')
-          engine.expect(item[ENUM_ITEM]).toBe(true);
-          // @ts-expect-error: because ENUM_ITEM equals Symbol.for('[EnumItem]')
-          engine.expect(item[Symbol.for('[EnumItem]')]).toBe(true);
+          // @ts-expect-error: because IS_ENUM_ITEM equals Symbol.for('[IsEnumItem]')
+          engine.expect(item[IS_ENUM_ITEM]).toBe(true);
+          engine.expect(item[IS_ENUM_ITEM_IN_NODE]).toBe(true);
+          // @ts-expect-error: because IS_ENUM_ITEM and Symbol.for('[IsEnumItem]') are equal
+          engine.expect(item[Symbol.for('[IsEnumItem]')]).toBe(true);
         });
       }
     );

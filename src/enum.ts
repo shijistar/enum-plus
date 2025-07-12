@@ -12,7 +12,7 @@ import type {
   LocalizeInterface,
   ValueTypeFromSingleInit,
 } from './types';
-import type { ITEMS, KEYS } from './utils';
+import type { IS_ENUM_COLLECTION, ITEMS, KEYS, LABELS, VALUES } from './utils';
 
 export interface EnumInterface {
   /**
@@ -118,6 +118,12 @@ export type IEnum<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > = IEnumItems<T, K, V> &
   EnumExtension<T, K, V> & {
+    /**
+     * - **EN:** A boolean value indicates that this is an enum collection instance.
+     * - **CN:** 布尔值，表示这是一个枚举集合实例
+     */
+    [IS_ENUM_COLLECTION]: true;
+  } & {
     // Add enum item values, just like native enums
     [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -165,6 +171,52 @@ export type IEnum<
          * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
          */
         readonly keys: K[];
+      }) &
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (T extends { values: any }
+    ? {
+        /**
+         * - **EN:** Alias for the `values` array, when any enum key conflicts with `values`, you can
+         *   access all enum values through this alias
+         * - **CN:** `values`数组的别名，当任何枚举的key与`values`冲突时，可以通过此别名访问所有枚举项的values
+         */
+        readonly [VALUES]: V[];
+      }
+    : {
+        /**
+         * - **EN:** Get all values of the enumeration items as an array
+         *
+         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
+         * > any modification methods
+         *
+         * - **CN:** 获取枚举项的全部values列表
+         *
+         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+         */
+        readonly values: V[];
+      }) &
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (T extends { labels: any }
+    ? {
+        /**
+         * - **EN:** Alias for the `labels` array, when any enum key conflicts with `labels`, you can
+         *   access all enum labels through this alias
+         * - **CN:** `labels`数组的别名，当任何枚举的key与`labels`冲突时，可以通过此别名访问所有枚举项的labels
+         */
+        readonly [LABELS]: string[];
+      }
+    : {
+        /**
+         * - **EN:** Get all labels of the enumeration items as an array
+         *
+         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
+         * > any modification methods
+         *
+         * - **CN:** 获取枚举项的全部labels列表
+         *
+         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+         */
+        readonly labels: string[];
       });
 
 export const Enum = (<

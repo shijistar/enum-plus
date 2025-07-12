@@ -15,25 +15,46 @@ export const ITEMS = Symbol.for('[items]');
 export const KEYS = Symbol.for('[keys]');
 
 /**
+ * - **EN:** Alias of `values`. If the enum contains a field with the same name as `values`, you can
+ *   access it by this Symbol as the field name
+ * - **CN:** 枚举values集合的别名。如果枚举中包含了`values`的同名字段，可以通过此Symbol作为字段名来访问
+ */
+export const VALUES = Symbol.for('[values]');
+
+/**
+ * - **EN:** Alias of `labels`. If the enum contains a field with the same name as `labels`, you can
+ *   access it by this Symbol as the field name
+ * - **CN:** 枚举labels集合的别名。如果枚举中包含了`labels`的同名字段，可以通过此Symbol作为字段名来访问
+ */
+export const LABELS = Symbol.for('[labels]');
+
+/**
+ * - **EN:** Alias of `raw`. If the enum contains a field with the same name as `raw`, you can access
+ *   it by this Symbol as the field name
+ * - **CN:** 枚举raw集合的别名。如果枚举中包含了`raw`的同名字段，可以通过此Symbol作为字段名来访问
+ */
+export const RAW = Symbol.for('[raw]');
+
+/**
  * - **EN:** Check whether the object is an instance of `EnumItem`. If the object has this field and
  *   its value is `true`, it is an `EnumItem` instance.
  * - **CN:** 判断对象是否 `EnumItem` 实例，如果对象存在此字段且值为`true`，则是 `EnumItem` 实例
  */
-export const ENUM_ITEM = Symbol.for('[EnumItem]');
+export const IS_ENUM_ITEM = Symbol.for('[IsEnumItem]');
 
 /**
  * - **EN:** Check whether the object is an instance of `EnumCollection`. If the object has this field
  *   and its value is `true`, it is an `EnumCollection` instance.
  * - **CN:** 判断对象是否 `EnumCollection` 实例，如果对象存在此字段且值为`true`，则是 `EnumCollection` 实例
  */
-export const ENUM_COLLECTION = Symbol.for('[EnumCollection]');
+export const IS_ENUM_COLLECTION = Symbol.for('[IsEnumCollection]');
 
 /**
  * - **EN:** Check whether the object is an instance of `EnumItems`. If the object has this field and
  *   its value is `true`, it is an `EnumItems` instance.
  * - **CN:** 判断对象是否 `EnumItems` 实例，如果对象存在此字段且值为`true`，则是 `EnumItems` 实例
  */
-export const ENUM_ITEMS = Symbol.for('[EnumItems]');
+export const IS_ENUM_ITEMS = Symbol.for('[IsEnumItems]');
 
 /**
  * - **EN:** Default global localization function, only used to resolve built-in resources into

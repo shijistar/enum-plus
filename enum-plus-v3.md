@@ -8,12 +8,15 @@
 - [x] Remove deprecated `enum.menus`
 - [x] Remove deprecated `enum.filters`
 - [x] Remove deprecated `enum.valuesEnum`
-- [ ] Change the behavior of `enum.values`, now it returns an array of the member raw values. Use `enum.items` for the old behavior.
-- [ ] Add `enum.labels` property, which returns an readonly array of the member labels.
+- [x] Change the behavior of `enum.values`, now it returns an array of the member raw values. Use `enum.items` for the old behavior.
+- [x] Add `enum.labels` property, which returns an readonly array of the member labels.
 - [ ] Add `enum.find` method, which allows searching for enum items by specific field, including _meta_ fields (i.e. custom fields).
 - [ ] Add `enum.meta` object to aggregate all custom fields defined in the enum. The keys are the field names, and values are the raw values of each field. It's a good way of accessing custom fields without iterating through the enum items.
 - [x] Add `enum.toList`, method which is an alternative of `toSelect`、`toMenu`、`toFilter`. The latter methods are moving out of the core library and will be available as plugins.
 - [ ] Add `enum.toMap` as an alternative of `enum.toValueMap`.
+<!-- - [ ] 增加isEnum方法，为instanceof增加断言 -->
+- [ ] Add `Enum.isEnum` method to check if an object is an instance of `Enum`.
+- [ ] Add type assertion for `instanceof` check of EnumCollection.
 - [x] Simplify the enum initialization that no longer requires `as const` assertion. _by @otomad_
 - [x] Release the `UMD` module format of `enum-plus` in `umd` folder.
 - [x] Reuse one copy of testing code for both `Jest` and `e2e` testing.

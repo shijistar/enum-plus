@@ -1,4 +1,4 @@
-import { defaultLocalize, ENUM_ITEMS as NODE_ENUM_ITEMS } from '@enum-plus';
+import { defaultLocalize, IS_ENUM_ITEMS as ENUM_ITEMS_IN_NODE } from '@enum-plus';
 import { getLocales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
@@ -244,17 +244,16 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
 
   engine.test(
     'should have [ENUM_ITEMS] property to indicate that this is an enum items array',
-    ({ EnumPlus: { Enum, ENUM_ITEMS }, WeekConfig: { StandardWeekConfig } }) => {
+    ({ EnumPlus: { Enum, IS_ENUM_ITEMS }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum, ENUM_ITEMS };
+      return { weekEnum, IS_ENUM_ITEMS };
     },
-    ({ weekEnum, ENUM_ITEMS }) => {
-      // @ts-expect-error: because ENUM_ITEMS is hidden by the interface, but it actually exists
-      engine.expect(weekEnum.items[NODE_ENUM_ITEMS]).toBe(true);
-      // @ts-expect-error: because ENUM_ITEMS is hidden by the interface, but it actually exists
-      engine.expect(weekEnum.items[ENUM_ITEMS]).toBe(true);
-      // @ts-expect-error: because ENUM_ITEMS equals Symbol.for('[EnumItems]')
-      engine.expect(weekEnum.items[Symbol.for('[EnumItems]')]).toBe(true);
+    ({ weekEnum, IS_ENUM_ITEMS }) => {
+      // @ts-expect-error: because IS_ENUM_ITEMS is hidden by the interface, but it actually exists
+      engine.expect(weekEnum.items[IS_ENUM_ITEMS]).toBe(true);
+      engine.expect(weekEnum.items[ENUM_ITEMS_IN_NODE]).toBe(true);
+      // @ts-expect-error: because IS_ENUM_ITEMS and Symbol.for('[IsEnumItems]') are equal
+      engine.expect(weekEnum.items[Symbol.for('[IsEnumItems]')]).toBe(true);
     }
   );
 

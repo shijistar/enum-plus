@@ -1,6 +1,6 @@
 import { localizer } from './localize';
 import type { EnumItemInit, EnumKey, EnumValue, LocalizeInterface, ValueTypeFromSingleInit } from './types';
-import { ENUM_ITEM } from './utils';
+import { IS_ENUM_ITEM } from './utils';
 
 /**
  * Enum item class
@@ -44,7 +44,7 @@ export class EnumItemClass<
    * - **EN:** A boolean value indicates that this is an enum item instance.
    * - **CN:** 布尔值，表示这是一个枚举项实例
    */
-  readonly [ENUM_ITEM] = true;
+  readonly [IS_ENUM_ITEM] = true;
   /**
    * Auto convert to a correct primitive type. This method is called when the object is used in a
    * context that requires a primitive value.
@@ -120,8 +120,8 @@ export class EnumItemClass<
         enumerable: true,
         configurable: false,
       },
-      [ENUM_ITEM]: {
-        value: this[ENUM_ITEM],
+      [IS_ENUM_ITEM]: {
+        value: this[IS_ENUM_ITEM],
         writable: false,
         enumerable: true,
         configurable: false,

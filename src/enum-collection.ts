@@ -17,7 +17,8 @@ import type {
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
 } from './types';
-import { ENUM_COLLECTION, ITEMS, KEYS } from './utils';
+import type { IS_ENUM_ITEMS } from './utils';
+import { IS_ENUM_COLLECTION, ITEMS, KEYS, LABELS, VALUES } from './utils';
 
 /**
  * - **EN:** Enum collection extension base class, used to extend the Enums
@@ -41,16 +42,16 @@ export class EnumCollectionClass<
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   >
   extends EnumExtensionClass<T, K, V>
-  implements IEnumItems<T, K, V>
+  implements Omit<IEnumItems<T, K, V>, typeof IS_ENUM_ITEMS>
 {
-  private _options: EnumItemOptions | undefined;
+  private __options__: EnumItemOptions | undefined;
   readonly items!: EnumItemsArray<T, K, V>;
   readonly keys!: K[];
   /**
    * - **EN:** A boolean value indicates that this is an enum collection instance.
    * - **CN:** 布尔值，表示这是一个枚举集合实例
    */
-  readonly [ENUM_COLLECTION] = true;
+  readonly [IS_ENUM_COLLECTION] = true;
   [Symbol.hasInstance](this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
     // intentionally use == to support both number and string format value
     return this.items.some(
@@ -69,16 +70,18 @@ export class EnumCollectionClass<
    *   set.
    */
   get name(): string | undefined {
-    const localize = this._options?.localize ?? localizer.localize;
+    const localize = this.__options__?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
-      return localize(this._options?.name);
+      return localize(this.__options__?.name);
     }
-    return this._options?.name;
+    return this.__options__?.name;
   }
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
-    this._options = options;
+    this.__options__ = options;
+
+    // Generate keys array
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
     const keys = Object.keys(init).filter(
       (k) => !(/^-?\d+$/.test(k) && k === `${init[init[k as K] as K] ?? ''}`)
@@ -86,28 +89,46 @@ export class EnumCollectionClass<
     const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V>(init[key], key));
     keys.forEach((key, index) => {
       const { value } = parsed[index];
-      // @ts-expect-error: because of dynamically define property
+      // @ts-expect-error: because of dynamic property
       this[key] = value;
     });
     Object.freeze(keys);
     // @ts-expect-error: because use KEYS to avoid naming conflicts in case of 'keys' field name is taken
     this[Object.keys(init).some((k) => k === 'keys') ? KEYS : 'keys'] = keys;
 
-    // Build enum item data
+    // Generate values array
+    const values = parsed.map((item) => item.value);
+    Object.freeze(values);
+    // @ts-expect-error: because use VALUES to avoid naming conflicts in case of 'values' field name is taken
+    this[Object.keys(init).some((k) => k === 'values') ? VALUES : 'values'] = values;
+
+    // Generate enum items array
     const items = new EnumItemsArray<T, K, V>(
       init,
-      this._options,
+      this.__options__,
       ...keys.map((key, index) => {
         const { value, label } = parsed[index];
-        return new EnumItemClass<T[K], K, V>(key, value, label, init[key], this._options);
+        return new EnumItemClass<T[K], K, V>(key, value, label, init[key], this.__options__);
       })
     );
+    Object.freeze(items);
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[Object.keys(init).some((k) => k === 'items') ? ITEMS : 'items'] = items;
 
+    // Generate labels array
+    Object.defineProperty(this, Object.keys(init).some((k) => k === 'labels') ? LABELS : 'labels', {
+      enumerable: true,
+      configurable: false,
+      get: () => {
+        // Cannot save to static array because labels may be localized contents
+        // Should not use `items` in the closure because the getter function cannot be fully serialized
+        return ((this as unknown as { [ITEMS]: EnumItemsArray<T, K, V> })[ITEMS] ?? this.items).map(
+          (item) => item.label
+        );
+      },
+    });
+
     Object.freeze(this);
-    Object.freeze(this.items);
-    Object.freeze(this.keys);
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {

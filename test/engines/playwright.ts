@@ -1,4 +1,6 @@
+import * as utils from '@enum-plus/utils';
 import { defaultLocalize, Enum } from '@enum-plus';
+import { EnumExtensionClass } from '@enum-plus/enum-collection';
 import { localizer } from '@enum-plus/localize';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
@@ -85,7 +87,12 @@ export class PlaywrightEngine extends TestEngineBase {
       return serializedStr;
     }, serializedEvaluateParams);
 
-    const initialState = parse(resultStr, { /* debug: true, */ prettyPrint: false });
+    const globalClosure = { Enum, EnumExtensionClass, localizer, ...utils };
+    const initialState = parse(resultStr, {
+      closure: globalClosure,
+      // debug: true,
+      prettyPrint: false,
+    });
     // Restore the lang to the Enum.localize
     setLang(initialState.lang, Enum, getLocales, defaultLocalize);
     if (!initialState.EnumLocalize) {
@@ -96,7 +103,7 @@ export class PlaywrightEngine extends TestEngineBase {
     // because the code is like `const localize = this._options?.localize ?? Enum.localize;`,
     // it seems that Enum is a global variable, but actually it is not, we simulate it as a closure context.
     const testResult = parse(resultStr, {
-      closure: { Enum, localizer, ...initialState },
+      closure: { ...globalClosure, ...initialState },
     });
     // console.log('deserialize result');
     // console.log(testResult);

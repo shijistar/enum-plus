@@ -205,7 +205,7 @@ export function parse(input: string, options?: ParseOptions) {
     const refData = JSON.parse(code) as SerializedResult;
     const refValue = executeDeserialize(refData, {
       ...options,
-      closure: { ...refMap, ...closure },
+      closure: { ...closure, ...refMap },
       variablePrefix,
       enablePatches: false,
     });
@@ -264,9 +264,9 @@ function getDeserializeJavascriptCode(result: SerializedResult, options: Interna
   // console.log('deserializeJavascript', str, sourceCode);
   const escapeSingleQuote = (str: string) => str.replace(/'/g, isPrint ? "\\\\'" : "\\'");
   const content = `${closure ? `const { ${Object.keys(closure ?? {}).join(', ')} } = ${VP}context || {};` : ''}
-const { get } = ${VP}options;
-const deserializeResult = (\n${decodeFormat(sourceCode, { tokenStart, tokenEnd })}\n);
-const patches = ${
+  const { get } = ${VP}options;
+  const deserializeResult = (\n${decodeFormat(sourceCode, { tokenStart, tokenEnd })}\n);
+  const patches = ${
     enablePatches
       ? decodeFormat(
           JSON.stringify(
@@ -283,32 +283,55 @@ const patches = ${
       : '[]'
   };
 
-const restoreSymbolKeys = (obj, paths=[]) => {
-  if (obj && !paths.includes(obj)) {
-    if (typeof obj === 'object') {
-      Object.keys(obj).forEach((key) => {
-        if (key.match(new RegExp('^${escapeRegExp(SymbolKeyRegExps[0], { escapeTwice: isPrint, format: escapeSingleQuote })}$')) || key.match(new RegExp('^${escapeRegExp(SymbolKeyRegExps[1], { escapeTwice: isPrint, format: escapeSingleQuote })}$'))) {
-          obj[new Function('return ' + key.replace(new RegExp('^${escapeRegExp(SymbolKeyPrefixRegExp, { escapeTwice: isPrint })}'), '').replace(new RegExp('${escapeRegExp(SymbolKeySuffixRegExp, { escapeTwice: isPrint })}$'), ''))()] = obj[key];
-          delete obj[key];
+  // Apply patches to the deserialized object
+  patches.forEach(({ path, context }) => {
+    const sourceObj = path?.length ? get(deserializeResult, path) : deserializeResult;
+    if (sourceObj) {
+      getFullKeys(context).forEach((key) => {
+        if (sourceObj[key] == null) {
+          sourceObj[key] = context[key];
         }
       });
-      for (const key of [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)]) {
-        if (typeof obj[key] === 'object') {
-          restoreSymbolKeys(obj[key], [obj]);
+    }
+  });
+
+  // Restore values for Symbol keys
+  restoreSymbolKeys(deserializeResult);
+
+
+  function restoreSymbolKeys(obj, paths = []) {
+    if (obj && !paths.includes(obj)) {
+      if (typeof obj === 'object') {
+        Object.keys(obj).forEach((key) => {
+          if (
+            key.match(new RegExp('^${escapeRegExp(SymbolKeyRegExps[0], { escapeTwice: isPrint, format: escapeSingleQuote })}$')) || 
+            key.match(new RegExp('^${escapeRegExp(SymbolKeyRegExps[1], { escapeTwice: isPrint, format: escapeSingleQuote })}$'))
+          ) {
+            const symbolExpr = key
+              .replace(new RegExp('^${escapeRegExp(SymbolKeyPrefixRegExp, { escapeTwice: isPrint })}'), '')
+              .replace(new RegExp('${escapeRegExp(SymbolKeySuffixRegExp, { escapeTwice: isPrint })}$'), '');
+            const symbolKey = new Function('return ' + symbolExpr)();
+            obj[symbolKey] = obj[key];
+            delete obj[key];
+          }
+        });
+        for (const key of [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)]) {
+          if (typeof obj[key] === 'object') {
+            restoreSymbolKeys(obj[key], [obj]);
+          }
         }
       }
     }
   }
-}
-restoreSymbolKeys(deserializeResult);
 
-patches.forEach(({ path, context }) => {
-  const sourceObj = path?.length ? get(deserializeResult, path) : deserializeResult;
-  if (sourceObj) {
-    Object.assign(sourceObj, context);
+  function getFullKeys(obj) {
+    return [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)].filter((key) => {
+      const descriptor = Object.getOwnPropertyDescriptor(obj, key);
+      return descriptor && ('value' in descriptor || descriptor.get);
+    });
   }
-});
-return deserializeResult;`;
+
+  return deserializeResult;`;
   return content;
 }
 
@@ -472,7 +495,7 @@ export function pickPrototype(
   source: any,
   options?: Pick<StringifyOptions, 'preserveClassConstructor'>
 ): Record<string | symbol, any> {
-  const { preserveClassConstructor } = options ?? {};
+  const { preserveClassConstructor = true } = options ?? {};
   const target: Record<string | symbol, any> = Object.create(null);
   const ignoredKeys = [preserveClassConstructor ? undefined : 'constructor'].filter(Boolean) as (string | symbol)[];
   let proto = Object.getPrototypeOf(source);

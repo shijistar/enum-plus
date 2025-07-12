@@ -354,6 +354,8 @@ const testLocalization = (engine: TestEngineBase) => {
     locales: typeof localeEN | typeof localeCN | typeof noLocale,
     getStandardWeekData: typeof getStandardWeekDataInterface
   ) {
+    engine.expect(Array.from(weekEnum.labels)).toEqual(weekEnum.keys.map((key) => locales[key]));
+
     const sunday = weekEnum.items[0];
     engine.expect(sunday.label).toBe(locales.Sunday);
     engine.expect(sunday.toString()).toBe(locales.Sunday);
