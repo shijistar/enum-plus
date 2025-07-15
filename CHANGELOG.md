@@ -53,7 +53,7 @@ const MyEnum = Enum({
   - `enums.filters`
   - `enums.valuesEnum`
 - Please use the new methods `Enum.items`, `Enum.toSelect`, `Enum.toMenu`, `Enum.toFilter`, and `Enum.toValueMap` instead, which are introduced since `v2.1.0`.
-- `ENUM_COLLECTION` symbol is renamed to `IS_ENUM_COLLECTION`.
+- `ENUM_COLLECTION` symbol is renamed to `IS_ENUM`.
 - `ENUM_ITEM` symbol is renamed to `IS_ENUM_ITEM`.
 - `ENUM_ITEMS` symbol is renamed to `IS_ENUM_ITEMS`.
 - `EnumValuesArray` interface is renamed to `EnumItemsArray`.

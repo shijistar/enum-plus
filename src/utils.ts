@@ -36,23 +36,20 @@ export const LABELS = Symbol.for('[labels]');
 export const RAW = Symbol.for('[raw]');
 
 /**
- * - **EN:** Check whether the object is an instance of `EnumItem`. If the object has this field and
- *   its value is `true`, it is an `EnumItem` instance.
- * - **CN:** 判断对象是否 `EnumItem` 实例，如果对象存在此字段且值为`true`，则是 `EnumItem` 实例
+ * - **CN:** 判断对象是否 `EnumItem` 实例
+ * - **EN:** Check whether the object is an `EnumItem` instance
  */
 export const IS_ENUM_ITEM = Symbol.for('[IsEnumItem]');
 
 /**
- * - **EN:** Check whether the object is an instance of `EnumCollection`. If the object has this field
- *   and its value is `true`, it is an `EnumCollection` instance.
- * - **CN:** 判断对象是否 `EnumCollection` 实例，如果对象存在此字段且值为`true`，则是 `EnumCollection` 实例
+ * - **EN:** Check whether the object is an enum type
+ * - **CN:** 判断对象是否枚举类型
  */
-export const IS_ENUM_COLLECTION = Symbol.for('[IsEnumCollection]');
+export const IS_ENUM = Symbol.for('[IsEnum]');
 
 /**
- * - **EN:** Check whether the object is an instance of `EnumItems`. If the object has this field and
- *   its value is `true`, it is an `EnumItems` instance.
- * - **CN:** 判断对象是否 `EnumItems` 实例，如果对象存在此字段且值为`true`，则是 `EnumItems` 实例
+ * - **EN:** Check whether the object is an `EnumItems` collection array
+ * - **CN:** 判断对象是否 `EnumItems` 集合数组
  */
 export const IS_ENUM_ITEMS = Symbol.for('[IsEnumItems]');
 

@@ -1,4 +1,4 @@
-import { defaultLocalize, IS_ENUM_COLLECTION as IS_ENUM_COLLECTION_IN_NODE } from '@enum-plus';
+import { defaultLocalize, IS_ENUM as IS_ENUM_IN_NODE } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils/index';
 import { addEnumValuesTestSuite } from './enum-items';
@@ -159,16 +159,16 @@ const testEnumCollection = (engine: TestEngineBase) => {
 
     engine.test(
       'should have [ENUM_COLLECTION] property to indicate that this is an enum collection',
-      ({ EnumPlus: { Enum, IS_ENUM_COLLECTION }, WeekConfig: { StandardWeekConfig } }) => {
+      ({ EnumPlus: { Enum, IS_ENUM }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
-        return { week, IS_ENUM_COLLECTION };
+        return { week, IS_ENUM };
       },
-      ({ week, IS_ENUM_COLLECTION }) => {
-        // @ts-expect-error: because IS_ENUM_COLLECTION is hidden by the interface, but it actually exists
-        engine.expect(week[IS_ENUM_COLLECTION]).toBe(true);
-        engine.expect(week[IS_ENUM_COLLECTION_IN_NODE]).toBe(true);
-        // @ts-expect-error: because IS_ENUM_COLLECTION and Symbol.for('[IsEnumCollection]') are equal
-        engine.expect(week[Symbol.for('[IsEnumCollection]')]).toBe(true);
+      ({ week, IS_ENUM }) => {
+        // @ts-expect-error: because IS_ENUM is hidden by the interface, but it actually exists
+        engine.expect(week[IS_ENUM]).toBe(true);
+        engine.expect(week[IS_ENUM_IN_NODE]).toBe(true);
+        // @ts-expect-error: because IS_ENUM and Symbol.for('[IsEnum]') are equal
+        engine.expect(week[Symbol.for('[IsEnum]')]).toBe(true);
       }
     );
 

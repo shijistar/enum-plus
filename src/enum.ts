@@ -12,7 +12,7 @@ import type {
   LocalizeInterface,
   ValueTypeFromSingleInit,
 } from './types';
-import type { IS_ENUM_COLLECTION, ITEMS, KEYS, LABELS, VALUES } from './utils';
+import type { IS_ENUM, ITEMS, KEYS, LABELS, VALUES } from './utils';
 
 export interface EnumInterface {
   /**
@@ -88,6 +88,8 @@ export interface EnumInterface {
    * > 根据不同的环境或技术框架，返回值可能是字符串以外类型，例如可能是一个组件以支持动态语言切换，而枚举项的`label`也会随之变化。
    */
   localize: LocalizeInterface | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isEnum<T>(value: T): value is IEnum<any, any, any>;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
    *   extension methods
@@ -122,7 +124,7 @@ export type IEnum<
      * - **EN:** A boolean value indicates that this is an enum collection instance.
      * - **CN:** 布尔值，表示这是一个枚举集合实例
      */
-    [IS_ENUM_COLLECTION]: true;
+    [IS_ENUM]: true;
   } & {
     // Add enum item values, just like native enums
     [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;

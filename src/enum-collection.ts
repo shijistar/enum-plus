@@ -18,7 +18,7 @@ import type {
   ValueTypeFromSingleInit,
 } from './types';
 import type { IS_ENUM_ITEMS } from './utils';
-import { IS_ENUM_COLLECTION, ITEMS, KEYS, LABELS, VALUES } from './utils';
+import { IS_ENUM, ITEMS, KEYS, LABELS, VALUES } from './utils';
 
 /**
  * - **EN:** Enum collection extension base class, used to extend the Enums
@@ -51,7 +51,7 @@ export class EnumCollectionClass<
    * - **EN:** A boolean value indicates that this is an enum collection instance.
    * - **CN:** 布尔值，表示这是一个枚举集合实例
    */
-  readonly [IS_ENUM_COLLECTION] = true;
+  readonly [IS_ENUM] = true;
   [Symbol.hasInstance](this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
     // intentionally use == to support both number and string format value
     return this.items.some(

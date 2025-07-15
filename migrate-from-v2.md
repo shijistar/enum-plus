@@ -4,6 +4,14 @@
 
 The `enum.values` property was originally planned for removal, but after some discussions, we decided to restore it and change its function: it now represents an array of the member raw values. Therefore, if you are still using the old `values`, please change to the `enum.items` instead.
 
+## 🛠 Symbols changed
+
+The following symbols have been renamed to better reflect their purpose:
+
+- `ENUM_COLLECTION` is now `IS_ENUM`
+- `ENUM_ITEM` is now `IS_ENUM_ITEM`
+- `ENUM_ITEMS` is now `IS_ENUM_ITEMS`
+
 ## 🛠 AntDesign oriented methods have been moved
 
 The following methods are removed from the core library and moved to the `enum-plus-plugin-antd` package. Please install the package and use them from there.
