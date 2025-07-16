@@ -12,7 +12,71 @@ import type {
   LocalizeInterface,
   ValueTypeFromSingleInit,
 } from './types';
-import type { IS_ENUM, ITEMS, KEYS, LABELS, VALUES } from './utils';
+import type { ITEMS, KEYS, LABELS, VALUES } from './utils';
+import { IS_ENUM } from './utils';
+
+export const Enum = (<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+>(
+  init: T | T[],
+  options?: EnumInitOptions<T, K, V>
+): IEnum<T, K, V> & EnumExtension<T, K, V> => {
+  if (Array.isArray(init)) {
+    const initMap = getInitMapFromArray<T, K, V>(init, options);
+    return new EnumCollectionClass<T, K, V>(initMap, options) as unknown as IEnum<T, K, V>;
+  } else {
+    return new EnumCollectionClass<T, K, V>(init, options) as unknown as IEnum<T, K, V>;
+  }
+}) as EnumInterface;
+
+/*
+ * Get or set the global localization function.
+ * Use defineProperty here to prevent circular dependencies.
+ */
+Object.defineProperty(Enum, 'localize', {
+  get: () => localizer.localize,
+  set: (localize: LocalizeInterface) => {
+    localizer.localize = localize;
+  },
+});
+Enum.extends = function (obj: Record<string, unknown> | undefined) {
+  if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
+    throw new Error('The extension of Enum must be an object');
+  }
+  Object.assign(EnumExtensionClass.prototype, obj);
+};
+Enum.install = <T = unknown>(plugin: PluginFunc<T>, options?: T) => {
+  plugin(options, Enum);
+};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Enum.isEnum = (value: unknown): value is IEnum<any, any, any> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return Boolean(value && typeof value === 'object' && (value as any)[IS_ENUM] === true);
+};
+
+function getInitMapFromArray<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+>(init: T[], options?: EnumInitOptions<T, K, V>) {
+  const { getValue = 'value' as keyof T, getLabel = 'label' as keyof T, getKey = 'key' as keyof T } = options ?? {};
+  return init.reduce((acc, item) => {
+    const value = typeof getValue === 'function' ? getValue(item) : (item[getValue] as V);
+    const label = typeof getLabel === 'function' ? getLabel(item) : item[getLabel];
+    let key: K | undefined = undefined;
+    if (getKey) {
+      key = typeof getKey === 'function' ? (getKey(item) as K) : (item[getKey] as K);
+    }
+    acc[(key ?? value) as unknown as K] = {
+      ...item,
+      label: label || (key ?? '') || (value != null ? value.toString() : value),
+      value,
+    } as LabelOnlyEnumItemInit as T[K];
+    return acc;
+  }, {} as T);
+}
 
 export interface EnumInterface {
   /**
@@ -88,8 +152,21 @@ export interface EnumInterface {
    * > 根据不同的环境或技术框架，返回值可能是字符串以外类型，例如可能是一个组件以支持动态语言切换，而枚举项的`label`也会随之变化。
    */
   localize: LocalizeInterface | undefined;
+
+  /**
+   * - **EN:** Check if the value is an Enum collection
+   * - **CN:** 检查值是否是枚举集合的实例
+   *
+   * @param value -
+   *
+   *   - **EN:** Check if the value is an instance of the Enum collection
+   *   - **CN:** 检查值是否是枚举集合的实例
+   *
+   * @returns `true` if the value is an Enum collection, otherwise `false` |
+   *   如果值是枚举集合，则返回`true`，否则返回`false`
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isEnum<T>(value: T): value is IEnum<any, any, any>;
+  isEnum(value: unknown): value is IEnum<any, any, any>;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
    *   extension methods
@@ -221,63 +298,6 @@ export type IEnum<
         readonly labels: string[];
       });
 
-export const Enum = (<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
->(
-  init: T | T[],
-  options?: EnumInitOptions<T, K, V>
-): IEnum<T, K, V> & EnumExtension<T, K, V> => {
-  if (Array.isArray(init)) {
-    const initMap = getInitMapFromArray<T, K, V>(init, options);
-    return new EnumCollectionClass<T, K, V>(initMap, options) as unknown as IEnum<T, K, V>;
-  } else {
-    return new EnumCollectionClass<T, K, V>(init, options) as unknown as IEnum<T, K, V>;
-  }
-}) as EnumInterface;
-
-/* 
-  Get or set the global localization function.
-  Use defineProperty here to prevent circular dependencies.
-*/
-Object.defineProperty(Enum, 'localize', {
-  get: () => localizer.localize,
-  set: (localize: LocalizeInterface) => {
-    localizer.localize = localize;
-  },
-});
-Enum.extends = function (obj: Record<string, unknown> | undefined) {
-  if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
-    throw new Error('The extension of Enum must be an object');
-  }
-  Object.assign(EnumExtensionClass.prototype, obj);
-};
-Enum.install = <T = unknown>(plugin: PluginFunc<T>, options?: T) => {
-  plugin(options, Enum);
-};
-
-function getInitMapFromArray<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
->(init: T[], options?: EnumInitOptions<T, K, V>) {
-  const { getValue = 'value' as keyof T, getLabel = 'label' as keyof T, getKey = 'key' as keyof T } = options ?? {};
-  return init.reduce((acc, item) => {
-    const value = typeof getValue === 'function' ? getValue(item) : (item[getValue] as V);
-    const label = typeof getLabel === 'function' ? getLabel(item) : item[getLabel];
-    let key: K | undefined = undefined;
-    if (getKey) {
-      key = typeof getKey === 'function' ? (getKey(item) as K) : (item[getKey] as K);
-    }
-    acc[(key ?? value) as unknown as K] = {
-      ...item,
-      label: label || (key ?? '') || (value != null ? value.toString() : value),
-      value,
-    } as LabelOnlyEnumItemInit as T[K];
-    return acc;
-  }, {} as T);
-}
 /**
  * - **EN:** Enum initialization options
  * - **CN:** 枚举初始化选项

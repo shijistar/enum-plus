@@ -445,6 +445,22 @@ const testCreatingEnum = (engine: TestEngineBase) => {
         ]);
       }
     );
+
+    engine.test(
+      'should be able to check if a value is a valid Enum',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const WeekConfig = StandardWeekConfig;
+        const weekEnum = Enum(WeekConfig);
+        return { Enum, weekEnum, WeekConfig };
+      },
+      ({ Enum, weekEnum, WeekConfig }) => {
+        engine.expect(Enum.isEnum(weekEnum)).toBe(true);
+        engine.expect(Enum.isEnum(WeekConfig)).toBe(false);
+        engine.expect(Enum.isEnum(1)).toBe(false);
+        engine.expect(Enum.isEnum('Monday')).toBe(false);
+        engine.expect(Enum.isEnum(weekEnum.items)).toBe(false);
+      }
+    );
   });
 };
 
