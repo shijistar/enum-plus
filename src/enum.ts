@@ -202,12 +202,6 @@ export type IEnum<
      * - **CN:** 布尔值，表示这是一个枚举类
      */
     [IS_ENUM]: true;
-    /**
-     * - **EN:** A method that determines if a constructor object recognizes an object as one of the
-     *   constructor’s instances. Called by the semantics of the `instanceof` operator.
-     * - **CN:** 一个方法，用于确定构造函数对象是否将对象识别为构造函数的实例之一。由 `instanceof` 运算符的语义调用。
-     */
-    [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V>;
   } & {
     // Add enum item values, just like native enums
     [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;

@@ -52,12 +52,8 @@ export class EnumCollectionClass<
    * - **CN:** 布尔值，表示这是一个枚举集合实例
    */
   readonly [IS_ENUM] = true;
-  [Symbol.hasInstance](this: EnumCollectionClass<T, K, V>, instance: unknown): boolean {
-    // intentionally use == to support both number and string format value
-    return this.items.some(
-      // eslint-disable-next-line eqeqeq
-      (i) => instance == i.value || instance === i.key
-    );
+  [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
+    return instance instanceof this.items;
   }
   /**
    * The enum collection name, supports localization. Note that it usually returns a string, but if

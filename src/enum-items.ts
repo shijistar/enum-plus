@@ -52,6 +52,14 @@ export class EnumItemsArray<
     super(...items);
     this.__raw__ = raw;
   }
+  name?: string | undefined;
+  [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
+    // intentionally use == to support both number and string format value
+    return this.some(
+      // eslint-disable-next-line eqeqeq
+      (i) => (instance as unknown as V) == i.value || (instance as unknown as K) === i.key
+    );
+  }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
     keyOrValue: KV
@@ -220,6 +228,12 @@ export interface IEnumItems<
    * - **CN:** 布尔值，表示这是一个枚举项数组
    */
   [IS_ENUM_ITEMS]: true;
+  /**
+   * - **EN:** A method that determines if a constructor object recognizes an object as one of the
+   *   constructor’s instances. Called by the semantics of the `instanceof` operator.
+   * - **CN:** 一个方法，用于确定构造函数对象是否将对象识别为构造函数的实例之一。由 `instanceof` 运算符的语义调用。
+   */
+  [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V>;
   /**
    * - **EN:** The enum collection name, supports localization.
    *

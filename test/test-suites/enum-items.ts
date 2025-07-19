@@ -258,6 +258,22 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
   );
 
   engine.test(
+    'enum.items should be applicable to "instanceof" operator',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+      const week = Enum(StandardWeekConfig);
+      return { week };
+    },
+    ({ week }) => {
+      engine.expect((0 as unknown) instanceof week.items).toBeTruthy();
+      engine.expect(('Sunday' as unknown) instanceof week.items).toBeTruthy();
+      engine.expect((6 as unknown) instanceof week.items).toBeTruthy();
+      engine.expect(('Saturday' as unknown) instanceof week.items).toBeTruthy();
+      engine.expect((7 as unknown) instanceof week.items).toBeFalsy();
+      engine.expect(('[Not Exists]' as unknown) instanceof week.items).toBeFalsy();
+    }
+  );
+
+  engine.test(
     'enums.valueType should throw error when called at runtime',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);

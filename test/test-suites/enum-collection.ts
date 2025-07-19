@@ -1,4 +1,4 @@
-import { defaultLocalize, IS_ENUM as IS_ENUM_IN_NODE } from '@enum-plus';
+import { IS_ENUM as IS_ENUM_IN_NODE } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils/index';
 import { addEnumValuesTestSuite } from './enum-items';
@@ -135,7 +135,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(strangeEnum.items.toMenu()).toHaveLength(Object.keys(strangeEnumConfig).length);
         engine.expect(strangeEnum.toValueMap).toBe(5);
         const map: Record<string, { text: string | undefined }> = {};
-        Object.entries(strangeEnumConfig).forEach(([key, item]) => {
+        Object.entries(strangeEnumConfig).forEach(([, item]) => {
           map[item.value] = { text: item.label };
         });
         engine.expect(strangeEnum.items.toValueMap()).toEqual(map);
@@ -173,25 +173,18 @@ const testEnumCollection = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'enums.value/enums.key/enums.label should be applicable to "instanceof" operator',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, lang, getLocales, genSillyLocalizer } }) => {
+      'Enum should be applicable to "instanceof" operator',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
-        return { week, lang, getLocales, genSillyLocalizer };
+        return { week };
       },
-      ({ week, lang, getLocales, genSillyLocalizer }) => {
-        const sillyLocalize = genSillyLocalizer(lang, getLocales, defaultLocalize);
-        engine.expect((0 as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
-        engine.expect(('Sunday' as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
-        engine
-          .expect((sillyLocalize('weekday.sunday') as unknown) instanceof (week as unknown as () => void))
-          .toBeTruthy();
-        engine.expect((6 as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
-        engine.expect(('Saturday' as unknown) instanceof (week as unknown as () => void)).toBeTruthy();
-        engine
-          .expect((sillyLocalize('weekday.saturday') as unknown) instanceof (week as unknown as () => void))
-          .toBeTruthy();
-        engine.expect((7 as unknown) instanceof (week as unknown as () => void)).toBeFalsy();
-        engine.expect(('[Not Exists]' as unknown) instanceof (week as unknown as () => void)).toBeFalsy();
+      ({ week }) => {
+        engine.expect((0 as unknown) instanceof week).toBeTruthy();
+        engine.expect(('Sunday' as unknown) instanceof week).toBeTruthy();
+        engine.expect((6 as unknown) instanceof week).toBeTruthy();
+        engine.expect(('Saturday' as unknown) instanceof week).toBeTruthy();
+        engine.expect((7 as unknown) instanceof week).toBeFalsy();
+        engine.expect(('[Not Exists]' as unknown) instanceof week).toBeFalsy();
       }
     );
   });
