@@ -55,6 +55,38 @@ export function addEnumValuesTestSuite(engine: TestEngineBase) {
   );
 
   engine.test(
+    'enums.find should be able to find enum item by key, value or custom meta fields',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekCompactConfig } }) => {
+      const weekEnum = Enum(StandardWeekConfig);
+      const compactWeekEnum = Enum(WeekCompactConfig);
+      return { weekEnum, compactWeekEnum };
+    },
+    ({ weekEnum, compactWeekEnum }) => {
+      engine.expect(weekEnum.findBy('key', 'Monday')).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.findBy('key', 'Saturday')).toBe(weekEnum.items[6]);
+      engine.expect(weekEnum.findBy('key', 'Invalid Key')).toBe(undefined);
+      engine.expect(weekEnum.findBy('value', 1)).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.findBy('value', 6)).toBe(weekEnum.items[6]);
+      engine.expect(weekEnum.findBy('value', 99)).toBe(undefined);
+      engine.expect(weekEnum.findBy('label', 'weekday.monday')).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.findBy('label', 'weekday.saturday')).toBe(weekEnum.items[6]);
+      engine.expect(weekEnum.findBy('label', 'Invalid Label')).toBe(undefined);
+      engine.expect(compactWeekEnum.findBy('key', 'Monday')).toBe(compactWeekEnum.items[1]);
+      engine.expect(compactWeekEnum.findBy('key', 'Invalid Key')).toBe(undefined);
+      engine.expect(compactWeekEnum.findBy('value', 1)).toBe(undefined);
+      engine.expect(compactWeekEnum.findBy('value', 99)).toBe(undefined);
+      engine.expect(compactWeekEnum.findBy('label', 'weekday.monday')).toBe(undefined);
+
+      // Custom meta field
+      engine.expect(weekEnum.findBy('status', 'error')).toEqual(weekEnum.items[0]);
+      engine.expect(weekEnum.findBy('status', 'warning')).toEqual(weekEnum.items[1]);
+      engine.expect(weekEnum.findBy('status', 'success')).toEqual(weekEnum.items[3]);
+      engine.expect(weekEnum.findBy('status', 'invalid')).toEqual(undefined);
+      engine.expect(compactWeekEnum.findBy('status' as 'key', 'success')).toEqual(undefined);
+    }
+  );
+
+  engine.test(
     'enums.toList should generate an object array',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);

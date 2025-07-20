@@ -8,6 +8,8 @@ export type {
   MenuItemOption,
   ColumnFilterItem,
   FindEnumKeyByValue,
+  FindValueByKey,
+  FindLabelByValue,
   ArrayToMap,
 } from './types';
 export type { LocalizeInterface } from './localize-interface';

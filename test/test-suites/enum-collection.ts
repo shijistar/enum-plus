@@ -63,6 +63,10 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(week.label(1)).toBe(week.items.label(1));
         engine.expect(week.key(1)).toBe(week.items.key(1));
         engine.expect(week.has(1)).toBe(week.items.has(1));
+        engine.expect(week.findBy('key', 'Monday')).toBe(week.items.findBy('key', 'Monday'));
+        engine.expect(week.findBy('value', 1)).toBe(week.items.findBy('value', 1));
+        engine.expect(week.findBy('label', 'weekday.monday')).toBe(week.items.findBy('label', 'weekday.monday'));
+        engine.expect(week.findBy('status', 'success')).toBe(week.items.findBy('status', 'success'));
         engine.expect(week.raw()).toBe(week.items.raw());
         engine.expect(week.toList()).toEqual(week.items.toList());
         engine.expect(week.toMenu()).toEqual(week.items.toMenu());
@@ -166,7 +170,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
       ({ week, IS_ENUM }) => {
         // @ts-expect-error: because IS_ENUM is hidden by the interface, but it actually exists
         engine.expect(week[IS_ENUM]).toBe(true);
-        engine.expect(week[IS_ENUM_IN_NODE]).toBe(true);
+        engine.expect(IS_ENUM_IN_NODE in week && week[IS_ENUM_IN_NODE]).toBe(true);
         // @ts-expect-error: because IS_ENUM and Symbol.for('[IsEnum]') are equal
         engine.expect(week[Symbol.for('[IsEnum]')]).toBe(true);
       }

@@ -44,7 +44,7 @@ export class EnumItemClass<
    * - **EN:** A boolean value indicates that this is an enum item instance.
    * - **CN:** 布尔值，表示这是一个枚举项实例
    */
-  readonly [IS_ENUM_ITEM] = true;
+  private readonly [IS_ENUM_ITEM] = true;
   /**
    * Auto convert to a correct primitive type. This method is called when the object is used in a
    * context that requires a primitive value.
@@ -55,7 +55,8 @@ export class EnumItemClass<
    *
    * @returns V | string
    */
-  [Symbol.toPrimitive](this: EnumItemClass<T, K, V>, hint: 'number' | 'string' | 'default'): V | string {
+  // @ts-expect-error: because don't want show `Symbol` in vscode's intellisense, it should work in background
+  private [Symbol.toPrimitive](this: EnumItemClass<T, K, V>, hint: 'number' | 'string' | 'default'): V | string {
     if (hint === 'number') {
       // for cases like Number(value) or +value
       return this.valueOf();

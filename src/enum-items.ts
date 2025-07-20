@@ -5,7 +5,10 @@ import type {
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
+  FindKeyByMeta,
   FindLabelByValue,
+  FindValueByKey,
+  FindValueByMeta,
   ListItem,
   MenuItemOption,
   PrimitiveOf,
@@ -26,7 +29,7 @@ import { IS_ENUM_ITEMS } from './utils';
  * @implements {IEnumValues<T, K, V>}
  */
 export class EnumItemsArray<
-    T extends EnumInit<K, V>,
+    const T extends EnumInit<K, V>,
     K extends EnumKey<T> = EnumKey<T>,
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   >
@@ -38,7 +41,11 @@ export class EnumItemsArray<
    * - **EN:** A boolean value indicates that this is an enum items array.
    * - **CN:** 布尔值，表示这是一个枚举项数组
    */
-  readonly [IS_ENUM_ITEMS] = true;
+  // Do not use readonly field here, because don't want print this field in Node.js
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+  get [IS_ENUM_ITEMS](): true {
+    return true;
+  }
 
   /**
    * Instantiate an enum items array
@@ -125,6 +132,41 @@ export class EnumItemsArray<
 
   has(keyOrValue?: string | V): boolean {
     return this.some((i) => i.value === keyOrValue || i.key === keyOrValue);
+  }
+
+  findBy<FK extends 'key' | 'value' | 'label' | Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>, FV>(
+    field: FK,
+    value: FV
+  ): FK extends 'key'
+    ? FV extends K
+      ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of K
+        EnumItemClass<T[FV], FV, FindValueByKey<T, FV>>
+      : EnumItemClass<T[K], K, V> | undefined
+    : FK extends 'value'
+      ? FV extends V
+        ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of V
+          EnumItemClass<T[FindEnumKeyByValue<T, FV>], FindEnumKeyByValue<T, FV>, FV>
+        : EnumItemClass<T[K], K, V> | undefined
+      : FK extends 'label'
+        ? EnumItemClass<T[K], K, V> | undefined
+        : // @ts-expect-error: because the type infer is not clever enough, FK here should be one of keyof Raw
+          FV extends T[keyof T][FK]
+          ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of T[keyof T][FK]
+            EnumItemClass<T[FindKeyByMeta<T, FK, FV>], FindKeyByMeta<T, FK, FV>, FindValueByMeta<T, FK, FV>>
+          : EnumItemClass<T[K], K, V> | undefined {
+    return this.find((item) => {
+      if (field === 'key' || field === 'value') {
+        return item[field as keyof typeof item] === value;
+      } else if (field === 'label') {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (item.raw as any)?.label === value || item.label === value;
+      } else {
+        // For other fields, use the raw object to find
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (item.raw as any)?.[field] === value;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }) as any;
   }
 
   toList(): ListItem<V, 'value', 'label'>[];
@@ -340,6 +382,37 @@ export interface IEnumItems<
    * @returns {boolean} Whether the enumeration item exists | 枚举项是否存在
    */
   has(keyOrValue?: string | V): boolean;
+
+  /**
+   * **EN:** Find an enumeration item by key or value, or by custom meta fields
+   *
+   * **CN:** 通过key或value查找枚举项，或通过自定义元字段查找
+   *
+   * @param field The field to search by | 要查找的字段
+   * @param value The value to search | 要查找的值
+   *
+   * @returns The found enumeration item or undefined if not found | 找到的枚举项，如果未找到则返回 undefined
+   */
+  findBy<FK extends 'key' | 'value' | 'label' | Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>, FV>(
+    field: FK,
+    value: FV
+  ): FK extends 'key'
+    ? FV extends K
+      ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of K
+        EnumItemClass<T[FV], FV, FindValueByKey<T, FV>>
+      : EnumItemClass<T[K], K, V> | undefined
+    : FK extends 'value'
+      ? FV extends V
+        ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of V
+          EnumItemClass<T[FindEnumKeyByValue<T, FV>], FindEnumKeyByValue<T, FV>, FV>
+        : EnumItemClass<T[K], K, V> | undefined
+      : FK extends 'label'
+        ? EnumItemClass<T[K], K, V> | undefined
+        : // @ts-expect-error: because the type infer is not clever enough, FK here should be one of keyof Raw
+          FV extends T[keyof T][FK]
+          ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of T[keyof T][FK]
+            EnumItemClass<T[FindKeyByMeta<T, FK, FV>], FindKeyByMeta<T, FK, FV>, FindValueByMeta<T, FK, FV>>
+          : EnumItemClass<T[K], K, V> | undefined;
 
   /**
    * - **EN:** Generate an object array containing all enumeration items

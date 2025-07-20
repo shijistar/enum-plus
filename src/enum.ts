@@ -201,7 +201,8 @@ export type IEnum<
      * - **EN:** A boolean value indicates that this is an Enum.
      * - **CN:** 布尔值，表示这是一个枚举类
      */
-    [IS_ENUM]: true;
+    // this flag exists but is removed from interface, as it's replaced with isEnum method
+    // [IS_ENUM]: true;
   } & {
     // Add enum item values, just like native enums
     [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;

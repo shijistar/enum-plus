@@ -51,7 +51,11 @@ export class EnumCollectionClass<
    * - **EN:** A boolean value indicates that this is an enum collection instance.
    * - **CN:** 布尔值，表示这是一个枚举集合实例
    */
-  readonly [IS_ENUM] = true;
+  // Do not use readonly field here, because don't want print this field in Node.js
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+  get [IS_ENUM](): true {
+    return true;
+  }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
     return instance instanceof this.items;
   }
@@ -149,6 +153,11 @@ export class EnumCollectionClass<
 
   has(keyOrValue?: string | V) {
     return this.items.has(keyOrValue);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  findBy(...rest: Parameters<EnumItemsArray<T, K, V>['findBy']>): any {
+    return this.items.findBy(...rest);
   }
 
   toList(): ListItem<V, 'value', 'label'>[];

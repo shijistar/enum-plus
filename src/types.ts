@@ -174,6 +174,35 @@ export type FindLabelByValue<T, V extends EnumValue, RAW = T[FindEnumKeyByValue<
   ? string
   : FindEnumKeyByValue<T, V>;
 
+/**
+ * - **EN:** Find the value of the enumeration item by key
+ * - **CN:** 通过key查找枚举项的值
+ *
+ * @template T Enum collection initialization data type | 枚举集合初始化数据的类型
+ * @template K Enum key type | 枚举key的类型
+ */
+export type FindValueByKey<T, K extends EnumKey<T>> = T[K] extends EnumValue
+  ? T[K]
+  : T[K] extends StandardEnumItemInit<infer V>
+    ? V
+    : T[K] extends ValueOnlyEnumItemInit<infer V>
+      ? V
+      : T[K] extends LabelOnlyEnumItemInit
+        ? K
+        : T[K] extends CompactEnumItemInit
+          ? K
+          : T[K] extends undefined
+            ? K
+            : never;
+
+export type FindKeyByMeta<T, MK extends keyof T[keyof T], MV> = {
+  [K in keyof T]: T[K] extends Record<MK, MV> ? K : never;
+}[keyof T];
+
+export type FindValueByMeta<T, MK extends keyof T[keyof T], MV> = {
+  [K in keyof T]: T[K] extends Record<MK, MV> ? T[K][MK] : never;
+}[keyof T];
+
 export type PrimitiveOf<T> = T extends string
   ? string
   : T extends number

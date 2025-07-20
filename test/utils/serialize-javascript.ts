@@ -7,17 +7,17 @@
  *    reference can't. If it's a class, set the closures to the class properties, and use 'this' to
  *    access them. If it's a normal function, set the closures to the function reference, and use
  *    the function name to access them.
- * 2. Do not use `function.bind`, because the bound function body is hidden. The `toString` method just
- *    returns `[native code]`.
- * 3. Do not use anonymous Symbols in both object keys and values. Use system predefined Symbols
+ * 2. Do not use anonymous Symbols in both object keys and values. Use system predefined Symbols
  *    instead or use `Symbol.for` to create a Symbol. The anonymous Symbols can't be serialized and
  *    event cannot be created.
- * 4. No direct or indirect circular references are allowed.
- * 5. For classes, should avoid private properties and methods, because they are not accessible from
+ * 3. No direct or indirect circular references are allowed.
+ * 4. For classes, should avoid private properties and methods, because they are not accessible from
  *    outside and can't be serialized. Please use a normal property or method instead, and starts
  *    with `_` to indicate it's a private member. If you are using TypeScript, you can use the
  *    `private` keyword to declare as private, which looks a little better.
- * 6. Class constructors will be dropped.
+ * 5. Class constructors will be dropped.
+ * 6. All native methods will be dropped, as `toString` method just returns `[native code]`.
+ * 7. Do not use `function.bind`, because the bound functions become native methods.
  */
 
 const TokenStart = '$SJS$';
@@ -287,8 +287,9 @@ function getDeserializeJavascriptCode(result: SerializedResult, options: Interna
   patches.forEach(({ path, context }) => {
     const sourceObj = path?.length ? get(deserializeResult, path) : deserializeResult;
     if (sourceObj) {
+      const sourceKeys = getFullKeys(sourceObj);
       getFullKeys(context).forEach((key) => {
-        if (sourceObj[key] == null) {
+        if (!sourceKeys.includes(key) || sourceObj[key] == null) {
           sourceObj[key] = context[key];
         }
       });
