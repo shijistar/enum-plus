@@ -15,6 +15,58 @@ export class EnumItemClass<
   K extends EnumKey<any> = string,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
 > {
+  private _options: EnumItemOptions | undefined;
+
+  /**
+   * Instantiate an enum item
+   *
+   * @param key Enum item key
+   * @param value Enum item value
+   * @param label Enum item display name
+   * @param raw Original initialization object
+   * @param options Construction options
+   */
+  constructor(key: K, value: V, label: string, raw: T, options?: EnumItemOptions) {
+    this.key = key;
+    this.value = value;
+    this.label = label;
+    this.raw = raw;
+    // Do not use class field here, because don't want print this field in Node.js
+    Object.defineProperty(this, '_options', {
+      value: options,
+      writable: false,
+      enumerable: false,
+      configurable: false,
+    });
+    Object.defineProperties(this, {
+      value: {
+        get: () => value,
+        set: () => console.warn(this._readonlyPropWarning('value')),
+        enumerable: true,
+        configurable: false,
+      },
+      label: {
+        get: () => this._localize(label) ?? label,
+        set: () => console.warn(this._readonlyPropWarning('label')),
+        enumerable: true,
+        configurable: false,
+      },
+      key: {
+        get: () => key,
+        set: () => console.warn(this._readonlyPropWarning('key')),
+        enumerable: true,
+        configurable: false,
+      },
+      raw: {
+        get: () => raw,
+        set: () => console.warn(this._readonlyPropWarning('raw')),
+        enumerable: true,
+        configurable: false,
+      },
+    });
+    Object.freeze(this);
+  }
+
   /**
    * - **EN:** The value of the enum item
    * - **CN:** 枚举项的值
@@ -44,7 +96,11 @@ export class EnumItemClass<
    * - **EN:** A boolean value indicates that this is an enum item instance.
    * - **CN:** 布尔值，表示这是一个枚举项实例
    */
-  private readonly [IS_ENUM_ITEM] = true;
+  // Do not use readonly field here, because don't want print this field in Node.js
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+  get [IS_ENUM_ITEM](): true {
+    return true;
+  }
   /**
    * Auto convert to a correct primitive type. This method is called when the object is used in a
    * context that requires a primitive value.
@@ -68,7 +124,6 @@ export class EnumItemClass<
     return this.valueOf();
   }
 
-  private _options: EnumItemOptions | undefined;
   // should use function here to avoid closure. this is important for the e2e test cases.
   private _localize(content: string | undefined) {
     const localize = this._options?.localize ?? localizer.localize;
@@ -81,55 +136,6 @@ export class EnumItemClass<
     return `Cannot modify property "${name}" on EnumItem. EnumItem instances are readonly and should not be mutated.`;
   }
 
-  /**
-   * Instantiate an enum item
-   *
-   * @param key Enum item key
-   * @param value Enum item value
-   * @param label Enum item display name
-   * @param raw Original initialization object
-   * @param options Construction options
-   */
-  constructor(key: K, value: V, label: string, raw: T, options?: EnumItemOptions) {
-    this.key = key;
-    this.value = value;
-    this.label = label;
-    this.raw = raw;
-    this._options = options;
-    Object.defineProperties(this, {
-      value: {
-        get: () => value,
-        set: () => console.warn(this._readonlyPropWarning('value')),
-        enumerable: true,
-        configurable: false,
-      },
-      label: {
-        get: () => this._localize(label) ?? label,
-        set: () => console.warn(this._readonlyPropWarning('label')),
-        enumerable: true,
-        configurable: false,
-      },
-      key: {
-        get: () => key,
-        set: () => console.warn(this._readonlyPropWarning('key')),
-        enumerable: true,
-        configurable: false,
-      },
-      raw: {
-        get: () => raw,
-        set: () => console.warn(this._readonlyPropWarning('raw')),
-        enumerable: true,
-        configurable: false,
-      },
-      [IS_ENUM_ITEM]: {
-        value: this[IS_ENUM_ITEM],
-        writable: false,
-        enumerable: true,
-        configurable: false,
-      },
-    });
-    Object.freeze(this);
-  }
   // The priority of the toString method is lower than the valueOf method
   toString() {
     return this._localize(this.label);

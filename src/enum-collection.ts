@@ -79,7 +79,13 @@ export class EnumCollectionClass<
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
-    this.__options__ = options;
+    // Do not use class field here, because don't want print this field in Node.js
+    Object.defineProperty(this, '__options__', {
+      value: options,
+      writable: false,
+      enumerable: false,
+      configurable: false,
+    });
 
     // Generate keys array
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums

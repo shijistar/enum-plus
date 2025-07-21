@@ -58,6 +58,13 @@ export class EnumItemsArray<
   constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
     super(...items);
     this.__raw__ = raw;
+    // Do not use class field here, because don't want print this field in Node.js
+    Object.defineProperty(this, '__raw__', {
+      value: raw,
+      enumerable: false,
+      writable: false,
+      configurable: false,
+    });
   }
   name?: string | undefined;
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
@@ -393,7 +400,7 @@ export interface IEnumItems<
    *
    * @returns The found enumeration item or undefined if not found | 找到的枚举项，如果未找到则返回 undefined
    */
-  findBy<FK extends 'key' | 'value' | 'label' | Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>, FV>(
+  findBy<FK extends 'key' | 'value' | 'label' | Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>, const FV>(
     field: FK,
     value: FV
   ): FK extends 'key'
