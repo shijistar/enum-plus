@@ -56,7 +56,7 @@ const MyEnum = Enum({
 - `ENUM_COLLECTION` symbol is renamed to `IS_ENUM`.
 - `ENUM_ITEM` symbol is renamed to `IS_ENUM_ITEM`.
 - `ENUM_ITEMS` symbol is renamed to `IS_ENUM_ITEMS`.
-- `EnumValuesArray` interface is renamed to `EnumItemsArray`.
+- `EnumValuesArray` interface is renamed to `EnumItemsArray`, and the `...rest` parameter is removed.
 - `IEnumValues` interface is renamed to `IEnumItems`.
 
 ### Bug Fixes

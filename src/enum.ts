@@ -2,7 +2,7 @@ import type { EnumExtension } from 'enum-plus/extension';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
 import type { IEnumItems } from './enum-items';
-import { localizer } from './localize';
+import { localizer } from './localizer';
 import type {
   ArrayToMap,
   EnumInit,
@@ -40,6 +40,8 @@ Object.defineProperty(Enum, 'localize', {
   set: (localize: LocalizeInterface) => {
     localizer.localize = localize;
   },
+  enumerable: true,
+  configurable: false,
 });
 Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {

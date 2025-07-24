@@ -1,4 +1,4 @@
-import { localizer } from './localize';
+import { localizer } from './localizer';
 import type { EnumItemInit, EnumKey, EnumValue, LocalizeInterface, ValueTypeFromSingleInit } from './types';
 import { IS_ENUM_ITEM } from './utils';
 
@@ -31,6 +31,7 @@ export class EnumItemClass<
     this.value = value;
     this.label = label;
     this.raw = raw;
+    const isNode = typeof process !== 'undefined' && process && process.versions && process.versions.node != null;
     // Do not use class field here, because don't want print this field in Node.js
     Object.defineProperty(this, '_options', {
       value: options,
@@ -40,8 +41,16 @@ export class EnumItemClass<
     });
     Object.defineProperties(this, {
       value: {
-        get: () => value,
-        set: () => console.warn(this._readonlyPropWarning('value')),
+        // To print pretty in Node.js console
+        ...(isNode
+          ? {
+              value,
+              writable: false,
+            }
+          : /* istanbul ignore next */ {
+              get: /* istanbul ignore next */ () => value,
+              set: /* istanbul ignore next */ () => console.warn(this._readonlyPropWarning('value')),
+            }),
         enumerable: true,
         configurable: false,
       },
@@ -52,14 +61,30 @@ export class EnumItemClass<
         configurable: false,
       },
       key: {
-        get: () => key,
-        set: () => console.warn(this._readonlyPropWarning('key')),
+        // To print pretty in Node.js console
+        ...(isNode
+          ? {
+              value: key,
+              writable: false,
+            }
+          : /* istanbul ignore next */ {
+              get: /* istanbul ignore next */ () => key,
+              set: /* istanbul ignore next */ () => console.warn(this._readonlyPropWarning('key')),
+            }),
         enumerable: true,
         configurable: false,
       },
       raw: {
-        get: () => raw,
-        set: () => console.warn(this._readonlyPropWarning('raw')),
+        // To print pretty in Node.js console
+        ...(isNode
+          ? {
+              value: raw,
+              writable: false,
+            }
+          : /* istanbul ignore next */ {
+              get: /* istanbul ignore next */ () => raw,
+              set: /* istanbul ignore next */ () => console.warn(this._readonlyPropWarning('raw')),
+            }),
         enumerable: true,
         configurable: false,
       },

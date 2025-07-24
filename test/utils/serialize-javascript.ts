@@ -387,11 +387,23 @@ function expandPrototypeChainRecursively(
 
     // Expand prototype properties to newSource
     const proto = pickPrototype(source, options);
+    const protoDescriptors = Object.getOwnPropertyDescriptors(proto);
     getFullKeys(proto).forEach((key) => {
+      const descriptor = protoDescriptors[key];
+      // If the descriptor is not readable, skip it
+      if (descriptor && !('value' in descriptor) && !descriptor.get) {
+        return;
+      }
       newSource[key] = proto[key];
     });
+    const sourceDescriptors = Object.getOwnPropertyDescriptors(source);
     // copy own properties to newSource
     getFullKeys(source).forEach((key) => {
+      const descriptor = sourceDescriptors[key as string];
+      // If the descriptor is not readable, skip it
+      if (descriptor && !('value' in descriptor) && !descriptor.get) {
+        return;
+      }
       newSource[key] = source[key];
     });
     for (const key of getFullKeys(newSource)) {

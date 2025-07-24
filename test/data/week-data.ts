@@ -1,4 +1,4 @@
-import { type localeCN, type localeEN, type noLocale } from './week-config';
+import type { localeCN, localeEN, noLocale } from './week-config';
 
 /** Standard week data, with key, value and label */
 export const getStandardWeekData = (locales: typeof localeEN | typeof localeCN | typeof noLocale) => [

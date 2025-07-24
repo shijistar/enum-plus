@@ -127,17 +127,33 @@ const testEnumItem = (engine: TestEngineBase) => {
         const sunday = weekEnum.items[0];
 
         /* ----------------- set ----------------- */
-        // @ts-expect-error: because try to modify the property forcefully
-        sunday.key = modifyValue;
+        try {
+          // @ts-expect-error: because try to modify the property forcefully
+          sunday.key = modifyValue;
+        } catch (error) {
+          // Ignore the error
+        }
         const sundayModifiedKey = sunday.key;
-        // @ts-expect-error: because try to modify the property forcefully
-        sunday.value = modifyValue;
+        try {
+          // @ts-expect-error: because try to modify the property forcefully
+          sunday.value = modifyValue;
+        } catch (error) {
+          // Ignore the error
+        }
         const sundayModifiedValue = sunday.value;
-        // @ts-expect-error: because try to modify the property forcefully
-        sunday.label = modifyValue;
+        try {
+          // @ts-expect-error: because try to modify the property forcefully
+          sunday.label = modifyValue;
+        } catch (error) {
+          // Ignore the error
+        }
         const sundayModifiedLabel = sunday.label;
-        // @ts-expect-error: because try to modify the property forcefully
-        sunday.raw = modifyValue;
+        try {
+          // @ts-expect-error: because try to modify the property forcefully
+          sunday.raw = modifyValue;
+        } catch (error) {
+          // Ignore the error
+        }
         const sundayModifiedRaw = sunday.raw;
 
         /* ----------------- delete ----------------- */

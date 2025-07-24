@@ -1,7 +1,7 @@
 import * as utils from '@enum-plus/utils';
 import { defaultLocalize, Enum } from '@enum-plus';
 import { EnumExtensionClass } from '@enum-plus/enum-collection';
-import { localizer } from '@enum-plus/localize';
+import { localizer } from '@enum-plus/localizer';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { getLocales, setLang } from '../data/week-config';
@@ -68,7 +68,7 @@ export class PlaywrightEngine extends TestEngineBase {
       const args = deserialize(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
       const { evaluateFn, ...rest } = args;
 
-      // Set the initial state to en-US before executing evaluation
+      // Set the initial state to en-US before executing evaluation, equal to setup in jest.
       WeekConfig.setLang('en-US', EnumPlus.Enum, WeekConfig.getLocales, EnumPlus.defaultLocalize);
 
       // Execute the evaluation
@@ -78,8 +78,8 @@ export class PlaywrightEngine extends TestEngineBase {
 
       // Serialize the evaluation result and pass it to assertion method
       const serializedStr = serialize({
-        EnumLocalize: EnumPlus.Enum.localize,
-        lang: WeekConfig.lang,
+        _enumLocalize: EnumPlus.Enum.localize,
+        _lang: WeekConfig.lang,
         ...evaluateResult,
       });
       // console.log('serialize result');
@@ -94,8 +94,8 @@ export class PlaywrightEngine extends TestEngineBase {
       prettyPrint: false,
     });
     // Restore the lang to the Enum.localize
-    setLang(initialState.lang, Enum, getLocales, defaultLocalize);
-    if (!initialState.EnumLocalize) {
+    setLang(initialState._lang, Enum, getLocales, defaultLocalize);
+    if (!initialState._enumLocalize) {
       Enum.localize = undefined!;
     }
 

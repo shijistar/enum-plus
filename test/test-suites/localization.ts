@@ -164,9 +164,16 @@ const testLocalization = (engine: TestEngineBase) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
-        return { weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems };
+        return {
+          Enum,
+          weekEnum,
+          localeEN,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+        };
       },
-      ({ weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems }) => {
+      ({ Enum, weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems }) => {
         assertEnum(weekEnum, localeEN, getStandardWeekData);
         assertListItems(defaultListItems, idNameListItems, localeEN, getStandardWeekData);
       }

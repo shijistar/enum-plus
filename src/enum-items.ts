@@ -1,7 +1,9 @@
-import type { EnumItemClass, EnumItemOptions } from './enum-item';
+import type { EnumItemOptions } from './enum-item';
+import { EnumItemClass } from './enum-item';
 import type {
   ColumnFilterItem,
   EnumInit,
+  EnumItemInit,
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
@@ -12,10 +14,11 @@ import type {
   ListItem,
   MenuItemOption,
   PrimitiveOf,
+  StandardEnumItemInit,
   ValueMap,
   ValueTypeFromSingleInit,
 } from './types';
-import { IS_ENUM_ITEMS } from './utils';
+import { IS_ENUM_ITEMS, KEYS, VALUES } from './utils';
 
 /**
  * Enum items array, mostly are simple wrappers for EnumCollectionClass
@@ -26,7 +29,7 @@ import { IS_ENUM_ITEMS } from './utils';
  *
  * @extends {EnumItemClass<T, K, V>[]}
  *
- * @implements {IEnumValues<T, K, V>}
+ * @implements {IEnumItems<T, K, V>}
  */
 export class EnumItemsArray<
     const T extends EnumInit<K, V>,
@@ -36,7 +39,7 @@ export class EnumItemsArray<
   extends Array<EnumItemClass<T[K], K, V>>
   implements IEnumItems<T, K, V>
 {
-  private __raw__: T;
+  private __raw__!: T;
   /**
    * - **EN:** A boolean value indicates that this is an enum items array.
    * - **CN:** 布尔值，表示这是一个枚举项数组
@@ -46,6 +49,9 @@ export class EnumItemsArray<
   get [IS_ENUM_ITEMS](): true {
     return true;
   }
+  readonly [KEYS]!: K[];
+  readonly [VALUES]!: V[];
+  readonly labels!: string[];
 
   /**
    * Instantiate an enum items array
@@ -55,9 +61,8 @@ export class EnumItemsArray<
    * @param {T} raw Original initialization data object
    * @param {...EnumItemClass<T[K], K, V>[]} items Enum item instance array
    */
-  constructor(raw: T, options: EnumItemOptions | undefined, ...items: EnumItemClass<T[K], K, V>[]) {
-    super(...items);
-    this.__raw__ = raw;
+  constructor(raw: T, options: EnumItemOptions | undefined) {
+    super();
     // Do not use class field here, because don't want print this field in Node.js
     Object.defineProperty(this, '__raw__', {
       value: raw,
@@ -65,8 +70,38 @@ export class EnumItemsArray<
       writable: false,
       configurable: false,
     });
+
+    // Generate keys array
+    // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
+    const keys = parseKeys<T, K, V>(raw);
+    const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V>(raw[key], key));
+    this[KEYS] = keys;
+    Object.freeze(keys);
+
+    const items: EnumItemClass<T[K], K, V>[] = [];
+    keys.forEach((key, index) => {
+      const { value, label } = parsed[index];
+      const item = new EnumItemClass<T[K], K, V>(key, value, label, raw[key], options);
+      items.push(item);
+      this.push(item);
+    });
+
+    // Generate values array
+    const values = parsed.map((item) => item.value);
+    this[VALUES] = values;
+    Object.freeze(values);
+
+    // Generate labels array
+    Object.defineProperty(this, 'labels', {
+      enumerable: true,
+      configurable: false,
+      get: () => {
+        // Cannot save to static array because labels may be localized contents
+        // Should not use `items` in the closure because the getter function cannot be fully serialized
+        return items.map((item) => item.label);
+      },
+    });
   }
-  name?: string | undefined;
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
     // intentionally use == to support both number and string format value
     return this.some(
@@ -297,6 +332,39 @@ export interface IEnumItems<
    *   set.
    */
   readonly name?: string;
+  /**
+   * - **EN:** Get all keys of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 获取枚举项的全部keys列表
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly [KEYS]: K[];
+  /**
+   * - **EN:** Get all values of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 获取枚举项的全部values列表
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly [VALUES]: V[];
+  /**
+   * - **EN:** Get all labels of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 获取枚举项的全部labels列表
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly labels: string[];
   /**
    * - **EN:** Get the label (also known as display name) of the enumeration item, supports getting by
    *   value or key
@@ -583,4 +651,59 @@ export interface ToListConfig<
    * - **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
    */
   labelField?: FOL;
+}
+
+export function parseKeys<
+  const T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+>(raw: EnumInit<K, V>) {
+  return Object.keys(raw).filter((k) => !(/^-?\d+$/.test(k) && k === `${raw[raw[k as K] as K] ?? ''}`)) as K[];
+}
+
+function parseEnumItem<
+  T extends EnumItemInit<V>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  K extends EnumKey<any>,
+  V extends EnumValue,
+>(init: T, key: K): StandardEnumItemInit<V> {
+  let value: V;
+  let label: string;
+  if (init != null) {
+    if (typeof init === 'number' || typeof init === 'string' || typeof init === 'symbol') {
+      value = init as V;
+      label = key as string;
+    } else if (typeof init === 'object') {
+      // Initialize using object
+      if (Object.prototype.toString.call(init) === '[object Object]') {
+        if ('value' in init && Object.keys(init).some((k) => k === 'value')) {
+          // type of {value, label}
+          value = init.value ?? key;
+          if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
+            label = init.label;
+          } else {
+            label = key as string;
+          }
+        } else if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
+          // typeof {label}
+          value = key as unknown as V;
+          label = init.label ?? key;
+        } else {
+          // {} empty object
+          value = key as unknown as V;
+          label = key as string;
+        }
+      } else {
+        // Probably Date, RegExp and other primitive types
+        value = init as V;
+        label = key as string;
+      }
+    } else {
+      throw new Error(`Invalid enum item: ${JSON.stringify(init)}`);
+    }
+  } else {
+    value = key as unknown as V;
+    label = key as string;
+  }
+  return { value, label };
 }
