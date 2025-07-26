@@ -1,22 +1,11 @@
 import { IS_ENUM as IS_ENUM_IN_NODE } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils/index';
-import { addEnumValuesTestSuite } from './enum-items';
+import { addEnumItemsTestSuite } from './enum-items';
 
 const testEnumCollection = (engine: TestEngineBase) => {
   engine.describe('The EnumCollectionClass api', () => {
-    addEnumValuesTestSuite(engine);
-
-    engine.test(
-      'enums.keys should return all enum keys',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
-        const week = Enum(StandardWeekConfig);
-        return { week, StandardWeekConfig };
-      },
-      ({ week, StandardWeekConfig }) => {
-        engine.expect(week.keys).toEqual(Object.keys(StandardWeekConfig));
-      }
-    );
+    addEnumItemsTestSuite(engine);
 
     engine.test(
       'enums.items should return an array of enum items',
@@ -31,35 +20,18 @@ const testEnumCollection = (engine: TestEngineBase) => {
     );
 
     engine.test(
-      'enums.values should return an array of enum values',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekNumberConfig } }) => {
-        const week = Enum(StandardWeekConfig);
-        return { week, StandardWeekConfig, WeekNumberConfig };
-      },
-      ({ week, WeekNumberConfig }) => {
-        engine.expect(week.values).toEqual(Object.values(WeekNumberConfig));
-      }
-    );
-
-    engine.test(
-      'enums.labels should return a strings array',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
-        const week = Enum(StandardWeekConfig);
-        return { week, StandardWeekConfig };
-      },
-      ({ week, StandardWeekConfig }) => {
-        engine.expect(week.labels).toBeInstanceOf(Array);
-        engine.expect(week.labels).toHaveLength(Object.keys(StandardWeekConfig).length);
-      }
-    );
-
-    engine.test(
       'the methods should be same as EnumItemsArray',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+      ({ EnumPlus: { Enum, KEYS, VALUES }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
-        return { week };
+        return { week, KEYS, VALUES };
       },
-      ({ week }) => {
+      ({ week, KEYS, VALUES }) => {
+        // @ts-expect-error: because KEYS equals Symbol.for('[keys]')
+        engine.expect(week.keys).toBe(week.items[KEYS]);
+        // @ts-expect-error: because VALUES equals Symbol.for('[values]')
+        engine.expect(week.values).toBe(week.items[VALUES]);
+        engine.expect(week.labels).toEqual(week.items.labels);
+        engine.expect(week.meta).toBe(week.items.meta);
         engine.expect(week.label(1)).toBe(week.items.label(1));
         engine.expect(week.key(1)).toBe(week.items.key(1));
         engine.expect(week.has(1)).toBe(week.items.has(1));
@@ -77,20 +49,21 @@ const testEnumCollection = (engine: TestEngineBase) => {
 
     engine.test(
       'the system fields should be protected and auto renamed to fallback names in case of conflicting with enum members',
-      ({ EnumPlus: { Enum, KEYS, ITEMS, VALUES, LABELS } }) => {
+      ({ EnumPlus: { Enum, KEYS, ITEMS, VALUES, LABELS, META } }) => {
         const strangeEnumConfig = {
-          keys: { value: 101, label: 'foo' },
-          values: { value: 102, label: 'baz' },
-          labels: { value: 103, label: 'bar' },
+          keys: { value: 101, label: 'foo', type: 1101 },
+          values: { value: 102, label: 'baz', type: 1102 },
+          labels: { value: 103, label: 'bar', type: 1103 },
+          meta: { value: 104, label: 'meta', type: 1104 },
 
-          raw: { value: 99, label: 'raw' },
-          label: { value: 1, label: 'label' },
-          key: { value: 2, label: 'key' },
-          has: { value: 3, label: 'has' },
-          toList: { value: 4, label: 'toList' },
-          toValueMap: { value: 5, label: 'toValueMap' },
-          toFilter: { value: 6, label: 'toFilter' },
-          toMenu: { value: 7, label: 'toMenu' },
+          raw: { value: 99, label: 'raw', type: 1099 },
+          label: { value: 1, label: 'label', type: 1001 },
+          key: { value: 2, label: 'key', type: 1002 },
+          has: { value: 3, label: 'has', type: 1003 },
+          toList: { value: 4, label: 'toList', type: 1004 },
+          toValueMap: { value: 5, label: 'toValueMap', type: 1005 },
+          toFilter: { value: 6, label: 'toFilter', type: 1006 },
+          toMenu: { value: 7, label: 'toMenu', type: 1007 },
         } as const;
         const strangeEnum = Enum(strangeEnumConfig);
 
@@ -108,9 +81,10 @@ const testEnumCollection = (engine: TestEngineBase) => {
           ITEMS,
           VALUES,
           LABELS,
+          META,
         };
       },
-      ({ strangeEnumConfig, strangeEnum, strangerEnumConfig, strangerEnum, KEYS, ITEMS, VALUES, LABELS }) => {
+      ({ strangeEnumConfig, strangeEnum, strangerEnumConfig, strangerEnum, KEYS, ITEMS, VALUES, LABELS, META }) => {
         engine.expect(strangeEnum.keys).toBe(101);
         // @ts-expect-error: because KEYS equals Symbol.for('[keys]')
         engine.expect(strangeEnum[KEYS] as string[]).toEqual(Object.keys(strangeEnumConfig));
@@ -120,9 +94,22 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(strangeEnum.labels).toBe(103);
         // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
         engine.expect(strangeEnum[LABELS] as string[]).toBeInstanceOf(Array);
-        // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
-        engine.expect(strangeEnum[LABELS] as string[]).toHaveLength(Object.keys(strangeEnumConfig).length);
-        engine.expect(Array.from(strangeEnum.items).map((i) => i.key)).toEqual(Object.keys(strangeEnumConfig));
+        engine
+          // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
+          .expect(strangeEnum[LABELS] as string[])
+          .toEqual(
+            Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].label)
+          );
+        engine.expect(strangeEnum.meta).toBe(104);
+        // @ts-expect-error: because META equals Symbol.for('[meta]')
+        engine.expect(strangeEnum[META].type).toBeInstanceOf(Array);
+        engine
+          // @ts-expect-error: because META equals Symbol.for('[meta]')
+          .expect(strangeEnum[META].type as string[])
+          .toEqual(
+            Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].type)
+          );
+        engine.expect(Array.from(strangeEnum.items.map((i) => i.key))).toEqual(Object.keys(strangeEnumConfig));
 
         engine.expect(strangeEnum.raw).toBe(99);
         engine.expect(strangeEnum.label).toBe(1);
@@ -189,6 +176,57 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(('Saturday' as unknown) instanceof week).toBeTruthy();
         engine.expect((7 as unknown) instanceof week).toBeFalsy();
         engine.expect(('[Not Exists]' as unknown) instanceof week).toBeFalsy();
+      }
+    );
+
+    engine.test(
+      'enums.valueType should throw error when called at runtime',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const weekEnum = Enum(StandardWeekConfig);
+        let error: Error | undefined;
+        try {
+          weekEnum.valueType;
+        } catch (e) {
+          error = e as Error;
+        }
+        return { weekEnum, error };
+      },
+      ({ error }) => {
+        engine.expect(error).toBeDefined();
+      }
+    );
+
+    engine.test(
+      'enums.keyType should throw error when called at runtime',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const weekEnum = Enum(StandardWeekConfig);
+        let error: Error | undefined;
+        try {
+          weekEnum.keyType;
+        } catch (e) {
+          error = e as Error;
+        }
+        return { weekEnum, error };
+      },
+      ({ error }) => {
+        engine.expect(error).toBeDefined();
+      }
+    );
+
+    engine.test(
+      'enums.rawType should throw error when called at runtime',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const weekEnum = Enum(StandardWeekConfig);
+        let error: Error | undefined;
+        try {
+          weekEnum.rawType;
+        } catch (e) {
+          error = e as Error;
+        }
+        return { weekEnum, error };
+      },
+      ({ error }) => {
+        engine.expect(error).toBeDefined();
       }
     );
   });

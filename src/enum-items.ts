@@ -14,6 +14,7 @@ import type {
   ListItem,
   MenuItemOption,
   PrimitiveOf,
+  StandardEnumInit,
   StandardEnumItemInit,
   ValueMap,
   ValueTypeFromSingleInit,
@@ -52,6 +53,7 @@ export class EnumItemsArray<
   readonly [KEYS]!: K[];
   readonly [VALUES]!: V[];
   readonly labels!: string[];
+  readonly meta!: IEnumItems<T, K, V>['meta'];
 
   /**
    * Instantiate an enum items array
@@ -79,11 +81,31 @@ export class EnumItemsArray<
     Object.freeze(keys);
 
     const items: EnumItemClass<T[K], K, V>[] = [];
+    const meta = {} as { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] };
+    this.meta = meta as IEnumItems<T, K, V>['meta'];
     keys.forEach((key, index) => {
       const { value, label } = parsed[index];
       const item = new EnumItemClass<T[K], K, V>(key, value, label, raw[key], options);
       items.push(item);
       this.push(item);
+
+      // Collect custom meta fields
+      const itemRaw = raw[key];
+      if (itemRaw && typeof itemRaw === 'object' && 'value' in itemRaw) {
+        Object.keys(itemRaw).forEach((k) => {
+          const metaKey = k as Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>;
+          if (metaKey !== 'key' && metaKey !== 'value' && metaKey !== 'label') {
+            if (!meta[metaKey]) {
+              meta[metaKey] = [];
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const metaValue = (itemRaw as any)[metaKey];
+            if (metaValue != null) {
+              meta[metaKey].push(metaValue);
+            }
+          }
+        });
+      }
     });
 
     // Generate values array
@@ -365,6 +387,11 @@ export interface IEnumItems<
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
   readonly labels: string[];
+
+  meta: T extends StandardEnumInit<K, V>
+    ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] }
+    : // eslint-disable-next-line @typescript-eslint/ban-types
+      {};
   /**
    * - **EN:** Get the label (also known as display name) of the enumeration item, supports getting by
    *   value or key

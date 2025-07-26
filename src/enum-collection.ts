@@ -15,7 +15,7 @@ import type {
   ValueTypeFromSingleInit,
 } from './types';
 import type { IS_ENUM_ITEMS } from './utils';
-import { IS_ENUM, ITEMS, KEYS, LABELS, VALUES } from './utils';
+import { IS_ENUM, ITEMS, KEYS, LABELS, META, VALUES } from './utils';
 
 /**
  * - **EN:** Enum collection extension base class, used to extend the Enums
@@ -39,11 +39,11 @@ export class EnumCollectionClass<
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   >
   extends EnumExtensionClass<T, K, V>
-  implements Omit<IEnumItems<T, K, V>, typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels'>
+  implements
+    Omit<IEnumItems<T, K, V>, typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta'>
 {
   private __options__: EnumItemOptions | undefined;
-  readonly items!: EnumItemsArray<T, K, V>;
-  readonly keys!: K[];
+  private readonly __items__!: EnumItemsArray<T, K, V>;
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
     super();
@@ -61,12 +61,21 @@ export class EnumCollectionClass<
     Object.freeze(items);
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[keys.includes('items') ? ITEMS : 'items'] = items;
+    Object.defineProperty(this, '__items__', {
+      value: items,
+      writable: false,
+      enumerable: false,
+      configurable: false,
+    });
 
     // @ts-expect-error: because use KEYS to avoid naming conflicts in case of 'keys' field name is taken
     this[keys.includes('keys') ? KEYS : 'keys'] = items[KEYS];
 
     // @ts-expect-error: because use VALUES to avoid naming conflicts in case of 'values' field name is taken
     this[keys.includes('values') ? VALUES : 'values'] = items[VALUES];
+
+    // @ts-expect-error: because use META to avoid naming conflicts in case of 'meta' field name is taken
+    this[keys.includes('meta') ? META : 'meta'] = items.meta;
 
     // Add keys to the instance, allows picking enum values by keys
     items.forEach((item) => {
@@ -93,7 +102,7 @@ export class EnumCollectionClass<
     return true;
   }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
-    return instance instanceof this.items;
+    return instance instanceof this.__items__;
   }
   /**
    * The enum collection name, supports localization. Note that it usually returns a string, but if
@@ -114,11 +123,11 @@ export class EnumCollectionClass<
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {
-    return this.items.label(keyOrValue);
+    return this.__items__.label(keyOrValue);
   }
 
   key<IV extends V | NonNullable<PrimitiveOf<V>> | undefined>(value?: IV) {
-    return this.items.key(value);
+    return this.__items__.key(value);
   }
 
   raw(): T;
@@ -127,19 +136,19 @@ export class EnumCollectionClass<
   ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
   raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
     if (value != null) {
-      return this.items.raw(value as keyof T | EnumValue) as T[K];
+      return this.__items__.raw(value as keyof T | EnumValue) as T[K];
     } else {
-      return this.items.raw();
+      return this.__items__.raw();
     }
   }
 
   has(keyOrValue?: string | V) {
-    return this.items.has(keyOrValue);
+    return this.__items__.has(keyOrValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   findBy(...rest: Parameters<EnumItemsArray<T, K, V>['findBy']>): any {
-    return this.items.findBy(...rest);
+    return this.__items__.findBy(...rest);
   }
 
   toList(): ListItem<V, 'value', 'label'>[];
@@ -165,28 +174,28 @@ export class EnumCollectionClass<
         FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
         FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
       >[] {
-    return this.items.toList(config as ToListConfig<T, FOV, FOL, K, V>);
+    return this.__items__.toList(config as ToListConfig<T, FOV, FOL, K, V>);
   }
 
   toMenu(): MenuItemOption<V>[] {
-    return this.items.toMenu();
+    return this.__items__.toMenu();
   }
 
   toFilter(): ColumnFilterItem<V>[] {
-    return this.items.toFilter();
+    return this.__items__.toFilter();
   }
 
   toValueMap() {
-    return this.items.toValueMap();
+    return this.__items__.toValueMap();
   }
 
   get valueType() {
-    return this.items.valueType;
+    return this.__items__.valueType;
   }
   get keyType() {
-    return this.items.keyType;
+    return this.__items__.keyType;
   }
   get rawType() {
-    return this.items.rawType;
+    return this.__items__.rawType;
   }
 }
