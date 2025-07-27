@@ -42,7 +42,8 @@ export class EnumCollectionClass<
   implements
     Omit<IEnumItems<T, K, V>, typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta'>
 {
-  private __options__: EnumItemOptions | undefined;
+  private readonly __options__: EnumItemOptions | undefined;
+  // used for e2e serialization
   private readonly __items__!: EnumItemsArray<T, K, V>;
 
   constructor(init: T = {} as T, options?: EnumItemOptions) {
@@ -87,7 +88,9 @@ export class EnumCollectionClass<
     Object.defineProperty(this, keys.includes('labels') ? LABELS : 'labels', {
       enumerable: true,
       configurable: false,
-      get: () => items.labels,
+      get: function (this: EnumCollectionClass<T, K, V>) {
+        return this.__items__.labels;
+      },
     });
 
     Object.freeze(this);

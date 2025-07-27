@@ -69,7 +69,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
 
         const strangerEnumConfig = {
           ...strangeEnumConfig,
-          items: { value: 101, label: 'bar' },
+          items: { value: 100, label: 'bar' },
         } as const;
         const strangerEnum = Enum(strangerEnumConfig);
         return {
@@ -119,11 +119,33 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(strangeEnum.has).toBe(3);
         engine.expect(strangeEnum.items.has(3)).toBe(true);
         engine.expect(strangeEnum.toList).toBe(4);
-        engine.expect(strangeEnum.items.toList()).toHaveLength(Object.keys(strangeEnumConfig).length);
+        engine
+          .expect(
+            strangeEnum.items.toList().map((i) => ({
+              value: i.value,
+              label: i.label,
+            }))
+          )
+          .toEqual(
+            Object.values(strangeEnumConfig).map((i) => ({
+              value: i.value,
+              label: i.label,
+            }))
+          );
         engine.expect(strangeEnum.toFilter).toBe(6);
-        engine.expect(strangeEnum.items.toFilter()).toHaveLength(Object.keys(strangeEnumConfig).length);
+        engine.expect(strangeEnum.items.toFilter()).toEqual(
+          Object.values(strangeEnumConfig).map((i) => ({
+            value: i.value,
+            text: i.label,
+          }))
+        );
         engine.expect(strangeEnum.toMenu).toBe(7);
-        engine.expect(strangeEnum.items.toMenu()).toHaveLength(Object.keys(strangeEnumConfig).length);
+        engine.expect(strangeEnum.items.toMenu()).toEqual(
+          Object.values(strangeEnumConfig).map((i) => ({
+            key: i.value,
+            label: i.label,
+          }))
+        );
         engine.expect(strangeEnum.toValueMap).toBe(5);
         const map: Record<string, { text: string | undefined }> = {};
         Object.entries(strangeEnumConfig).forEach(([, item]) => {
@@ -131,7 +153,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
         });
         engine.expect(strangeEnum.items.toValueMap()).toEqual(map);
 
-        engine.expect(strangerEnum.items).toBe(101);
+        engine.expect(strangerEnum.items).toBe(100);
         const standardEnumItems = Object.keys(strangerEnumConfig).map((key) => ({
           key,
           value: strangerEnumConfig[key as keyof typeof strangerEnumConfig].value,
@@ -144,7 +166,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
         // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
         engine.expect(strangerEnum[LABELS] as string[]).toBeInstanceOf(Array);
         // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
-        engine.expect(strangerEnum[LABELS] as string[]).toHaveLength(Object.keys(strangerEnumConfig).length);
+        engine.expect(strangerEnum[LABELS] as string[]).toEqual(Object.values(strangerEnumConfig).map((i) => i.label));
       }
     );
 
@@ -170,6 +192,7 @@ const testEnumCollection = (engine: TestEngineBase) => {
         return { week };
       },
       ({ week }) => {
+        // console.log(week.__items__);
         engine.expect((0 as unknown) instanceof week).toBeTruthy();
         engine.expect(('Sunday' as unknown) instanceof week).toBeTruthy();
         engine.expect((6 as unknown) instanceof week).toBeTruthy();

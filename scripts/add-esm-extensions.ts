@@ -21,7 +21,7 @@ function processDir(dir: string) {
     } else if (file.endsWith('.js')) {
       let content = readFileSync(fullPath, 'utf8');
       content = content.replace(/from\s+(['"])([./][^'"]+)['"]/g, (match, quote, importPath) => {
-        if (!importPath.endsWith('.js')) {
+        if (!importPath.endsWith('.js') && !importPath.endsWith('.json')) {
           return `from ${quote}${importPath}.js${quote}`;
         }
         return match;

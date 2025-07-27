@@ -4,6 +4,8 @@ es-legacy
 umd
 tslib
 tses
+src/version.ts
+test/utils/version.ts
 types-legacy/*/*.d.ts
 node_modules
 npm-debug.log

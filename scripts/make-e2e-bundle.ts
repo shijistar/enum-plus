@@ -1,5 +1,4 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { cpSync, readFileSync, writeFileSync } from 'fs';
 import { rollup } from 'rollup';
 
 async function build() {
@@ -26,41 +25,36 @@ async function build() {
   });
 
   // Bundle serialize-javascript
-  const serializePath = './e2e/fixtures/scripts/serialize-javascript.js';
-  changeFormat('./tslib/test/utils/serialize-javascript.js', serializePath, 'SerializeJavascript');
   const serializeJavascript = await rollup({
-    input: serializePath,
+    input: 'tses/test/utils/serialize-javascript.js',
     plugins: [nodeResolve()],
   });
   await serializeJavascript.write({
     file: 'e2e/fixtures/scripts/serialize-javascript-bundle.js',
     format: 'iife',
+    name: 'SerializeJavascript',
   });
 
   // Bundle week-config
-  const weekConfigPath = './e2e/fixtures/scripts/week-config.js';
-  changeFormat('./tslib/test/data/week-config.js', weekConfigPath, 'WeekConfig', (content) => {
-    return content.replace('require("../src")', 'window.EnumPlus');
-  });
   const weekConfig = await rollup({
-    input: weekConfigPath,
+    input: 'tses/test/data/week-config.js',
     plugins: [nodeResolve()],
   });
   await weekConfig.write({
     file: 'e2e/fixtures/scripts/week-config-bundle.js',
     format: 'iife',
+    name: 'WeekConfig',
   });
 
   // Bundle week-data
-  const weekDataPath = './e2e/fixtures/scripts/week-data.js';
-  changeFormat('./tslib/test/data/week-data.js', weekDataPath, 'WeekData');
   const weekDataConfig = await rollup({
-    input: weekDataPath,
+    input: 'tses/test/data/week-data.js',
     plugins: [nodeResolve()],
   });
   await weekDataConfig.write({
     file: 'e2e/fixtures/scripts/week-data-bundle.js',
     format: 'iife',
+    name: 'WeekData',
   });
 }
 
@@ -68,18 +62,3 @@ build().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-
-function changeFormat(src: string, dest: string, name: string, replacer?: (content: string) => string) {
-  cpSync(src, dest, {
-    force: true,
-  });
-  let content = readFileSync(dest, 'utf-8');
-  content = `var exports = {};\n` + content;
-  if (name) {
-    content += `\n window.${name} = exports;`;
-  }
-  if (replacer) {
-    content = replacer(content);
-  }
-  writeFileSync(dest, content);
-}

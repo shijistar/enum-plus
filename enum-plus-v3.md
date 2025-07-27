@@ -52,6 +52,10 @@
 - `enum.valuesEnum` method is removed, use `enum.toValueMap` instead.
 - The behavior of `enum.values` is changed. Use `enum.items` for the old behavior.
 
+## Misc
+
+- The warning message for trying to modify enum items has been removed. First, in order to avoid circular references within enum items (which would affect serialization), we removed the internal `proxy` and used `getter/setter` instead. However, this brought about another problem: when printing enum items in the browser console or node.js, the `key`, `value`, and `label` cannot display their values, but show `[Getter/Setter]` instead. This somewhat affects the debugging experience. Sorry @yyz945947732, you introduced this feature, which is very good, but after weighing the pros and cons, we still had to remove this feature.
+
 ## Bug Fixes
 
 - Fix the issue where sourcemap files under the `lib` directory could not be parsed.

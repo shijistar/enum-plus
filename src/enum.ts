@@ -36,8 +36,10 @@ export const Enum = (<
  * Use defineProperty here to prevent circular dependencies.
  */
 Object.defineProperty(Enum, 'localize', {
-  get: () => localizer.localize,
-  set: (localize: LocalizeInterface) => {
+  get: function () {
+    return localizer.localize;
+  },
+  set: function (localize: LocalizeInterface) {
     localizer.localize = localize;
   },
   enumerable: true,

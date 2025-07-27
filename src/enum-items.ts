@@ -54,6 +54,7 @@ export class EnumItemsArray<
   readonly [VALUES]!: V[];
   readonly labels!: string[];
   readonly meta!: IEnumItems<T, K, V>['meta'];
+  private _runtimeError: (name: string) => string;
 
   /**
    * Instantiate an enum items array
@@ -115,13 +116,23 @@ export class EnumItemsArray<
 
     // Generate labels array
     Object.defineProperty(this, 'labels', {
-      enumerable: true,
-      configurable: false,
-      get: () => {
+      get: function (this: EnumItemsArray<T, K, V>) {
         // Cannot save to static array because labels may be localized contents
         // Should not use `items` in the closure because the getter function cannot be fully serialized
-        return items.map((item) => item.label);
+        return Array.from(this).map((item) => item.label);
       },
+      enumerable: true,
+      configurable: false,
+    });
+
+    this._runtimeError = undefined!;
+    Object.defineProperty(this, '_runtimeError', {
+      value: function (this: EnumItemsArray<T, K, V>, name: string) {
+        return `The ${name} property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the typeof operator in the ts type, for example: typeof Week.${name}`;
+      },
+      writable: false,
+      enumerable: false,
+      configurable: false,
     });
   }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
@@ -258,22 +269,34 @@ export class EnumItemsArray<
       >[] {
     const { valueField = 'value' as FOV, labelField = 'label' as FOL } = config ?? {};
     if (valueField === 'value' && labelField === 'label') {
-      return this;
+      return Array.from(this);
     } else {
-      return this.map((item) => {
+      return Array.from(this).map((item) => {
         const valueFieldName = typeof valueField === 'function' ? valueField(item) : (valueField as string);
         const labelFieldName = typeof labelField === 'function' ? labelField(item) : (labelField as string);
-        return {
+        const listItem = {
           [valueFieldName]: item.value,
-          // should use getter to preserve the localized label, as it may be dynamic content
-          get [labelFieldName]() {
-            return item.label;
-          },
         } as ListItem<
           V,
           FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
           FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
         >;
+        // used for e2e serialization
+        Object.defineProperty(listItem, '__enumItem__', {
+          value: item,
+          writable: false,
+          enumerable: false,
+          configurable: false,
+        });
+        // should use getter to preserve the localized label, as it may be dynamic content
+        Object.defineProperty(listItem, labelFieldName, {
+          get: function () {
+            return this.__enumItem__.label;
+          },
+          enumerable: true,
+          configurable: true,
+        });
+        return listItem;
       });
     }
   }
@@ -287,11 +310,11 @@ export class EnumItemsArray<
   }
 
   toMenu(): MenuItemOption<V>[] {
-    return this.map(({ value, label }) => ({ key: value, label }));
+    return Array.from(this).map(({ value, label }) => ({ key: value, label }));
   }
 
   toFilter(): ColumnFilterItem<V>[] {
-    return this.map(({ value, label }) => ({ text: label, value }));
+    return Array.from(this).map(({ value, label }) => ({ text: label, value }));
   }
 
   /** Stub method, only for typing usages, not for runtime calling */
@@ -307,10 +330,6 @@ export class EnumItemsArray<
   /** Stub method, only for typing usages, not for runtime calling */
   get rawType(): T[K] {
     throw new Error(this._runtimeError('rawType'));
-  }
-
-  private _runtimeError(name: string) {
-    return `The ${name} property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the typeof operator in the ts type, for example: typeof Week.${name}`;
   }
 }
 

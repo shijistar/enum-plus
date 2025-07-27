@@ -192,11 +192,22 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       const defaultListItems = weekEnum.items.toList();
-      return { locales, defaultListItems };
+      const customListItems = weekEnum.items.toList({
+        valueField: 'id',
+        labelField: 'name',
+      });
+      return { locales, defaultListItems, customListItems };
     },
-    ({ locales, defaultListItems }) => {
+    ({ locales, defaultListItems, customListItems }) => {
       engine.expect(copyList(defaultListItems)).toEqual(pickArray(getStandardWeekData(locales), ['value', 'label']));
+      engine.expect(copyList(customListItems, 'id', 'name')).toEqual(
+        pickArray(getStandardWeekData(locales), ['value', 'label']).map((item) => ({
+          id: item.value,
+          name: item.label,
+        }))
+      );
 
+      // todo: 这些逻辑需要迁移到antd插件中
       // Add first-option by boolean flag
       // const withDefaultFirstOption = weekEnum.items.toList({ firstOption: true });
       // engine.expect(withDefaultFirstOption).toHaveLength(8);

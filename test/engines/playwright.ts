@@ -64,8 +64,8 @@ export class PlaywrightEngine extends TestEngineBase {
         SerializeJavascript,
       };
       // console.log('window', runtimeContext);
-      const { stringify: serialize, parse: deserialize } = SerializeJavascript;
-      const args = deserialize(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
+      const { stringify, parse } = SerializeJavascript;
+      const args = parse(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
       const { evaluateFn, ...rest } = args;
 
       // Set the initial state to en-US before executing evaluation, equal to setup in jest.
@@ -77,7 +77,7 @@ export class PlaywrightEngine extends TestEngineBase {
       // console.log(evaluateResult);
 
       // Serialize the evaluation result and pass it to assertion method
-      const serializedStr = serialize({
+      const serializedStr = stringify({
         _enumLocalize: EnumPlus.Enum.localize,
         _lang: WeekConfig.lang,
         ...evaluateResult,

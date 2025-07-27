@@ -16,6 +16,9 @@ export class EnumItemClass<
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
 > {
   private _options: EnumItemOptions | undefined;
+  private _label: string | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _localize: (content: string | undefined) => any;
 
   /**
    * Instantiate an enum item
@@ -31,7 +34,40 @@ export class EnumItemClass<
     this.value = value;
     this.label = label;
     this.raw = raw;
-    const isNode = typeof process !== 'undefined' && process && process.versions && process.versions.node != null;
+
+    Object.defineProperty(this, '_label', {
+      value: label,
+      writable: false,
+      enumerable: false,
+      configurable: false,
+    });
+    Object.defineProperties(this, {
+      value: {
+        value,
+        writable: false,
+        enumerable: true,
+        configurable: false,
+      },
+      label: {
+        get: function (this: EnumItemClass<T, K, V>) {
+          return this._localize(this._label) ?? this._label;
+        },
+        enumerable: true,
+        configurable: false,
+      },
+      key: {
+        value: key,
+        writable: false,
+        enumerable: true,
+        configurable: false,
+      },
+      raw: {
+        value: raw,
+        writable: false,
+        enumerable: true,
+        configurable: false,
+      },
+    });
     // Do not use class field here, because don't want print this field in Node.js
     Object.defineProperty(this, '_options', {
       value: options,
@@ -39,56 +75,20 @@ export class EnumItemClass<
       enumerable: false,
       configurable: false,
     });
-    Object.defineProperties(this, {
-      value: {
-        // To print pretty in Node.js console
-        ...(isNode
-          ? {
-              value,
-              writable: false,
-            }
-          : /* istanbul ignore next */ {
-              get: /* istanbul ignore next */ () => value,
-              set: /* istanbul ignore next */ () => console.warn(this._readonlyPropWarning('value')),
-            }),
-        enumerable: true,
-        configurable: false,
+    this._localize = undefined!;
+    Object.defineProperty(this, '_localize', {
+      value: function (this: EnumItemClass<T, K, V>, content: string | undefined) {
+        const localize = this._options?.localize ?? localizer.localize;
+        if (typeof localize === 'function') {
+          return localize(content);
+        }
+        return content;
       },
-      label: {
-        get: () => this._localize(label) ?? label,
-        set: () => console.warn(this._readonlyPropWarning('label')),
-        enumerable: true,
-        configurable: false,
-      },
-      key: {
-        // To print pretty in Node.js console
-        ...(isNode
-          ? {
-              value: key,
-              writable: false,
-            }
-          : /* istanbul ignore next */ {
-              get: /* istanbul ignore next */ () => key,
-              set: /* istanbul ignore next */ () => console.warn(this._readonlyPropWarning('key')),
-            }),
-        enumerable: true,
-        configurable: false,
-      },
-      raw: {
-        // To print pretty in Node.js console
-        ...(isNode
-          ? {
-              value: raw,
-              writable: false,
-            }
-          : /* istanbul ignore next */ {
-              get: /* istanbul ignore next */ () => raw,
-              set: /* istanbul ignore next */ () => console.warn(this._readonlyPropWarning('raw')),
-            }),
-        enumerable: true,
-        configurable: false,
-      },
+      writable: false,
+      enumerable: false,
+      configurable: false,
     });
+
     Object.freeze(this);
   }
 
@@ -149,21 +149,9 @@ export class EnumItemClass<
     return this.valueOf();
   }
 
-  // should use function here to avoid closure. this is important for the e2e test cases.
-  private _localize(content: string | undefined) {
-    const localize = this._options?.localize ?? localizer.localize;
-    if (typeof localize === 'function') {
-      return localize(content);
-    }
-    return content;
-  }
-  private _readonlyPropWarning(name: string) {
-    return `Cannot modify property "${name}" on EnumItem. EnumItem instances are readonly and should not be mutated.`;
-  }
-
   // The priority of the toString method is lower than the valueOf method
   toString() {
-    return this._localize(this.label);
+    return this.label;
   }
   toLocaleString() {
     return this.toString();
