@@ -361,15 +361,30 @@ function serializeRecursively(
     return `${ST}null${ET}`;
   } else if (source === undefined) {
     return undefined;
-  } else if (source instanceof RegExp) {
-    return `${ST}new RegExp('${source.source.replace(/\\\\/g, '\\')}', '${source.flags ?? ''}')${ET}`;
-    // `value instanceof Date` never works, try testing date format instead
+  } else if (typeof source === 'number') {
+    if (Number.isNaN(source)) {
+      return `${ST}NaN${ET}`;
+    } else if (source === Number.POSITIVE_INFINITY) {
+      return `${ST}Infinity${ET}`;
+    } else if (source === Number.NEGATIVE_INFINITY) {
+      return `${ST}-Infinity${ET}`;
+    } else {
+      return `${ST}${source}${ET}`;
+    }
   } else if (source instanceof Date) {
+    if (Number.isNaN(source.getTime())) {
+      return `${ST}new Date(NaN)${ET}`;
+    }
     return `${ST}new Date('${source.toISOString()}')${ET}`;
   } else if (typeof source === 'bigint') {
     return `${ST}BigInt('${source.toString()}')${ET}`;
+  } else if (source instanceof RegExp) {
+    return `${ST}new RegExp('${source.source.replace(/\\\\/g, '\\')}', '${source.flags ?? ''}')${ET}`;
+    // `value instanceof Date` never works, try testing date format instead
   } else if (typeof source === 'symbol') {
-    if (Symbol.keyFor(source)) {
+    if (wellKnownSymbols.includes(source)) {
+      return `${ST}${source.description}${ET}`;
+    } else if (Symbol.keyFor(source)) {
       return `${ST}Symbol.for('${Symbol.keyFor(source)}')${ET}`;
     }
     return `${ST}Symbol('${source.description}')${ET}`;
@@ -390,6 +405,7 @@ function serializeRecursively(
       NaN 和 Infinity 格式的数值及 null 都会被当做 null。
       其他类型的对象，包括 Map/Set/WeakMap/WeakSet，仅会序列化可枚举的属性。
 
+      todo:
       https://developer.mozilla.org/zh-CN/docs/Web/API/Window/structuredClone
     */
       // Save the symbol keys to a string property, because symbol keys are not serializable.
@@ -408,31 +424,22 @@ function serializeRecursively(
       }
       Object.keys(source).forEach((key) => {
         const subValue = source[key];
-        if (
-          subValue != null &&
-          typeof subValue !== 'string' &&
-          typeof subValue !== 'number' &&
-          typeof subValue !== 'boolean'
-        ) {
-          const serializedValue = serializeRecursively(subValue, {
-            ...options,
-            parentPath: [...parentPath, key],
-            printLabel,
-          });
-          if (debug) {
-            console.log(
-              `------------------ serializeRecursively${printLabel ? ` (${printLabel})` : ''}`,
-              printPath ? printPath({ parentPath, key }) : [...parentPath, key],
-              ' ------------------'
-            );
-            console.log('value:', subValue);
-            console.log('result:');
-            console.log(serializedValue);
-          }
-          source[key] = serializedValue;
-        } else {
-          source[key] = subValue;
+        const serializedValue = serializeRecursively(subValue, {
+          ...options,
+          parentPath: [...parentPath, key],
+          printLabel,
+        });
+        if (debug) {
+          console.log(
+            `------------------ serializeRecursively${printLabel ? ` (${printLabel})` : ''}`,
+            printPath ? printPath({ parentPath, key }) : [...parentPath, key],
+            ' ------------------'
+          );
+          console.log('value:', subValue);
+          console.log('result:');
+          console.log(serializedValue);
         }
+        source[key] = serializedValue;
       });
       return source;
     } else if (typeof source === 'function') {
@@ -883,6 +890,10 @@ interface RefInfo {
   path: PathType[];
   from: PathType[];
 }
+// interface Jsoner<T> {
+//   fromJson: (value: T) => string;
+//   deserialize: (value: string) => T;
+// }
 
 interface SerializedResult {
   version?: string;
@@ -890,10 +901,10 @@ interface SerializedResult {
   variablePrefix?: string;
   endTag?: string;
   source: string | undefined;
-  patches: PatchInfo[];
-  descriptors?: DescriptorInfo[];
   types: TypeInfo[];
+  patches: PatchInfo[];
   refs: RefInfo[];
+  descriptors?: DescriptorInfo[];
 }
 
 export interface StringifyOptions {
