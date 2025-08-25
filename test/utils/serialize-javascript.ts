@@ -58,7 +58,8 @@ export function stringify(value: any, options?: StringifyOptions): string {
   const types: TypeInfo[] = [];
   const circular = new WeakMap<any, PathType[]>();
   const refs: RefInfo[] = [];
-  const source = expandPrototypeChain(value, { ...options, patches, descriptors, types, circular, refs });
+  const apis: JsonApi[] = [];
+  const source = expandPrototypeChain(value, { ...options, patches, descriptors, types, apis, circular, refs });
   const serialized = serializeRecursively(source, {
     ...options,
     parentPath: [],
@@ -82,6 +83,7 @@ export function stringify(value: any, options?: StringifyOptions): string {
       },
     }) as PatchInfo[],
     types,
+    apis,
     refs,
   };
   if (preserveDescriptors) {
@@ -112,39 +114,35 @@ export function stringify(value: any, options?: StringifyOptions): string {
  * @param options - Options to control the expansion behavior.
  */
 export function expandPrototypeChain(source: any, options?: ExpandPrototypeChainOptions): typeof source {
-  const { parentPath, patches = [], descriptors = [], types = [], refs = [], circular = new WeakMap() } = options ?? {};
+  const {
+    parentPath,
+    patches = [],
+    descriptors = [],
+    types = [],
+    refs = [],
+    apis = [],
+    circular = new WeakMap(),
+  } = options ?? {};
   return expandPrototypeChainRecursively(source, {
     ...options,
+    paths: parentPath ?? [],
     patches,
     descriptors,
     types,
     refs,
+    apis,
     circular,
-    paths: parentPath,
   });
 }
 
 function expandPrototypeChainRecursively(
   source: any,
   options: {
-    paths?: PathType[];
-    patches: PatchInfo[];
-    descriptors: DescriptorInfo[];
-    types: TypeInfo[];
-    circular: WeakMap<any, PathType[]>;
-    refs: RefInfo[];
-  } & Pick<StringifyOptions, 'preserveClassConstructor' | 'preserveDescriptors' | 'debug'>
+    paths: PathType[];
+  } & Pick<ExpandPrototypeChainOptions, 'patches' | 'descriptors' | 'types' | 'refs' | 'apis' | 'circular'> &
+    Pick<StringifyOptions, 'preserveClassConstructor' | 'preserveDescriptors' | 'debug'>
 ): typeof source {
-  const {
-    debug,
-    patches,
-    preserveDescriptors = true,
-    descriptors = [],
-    types = [],
-    paths = [],
-    refs = [],
-    circular,
-  } = options ?? {};
+  const { debug, patches, preserveDescriptors = true, descriptors, types, paths, refs, apis, circular } = options;
   if (source == null || source === Array.prototype || source === Object.prototype) {
     return source;
   }
@@ -176,6 +174,19 @@ function expandPrototypeChainRecursively(
     if (assertCircular(source, paths)) {
       // should return `null` instead of `undefined`, since undefined will be ignored in JSON.stringify
       return null;
+    }
+    if ('isRawJSON' in JSON && typeof JSON.isRawJSON === 'function' && JSON.isRawJSON(source)) {
+      return source;
+    } else if (source.toJSON && typeof source.toJSON === 'function') {
+      const api: JsonApi = {
+        toJSON: stringToBase64(serializeFunction(source.toJSON.toString())!),
+      };
+      if (source.fromJSON && typeof source.fromJSON === 'function') {
+        api.fromJSON = stringToBase64(serializeFunction(source.fromJSON.toString())!);
+      }
+      apis.push(api);
+      // todo: 1. 序列化result 2. 解析apis
+      result = source.toJSON();
     }
     if (Array.isArray(source)) {
       result = [...source];
@@ -361,6 +372,8 @@ function serializeRecursively(
     return `${ST}null${ET}`;
   } else if (source === undefined) {
     return undefined;
+  } else if ('isRawJSON' in JSON && typeof JSON.isRawJSON === 'function' && JSON.isRawJSON(source)) {
+    return source;
   } else if (typeof source === 'number') {
     if (Number.isNaN(source)) {
       return `${ST}NaN${ET}`;
@@ -460,11 +473,17 @@ export function serializeFunction(funcStr: string) {
     return undefined;
   }
   if (
+    // function () {}
     !funcStr.startsWith('function') &&
+    // async function () {}
     !funcStr.startsWith('async function') &&
+    // class {}
     !funcStr.startsWith('class') &&
+    // function* () {}
     !funcStr.startsWith('function*') &&
+    // async function* () {}
     !funcStr.startsWith('async function*') &&
+    // () => {}
     !funcStr.replace(/\s/g, '').match(/^\(?[^)]+\)?=>/)
   ) {
     // If it's a computed property function, for example: { [Symbol.toPrimitive]() { return 1; } }
@@ -890,10 +909,10 @@ interface RefInfo {
   path: PathType[];
   from: PathType[];
 }
-// interface Jsoner<T> {
-//   fromJson: (value: T) => string;
-//   deserialize: (value: string) => T;
-// }
+interface JsonApi {
+  fromJSON?: string;
+  toJSON: string;
+}
 
 interface SerializedResult {
   version?: string;
@@ -902,6 +921,7 @@ interface SerializedResult {
   endTag?: string;
   source: string | undefined;
   types: TypeInfo[];
+  apis: JsonApi[];
   patches: PatchInfo[];
   refs: RefInfo[];
   descriptors?: DescriptorInfo[];
@@ -969,6 +989,7 @@ export type ExpandPrototypeChainOptions = {
   descriptors: DescriptorInfo[];
   /** The output types for the object after expanding the prototype chain. */
   types: TypeInfo[];
+  apis: JsonApi[];
   circular: WeakMap<any, PathType[]>;
   /** The circular refs for the object after expanding the prototype chain. */
   refs: RefInfo[];
