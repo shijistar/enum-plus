@@ -33,6 +33,8 @@ import { version } from './version';
  * 4. Supports serialization of Symbol keys and values.
  * 5. Supports serialization of custom property descriptors.
  * 6. Supports serialization of non-enumerable properties.
+ * 7. Supports toJSON and fromJSON methods for custom serialization and deserialization.
+ * 8. Supports raw JSON objects (via JSON.rawJSON() method).
  */
 
 const DefaultStartTag = '$SJS$_';
@@ -42,6 +44,19 @@ const SymbolKeyRegExps: [RegExp, RegExp] = [/\[Symbol\.\w+\]/, /\[Symbol\.for\([
 const SymbolKeyPrefixRegExp = /\[/;
 const SymbolKeySuffixRegExp = /\]/;
 const wellKnownSymbols = getWellKnownSymbols();
+const TypedArrays = [
+  Int8Array,
+  Uint8Array,
+  Uint8ClampedArray,
+  Int16Array,
+  Uint16Array,
+  Int32Array,
+  Uint32Array,
+  Float32Array,
+  Float64Array,
+  BigInt64Array,
+  BigUint64Array,
+];
 
 /**
  * Serialize JavaScript object to string, support functions. Should including all fields of both
@@ -185,10 +200,11 @@ function expandPrototypeChainRecursively(
         api.fromJSON = stringToBase64(serializeFunction(source.fromJSON.toString())!);
       }
       apis.push(api);
-      // todo: 1. 序列化result 2. 解析apis
       result = source.toJSON();
-    }
-    if (Array.isArray(source)) {
+      if (result == null) {
+        return result;
+      }
+    } else if (Array.isArray(source)) {
       result = [...source];
     } else if (source instanceof Map) {
       result = Array.from(source.keys()).reduce(
@@ -206,6 +222,9 @@ function expandPrototypeChainRecursively(
       result = {};
     } else if (source instanceof WeakSet) {
       result = [];
+    } else if (TypedArrays.some((Type) => source instanceof Type)) {
+      result = Array.from(source);
+      types.push({ path: paths, type: source.constructor.name });
     } else if (source instanceof ArrayBuffer) {
       result = source.slice(0);
       types.push({ path: paths, type: 'ArrayBuffer' });
@@ -336,7 +355,7 @@ function expandPrototypeChainRecursively(
       if (hasExtra) {
         patches.push({
           path: paths,
-          info: patchValue,
+          patch: patchValue,
         });
       }
     }
@@ -602,9 +621,13 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
   function restoreOriginalTypes(root, types = []) {
     // Apply types to the deserialized object
     types.forEach(({ path, type, metadata }) => {
+    // todo: path = [] 时，下面的逻辑会有问题
+    // todo: 测试支持BigInt64Array的序列化
+    // todo: 支持URL、URLSearchParams、支持Buffer
       const keyName = getLastKey(path);
       const parent = getParent(root, path);
       const value = get(root, path);
+      console.log('Restoring type:', type, 'at', path, 'with value:', value, parent[keyName] === value);
       if (value && parent && parent[keyName] === value) {
         if (type === 'Map' && typeof value === 'object') {
           // Convert array to Map
@@ -618,7 +641,14 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
           // Convert array to Set
           const set = new Set(value);
           parent[keyName] = set;
-        } else if (type === 'ArrayBuffer' && typeof ArrayBuffer === 'function' && typeof Uint8Array === 'function' && Array.isArray(value)) {
+        } 
+        else if ([${TypedArrays.map((t) => `'${t.name}'`).join(', ')}].includes(type) && 
+          typeof globalThis[type] === 'function' && 
+          Array.isArray(value)) {
+          console.log('Creating TypedArray:', type, value);
+          parent[keyName] = new globalThis[type](value);
+        }
+        else if (type === 'ArrayBuffer' && typeof ArrayBuffer === 'function' && typeof Uint8Array === 'function' && Array.isArray(value)) {
           const buffer = new ArrayBuffer(value.length);
           const view = new Uint8Array(buffer);
           value.forEach((item, index) => {
@@ -643,13 +673,13 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
 
   function restorePatches(root, patches = []) {
     // Apply patches to the deserialized object
-    patches.forEach(({ path, info }) => {
+    patches.forEach(({ path, patch }) => {
       const sourceObj = get(root, path);
       if (sourceObj) {
         const sourceKeys = getFullKeys(sourceObj);
-        getFullKeys(info).forEach((key) => {
+        getFullKeys(patch).forEach((key) => {
           if (!sourceKeys.includes(key) || sourceObj[key] == null) {
-            sourceObj[key] = info[key];
+            sourceObj[key] = patch[key];
           }
         });
       }
@@ -890,7 +920,7 @@ type PathType = string | number | symbol;
 /** Information about a patch applied to an Array or function. */
 interface PatchInfo {
   path: PathType[];
-  info: any;
+  patch: any;
 }
 interface DescriptorInfo {
   ownerPath: PathType[];
