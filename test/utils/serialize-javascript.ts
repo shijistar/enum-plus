@@ -23,6 +23,9 @@ import { version } from './version';
  * 8. Respect `toJSON` and `fromJSON` method, if the object has a `toJSON` method, it will be called to
  *    get the serialized value. If the object has a `fromJSON` method, it will be called with
  *    serialized json to restore the original value.
+ * 9. Make sure you trust the source of the serialized string, because the deserialization need to
+ *    evaluate script codes. A carefully crafted strings may embed malicious code, thus posing a
+ *    security threat.
  */
 /**
  * Advantages:
@@ -597,8 +600,8 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
   const symbolKeySuffixRegExp = new RegExp('${escapeRegExp(SymbolKeySuffixRegExp, { escapeTwice: isPrinting })}$');
 
   // 1. Should be the first step.
-  // Restore to the original types.
-  restoreOriginalTypes(deserializeResult, types);
+  // Restore to the original types, except the root object.
+  restoreOriginalTypes(deserializeResult, types.filter((t) => t.path.length > 0));
 
   // 2. Should be before restoreSymbolKeys, because the symbol-strings may be broken to Symbols.
   // Restore patches
@@ -613,62 +616,89 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
   // 4-2. Should be before restoreDescriptors, because related fields may be changed to readonly.
   // Restore references to solve circular dependencies
   restoreRefs(deserializeResult, refs);
-  
-  // 5. Should be the last step.
+
+  // 5. Should be after restoreRefs.
   // Restore custom property descriptors
   restoreDescriptors(deserializeResult, descriptors);
 
+  // 6. Should be the last step.
+  // Restore the root object type.
+  if (types.some((t) => t.path.length === 0)) {
+    const rootResult = restoreOriginalTypes(deserializeResult, types.filter((t) => t.path.length === 0));
+    const newRoot = rootResult.root;
+    if (refs.some((t) => t.from.length === 0)) {
+      // Remap the refs to the root
+      const rootRefs = refs.filter((t) => t.from.length === 0);
+      rootRefs.forEach(({ path, from }) => {
+        const parent = getParent(deserializeResult, path);
+        const keyName = getLastKey(path);
+        if (parent != null && keyName) {
+          parent[keyName] = newRoot;
+        }
+      });
+    }
+    return newRoot;
+  }
+
   function restoreOriginalTypes(root, types = []) {
+    const returnResult = {};
     // Apply types to the deserialized object
     types.forEach(({ path, type, metadata }) => {
-    // todo: path = [] 时，下面的逻辑会有问题
-    // todo: 测试支持BigInt64Array的序列化
     // todo: 支持URL、URLSearchParams、支持Buffer
-      const keyName = getLastKey(path);
-      const parent = getParent(root, path);
       const value = get(root, path);
-      console.log('Restoring type:', type, 'at', path, 'with value:', value, parent[keyName] === value);
-      if (value && parent && parent[keyName] === value) {
-        if (type === 'Map' && typeof value === 'object') {
-          // Convert array to Map
-          const map = new Map();
-          Object.keys(value).forEach((key) => {
-            map.set(key, value[key]);
-          });
-          parent[keyName] = map;
+      let newResult;
+      if (type === 'Map' && typeof value === 'object') {
+        // Convert array to Map
+        const map = new Map();
+        Object.keys(value).forEach((key) => {
+          map.set(key, value[key]);
+        });
+        newResult = map;
+      }
+      else if (type === 'Set' && Array.isArray(value)) {
+        // Convert array to Set
+        const set = new Set(value);
+        newResult = set;
+      } 
+      else if ([${TypedArrays.map((t) => `'${t.name}'`).join(', ')}].includes(type) && 
+        typeof globalThis[type] === 'function' && 
+        Array.isArray(value)) {
+        newResult = new globalThis[type](value);
+      }
+      else if (type === 'ArrayBuffer' && typeof ArrayBuffer === 'function' && typeof Uint8Array === 'function' && Array.isArray(value)) {
+        const buffer = new ArrayBuffer(value.length);
+        const view = new Uint8Array(buffer);
+        value.forEach((item, index) => {
+          view[index] = item;
+        });
+        newResult = buffer;
+      }
+      else if (type === 'DataView' && typeof DataView === 'function' && typeof ArrayBuffer === 'function' && typeof Uint8Array === 'function' && Array.isArray(value)) {
+        const buffer = new ArrayBuffer(value.length);
+        const view = new Uint8Array(buffer);
+        value.forEach((item, index) => {
+          view[index] = item;
+        });
+        newResult = new DataView(buffer);
+      }
+      else if (type === 'Blob' && typeof Blob === 'function' && Array.isArray(value)) {
+        newResult = new Blob(value, { type: metadata && metadata.type ? metadata.type : '' });
+      }
+
+      if (newResult) {
+        if (path.length === 0) {
+          returnResult.root = newResult;
         }
-        else if (type === 'Set' && Array.isArray(value)) {
-          // Convert array to Set
-          const set = new Set(value);
-          parent[keyName] = set;
-        } 
-        else if ([${TypedArrays.map((t) => `'${t.name}'`).join(', ')}].includes(type) && 
-          typeof globalThis[type] === 'function' && 
-          Array.isArray(value)) {
-          console.log('Creating TypedArray:', type, value);
-          parent[keyName] = new globalThis[type](value);
-        }
-        else if (type === 'ArrayBuffer' && typeof ArrayBuffer === 'function' && typeof Uint8Array === 'function' && Array.isArray(value)) {
-          const buffer = new ArrayBuffer(value.length);
-          const view = new Uint8Array(buffer);
-          value.forEach((item, index) => {
-            view[index] = item;
-          });
-          parent[keyName] = buffer;
-        }
-        else if (type === 'DataView' && typeof DataView === 'function' && typeof ArrayBuffer === 'function' && typeof Uint8Array === 'function' && Array.isArray(value)) {
-          const buffer = new ArrayBuffer(value.length);
-          const view = new Uint8Array(buffer);
-          value.forEach((item, index) => {
-            view[index] = item;
-          });
-          parent[keyName] = new DataView(buffer);
-        }
-        else if (type === 'Blob' && typeof Blob === 'function' && Array.isArray(value)) {
-          parent[keyName] = new Blob(value, { type: metadata && metadata.type ? metadata.type : '' });
+        else {
+          const keyName = getLastKey(path);
+          const parent = getParent(root, path);
+          if (parent) {
+            parent[keyName] = newResult;
+          }
         }
       }
     });
+    return returnResult;
   }
 
   function restorePatches(root, patches = []) {
@@ -749,7 +779,10 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
   }
 
   function getParent(root, path) {
-    return path && path.length ? get(root, path.slice(0, -1)) : null;
+    if (path.length <= 1) {
+      return root;
+    }
+    return get(root, path.slice(0, -1));
   }
 
   function isSymbolFieldName(key) {
@@ -834,7 +867,14 @@ export function pickPrototype(
   const target: Record<string | symbol, any> = Object.create(null);
   const ignoredKeys = [preserveClassConstructor ? undefined : 'constructor'].filter(Boolean) as (string | symbol)[];
   let proto = Object.getPrototypeOf(source);
-  while (proto != null && proto !== Object.prototype && proto !== Array.prototype) {
+  while (
+    proto != null &&
+    proto !== Object.prototype &&
+    proto !== Array.prototype &&
+    proto !== Function.prototype &&
+    proto !== Map.prototype &&
+    proto !== Set.prototype
+  ) {
     const protoKeys = getFullKeys(proto);
     for (const key of protoKeys) {
       if (!(key in target) && !ignoredKeys.includes(key)) {
