@@ -152,7 +152,7 @@
     "task:update-es-legacy-enum": "tsx scripts/update-enum-ts.ts es-legacy",
     "task:update-lib-enum": "tsx scripts/update-enum-ts.ts lib",
     "task:update-tses-enum": "tsx scripts/update-enum-ts.ts tses",
-    "test": "npm run gv task:jest",
+    "test": "run-s gv task:jest",
     "test-all": "run-s build task:jest test-node-cjs-core test-node-esm-core task:run-e2e",
     "test-node-cjs": "run-s build:lib test-node-cjs-core",
     "test-node-cjs-core": "run-s ts2lib task:jest-cjs",

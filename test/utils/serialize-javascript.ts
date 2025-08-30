@@ -26,6 +26,7 @@ import { version } from './version';
  * 9. Make sure you trust the source of the serialized string, because the deserialization need to
  *    evaluate script codes. A carefully crafted strings may embed malicious code, thus posing a
  *    security threat.
+ * 10. Buffer is supported in Node.js environment, and will be converted to Uint8Array in web browsers.
  */
 /**
  * Advantages:
@@ -43,10 +44,10 @@ import { version } from './version';
 const DefaultStartTag = '$SJS$_';
 const DefaultEndTag = '_$SJE$';
 const VariablePrefix = '$SJV$_';
-const SymbolKeyRegExps: [RegExp, RegExp] = [/\[Symbol\.\w+\]/, /\[Symbol\.for\([\u0027\u0022].+?[\u0027\u0022]\)\]/];
+const SymbolKeyRegExps = [/\[Symbol\.\w+\]/, /\[Symbol\.for\([\u0027\u0022].+?[\u0027\u0022]\)\]/];
 const SymbolKeyPrefixRegExp = /\[/;
 const SymbolKeySuffixRegExp = /\]/;
-const wellKnownSymbols = getWellKnownSymbols();
+const WellKnownSymbols = getWellKnownSymbols();
 const TypedArrays = [
   Int8Array,
   Uint8Array,
@@ -195,20 +196,14 @@ function expandPrototypeChainRecursively(
     }
     if ('isRawJSON' in JSON && typeof JSON.isRawJSON === 'function' && JSON.isRawJSON(source)) {
       return source;
-    } else if (source.toJSON && typeof source.toJSON === 'function') {
-      const api: JsonApi = {
-        toJSON: stringToBase64(serializeFunction(source.toJSON.toString())!),
-      };
-      if (source.fromJSON && typeof source.fromJSON === 'function') {
-        api.fromJSON = stringToBase64(serializeFunction(source.fromJSON.toString())!);
-      }
-      apis.push(api);
-      result = source.toJSON();
-      if (result == null) {
-        return result;
-      }
-    } else if (Array.isArray(source)) {
-      result = [...source];
+    } else if (source instanceof URL) {
+      result = source.toString();
+      types.push({ path: paths, type: 'URL' });
+      return result;
+    } else if (source instanceof URLSearchParams) {
+      result = source.toString();
+      types.push({ path: paths, type: 'URLSearchParams' });
+      return result;
     } else if (source instanceof Map) {
       result = Array.from(source.keys()).reduce(
         (acc, key) => {
@@ -237,6 +232,28 @@ function expandPrototypeChainRecursively(
     } else if (typeof Blob !== 'undefined' && source instanceof Blob) {
       result = typeof Blob !== 'undefined' ? new Blob([source], { type: source.type }) : undefined;
       types.push({ path: paths, type: 'Blob', metadata: { type: source.type } });
+    } else if (typeof Buffer !== 'undefined' && source instanceof Buffer) {
+      result = Array.from(source);
+      types.push({ path: paths, type: 'Buffer' });
+      return result;
+    } else if (Array.isArray(source)) {
+      result = [...source];
+    } else if (source.toJSON && typeof source.toJSON === 'function') {
+      const api: JsonApi = {
+        path: paths,
+        toJSON: stringToBase64(serializeFunction(source.toJSON.toString())!),
+      };
+      if (source.fromJSON && typeof source.fromJSON === 'function') {
+        api.fromJSON = stringToBase64(serializeFunction(source.fromJSON.toString())!);
+      }
+      apis.push(api);
+      result = source.toJSON();
+      if (result != null && typeof result !== 'object' && typeof result !== 'function') {
+        return result;
+      } else {
+        // continue to expand the prototype chain
+        source = result;
+      }
     } else if (source[Symbol.iterator]) {
       result = Array.from(source);
     } else {
@@ -318,7 +335,6 @@ function expandPrototypeChainRecursively(
 
     assign(proto);
     assign(source);
-
     for (const key of getFullKeys(result)) {
       result[key] = expandPrototypeChainRecursively(result[key], {
         ...options,
@@ -417,7 +433,7 @@ function serializeRecursively(
     return `${ST}new RegExp('${source.source.replace(/\\\\/g, '\\')}', '${source.flags ?? ''}')${ET}`;
     // `value instanceof Date` never works, try testing date format instead
   } else if (typeof source === 'symbol') {
-    if (wellKnownSymbols.includes(source)) {
+    if (WellKnownSymbols.includes(source)) {
       return `${ST}${source.description}${ET}`;
     } else if (Symbol.keyFor(source)) {
       return `${ST}Symbol.for('${Symbol.keyFor(source)}')${ET}`;
@@ -427,22 +443,7 @@ function serializeRecursively(
     return `${ST}new Error('${source.message}')${ET}`;
   } else {
     if (typeof source === 'object') {
-      // todo: 优先判断对象是否有toJson()方法
-      // todo: parse时，需要判断是否有fromJson()方法，如果有，则调用该方法进行反序列化
-      /*
-      转换值如果有 toJSON() 方法，该方法定义什么值将被序列化。
-      非数组对象的属性不能保证以特定的顺序出现在序列化后的字符串中。
-      布尔值、数字、字符串的包装对象在序列化过程中会自动转换成对应的原始值。
-      undefined、任意的函数以及 symbol 值，在序列化过程中会被忽略（出现在非数组对象的属性值中时）或者被转换成 null（出现在数组中时）。函数、undefined 被单独转换时，会返回 undefined，如JSON.stringify(function(){}) or JSON.stringify(undefined).
-      对包含循环引用的对象（对象之间相互引用，形成无限循环）执行此方法，会抛出错误。
-      所有以 symbol 为属性键的属性都会被完全忽略掉，即便 replacer 参数中强制指定包含了它们。
-      Date 日期调用了 toJSON() 将其转换为了 string 字符串（同 Date.toISOString()），因此会被当做字符串处理。
-      NaN 和 Infinity 格式的数值及 null 都会被当做 null。
-      其他类型的对象，包括 Map/Set/WeakMap/WeakSet，仅会序列化可枚举的属性。
-
-      todo:
-      https://developer.mozilla.org/zh-CN/docs/Web/API/Window/structuredClone
-    */
+      // todo: 反序列化时，需要反解析两次，第一次作为source，第二个作为target。避免在处理types或apis时，source被修改从而导致patches获取不到子代的值
       // Save the symbol keys to a string property, because symbol keys are not serializable.
       // They will be restored in the deserialization process.
 
@@ -485,7 +486,8 @@ function serializeRecursively(
       funcStr = funcStr.replace(/"/g, "'");
       return `${ST}(${funcStr})${ET}`;
     } else {
-      return source.toString();
+      // rest primitive types, including boolean and string
+      return source;
     }
   }
 }
@@ -569,15 +571,26 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
     patches,
     descriptors,
     types,
+    apis,
     refs,
   } = result;
   const escapeSingleQuote = (str: string) => str.replace(/'/g, isPrinting ? "\\\\'" : "\\'");
   const content = `${closure ? `const { ${Object.keys(closure ?? {}).join(', ')} } = ${VP}context || {};` : ''}
   const { get } = ${VP}options;
   const deserializeResult = (\n${decodeFormat(sourceCode, { startTag: ST, endTag: ET })}\n);
-  const patches = ${decodeFormat(JSON.stringify(patches), { startTag: ST, endTag: ET })} ?? [];
   const types = ${decodeFormat(JSON.stringify(types), { startTag: ST, endTag: ET })} ?? [];
+  const patches = ${decodeFormat(JSON.stringify(patches), { startTag: ST, endTag: ET })} ?? [];
   const refs = ${decodeFormat(JSON.stringify(refs), { startTag: ST, endTag: ET })} ?? [];
+  const apis = ${decodeFormat(
+    JSON.stringify(
+      apis.map((api) => ({
+        ...api,
+        toJSON: `${ST}${base64ToString(api.toJSON)}${ET}`,
+        fromJSON: api.fromJSON ? `${ST}${base64ToString(api.fromJSON)}${ET}` : undefined,
+      }))
+    ),
+    { startTag: ST, endTag: ET }
+  )} ?? [];
   const descriptors = ${decodeFormat(
     JSON.stringify(
       descriptors?.map((d) => ({
@@ -601,7 +614,7 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
 
   // 1. Should be the first step.
   // Restore to the original types, except the root object.
-  restoreOriginalTypes(deserializeResult, types.filter((t) => t.path.length > 0));
+  restoreOriginalTypes(deserializeResult, types.filter((t) => t.path.length > 0), apis.filter((t) => t.path.length > 0));
 
   // 2. Should be before restoreSymbolKeys, because the symbol-strings may be broken to Symbols.
   // Restore patches
@@ -623,8 +636,8 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
 
   // 6. Should be the last step.
   // Restore the root object type.
-  if (types.some((t) => t.path.length === 0)) {
-    const rootResult = restoreOriginalTypes(deserializeResult, types.filter((t) => t.path.length === 0));
+  if (types.some((t) => t.path.length === 0) || apis.some((t) => t.path.length === 0)) {
+    const rootResult = restoreOriginalTypes(deserializeResult, types.filter((t) => t.path.length === 0), apis.filter((t) => t.path.length === 0));
     const newRoot = rootResult.root;
     if (refs.some((t) => t.from.length === 0)) {
       // Remap the refs to the root
@@ -640,14 +653,19 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
     return newRoot;
   }
 
-  function restoreOriginalTypes(root, types = []) {
+  function restoreOriginalTypes(root, types = [], apis = []) {
     const returnResult = {};
     // Apply types to the deserialized object
     types.forEach(({ path, type, metadata }) => {
-    // todo: 支持URL、URLSearchParams、支持Buffer
       const value = get(root, path);
       let newResult;
-      if (type === 'Map' && typeof value === 'object') {
+      if (type === 'URL' && typeof value === 'string') {
+        newResult = new URL(value);
+      }
+      else if (type === 'URLSearchParams' && typeof value === 'string') {
+        newResult = new URLSearchParams(value);
+      }
+      else if (type === 'Map' && typeof value === 'object') {
         // Convert array to Map
         const map = new Map();
         Object.keys(value).forEach((key) => {
@@ -661,8 +679,7 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
         newResult = set;
       } 
       else if ([${TypedArrays.map((t) => `'${t.name}'`).join(', ')}].includes(type) && 
-        typeof globalThis[type] === 'function' && 
-        Array.isArray(value)) {
+        typeof globalThis[type] === 'function' && Array.isArray(value)) {
         newResult = new globalThis[type](value);
       }
       else if (type === 'ArrayBuffer' && typeof ArrayBuffer === 'function' && typeof Uint8Array === 'function' && Array.isArray(value)) {
@@ -684,6 +701,14 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
       else if (type === 'Blob' && typeof Blob === 'function' && Array.isArray(value)) {
         newResult = new Blob(value, { type: metadata && metadata.type ? metadata.type : '' });
       }
+      else if (type === 'Buffer' && Array.isArray(value)) {
+        if (typeof Buffer !== 'undefined') {
+          newResult = Buffer.from(value);
+        }
+        else if (typeof Uint8Array === 'function') {
+          newResult = new Uint8Array(value);
+        }
+      }
 
       if (newResult) {
         if (path.length === 0) {
@@ -694,6 +719,31 @@ function generateDeserializationCode(result: SerializedResult, options: Internal
           const parent = getParent(root, path);
           if (parent) {
             parent[keyName] = newResult;
+          }
+        }
+      }
+    });
+
+    apis.forEach(({ path, toJSON, fromJSON }) => {
+      if (typeof fromJSON === 'function') {
+        const value = get(root, path);
+        const result = fromJSON(value);
+        const keyName = getLastKey(path);
+        const parent = getParent(root, path);
+        if (result != null && typeof result === 'object') {
+          if (result.toJSON == null) {
+            result.toJSON = toJSON;
+          }
+          if (result.fromJSON == null) {
+            result.fromJSON = fromJSON;
+          }
+        }
+        if (path.length === 0) {
+          returnResult.root = result;
+        }
+        else {
+          if (parent && keyName != null) {
+            parent[keyName] = result;
           }
         }
       }
@@ -843,7 +893,7 @@ function getFullKeys(obj: any): (string | symbol)[] {
 }
 
 function toSymbolString(symbol: symbol): string | undefined {
-  if (wellKnownSymbols.includes(symbol)) {
+  if (WellKnownSymbols.includes(symbol)) {
     return `[${symbol.description}]`;
   } else if (Symbol.keyFor(symbol)) {
     return `[Symbol.for('${Symbol.keyFor(symbol)}')]`;
@@ -873,7 +923,11 @@ export function pickPrototype(
     proto !== Array.prototype &&
     proto !== Function.prototype &&
     proto !== Map.prototype &&
-    proto !== Set.prototype
+    proto !== Set.prototype &&
+    proto !== Blob.prototype &&
+    proto !== ArrayBuffer.prototype &&
+    proto !== DataView.prototype &&
+    (typeof Buffer === 'undefined' || proto !== Buffer.prototype)
   ) {
     const protoKeys = getFullKeys(proto);
     for (const key of protoKeys) {
@@ -980,6 +1034,7 @@ interface RefInfo {
   from: PathType[];
 }
 interface JsonApi {
+  path: PathType[];
   fromJSON?: string;
   toJSON: string;
 }
@@ -998,9 +1053,9 @@ interface SerializedResult {
 }
 
 export interface StringifyOptions {
-  /** The start token to mark the start of the serialized string. Default is `$<SJS>$`. */
+  /** The start token to mark the start of the serialized string. Default is `$SJS$_`. */
   startTag?: string;
-  /** The end token to mark the end of the serialized string. Default is `$<SJE>$`. */
+  /** The end token to mark the end of the serialized string. Default is `_$SJE$`. */
   endTag?: string;
   /** The prefix of the variable name to be used in the serialized string. Default is `$SJV$_`. */
   variablePrefix?: string;
