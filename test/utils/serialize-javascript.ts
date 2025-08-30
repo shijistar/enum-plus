@@ -58,9 +58,9 @@ const TypedArrays = [
   Uint32Array,
   Float32Array,
   Float64Array,
-  BigInt64Array,
-  BigUint64Array,
-];
+  typeof BigInt64Array !== 'undefined' ? BigInt64Array : undefined!,
+  typeof BigUint64Array !== 'undefined' ? BigUint64Array : undefined!,
+].filter(Boolean);
 
 /**
  * Serialize JavaScript object to string, support functions. Should including all fields of both
