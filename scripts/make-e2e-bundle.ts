@@ -24,15 +24,15 @@ async function build() {
     name: 'EnumPlus',
   });
 
-  // Bundle serialize-javascript
-  const serializeJavascript = await rollup({
-    input: 'tses/test/utils/serialize-javascript.js',
+  // Bundle jsoneo library
+  const jsoneoLib = await rollup({
+    input: 'jsoneo/es/index.js',
     plugins: [nodeResolve()],
   });
-  await serializeJavascript.write({
-    file: 'e2e/fixtures/scripts/serialize-javascript-bundle.js',
+  await jsoneoLib.write({
+    file: 'e2e/fixtures/scripts/jsoneo-bundle.js',
     format: 'iife',
-    name: 'SerializeJavascript',
+    name: 'JSONeo',
   });
 
   // Bundle week-config

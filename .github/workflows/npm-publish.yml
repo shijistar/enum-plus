@@ -1,4 +1,4 @@
-name: Publish to npm
+name: NPM Publish
 
 on:
   release:
@@ -93,7 +93,7 @@ jobs:
         id: get_next_version_before_publish
         continue-on-error: true
         run: |
-          VERSION=$(npm view enum-plus@next version || "0.0.0")
+          VERSION=$(npm view jsoneo@next version 2>/dev/null || echo 0.0.0)
           echo "NEXT_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish a prerelease version to npm

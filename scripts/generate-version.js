@@ -4,7 +4,6 @@ const fs = require('fs');
 const root = path.resolve(__dirname, '..');
 
 generate(path.join(root, 'src/version.ts'));
-generate(path.join(root, 'test/utils/version.ts'));
 
 /** @param {string} outFile */
 function generate(outFile) {

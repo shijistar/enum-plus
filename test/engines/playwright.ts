@@ -4,8 +4,8 @@ import { EnumExtensionClass } from '@enum-plus/enum-collection';
 import { localizer } from '@enum-plus/localizer';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
+import { parse, stringify } from 'jsoneo';
 import { getLocales, setLang } from '../data/week-config';
-import { parse, stringify } from '../utils/serialize-javascript';
 import TestEngineBase, { type RuntimeContext } from './base';
 import type { MakeMatchers } from './playwright-types';
 
@@ -54,17 +54,17 @@ export class PlaywrightEngine extends TestEngineBase {
       const EnumPlus = window.EnumPlus;
       const WeekConfig = window.WeekConfig;
       const WeekData = window.WeekData;
-      const SerializeJavascript = window.SerializeJavascript;
+      const JSONeo = window.JSONeo;
 
       // Deserialize request
       const runtimeContext = {
         EnumPlus,
         WeekConfig,
         WeekData,
-        SerializeJavascript,
+        JSONeo,
       };
       // console.log('window', runtimeContext);
-      const { stringify, parse } = SerializeJavascript;
+      const { stringify, parse } = JSONeo;
       const args = parse(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
       const { evaluateFn, ...rest } = args;
 

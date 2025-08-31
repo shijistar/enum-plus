@@ -1,7 +1,7 @@
 import type * as EnumPlusNamespace from '@enum-plus';
+import type * as JsoneoNamespace from 'jsoneo';
 import type * as WeekConfigNamespace from '../data/week-config';
 import type * as WeekDataNamespace from '../data/week-data';
-import type * as SerializeJavascriptNamespace from '../utils/serialize-javascript';
 import type { TestEngine } from './config';
 import type { MakeMatchers } from './playwright-types';
 
@@ -30,7 +30,7 @@ export interface RuntimeContext {
   EnumPlus: typeof EnumPlusNamespace;
   WeekConfig: typeof WeekConfigNamespace;
   WeekData: typeof WeekDataNamespace;
-  SerializeJavascript: typeof SerializeJavascriptNamespace;
+  JSONeo: typeof JsoneoNamespace;
   [key: string]: unknown;
 }
 export default TestEngineBase;

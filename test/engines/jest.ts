@@ -1,7 +1,7 @@
 import * as EnumPlus from '@enum-plus';
+import * as JSONeo from 'jsoneo';
 import * as WeekConfig from '../data/week-config';
 import * as WeekData from '../data/week-data';
-import * as SerializeJavascript from '../utils/serialize-javascript';
 import TestEngineBase, { type RuntimeContext } from './base';
 
 export class JestEngine extends TestEngineBase {
@@ -38,7 +38,7 @@ export class JestEngine extends TestEngineBase {
       EnumPlus,
       WeekConfig,
       WeekData,
-      SerializeJavascript,
+      JSONeo: JSONeo,
     };
   }
 }
