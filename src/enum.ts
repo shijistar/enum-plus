@@ -12,7 +12,7 @@ import type {
   LocalizeInterface,
   ValueTypeFromSingleInit,
 } from './types';
-import type { ITEMS, KEYS, LABELS, VALUES } from './utils';
+import type { ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
 import { IS_ENUM } from './utils';
 
 export const Enum = (<
@@ -301,6 +301,44 @@ export type IEnum<
          * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
          */
         readonly labels: string[];
+      }) &
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (T extends { named: any }
+    ? {
+        /**
+         * - **EN:** Alias for the `named` array, when any enum key conflicts with `named`, you can
+         *   access all enum names through this alias
+         * - **CN:** `named`数组的别名，当任何枚举的key与`named`冲突时，可以通过此别名访问所有枚举项的names
+         */
+        readonly [NAMED]: IEnumItems<T, K, V>['named'];
+      }
+    : {
+        /**
+         * - **EN:** Get all names of the enumeration items as an array
+         *
+         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
+         * > any modification methods
+         */
+        readonly named: IEnumItems<T, K, V>['named'];
+      }) &
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (T extends { meta: any }
+    ? {
+        /**
+         * - **EN:** Alias for the `meta` array, when any enum key conflicts with `meta`, you can
+         *   access all enum meta information through this alias
+         * - **CN:** `meta`数组的别名，当任何枚举的key与`meta`冲突时，可以通过此别名访问所有枚举项的meta信息
+         */
+        readonly [META]: IEnumItems<T, K, V>['meta'];
+      }
+    : {
+        /**
+         * - **EN:** Get all meta information of the enumeration items as an array
+         *
+         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
+         * > any modification methods
+         */
+        readonly [META]: IEnumItems<T, K, V>['meta'];
       });
 
 /**

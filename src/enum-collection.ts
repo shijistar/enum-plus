@@ -15,7 +15,7 @@ import type {
   ValueTypeFromSingleInit,
 } from './types';
 import type { IS_ENUM_ITEMS } from './utils';
-import { IS_ENUM, ITEMS, KEYS, LABELS, META, VALUES } from './utils';
+import { IS_ENUM, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
 
 /**
  * - **EN:** Enum collection extension base class, used to extend the Enums
@@ -40,7 +40,10 @@ export class EnumCollectionClass<
   >
   extends EnumExtensionClass<T, K, V>
   implements
-    Omit<IEnumItems<T, K, V>, typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta'>
+    Omit<
+      IEnumItems<T, K, V>,
+      typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
+    >
 {
   private readonly __options__: EnumItemOptions | undefined;
   // used for e2e serialization
@@ -74,6 +77,9 @@ export class EnumCollectionClass<
 
     // @ts-expect-error: because use VALUES to avoid naming conflicts in case of 'values' field name is taken
     this[keys.includes('values') ? VALUES : 'values'] = items[VALUES];
+
+    // @ts-expect-error: because use NAMED to avoid naming conflicts in case of 'named' field name is taken
+    this[keys.includes('named') ? NAMED : 'named'] = items.named;
 
     // @ts-expect-error: because use META to avoid naming conflicts in case of 'meta' field name is taken
     this[keys.includes('meta') ? META : 'meta'] = items.meta;

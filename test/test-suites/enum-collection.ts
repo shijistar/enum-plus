@@ -1,4 +1,12 @@
-import { IS_ENUM as IS_ENUM_IN_NODE } from '@enum-plus';
+import {
+  IS_ENUM as NODE_IS_ENUM,
+  ITEMS as NODE_ITEMS,
+  KEYS as NODE_KEYS,
+  LABELS as NODE_LABELS,
+  META as NODE_META,
+  NAMED as NODE_NAMED,
+  VALUES as NODE_VALUES,
+} from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils/index';
 import { addEnumItemsTestSuite } from './enum-items';
@@ -26,11 +34,10 @@ const testEnumCollection = (engine: TestEngineBase) => {
         return { week, KEYS, VALUES };
       },
       ({ week, KEYS, VALUES }) => {
-        // @ts-expect-error: because KEYS equals Symbol.for('[keys]')
-        engine.expect(week.keys).toBe(week.items[KEYS]);
-        // @ts-expect-error: because VALUES equals Symbol.for('[values]')
-        engine.expect(week.values).toBe(week.items[VALUES]);
+        engine.expect(week.keys).toBe(week.items[KEYS as typeof NODE_KEYS]);
+        engine.expect(week.values).toBe(week.items[VALUES as typeof NODE_VALUES]);
         engine.expect(week.labels).toEqual(week.items.labels);
+        engine.expect(week.named).toBe(week.items.named);
         engine.expect(week.meta).toBe(week.items.meta);
         engine.expect(week.label(1)).toBe(week.items.label(1));
         engine.expect(week.key(1)).toBe(week.items.key(1));
@@ -48,13 +55,29 @@ const testEnumCollection = (engine: TestEngineBase) => {
     );
 
     engine.test(
+      'utils.Symbols should be equal to node Symbols',
+      ({ EnumPlus: { KEYS, ITEMS, VALUES, LABELS, NAMED, META } }) => {
+        return { KEYS, ITEMS, VALUES, LABELS, NAMED, META };
+      },
+      ({ KEYS, ITEMS, VALUES, LABELS, NAMED, META }) => {
+        engine.expect(KEYS).toBe(NODE_KEYS);
+        engine.expect(ITEMS).toBe(NODE_ITEMS);
+        engine.expect(VALUES).toBe(NODE_VALUES);
+        engine.expect(LABELS).toBe(NODE_LABELS);
+        engine.expect(NAMED).toBe(NODE_NAMED);
+        engine.expect(META).toBe(NODE_META);
+      }
+    );
+
+    engine.test(
       'the system fields should be protected and auto renamed to fallback names in case of conflicting with enum members',
-      ({ EnumPlus: { Enum, KEYS, ITEMS, VALUES, LABELS, META } }) => {
+      ({ EnumPlus: { Enum, KEYS, VALUES, LABELS, ITEMS, NAMED, META } }) => {
         const strangeEnumConfig = {
           keys: { value: 101, label: 'foo', type: 1101 },
           values: { value: 102, label: 'baz', type: 1102 },
           labels: { value: 103, label: 'bar', type: 1103 },
-          meta: { value: 104, label: 'meta', type: 1104 },
+          named: { value: 104, label: 'named', type: 1104 },
+          meta: { value: 105, label: 'meta', type: 1105 },
 
           raw: { value: 99, label: 'raw', type: 1099 },
           label: { value: 1, label: 'label', type: 1001 },
@@ -78,34 +101,47 @@ const testEnumCollection = (engine: TestEngineBase) => {
           strangeEnum,
           strangerEnum,
           KEYS,
-          ITEMS,
           VALUES,
           LABELS,
+          ITEMS,
+          NAMED,
           META,
         };
       },
-      ({ strangeEnumConfig, strangeEnum, strangerEnumConfig, strangerEnum, KEYS, ITEMS, VALUES, LABELS, META }) => {
+      ({
+        strangeEnumConfig,
+        strangeEnum,
+        strangerEnumConfig,
+        strangerEnum,
+        KEYS,
+        VALUES,
+        LABELS,
+        ITEMS,
+        NAMED,
+        META,
+      }) => {
         engine.expect(strangeEnum.keys).toBe(101);
-        // @ts-expect-error: because KEYS equals Symbol.for('[keys]')
-        engine.expect(strangeEnum[KEYS] as string[]).toEqual(Object.keys(strangeEnumConfig));
+        engine.expect(strangeEnum[KEYS as typeof NODE_KEYS] as string[]).toEqual(Object.keys(strangeEnumConfig));
         engine.expect(strangeEnum.values).toBe(102);
-        // @ts-expect-error: because VALUES equals Symbol.for('[values]')
-        engine.expect(strangeEnum[VALUES] as number[]).toEqual(Object.values(strangeEnumConfig).map((i) => i.value));
-        engine.expect(strangeEnum.labels).toBe(103);
-        // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
-        engine.expect(strangeEnum[LABELS] as string[]).toBeInstanceOf(Array);
         engine
-          // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
-          .expect(strangeEnum[LABELS] as string[])
+          .expect(strangeEnum[VALUES as typeof NODE_VALUES] as number[])
+          .toEqual(Object.values(strangeEnumConfig).map((i) => i.value));
+        engine.expect(strangeEnum.labels).toBe(103);
+        engine.expect(strangeEnum[LABELS as typeof NODE_LABELS] as string[]).toBeInstanceOf(Array);
+        engine
+          .expect(strangeEnum[LABELS as typeof NODE_LABELS] as string[])
           .toEqual(
             Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].label)
           );
-        engine.expect(strangeEnum.meta).toBe(104);
-        // @ts-expect-error: because META equals Symbol.for('[meta]')
-        engine.expect(strangeEnum[META].type).toBeInstanceOf(Array);
+        engine.expect(strangeEnum.named).toBe(104);
+        strangeEnum.items.forEach((item) => {
+          engine.expect(strangeEnum[NAMED as typeof NODE_NAMED][item.key]).toBe(item);
+        });
+        engine.expect(Object.keys(strangeEnum[NAMED as typeof NODE_NAMED])).toEqual(Object.keys(strangeEnumConfig));
+        engine.expect(strangeEnum.meta).toBe(105);
+        engine.expect(strangeEnum[META as typeof NODE_META].type).toBeInstanceOf(Array);
         engine
-          // @ts-expect-error: because META equals Symbol.for('[meta]')
-          .expect(strangeEnum[META].type as string[])
+          .expect(strangeEnum[META as typeof NODE_META].type)
           .toEqual(
             Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].type)
           );
@@ -159,14 +195,12 @@ const testEnumCollection = (engine: TestEngineBase) => {
           value: strangerEnumConfig[key as keyof typeof strangerEnumConfig].value,
           label: strangerEnumConfig[key as keyof typeof strangerEnumConfig].label,
         }));
-        // @ts-expect-error: because ITEMS equals Symbol.for('[items]')
-        engine.expect(Array.isArray(strangerEnum[ITEMS])).toBeTruthy();
-        // @ts-expect-error: because ITEMS equals Symbol.for('[items]')
-        engine.expect(toPlainEnums(strangerEnum[ITEMS])).toEqual(standardEnumItems);
-        // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
-        engine.expect(strangerEnum[LABELS] as string[]).toBeInstanceOf(Array);
-        // @ts-expect-error: because LABELS equals Symbol.for('[labels]')
-        engine.expect(strangerEnum[LABELS] as string[]).toEqual(Object.values(strangerEnumConfig).map((i) => i.label));
+        engine.expect(Array.isArray(strangerEnum[ITEMS as typeof NODE_ITEMS])).toBeTruthy();
+        engine.expect(toPlainEnums(strangerEnum[ITEMS as typeof NODE_ITEMS])).toEqual(standardEnumItems);
+        engine.expect(strangerEnum[LABELS as typeof NODE_LABELS]).toBeInstanceOf(Array);
+        engine
+          .expect(strangerEnum[LABELS as typeof NODE_LABELS])
+          .toEqual(Object.values(strangerEnumConfig).map((i) => i.label));
       }
     );
 
@@ -178,8 +212,8 @@ const testEnumCollection = (engine: TestEngineBase) => {
       },
       ({ week, IS_ENUM }) => {
         // @ts-expect-error: because IS_ENUM is hidden by the interface, but it actually exists
-        engine.expect(week[IS_ENUM]).toBe(true);
-        engine.expect(IS_ENUM_IN_NODE in week && week[IS_ENUM_IN_NODE]).toBe(true);
+        engine.expect(week[IS_ENUM as typeof NODE_IS_ENUM]).toBe(true);
+        engine.expect(NODE_IS_ENUM in week && week[NODE_IS_ENUM]).toBe(true);
         // @ts-expect-error: because IS_ENUM and Symbol.for('[IsEnum]') are equal
         engine.expect(week[Symbol.for('[IsEnum]')]).toBe(true);
       }

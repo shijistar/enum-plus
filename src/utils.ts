@@ -43,6 +43,13 @@ export const RAW = Symbol.for('[raw]');
 export const META = Symbol.for('[meta]');
 
 /**
+ * - **EN:** Alias of `named`. If the enum contains a field with the same name as `named`, you can
+ *   access it by this Symbol as the field name
+ * - **CN:** 枚举`named`集合的别名。如果枚举中包含了`named`的同名字段，可以通过此Symbol作为字段名来访问
+ */
+export const NAMED = Symbol.for('[named]');
+
+/**
  * - **CN:** 判断对象是否 `EnumItem` 实例
  * - **EN:** Check whether the object is an `EnumItem` instance
  */

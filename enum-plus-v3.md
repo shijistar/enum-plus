@@ -17,8 +17,8 @@
 - [x] Change the behavior of `enum.values`, now it returns an array of the member raw values. Use `enum.items` for the old behavior.
 - [x] Add `enum.labels` property, which returns an readonly array of the member labels.
 - [x] Add `enum.findBy` method, which allows searching for enum items by built-in fields, and the custom _meta_ fields.
-- [ ] Add `enum.meta` object to aggregate all custom fields defined in the enum. The keys are the field names, and values are the raw values of each field. It's a good way of accessing custom fields without iterating through the enum items.
-- [ ] Add `enum.named` object to aggregate all enum items by their names, so that you can quick access an enum item by `enum.named.<name>`.
+- [x] Add `enum.meta` object to aggregate all custom fields defined in the enum. The keys are the field names, and values are the raw values of each field. It's a good way of accessing custom fields without iterating through the enum items.
+- [x] Add `enum.named` object to aggregate all enum items by their names, so that you can quick access an enum item by `enum.named.<name>`.
 - [x] Add `enum.toList`, method which is an alternative of `toSelect`、`toMenu`、`toFilter`. The latter methods are moving out of the core library and will be available as plugins.
 - [ ] Add `enum.toMap` as an alternative of `enum.toValueMap`.
 - [x] Add `Enum.isEnum` method to check if an object is an instance of `Enum`.

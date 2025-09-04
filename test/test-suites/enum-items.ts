@@ -76,6 +76,28 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
   );
 
   engine.test(
+    'enum.items.named should return a mapping object of enum items by keys',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+      const week = Enum(StandardWeekConfig);
+      const conflictNameEnum = Enum({
+        ...StandardWeekConfig,
+        named: { value: 9, label: 'named' },
+      });
+      return { week, StandardWeekConfig, conflictNameEnum };
+    },
+    ({ week, StandardWeekConfig, conflictNameEnum }) => {
+      week.items.forEach((item) => {
+        engine.expect(week.items.named[item.key]).toBe(item);
+      });
+      engine.expect(Object.keys(week.items.named)).toEqual(Object.keys(StandardWeekConfig));
+      engine.expect(conflictNameEnum.named).toBe(9);
+      engine
+        .expect(conflictNameEnum.items.named.named)
+        .toBe(conflictNameEnum.items.find((item) => item.key === 'named'));
+    }
+  );
+
+  engine.test(
     'enum.items.meta should return a values of custom meta fields',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const week = Enum(StandardWeekConfig);

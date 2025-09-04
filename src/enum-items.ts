@@ -53,6 +53,14 @@ export class EnumItemsArray<
   readonly [KEYS]!: K[];
   readonly [VALUES]!: V[];
   readonly labels!: string[];
+  readonly named!: {
+    [key in keyof T]: EnumItemClass<
+      // @ts-expect-error: because the first type parameter T is a union type, T[key] cannot satisfy each one of T.
+      T[key],
+      key,
+      ValueTypeFromSingleInit<T[key], key, T[key] extends number | undefined ? number : key>
+    >;
+  };
   readonly meta!: IEnumItems<T, K, V>['meta'];
   private _runtimeError: (name: string) => string;
 
@@ -84,11 +92,14 @@ export class EnumItemsArray<
     const items: EnumItemClass<T[K], K, V>[] = [];
     const meta = {} as { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] };
     this.meta = meta as IEnumItems<T, K, V>['meta'];
+    const named = {} as Record<K, EnumItemClass<T[K], K, V>>;
+    this.named = named as IEnumItems<T, K, V>['named'];
     keys.forEach((key, index) => {
       const { value, label } = parsed[index];
       const item = new EnumItemClass<T[K], K, V>(key, value, label, raw[key], options);
       items.push(item);
       this.push(item);
+      named[key] = item;
 
       // Collect custom meta fields
       const itemRaw = raw[key];
@@ -407,7 +418,26 @@ export interface IEnumItems<
    */
   readonly labels: string[];
 
-  meta: T extends StandardEnumInit<K, V>
+  /**
+   * - **EN:** A mapping of enum keys to their corresponding enum item classes. This is useful for
+   *   quick access to specific enum items.
+   * - **CN:** 枚举键到其对应的枚举项类的映射，对于快速访问枚举项非常有用
+   */
+  named: {
+    [key in keyof T]: EnumItemClass<
+      // @ts-expect-error: because the first type parameter T is a union type, T[key] cannot satisfy each one of T.
+      T[key],
+      key,
+      ValueTypeFromSingleInit<T[key], key, T[key] extends number | undefined ? number : key>
+    >;
+  };
+
+  /**
+   * - **EN:** Get all custom meta fields of the enumeration items as an object, where the keys are
+   *   the field names, and values are the raw values of each field
+   * - **CN:** 获取枚举项的全部自定义元字段，返回一个对象，其中key为字段名，value为每个字段的原始值数组
+   */
+  readonly meta: T extends StandardEnumInit<K, V>
     ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] }
     : // eslint-disable-next-line @typescript-eslint/ban-types
       {};
