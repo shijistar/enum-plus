@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
@@ -168,9 +168,6 @@
     },
     "esbuild": "^0.25.9"
   },
-  "dependencies": {
-    "jsoneo": "^1.0.1"
-  },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -182,6 +179,7 @@
     "father": "^4.6.3",
     "glob": "^11.0.3",
     "jest": "^29.7.0",
+    "jsoneo": "^1.0.1",
     "npm-run-all2": "^8.0.4",
     "playwright": "^1.55.0",
     "rollup": "^4.50.0",

@@ -1,6 +1,6 @@
 # enum-plus v3.0 - A Major Update
 
-### ■■■■■■■■■■■■■■■■■■□□ (90%)
+### ■■■■■■■■■■■■■■■■■■■□ (95%)
 
 ## Features
 
@@ -14,27 +14,27 @@
   - `ENUM_COLLECTION` is now `IS_ENUM`
   - `ENUM_ITEM` is now `IS_ENUM_ITEM`
   - `ENUM_ITEMS` is now `IS_ENUM_ITEMS`
-- [x] Change the behavior of `enum.values`, now it returns an array of the member raw values. Use `enum.items` for the old behavior.
-- [x] Add `enum.labels` property, which returns an readonly array of the member labels.
-- [x] Add `enum.findBy` method, which allows searching for enum items by built-in fields, and the custom _meta_ fields.
-- [x] Add `enum.meta` object to aggregate all custom fields defined in the enum. The keys are the field names, and values are the raw values of each field. It's a good way of accessing custom fields without iterating through the enum items.
-- [x] Add `enum.named` object to aggregate all enum items by their names, so that you can quick access an enum item by `enum.named.<name>`.
-- [x] Add `enum.toList`, method which is an alternative of `toSelect`、`toMenu`、`toFilter`. The latter methods are moving out of the core library and will be available as plugins.
-- [ ] Add `enum.toMap` as an alternative of `enum.toValueMap`.
+- [x] 🔥 Add `enum.named` to aggregate all enum items by their names, so that you can quick access an enum item by `enum.named.XXX`.
+- [x] 🔥 Add `enum.meta` object to aggregate all custom fields defined in the enum. The keys are the field names, and values are the raw values of each field. It's a good way of accessing custom fields without iterating through the enum items.
+- [x] 🔥 Change the behavior of `enum.values`, now it returns an array of the member raw values. Use `enum.items` for the old behavior.
+- [x] 🔥 Add `enum.labels` property, which returns an readonly array of the member labels.
+- [x] 🔥 Add `enum.toList`, method which is an alternative of `toSelect`、`toMenu`、`toFilter`. The latter methods are moving out of the core library and will be available as plugins.
+- [ ] 🔥 Add `enum.toMap` as an alternative of `enum.toValueMap`.
 - [x] Add `Enum.isEnum` method to check if an object is an instance of `Enum`.
+- [x] 🔥 Add `enum.findBy` method, which allows searching for enum items by built-in fields, and the custom _meta_ fields (i.e. custom fields).
 - [x] Add type assertion for `instanceof` check of EnumCollection.
-- [x] Simplify the enum initialization that no longer requires `as const` assertion. _by @otomad_
-- [x] Release the `UMD` module format of `enum-plus` in `umd` folder.
+- [x] 🔥 Simplify the enum initialization that no longer requires `as const` assertion. _by @otomad_
+- [x] 🔥 Release the `UMD` module format of `enum-plus` in `umd` folder.
 - [x] Reuse one copy of testing code for both `Jest` and `e2e` testing.
 - [x] Remove `private member` syntax from the codebase.
-- [x] Support graceful downgrade for multiple TypeScript versions. For `v5.0` and later, Enum initializations allows omitting the `as const` assertion. For earlier versions, will be automatically downgraded to the earlier syntax, just manually adding `as const` as needed.
-- [x] Remove the internal `proxy` from `EnumItemClass`, and use `getter` instead. The reason is to avoid self-references to support `JSON.stringify` and to run in WeChat mini-programs.
+- [x] Support graceful downgrade for multiple TypeScript versions. For v5.0 and later, Enum initializations allows omitting the as const assertion. For earlier versions, will be automatically downgraded to the earlier syntax, just manually adding as const as needed.
+- [x] Remove the internal `proxy` from `EnumItemClass`, and use `getter` instead. This is to prevent circular-reference to support `JSON.stringify` in WeChat mini-programs.
 
 ### Plugin System
 
-- [x] Introduce a new plugin system for extending features and ship them as separate npm packages.
+- [x] 🔥 Introduce a new plugin system for extending features and ship them as separate npm packages.
 - [x] Add `Enum.install` which is used to install plugins.
-- [x] Implement `enum-plus-plugin-antd` project and move Ant Design oriented code into the plugin, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. Set the default value of `valueField` to `value` and `labelField` to `label` in the plugin.
+- [ ] 🔥 Implement `enum-plus-plugin-antd` project and move Ant Design oriented code into the plugin, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. Set the default value of `valueField` to `value` and `labelField` to `label` in the plugin.
 
 ### Github Actions
 
