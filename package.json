@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
@@ -102,9 +102,6 @@
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
-  "overrides": {
-    "esbuild": "^0.25.0"
-  },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -130,5 +127,8 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "overrides": {
+    "esbuild": "^0.25.0"
   }
 }

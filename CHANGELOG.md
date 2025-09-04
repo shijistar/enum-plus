@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 2.4.3
+
+2025-9-4
+
+### Security
+
+- 🔒 Bump `sha.js` from `2.4.11` to `2.4.12` to address security vulnerabilities.
+
 ## 2.4.2
 
 2025-7-8
