@@ -40,6 +40,7 @@
   "license": "MIT",
   "author": "李凤宝(Leo) <shijistar@gmail.com>",
   "sideEffects": false,
+  "type": "commonjs",
   "exports": {
     ".": {
       "import": "./es/index.js",
@@ -163,30 +164,32 @@
   },
   "overrides": {
     "@umijs/babel-preset-umi": {
-      "@babel/runtime": "^7.27.1"
+      "@babel/runtime": "^7.28.3"
     },
-    "esbuild": "^0.25.4"
+    "esbuild": "^0.25.9"
+  },
+  "dependencies": {
+    "jsoneo": "^1.0.1-canary.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
+    "@playwright/test": "^1.55.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@tiny-codes/code-style-all-in-one": "^1.1.5",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.16.2",
-    "cross-env": "^7.0.3",
-    "esbuild": "^0.25.4",
-    "father": "^4.5.5",
+    "@types/node": "^22.18.0",
+    "cross-env": "^10.0.0",
+    "esbuild": "^0.25.9",
+    "father": "^4.6.3",
     "glob": "^11.0.3",
     "jest": "^29.7.0",
-    "jsoneo": "^1.0.1-canary.0",
-    "npm-run-all2": "^8.0.3",
-    "playwright": "^1.52.0",
-    "rollup": "^4.41.1",
+    "npm-run-all2": "^8.0.4",
+    "playwright": "^1.55.0",
+    "rollup": "^4.50.0",
     "serve": "^14.2.4",
     "shx": "^0.4.0",
-    "ts-jest": "^29.3.4",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
+    "ts-jest": "^29.4.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   },
   "packageManager": "npm@11.4.2",
   "engines": {
