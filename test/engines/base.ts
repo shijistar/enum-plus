@@ -30,7 +30,7 @@ export interface RuntimeContext {
   EnumPlus: typeof EnumPlusNamespace;
   WeekConfig: typeof WeekConfigNamespace;
   WeekData: typeof WeekDataNamespace;
-  JSONEO: typeof JsoneoNamespace;
+  jsoneo: typeof JsoneoNamespace;
   [key: string]: unknown;
 }
 export default TestEngineBase;

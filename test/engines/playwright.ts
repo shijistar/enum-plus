@@ -54,17 +54,17 @@ export class PlaywrightEngine extends TestEngineBase {
       const EnumPlus = window.EnumPlus;
       const WeekConfig = window.WeekConfig;
       const WeekData = window.WeekData;
-      const JSONEO = window.JSONEO;
+      const jsoneo = window.jsoneo;
 
       // Deserialize request
       const runtimeContext = {
         EnumPlus,
         WeekConfig,
         WeekData,
-        JSONEO,
+        jsoneo,
       };
       // console.log('window', runtimeContext);
-      const { stringify, parse } = JSONEO;
+      const { stringify, parse } = jsoneo;
       const args = parse(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
       const { evaluateFn, ...rest } = args;
 

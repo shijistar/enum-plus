@@ -3,7 +3,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["JSONEO", "shijistar", "tses", "Vuetify"],
+  "cSpell.words": ["jsoneo", "shijistar", "tses", "Vuetify"],
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

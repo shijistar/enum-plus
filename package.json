@@ -118,7 +118,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "run-p build:*",
+    "build": "npm-run-all -s clean -p build:*",
     "build:es": "run-s gv task:build-es task:update-es-enum task:add-es-extensions task:add-umd-banner",
     "build:es-legacy": "cross-env LEGACY=1 run-s gv task:build-es-legacy task:update-es-legacy-enum task:add-umd-banner task:add-es-legacy-extensions",
     "build:lib": "run-s gv ts2lib task:copy-lib task:copy-dts task:types-legacy",
@@ -169,7 +169,7 @@
     "esbuild": "^0.25.9"
   },
   "dependencies": {
-    "jsoneo": "^1.0.1-canary.0"
+    "jsoneo": "^1.0.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",

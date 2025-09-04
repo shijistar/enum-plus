@@ -32,7 +32,7 @@ async function build() {
   await jsoneoLib.write({
     file: 'e2e/fixtures/scripts/jsoneo-bundle.js',
     format: 'iife',
-    name: 'JSONEO',
+    name: 'jsoneo',
   });
 
   // Bundle week-config

@@ -1,5 +1,5 @@
 import * as EnumPlus from '@enum-plus';
-import * as JSONEO from 'jsoneo';
+import * as jsoneo from 'jsoneo';
 import * as WeekConfig from '../data/week-config';
 import * as WeekData from '../data/week-data';
 import TestEngineBase, { type RuntimeContext } from './base';
@@ -38,7 +38,7 @@ export class JestEngine extends TestEngineBase {
       EnumPlus,
       WeekConfig,
       WeekData,
-      JSONEO: JSONEO,
+      jsoneo: jsoneo,
     };
   }
 }
