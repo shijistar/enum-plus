@@ -1,8 +1,8 @@
-name: First Contribution Welcome Workflow
+name: Greeting First-Time Contributor
 
 on:
   pull_request_target:
-    types: [opened]
+    types: [opened, reopened]
 
 jobs:
   greet-first-time-contributor:
@@ -10,7 +10,7 @@ jobs:
     permissions:
       pull-requests: write
     # Only run for first-time contributors
-    if: github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    if: contains(fromJson('["FIRST_TIMER","FIRST_TIME_CONTRIBUTOR"]'), github.event.pull_request.author_association)
     steps:
       - name: Send Greeting Comment
         uses: actions/github-script@v6
