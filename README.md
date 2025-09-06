@@ -29,6 +29,8 @@
 
 ⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Naming Conventions](#naming-convention-best-practices) | [Localization](#localization) | [Extensibility](#extensibility) | [Compatibility](#compatibility) | [Q&A](#qa)&nbsp; ⬇️
 
+> `v3.0` is coming soon! Feel free to try the preview version [enum-plus@next](https://www.npmjs.com/package/enum-plus/v/next). The new version will bring more exciting features and improvements. For details, please refer to [v3 Release Notes](https://github.com/shijistar/enum-plus/issues/14).
+
 ## Introduction
 
 `enum-plus` is an enhanced enum library that is fully compatible with the native `enum` and extends it with powerful features such as display text, localization, UI control binding, enum members traversal, and more useful extension methods. This lightweight, zero-dependency, TypeScript library works with any front-end framework.
@@ -85,39 +87,33 @@ yarn add enum-plus
 
 This section shows the various ways to initialize enums using the `Enum` function. Understanding these different initialization formats allows you to choose the most convenient approach for your specific use case.
 
-### 1. Simple `key-value` Format
+### 1. Simple Key-Value Format
 
 The simplest format is a direct mapping of keys to values. This is similar to the native enum format.
 
 ```js
 import { Enum } from 'enum-plus';
 
+// With number values
 const WeekEnum = Enum({
   Sunday: 0,
   Monday: 1,
 } as const);
 
 WeekEnum.Monday; // 1
-```
 
-> The `as const` type assertion is used to ensure that the enum values are treated as `literal` types, otherwise they will be treated as `number` types. If you are using JavaScript, please remove the `as const`.
-
-### 2. Simple `key-value` with String Values
-
-This format is similar to the first one, allowing you to use `string` values.
-
-```js
-import { Enum } from 'enum-plus';
-
-const WeekEnum = Enum({
+// With string values
+const WeekEnum2 = Enum({
   Sunday: 'Sun',
   Monday: 'Mon',
 } as const);
 
-WeekEnum.Monday; // 'Mon'
+WeekEnum2.Monday; // 'Mon'
 ```
 
-### 3. Standard Format (Recommended)
+> The `as const` type assertion is used to ensure that the enum values are treated as `literal` types, otherwise they will be treated as `number` types. If you are using JavaScript, please remove the `as const`.
+
+### 2. Standard Format (Recommended)
 
 The standard format includes both a `value` and a `label` for each enum member. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display text for each enum member, which can be used in UI components.
 
@@ -133,7 +129,7 @@ WeekEnum.Sunday; // 0
 WeekEnum.label(0); // I love Sunday
 ```
 
-### 4. Label-Only Format
+### 3. Label-Only Format
 
 This is useful when you want to use the key as the value.
 
@@ -149,21 +145,25 @@ WeekEnum.Sunday; // 'Sunday'
 WeekEnum.label('Sunday'); // I love Sunday
 ```
 
-### 5. Array Format
+### 4. Array Format
 
 The array format is useful when you need to create enums dynamically, such as from API data. This allows for flexibility in [custom field mapping](#custom-field-mapping) to adapt to different data structures.
 
 ```js
 import { Enum } from 'enum-plus';
 
-const petTypes = await getPetsData();
-// [   { value: 1, key: 'dog', label: 'Dog' },
-//     { value: 2, key: 'cat', label: 'Cat' },
-//     { value: 3, key: 'rabbit', label: 'Rabbit' }   ];
-const PetTypes = Enum(petTypes);
+const pets = [
+  { value: 1, key: 'Dog', label: 'Dog' },
+  { value: 2, key: 'Cat', label: 'Cat' },
+  { value: 3, key: 'Rabbit', label: 'Rabbit' },
+] as const;
+const PetEnum = Enum(pets);
+
+PetEnum.Dog; // 1
+PetEnum.label(1); // Dog
 ```
 
-### 6. Native Enum Format
+### 5. Native Enum Format
 
 You can also create from native enums. It benefits from the native enum's `auto-incrementing` behavior.
 

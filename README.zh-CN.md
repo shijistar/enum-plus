@@ -29,6 +29,8 @@
 
 ⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [用法](#用法) | [命名规范建议](#命名规范建议) | [本地化](#本地化) | [全局扩展](#全局扩展) | [兼容性](#兼容性) | [常见问题](#常见问题) | [贡献](#贡献)&nbsp; ⬇️
 
+> `v3.0` 即将发布，欢迎试用预览版 [enum-plus@next](https://www.npmjs.com/package/enum-plus/v/next)，新版本将带来更多令人兴奋的功能和改进，详情请参考 [v3 版本更新](https://github.com/shijistar/enum-plus/issues/14)。
+
 ## 简介
 
 `enum-plus`是一个增强版的枚举类库，完全兼容原生`enum`的基本用法，同时支持扩展显示文本、绑定到 UI 组件以及提供丰富的扩展方法，是原生`enum`的一个直接替代品。它是一个轻量级、零依赖、100% TypeScript 实现的工具，适用于多种前端框架，并支持本地化。
@@ -90,32 +92,26 @@ yarn add enum-plus
 ```js
 import { Enum } from 'enum-plus';
 
+// Number 类型
 const WeekEnum = Enum({
   Sunday: 0,
   Monday: 1,
 } as const);
 
 WeekEnum.Monday; // 1
-```
 
-> `as const` 类型断言用于将枚举值变成字面量类型，类型更精确，否则它们将被作为`number`类型。如果你使用的是JavaScript，请删除`as const`。
-
-### 2. 基础格式，String 类型
-
-与第一种方式类似，只不过枚举值是字符串类型
-
-```js
-import { Enum } from 'enum-plus';
-
-const WeekEnum = Enum({
+// String 类型
+const WeekEnum2 = Enum({
   Sunday: 'Sun',
   Monday: 'Mon',
 } as const);
 
-WeekEnum.Monday; // 'Mon'
+WeekEnum2.Monday; // 'Mon'
 ```
 
-### 3. 标准格式（推荐）
+> `as const` 类型断言用于将枚举值变成字面量类型，类型更精确，否则它们将被作为`number`类型。如果你使用的是JavaScript，请删除`as const`。
+
+### 2. 标准格式（推荐）
 
 为每个枚举项指定 `value` (枚举值) 和 `label`（显示文本）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示文本，这些文本可以在UI组件中使用。
 
@@ -131,7 +127,7 @@ WeekEnum.Sunday; // 0
 WeekEnum.label(0); // 星期日
 ```
 
-- ### 4. Label-Only 格式
+### 3. Label-Only 格式
 
 当你希望使用`key`作为枚举值时，这种方式比较有用，此时`value`和`key`的值相同，`label`是显示文本
 
@@ -147,21 +143,25 @@ WeekEnum.Sunday; // 'Sunday'
 WeekEnum.label('Sunday'); // 星期日
 ```
 
-### 5. 数组格式
+### 4. 数组格式
 
 数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。这种方式还允许[自定义字段映射](#自定义字段映射)，这增加了灵活性，可以适配不同的数据格式
 
 ```js
 import { Enum } from 'enum-plus';
 
-const petTypes = await getPetsData();
-// [   { value: 1, key: 'dog', label: '狗' },
-//     { value: 2, key: 'cat', label: '猫' },
-//     { value: 3, key: 'rabbit', label: '兔子' }   ];
-const PetTypes = Enum(petTypes);
+const pets = [
+  { value: 1, key: 'Dog', label: '狗' },
+  { value: 2, key: 'Cat', label: '猫' },
+  { value: 3, key: 'Rabbit', label: '兔子' },
+] as const;
+const PetEnum = Enum(pets);
+
+PetEnum.Dog; // 1
+PetEnum.label(1); // 狗
 ```
 
-### 6. 原生枚举格式
+### 5. 原生枚举格式
 
 如果你已经有一个原生的枚举，你可以直接传递给`Enum`函数，它会自动转换为增强版的枚举，这样可以借用原生枚举的`枚举值自动递增`特性
 
