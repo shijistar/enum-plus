@@ -15,13 +15,17 @@
 
 [![npm latest version](https://img.shields.io/npm/v/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 [![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/enum-plus?logo=javascript&label=Minzipped&color=44cc11&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus?activeTab=code)
-[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?logo=rolldown&logoColor=5B4638&label=&color=007ec6&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
+[![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?logo=rolldown&logoColor=fd7b24&label=Downloads&color=007ec6&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 [![code coverage](https://codecov.io/gh/shijistar/enum-plus/graph/badge.svg?token=JMCDJKLT0B)](https://codecov.io/gh/shijistar/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=ff8000&cacheSeconds=86400)
 
-[![Node compatibility](https://img.shields.io/node/v/enum-plus?logo=nodedotjs&label=Node%20✅&color=2185D0&cacheSeconds=86400)](https://github.com/shijistar/enum-plus)
-[![Browser compatible](https://img.shields.io/badge/Browsers%20✅-brightgreen?logo=googlechrome&logoColor=brightgreen&label=&labelColor=2185D0&color=2185D0)](https://www.npmjs.com/package/enum-plus)
-[![MicroProgram](https://img.shields.io/badge/MiniProgram%20✅-eeeeee?logo=wechat)](https://developers.weixin.qq.com/miniprogram/en/dev/framework)
+**Supported Platforms**
+
+[![Node compatibility](https://img.shields.io/node/v/enum-plus?logo=nodedotjs&label=Node.js&color=2185D0&cacheSeconds=86400)](https://github.com/shijistar/enum-plus)
+[![Web Browsers](https://img.shields.io/badge/Web%20Browser-2185D0?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAABa1BMVEUAAAD/1kZap04co1BLr1H/1kZKr0//zDbmXC6IzZv95Y390jpLr09Lr0//1kT/1kU8rE/aeibNi13NfUz3kUrDjVrZaTjZWib2YSn2YSj3iC33xRp7q1/91kX9211cuWxBsWv81VL/10f1jhX411Uqpk771Ub2byLNazVTq0xAq09Lr0/91EBAqk6SwFkipFD8zi/GZiz1dSHGYCb2dSDKykirw0oup0/6yiO2dzn2fhuzdDVKrlD1fxv1gBtHrU+hcCr4wRT3Vi1Lr1D/1kVHr1D+1T//10b3Uyr3TyUel+wWj+f2hhn6yiT3SR74wxOn2PmdzfINh+FErVA8rFAxqFD90Tf8zjD2Ow3j8/7g7/sinO8Zk+kRi+QIgt73RBin1fYto/EMgt3J58z88MLYvJxBrVA5qlAqplAkpFD0WC33QBOu3Pvf7vre7vqgzfG748v97rtRqk1knUSBiDembSftUiTFWBrhRxFiNA5aAAAAQnRSTlMAUQX89dtVBfv6+fHapqSJUQ39/f38/Pz7+/j48/Py8fHx7+7s6+fj4t7d3NjX1dXRz8/OzsHApqWTk46MiomAfUvELz/2AAABGUlEQVQoz52P11rCQBBGQ4mhKIK999577ytKEo2JgiaxgAIWsPfHd3Z2JXDLuTzn+ydZoWwiy0O+XK55cCVS6ld9sR1G03qRdk/LcgwKY8YJs5qGgTP377fMpCYXlw1+aPg3T0tDTV3LAdIrYaggn2Ze+85aum69tR5RtjFUEfJjJrOP1+eKksocUpYwVBLyYTZa4C9U1e4+A6YweAkhX7U69ZfHRuAUCBbCe72O/soI7AFBfgposxXqb547aBjjH6ekUyr4l8wuJcR/F4h607ZhPL32YXCxB46Cj57cdvr9XRPoRUlgEwzxu8SDZ4APOGt0EE/cexbQVwsFNtmgv30fAO8QHqGDedAi3nFwhxcnx3vEkEsSyuUPnANWVoDZ/WEAAAAASUVORK5CYII=)](https://www.npmjs.com/package/enum-plus)
+[![ReactNative](https://img.shields.io/badge/ReactNative-2185D0?logo=react)](https://reactnative.dev)
+[![MicroProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/en/dev/framework)
+[![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://docs.taro.zone/en/docs)
 
 ⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Naming Conventions](#naming-convention-best-practices) | [Localization](#localization) | [Extensibility](#extensibility) | [Compatibility](#compatibility) | [Q&A](#qa)&nbsp; ⬇️
 
@@ -216,7 +220,7 @@ Returns a read-only array of all enum member `key`(s)
 
 ### 💎 &nbsp; label
 
-<sup>**_\[Function]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
+<sup>**_\[F]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
 Gets the display text of an enum member based on a certain value or key. If localization has been set up, the localized text will be returned.
 
@@ -230,7 +234,7 @@ WeekEnum.label('Monday'); // 星期日, or show localized text if localization i
 
 ### 💎 &nbsp; key
 
-<sup>**_\[Function]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
+<sup>**_\[F]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
 Get the key of an enum member based on the enum value, if the key is not found, return `undefined`.
 
@@ -242,7 +246,7 @@ WeekEnum.key(1); // Monday (here is key, not label)
 
 ### 💎 &nbsp; has
 
-<sup>**_\[Function]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
+<sup>**_\[F]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
 Determine whether a certain enum member (value or key) exists.
 
@@ -257,7 +261,7 @@ WeekEnum.has('Birthday'); // false
 
 ### 💎 &nbsp; toSelect
 
-<sup>**_\[Function]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
+<sup>**_\[F]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
 
 `toSelect` is similar to `items`, both return an array of all enum members. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields, no other extra fields. At the same time, the `toSelect` method allows inserting a default element at the beginning of the array, which is generally used for the default option (which means _all_, _none_, or _unlimited_, etc) of select control. Of course, you can customize this default option.
 
@@ -265,7 +269,7 @@ WeekEnum.has('Birthday'); // false
 
 ### 💎 &nbsp; toMenu
 
-<sup>**_\[Function]_**</sup> &nbsp; `toMenu(): { key, label }[]`
+<sup>**_\[F]_**</sup> &nbsp; `toMenu(): { key, label }[]`
 
 Returns an array of all enum members that conforms to [Ant Design](https://ant.design/components/menu) specifications. It's used to generate the `Menu`, `Dropdown` controls, in a single line of code.
 
@@ -288,7 +292,7 @@ The data format is:
 
 ### 💎 &nbsp; toFilter
 
-<sup>**_\[Function]_**</sup> &nbsp; `toFilter(): { text, value }[]`
+<sup>**_\[F]_**</sup> &nbsp; `toFilter(): { text, value }[]`
 
 Returns an array of enum members that can pass directly to the [Ant Design](https://ant.design/components/table#table-demo-head) Table component as `filters` property of a column. This is used to add a dropdown filter box in the table header to filter table data.
 
@@ -305,7 +309,7 @@ The data format is:
 
 ### 💎 &nbsp; toValueMap
 
-<sup>**_\[Function]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
+<sup>**_\[F]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
 
 Returns a value-to-text mapping object, which maps enum values to their display text, conforming to the [Ant Design Pro](https://procomponents.ant.design/en-US/components/schema#valueenum-1) specification. This is used to generate data sources for `ProFormField` series controls, and `ProTable`.
 

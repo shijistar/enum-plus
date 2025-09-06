@@ -8,15 +8,18 @@
     "tool",
     "javascript",
     "typescript",
-    "frontend",
-    "ui binding",
-    "ui integration",
+    "front-end",
+    "back-end",
     "node.js",
+    "browser",
+    "mini-program",
+    "react-native",
+    "assembly-script",
+    "ui-binding",
     "ssr",
     "localization",
     "globalization",
-    "internationalization",
-    "plugin system",
+    "plugin-system",
     "react",
     "vue",
     "angular",
@@ -102,6 +105,9 @@
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
+  "overrides": {
+    "esbuild": "^0.25.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -127,8 +133,5 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
-  },
-  "overrides": {
-    "esbuild": "^0.25.0"
   }
 }
