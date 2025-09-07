@@ -338,6 +338,128 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
   );
 
   engine.test(
+    'enum.items.toMap should generate a default mapping object with value and label',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+      const weekEnum = Enum(StandardWeekConfig);
+      return { weekEnum };
+    },
+    ({ weekEnum }) => {
+      engine.expect(weekEnum.items.toMap()).toEqual(
+        Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).reduce(
+          (acc, { value, label }) => {
+            acc[value] = label;
+            return acc;
+          },
+          {} as Record<number, string>
+        )
+      );
+    }
+  );
+
+  engine.test(
+    'enum.items.toMap should generate a mapping object with custom field of keys and values',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+      const weekEnum = Enum(StandardWeekConfig);
+      return { weekEnum };
+    },
+    ({ weekEnum }) => {
+      engine
+        .expect(
+          weekEnum.items.toMap({
+            keySelector: 'key',
+            valueSelector: 'value',
+          })
+        )
+        .toEqual(
+          Object.keys(StandardWeekConfig).reduce(
+            (acc, key) => {
+              acc[key] = StandardWeekConfig[key as keyof typeof StandardWeekConfig].value;
+              return acc;
+            },
+            {} as Record<string, number>
+          )
+        );
+    }
+  );
+
+  engine.test(
+    'enum.items.toMap should generate a mapping object with custom functions',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+      const weekEnum = Enum(StandardWeekConfig);
+      return { weekEnum };
+    },
+    ({ weekEnum }) => {
+      engine
+        .expect(
+          weekEnum.items.toMap({
+            keySelector: 'key',
+            valueSelector: (item) => ({ value: item.value }),
+          })
+        )
+        .toEqual(
+          Object.keys(StandardWeekConfig).reduce(
+            (acc, key) => {
+              acc[key] = { value: StandardWeekConfig[key as keyof typeof StandardWeekConfig].value };
+              return acc;
+            },
+            {} as Record<string, { value: number }>
+          )
+        );
+      engine
+        .expect(
+          weekEnum.items.toMap({
+            keySelector: (item) => item.value,
+            valueSelector: 'key',
+          })
+        )
+        .toEqual(
+          Object.keys(StandardWeekConfig).reduce(
+            (acc, key) => {
+              const item = StandardWeekConfig[key as keyof typeof StandardWeekConfig];
+              acc[item.value] = key;
+              return acc;
+            },
+            {} as Record<string, string>
+          )
+        );
+      engine
+        .expect(
+          weekEnum.items.toMap({
+            keySelector: (item) => item.key,
+            valueSelector: (item) => item.value,
+          })
+        )
+        .toEqual(
+          Object.keys(StandardWeekConfig).reduce(
+            (acc, key) => {
+              const item = StandardWeekConfig[key as keyof typeof StandardWeekConfig];
+              acc[key] = item.value;
+              return acc;
+            },
+            {} as Record<string, number>
+          )
+        );
+      engine
+        .expect(
+          weekEnum.items.toMap({
+            keySelector: (item) => item.key,
+            valueSelector: (item) => ({ value: item.value, status: item.raw.status }),
+          })
+        )
+        .toEqual(
+          Object.keys(StandardWeekConfig).reduce(
+            (acc, key) => {
+              const item = StandardWeekConfig[key as keyof typeof StandardWeekConfig];
+              acc[key] = { value: item.value, status: item.status };
+              return acc;
+            },
+            {} as Record<string, { value: number; status: string }>
+          )
+        );
+    }
+  );
+
+  engine.test(
     'enum.items.toValueMap should generate an object array for AntDesignPro',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);

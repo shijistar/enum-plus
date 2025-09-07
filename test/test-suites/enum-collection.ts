@@ -48,6 +48,13 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(week.findBy('status', 'success')).toBe(week.items.findBy('status', 'success'));
         engine.expect(week.raw()).toBe(week.items.raw());
         engine.expect(week.toList()).toEqual(week.items.toList());
+        engine
+          .expect(week.toList({ valueField: 'id', labelField: 'name' }))
+          .toEqual(week.items.toList({ valueField: 'id', labelField: 'name' }));
+        engine.expect(week.toMap()).toEqual(week.items.toMap());
+        engine
+          .expect(week.toMap({ keySelector: 'key', valueSelector: 'value' }))
+          .toEqual(week.items.toMap({ keySelector: 'key', valueSelector: 'value' }));
         engine.expect(week.toMenu()).toEqual(week.items.toMenu());
         engine.expect(week.toFilter()).toEqual(week.items.toFilter());
         engine.expect(week.toValueMap()).toEqual(week.items.toValueMap());
@@ -84,9 +91,10 @@ const testEnumCollection = (engine: TestEngineBase) => {
           key: { value: 2, label: 'key', type: 1002 },
           has: { value: 3, label: 'has', type: 1003 },
           toList: { value: 4, label: 'toList', type: 1004 },
-          toValueMap: { value: 5, label: 'toValueMap', type: 1005 },
-          toFilter: { value: 6, label: 'toFilter', type: 1006 },
-          toMenu: { value: 7, label: 'toMenu', type: 1007 },
+          toMap: { value: 5, label: 'toMap', type: 1005 },
+          toValueMap: { value: 6, label: 'toValueMap', type: 1006 },
+          toFilter: { value: 7, label: 'toFilter', type: 1007 },
+          toMenu: { value: 8, label: 'toMenu', type: 1008 },
         } as const;
         const strangeEnum = Enum(strangeEnumConfig);
 
@@ -168,26 +176,32 @@ const testEnumCollection = (engine: TestEngineBase) => {
               label: i.label,
             }))
           );
-        engine.expect(strangeEnum.toFilter).toBe(6);
+        engine.expect(strangeEnum.toMap).toBe(5);
+        engine.expect(strangeEnum.toValueMap).toBe(6);
+        const map: Record<string, string> = {};
+        Object.entries(strangeEnumConfig).forEach(([, item]) => {
+          map[item.value] = item.label;
+        });
+        engine.expect(strangeEnum.items.toMap()).toEqual(map);
+        const valueMap: Record<string, { text: string | undefined }> = {};
+        Object.entries(strangeEnumConfig).forEach(([, item]) => {
+          valueMap[item.value] = { text: item.label };
+        });
+        engine.expect(strangeEnum.items.toValueMap()).toEqual(valueMap);
+        engine.expect(strangeEnum.toFilter).toBe(7);
         engine.expect(strangeEnum.items.toFilter()).toEqual(
           Object.values(strangeEnumConfig).map((i) => ({
             value: i.value,
             text: i.label,
           }))
         );
-        engine.expect(strangeEnum.toMenu).toBe(7);
+        engine.expect(strangeEnum.toMenu).toBe(8);
         engine.expect(strangeEnum.items.toMenu()).toEqual(
           Object.values(strangeEnumConfig).map((i) => ({
             key: i.value,
             label: i.label,
           }))
         );
-        engine.expect(strangeEnum.toValueMap).toBe(5);
-        const map: Record<string, { text: string | undefined }> = {};
-        Object.entries(strangeEnumConfig).forEach(([, item]) => {
-          map[item.value] = { text: item.label };
-        });
-        engine.expect(strangeEnum.items.toValueMap()).toEqual(map);
 
         engine.expect(strangerEnum.items).toBe(100);
         const standardEnumItems = Object.keys(strangerEnumConfig).map((key) => ({

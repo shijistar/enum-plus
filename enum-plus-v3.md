@@ -19,7 +19,7 @@
 - [x] 🔥 Change the behavior of `enum.values`, now it returns an array of the member raw values. Use `enum.items` for the old behavior.
 - [x] 🔥 Add `enum.labels` property, which returns an readonly array of the member labels.
 - [x] 🔥 Add `enum.toList`, method which is an alternative of `toSelect`、`toMenu`、`toFilter`. The latter methods are moving out of the core library and will be available as plugins.
-- [ ] 🔥 Add `enum.toMap` as an alternative of `enum.toValueMap`.
+- [x] 🔥 Add `enum.toMap` as an alternative of `enum.toValueMap`.
 - [x] Add `Enum.isEnum` method to check if an object is an instance of `Enum`.
 - [x] 🔥 Add `enum.findBy` method, which allows searching for enum items by built-in fields, and the custom _meta_ fields (i.e. custom fields).
 - [x] Add type assertion for `instanceof` check of EnumCollection.

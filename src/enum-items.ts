@@ -146,6 +146,7 @@ export class EnumItemsArray<
       configurable: false,
     });
   }
+
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
     // intentionally use == to support both number and string format value
     return this.some(
@@ -310,6 +311,52 @@ export class EnumItemsArray<
         return listItem;
       });
     }
+  }
+
+  toMap(): MapResult<T, 'value', 'label', K, V>;
+  toMap<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+  >(config: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V>;
+  toMap<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+  >(config?: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V> {
+    if (!config) {
+      return this.reduce(
+        (prev, cur) => {
+          prev[cur.value] = cur.label;
+          return prev;
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {} as any
+      ) as unknown as MapResult<T, FOK, FOV, K, V>;
+    }
+    const { keySelector, valueSelector } = config;
+    return this.reduce(
+      (prev, cur) => {
+        let key: string | symbol;
+        if (typeof keySelector === 'function') {
+          key = keySelector(cur);
+        } else {
+          key = cur[keySelector as keyof EnumItemClass<T[K], K, V>] as string | symbol;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let value: any;
+        if (typeof valueSelector === 'function') {
+          value = valueSelector(cur);
+        } else {
+          value = cur[valueSelector as keyof EnumItemClass<T[K], K, V>] as unknown;
+        }
+        prev[key as keyof MapResult<T, FOK, FOV, K, V>] = value;
+        return prev;
+      },
+      {} as MapResult<T, FOK, FOV, K, V>
+    ) as unknown as MapResult<T, FOK, FOV, K, V>;
   }
 
   toValueMap() {
@@ -607,6 +654,49 @@ export interface IEnumItems<
   >[];
 
   /**
+   * - **EN:** Generate a mapping object of all enum items, where the keys are the values of the enum
+   *   and the values are the labels of the enum
+   * - **CN:** 生成一个映射对象，包含所有的枚举项，key为枚举值，value为枚举标签
+   *
+   * @example
+   *   {
+   *     "0": "Sunday",
+   *     "1": "Monday"
+   *   }
+   */
+  toMap(): MapResult<T, 'value', 'label', K, V>;
+  /**
+   * - **EN:** Generate a mapping object of all enum items, with customizable key and value fields
+   * - **CN:** 生成一个映射对象，包含所有的枚举项，可自定义键和值字段
+   *
+   * @example
+   *   Week.toMap({ key: 'value', value: 'label' });
+   *
+   *   ({ '0': 'Sunday', '1': 'Monday' });
+   *
+   *   /// Allow custom function, and meta fields can be used
+   *   Week.toMap({
+   *     key: 'key',
+   *     value: (item) => ({ id: item.value, name: item.label, foo: item.raw.foo }),
+   *   });
+   *
+   *   ({
+   *     Sunday: { id: 0, name: 'Sunday', foo: 'bar' },
+   *     Monday: { id: 1, name: 'Monday', foo: 'b' },
+   *   });
+   *
+   * @param config Custom options, supports customizing key and value fields | 自定义选项，支持自定义键和值字段
+   */
+  toMap<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+  >(
+    config: ToMapConfig<T, FOK, FOV, K, V>
+  ): MapResult<T, FOK, FOV, K, V>;
+
+  /**
    * - **EN:** Generate an object array that can be bound to the data source of components such as
    *   Menu and Dropdown, following the data specification of ant-design
    * - **CN:** 生成一个对象数组，可以绑定到 Menu、Dropdown 等组件的数据源，遵循 ant-design 的数据规范
@@ -638,9 +728,9 @@ export interface IEnumItems<
   toFilter(): ColumnFilterItem<V>[];
 
   /**
-   * - **EN:** Generate a Map object that can be used to bind Select, Checkbox and other form
+   * - **EN:** Generate a mapping object that can be used to bind Select, Checkbox and other form
    *   components, following the data specification of ant-design-pro
-   * - **CN:** 生成一个Map对象，可以用来绑定Select、Checkbox等表单组件，遵循 ant-design-pro 的数据规范
+   * - **CN:** 生成一个映射对象，可以用来绑定Select、Checkbox等表单组件，遵循 ant-design-pro 的数据规范
    *
    * @example
    *   {
@@ -728,6 +818,70 @@ export interface ToListConfig<
    */
   labelField?: FOL;
 }
+
+export interface ToMapConfig<
+  T extends EnumInit<K, V>,
+  FOK extends
+    | keyof EnumItemClass<T[K], K, V>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    | ((item: EnumItemClass<T[K], K, V>) => any),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> {
+  /**
+   * - **EN:** A field of `EnumItem` as the key of the output object, or a function to get the key of
+   *   items, default is `key`
+   * - **CN:** 作为输出对象key的`EnumItem`字段名，或者获取输出对象key的函数，默认为 `key`
+   */
+  keySelector?: FOK;
+  /**
+   * - **EN:** A field of `EnumItem` as the value of the output object, or a function to get the value
+   *   of items, default is `value`
+   * - **CN:** 作为输出对象value的`EnumItem`字段名，或者获取输出对象value的函数，默认为 `value`
+   */
+  valueSelector?: FOV;
+}
+
+export type MapResult<
+  T extends EnumInit<K, V>,
+  FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => string | symbol),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> = {
+  [key in ExactEqual<
+    FOK,
+    keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => string | symbol)
+  > extends true
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      EnumItemClass<T[K], K, V>['value'] & keyof any
+    : FOK extends keyof EnumItemClass<T[K], K, V>
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        EnumItemClass<T[K], K, V>[FOK] & keyof any
+      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        FOK extends (item: any) => infer R
+        ? R
+        : never]: ExactEqual<
+    FOV,
+    keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => unknown)
+  > extends true
+    ? ExactEqual<
+        FOK,
+        keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => string | symbol)
+      > extends true
+      ? FindLabelByValue<T, key>
+      : EnumItemClass<T[K], K, V>['label']
+    : FOV extends keyof EnumItemClass<T[K], K, V>
+      ? EnumItemClass<T[K], K, V>[FOV]
+      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        FOV extends (item?: any) => infer R
+        ? R
+        : never;
+};
+type ExactEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
 
 export function parseKeys<
   const T extends EnumInit<K, V>,
