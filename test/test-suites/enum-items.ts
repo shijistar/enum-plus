@@ -344,15 +344,15 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
       return { weekEnum };
     },
     ({ weekEnum }) => {
-      engine.expect(weekEnum.items.toMap()).toEqual(
-        Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).reduce(
-          (acc, { value, label }) => {
-            acc[value] = label;
-            return acc;
-          },
-          {} as Record<number, string>
-        )
+      const defaultMapData = Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).reduce(
+        (acc, { value, label }) => {
+          acc[value] = label;
+          return acc;
+        },
+        {} as Record<number, string>
       );
+      engine.expect(weekEnum.items.toMap({ keySelector: 'value' })).toEqual(defaultMapData);
+      engine.expect(weekEnum.items.toMap({ valueSelector: 'label' })).toEqual(defaultMapData);
     }
   );
 

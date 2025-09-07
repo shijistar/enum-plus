@@ -316,15 +316,15 @@ export class EnumItemsArray<
   toMap(): MapResult<T, 'value', 'label', K, V>;
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
   >(config: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V>;
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
   >(config?: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V> {
     if (!config) {
       return this.reduce(
@@ -689,9 +689,9 @@ export interface IEnumItems<
    */
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+    FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
   >(
     config: ToMapConfig<T, FOK, FOV, K, V>
   ): MapResult<T, FOK, FOV, K, V>;
@@ -822,11 +822,11 @@ export interface ToListConfig<
 export interface ToMapConfig<
   T extends EnumInit<K, V>,
   FOK extends
-    | keyof EnumItemClass<T[K], K, V>
+    | EnumItemFields
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | ((item: EnumItemClass<T[K], K, V>) => any),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+  FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
@@ -846,41 +846,44 @@ export interface ToMapConfig<
 
 export type MapResult<
   T extends EnumInit<K, V>,
-  FOK extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => string | symbol),
+  FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FOV extends keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => any),
+  FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > = {
-  [key in ExactEqual<
-    FOK,
-    keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => string | symbol)
-  > extends true
+  [key in ExactEqual<FOK, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol)> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       EnumItemClass<T[K], K, V>['value'] & keyof any
-    : FOK extends keyof EnumItemClass<T[K], K, V>
+    : FOK extends EnumItemFields
       ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
         EnumItemClass<T[K], K, V>[FOK] & keyof any
       : // eslint-disable-next-line @typescript-eslint/no-explicit-any
         FOK extends (item: any) => infer R
         ? R
-        : never]: ExactEqual<
-    FOV,
-    keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => unknown)
-  > extends true
-    ? ExactEqual<
-        FOK,
-        keyof EnumItemClass<T[K], K, V> | ((item: EnumItemClass<T[K], K, V>) => string | symbol)
-      > extends true
+        : never]: ExactEqual<FOV, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => unknown)> extends true
+    ? ExactEqual<FOK, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol)> extends true
       ? FindLabelByValue<T, key>
       : EnumItemClass<T[K], K, V>['label']
-    : FOV extends keyof EnumItemClass<T[K], K, V>
+    : FOV extends EnumItemFields
       ? EnumItemClass<T[K], K, V>[FOV]
       : // eslint-disable-next-line @typescript-eslint/no-explicit-any
         FOV extends (item?: any) => infer R
         ? R
         : never;
 };
+
+type EnumItemFields = Exclude<
+  {
+    [key in keyof EnumItemClass<StandardEnumItemInit<string>>]: EnumItemClass<
+      StandardEnumItemInit<string>
+    >[key] extends (...args: any[]) => unknown
+      ? never
+      : key;
+  }[keyof EnumItemClass<StandardEnumItemInit<string>>] &
+    string,
+  'raw'
+>;
 type ExactEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
 
 export function parseKeys<
