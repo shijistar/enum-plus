@@ -1,3 +1,4 @@
+import type { ExactEqual } from '@enum-plus/types';
 import type {
   EnumInit,
   EnumItemClass,
@@ -9,9 +10,9 @@ import type {
 } from 'enum-plus';
 import type { StandardEnumInit, StandardEnumItemInit } from 'lib/types';
 
-export type PluginOptions = Pick<ToSelectConfig<EnumInit, string, string>, 'labelField' | 'valueField'>;
+export type ToSelectPluginOptions = Pick<ToSelectConfig<EnumInit, string, string>, 'labelField' | 'valueField'>;
 
-const toSelectPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
+const toSelectPlugin: PluginFunc<ToSelectPluginOptions> = (options, Enum) => {
   const { labelField: globalLabelField, valueField: globalValueField } = options ?? {};
   Enum.extends({
     toSelect<
@@ -94,7 +95,7 @@ export interface ToSelectConfig<
   labelField?: FOL;
 }
 
-export interface FirstOptionConfig<V = EnumValue, FOV extends string = string, FOL extends string = string> {
+export interface FirstOptionConfig<V extends EnumValue, FOV extends string = 'value', FOL extends string = 'label'> {
   /**
    * - **EN:** Add a default option at the top, the data structure is the same as `SelectItem`
    * - **CN:** 在头部添加一个默认选项，数据结构与 `SelectItem` 相同
@@ -103,7 +104,10 @@ export interface FirstOptionConfig<V = EnumValue, FOV extends string = string, F
 }
 
 /** Data structure of ant-design Select options */
-export type SelectItem<V = EnumValue, FOV extends string = 'value', FOL extends string = 'label'> = Record<FOV, V> &
+export type SelectItem<V extends EnumValue, FOV extends string = 'value', FOL extends string = 'label'> = Record<
+  FOV,
+  V
+> &
   Record<FOL, string>;
 
 export default toSelectPlugin;
@@ -114,17 +118,24 @@ declare module 'enum-plus/extension' {
     K extends EnumKey<T> = EnumKey<T>,
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   > {
-    toSelect(this: IEnum<T, K, V> & EnumExtension<T, K, V>): SelectItem<V, 'value', 'label'>[];
+    toSelect(): SelectItem<V, 'value', 'label'>[];
     toSelect<
       FOV extends string | ((item: EnumItemClass<T[K], K, V> | undefined) => string),
       FOL extends string | ((item: EnumItemClass<T[K], K, V> | undefined) => string),
     >(
-      this: IEnum<T, K, V> & EnumExtension<T, K, V>,
       config: ToSelectConfig<T, FOV, FOL, K, V> &
         FirstOptionConfig<
           V,
-          FOV extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R ? R : FOV,
-          FOL extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R ? R : FOL
+          ExactEqual<FOV, string | ((item: EnumItemClass<T[K], K, V> | undefined) => string)> extends true
+            ? 'value'
+            : FOV extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R
+              ? R
+              : FOV,
+          ExactEqual<FOL, string | ((item: EnumItemClass<T[K], K, V> | undefined) => string)> extends true
+            ? 'label'
+            : FOL extends (item: EnumItemClass<T[K], K, V> | undefined) => infer R
+              ? R
+              : FOL
         >
     ): SelectItem<
       V,

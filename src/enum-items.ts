@@ -1,22 +1,20 @@
 import type { EnumItemOptions } from './enum-item';
 import { EnumItemClass } from './enum-item';
 import type {
-  ColumnFilterItem,
   EnumInit,
   EnumItemInit,
   EnumKey,
   EnumValue,
+  ExactEqual,
   FindEnumKeyByValue,
   FindKeyByMeta,
   FindLabelByValue,
   FindValueByKey,
   FindValueByMeta,
   ListItem,
-  MenuItemOption,
   PrimitiveOf,
   StandardEnumInit,
   StandardEnumItemInit,
-  ValueMap,
   ValueTypeFromSingleInit,
 } from './types';
 import { IS_ENUM_ITEMS, KEYS, VALUES } from './utils';
@@ -336,7 +334,7 @@ export class EnumItemsArray<
         {} as any
       ) as unknown as MapResult<T, FOK, FOV, K, V>;
     }
-    const { keySelector, valueSelector } = config;
+    const { keySelector = 'value', valueSelector = 'label' } = config;
     return this.reduce(
       (prev, cur) => {
         let key: string | symbol;
@@ -357,22 +355,6 @@ export class EnumItemsArray<
       },
       {} as MapResult<T, FOK, FOV, K, V>
     ) as unknown as MapResult<T, FOK, FOV, K, V>;
-  }
-
-  toValueMap() {
-    const itemsMap = {} as ValueMap;
-    this.forEach((item) => {
-      itemsMap[item.value as keyof typeof itemsMap] = { text: item.label };
-    });
-    return itemsMap;
-  }
-
-  toMenu(): MenuItemOption<V>[] {
-    return Array.from(this).map(({ value, label }) => ({ key: value, label }));
-  }
-
-  toFilter(): ColumnFilterItem<V>[] {
-    return Array.from(this).map(({ value, label }) => ({ text: label, value }));
   }
 
   /** Stub method, only for typing usages, not for runtime calling */
@@ -697,54 +679,6 @@ export interface IEnumItems<
   ): MapResult<T, FOK, FOV, K, V>;
 
   /**
-   * - **EN:** Generate an object array that can be bound to the data source of components such as
-   *   Menu and Dropdown, following the data specification of ant-design
-   * - **CN:** 生成一个对象数组，可以绑定到 Menu、Dropdown 等组件的数据源，遵循 ant-design 的数据规范
-   *
-   * @example
-   *   [
-   *     { key: 0, label: 'Sunday' },
-   *     { key: 1, label: 'Monday' },
-   *   ];
-   *
-   * @see https://ant.design/components/menu-cn#itemtype
-   */
-  toMenu(): MenuItemOption<V>[];
-
-  /**
-   * - **EN:** Generate an object array that can add filtering function to table columns, following
-   *   the data specification of ant-design Table component
-   * - **CN:** 生成一个对象数组，可以给表格列增加筛选功能，遵循 ant-design Table 组件的数据规范
-   *
-   * @example
-   *   [
-   *     { text: 'Sunday', value: 0 },
-   *     { text: 'Monday', value: 1 },
-   *   ];
-   *
-   * @see https://ant.design/components/table-cn#components-table-demo-head
-   * @see https://ant.design/components/table-cn#column
-   */
-  toFilter(): ColumnFilterItem<V>[];
-
-  /**
-   * - **EN:** Generate a mapping object that can be used to bind Select, Checkbox and other form
-   *   components, following the data specification of ant-design-pro
-   * - **CN:** 生成一个映射对象，可以用来绑定Select、Checkbox等表单组件，遵循 ant-design-pro 的数据规范
-   *
-   * @example
-   *   {
-   *     "0": { "text": "Sunday" },
-   *     "1": { "text": "Monday" }
-   *   }
-   *
-   * @see https://procomponents.ant.design/components/schema#valueenum-1
-   * @see https://procomponents.ant.design/components/field-set#proformselect
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  toValueMap(): ValueMap;
-
-  /**
    * - **EN:** The data type of all enumeration values
    *
    * > 📣 Note: Can only be used as a type declaration, cannot be called at runtime
@@ -873,7 +807,7 @@ export type MapResult<
         : never;
 };
 
-type EnumItemFields = Exclude<
+export type EnumItemFields = Exclude<
   {
     [key in keyof EnumItemClass<StandardEnumItemInit<string>>]: EnumItemClass<
       StandardEnumItemInit<string>
@@ -884,7 +818,6 @@ type EnumItemFields = Exclude<
     string,
   'raw'
 >;
-type ExactEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
 
 export function parseKeys<
   const T extends EnumInit<K, V>,

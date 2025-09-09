@@ -228,42 +228,6 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
           name: item.label,
         }))
       );
-
-      // todo: 这些逻辑需要迁移到antd插件中
-      // Add first-option by boolean flag
-      // const withDefaultFirstOption = weekEnum.items.toList({ firstOption: true });
-      // engine.expect(withDefaultFirstOption).toHaveLength(8);
-      // engine.expect(withDefaultFirstOption[0]).toEqual({
-      //   value: '',
-      //   key: '',
-      //   label: 'All',
-      // });
-
-      // Add first-option by boolean flag with custom value
-      // const customDefaultOption = weekEnum.items.toList({
-      //   firstOption: true,
-      //   firstOptionValue: 99 as 1,
-      //   firstOptionLabel: 'Select All',
-      // });
-      // engine.expect(customDefaultOption).toHaveLength(8);
-      // engine.expect(customDefaultOption[0]).toEqual({ value: 99, key: '', label: 'Select All' });
-
-      // Add custom first-option
-      // const customOption = { value: 99, key: '99', label: 'WeekdayX' };
-      // const withCustomFirstOption = weekEnum.items.toList({
-      //   firstOption: customOption,
-      // });
-      // engine.expect(withCustomFirstOption[0]).toEqual(customOption);
-
-      // Add custom first-option using value as key
-      // const customOptionWithoutKey = { value: 99, label: 'WeekdayX' };
-      // const withCustomFirstOptionUsingValueAsKey = weekEnum.items.toList({
-      //   firstOption: customOptionWithoutKey,
-      // });
-      // engine.expect(withCustomFirstOptionUsingValueAsKey[0]).toEqual({
-      //   ...customOptionWithoutKey,
-      //   key: customOptionWithoutKey.value,
-      // });
     }
   );
 
@@ -456,57 +420,6 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
             {} as Record<string, { value: number; status: string }>
           )
         );
-    }
-  );
-
-  engine.test(
-    'enum.items.toValueMap should generate an object array for AntDesignPro',
-    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
-      const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
-    },
-    ({ weekEnum }) => {
-      engine.expect(weekEnum.items.toValueMap()).toEqual(
-        Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).reduce(
-          (acc, { value, label }) => {
-            acc[value] = { text: label };
-            return acc;
-          },
-          {} as Record<number, { text: string }>
-        )
-      );
-    }
-  );
-
-  engine.test(
-    'enum.items.toMenu should generate an object array for AntDesign Menu',
-    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
-      const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
-    },
-    ({ weekEnum }) => {
-      engine.expect(Array.from(weekEnum.items.toMenu())).toEqual(
-        Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).map(({ value, label }) => ({
-          key: value,
-          label: label,
-        }))
-      );
-    }
-  );
-
-  engine.test(
-    'enum.items.toFilter should generate an object array for AntDesign Table',
-    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
-      const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
-    },
-    ({ weekEnum }) => {
-      engine.expect(Array.from(weekEnum.items.toFilter())).toEqual(
-        Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).map(({ value, label }) => ({
-          text: label,
-          value,
-        }))
-      );
     }
   );
 

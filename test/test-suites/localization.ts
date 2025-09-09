@@ -423,27 +423,6 @@ const testLocalization = (engine: TestEngineBase) => {
     engine.expect(sunday.toLocaleString()).toBe(locales.Sunday);
     engine.expect(copyList(weekEnum.items)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
     engine.expect(copyList(weekEnum.toList())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
-    engine.expect(Array.from(weekEnum.toMenu())).toEqual(
-      pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
-        key: item.value,
-        label: item.label,
-      }))
-    );
-    engine.expect(Array.from(weekEnum.toFilter())).toEqual(
-      pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
-        value: item.value,
-        text: item.label,
-      }))
-    );
-    engine.expect(weekEnum.toValueMap()).toEqual(
-      getStandardWeekData(locales).reduce(
-        (acc, item) => {
-          acc[item.value] = { text: item.label };
-          return acc;
-        },
-        {} as Record<number, { text: string | undefined }>
-      )
-    );
   }
 
   function assertListItems(options: {

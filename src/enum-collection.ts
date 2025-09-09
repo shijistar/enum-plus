@@ -1,16 +1,14 @@
 import type { EnumExtension } from 'enum-plus/extension';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
-import type { IEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
+import type { EnumItemFields, IEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
 import { EnumItemsArray } from './enum-items';
 import { localizer } from './localizer';
 import type {
-  ColumnFilterItem,
   EnumInit,
   EnumKey,
   EnumValue,
   FindEnumKeyByValue,
   ListItem,
-  MenuItemOption,
   PrimitiveOf,
   ValueTypeFromSingleInit,
 } from './types';
@@ -188,26 +186,14 @@ export class EnumCollectionClass<
 
   toMap(): MapResult<T, 'value', 'label', K, V>;
   toMap<
-    FOK extends keyof EnumItemClass<T[K], K, V> | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
-    FOV extends keyof EnumItemClass<T[K], K, V> | (<R>(item: EnumItemClass<T[K], K, V>) => R),
+    FOK extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
+    FOV extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
   >(config: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V>;
   toMap<
-    FOK extends keyof EnumItemClass<T[K], K, V> | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
-    FOV extends keyof EnumItemClass<T[K], K, V> | (<R>(item: EnumItemClass<T[K], K, V>) => R),
+    FOK extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
+    FOV extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
   >(config?: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V> {
     return this.__items__.toMap(config as ToMapConfig<T, FOK, FOV, K, V>);
-  }
-
-  toMenu(): MenuItemOption<V>[] {
-    return this.__items__.toMenu();
-  }
-
-  toFilter(): ColumnFilterItem<V>[] {
-    return this.__items__.toFilter();
-  }
-
-  toValueMap() {
-    return this.__items__.toValueMap();
   }
 
   get valueType() {

@@ -73,24 +73,6 @@ export type ListItem<
   FOL extends string = 'label',
 > = Record<FOV, V> & Record<FOL, string>;
 
-/** Data structure of column filter items of ant-design Table */
-export interface ColumnFilterItem<V> {
-  /** Display name */
-  text: string;
-  /** Value */
-  value: V;
-}
-
-/** Data structure of ant-design Menu items */
-export interface MenuItemOption<V> {
-  /** Key of menu item */
-  key: V;
-  /** Menu item text */
-  label: string;
-}
-
-export type ValueMap = Record<string, { text: string }>;
-
 /** Enum value type, support number, string, symbol */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EnumValue = keyof any | bigint | boolean | Date | RegExp;
@@ -230,3 +212,5 @@ export type PrimitiveOf<T> = T extends string
 export type ArrayToMap<A extends Record<string, any>[] | readonly Record<string, any>[]> = {
   [K in A[number]['key']]: Extract<A[number], { key?: K }>;
 };
+
+export type ExactEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;

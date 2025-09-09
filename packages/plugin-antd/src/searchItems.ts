@@ -8,7 +8,7 @@ import type {
   ValueTypeFromSingleInit,
 } from 'enum-plus';
 
-export interface PluginOptions {
+export interface SearchItemsPluginOptions {
   /**
    * - **EN:** The name of the field used for list item labels, used to search list items. Default is
    *   `label`.
@@ -23,7 +23,7 @@ export interface PluginOptions {
   ignoreCase?: boolean;
 }
 
-const searchItemsPlugin: PluginFunc<PluginOptions> = (options, Enum) => {
+const searchItemsPlugin: PluginFunc<SearchItemsPluginOptions> = (options, Enum) => {
   const { labelField = 'label', ignoreCase = true } = options ?? {};
   Enum.extends({
     searchItems: <

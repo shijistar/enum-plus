@@ -55,9 +55,6 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine
           .expect(week.toMap({ keySelector: 'key', valueSelector: 'value' }))
           .toEqual(week.items.toMap({ keySelector: 'key', valueSelector: 'value' }));
-        engine.expect(week.toMenu()).toEqual(week.items.toMenu());
-        engine.expect(week.toFilter()).toEqual(week.items.toFilter());
-        engine.expect(week.toValueMap()).toEqual(week.items.toValueMap());
       }
     );
 
@@ -92,9 +89,6 @@ const testEnumCollection = (engine: TestEngineBase) => {
           has: { value: 3, label: 'has', type: 1003 },
           toList: { value: 4, label: 'toList', type: 1004 },
           toMap: { value: 5, label: 'toMap', type: 1005 },
-          toValueMap: { value: 6, label: 'toValueMap', type: 1006 },
-          toFilter: { value: 7, label: 'toFilter', type: 1007 },
-          toMenu: { value: 8, label: 'toMenu', type: 1008 },
         } as const;
         const strangeEnum = Enum(strangeEnumConfig);
 
@@ -177,7 +171,6 @@ const testEnumCollection = (engine: TestEngineBase) => {
             }))
           );
         engine.expect(strangeEnum.toMap).toBe(5);
-        engine.expect(strangeEnum.toValueMap).toBe(6);
         const map: Record<string, string> = {};
         Object.entries(strangeEnumConfig).forEach(([, item]) => {
           map[item.value] = item.label;
@@ -187,21 +180,6 @@ const testEnumCollection = (engine: TestEngineBase) => {
         Object.entries(strangeEnumConfig).forEach(([, item]) => {
           valueMap[item.value] = { text: item.label };
         });
-        engine.expect(strangeEnum.items.toValueMap()).toEqual(valueMap);
-        engine.expect(strangeEnum.toFilter).toBe(7);
-        engine.expect(strangeEnum.items.toFilter()).toEqual(
-          Object.values(strangeEnumConfig).map((i) => ({
-            value: i.value,
-            text: i.label,
-          }))
-        );
-        engine.expect(strangeEnum.toMenu).toBe(8);
-        engine.expect(strangeEnum.items.toMenu()).toEqual(
-          Object.values(strangeEnumConfig).map((i) => ({
-            key: i.value,
-            label: i.label,
-          }))
-        );
 
         engine.expect(strangerEnum.items).toBe(100);
         const standardEnumItems = Object.keys(strangerEnumConfig).map((key) => ({

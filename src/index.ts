@@ -5,8 +5,6 @@ export type {
   EnumValue,
   ValueTypeFromSingleInit,
   ListItem,
-  MenuItemOption,
-  ColumnFilterItem,
   FindEnumKeyByValue,
   FindValueByKey,
   FindLabelByValue,
