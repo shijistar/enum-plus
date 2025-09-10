@@ -17,6 +17,7 @@ import type {
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
 } from './types';
+import type { ITEMS } from './utils';
 import { IS_ENUM_ITEMS, KEYS, VALUES } from './utils';
 
 /**
@@ -314,16 +315,16 @@ export class EnumItemsArray<
   toMap(): MapResult<T, 'value', 'label', K, V>;
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
+    KS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
-  >(config: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V>;
+    VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
+  >(config: ToMapConfig<T, KS, VS, K, V>): MapResult<T, KS, VS, K, V>;
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
+    KS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
-  >(config?: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V> {
+    VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
+  >(config?: ToMapConfig<T, KS, VS, K, V>): MapResult<T, KS, VS, K, V> {
     if (!config) {
       return this.reduce(
         (prev, cur) => {
@@ -332,7 +333,7 @@ export class EnumItemsArray<
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {} as any
-      ) as unknown as MapResult<T, FOK, FOV, K, V>;
+      ) as unknown as MapResult<T, KS, VS, K, V>;
     }
     const { keySelector = 'value', valueSelector = 'label' } = config;
     return this.reduce(
@@ -350,11 +351,11 @@ export class EnumItemsArray<
         } else {
           value = cur[valueSelector as keyof EnumItemClass<T[K], K, V>] as unknown;
         }
-        prev[key as keyof MapResult<T, FOK, FOV, K, V>] = value;
+        prev[key as keyof MapResult<T, KS, VS, K, V>] = value;
         return prev;
       },
-      {} as MapResult<T, FOK, FOV, K, V>
-    ) as unknown as MapResult<T, FOK, FOV, K, V>;
+      {} as MapResult<T, KS, VS, K, V>
+    ) as unknown as MapResult<T, KS, VS, K, V>;
   }
 
   /** Stub method, only for typing usages, not for runtime calling */
@@ -731,6 +732,15 @@ export interface IEnumItems<
   rawType: T[K];
 }
 
+export type InheritableEnumItems<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> = Omit<
+  IEnumItems<T, K, V>,
+  typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
+>;
+
 /** More options for the options method */
 export interface ToListConfig<
   T extends EnumInit<K, V>,
@@ -755,12 +765,12 @@ export interface ToListConfig<
 
 export interface ToMapConfig<
   T extends EnumInit<K, V>,
-  FOK extends
+  KS extends
     | EnumItemFields
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | ((item: EnumItemClass<T[K], K, V>) => any),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
+  VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > {
@@ -769,40 +779,40 @@ export interface ToMapConfig<
    *   items, default is `key`
    * - **CN:** 作为输出对象key的`EnumItem`字段名，或者获取输出对象key的函数，默认为 `key`
    */
-  keySelector?: FOK;
+  keySelector?: KS;
   /**
    * - **EN:** A field of `EnumItem` as the value of the output object, or a function to get the value
    *   of items, default is `value`
    * - **CN:** 作为输出对象value的`EnumItem`字段名，或者获取输出对象value的函数，默认为 `value`
    */
-  valueSelector?: FOV;
+  valueSelector?: VS;
 }
 
 export type MapResult<
   T extends EnumInit<K, V>,
-  FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol),
+  KS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
+  VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => any),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 > = {
-  [key in ExactEqual<FOK, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol)> extends true
+  [key in ExactEqual<KS, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol)> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       EnumItemClass<T[K], K, V>['value'] & keyof any
-    : FOK extends EnumItemFields
+    : KS extends EnumItemFields
       ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        EnumItemClass<T[K], K, V>[FOK] & keyof any
+        EnumItemClass<T[K], K, V>[KS] & keyof any
       : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        FOK extends (item: any) => infer R
+        KS extends (item: any) => infer R
         ? R
-        : never]: ExactEqual<FOV, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => unknown)> extends true
-    ? ExactEqual<FOK, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol)> extends true
+        : never]: ExactEqual<VS, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => unknown)> extends true
+    ? ExactEqual<KS, EnumItemFields | ((item: EnumItemClass<T[K], K, V>) => string | symbol)> extends true
       ? FindLabelByValue<T, key>
       : EnumItemClass<T[K], K, V>['label']
-    : FOV extends EnumItemFields
-      ? EnumItemClass<T[K], K, V>[FOV]
+    : VS extends EnumItemFields
+      ? EnumItemClass<T[K], K, V>[VS]
       : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        FOV extends (item?: any) => infer R
+        VS extends (item?: any) => infer R
         ? R
         : never;
 };

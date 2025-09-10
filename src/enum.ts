@@ -1,7 +1,7 @@
 import type { EnumExtension } from 'enum-plus/extension';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
-import type { IEnumItems } from './enum-items';
+import type { IEnumItems, InheritableEnumItems } from './enum-items';
 import { localizer } from './localizer';
 import type {
   ArrayToMap,
@@ -12,7 +12,7 @@ import type {
   LocalizeInterface,
   ValueTypeFromSingleInit,
 } from './types';
-import type { ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
+import type { ENUM_OPTIONS, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
 import { IS_ENUM } from './utils';
 
 export const Enum = (<
@@ -199,7 +199,7 @@ export type IEnum<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-> = IEnumItems<T, K, V> &
+> = InheritableEnumItems<T, K, V> &
   EnumExtension<T, K, V> & {
     /**
      * - **EN:** A boolean value indicates that this is an Enum.
@@ -207,6 +207,7 @@ export type IEnum<
      */
     // this flag exists but is removed from interface, as it's replaced with isEnum method
     // [IS_ENUM]: true;
+    [ENUM_OPTIONS]?: EnumItemOptions;
   } & {
     // Add enum item values, just like native enums
     [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
@@ -338,7 +339,7 @@ export type IEnum<
          * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
          * > any modification methods
          */
-        readonly [META]: IEnumItems<T, K, V>['meta'];
+        readonly meta: IEnumItems<T, K, V>['meta'];
       });
 
 /**

@@ -35,6 +35,8 @@ export const LABELS = Symbol.for('[labels]');
  */
 export const RAW = Symbol.for('[raw]');
 
+export const ENUM_OPTIONS = Symbol.for('[EnumOptions]');
+
 /**
  * - **EN:** Alias of `meta`. If the enum contains a field with the same name as `meta`, you can
  *   access it by this Symbol as the field name

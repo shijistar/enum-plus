@@ -1,5 +1,5 @@
 {
-  "name": "@enum-plus/plugins-antd",
+  "name": "@enum-plus/plugin-antd",
   "version": "1.0.0-alpha.0",
   "description": "The official plugin library for enum-plus, extending it with additional features and functionality",
   "keywords": [

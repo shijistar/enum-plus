@@ -26,6 +26,7 @@ export {
   IS_ENUM_ITEM,
   IS_ENUM_ITEMS,
   IS_ENUM,
+  ENUM_OPTIONS,
   defaultLocalize,
 } from './utils';
 export type { PluginFunc } from './enum';

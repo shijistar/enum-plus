@@ -1,5 +1,13 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["./src", "./test", "./e2e", "./playwright.config.ts", "../.."],
+  "compilerOptions": {
+    "rootDir": "../../",
+    "baseUrl": ".",
+    "paths": {
+      "@enum-plus": ["../../src/index.ts"],
+      "@enum-plus/*": ["../../src/*"]
+    }
+  },
+  "include": ["../../", "./test", "./e2e", "./playwright.config.ts"],
   "exclude": ["node_modules", "es", "lib"]
 }

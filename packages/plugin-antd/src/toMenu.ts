@@ -1,5 +1,5 @@
+import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from '@enum-plus';
 import type { StandardEnumInit } from '@enum-plus/types';
-import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from 'enum-plus';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ToMenuPluginOptions {}
@@ -7,7 +7,7 @@ export interface ToMenuPluginOptions {}
 const toMenuPlugin: PluginFunc<ToMenuPluginOptions> = (options, Enum) => {
   Enum.extends({
     toMenu(this: IEnum<StandardEnumInit<string, EnumValue>, string, EnumValue>): MenuItemOption<EnumValue>[] {
-      return Array.from(this.items).map(({ value, label }) => ({ key: value, label }));
+      return Array.from(this.items.map(({ value, label }) => ({ key: value, label })));
     },
   });
 };

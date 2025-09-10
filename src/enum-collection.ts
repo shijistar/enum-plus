@@ -1,6 +1,6 @@
 import type { EnumExtension } from 'enum-plus/extension';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
-import type { EnumItemFields, IEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
+import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
 import { EnumItemsArray } from './enum-items';
 import { localizer } from './localizer';
 import type {
@@ -12,8 +12,7 @@ import type {
   PrimitiveOf,
   ValueTypeFromSingleInit,
 } from './types';
-import type { IS_ENUM_ITEMS } from './utils';
-import { IS_ENUM, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
+import { ENUM_OPTIONS, IS_ENUM, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
 
 /**
  * - **EN:** Enum collection extension base class, used to extend the Enums
@@ -37,11 +36,7 @@ export class EnumCollectionClass<
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   >
   extends EnumExtensionClass<T, K, V>
-  implements
-    Omit<
-      IEnumItems<T, K, V>,
-      typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
-    >
+  implements InheritableEnumItems<T, K, V>
 {
   private readonly __options__: EnumItemOptions | undefined;
   // used for e2e serialization
@@ -107,6 +102,13 @@ export class EnumCollectionClass<
   // eslint-disable-next-line @typescript-eslint/class-literal-property-style
   get [IS_ENUM](): true {
     return true;
+  }
+  /**
+   * - **EN:** Get the options to initialize the enum.
+   * - **CN:** 获取初始化枚举时的选项
+   */
+  get [ENUM_OPTIONS](): EnumItemOptions | undefined {
+    return this.__options__;
   }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
     return instance instanceof this.__items__;
@@ -186,14 +188,14 @@ export class EnumCollectionClass<
 
   toMap(): MapResult<T, 'value', 'label', K, V>;
   toMap<
-    FOK extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
-    FOV extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
-  >(config: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V>;
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
+  >(config: ToMapConfig<T, KS, VS, K, V>): MapResult<T, KS, VS, K, V>;
   toMap<
-    FOK extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
-    FOV extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
-  >(config?: ToMapConfig<T, FOK, FOV, K, V>): MapResult<T, FOK, FOV, K, V> {
-    return this.__items__.toMap(config as ToMapConfig<T, FOK, FOV, K, V>);
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
+  >(config?: ToMapConfig<T, KS, VS, K, V>): MapResult<T, KS, VS, K, V> {
+    return this.__items__.toMap(config as ToMapConfig<T, KS, VS, K, V>);
   }
 
   get valueType() {

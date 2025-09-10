@@ -1,5 +1,5 @@
+import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from '@enum-plus';
 import type { StandardEnumInit } from '@enum-plus/types';
-import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from 'enum-plus';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ToValueMapPluginOptions {}

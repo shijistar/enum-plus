@@ -288,71 +288,6 @@ WeekEnum.has('Birthday'); // false
 
 ---
 
-### 💎 &nbsp; toSelect
-
-<sup>**_\[F]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
-
-`toSelect` is similar to `items`, both return an array of all enum members. The difference is that the elements returned by `toSelect` only contain the `label` and `value` fields, no other extra fields. At the same time, the `toSelect` method allows inserting a default element at the beginning of the array, which is generally used for the default option (which means _all_, _none_, or _unlimited_, etc) of select control. Of course, you can customize this default option.
-
----
-
-### 💎 &nbsp; toMenu
-
-<sup>**_\[F]_**</sup> &nbsp; `toMenu(): { key, label }[]`
-
-Returns an array of all enum members that conforms to [Ant Design](https://ant.design/components/menu) specifications. It's used to generate the `Menu`, `Dropdown` controls, in a single line of code.
-
-```js
-import { Menu } from 'antd';
-
-<Menu items={WeekEnum.toMenu()} />;
-```
-
-The data format is:
-
-```js
-[
-  { key: 0, label: 'Sunday' },
-  { key: 1, label: 'Monday' },
-];
-```
-
----
-
-### 💎 &nbsp; toFilter
-
-<sup>**_\[F]_**</sup> &nbsp; `toFilter(): { text, value }[]`
-
-Returns an array of enum members that can pass directly to the [Ant Design](https://ant.design/components/table#table-demo-head) Table component as `filters` property of a column. This is used to add a dropdown filter box in the table header to filter table data.
-
-The data format is:
-
-```js
-[
-  { text: 'Sunday', value: 0 },
-  { text: 'Monday', value: 1 },
-];
-```
-
----
-
-### 💎 &nbsp; toValueMap
-
-<sup>**_\[F]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
-
-Returns a value-to-text mapping object, which maps enum values to their display text, conforming to the [Ant Design Pro](https://procomponents.ant.design/en-US/components/schema#valueenum-1) specification. This is used to generate data sources for `ProFormField` series controls, and `ProTable`.
-
-The data format is:
-
-```js
-{
-  0: { text: 'Sunday' },
-  1: { text: 'Monday' },
-}
-```
-
----
-
 ### 💎 &nbsp; raw
 
 <sup>**_\[Override^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
@@ -656,58 +591,6 @@ WeekEnum.raw('Sunday').active; // true
   </nz-select>
   ```
 
-- The `toSelect` method is similar to `items`, allows adding a default option at the beginning of the array. The default option can be a boolean value or a custom object.
-
-  - If set to an object, you can customize the value and display text of the default option, and the display text will automatically support localization.
-
-  ```tsx
-  <Select options={WeekEnum.toSelect({ firstOption: true })} />
-  // [
-  //  { value: '', label: 'All' },
-  //  { value: 0, label: 'Sunday' },
-  //  { value: 1, label: 'Monday' }
-  // ]
-
-  // Add custom option at the top
-  <Select options={WeekEnum.toSelect({ firstOption: { value: 0, label: 'Unlimited' } })} />
-  ```
-
-- `toMenu` method is used to generate data sources for [Ant Design](https://ant.design/components/menu#itemtype) `Menu`, `Dropdown` components.
-
-```tsx
-import { Menu } from 'antd';
-
-<Menu items={WeekEnum.toMenu()} />;
-```
-
-- `toFilter` method is used to add a dropdown filter box in the [Ant Design](https://ant.design/components/table#table-demo-head) `Table` header to filter table data.
-
-```tsx
-import { Table } from 'antd';
-
-const columns = [
-  {
-    title: 'week',
-    dataIndex: 'week',
-    filters: WeekEnum.toFilter(),
-  },
-];
-// Add column filter at table header
-<Table columns={columns} />;
-```
-
-- `toValueMap` method is used to generate data sources for binding the [Ant Design Pro](https://procomponents.ant.design/en-US/components/schema#valueenum-1) `ProFormField` series controls, and `ProTable`.
-
-```tsx
-import { ProFormCheckbox, ProFormRadio, ProFormSelect, ProFormTreeSelect, ProTable } from '@ant-design/pro-components';
-
-<ProFormSelect valueEnum={WeekEnum.toValueMap()} />; // Select
-<ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />; // Checkbox
-<ProFormRadio.Group valueEnum={WeekEnum.toValueMap()} />; // Radio
-<ProFormTreeSelect valueEnum={WeekEnum.toValueMap()} />; // TreeSelect
-<ProTable columns={[{ dataIndex: 'week', valueEnum: WeekEnum.toValueMap() }]} />; // ProTable
-```
-
 ---
 
 #### Merge two enums (or extend an enum)
@@ -782,7 +665,7 @@ const PetTypes = Enum(petTypes, {
 
 When working with enums, a common edge case occurs when an enum member's key conflicts with built-in method names. While we typically access enum values through `WeekEnum.XXX` notation, complications arise when these keys overlap with enum methods.
 
-The enum library provides several utility methods like `label`, `key`, and `toSelect`. When an enum member shares a name with these methods, the enum member takes precedence, effectively overriding the utility method. However, this doesn't mean you lose access to those methods - they remain available through the `items` collection, ensuring all functionality is preserved regardless of naming conflicts. Please refer to the code example below:
+The enum library provides several utility methods like `label`, `key`. When an enum member shares a name with these methods, the enum member takes precedence, effectively overriding the utility method. However, this doesn't mean you lose access to those methods - they remain available through the `items` collection, ensuring all functionality is preserved regardless of naming conflicts. Please refer to the code example below:
 
 ```js
 const WeekEnum = Enum({

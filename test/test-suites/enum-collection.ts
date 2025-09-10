@@ -1,4 +1,5 @@
 import {
+  ENUM_OPTIONS as NODE_ENUM_OPTIONS,
   IS_ENUM as NODE_IS_ENUM,
   ITEMS as NODE_ITEMS,
   KEYS as NODE_KEYS,
@@ -31,9 +32,13 @@ const testEnumCollection = (engine: TestEngineBase) => {
       'the methods should be same as EnumItemsArray',
       ({ EnumPlus: { Enum, KEYS, VALUES }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
-        return { week, KEYS, VALUES };
+        const defaultListItems = week.toList();
+        const customListItems = week.toList({ valueField: 'id', labelField: 'name' });
+        const defaultMapItems = week.toMap();
+        const customMapItems = week.toMap({ keySelector: 'key', valueSelector: 'value' });
+        return { week, KEYS, VALUES, defaultListItems, customListItems, defaultMapItems, customMapItems };
       },
-      ({ week, KEYS, VALUES }) => {
+      ({ week, KEYS, VALUES, defaultListItems, customListItems, defaultMapItems, customMapItems }) => {
         engine.expect(week.keys).toBe(week.items[KEYS as typeof NODE_KEYS]);
         engine.expect(week.values).toBe(week.items[VALUES as typeof NODE_VALUES]);
         engine.expect(week.labels).toEqual(week.items.labels);
@@ -47,32 +52,41 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(week.findBy('label', 'weekday.monday')).toBe(week.items.findBy('label', 'weekday.monday'));
         engine.expect(week.findBy('status', 'success')).toBe(week.items.findBy('status', 'success'));
         engine.expect(week.raw()).toBe(week.items.raw());
-        engine.expect(week.toList()).toEqual(week.items.toList());
-        engine
-          .expect(week.toList({ valueField: 'id', labelField: 'name' }))
-          .toEqual(week.items.toList({ valueField: 'id', labelField: 'name' }));
-        engine.expect(week.toMap()).toEqual(week.items.toMap());
-        engine
-          .expect(week.toMap({ keySelector: 'key', valueSelector: 'value' }))
-          .toEqual(week.items.toMap({ keySelector: 'key', valueSelector: 'value' }));
+        engine.expect(defaultListItems).toEqual(week.items.toList());
+        engine.expect(customListItems).toEqual(week.items.toList({ valueField: 'id', labelField: 'name' }));
+        engine.expect(defaultMapItems).toEqual(week.items.toMap());
+        engine.expect(customMapItems).toEqual(week.items.toMap({ keySelector: 'key', valueSelector: 'value' }));
       }
     );
 
     engine.test(
       'utils.Symbols should be equal to node Symbols',
-      ({ EnumPlus: { KEYS, ITEMS, VALUES, LABELS, NAMED, META } }) => {
-        return { KEYS, ITEMS, VALUES, LABELS, NAMED, META };
+      ({ EnumPlus: { KEYS, ITEMS, VALUES, LABELS, NAMED, META, ENUM_OPTIONS } }) => {
+        return { KEYS, ITEMS, VALUES, LABELS, NAMED, META, ENUM_OPTIONS };
       },
-      ({ KEYS, ITEMS, VALUES, LABELS, NAMED, META }) => {
+      ({ KEYS, ITEMS, VALUES, LABELS, NAMED, META, ENUM_OPTIONS }) => {
         engine.expect(KEYS).toBe(NODE_KEYS);
         engine.expect(ITEMS).toBe(NODE_ITEMS);
         engine.expect(VALUES).toBe(NODE_VALUES);
         engine.expect(LABELS).toBe(NODE_LABELS);
         engine.expect(NAMED).toBe(NODE_NAMED);
         engine.expect(META).toBe(NODE_META);
+        engine.expect(ENUM_OPTIONS).toBe(NODE_ENUM_OPTIONS);
       }
     );
 
+    engine.test(
+      'should be able to get the initialization options by ENUM_OPTIONS symbol',
+      ({ EnumPlus: { Enum, ENUM_OPTIONS }, WeekConfig: { StandardWeekConfig } }) => {
+        const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+        return { weekEnum, ENUM_OPTIONS };
+      },
+      ({ weekEnum, ENUM_OPTIONS }) => {
+        engine.expect(weekEnum[ENUM_OPTIONS as typeof NODE_ENUM_OPTIONS]).toEqual({
+          name: 'weekDay.name',
+        });
+      }
+    );
     engine.test(
       'the system fields should be protected and auto renamed to fallback names in case of conflicting with enum members',
       ({ EnumPlus: { Enum, KEYS, VALUES, LABELS, ITEMS, NAMED, META } }) => {

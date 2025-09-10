@@ -1,5 +1,5 @@
+import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from '@enum-plus';
 import type { StandardEnumInit } from '@enum-plus/types';
-import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from 'enum-plus';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ToFilterPluginOptions {}
@@ -7,7 +7,7 @@ export interface ToFilterPluginOptions {}
 const toFilterPlugin: PluginFunc<ToFilterPluginOptions> = (options, Enum) => {
   Enum.extends({
     toFilter(this: IEnum<StandardEnumInit<string, EnumValue>, string, EnumValue>): ColumnFilterItem<EnumValue>[] {
-      return Array.from(this.items).map(({ value, label }) => ({ text: label, value }));
+      return Array.from(this.items.map(({ value, label }) => ({ text: label, value })));
     },
   });
 };

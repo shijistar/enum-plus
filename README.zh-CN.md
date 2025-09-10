@@ -285,71 +285,6 @@ WeekEnum.has('Birthday'); // false
 
 ---
 
-### 💎 &nbsp; toSelect
-
-<sup>**_\[方法]_**</sup> &nbsp; `toSelect(config?: OptionsConfig): {value, label}[]`
-
-`toSelect`与`items`相似，都是返回一个包含全部枚举项的数组。区别是，`toSelect`返回的元素只包含`label`和`value`两个字段，同时，`toSelect`方法支持在数组头部插入一个默认元素，一般用于下拉框等组件的默认选项，表示全部、无值或不限等，当然你也能够自定义这个默认选项
-
----
-
-### 💎 &nbsp; toMenu
-
-<sup>**_\[方法]_**</sup> &nbsp; `toMenu(): { key, label }[]`
-
-生成一个对象数组，可以绑定给 [Ant Design](https://ant-design.antgroup.com/components/menu-cn#itemtype) 的`Menu`、`Dropdown`等组件
-
-```js
-import { Menu } from 'antd';
-
-<Menu items={WeekEnum.toMenu()} />;
-```
-
-数据格式为：
-
-```js
-[
-  { key: 0, label: '星期日' },
-  { key: 1, label: '星期一' },
-];
-```
-
----
-
-### 💎 &nbsp; toFilter
-
-<sup>**_\[方法]_**</sup> &nbsp; `toFilter(): { text, value }[]`
-
-生成一个对象数组，可以直接传递给 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) Table 组件的列配置，在表头中显示一个下拉筛选框，用来过滤表格数据
-
-数据格式为：
-
-```js
-[
-  { text: '星期日', value: 0 },
-  { text: '星期一', value: 1 },
-];
-```
-
----
-
-### 💎 &nbsp; toValueMap
-
-<sup>**_\[方法]_**</sup> &nbsp; `toValueMap(): Record<V, { text: string }>`
-
-生成一个符合 [Ant Design Pro](https://pro-components.antdigital.dev/components/schema#valueenum) 规范的枚举集合对象，可以传递给 `ProFormField`、`ProTable` 等组件。
-
-数据格式为：
-
-```js
-{
-  0: { text: '星期日' },
-  1: { text: '星期一' },
-}
-```
-
----
-
 ### 💎 &nbsp; raw
 
 <sup>**_\[方法重载^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
@@ -655,57 +590,6 @@ WeekEnum.raw('Sunday').active // true
   </nz-select>
   ```
 
-- `toSelect`方法与`items`类似，但允许在头部增加一个默认选项。默认选项可以是一个布尔值，也可以是一个自定义对象。
-
-  - 如果是一个对象，则可以自定义默认选项的值和显示文本，显示文本会自动支持本地化
-
-  ```tsx
-  <Select options={WeekEnum.toSelect({ firstOption: true })} />
-  // [
-  //  { value: '', label: 'All' },
-  //  { value: 0, label: '星期日' },
-  //  { value: 1, label: '星期一' }
-  // ]
-
-  // 自定义头部默认选项
-  <Select options={WeekEnum.toSelect({ firstOption: { value: 0, label: '不限' } })} />
-  ```
-
-- `toMenu`方法可以为 [Ant Design](https://ant-design.antgroup.com/components/menu-cn#itemtype) `Menu`、`Dropdown` 等组件生成数据源，格式为：`{ key: number|string, label: string } []`
-
-```tsx
-import { Menu } from 'antd';
-
-<Menu items={WeekEnum.toMenu()} />;
-```
-
-- `toFilter`方法可以生成一个对象数组，为表格绑定`列筛选`功能，列头中显示一个下拉筛选框，用来过滤表格数据。对象结构遵循 [Ant Design](https://ant-design.antgroup.com/components/table-cn#table-demo-head) 的数据规范，格式为：`{ text: string, value: number|string } []`
-
-```tsx
-import { Table } from 'antd';
-
-const columns = [
-  {
-    title: 'week',
-    dataIndex: 'week',
-    filters: WeekEnum.toFilter(),
-  },
-];
-// 在表头中显示下拉筛选项
-<Table columns={columns} />;
-```
-
-- `toValueMap`方法可以为 [Ant Design Pro](https://pro-components.antdigital.dev/components/schema#valueenum) 的`ProFormFields`、`ProTable`等组件生成数据源，这是一个类似 Map 的数据结构，格式为：`{ [key: number|string]: { text: string } }`
-
-```tsx
-import { ProFormCheckbox, ProFormRadio, ProFormSelect, ProFormTreeSelect } from '@ant-design/pro-components';
-
-<ProFormSelect valueEnum={WeekEnum.toValueMap()} />; // 下拉框
-<ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />; // 复选框
-<ProFormRadio.Group valueEnum={WeekEnum.toValueMap()} />; // 单选框
-<ProFormTreeSelect valueEnum={WeekEnum.toValueMap()} />; // 树选择
-```
-
 ---
 
 #### 两个枚举合并（或者扩展某个枚举）
@@ -780,7 +664,7 @@ const PetTypes = Enum(petTypes, {
 
 这里为枚举使用添加一些边界情况，从上面的用例中可以看到，我们可以通过 `WeekEnum.XXX` 来快捷访问枚举项，但是万一枚举项的 key 与枚举方法命名冲突怎么办？
 
-我们知道枚举类型上还存在 `label`、`key`、`toSelect` 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 `items` 下访问到它们。请参考下面的代码示例：
+我们知道枚举类型上还存在 `label`、`key` 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 `items` 下访问到它们。请参考下面的代码示例：
 
 ```js
 const WeekEnum = Enum({
