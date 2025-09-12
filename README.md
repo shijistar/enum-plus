@@ -40,7 +40,7 @@ With the extended display text capability, enum members can be used to generate 
 What other exciting features are there? Please continue to explore! Or you can check out this usage video first.
 
 <p align="center">
-  <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
+  <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
 </p>
 
 ## Features
