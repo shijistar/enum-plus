@@ -125,7 +125,7 @@ import { Enum } from 'enum-plus';
 const WeekEnum = Enum({
   Sunday: 0,
   Monday: 1,
-} as const);
+});
 
 WeekEnum.Monday; // 1
 
@@ -133,7 +133,7 @@ WeekEnum.Monday; // 1
 const WeekEnum2 = Enum({
   Sunday: 'Sun',
   Monday: 'Mon',
-} as const);
+});
 
 WeekEnum2.Monday; // 'Mon'
 ```
@@ -150,7 +150,7 @@ import { Enum } from 'enum-plus';
 const WeekEnum = Enum({
   Sunday: { value: 0, label: '星期日' },
   Monday: { value: 1, label: '星期一' },
-} as const);
+});
 
 WeekEnum.Sunday; // 0
 WeekEnum.label(0); // 星期日
@@ -166,7 +166,7 @@ import { Enum } from 'enum-plus';
 const WeekEnum = Enum({
   Sunday: { label: '星期日' },
   Monday: { label: '星期一' },
-} as const);
+});
 
 WeekEnum.Sunday; // 'Sunday'
 WeekEnum.label('Sunday'); // 星期日
@@ -183,7 +183,7 @@ const pets = [
   { value: 1, key: 'Dog', label: '狗' },
   { value: 2, key: 'Cat', label: '猫' },
   { value: 3, key: 'Rabbit', label: '兔子' },
-] as const;
+];
 const PetEnum = Enum(pets);
 
 PetEnum.Dog; // 1
@@ -301,9 +301,9 @@ WeekEnum.has('Birthday'); // false
 const WeekEnum = Enum({
   Sunday: { value: 0, label: '星期日', happy: true },
   Monday: { value: 1, label: '星期一', happy: false },
-} as const);
+});
 
-WeekEnum.raw(0).happy // true
+WeekEnum.raw(0).happy; // true
 WeekEnum.raw(0); // { value: 0, label: '星期日', happy: true }
 WeekEnum.raw('Monday'); // { value: 1, label: '星期一', happy: false }
 WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Monday: { value: 1, label: '星期一', happy: false } }
@@ -320,12 +320,15 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Mond
 > 在UI组件中，枚举通常用来作为数据源，生成下拉框表单项，或在表格单元格中显式枚举成员文本。而对应的表单项标签或列标题就是枚举类型的名称。通过使用`name`，我们可以集中管理枚举名称，和枚举成员的名称，也更方便使用。
 
 ```js
-const WeekEnum = Enum({
-  Sunday: { value: 0, label: '星期日', happy: true },
-  Monday: { value: 1, label: '星期一', happy: false },
-} as const, {
-  name: 'i18n.enums.week', // 可以是一个本地化键值
-});
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: '星期日', happy: true },
+    Monday: { value: 1, label: '星期一', happy: false },
+  },
+  {
+    name: 'i18n.enums.week', // 可以是一个本地化键值
+  }
+);
 
 WeekEnum.name; // 周
 WeekEnum.label(0); // 星期日
@@ -389,7 +392,7 @@ const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 const WeekEnum = Enum({
   Sunday: { value: 0, label: '星期日' },
   Monday: { value: 1, label: '星期一' },
-} as const);
+});
 
 WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
@@ -407,7 +410,7 @@ const WeekEnum = Enum({
   Sunday: { value: 0, label: '星期日' },
   /** 星期一 */
   Monday: { value: 1, label: '星期一' },
-} as const);
+});
 
 WeekEnum.Monday; // 将光标悬浮在 Monday 上
 ```
@@ -500,11 +503,11 @@ WeekEnum.key(9); // undefined, 不存在此枚举项
 const WeekEnum = Enum({
   Sunday: { value: 0, label: '星期日', active: true, disabled: false },
   Monday: { value: 1, label: '星期一', active: false, disabled: true },
-} as const);
+});
 
-WeekEnum.raw(0).active // true
-WeekEnum.raw(WeekEnum.Sunday).active // true
-WeekEnum.raw('Sunday').active // true
+WeekEnum.raw(0).active; // true
+WeekEnum.raw(WeekEnum.Sunday).active; // true
+WeekEnum.raw('Sunday').active; // true
 ```
 
 ---
@@ -672,7 +675,7 @@ const WeekEnum = Enum({
   bar: { value: 2 },
   keys: { value: 3 }, // 命名冲突
   label: { value: 4 }, // 命名冲突
-} as const);
+});
 
 WeekEnum.keys; // 3，枚举项优先级更高，会覆盖掉方法
 WeekEnum.label; // 4，枚举项优先级更高，会覆盖掉方法
@@ -690,7 +693,7 @@ const WeekEnum = Enum({
   foo: { value: 1 },
   bar: { value: 2 },
   items: { value: 3 }, // 命名冲突
-} as const);
+});
 
 WeekEnum.items; // 3，枚举项优先级更高，会覆盖掉 items
 WeekEnum[ITEMS]; // ITEMS 是一个别名Symbol
@@ -766,7 +769,7 @@ const WeekEnum = Enum(
   {
     Sunday: { value: 0, label: 'week.sunday' },
     Monday: { value: 1, label: 'week.monday' },
-  } as const,
+  },
   {
     localize: sillyLocalize,
     // localize: i18nLocalize, // 👍 推荐使用i18类库

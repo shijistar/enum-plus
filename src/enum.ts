@@ -51,7 +51,8 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   }
   Object.assign(EnumExtensionClass.prototype, obj);
 };
-Enum.install = <T = unknown>(plugin: PluginFunc<T>, options?: T) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Enum.install = <T extends PluginFunc<any>>(plugin: T, options?: Parameters<T>[0]) => {
   plugin(options, Enum);
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

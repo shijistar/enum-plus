@@ -1,17 +1,16 @@
-import type { EnumInit, EnumKey, EnumValue, PluginFunc, ValueTypeFromSingleInit } from '@enum-plus';
-import { Enum, IS_ENUM_ITEM } from '@enum-plus';
+import type { EnumInit, EnumKey, EnumValue, PluginFunc, ValueTypeFromSingleInit } from 'enum-plus';
+import { Enum, IS_ENUM_ITEM } from 'enum-plus';
 
 export interface FilterItemPluginOptions {
   /**
-   * - **EN:** The name of the field used for list item labels, used to search list items. Default is
-   *   `label`.
-   * - **CN:** 列表项标签(名称)的字段名，用于搜索列表项，默认是`label`。
+   * - **EN:** The field to be used for searching, default is `label`.
+   * - **CN:** 用于搜索的字段，默认为 `label`。
    */
-  labelField?: string;
+  searchField?: string;
 }
 
 const filterItemPlugin: PluginFunc<FilterItemPluginOptions> = (options = {}, Enum) => {
-  const { labelField = 'label' } = options;
+  const { searchField = 'label' } = options;
   Enum.extends({
     filterItem: <
       T extends EnumInit<K, V>,
@@ -21,7 +20,7 @@ const filterItemPlugin: PluginFunc<FilterItemPluginOptions> = (options = {}, Enu
       search: string | undefined,
       item: unknown
     ): boolean => {
-      return filterCore({ search, item, labelField, ignoreCase: true });
+      return filterCore({ search, item, searchField, ignoreCase: true });
     },
     filterItemCaseSensitive: <
       T extends EnumInit<K, V>,
@@ -31,36 +30,39 @@ const filterItemPlugin: PluginFunc<FilterItemPluginOptions> = (options = {}, Enu
       search: string | undefined,
       item: unknown
     ): boolean => {
-      return filterCore({ search, item, labelField, ignoreCase: false });
+      return filterCore({ search, item, searchField, ignoreCase: false });
     },
   });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function filterCore(options: { search: string | undefined; item: any; labelField: string; ignoreCase: boolean }) {
-  const { search, item, labelField, ignoreCase } = options;
+function filterCore(options: { search: string | undefined; item: any; searchField: string; ignoreCase: boolean }) {
+  const { search, item, searchField, ignoreCase } = options;
   if (!search) return true;
-  let label: string | undefined;
+  let text: string | undefined;
   if (needConvert(item)) {
-    label = toString(item);
+    text = toString(item);
   } else if (typeof item === 'object' && item !== null) {
-    const possible = item[IS_ENUM_ITEM]
-      ? (item[labelField] ?? item.raw?.[labelField])
-      : (item as Record<string, unknown>)[labelField];
-    if (possible != null) {
-      if (needConvert(possible)) {
-        label = toString(possible);
+    let content: unknown;
+    if (item[IS_ENUM_ITEM]) {
+      if (item.raw?.[searchField] !== undefined) {
+        content = Enum.localize ? Enum.localize(item.raw[searchField]) : item.raw[searchField];
+      } else {
+        content = item[searchField];
+      }
+    } else {
+      content = item[searchField];
+    }
+    if (content != null) {
+      if (needConvert(content)) {
+        text = toString(content);
       }
     }
   }
-  if (Enum.localize) {
-    const result = Enum.localize(label);
-    label = result ?? label;
-  }
   if (ignoreCase) {
-    return label?.toUpperCase?.().includes(search.toUpperCase?.()) ?? false;
+    return text?.toUpperCase?.().includes(search.toUpperCase?.()) ?? false;
   } else {
-    return label?.includes(search) ?? false;
+    return text?.includes(search) ?? false;
   }
 }
 
@@ -75,11 +77,13 @@ function needConvert(v: unknown) {
     v instanceof Date
   );
 }
-function toString(v: unknown | undefined) {
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toString(v: any) {
   if (v instanceof Date) {
     return v.toISOString();
   }
-  return v?.toString?.();
+  return v.toString();
 }
 
 export default filterItemPlugin;

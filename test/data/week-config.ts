@@ -207,20 +207,45 @@ export function genSillyLocalizer(
 
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
+  locales: typeof localeEN | typeof localeCN | typeof noLocale
+): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
+export function localizeConfigData(
+  config: typeof StandardWeekConfig,
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
   getLocales: getLocalesType,
   defaultLocalize: typeof defaultLocalizeType
+): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
+export function localizeConfigData(
+  config: typeof StandardWeekConfig,
+  getLocales: getLocalesType | typeof localeEN | typeof localeCN | typeof noLocale,
+  defaultLocalize?: typeof defaultLocalizeType
 ) {
-  const localizer = localizeConfigData.genSillyLocalizer(lang, getLocales, defaultLocalize);
-  return Object.keys(config).reduce(
-    (acc, key) => {
-      // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
-      acc[key as keyof typeof config] = {
-        ...config[key as keyof typeof config],
-        label: localizer?.(config[key as keyof typeof config].label),
-      };
-      return acc;
-    },
-    {} as typeof config
-  );
+  if (typeof getLocales === 'function' && defaultLocalize) {
+    const localizer = localizeConfigData.genSillyLocalizer(lang, getLocales, defaultLocalize);
+    return Object.keys(config).reduce(
+      (acc, key) => {
+        // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
+        acc[key as keyof typeof config] = {
+          ...config[key as keyof typeof config],
+          label: localizer?.(config[key as keyof typeof config].label),
+        };
+        return acc;
+      },
+      {} as typeof config
+    );
+  } else {
+    const locales = getLocales;
+    return Object.keys(config).reduce(
+      (acc, key) => {
+        // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
+        acc[key as keyof typeof config] = {
+          ...config[key as keyof typeof config],
+          label: locales[key as keyof typeof locales],
+        };
+        return acc;
+      },
+      {} as typeof config
+    );
+  }
 }
 localizeConfigData.genSillyLocalizer = genSillyLocalizer;

@@ -127,7 +127,7 @@ import { Enum } from 'enum-plus';
 const WeekEnum = Enum({
   Sunday: 0,
   Monday: 1,
-} as const);
+});
 
 WeekEnum.Monday; // 1
 
@@ -135,7 +135,7 @@ WeekEnum.Monday; // 1
 const WeekEnum2 = Enum({
   Sunday: 'Sun',
   Monday: 'Mon',
-} as const);
+});
 
 WeekEnum2.Monday; // 'Mon'
 ```
@@ -152,7 +152,7 @@ import { Enum } from 'enum-plus';
 const WeekEnum = Enum({
   Sunday: { value: 0, label: 'I love Sunday' },
   Monday: { value: 1, label: 'I hate Monday' },
-} as const);
+});
 
 WeekEnum.Sunday; // 0
 WeekEnum.label(0); // I love Sunday
@@ -168,7 +168,7 @@ import { Enum } from 'enum-plus';
 const WeekEnum = Enum({
   Sunday: { label: 'I love Sunday' },
   Monday: { label: 'I hate Monday' },
-} as const);
+});
 
 WeekEnum.Sunday; // 'Sunday'
 WeekEnum.label('Sunday'); // I love Sunday
@@ -185,7 +185,7 @@ const pets = [
   { value: 1, key: 'Dog', label: 'Dog' },
   { value: 2, key: 'Cat', label: 'Cat' },
   { value: 3, key: 'Rabbit', label: 'Rabbit' },
-] as const;
+];
 const PetEnum = Enum(pets);
 
 PetEnum.Dog; // 1
@@ -304,7 +304,7 @@ The main purpose of the `raw` method is to get the extended custom fields of the
 const WeekEnum = Enum({
   Sunday: { value: 0, label: 'Sunday', happy: true },
   Monday: { value: 1, label: 'Monday', happy: false },
-} as const);
+});
 
 WeekEnum.raw(0).happy; // true
 WeekEnum.raw(0); // { value: 0, label: 'Sunday', happy: true }
@@ -323,12 +323,15 @@ Display name for Enum types. When creating an enum, you can assign it a display 
 > Usually Enums are used to generate dropdown menus in form, or show member text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its members' labels, simplifying maintenance and ensuring consistency across your application.
 
 ```js
-const WeekEnum = Enum({
-  Sunday: { value: 0, label: 'Sunday', happy: true },
-  Monday: { value: 1, label: 'Monday', happy: false },
-} as const, {
-  name: 'i18n.enums.week', // A localization key
-});
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: 'Sunday', happy: true },
+    Monday: { value: 1, label: 'Monday', happy: false },
+  },
+  {
+    name: 'i18n.enums.week', // A localization key
+  }
+);
 
 WeekEnum.name; // Week
 WeekEnum.label(0); // Sunday
@@ -391,7 +394,7 @@ Provides a type of the original initialization object of the Enum collection.
 const WeekEnum = Enum({
   Sunday: { value: 0, label: 'Sunday' },
   Monday: { value: 1, label: 'Monday' },
-} as const);
+});
 
 WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
@@ -409,7 +412,7 @@ const WeekEnum = Enum({
   Sunday: { value: 0, label: 'Sunday' },
   /** Represents Monday */
   Monday: { value: 1, label: 'Monday' },
-} as const);
+});
 
 WeekEnum.Monday; // Hover over Monday
 ```
@@ -502,7 +505,7 @@ WeekEnum.key(9); // undefined, because it does not exist
 const WeekEnum = Enum({
   Sunday: { value: 0, label: 'Sunday', active: true, disabled: false },
   Monday: { value: 1, label: 'Monday', active: false, disabled: true },
-} as const);
+});
 
 WeekEnum.raw(0).active; // true
 WeekEnum.raw(WeekEnum.Sunday).active; // true
@@ -673,7 +676,7 @@ const WeekEnum = Enum({
   bar: { value: 2 },
   keys: { value: 3 }, // Naming conflict
   label: { value: 4 }, // Naming conflict
-} as const);
+});
 
 WeekEnum.keys; // 3, enum member has higher priority and will override the method
 WeekEnum.label; // 4, enum member has higher priority and will override the method
@@ -691,7 +694,7 @@ const WeekEnum = Enum({
   foo: { value: 1 },
   bar: { value: 2 },
   items: { value: 3 }, // Naming conflict
-} as const);
+});
 
 WeekEnum.items; // 3, enum member has higher priority and will override items
 WeekEnum[ITEMS]; // ITEMS is an alias Symbol
@@ -767,7 +770,7 @@ const WeekEnum = Enum(
   {
     Sunday: { value: 0, label: 'week.sunday' },
     Monday: { value: 1, label: 'week.monday' },
-  } as const,
+  },
   {
     localize: sillyLocalize,
     // localize: i18nLocalize, // 👍  Recommended to use i18n

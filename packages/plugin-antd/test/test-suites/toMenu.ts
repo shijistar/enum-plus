@@ -1,13 +1,15 @@
-import { defaultLocalize } from '@enum-plus';
-import { getLocales, localizeConfigData, StandardWeekConfig } from '../../../../test/data/week-config';
-import type TestEngineBase from '../../../../test/engines/base';
-import '../../src/index';
+// eslint-disable-next-line import/no-unresolved
+import { getLocales, localizeConfigData, StandardWeekConfig } from '@enum-plus/test/data/week-config';
+import type TestEngineBase from '@enum-plus/test/engines/base';
+import { defaultLocalize } from 'enum-plus';
+import toMenuPlugin from '../../src/toMenu';
 
 const testEnumItems = (engine: TestEngineBase) => {
   engine.describe('The toMenu plugin', () => {
     engine.test(
       'should generate an object array for AntDesign Menu',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        Enum.install(toMenuPlugin);
         const weekEnum = Enum(StandardWeekConfig);
         const menuItems = weekEnum.toMenu();
         return { menuItems };
