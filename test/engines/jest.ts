@@ -2,7 +2,8 @@ import * as EnumPlus from '@enum-plus';
 import * as jsoneo from 'jsoneo';
 import * as WeekConfig from '../data/week-config';
 import * as WeekData from '../data/week-data';
-import TestEngineBase, { type RuntimeContext } from './base';
+import type { RuntimeContext } from './base';
+import TestEngineBase from './base';
 
 export class JestEngine extends TestEngineBase {
   constructor() {

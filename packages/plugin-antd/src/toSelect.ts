@@ -7,8 +7,8 @@ import {
   type IEnum,
   type PluginFunc,
   type ValueTypeFromSingleInit,
-} from '@enum-plus';
-import type { ExactEqual, StandardEnumInit, StandardEnumItemInit } from '@enum-plus/types';
+} from 'enum-plus';
+import type { ExactEqual, StandardEnumInit, StandardEnumItemInit } from 'enum-plus/types';
 
 export type ToSelectPluginOptions = Pick<ToSelectConfig<EnumInit, string, string>, 'labelField' | 'valueField'>;
 
@@ -122,7 +122,7 @@ export interface FirstOptionConfig<V extends EnumValue, FOV extends string = 'va
 /** Data structure of ant-design Select options */
 export type SelectItem<V extends EnumValue, FOV extends string = 'value', FOL extends string = 'label'> = Record<
   FOV,
-  V | undefined
+  (V extends string ? V | '' : V extends number ? V | 0 : V) | undefined
 > &
   Record<FOL, string>;
 
