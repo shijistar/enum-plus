@@ -87,7 +87,7 @@ export class PlaywrightEngine extends TestEngineBase {
       return serializedStr;
     }, serializedEvaluateParams);
 
-    const globalClosure = { Enum, EnumExtensionClass, localizer, ...utils };
+    const globalClosure = { Enum, EnumExtensionClass, localizer, ...utils, exports: {} };
     const initialState = parse(resultStr, {
       closure: globalClosure,
       // debug: true,

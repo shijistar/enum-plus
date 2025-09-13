@@ -54,16 +54,18 @@ getLocales.localeCN = localeCN;
 getLocales.localeEN = localeEN;
 
 type getLocalesType = typeof getLocales;
-export const setLang = (
+export function setLang(
   value: typeof lang | undefined,
   Enum: typeof EnumType,
   getLocales: getLocalesType,
   defaultLocalize: typeof defaultLocalizeType
-) => {
+) {
   lang = value;
   locales = getLocales(value);
-  Enum.localize = genSillyLocalizer(value, getLocales, defaultLocalize);
-};
+  Enum.localize = setLang.genSillyLocalizer(value, getLocales, defaultLocalize);
+}
+setLang.genSillyLocalizer = genSillyLocalizer;
+
 export const clearLang = (Enum: typeof EnumType) => {
   lang = undefined;
   locales = noLocale;
@@ -208,16 +210,17 @@ export function localizeConfigData(
   getLocales: getLocalesType,
   defaultLocalize: typeof defaultLocalizeType
 ) {
-  const sillyLocalize = genSillyLocalizer(lang, getLocales, defaultLocalize);
+  const localizer = localizeConfigData.genSillyLocalizer(lang, getLocales, defaultLocalize);
   return Object.keys(config).reduce(
     (acc, key) => {
       // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
       acc[key as keyof typeof config] = {
         ...config[key as keyof typeof config],
-        label: sillyLocalize?.(config[key as keyof typeof config].label),
+        label: localizer?.(config[key as keyof typeof config].label),
       };
       return acc;
     },
     {} as typeof config
   );
 }
+localizeConfigData.genSillyLocalizer = genSillyLocalizer;

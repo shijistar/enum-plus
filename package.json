@@ -40,7 +40,6 @@
   "license": "MIT",
   "author": "李凤宝(Leo) <shijistar@gmail.com>",
   "sideEffects": false,
-  "type": "commonjs",
   "exports": {
     ".": {
       "import": "./es/index.js",

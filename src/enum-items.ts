@@ -197,22 +197,21 @@ export class EnumItemsArray<
   raw<IK extends V | K | Exclude<EnumValue, string> | NonNullable<string>>(
     keyOrValue: IK
   ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
-  raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
-    if (value == null) {
+  raw<IK extends EnumValue>(keyOrValue?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
+    if (keyOrValue == null) {
       // Return the original initialization object
       return this.__raw__;
     } else {
-      if (Object.keys(this.__raw__).some((k) => k === (value as string))) {
-        // Find by key
-        return this.__raw__[value as K];
+      // Find by key
+      if (Object.keys(this.__raw__).some((k) => k === keyOrValue)) {
+        return this.__raw__[keyOrValue as K];
       }
       // Find by value
-      const itemByValue = this.find((i) => i.value === value);
+      const itemByValue = this.find((i) => i.value === keyOrValue);
       if (itemByValue) {
         return itemByValue.raw;
-      } else {
-        return undefined;
       }
+      return undefined;
     }
   }
 
@@ -259,57 +258,46 @@ export class EnumItemsArray<
   toList<
     FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
     FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    R extends Record<string, unknown> = never,
   >(
-    config: ToListConfig<T, FOV, FOL, K, V>
+    config: ToListConfig<T, FOV, FOL, K, V, R>
   ): ListItem<
     V,
     FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
-    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL,
+    R
   >[];
   toList<
     FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
     FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    R extends Record<string, unknown> = never,
   >(
-    config?: ToListConfig<T, FOV, FOL, K, V>
+    config?: ToListConfig<T, FOV, FOL, K, V, R>
   ):
     | ListItem<V, 'value', 'label'>[]
     | ListItem<
         V,
         FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
-        FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+        FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL,
+        R
       >[] {
-    const { valueField = 'value' as FOV, labelField = 'label' as FOL } = config ?? {};
-    if (valueField === 'value' && labelField === 'label') {
-      return Array.from(this);
-    } else {
-      return Array.from(this).map((item) => {
-        const valueFieldName = typeof valueField === 'function' ? valueField(item) : (valueField as string);
-        const labelFieldName = typeof labelField === 'function' ? labelField(item) : (labelField as string);
-        const listItem = {
-          [valueFieldName]: item.value,
-        } as ListItem<
-          V,
-          FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
-          FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
-        >;
-        // used for e2e serialization
-        Object.defineProperty(listItem, '__enumItem__', {
-          value: item,
-          writable: false,
-          enumerable: false,
-          configurable: false,
-        });
-        // should use getter to preserve the localized label, as it may be dynamic content
-        Object.defineProperty(listItem, labelFieldName, {
-          get: function () {
-            return this.__enumItem__.label;
-          },
-          enumerable: true,
-          configurable: true,
-        });
-        return listItem;
-      });
-    }
+    const { valueField = 'value' as FOV, labelField = 'label' as FOL, extra } = config ?? {};
+    return Array.from(this).map((item) => {
+      const valueFieldName = typeof valueField === 'function' ? valueField(item) : (valueField as string);
+      const labelFieldName = typeof labelField === 'function' ? labelField(item) : (labelField as string);
+      const extraData = extra ? (extra(item) as R) : ({} as R);
+      const listItem = {
+        [valueFieldName]: item.value,
+        [labelFieldName]: item.label,
+        ...extraData,
+      } as ListItem<
+        V,
+        FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL,
+        R
+      >;
+      return listItem;
+    });
   }
 
   toMap(): MapResult<T, 'value', 'label', K, V>;
@@ -628,12 +616,14 @@ export interface IEnumItems<
   toList<
     FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
     FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    R extends Record<string, unknown> = never,
   >(
-    config: ToListConfig<T, FOV, FOL, K, V>
+    config: ToListConfig<T, FOV, FOL, K, V, R>
   ): ListItem<
     V,
     FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
-    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL,
+    R
   >[];
 
   /**
@@ -748,6 +738,7 @@ export interface ToListConfig<
   FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  R extends Record<string, unknown> = never,
 > {
   /**
    * - **EN:** The name of the value field in the output object, or a function to get the field name,
@@ -761,6 +752,11 @@ export interface ToListConfig<
    * - **CN:** 输出对象的label字段名，或者获取字段名的函数，默认为 `label`
    */
   labelField?: FOL;
+  /**
+   * - **EN:** A function to add extra fields to each item in the output object
+   * - **CN:** 一个函数，用于为输出对象中的每个项添加额外的字段
+   */
+  extra?: (item: EnumItemClass<T[K], K, V>) => R;
 }
 
 export interface ToMapConfig<

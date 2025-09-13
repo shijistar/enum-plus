@@ -34,11 +34,41 @@ const testEnumCollection = (engine: TestEngineBase) => {
         const week = Enum(StandardWeekConfig);
         const defaultListItems = week.toList();
         const customListItems = week.toList({ valueField: 'id', labelField: 'name' });
+        const customWithStatusListItems = week.toList({
+          valueField: 'id',
+          labelField: 'name',
+          extra: (item) => ({ status: item.raw.status }),
+        });
+        const customFuncWithStatusListItems = week.toList({
+          valueField: () => 'id',
+          labelField: () => 'name',
+          extra: (item) => ({ status: item.raw.status }),
+        });
         const defaultMapItems = week.toMap();
         const customMapItems = week.toMap({ keySelector: 'key', valueSelector: 'value' });
-        return { week, KEYS, VALUES, defaultListItems, customListItems, defaultMapItems, customMapItems };
+        return {
+          week,
+          KEYS,
+          VALUES,
+          defaultListItems,
+          customListItems,
+          customWithStatusListItems,
+          customFuncWithStatusListItems,
+          defaultMapItems,
+          customMapItems,
+        };
       },
-      ({ week, KEYS, VALUES, defaultListItems, customListItems, defaultMapItems, customMapItems }) => {
+      ({
+        week,
+        KEYS,
+        VALUES,
+        defaultListItems,
+        customListItems,
+        customWithStatusListItems,
+        customFuncWithStatusListItems,
+        defaultMapItems,
+        customMapItems,
+      }) => {
         engine.expect(week.keys).toBe(week.items[KEYS as typeof NODE_KEYS]);
         engine.expect(week.values).toBe(week.items[VALUES as typeof NODE_VALUES]);
         engine.expect(week.labels).toEqual(week.items.labels);
@@ -54,6 +84,13 @@ const testEnumCollection = (engine: TestEngineBase) => {
         engine.expect(week.raw()).toBe(week.items.raw());
         engine.expect(defaultListItems).toEqual(week.items.toList());
         engine.expect(customListItems).toEqual(week.items.toList({ valueField: 'id', labelField: 'name' }));
+        const customWithStatusData = week.items.toList({
+          valueField: 'id',
+          labelField: 'name',
+          extra: (item) => ({ status: item.raw.status }),
+        });
+        engine.expect(customWithStatusListItems).toEqual(customWithStatusData);
+        engine.expect(customFuncWithStatusListItems).toEqual(customWithStatusData);
         engine.expect(defaultMapItems).toEqual(week.items.toMap());
         engine.expect(customMapItems).toEqual(week.items.toMap({ keySelector: 'key', valueSelector: 'value' }));
       }

@@ -1,8 +1,8 @@
 import { defaultLocalize, IS_ENUM_ITEMS as ENUM_ITEMS_IN_NODE, KEYS, VALUES } from '@enum-plus';
-import { getLocales, localizeConfigData, StandardWeekConfig } from '../data/week-config';
+import { getLocales, localizeConfigData } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
-import { copyList, pickArray } from '../utils/index';
+import { pickArray } from '../utils/index';
 
 const testEnumItems = (engine: TestEngineBase) => {
   engine.describe('The EnumItemsArray api', () => {
@@ -210,24 +210,31 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
   );
 
   engine.test(
-    'enum.items.toList should generate an object array',
+    'enum.items.toList should generate the default objects array with value and label',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       const defaultListItems = weekEnum.items.toList();
-      const customListItems = weekEnum.items.toList({
-        valueField: 'id',
-        labelField: 'name',
+      const defaultListItems2 = weekEnum.items.toList({});
+      const defaultListItems3 = weekEnum.items.toList({
+        valueField: 'value',
       });
-      return { locales, defaultListItems, customListItems };
+      const defaultListItems4 = weekEnum.items.toList({
+        labelField: 'label',
+      });
+      return {
+        locales,
+        defaultListItems,
+        defaultListItems2,
+        defaultListItems3,
+        defaultListItems4,
+      };
     },
-    ({ locales, defaultListItems, customListItems }) => {
-      engine.expect(copyList(defaultListItems)).toEqual(pickArray(getStandardWeekData(locales), ['value', 'label']));
-      engine.expect(copyList(customListItems, 'id', 'name')).toEqual(
-        pickArray(getStandardWeekData(locales), ['value', 'label']).map((item) => ({
-          id: item.value,
-          name: item.label,
-        }))
-      );
+    ({ locales, defaultListItems, defaultListItems2, defaultListItems3, defaultListItems4 }) => {
+      const defaultData = pickArray(getStandardWeekData(locales), ['value', 'label']);
+      engine.expect(defaultListItems).toEqual(defaultData);
+      engine.expect(defaultListItems2).toEqual(defaultData);
+      engine.expect(defaultListItems3).toEqual(defaultData);
+      engine.expect(defaultListItems4).toEqual(defaultData);
     }
   );
 
@@ -240,32 +247,49 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
         labelField: 'name',
       });
       const valueNameListItems = weekEnum.items.toList({
-        valueField: 'value',
         labelField: 'name',
       });
       const idLabelListItems = weekEnum.items.toList({
         valueField: 'id',
-        labelField: 'label',
       });
-      return { locales, idNameListItems, valueNameListItems, idLabelListItems };
+      const idNameStatusListItems = weekEnum.items.toList({
+        valueField: 'id',
+        labelField: 'name',
+        extra: (item) => ({ status: item.raw.status }),
+      });
+      return {
+        locales,
+        StandardWeekConfig,
+        idNameListItems,
+        valueNameListItems,
+        idLabelListItems,
+        idNameStatusListItems,
+      };
     },
-    ({ locales, idNameListItems, valueNameListItems, idLabelListItems }) => {
-      engine.expect(Array.from(idNameListItems)).toEqual(
+    ({ locales, StandardWeekConfig, idNameListItems, valueNameListItems, idLabelListItems, idNameStatusListItems }) => {
+      engine.expect(idNameListItems).toEqual(
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           name: item.label,
         }))
       );
-      engine.expect(Array.from(valueNameListItems)).toEqual(
+      engine.expect(valueNameListItems).toEqual(
         getStandardWeekData(locales).map((item) => ({
           value: item.value,
           name: item.label,
         }))
       );
-      engine.expect(Array.from(idLabelListItems)).toEqual(
+      engine.expect(idLabelListItems).toEqual(
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           label: item.label,
+        }))
+      );
+      engine.expect(idNameStatusListItems).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          id: item.value,
+          name: item.label,
+          status: StandardWeekConfig[item.key as keyof typeof StandardWeekConfig].status,
         }))
       );
     }
@@ -279,23 +303,61 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
         valueField: () => 'id' as const,
         labelField: () => 'name' as const,
       });
+      const staticFieldStatusListItems = weekEnum.items.toList({
+        valueField: () => 'id' as const,
+        labelField: () => 'name' as const,
+        extra: (item) => ({ status: item.raw.status }),
+      });
       const dynamicFieldListItems = weekEnum.items.toList({
         valueField: (item) => `id-${item.value}`,
         labelField: (item) => `name-${item.value}`,
       });
-      return { locales, staticFieldListItems, dynamicFieldListItems };
+      const dynamicFieldStatusListItems = weekEnum.items.toList({
+        valueField: (item) => `id-${item.value}`,
+        labelField: (item) => `name-${item.value}`,
+        extra: (item) => ({ status: item.raw.status }),
+      });
+      return {
+        locales,
+        StandardWeekConfig,
+        staticFieldListItems,
+        staticFieldStatusListItems,
+        dynamicFieldListItems,
+        dynamicFieldStatusListItems,
+      };
     },
-    ({ locales, staticFieldListItems, dynamicFieldListItems }) => {
+    ({
+      locales,
+      StandardWeekConfig,
+      staticFieldListItems,
+      dynamicFieldListItems,
+      staticFieldStatusListItems,
+      dynamicFieldStatusListItems,
+    }) => {
       engine.expect(Array.from(staticFieldListItems)).toEqual(
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           name: item.label,
         }))
       );
+      engine.expect(Array.from(staticFieldStatusListItems)).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          id: item.value,
+          name: item.label,
+          status: StandardWeekConfig[item.key as keyof typeof StandardWeekConfig].status,
+        }))
+      );
       engine.expect(Array.from(dynamicFieldListItems)).toEqual(
         getStandardWeekData(locales).map((item) => ({
           ['id-' + item.value]: item.value,
           ['name-' + item.value]: item.label,
+        }))
+      );
+      engine.expect(Array.from(dynamicFieldStatusListItems)).toEqual(
+        getStandardWeekData(locales).map((item) => ({
+          ['id-' + item.value]: item.value,
+          ['name-' + item.value]: item.label,
+          status: StandardWeekConfig[item.key as keyof typeof StandardWeekConfig].status,
         }))
       );
     }
@@ -305,9 +367,9 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
     'enum.items.toMap should generate a default mapping object with value and label',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
+      return { weekEnum, StandardWeekConfig };
     },
-    ({ weekEnum }) => {
+    ({ weekEnum, StandardWeekConfig }) => {
       const defaultMapData = Object.values(localizeConfigData(StandardWeekConfig, getLocales, defaultLocalize)).reduce(
         (acc, { value, label }) => {
           acc[value] = label;
@@ -324,9 +386,9 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
     'enum.items.toMap should generate a mapping object with custom field of keys and values',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
+      return { weekEnum, StandardWeekConfig };
     },
-    ({ weekEnum }) => {
+    ({ weekEnum, StandardWeekConfig }) => {
       engine
         .expect(
           weekEnum.items.toMap({
@@ -350,9 +412,9 @@ export function addEnumItemsTestSuite(engine: TestEngineBase) {
     'enum.items.toMap should generate a mapping object with custom functions',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      return { weekEnum };
+      return { weekEnum, StandardWeekConfig };
     },
-    ({ weekEnum }) => {
+    ({ weekEnum, StandardWeekConfig }) => {
       engine
         .expect(
           weekEnum.items.toMap({

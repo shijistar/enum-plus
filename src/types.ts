@@ -71,7 +71,9 @@ export type ListItem<
   V extends EnumValue = EnumValue,
   FOV extends string = 'value',
   FOL extends string = 'label',
-> = Record<FOV, V> & Record<FOL, string>;
+  R extends Record<string, unknown> = never,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+> = Record<FOV, V> & Record<FOL, string> & (IsNever<R> extends true ? {} : R);
 
 /** Enum value type, support number, string, symbol */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -214,3 +216,5 @@ export type ArrayToMap<A extends Record<string, any>[] | readonly Record<string,
 };
 
 export type ExactEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
+
+export type IsNever<T> = [T] extends [never] ? true : false;
