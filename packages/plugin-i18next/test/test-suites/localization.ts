@@ -1,235 +1,240 @@
-import type { IEnum } from '@enum-plus';
-import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '../../../../test/data/week-config';
-import type { getStandardWeekData as getStandardWeekDataInterface } from '../../../../test/data/week-data';
-import type TestEngineBase from '../../../../test/engines/base';
-import { pickArray } from '../../../../test/utils/index';
-import type { ColumnFilterItem } from '../../src/toFilter';
-import type { MenuItemOption } from '../../src/toMenu';
-import type { SelectItem } from '../../src/toSelect';
-import type { ValueMap } from '../../src/toValueMap';
+import type { EnumInterface, IEnum } from '@enum-plus';
+import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '@enum-plus/test/data/week-config';
+import type TestEngineBase from '@enum-plus/test/engines/base';
+import { changeLanguage } from 'i18next';
+import rootPlugin from '../../src/index';
+import localizePlugin from '../../src/localize';
+import { getAltData } from '../data/altLocale';
 
 const testLocalization = (engine: TestEngineBase) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'Should show English by default',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return { ...getEnumTestData(weekEnum as any), locales: localeEN, getStandardWeekData };
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+        Enum.install(localizePlugin);
+        return {
+          ...getAssertData({
+            Enum,
+            StandardWeekConfig,
+            locales: localeEN,
+            noLocale,
+          }),
+        };
       },
       (args) => assertEnum(args)
     );
 
     engine.test(
       'Should show Chinese after changing lang',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang('zh-CN', Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), locales: localeCN, getStandardWeekData };
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeCN, noLocale } }) => {
+        Enum.install(localizePlugin);
+        changeLanguage('zh-CN');
+        return {
+          ...getAssertData({
+            Enum,
+            StandardWeekConfig,
+            locales: localeCN,
+            noLocale,
+          }),
+        };
       },
       (args) => assertEnum(args)
     );
 
     engine.test(
       'Should show English after changing back',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+        Enum.install(localizePlugin);
+        changeLanguage('en');
+        return {
+          ...getAssertData({
+            Enum,
+            StandardWeekConfig,
+            locales: localeEN,
+            noLocale,
+          }),
+        };
       },
       (args) => assertEnum(args)
     );
 
     engine.test(
-      'Should show original label if no localization found',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang(undefined, Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), getStandardWeekData, locales: noLocale };
-      },
-      (args) => assertEnum(args)
-    );
-
-    engine.test(
-      'Should show original label if Enum.localize is explicitly set to undefined ',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang(undefined, Enum, getLocales, defaultLocalize);
-        Enum.localize = undefined!;
-        const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), getStandardWeekData, locales: noLocale };
-      },
-      (args) => assertEnum(args)
-    );
-
-    engine.test(
-      'Should respect Enum options over global setting (Chinese over English)',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+      'Should accept plugin options',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+        Enum.install(localizePlugin, {
+          tOptions: { ns: 'alternative' },
         });
-        return { ...getEnumTestData(weekEnum), locales: localeCN, getStandardWeekData };
-      },
-      (args) => assertEnum(args)
-    );
-    engine.test(
-      'Should respect Enum options over global setting (undefined over English)',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
-      },
-      (args) => assertEnum(args)
-    );
-    engine.test(
-      'Should respect Enum options over global setting (undefined over English), support delayed assign',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang(undefined, Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
-      },
-      (args) => assertEnum(args)
-    );
-    engine.test(
-      'Should respect Enum options over global setting (Chinese over undefined)',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang(undefined, Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+        changeLanguage('en');
+        const { weekEnum, AltLocales } = getAssertData({
+          Enum,
+          StandardWeekConfig,
+          locales: localeEN,
+          noLocale,
         });
-        return { ...getEnumTestData(weekEnum), locales: localeCN, getStandardWeekData };
+        return {
+          weekEnum,
+          AltLocales,
+        };
       },
-      (args) => assertEnum(args)
+      ({ weekEnum, AltLocales }) => {
+        engine.expect(weekEnum.name).toBe(AltLocales['alternative:weekDay.name']);
+        engine
+          .expect(Array.from(weekEnum.labels))
+          .toEqual(Array.from(weekEnum.items).map((item) => AltLocales[`alternative:${item.raw.label}`]));
+        const sunday = weekEnum.items[0];
+        engine.expect(sunday.label).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(sunday.toString()).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:weekday.sunday']);
+      }
     );
     engine.test(
-      'Should respect Enum options over global setting (both undefined)',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang(undefined, Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        return { ...getEnumTestData(weekEnum), locales: noLocale, getStandardWeekData };
+      'Should be able to set plugin option by root plugin',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+        Enum.install(rootPlugin, {
+          localize: { tOptions: { ns: 'alternative' } },
+        });
+        changeLanguage('en');
+        const { weekEnum, AltLocales } = getAssertData({
+          Enum,
+          StandardWeekConfig,
+          locales: localeEN,
+          noLocale,
+        });
+        return {
+          weekEnum,
+          AltLocales,
+        };
       },
-      (args) => assertEnum(args)
+      ({ weekEnum, AltLocales }) => {
+        engine.expect(weekEnum.name).toBe(AltLocales['alternative:weekDay.name']);
+        engine
+          .expect(Array.from(weekEnum.labels))
+          .toEqual(Array.from(weekEnum.items).map((item) => AltLocales[`alternative:${item.raw.label}`]));
+        const sunday = weekEnum.items[0];
+        engine.expect(sunday.label).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(sunday.toString()).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:weekday.sunday']);
+      }
     );
+
     engine.test(
-      'Should respect Enum options over global setting (both explicit undefined)',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang(undefined, Enum, getLocales, defaultLocalize);
-        Enum.localize = undefined!;
-        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        return { ...getEnumTestData(weekEnum), locales: noLocale, getStandardWeekData };
+      'Should accept plugin options with tOptions function',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+        Enum.install(localizePlugin, {
+          tOptions: (key) => {
+            return { ns: key === 'weekDay.name' ? 'translation' : 'alternative' };
+          },
+        });
+        changeLanguage('en');
+        const { weekEnum, AltLocales } = getAssertData({
+          Enum,
+          StandardWeekConfig,
+          locales: localeEN,
+          noLocale,
+        });
+        return {
+          weekEnum,
+          AltLocales,
+          Locales: localeEN,
+        };
       },
-      (args) => {
-        assertEnum(args);
+      ({ weekEnum, AltLocales, Locales }) => {
+        engine.expect(weekEnum.name).toBe(Locales['weekDay.name']);
+        engine
+          .expect(Array.from(weekEnum.labels))
+          .toEqual(Array.from(weekEnum.items).map((item) => AltLocales[`alternative:${item.raw.label}`]));
+        const sunday = weekEnum.items[0];
+        engine.expect(sunday.label).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(sunday.toString()).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:weekday.sunday']);
+      }
+    );
+
+    engine.test(
+      'Should allow plugin option overriding the t function',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+        Enum.install(localizePlugin, {
+          tOptions: (key) => key + '(overridden)',
+        });
+        changeLanguage('en');
+        const { weekEnum } = getAssertData({
+          Enum,
+          StandardWeekConfig,
+          locales: localeEN,
+          noLocale,
+        });
+        return {
+          weekEnum,
+        };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.name).toBe('weekDay.name(overridden)');
+        engine
+          .expect(Array.from(weekEnum.labels))
+          .toEqual(Array.from(weekEnum.items).map((item) => `${item.raw.label}(overridden)`));
+        const sunday = weekEnum.items[0];
+        engine.expect(sunday.label).toBe(`weekday.sunday(overridden)`);
+        engine.expect(sunday.toString()).toBe(`weekday.sunday(overridden)`);
+        engine.expect(sunday.toLocaleString()).toBe(`weekday.sunday(overridden)`);
       }
     );
   });
 
-  function getEnumTestData(
-    weekEnum: IEnum<
-      typeof StandardWeekConfig,
-      keyof typeof StandardWeekConfig,
-      (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
-    >
-  ) {
-    const selectItems = weekEnum.toSelect({ valueField: 'value', labelField: 'label' });
-    const selectItemsWithFirst = weekEnum.toSelect({
-      firstOption: { value: undefined, label: 'weekDay.name' },
-      valueField: 'value',
-      labelField: 'label',
-    });
-    const menuItems = weekEnum.toMenu();
-    const filterItems = weekEnum.toFilter();
-    const valueMap = weekEnum.toValueMap();
-    return { selectItems, selectItemsWithFirst, menuItems, filterItems, valueMap };
+  function getAssertData(options: {
+    Enum: EnumInterface;
+    StandardWeekConfig: typeof StandardWeekConfig;
+    locales: typeof localeEN | typeof localeCN | typeof noLocale;
+    noLocale: typeof noLocale;
+  }) {
+    const { Enum, StandardWeekConfig, locales, noLocale } = options;
+    const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+    const altData = getAltData({ locales, StandardWeekConfig });
+    const altWeekEnum = Enum(altData.AltStandardWeekConfig, { name: 'alternative:weekDay.name' });
+    const Locales = Object.keys(noLocale).reduce(
+      (acc, key) => {
+        acc[noLocale[key as keyof typeof noLocale]] = (locales as Record<string, string>)[key] as never;
+        return acc;
+      },
+      {} as { -readonly [key in (typeof noLocale)[keyof typeof noLocale]]: string }
+    );
+    return {
+      weekEnum,
+      altWeekEnum,
+      Locales,
+      ...altData,
+    };
   }
 
   type WeekValue = (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'];
-  function assertEnum(options: {
-    selectItems: SelectItem<WeekValue, 'value', 'label'>[];
-    selectItemsWithFirst: SelectItem<WeekValue, 'value', 'label'>[];
-    menuItems: MenuItemOption<WeekValue>[];
-    filterItems: ColumnFilterItem<WeekValue>[];
-    valueMap: ValueMap;
-    locales: typeof localeEN | typeof localeCN | typeof noLocale;
-    getStandardWeekData: typeof getStandardWeekDataInterface;
-  }) {
-    const { selectItems, selectItemsWithFirst, menuItems, filterItems, valueMap, locales, getStandardWeekData } =
-      options;
-    engine.expect(selectItems).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
-    engine.expect(selectItemsWithFirst).toEqual([
-      {
-        label: locales['weekDay.name'],
-        value: undefined,
-      },
-      ...pickArray(getStandardWeekData(locales), ['label', 'value']),
-    ]);
-    engine.expect(menuItems).toEqual(
-      pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
-        key: item.value,
-        label: item.label,
-      }))
-    );
-    engine.expect(filterItems).toEqual(
-      pickArray(getStandardWeekData(locales), ['label', 'value']).map((item) => ({
-        value: item.value,
-        text: item.label,
-      }))
-    );
-    engine.expect(valueMap).toEqual(
-      getStandardWeekData(locales).reduce(
-        (acc, item) => {
-          acc[item.value] = { text: item.label };
-          return acc;
-        },
-        {} as Record<number, { text: string | undefined }>
-      )
-    );
+  function assertEnum(
+    options: {
+      weekEnum: IEnum<typeof StandardWeekConfig, keyof typeof StandardWeekConfig, WeekValue>;
+      altWeekEnum: IEnum<
+        ReturnType<typeof getAltData>['AltStandardWeekConfig'],
+        keyof typeof StandardWeekConfig,
+        WeekValue
+      >;
+      Locales: { -readonly [key in (typeof noLocale)[keyof typeof noLocale]]: string };
+    } & ReturnType<typeof getAltData>
+  ) {
+    const { weekEnum, altWeekEnum, Locales, AltLocales } = options;
+    engine.expect(weekEnum.name).toEqual(Locales['weekDay.name']);
+    engine.expect(weekEnum.labels).toEqual(Array.from(weekEnum.items).map((item) => Locales[item.raw.label]));
+
+    const sunday = weekEnum.items[0];
+    engine.expect(sunday.label).toBe(Locales['weekday.sunday']);
+    engine.expect(sunday.toString()).toBe(Locales['weekday.sunday']);
+    engine.expect(sunday.toLocaleString()).toBe(Locales['weekday.sunday']);
+
+    engine.expect(altWeekEnum.name).toEqual(AltLocales['alternative:weekDay.name']);
+    engine
+      .expect(Array.from(altWeekEnum.labels))
+      .toEqual(Array.from(altWeekEnum.items).map((item) => AltLocales[item.raw.label as keyof typeof AltLocales]));
+
+    const altSunday = altWeekEnum.items[0];
+    engine.expect(altSunday.label).toBe(AltLocales['alternative:weekday.sunday']);
+    engine.expect(altSunday.toString()).toBe(AltLocales['alternative:weekday.sunday']);
+    engine.expect(altSunday.toLocaleString()).toBe(AltLocales['alternative:weekday.sunday']);
   }
 };
 

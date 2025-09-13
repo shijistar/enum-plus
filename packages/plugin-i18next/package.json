@@ -1,17 +1,19 @@
 {
-  "name": "@enum-plus/plugin-antd",
+  "name": "@enum-plus/plugin-i18next",
   "version": "1.0.0-alpha.0",
-  "description": "A plugin for `enum-plus` that provides functionality to bind enums to Ant Design",
+  "description": "A plugin for `enum-plus` that supports internationalization of enums through i18next",
   "keywords": [
     "enum",
     "enumeration",
     "enum-plus",
     "plugin",
     "typescript",
+    "localization",
+    "globalization",
+    "internationalization",
     "front-end",
-    "antd",
-    "ant design",
-    "AntDesign"
+    "node.js",
+    "ssr"
   ],
   "homepage": "https://github.com/shijistar/enum-plus",
   "bugs": {
@@ -41,7 +43,6 @@
     "build:es": "father build",
     "build:es-legacy": "cross-env LEGACY=1 father build",
     "build:lib": "run-s ts2lib task:copy-lib",
-    "clean": "shx rm -rf lib es es-legacy tslib",
     "prepublishOnly": "npm run build && npm run test",
     "task:copy-lib": "tsx ../../scripts/copy-lib.ts",
     "test": "jest",
@@ -53,7 +54,7 @@
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "peerDependencies": {
-    "enum-plus": "^3.0.0-alpha.0"
+    "i18next": ">=8.4.0"
   },
   "packageManager": "npm@10.9.2",
   "publishConfig": {

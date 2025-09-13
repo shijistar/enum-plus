@@ -1,13 +1,15 @@
-import { defaultLocalize } from '@enum-plus';
-import { getLocales, localizeConfigData, StandardWeekConfig } from '../../../../test/data/week-config';
-import type TestEngineBase from '../../../../test/engines/base';
-import '../../src/index';
+// eslint-disable-next-line import/no-unresolved
+import { getLocales, localizeConfigData, StandardWeekConfig } from '@enum-plus/test/data/week-config';
+import type TestEngineBase from '@enum-plus/test/engines/base';
+import { defaultLocalize } from 'enum-plus';
+import toValueMapPlugin from '../../src/toValueMap';
 
 const testEnumItems = (engine: TestEngineBase) => {
   engine.describe('The toValueMap plugin', () => {
     engine.test(
       'should generate an object array for AntDesignPro',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        Enum.install(toValueMapPlugin);
         const weekEnum = Enum(StandardWeekConfig);
         const valueMap = weekEnum.toValueMap();
         return { valueMap };

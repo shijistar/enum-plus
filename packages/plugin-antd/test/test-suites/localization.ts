@@ -1,8 +1,10 @@
 import type { IEnum } from '@enum-plus';
-import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '../../../../test/data/week-config';
-import type { getStandardWeekData as getStandardWeekDataInterface } from '../../../../test/data/week-data';
-import type TestEngineBase from '../../../../test/engines/base';
-import { pickArray } from '../../../../test/utils/index';
+import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '@enum-plus/test/data/week-config';
+import type { getStandardWeekData as getStandardWeekDataInterface } from '@enum-plus/test/data/week-data';
+import type TestEngineBase from '@enum-plus/test/engines/base';
+// eslint-disable-next-line import/no-unresolved
+import { pickArray } from '@enum-plus/test/utils/index';
+import antdPlugins from '../../src/index';
 import type { ColumnFilterItem } from '../../src/toFilter';
 import type { MenuItemOption } from '../../src/toMenu';
 import type { SelectItem } from '../../src/toSelect';
@@ -17,6 +19,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,6 +35,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang('zh-CN', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         return { ...getEnumTestData(weekEnum), locales: localeCN, getStandardWeekData };
@@ -46,6 +50,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
@@ -60,6 +65,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         return { ...getEnumTestData(weekEnum), getStandardWeekData, locales: noLocale };
@@ -74,6 +80,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         Enum.localize = undefined!;
         const weekEnum = Enum(StandardWeekConfig);
@@ -89,6 +96,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, {
           localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
@@ -104,6 +112,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
         return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
@@ -117,6 +126,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
         setLang('en-US', Enum, getLocales, defaultLocalize);
@@ -131,6 +141,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, {
           localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
@@ -146,6 +157,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
         return { ...getEnumTestData(weekEnum), locales: noLocale, getStandardWeekData };
@@ -159,6 +171,7 @@ const testLocalization = (engine: TestEngineBase) => {
         WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
+        Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         Enum.localize = undefined!;
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });

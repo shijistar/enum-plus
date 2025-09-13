@@ -1,13 +1,17 @@
-import { getStandardWeekData } from '../../../../test/data/week-data';
-import type TestEngineBase from '../../../../test/engines/base';
-import { copyList, pickArray } from '../../../../test/utils/index';
-import '../../src/index';
+// eslint-disable-next-line import/no-unresolved
+import { getStandardWeekData } from '@enum-plus/test/data/week-data';
+import type TestEngineBase from '@enum-plus/test/engines/base';
+// eslint-disable-next-line import/no-unresolved
+import { copyList, pickArray } from '@enum-plus/test/utils/index';
+import antdPlugin from '../../src/index';
+import toSelectPlugin from '../../src/toSelect';
 
 const testEnumItems = (engine: TestEngineBase) => {
   engine.describe('The toSelect plugin', () => {
     engine.test(
       'should generate an object array',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
+        Enum.install(toSelectPlugin);
         const weekEnum = Enum(StandardWeekConfig);
         const defaultListItems = weekEnum.toSelect();
         const defaultListItemsWithFirst1 = weekEnum.toSelect({
@@ -77,6 +81,49 @@ const testEnumItems = (engine: TestEngineBase) => {
       }
     );
   });
+
+  engine.test(
+    'should accept plugin options',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
+      Enum.install(toSelectPlugin, {
+        valueField: 'id',
+        labelField: 'name',
+      });
+      Enum.install(antdPlugin, {
+        toSelect: { valueField: 'id', labelField: 'name' },
+      });
+      const weekEnum = Enum(StandardWeekConfig);
+      const defaultListItems = weekEnum.toSelect();
+
+      return { locales, defaultListItems };
+    },
+    ({ defaultListItems, locales }) => {
+      const defaultItemsData = pickArray(getStandardWeekData(locales), ['value', 'label']).map((item) => ({
+        id: item.value,
+        name: item.label,
+      }));
+      engine.expect(defaultListItems).toEqual(defaultItemsData);
+    }
+  );
+  engine.test(
+    'should be able to set plugin options by root plugin',
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
+      Enum.install(antdPlugin, {
+        toSelect: { valueField: 'id', labelField: 'name' },
+      });
+      const weekEnum = Enum(StandardWeekConfig);
+      const defaultListItems = weekEnum.toSelect();
+
+      return { locales, defaultListItems };
+    },
+    ({ defaultListItems, locales }) => {
+      const defaultItemsData = pickArray(getStandardWeekData(locales), ['value', 'label']).map((item) => ({
+        id: item.value,
+        name: item.label,
+      }));
+      engine.expect(defaultListItems).toEqual(defaultItemsData);
+    }
+  );
 };
 
 export default testEnumItems;

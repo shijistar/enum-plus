@@ -8,7 +8,7 @@ rmSync(libDir, {
   force: true,
 });
 
-cpSync('./tslib/src', libDir, {
+cpSync('./tslib/packages/plugin-antd/src', libDir, {
   recursive: true,
   force: true,
   errorOnExist: false,
