@@ -1,15 +1,13 @@
 import type { PluginFunc } from 'enum-plus';
-import type { TOptions } from 'i18next';
-// eslint-disable-next-line import/no-named-as-default
-import i18n from 'i18next';
+import type { i18n, TOptions } from 'i18next';
+import Locale from './components/Locale';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LocalizePluginOptions {
   /**
    * - **EN:** The i18next instance to be used, if not provided, the default instance will be used.
    * - **CN:** 要使用的i18next实例，如果不提供，则使用默认实例。
    */
-  instance?: typeof i18n;
+  instance?: i18n;
   /**
    * - **EN:** Provide options to be passed to the `t` method when generating internationalized text
    *   within the enum, so that parameters can be passed dynamically.
@@ -24,21 +22,10 @@ export interface LocalizePluginOptions {
   tOptions?: TOptions | ((key: (string | undefined) | (string | undefined)[]) => TOptions | string);
 }
 
-const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) => {
-  Enum.localize = (key: string | undefined) => {
-    const { instance = i18n } = pluginOptions || {};
-    let options: TOptions | string | undefined;
-    if (pluginOptions?.tOptions) {
-      if (typeof pluginOptions.tOptions === 'function') {
-        options = pluginOptions.tOptions(key);
-      } else {
-        options = pluginOptions.tOptions;
-      }
-    }
-    if (typeof options === 'string') {
-      return options;
-    }
-    return instance.t(key as string, options);
-  };
+const localizePlugin: PluginFunc<LocalizePluginOptions> = (options = {}, Enum) => {
+  const { instance, tOptions } = options;
+  Enum.localize = (key: string | undefined) =>
+    (<Locale key={key} i18nKey={key} instance={instance} tOptions={tOptions} />) as unknown as string;
 };
+
 export default localizePlugin;

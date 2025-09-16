@@ -3,6 +3,9 @@ import type { FilterItemPluginOptions } from './filterItem';
 import filterItemPlugin from './filterItem';
 import localizePlugin, { type LocalizePluginOptions } from './localize';
 
+export * from './filterItem';
+export * from './localize';
+
 /* istanbul ignore next */
 const i18nPlugins: PluginFunc<{
   localize?: LocalizePluginOptions;

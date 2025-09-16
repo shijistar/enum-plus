@@ -1,10 +1,11 @@
 import type { EnumInterface, IEnum } from '@enum-plus';
 import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '@enum-plus/test/data/week-config';
 import type TestEngineBase from '@enum-plus/test/engines/base';
-import { changeLanguage } from 'i18next';
+import { changeLanguage, createInstance } from 'i18next';
 import rootPlugin from '../../src/index';
 import localizePlugin from '../../src/localize';
 import { getAltData } from '../data/altLocale';
+import initInstance from '../data/initInstance';
 
 const testLocalization = (engine: TestEngineBase) => {
   engine.describe('Enum localization', () => {
@@ -86,6 +87,26 @@ const testLocalization = (engine: TestEngineBase) => {
         engine.expect(sunday.toString()).toBe(AltLocales['alternative:weekday.sunday']);
         engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:weekday.sunday']);
       }
+    );
+    engine.test(
+      'Should accept i18n instance by plugin option',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeCN, noLocale } }) => {
+        const instance = createInstance();
+        initInstance(instance);
+        Enum.install(rootPlugin, {
+          localize: { instance },
+        });
+        instance.changeLanguage('zh-CN');
+        return {
+          ...getAssertData({
+            Enum,
+            StandardWeekConfig,
+            locales: localeCN,
+            noLocale,
+          }),
+        };
+      },
+      (args) => assertEnum(args)
     );
     engine.test(
       'Should be able to set plugin option by root plugin',
