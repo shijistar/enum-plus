@@ -1,7 +1,7 @@
 {
   "name": "@enum-plus/plugin-i18next",
-  "version": "1.0.0-alpha.0",
-  "description": "A plugin for `enum-plus` that supports internationalization of enums through i18next",
+  "version": "1.0.0",
+  "description": "A plugin for enum-plus that supports internationalization of enums through i18next",
   "keywords": [
     "enum",
     "enumeration",

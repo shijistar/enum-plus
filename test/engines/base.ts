@@ -14,7 +14,7 @@ abstract class TestEngineBase {
 
   abstract test<Data = unknown>(
     name: string,
-    evaluate: (context: RuntimeContext) => Data,
+    evaluate: (context: RuntimeContext) => Data | Promise<Data>,
     assert: (data: Data) => void,
     evaluateContext?: Record<string, unknown>
   ): void;
