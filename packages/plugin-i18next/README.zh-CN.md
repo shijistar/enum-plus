@@ -6,7 +6,7 @@
 
 ## 简介
 
-`@enum-plus/i18next` 是 `enum-plus` 的一个插件，支持通过 [i18next](https://www.i18next.com/) 为枚举提供国际化支持，它允许你轻松地将枚举转换为多语言支持的文本，从而提升应用的国际化能力。
+`@enum-plus/i18next` 是 `enum-plus` 的一个插件，自动集成 [i18next](https://www.i18next.com/) 实现枚举标签的国际化。它允许你在枚举定义中使用 i18next 的本地化键，并动态显示为当前语言的翻译文本。
 
 ## 安装
 
@@ -28,6 +28,8 @@ Enum.install(i18nextPlugin);
 可以通过在枚举定义中使用本地化键，来实现枚举标签的国际化。
 
 ```js
+import { Enum } from 'enum-plus';
+
 const WeekEnum = Enum(
   {
     Monday: { value: 1, label: 'week.monday' },

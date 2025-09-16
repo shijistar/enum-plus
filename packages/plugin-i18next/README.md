@@ -2,11 +2,11 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
-# enum-plus For Ant Design
+# enum-plus for Globalization with i18next
 
 ## Introduction
 
-`@enum-plus/i18next` is a plugin for `enum-plus` that supports internationalization of enums through [i18next](https://www.i18next.com/). It allows you to easily convert enums into multi-language supported text, enhancing the internationalization capabilities of your application.
+`@enum-plus/i18next` is a plugin for `enum-plus` that automatically integrates with [i18next](https://www.i18next.com/) to achieve internationalization of enum labels. It allows you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
 
 ## Installation
 
@@ -28,6 +28,8 @@ Enum.use(i18nextPlugin);
 You can achieve internationalization of enum labels by using localization keys in the enum definition.
 
 ```js
+import { Enum } from 'enum-plus';
+
 const WeekEnum = Enum(
   {
     Monday: { value: 1, label: 'week.monday' },

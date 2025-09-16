@@ -8,6 +8,11 @@ import toSelectPlugin from './toSelect';
 import type { ToValueMapPluginOptions } from './toValueMap';
 import toValueMapPlugin from './toValueMap';
 
+export * from './toFilter';
+export * from './toMenu';
+export * from './toSelect';
+export * from './toValueMap';
+
 const antdPlugins: PluginFunc<{
   toSelect?: ToSelectPluginOptions;
   toMenu?: ToMenuPluginOptions;

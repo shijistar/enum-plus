@@ -13,18 +13,14 @@ export class JestEngine extends TestEngineBase {
 
   override test<Data>(
     name: string,
-    evaluate: (context: RuntimeContext) => Data,
+    evaluate: (context: RuntimeContext) => Data | Promise<Data>,
     assert: (data: Data) => void,
     evaluateContext?: Record<string, unknown>
   ): void {
-    test(name, () => {
+    test(name, async () => {
       const runtimeContext = this.getRuntimeContext();
-      const result = evaluate({ ...runtimeContext, ...evaluateContext });
-      if (result instanceof Promise) {
-        result.then(assert);
-      } else {
-        assert(result);
-      }
+      const result = await evaluate({ ...runtimeContext, ...evaluateContext });
+      assert(result);
     });
   }
   override expect<ActualType = unknown>(actual: ActualType): jest.JestMatchers<ActualType> {

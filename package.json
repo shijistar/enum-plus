@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
@@ -187,6 +187,7 @@
     "serve": "^14.2.4",
     "shx": "^0.4.0",
     "ts-jest": "^29.4.1",
+    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   },
