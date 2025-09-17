@@ -14,6 +14,9 @@ const initInstance = (instance: i18n) => {
         alternative: {
           greeting: 'Hi',
         },
+        override: {
+          greeting: 'Hey',
+        },
       },
       'zh-CN': {
         translation: {
@@ -21,6 +24,9 @@ const initInstance = (instance: i18n) => {
         },
         alternative: {
           greeting: '嗨',
+        },
+        override: {
+          greeting: '嘿',
         },
       },
     },

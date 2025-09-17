@@ -4,6 +4,6 @@
 
 ## 1.0.0
 
-2025-9-15
+2025-9-18
 
-- 🆕 the first release of `@enum-plus/antd` library
+- 🆕 the first release of `@enum-plus/react` library

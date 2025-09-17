@@ -6,4 +6,4 @@
 
 2025-9-15
 
-- 🆕 the first release of `@enum-plus/antd` library
+- 🆕 the first release of `@enum-plus/i18next` library
