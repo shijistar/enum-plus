@@ -6,13 +6,14 @@
 
 ## Introduction
 
-`@enum-plus/react` is a plugin for `enum-plus` that can be considered an advanced version of `@enum-plus/i18next`. It provides integration with [i18next](https://www.i18next.com/) and `react-i18next` (<https://react.i18next.com/getting-started>), allowing you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language, making it easier and more efficient to use i18next in React applications.
+`@enum-plus/react` is a plugin for `enum-plus` that can be considered an advanced version of `@enum-plus/i18next`. It provides integration with [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/getting-started). The plugin allows you to use i18next localization keys in enum definitions and dynamically display the translated text for the current language, making it easier and more efficient to use i18next in React applications.
 
 It differs from the `@enum-plus/i18next` plugin in the following ways:
 
 #### **@enum-plus/i18next**
 
 - Suitable for any JavaScript project, returning labels as string types, making it suitable for use in various mainstream frameworks.
+- Can be used directly for text search and other scenarios, such as using the `Array.includes` method to check if a label contains a certain substring, or binding to UI components like Select, where the search function works as expected.
 - Does not listen for language changes; when the language changes, you need to manually re-render components.
 
 #### **@enum-plus/react**
@@ -32,19 +33,19 @@ Import the `@enum-plus/react` plugin and install it in the entry file of your ap
 - If you are using `i18next`:
 
 ```js
-import { i18nLocalizePlugin } from '@enum-plus/react';
+import { i18nextPlugin } from '@enum-plus/react';
 import { Enum } from 'enum-plus';
 
-Enum.install(i18nLocalizePlugin);
+Enum.install(i18nextPlugin);
 ```
 
 - If you are using `react-i18next`:
 
 ```js
-import { reactI18nLocalizePlugin } from '@enum-plus/react';
+import { reactI18nextPlugin } from '@enum-plus/react';
 import { Enum } from 'enum-plus';
 
-Enum.install(reactI18nLocalizePlugin);
+Enum.install(reactI18nextPlugin);
 ```
 
 ## Basic Usage
@@ -79,9 +80,9 @@ import { Button, Select } from 'antd';
 import { changeLanguage } from 'i18next';
 
 <Select options={WeekEnum.items} defaultValue={WeekEnum.Monday} />;
-// Selected and displayed - Monday
+// Selected and displayed: Monday
 
 <Button onClick={() => changeLanguage('zh-CN')}>Switch Language</Button>;
 
-// After switching languages, the selected item's text will automatically update to - 星期一
+// After switching languages, the selected item's text will automatically update to: 星期一
 ```
