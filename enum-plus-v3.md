@@ -1,7 +1,5 @@
 # enum-plus v3.0 - A Major Update
 
-### ■■■■■■■■■■■■■■■■■■■■ (100%)
-
 ## Features
 
 ### Codebase
@@ -33,14 +31,13 @@
 ### Plugin System
 
 - [x] 🔥 Introduce a new plugin system for extending features and ship them as separate npm packages.
-- [x] Add `Enum.install` which is used to install plugins.
+- [x] Add `Enum.install` method used to install plugins.
 - [x] 🔥 Implement `enum-plus-plugin-antd` project and move Ant Design oriented code into the plugin, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. Set the default value of `valueField` to `value` and `labelField` to `label` in the plugin.
 
 ### Github Actions
 
 - [x] Improve Github Actions that updates the CDN url of UMD files in README.md when releasing a new version.
 - [x] Add e2e tests to cover unit tests for browser compatibility.
-
   - [x] `es` folder ( ES2020 )
   - [ ] `es-legacy` folder ( ES2015 )
   - [ ] `umd` folder ( UMD )
