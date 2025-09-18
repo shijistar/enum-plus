@@ -23,6 +23,19 @@ import { Enum } from 'enum-plus';
 Enum.install(antdPlugin);
 ```
 
+## 插件选项
+
+安装插件时，可以传入一个配置对象，用于设置插件的全局选项：
+
+```ts
+Enum.install(antdPlugin, {
+  toSelect: {
+    valueField: 'id', // 设置 toSelect 方法生成的数据对象中，表示值的字段
+    labelField: 'name', // 设置 toSelect 方法生成的数据对象中，表示标签的字段
+  },
+});
+```
+
 ## API
 
 ### 💎 &nbsp; toSelect

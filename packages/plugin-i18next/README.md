@@ -23,6 +23,56 @@ import { Enum } from 'enum-plus';
 Enum.use(i18nextPlugin);
 ```
 
+## Plugin Options
+
+When installing the plugin, you can pass a configuration object to set global options for the plugin:
+
+```ts
+Enum.use(i18nextPlugin, {
+  localize: {
+    // Set the i18next instance, defaults to the global i18next instance if necessary
+    instance: i18next,
+    // Options to pass to the i18next.t method
+    tOptions: {
+      // Set the namespace
+      ns: 'my-namespace',
+      // Set the default value for the return value
+      defaultValue: '-',
+      // Other options supported by the i18next.t method
+      // Please refer to https://www.i18next.com/translation-function/essentials#overview-options
+    },
+  },
+});
+```
+
+`tOptions` also supports a function form to dynamically generate options, and can even directly return the final translated text.
+
+```ts
+// Use function form to dynamically generate tOptions
+Enum.use(i18nextPlugin, {
+  localize: {
+    tOptions: (key) => {
+      if (key === 'week.sunday') {
+        return { ns: 'my-namespace' };
+      }
+      return { ns: 'translation' }; // Default namespace
+    },
+  },
+});
+
+// Directly return translated text
+Enum.use(i18nextPlugin, {
+  localize: {
+    tOptions: (key, instance) => {
+      if (key === 'week.sunday') {
+        return '周日'; // Directly return the custom translated text
+      }
+      return instance.t(key); // Use i18next instance to translate other keys
+    },
+  },
+});
+```
+
 ## Basic Usage
 
 You can achieve internationalization of enum labels by using localization keys in the enum definition.

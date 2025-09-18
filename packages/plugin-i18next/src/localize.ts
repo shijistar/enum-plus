@@ -21,7 +21,9 @@ export interface LocalizePluginOptions {
    *
    *   可以传递一个对象，也可以传递一个函数，函数的参数是当前的key，返回值是传递给`t`方法的选项，甚至可以直接返回一个字符串作为最终的翻译结果。
    */
-  tOptions?: TOptions | ((key: (string | undefined) | (string | undefined)[]) => TOptions | string);
+  tOptions?:
+    | TOptions
+    | ((key: string | undefined | (string | undefined)[], instance: typeof i18n) => TOptions | string);
 }
 
 const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) => {
@@ -30,7 +32,7 @@ const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) 
     let options: TOptions | string | undefined;
     if (pluginOptions?.tOptions) {
       if (typeof pluginOptions.tOptions === 'function') {
-        options = pluginOptions.tOptions(key);
+        options = pluginOptions.tOptions(key, instance);
       } else {
         options = pluginOptions.tOptions;
       }
