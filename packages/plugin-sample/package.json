@@ -1,0 +1,56 @@
+{
+  "name": "@enum-plus/plugin-sample",
+  "version": "1.0.0",
+  "description": "A plugin for enum-plus that adds a sample method to enums",
+  "keywords": [
+    "enum",
+    "enumeration",
+    "enum-plus",
+    "plugin",
+    "typescript",
+    "localization",
+    "front-end"
+  ],
+  "homepage": "https://github.com/shijistar/enum-plus",
+  "bugs": {
+    "url": "https://github.com/shijistar/enum-plus/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shijistar/enum-plus.git"
+  },
+  "license": "MIT",
+  "author": "xxx <xxx@example.com>",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "es",
+    "es-legacy",
+    "LICENSE",
+    "CHANGELOG.md",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "scripts": {
+    "build": "run-p build:es build:es-legacy build:lib",
+    "build:es": "father build",
+    "build:es-legacy": "cross-env LEGACY=1 father build",
+    "build:lib": "run-s ts2lib task:copy-lib",
+    "prepublishOnly": "npm run build && npm run test",
+    "task:copy-lib": "tsx ../../scripts/copy-lib.ts",
+    "test": "jest",
+    "test-legacy": "jest -c jest-legacy.config.js",
+    "test:browser": "npm run test:browser:bundle && playwright test",
+    "test:browser:bundle": "node scripts/browser-test-bundle.js",
+    "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
+    "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
+    "ts2lib": "tsc -p tsconfig.lib.json"
+  },
+  "packageManager": "npm@10.9.2",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}

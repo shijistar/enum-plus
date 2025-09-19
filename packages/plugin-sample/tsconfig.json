@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@enum-plus/test/*": ["../../tslib/test/*"],
+      "@enum-plus/*": ["../../lib/*"],
+      "@enum-plus": ["../../lib"]
+    }
+  },
+  "include": ["../../tslib", "./src", "./test"],
+  "exclude": ["node_modules", "es", "lib"]
+}
