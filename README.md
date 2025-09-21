@@ -29,7 +29,9 @@
 
 ⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Usage](#usage) | [Naming Conventions](#naming-convention-best-practices) | [Localization](#localization) | [Extensibility](#extensibility) | [Compatibility](#compatibility) | [Q&A](#qa) | [Contributing](#contributing)&nbsp; ⬇️
 
-> `v3.0` is coming soon! Feel free to try the preview version [enum-plus@next](https://www.npmjs.com/package/enum-plus/v/next). The new version will bring more exciting features and improvements. For details, please refer to [v3 Release Notes](https://github.com/shijistar/enum-plus/issues/14).
+> 🎉 `v3.0` Has Been Released!
+>
+> The new version brings more exciting features and improvements. Please check the [release notes](./docs/release-v3.md) and [migration guide](./docs/migration-guide-v2-to-v3.md) for details.
 
 ## Introduction
 
@@ -50,9 +52,11 @@ What other exciting features are there? Please continue to explore! Or you can c
 - Enhanced enum members with customizable display text
 - Built-in localization capabilities that integrate with any i18n library
 - Streamlined conversion from enum values to human-readable display text
-- Extensible design allowing unlimited custom fields on enum members
+- Extensible design allowing unlimited metadata fields on enum members
+- Plugin system with a variety of practical plugins available for installation
 - Seamless integration with any UI libraries like [Ant Design](https://ant.design/components/overview), [ElementPlus](https://element-plus.org/en-US/component/overview.html), [Material-UI](https://mui.com/material-ui), in a single line of code
-- Complete Node.js compatibility with SSR support
+- Support for server-side rendering (SSR)
+- Support for multiple environments including Web browsers, Node.js, ReactNative, Taro, and Mini Programs
 - Zero dependencies - pure JavaScript implementation usable in any front-end framework
 - First-class TypeScript support with comprehensive type inference
 - Lightweight (only 2KB+ gzipped)
@@ -139,8 +143,6 @@ const WeekEnum2 = Enum({
 
 WeekEnum2.Monday; // 'Mon'
 ```
-
-> The `as const` type assertion is used to ensure that the enum values are treated as `literal` types, otherwise they will be treated as `number` types. If you are using JavaScript, please remove the `as const`.
 
 ### 2. Standard Format (Recommended)
 
@@ -231,11 +233,49 @@ WeekEnum.Monday; // 1
 
 ---
 
+### 💎 &nbsp; named
+
+`Record<string, EnumItemClass>`
+
+一个聚合了所有枚举项的只读对象，可以通过`key`来快速访问某个枚举项对象。
+
+```js
+WeekEnum.named.Monday; // { key: 'Monday', value: 1, label: '星期一' }
+```
+
 ### 💎 &nbsp; items
 
 `{ value, label, key, raw }[]`
 
-Returns a read-only array of all enum members. The array structure conforms to [Ant Design](https://ant.design/components/select#usage-upgrade) component specifications, which makes it possible to generate dropdown menus, checkboxes, and other UI controls with just one line of code. For more details, please refer to the usage examples below.
+Returns a read-only array of all enum members.
+
+```js
+WeekEnum.items; // [ { value: 0, label: 'Sunday', key:  'Sunday' }, { value: 1, label: 'Monday', key: 'Monday' }, ... ]
+```
+
+---
+
+### 💎 &nbsp; values
+
+`(string | number)[]`
+
+Returns an array of all enum member `value`(s).
+
+```js
+WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
+```
+
+---
+
+### 💎 &nbsp; labels
+
+`string[]`
+
+Returns an array of all enum member `label`(s).
+
+```js
+WeekEnum.labels; // ['星期日', '星期一', ... '星期五', '星期六']
+```
 
 ---
 
@@ -243,7 +283,66 @@ Returns a read-only array of all enum members. The array structure conforms to [
 
 `string[]`
 
-Returns a read-only array of all enum member `key`(s)
+Returns an array of all enum member `key`(s)
+
+```js
+WeekEnum.keys; // ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+```
+
+---
+
+### 💎 &nbsp; meta
+
+`Record<string, any[]>`
+
+Returns an object containing arrays of custom field values for all enum members. Each key in the object corresponds to a custom field name, and the value is an array of that field's values across all enum members.
+
+```js
+const ColorEnum = Enum({
+  Red: { value: 1, label: 'Red', hex: '#FF0000' },
+  Green: { value: 2, label: 'Green', hex: '#00FF00' },
+  Blue: { value: 3, label: 'Blue', hex: '#0000FF' },
+});
+ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
+```
+
+By the way, you can quickly access custom fields of a single enum member through the `named` property.
+
+```js
+ColorEnum.named.Red.raw.hex; // '#FF0000'
+```
+
+---
+
+### 💎 &nbsp; has
+
+<sup>**_\[F]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
+
+Determine whether a certain enum member (value or key) exists.
+
+```js
+WeekEnum.has(1); // true
+WeekEnum.has('Sunday'); // true
+WeekEnum.has(9); // false
+WeekEnum.has('Birthday'); // false
+```
+
+---
+
+### 💎 &nbsp; findBy
+
+<sup>**_\[F]_**</sup> &nbsp; `findBy(field: string, value: any): EnumItemClass | undefined`
+
+Find an enum member by a specific field and its value. Returns the enum member object if found, otherwise returns `undefined`.
+
+The `field` parameter can be one of the built-in fields: `key`, `value`, `label`, or any custom field defined in the enum.
+
+```js
+WeekEnum.findBy('value', 1); // { key: 'Monday', value: 1, label: 'Monday' }
+WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: 'Monday' }
+```
+
+> If you want to get the custom fields of a known enum member, it is recommended to use the `named` property to access it
 
 ---
 
@@ -273,21 +372,6 @@ WeekEnum.key(1); // Monday (here is key, not label)
 
 ---
 
-### 💎 &nbsp; has
-
-<sup>**_\[F]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
-
-Determine whether a certain enum member (value or key) exists.
-
-```js
-WeekEnum.has(1); // true
-WeekEnum.has('Sunday'); // true
-WeekEnum.has(9); // false
-WeekEnum.has('Birthday'); // false
-```
-
----
-
 ### 💎 &nbsp; raw
 
 <sup>**_\[Override^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
@@ -310,6 +394,56 @@ WeekEnum.raw(0).happy; // true
 WeekEnum.raw(0); // { value: 0, label: 'Sunday', happy: true }
 WeekEnum.raw('Monday'); // { value: 1, label: 'Monday', happy: false }
 WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { value: 1, label: 'Monday', happy: false } }
+```
+
+---
+
+### 💎 &nbsp; toList
+
+<sup>**_\[Override^1]_**</sup> &nbsp; `toList(): { value, label }[]`
+<br/>
+<sup>**_\[Override^2]_**</sup> &nbsp; `toList(options?: { valueField?: string; labelField?: string }): { [key: string]: any }[]`
+
+Converts the enum members to an array of objects, each containing `value` and `label` fields by default. You can customize the field names using the `options` parameter.
+
+```js
+WeekEnum.toList();
+// [
+//   { value: 1, label: 'Monday' },
+//   { value: 2, label: 'Tuesday' },
+//   ...
+// ]
+WeekEnum.toList({ valueField: 'id', labelField: 'name' });
+// [
+//   { id: 1, name: 'Monday' },
+//   { id: 2, name: 'Tuesday' },
+//   ...
+// ]
+```
+
+---
+
+### 💎 &nbsp; toMap
+
+<sup>**_\[Override^1]_**</sup> &nbsp; `toMap(): Record<string, string | number>`
+<br/>
+<sup>**_\[Override^2]_**</sup> &nbsp; `toMap(options?: { keySelector?: string; valueSelector?: string }): Record<string, any>`
+
+Converts the enum members to a key-value map object, where the keys are the enum values and the values are the enum labels by default. You can customize the key and value fields using the `options` parameter.
+
+```js
+WeekEnum.toMap();
+// {
+//   "1": 'Monday',
+//   "2": 'Tuesday',
+//   ...
+// }
+WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
+// {
+//   "Monday": 1,
+//   "Tuesday": 2,
+//   ...
+// }
 ```
 
 ---
@@ -383,6 +517,65 @@ const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 Provides a type of the original initialization object of the Enum collection.
 
 > Note: This is a TypeScript type only and cannot be called at runtime. Calling it at runtime will throw an exception.
+
+---
+
+## Static Methods
+
+### 💎 &nbsp; Enum.isEnum
+
+<sup>**_\[F]_**</sup> &nbsp; `isEnum(obj: any): boolean`
+
+Check if a given object is an instance which was created by `Enum` function.
+
+```js
+Enum.isEnum(WeekEnum); // true
+Enum.isEnum({}); // false
+```
+
+---
+
+### 💎 &nbsp; Enum.localize
+
+<sup>**_\[F]_**</sup> &nbsp; `(key: string) => string`
+
+Set a global localization function for all enums. This function will be used to get the localized text for enum members and enum type names.
+
+```js
+import i8n from 'i18next';
+
+Enum.localize = (key) => i8n.t(key);
+```
+
+---
+
+### 💎 &nbsp; Enum.extends
+
+<sup>**_\[F]_**</sup> &nbsp; `(obj: Record<string, unknown> | undefined) => void`
+
+Extend the `Enum` objects with custom methods.
+
+```js
+Enum.extends({
+  sayHello() {
+    return `Hello EnumPlus!`;
+  },
+});
+```
+
+---
+
+### 💎 &nbsp; Enum.install
+
+<sup>**_\[F]_**</sup> &nbsp; `(plugin: EnumPlugin, options?: any) => void`
+
+Install a plugin to extend the functionality of all enums.
+
+```js
+import i18nextPlugin from '@enum-plus/i18next';
+
+Enum.install(i18nextPlugin);
+```
 
 ---
 
@@ -852,7 +1045,6 @@ enum-plus is designed to be compatible with a wide range of environments, includ
 - **Legacy Bundlers**: For bundlers without [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration support (like Webpack 4), this library automatically falls back to the `main` field entry point, and `es-legacy` directory is imported, which targets `ES2015`.
 
 - **UMD Version**: For direct browser usage or static projects without bundlers, enum-plus provides UMD format files in the `umd` directory. These can be included via a `<script>` tag and accessed through `window.EnumPlus`. The UMD directory offers two versions:
-
   - `enum-plus.min.js`: Targets **`ES2020`**, suitable for modern browsers.
   - `enum-plus-legacy.min.js`: Targets **`ES2015`**, suitable for older browsers.
 
