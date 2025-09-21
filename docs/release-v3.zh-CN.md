@@ -20,9 +20,11 @@
 
 - 🔥 新增 `enum.named` 属性，聚合所有枚举项，方便通过 `enum.named.XXX` 快速访问某个枚举项。
 
-  ```diff
-  - const monday = WeekEnum.items.find(item => item.value === 1);
-  + const monday = WeekEnum.named.Monday;
+  ```js
+  // 以前
+  const monday = WeekEnum.items.find(item => item.value === 1);
+  // 现在
+  const monday = WeekEnum.named.Monday;
   ```
 
 - 🔥 新增 `enum.meta` 对象，聚合枚举中定义的所有自定义字段，键为字段名，值为各字段的原始值。这样可以在不遍历枚举项的情况下访问自定义字段。
@@ -33,7 +35,7 @@
     Green: { value: 2, label: 'Green', hex: '#00FF00' },
     Blue: { value: 3, label: 'Blue', hex: '#0000FF' },
   });
-  ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF'
+  ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
   ```
 
 - 🔥 修改 `enum.values` 的行为，现在它返回成员原始值的数组。请使用 `enum.items` 获取旧行为。

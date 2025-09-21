@@ -20,9 +20,11 @@
 
 - 🔥 Add `enum.named` to aggregate all enum items by their names, so that you can quick access an enum item by `enum.named.XXX`.
 
-  ```diff
-  - const monday = WeekEnum.items.find(item => item.value === 1);
-  + const monday = WeekEnum.named.Monday;
+  ```js
+  // Before
+  const monday = WeekEnum.items.find(item => item.value === 1);
+  // After
+  const monday = WeekEnum.named.Monday;
   ```
 
 - 🔥 Add `enum.meta` object to aggregate all custom fields defined in the enum. The keys are the field names, and values are the raw values of each field. It's a good way of accessing custom fields without iterating through the enum items.
@@ -33,7 +35,7 @@
     Green: { value: 2, label: 'Green', hex: '#00FF00' },
     Blue: { value: 3, label: 'Blue', hex: '#0000FF' },
   });
-  ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF'
+  ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
   ```
 
 - 🔥 Change the behavior of `enum.values`, now it returns an array of the member raw values. Use `enum.items` for the old behavior.
