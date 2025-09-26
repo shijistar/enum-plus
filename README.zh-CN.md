@@ -89,21 +89,21 @@ yarn add enum-plus
 
 **在浏览器中使用**:
 
-- 特定版本:
+- 特定版本号:
 
 ```html
-<!-- ES2020 现代版本 -->
+<!-- 兼容 ES2020 的现代版本 -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
-<!-- ES2015 兼容版本 -->
+<!-- 兼容 ES2015 的早期版本 -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - 最新版本:
 
 ```html
-<!-- ES2020 现代版本 -->
+<!-- 兼容 ES2020 的现代版本 -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
-<!-- ES2015 兼容版本 -->
+<!-- 兼容 ES2015 的早期版本 -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
 ```
 
@@ -176,7 +176,7 @@ WeekEnum.label('Sunday'); // 星期日
 
 ### 4. 数组格式
 
-数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。这种方式还允许[自定义字段映射](#自定义字段映射)，这增加了灵活性，可以适配不同的数据格式
+数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。这种方式还允许[自定义字段映射](#数组格式初始化设置不同的字段映射)，这增加了灵活性，可以适配不同的数据格式
 
 ```js
 import { Enum } from 'enum-plus';
@@ -447,7 +447,7 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 `string`
 
-枚举类型的显示名称。在创建枚举时，可以通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。关于本地化的更多详情，请参考[本地化](#本地化)章节。
+枚举类型的显示名称。在创建枚举时，可以通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。关于本地化的更多信息，请参考[本地化](#本地化)章节。
 
 > 在UI组件中，枚举通常用来作为数据源，生成下拉框表单项，或在表格单元格中显式枚举成员文本。而对应的表单项标签或列标题就是枚举类型的名称。通过使用`name`，我们可以集中管理枚举名称，和枚举成员的名称，也更方便使用。
 
@@ -554,7 +554,7 @@ Enum.localize = (key) => i18n.t(key);
 
 <sup>**_\[方法]_**</sup> &nbsp; `(obj: Record<string, unknown> | undefined) => void`
 
-为所有枚举对象添加全局扩展方法，更多详情请参考[全局扩展](#全局扩展)章节。
+为所有枚举对象添加全局扩展方法，更多信息请参考[全局扩展](#全局扩展)章节。
 
 ```js
 Enum.extends({
@@ -570,7 +570,7 @@ Enum.extends({
 
 <sup>**_\[方法]_**</sup> &nbsp; `(plugin: EnumPlugin, options?: any) => void`
 
-安装一个插件，插件可以为所有枚举添加新的功能。更多详情请参考[插件体系](./docs/plugins.md)章节。
+安装一个插件，插件可以为所有枚举添加新的功能。更多信息请参考[插件体系](./docs/plugins.md)章节。
 
 ```js
 import i18nextPlugin from '@enum-plus/i18next';
@@ -580,7 +580,7 @@ Enum.install(i18nextPlugin);
 
 ## 使用案例
 
-#### 拾取枚举值，与原生枚举用法一致
+#### 💡 基础用法，替代魔法数字
 
 ```js
 const WeekEnum = Enum({
@@ -588,15 +588,168 @@ const WeekEnum = Enum({
   Monday: { value: 1, label: '星期一' },
 });
 
-WeekEnum.Sunday; // 0
-WeekEnum.Monday; // 1
+if (today === WeekEnum.Sunday) {
+  // 今天是星期天，享受你的一天吧！
+} else if (today === WeekEnum.Monday) {
+  // 哦不，又是星期一了...
+}
+```
+
+---
+
+#### 检查是否一个有效的枚举值
+
+```js
+if (WeekEnum.has(value)) {
+  // 是一个有效的枚举值，可以安全使用
+} else {
+  // 抛出异常或使用默认值
+}
+```
+
+---
+
+#### 检查是否一个枚举对象
+
+```js
+let values: number[] | undefined;
+if (Enum.isEnum(data)) {
+  values = data.values;
+} else if (Array.isArray(data)) {
+  values = data;
+} else {
+  // 非法输入，抛出异常或使用默认值
+}
+```
+
+---
+
+#### 💡 生成 UI 组件
+
+以 React + Ant Design 为例，更多UI组件的案例请参考 [支持多种前端框架](#-支持多种前端框架) 章节
+
+```jsx
+import { Menu, Select, Table } from 'antd';
+import { ProFormCheckbox, ProFormSelect } from '@ant-design/pro-components';
+
+const App = () => {
+  return (
+    <>
+      <Select options={WeekEnum.items} />
+      <Menu items={WeekEnum.toMenu()} />
+      <Table columns={[{ filters: WeekEnum.toFilter() }]} />;
+      <ProFormSelect valueEnum={WeekEnum.toValueMap()} />; // Select
+      <ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />; // Checkbox
+    </>
+  );
+};
+```
+
+> 需要安装 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) 插件
+
+---
+
+#### 💡 支持本地化显示文本
+
+可以支持多语言环境，将`label`字段设置为一个本地化键值，根据当前语言环境显示对应的文本。更多信息请参考 [本地化](./docs/localization.md) 章节。
+
+```js
+WeekEnum.label(1); // Monday 或 星期一，取决于当前语言环境
+WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环境
+WeekEnum.name; // Week 或 周，取决于当前语言环境
+```
+
+---
+
+#### 约束数据类型 (仅TypeScript)
+
+```ts
+type MyComponentProps = {
+  day: typeof WeekEnum.valueType; // 0 | 1 | ... | 5 | 6
+};
+const MyComponent = (props: MyComponentProps) => {
+  return <div>今天是 {WeekEnum.label(props.day)}</div>;
+};
+
+<MyComponent day={1} />; // ✅ 类型正确
+<MyComponent day="Monday" />; // ❌ 类型错误
+<MyComponent day={8} />; // ❌ 错误，8 不是一个有效的枚举值
+```
+
+```ts
+function setDay(day: typeof WeekEnum.valueType) {
+  // day 的类型被约束为 0 | 1 | ... | 5 | 6
+}
+
+setDay(1); // ✅ 类型正确
+setDay('Monday'); // ❌ 类型错误
+setDay(8); // ❌ 错误，8 不是一个有效的枚举值
+```
+
+---
+
+#### 💡 添加元数据字段，可以作为静态全局配置系统
+
+```js
+const ColorEnum = Enum({
+  Red: { value: 1, hex: '#FF0000', icon: '🔥' },
+  Green: { value: 2, hex: '#00FF00', icon: '🍏' },
+  Blue: { value: 3, hex: '#0000FF', icon: '🔵' },
+});
+
+ColorEnum.values; // [1, 2, 3]
+ColorEnum.keys; // ['Red', 'Green', 'Blue']
+ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
+ColorEnum.meta.icon; // ['🔥', '🍏', '🔵']
+ColorEnum.named.Red.raw.hex; // '#FF0000'
+ColorEnum.named.Red.raw.icon; // '🔥'
+```
+
+---
+
+#### 支持遍历枚举项数组，但不可修改
+
+```js
+Array.isArray(WeekEnum.items); // true
+WeekEnum.items.map((item) => item.value); // [0, 1, ..., 5, 6]
+WeekEnum.items.forEach((item) => {
+  // ✅ 可遍历
+});
+for (const item of WeekEnum.items) {
+  // ✅ 可遍历
+}
+
+WeekEnum.items.push({ value: 2, label: '星期二' }); // ❌ 不可修改
+WeekEnum.items.splice(0, 1); // ❌ 不可修改
+WeekEnum.items[0].label = 'foo'; // ❌ 不可修改
+```
+
+---
+
+#### 💡 枚举组合（合并）
+
+```js
+const PrimaryColorEnum = Enum({
+  Red: { value: 1, hex: '#FF0000' },
+  Green: { value: 2, hex: '#00FF00' },
+  Blue: { value: 3, hex: '#0000FF' },
+});
+const SecondaryColorEnum = Enum({
+  Yellow: { value: 4, hex: '#FFFF00' },
+  Cyan: { value: 5, hex: '#00FFFF' },
+  Magenta: { value: 6, hex: '#FF00FF' },
+});
+const AllColorEnum = Enum({
+  ...PrimaryColorEnum.raw(),
+  ...SecondaryColorEnum.raw(),
+});
 ```
 
 ---
 
 #### 枚举项支持 Jsdoc 注释，启用代码智能提示
 
-在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 Jsdoc 注释，而不必再转到枚举定义处查看
+在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 Jsdoc 注释，而不必再转到枚举定义处查看。关于如何编写良好的代码，请参考 [最佳实践](./docs/best-practices.md) 章节。
 
 ```js
 const WeekEnum = Enum({
@@ -611,106 +764,15 @@ WeekEnum.Monday; // 将光标悬浮在 Monday 上
 
 ![jsdoc](./public/jsdoc-chs.png)
 
-可以看到，不但提示了枚举项的释义，还有枚举项的值，无需跳转离开当前光标位置，在阅读代码时非常方便
+可以看到，不但提示了枚举项的释义，还有枚举项的值，无需跳转离开当前光标位置，在阅读代码时非常方便。
 
 ---
 
-#### 获取包含全部枚举项的数组
+#### 💡 支持多种前端框架
 
-```js
-WeekEnum.items; // 输出如下:
-// [
-//  { value: 0, label: '星期日', key: 'Sunday', raw: { value: 0, label: '星期日' } },
-//  { value: 1, label: '星期一', key: 'Monday', raw: { value: 1, label: '星期一' } }
-// ]
-```
+`Enum.items` 可以直接作为组件的数据源（以 Select 组件为例）
 
----
-
-#### 获取第一个枚举值
-
-```js
-WeekEnum.items[0].value; // 0
-```
-
----
-
-#### 检查一个值是否一个有效的枚举值
-
-```js
-WeekEnum.has(1); // true
-WeekEnum.items.some((item) => item.value === 1); // true
-1 instanceof WeekEnum; // true
-```
-
----
-
-#### `instanceof` 操作符
-
-```js
-1 instanceof WeekEnum; // true
-'1' instanceof WeekEnum; // true
-'Monday' instanceof WeekEnum; // true
-```
-
----
-
-#### 支持遍历枚举项数组，但不可修改
-
-```js
-WeekEnum.items.length; // 2
-WeekEnum.items.map((item) => item.value); // [0, 1]，✅ 可遍历
-WeekEnum.items.forEach((item) => {}); // ✅ 可遍历
-for (const item of WeekEnum.items) {
-  // ✅ 可遍历
-}
-WeekEnum.items.push({ value: 2, label: '星期二' }); // ❌ 不可修改
-WeekEnum.items.splice(0, 1); // ❌ 不可修改
-WeekEnum.items[0].label = 'foo'; // ❌ 不可修改
-```
-
----
-
-#### 枚举值(或key)转换为显示文本
-
-```js
-WeekEnum.label(1); // 星期一，
-WeekEnum.label(WeekEnum.Monday); // 星期一
-WeekEnum.label('Monday'); // 星期一
-```
-
----
-
-#### 枚举值转换为key
-
-```js
-WeekEnum.key(1); // 'Monday'
-WeekEnum.key(WeekEnum.Monday); // 'Monday'
-WeekEnum.key(9); // undefined, 不存在此枚举项
-```
-
----
-
-#### 添加扩展字段，不限数量
-
-```js
-const WeekEnum = Enum({
-  Sunday: { value: 0, label: '星期日', active: true, disabled: false },
-  Monday: { value: 1, label: '星期一', active: false, disabled: true },
-});
-
-WeekEnum.raw(0).active; // true
-WeekEnum.raw(WeekEnum.Sunday).active; // true
-WeekEnum.raw('Sunday').active; // true
-```
-
----
-
-#### 转换成 UI 组件
-
-- `Enum.items` 可以直接作为组件的数据源（以 Select 组件为例）
-
-  **React相关框架**
+- **React相关框架**
 
   [Ant Design](https://ant-design.antgroup.com/components/select-cn) | [Arco Design](https://arco.design/react/components/select)
   Select
@@ -743,7 +805,7 @@ WeekEnum.raw('Sunday').active; // true
   <DropDownList data={WeekEnum.items} textField="label" dataItemKey="value" />;
   ```
 
-  **Vue相关框架**
+- **Vue相关框架**
 
   [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
 
@@ -765,7 +827,7 @@ WeekEnum.raw('Sunday').active; // true
   <v-select :items="WeekEnum.items" item-title="label" />
   ```
 
-  **Angular相关框架**
+- **Angular相关框架**
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
 
@@ -789,43 +851,9 @@ WeekEnum.raw('Sunday').active; // true
 
 ---
 
-#### 两个枚举合并（或者扩展某个枚举）
+#### 数组格式初始化，设置不同的字段映射
 
-```js
-const myWeek = Enum({
-  ...WeekEnum.raw(),
-  Friday: { value: 5, label: '星期五' },
-  Saturday: { value: 6, label: '星期六' },
-});
-```
-
----
-
-#### 使用枚举值序列来缩小 `number` 取值范围 &nbsp;&nbsp;<sup>_\[TypeScript ONLY]_</sup>
-
-使用`valueType`类型约束，你可以将变量类型从宽泛的基本类型（如`number`或`string`）精确缩小为枚举值的联合类型。这种类型缩窄不仅能在编译时防止无效赋值，还能增强代码的可读性和自文档化能力，同时提供更强的类型安全保障
-
-```typescript
-const weekValue: number = 8; // 👎 任意数字都可以赋值给周枚举，即使错误的
-const weekName: string = 'Birthday'; // 👎 任意字符串都可以赋值给周枚举，即使错误的
-
-const goodWeekValue: typeof WeekEnum.valueType = 1; // ✅ 类型正确，1 是一个有效的周枚举值
-const goodWeekName: typeof WeekEnum.keyType = 'Monday'; // ✅ 类型正确，'Monday' 是一个有效的周枚举名
-
-const badWeekValue: typeof WeekEnum.valueType = 8; // ❌ 类型错误，8 不是一个有效的周枚举值
-const badWeekName: typeof WeekEnum.keyType = 'Birthday'; // ❌ 类型错误，'Birthday' 不是一个有效的周枚举名
-
-type FooProps = {
-  value?: typeof WeekEnum.valueType; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
-  names?: (typeof WeekEnum.keyType)[]; // 👍 组件属性类型约束，可以防止错误赋值，还能智能提示有效值有哪些
-};
-```
-
----
-
-#### 自定义字段映射
-
-在 [5. 数组格式](#5-数组格式) 章节中，介绍了可以通过后端动态数据来构建枚举，但是很可能动态数据的字段名并不是`value`、`label`、`key`，而是其它的字段名。这时你可以传入一个自定义选项，把这些映射到其它字段名上
+在 [4. 数组格式](#4-数组格式) 章节中，介绍了可以通过后端动态数据来构建枚举，但是很可能动态数据的字段名并不是`value`、`label`、`key`，而是其它的字段名。这时你可以传入一个自定义选项，把这些映射到其它字段名上
 
 ```js
 import { Enum } from 'enum-plus';
@@ -833,22 +861,22 @@ import { Enum } from 'enum-plus';
 const data = await getPetsData();
 // [   { id: 1, code: 'dog', name: '狗' },
 //     { id: 2, code: 'cat', name: '猫' },
-//     { id: 3, code: 'rabbit', name: '兔子' }   ];
-const PetTypes = Enum(data, {
+//     { id: 3, code: 'rabbit', name: '兔' }   ];
+const PetTypesEnum = Enum(data, {
   getValue: 'id',
   getLabel: 'name',
   getKey: 'code', // getKey可选
 });
-PetTypes.items; // 输出如下:
+PetTypesEnum.items; // 输出如下:
 // [   { value: 1, label: '狗', key: 'dog' },
 //     { value: 2, label: '猫', key: 'cat' },
-//     { value: 3, label: '兔子', key: 'rabbit' }   ]
+//     { value: 3, label: '兔', key: 'rabbit' }   ]
 ```
 
 在上面的例子中，`getValue`、`getLabel`、`getKey` 还可以是一个函数，用来处理更复杂的业务逻辑，比如：
 
 ```js
-const PetTypes = Enum(petTypes, {
+const PetTypeEnum = Enum(petTypes, {
   getValue: (item) => item.id,
   getLabel: (item) => `${item.name} (${item.code})`,
   getKey: (item) => item.code,
@@ -868,9 +896,9 @@ import { Enum } from 'enum-plus';
 Enum.install(antdPlugin);
 ```
 
-当你安装一个插件后，插件会为所有枚举实例添加新的方法或属性。例如，安装了 `@enum-plus/plugin-antd` 插件后，你可以使用 `enum.toSelect` 方法使用枚举生成一个 Select 组件。
+当你安装一个插件后，插件会为所有枚举实例添加新的方法或属性。例如，安装了 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) 插件后，你可以使用 `enum.toSelect` 方法使用枚举生成一个 Select 组件。
 
-可选的，你还可以为插件提供配置选项，以定制插件的行为，关于插件的配置选项，请参考各个插件的文档。
+你还可以设置插件的可选配置选项，以定制插件的行为，关于插件的配置选项，请参考各个插件的文档。
 
 ```ts
 import antdPlugin from '@enum-plus/plugin-antd';
@@ -895,7 +923,7 @@ Enum.install(antdPlugin, {
   - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
   - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
 
-> 如果你没有找到需要的插件，或者你想开发自己的插件，请参阅 [插件开发指南](./docs/plugin-development.md)。你可以在enum-plus官方仓库中开发新插件，也可以将你开发的插件发布到 npm 上，并把你的插件链接分享在这里。我们真诚地需要你的帮助，来丰富插件生态系统！
+> 如果你没有找到需要的插件，或者你想开发自己的插件，请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。你可以在enum-plus官方仓库中开发新插件，也可以将你开发的插件发布到 npm 上，并把你的插件链接分享在这里。我们真诚地需要你的帮助，来丰富插件生态系统！
 
 ---
 
@@ -933,7 +961,7 @@ WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环�
 WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
-此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，更多详情请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options)。
+此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，更多信息请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options)。
 
 如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) 等插件。
 
@@ -950,7 +978,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> 一旦你完成了 `Enum.localize` 的设置，强烈建议你把它发布成一个npm包，并分享在[插件生态](#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) 官方插件库中，详情请参阅 [插件开发指南](./docs/plugin-development.md)。
+> 一旦你完成了自定义本地化功能，强烈建议你把它发布成一个 npm 包，并分享在[插件生态](#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。
 
 ---
 
@@ -1073,6 +1101,26 @@ WeekEnum[ITEMS].toList(); // 但可以通过 ITEMS 别名来访问它
 4. **单一职责原则：** 每个枚举类型应专注表达一组高内聚的相关常量，避免不同枚举类型之间的职责重叠。
 5. **提供JSDoc注释：** 为每个枚举项添加 Jsdoc 注释，说明其含义和用途。完善的JSDoc文档能在IDE中提供悬停提示，提升代码阅读体验。同样也建议为枚举类添加注释。
 6. **国际化架构：** 建议从开始就搭建国际化架构，可集成本库提供的 [本地化](#本地化) 机制。预先设计的国际化方案能够避免后期重构的高成本，并使应用更易于扩展到全球市场。
+
+下面是一个示例，展示了如何结合上述最佳实践来定义一个枚举：
+
+```js
+/** 表示一周枚举 */
+const WeekEnum = Enum(
+  {
+    /** 星期日 */
+    Sunday: { value: 0, label: 'enums.week.sunday' },
+    /** 星期一 */
+    Monday: { value: 1, label: 'enums.week.monday' },
+    // ...
+    /** 星期五 */
+    Friday: { value: 5, label: 'enums.week.friday' },
+    /** 星期六 */
+    Saturday: { value: 6, label: 'enums.week.saturday' },
+  },
+  { name: 'enums.week.name' }
+);
+```
 
 ---
 
