@@ -138,7 +138,7 @@ WeekEnum.labels; // ['星期一', '星期二', '星期三', '星期四', '星期
     - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
     - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要您的帮助来开发这个插件！_
 
-> 如果您搜索的插件不可用，或者您想开发自己的插件，请参阅 [插件开发指南](./plugin-development.md)。 我们真诚地需要您的帮助，来丰富插件生态系统！
+> 如果您搜索的插件不可用，或者您想开发自己的插件，请参阅 [插件开发指南](./plugin-development.zh-CN.md)。 我们真诚地需要您的帮助，来丰富插件生态系统！
 
 ## 破坏性变更
 

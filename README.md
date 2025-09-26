@@ -92,18 +92,18 @@ yarn add enum-plus
 - The specific version:
 
 ```html
-<!-- ES2020 modern version -->
+<!-- Modern version, ES2020 compatible -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus.min.js"></script>
-<!-- ES2015 legacy version -->
+<!-- Legacy version, ES2015 compatible -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.0.0/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - The latest version:
 
 ```html
-<!-- ES2020 modern version -->
+<!-- Modern version, ES2020 compatible -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
-<!-- ES2015 legacy version -->
+<!-- Legacy version, ES2015 compatible -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
 ```
 
@@ -114,7 +114,7 @@ yarn add enum-plus
 - [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.min.js.gz)
 - [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (Full package with sourcemap)
 
-> You can also download them in [github release](https://github.com/shijistar/enum-plus/releases) assets
+> You can download them in [github release](https://github.com/shijistar/enum-plus/releases) assets too.
 
 ## Enum Initialization
 
@@ -178,7 +178,7 @@ WeekEnum.label('Sunday'); // I love Sunday
 
 ### 4. Array Format
 
-The array format is useful when you need to create enums dynamically, such as from API data. This allows for flexibility in [custom field mapping](#custom-field-mapping) to adapt to different data structures.
+The array format is useful when you need to create enums dynamically, such as from API data. This allows for flexibility in [Custom Field Mapping](#-custom-field-mapping-in-array-format-initialization) to adapt to different data structures.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -585,7 +585,7 @@ Enum.install(i18nextPlugin);
 
 ## User Stories
 
-#### Picks enum values, consistent with native enums
+#### 💡 Basic Usage, Replacing Magic Numbers
 
 ```js
 const WeekEnum = Enum({
@@ -593,15 +593,168 @@ const WeekEnum = Enum({
   Monday: { value: 1, label: 'Monday' },
 });
 
-WeekEnum.Sunday; // 0
-WeekEnum.Monday; // 1
+if (today === WeekEnum.Sunday) {
+  // It's Sunday, enjoy your day!
+} else if (today === WeekEnum.Monday) {
+  // Oh no, it's Monday again...
+}
 ```
 
 ---
 
-#### Supports JSDoc comments on enum members
+#### 💡 Checks for Valid Enum Values
 
-Supports inline documentation through JSDoc, allowing developers to view detailed comments by simply hovering over enum values in the editor.
+```js
+if (WeekEnum.has(value)) {
+  // It's a valid enum value, safe to use
+} else {
+  // Throw an error or use a default value
+}
+```
+
+---
+
+#### 💡 Checks for Enum Objects
+
+```js
+let values: number[] | undefined;
+if (Enum.isEnum(data)) {
+  values = data.values;
+} else if (Array.isArray(data)) {
+  values = data;
+} else {
+  // Throw an error or use a default value
+}
+```
+
+---
+
+#### 💡 Generate UI Components
+
+Take React and Ant Design as an example. Please refer to the [Supports Various Frontend Frameworks](#-supports-various-frontend-frameworks) section for more examples.
+
+```jsx
+import { Menu, Select, Table } from 'antd';
+import { ProFormCheckbox, ProFormSelect } from '@ant-design/pro-components';
+
+const App = () => {
+  return (
+    <>
+      <Select options={WeekEnum.items} />
+      <Menu items={WeekEnum.toMenu()} />
+      <Table columns={[{ filters: WeekEnum.toFilter() }]} />;
+      <ProFormSelect valueEnum={WeekEnum.toValueMap()} />; // Select
+      <ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />; // Checkbox
+    </>
+  );
+};
+```
+
+> Need to install [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) plugin
+
+---
+
+#### 💡 Supports Localization for Enum Labels
+
+Support for globalization. Set the `label` field to a localization key, it can display the corresponding text based on the current language environment. For more information, please refer to the [Localization](#localization) section.
+
+```js
+WeekEnum.label(1); // Monday or 星期一, depending on the current locale
+WeekEnum.named.Monday.label; // Monday or 星期一, depending on the current locale
+WeekEnum.name; // Week or 周, depending on the current locale
+```
+
+---
+
+#### 💡 Data Type Narrowing &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+
+```ts
+type MyComponentProps = {
+  day: typeof WeekEnum.valueType; // 0 | 1 | ... | 5 | 6
+};
+const MyComponent = (props: MyComponentProps) => {
+  return <div>Today is {WeekEnum.label(props.day)}</div>;
+};
+
+<MyComponent day={1} />; // ✅ Type correct
+<MyComponent day="Monday" />; // ❌ Type error
+<MyComponent day={8} />; // ❌ Error, 8 is not a valid enum value
+```
+
+```ts
+function setDay(day: typeof WeekEnum.valueType) {
+  // The type of day is narrowed to 0 | 1 | ... | 5 | 6
+}
+
+setDay(1); // ✅ Type correct
+setDay('Monday'); // ❌ Type error
+setDay(8); // ❌ Error, 8 is not a valid enum value
+```
+
+---
+
+#### 💡 Adds Metadata Fields. Can Be Used as Static Config System
+
+```js
+const ColorEnum = Enum({
+  Red: { value: 1, hex: '#FF0000', icon: '🔥' },
+  Green: { value: 2, hex: '#00FF00', icon: '🍏' },
+  Blue: { value: 3, hex: '#0000FF', icon: '🔵' },
+});
+
+ColorEnum.values; // [1, 2, 3]
+ColorEnum.keys; // ['Red', 'Green', 'Blue']
+ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
+ColorEnum.meta.icon; // ['🔥', '🍏', '🔵']
+ColorEnum.named.Red.raw.hex; // '#FF0000'
+ColorEnum.named.Red.raw.icon; // '🔥'
+```
+
+---
+
+#### Supports Traversing Enum Members, in a Read-Only Manner
+
+```js
+Array.isArray(WeekEnum.items); // true
+WeekEnum.items.map((item) => item.value); // [0, 1, ..., 5, 6]
+WeekEnum.items.forEach((item) => {
+  // ✅ Traversable
+});
+for (const item of WeekEnum.items) {
+  // ✅ Traversable
+}
+
+WeekEnum.items.push({ value: 2, label: 'Tuesday' }); // ❌ Not allowed, read-only
+WeekEnum.items.splice(0, 1); // ❌ Not allowed, read-only
+WeekEnum.items[0].label = 'foo'; // ❌ Not allowed, read-only
+```
+
+---
+
+#### 💡 Enum Composition (Merging)
+
+```js
+const PrimaryColorEnum = Enum({
+  Red: { value: 1, hex: '#FF0000' },
+  Green: { value: 2, hex: '#00FF00' },
+  Blue: { value: 3, hex: '#0000FF' },
+});
+const SecondaryColorEnum = Enum({
+  Yellow: { value: 4, hex: '#FFFF00' },
+  Cyan: { value: 5, hex: '#00FFFF' },
+  Magenta: { value: 6, hex: '#FF00FF' },
+});
+const AllColorEnum = Enum({
+  ...PrimaryColorEnum.raw(),
+  ...SecondaryColorEnum.raw(),
+});
+```
+
+---
+
+#### 💡 Supports JSDoc Comments on Enum Members, Enabling Code Intelligence
+
+Supports inline documentation through JSDoc, allowing developers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](./docs/best-practices.md) section for writing good code.
 
 ```js
 const WeekEnum = Enum({
@@ -620,102 +773,11 @@ You can see that this hover functionality reveals both documentation and enum va
 
 ---
 
-#### Gets a read-only enum members array
+#### 💡 Supports Various Frontend Frameworks
 
-```js
-WeekEnum.items; // The output is:
-// [
-//  { value: 0, label: 'Sunday', key: 'Sunday', raw: { value: 0, label: 'Sunday' } },
-//  { value: 1, label: 'Monday', key: 'Monday', raw: { value: 1, label: 'Monday' } },
-// ]
-```
+`Enum.items` can be consumed as control data sources (using Select as an example).
 
----
-
-#### Gets the first enum value
-
-```js
-WeekEnum.items[0].value; // 0
-```
-
----
-
-#### Checks if a value is a valid enum value
-
-```js
-WeekEnum.has(1); // true
-WeekEnum.items.some((item) => item.value === 1); // true
-1 instanceof WeekEnum; // true
-```
-
----
-
-#### `instanceof` operator
-
-```js
-1 instanceof WeekEnum; // true
-'1' instanceof WeekEnum; // true
-'Monday' instanceof WeekEnum; // true
-```
-
----
-
-#### Supports traversing enum members array
-
-```js
-WeekEnum.items.length; // 2
-WeekEnum.items.map((item) => item.value); // [0, 1], ✅ Traversable
-WeekEnum.items.forEach((item) => {}); // ✅ Traversable
-for (const item of WeekEnum.items) {
-  // ✅ Traversable
-}
-WeekEnum.items.push({ value: 2, label: 'Tuesday' }); // ❌ Not allowed, read-only
-WeekEnum.items.splice(0, 1); // ❌ Not allowed, read-only
-WeekEnum.items[0].label = 'foo'; // ❌ Not allowed, read-only
-```
-
----
-
-#### Gets enum display text by value (or key)
-
-```js
-WeekEnum.label(1); // Monday, here is label, not key
-WeekEnum.label(WeekEnum.Monday); // Monday, here is label, not key
-WeekEnum.label('Monday'); // Monday, get display text by key
-```
-
----
-
-#### Gets enum key by value
-
-```js
-WeekEnum.key(1); // 'Monday'
-WeekEnum.key(WeekEnum.Monday); // 'Monday'
-WeekEnum.key(9); // undefined, because it does not exist
-```
-
----
-
-#### Extends custom fields with unlimited numbers
-
-```js
-const WeekEnum = Enum({
-  Sunday: { value: 0, label: 'Sunday', active: true, disabled: false },
-  Monday: { value: 1, label: 'Monday', active: false, disabled: true },
-});
-
-WeekEnum.raw(0).active; // true
-WeekEnum.raw(WeekEnum.Sunday).active; // true
-WeekEnum.raw('Sunday').active; // true
-```
-
----
-
-#### Converts to UI controls
-
-- `Enum.items` can be consumed as control data sources (using Select as an example).
-
-  **React-based UI libraries**
+- **React-based UI libraries**
 
   [Ant Design](https://ant.design/components/select) | [Arco Design](https://arco.design/react/en-US/components/select) Select
 
@@ -747,7 +809,7 @@ WeekEnum.raw('Sunday').active; // true
   <DropDownList data={WeekEnum.items} textField="label" dataItemKey="value" />;
   ```
 
-  **Vue-based UI libraries**
+- **Vue-based UI libraries**
 
   [ElementPlus](https://element-plus.org/en-US/component/select.html) Select
 
@@ -769,7 +831,7 @@ WeekEnum.raw('Sunday').active; // true
   <v-select :items="WeekEnum.items" item-title="label" />
   ```
 
-  **Angular-based UI libraries**
+- **Angular-based UI libraries**
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
 
@@ -793,43 +855,9 @@ WeekEnum.raw('Sunday').active; // true
 
 ---
 
-#### Merge two enums (or extend an enum)
+#### 💡 Custom Field Mapping in Array Format Initialization
 
-```js
-const myWeek = Enum({
-  ...WeekEnum.raw(),
-  Friday: { value: 5, label: 'Friday' },
-  Saturday: { value: 6, label: 'Saturday' },
-});
-```
-
----
-
-#### Narrowing the `number` type to enum value sequences &nbsp;&nbsp;<sup>_\[TypeScript ONLY]_</sup>
-
-By leveraging the `valueType` type constraint, you can narrow variable types from broad primitives like `number` or `string` to precise enum value unions. This type narrowing not only prevents invalid assignments at compile time, but also enhances code readability and self-documentation while providing stronger type safety guarantees.
-
-```typescript
-const weekValue: number = 8; // 👎 Any number can be assigned to the week enum, even if it is wrong
-const weekName: string = 'Birthday'; // 👎 Any string can be assigned to the week enum, even if it is wrong
-
-const goodWeekValue: typeof WeekEnum.valueType = 1; // ✅ Type correct, 1 is a valid week enum value
-const goodWeekName: typeof WeekEnum.keyType = 'Monday'; // ✅ Type correct, 'Monday' is a valid week enum name
-
-const badWeekValue: typeof WeekEnum.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
-const badWeekName: typeof WeekEnum.keyType = 'Birthday'; // ❌ Type error, 'Birthday' is not a valid week enum name
-
-type FooProps = {
-  value?: typeof WeekEnum.valueType; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
-  names?: (typeof WeekEnum.keyType)[]; // 👍 Component property type constraint, prevent erroneous assignment, and also prompts which values are valid
-};
-```
-
----
-
-#### Custom field mapping
-
-In [5. Array Format](#5-array-format) section, we know that you can build an enum from dynamic data from the backend, but it is very likely that the field names of dynamic data are not `value`, `label`, `key`, but other field names. In this case, you can pass in a custom option to map these to other field names.
+In [4. Array Format](#4-array-format) section, we know that you can build an enum from dynamic data from the backend, but it is very likely that the field names of dynamic data are not `value`, `label`, `key`, but other field names. In this case, you can pass in a custom option to map these to other field names.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -838,12 +866,12 @@ const data = await getPetsData();
 // [   { id: 1, code: 'dog', name: 'Dog' },
 //     { id: 2, code: 'cat', name: 'Cat' },
 //     { id: 3, code: 'rabbit', name: 'Rabbit' }   ];
-const PetTypes = Enum(data, {
+const PetTypesEnum = Enum(data, {
   getValue: 'id',
   getLabel: 'name',
   getKey: 'code', // getKey is optional
 });
-PetTypes.items; // The output is:
+PetTypesEnum.items; // The output is:
 // [   { value: 1, label: 'Dog', key: 'dog' },
 //     { value: 2, label: 'Cat', key: 'cat' },
 //     { value: 3, label: 'Rabbit', key: 'rabbit' }   ]
@@ -852,7 +880,7 @@ PetTypes.items; // The output is:
 `getValue`, `getLabel`, `getKey` can also be a function to handle more complex business logic, for example:
 
 ```js
-const PetTypes = Enum(petTypes, {
+const PetTypesEnum = Enum(petTypes, {
   getValue: (item) => item.id,
   getLabel: (item) => `${item.name} (${item.code})`,
   getKey: (item) => item.code,
@@ -954,7 +982,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> Once you have completed the setup of `Enum.localize`, it is highly recommended to publish it as an npm package and share it in the [Awesome Plugins](#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) plugin repository.
+> Once you have completed the custom localization functionality, it is highly recommended to publish it as an npm package and share it in the [Awesome Plugins](#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](./docs/plugin-development.md).
 
 ---
 
@@ -1077,6 +1105,26 @@ When using `enum-plus`, following these best practices can help ensure consisten
 4. **Single Responsibility Principle:** Each enum type should represent a single, cohesive set of related constants. Avoiding overlapping responsibilities between different enum types.
 5. **Provide JSDoc Comments:** Provide JSDoc comments for each enum member and the enum type itself, explaining their purpose and usage. Comprehensive documentation enables IDE hover tooltips and improves code readability and maintainability.
 6. **Internationalization Architecture:** Plan for internationalization from the outset by leveraging the library’s built-in [localization](#localization) features. A well-designed internationalization architecture minimizes future refactoring and facilitates global scalability.
+
+Here is an example that combines the above best practices to define an enum:
+
+```js
+/** Represents the days of the week */
+const WeekEnum = Enum(
+  {
+    /** Sunday */
+    Sunday: { value: 0, label: 'enums.week.sunday' },
+    /** Monday */
+    Monday: { value: 1, label: 'enums.week.monday' },
+    // ...
+    /** Friday */
+    Friday: { value: 5, label: 'enums.week.friday' },
+    /** Saturday */
+    Saturday: { value: 6, label: 'enums.week.saturday' },
+  },
+  { name: 'enums.week.name' }
+);
+```
 
 ---
 
