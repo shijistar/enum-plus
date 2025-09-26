@@ -8,6 +8,8 @@
 
 `@enum-plus/i18next` 是 `enum-plus` 的一个插件，自动集成 [i18next](https://www.i18next.com/) 实现枚举标签的国际化。它允许你在枚举定义中使用 i18next 的本地化键，并动态显示为当前语言的翻译文本。
 
+> 该插件不支持切换语言后自动更新 UI，这需要结合前端框架（如 React、Vue 等）来实现。请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) 插件。
+
 ## 安装
 
 ```bash
@@ -45,7 +47,7 @@ Enum.install(i18nextPlugin, {
 });
 ```
 
-`tOptions` 还支持函数形式，以便动态生成选项，甚至可以直接返回最终的翻译文本。
+`tOptions` 还支持函数形式，以便动态生成选项，
 
 ```ts
 // 使用函数形式动态生成 tOptions
@@ -59,11 +61,14 @@ Enum.install(i18nextPlugin, {
     },
   },
 });
+```
 
-// 直接返回翻译文本
+你甚至可以在 `tOptions` 中直接返回一个字符串，作为最终的翻译文本，以完全控制 `localize` 方法的行为。
+
+```ts
 Enum.install(i18nextPlugin, {
   localize: {
-    tOptions: (key, instance) => {
+    tOptions: (key) => {
       if (key === 'week.sunday') {
         return '周日'; // 直接返回翻译文本
       }

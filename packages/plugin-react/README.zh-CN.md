@@ -123,6 +123,21 @@ Enum.install(i18nextPlugin, {
 });
 ```
 
+你甚至可以在 `tOptions` 中直接返回一个字符串，作为最终的翻译文本，以完全控制 `localize` 方法的行为。
+
+```ts
+Enum.install(i18nextPlugin, {
+  localize: {
+    tOptions: (key, instance) => {
+      if (key === 'week.sunday') {
+        return '周日'; // 直接返回翻译文本
+      }
+      return instance.t(key); // 其它情况返回默认翻译
+    },
+  },
+});
+```
+
 ## 基本用法
 
 可以通过在枚举定义中使用本地化键，来实现枚举标签的国际化。
