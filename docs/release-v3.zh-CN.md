@@ -112,6 +112,8 @@ WeekEnum.labels; // ['星期一', '星期二', '星期三', '星期四', '星期
   Enum.install(plugin);
   ```
 
+- 🔥 `Enum.extends` 方法对应的类型定义方式发生了变化，详情请参考 [迁移指南](./migration-guide-v2-to-v3.zh-CN.md#-扩展-enum-类型的方式已更改)
+
 - 🔥 在 `umd` 文件夹中发布 `UMD` 格式的模块。
 - 支持多个 TypeScript 版本的平滑降级。对于 v5.0 及更高版本，允许在 Enum 初始化时省略 `as const` 断言。对于较早版本，将自动降级为较早的语法，需要手动添加 `as const` 断言。
 
@@ -129,13 +131,14 @@ WeekEnum.labels; // ['星期一', '星期二', '星期三', '星期四', '星期
 ## 插件系统
 
 - 🔥 引入新的插件系统，以独立的 npm 包形式扩展功能。以下是可用的包：
-  - [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd): Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。
+  - [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd): Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
   - [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next): i18next 本地化支持。
   - [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react): React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
   - 我们正在开发以下插件：
     - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
+    - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要您的帮助来开发这个插件！_
 
-> 如果您搜索的插件不可用，或者您想开发自己的插件，请参阅 [插件开发指南](./plugin-development.md)。我们需要您的帮助来丰富插件生态系统！
+> 如果您搜索的插件不可用，或者您想开发自己的插件，请参阅 [插件开发指南](./plugin-development.md)。 我们真诚地需要您的帮助，来丰富插件生态系统！
 
 ## 破坏性变更
 

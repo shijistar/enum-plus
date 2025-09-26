@@ -49,6 +49,9 @@
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
+  "peerDependencies": {
+    "enum-plus": "^3.0.0-0"
+  },
   "packageManager": "npm@10.9.2",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
