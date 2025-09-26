@@ -2,7 +2,7 @@
 
 ## 🛠 Behavior Change of enum.values
 
-The `enum.values` property was originally planned for removal, but after some discussions, we decided to restore it and change its function: it now represents an array of the member raw values. Therefore, if you are still using the old `values`, please change to the `enum.items` instead.
+The `enum.values` property was originally planned for removal, but [after some discussions](https://github.com/shijistar/enum-plus/issues/13), we decided to restore it and change its function: it now represents an array of the member raw values. Therefore, if you are still using the old `values`, please change to the `enum.items` instead.
 
 ## 🛠 Symbols Changes
 
@@ -88,12 +88,22 @@ declare global {
 
 In v3, the way to extend Enum types is using module declaration interface merging:
 
+_enum-extension.d.ts_
+
 ```ts
 declare module 'enum-plus' {
   export interface EnumExtension<T, K, V> {
     hello(): string;
   }
 }
+```
+
+At the same time, import the `enum-extension.d.ts` module in the project entry file:
+
+_index.ts_
+
+```ts
+import './enum-extension';
 ```
 
 The advantage of this approach is that it avoids global namespace pollution and makes it clearer which module the extension is for.

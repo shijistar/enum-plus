@@ -111,19 +111,21 @@ Enum.install(i18nextPlugin, {
     },
   },
 });
+```
 
-// Directly return translated text
+You can even return a string directly in `tOptions` as the final translated text to have full control over the behavior of the `localize` method.
+
+````ts
 Enum.install(i18nextPlugin, {
   localize: {
-    tOptions: (key, instance) => {
+    tOptions: (key) => {
       if (key === 'week.sunday') {
-        return '周日'; // Directly return the custom translated text
+        return '周日'; // Directly return the translated text
       }
-      return instance.t(key); // Use i18next instance to translate other keys
+      return instance.t(key); // Return the default translation in other cases
     },
   },
 });
-```
 
 ## Basic Usage
 
@@ -148,7 +150,7 @@ WeekEnum.name; // Week - ReactElement
 i18next.changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一 - ReactElement
 WeekEnum.name; // 星期 - ReactElement
-```
+````
 
 Binding to UI components:
 

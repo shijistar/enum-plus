@@ -27,7 +27,7 @@
 [![MicroProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/dev/framework)
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://taro.zone/)
 
-⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [用法](#用法) | [命名规范建议](#命名规范建议) | [本地化](#本地化) | [全局扩展](#全局扩展) | [兼容性](#兼容性) | [常见问题](#常见问题) | [贡献](#贡献)&nbsp; ⬇️
+⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [贡献](#贡献)&nbsp; ⬇️
 
 > `v3.0` 已经发布了！
 >
@@ -144,7 +144,7 @@ WeekEnum2.Monday; // 'Mon'
 
 ### 2. 标准格式（推荐）
 
-为每个枚举项指定 `value` (枚举值) 和 `label`（显示文本）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示文本，这些文本可以在UI组件中使用。
+为每个枚举项指定 `value` (枚举值) 和 `label`（显示文本）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示文本，这些文本可以在UI组件中使用。关于为 `label` 字段启用本地化支持，请参考[本地化](#本地化)章节
 
 ```js
 import { Enum } from 'enum-plus';
@@ -255,7 +255,7 @@ WeekEnum.items; // [ { value: 0, label: '星期日', key: 'Sunday' }, { value: 1
 
 ### 💎 &nbsp; values
 
-`V[]`
+`(string | number)[]`
 
 获取一个包含全部枚举项`value`的数组
 
@@ -367,9 +367,9 @@ WeekEnum.key(1); // 'Monday'
 
 ### 💎 &nbsp; raw
 
-<sup>**_\[方法重载^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
+<sup>**_\[方法^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
 <br/>
-<sup>**_\[方法重载^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
+<sup>**_\[方法^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
 第一个重载方法，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
 
@@ -395,9 +395,9 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Mond
 
 ### 💎 &nbsp; toList
 
-<sup>**_\[方法]_**</sup> &nbsp; `toList(): { value, label }[]`
+<sup>**_\[方法^1]_**</sup> &nbsp; `toList(): { value, label }[]`
 <br/>
-<sup>**_\[方法]_**</sup> &nbsp; `toList(options?: { valueField?: string; labelField?: string }): { [key: string]: any }[]`
+<sup>**_\[方法^2]_**</sup> &nbsp; `toList(options?: { valueField?: string; labelField?: string }): { [key: string]: any }[]`
 
 将枚举转换为一个默认包含`value`和`label`字段的数组，或者通过`options`参数自定义字段名。
 
@@ -420,9 +420,9 @@ WeekEnum.toList({ valueField: 'id', labelField: 'name' });
 
 ### 💎 &nbsp; toMap
 
-<sup>**_\[方法]_**</sup> &nbsp; `toMap(): Record<string, any>`
+<sup>**_\[方法^1]_**</sup> &nbsp; `toMap(): Record<string, string | number>`
 <br/>
-<sup>**_\[方法]_**</sup> &nbsp; `toMap(options?: { keySelector?: string; valueSelector?: string }): Record<string, any>`
+<sup>**_\[方法^2]_**</sup> &nbsp; `toMap(options?: { keySelector?: string; valueSelector?: string }): Record<string, any>`
 
 将枚举转换为一个默认以`value`为键，`label`为值的对象，或者通过`options`参数自定义键和值的字段名。
 
@@ -484,7 +484,7 @@ const badWeekValue: typeof WeekEnum.valueType = 8; // ❌ 类型错误，8 不�
 const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ 类型错误，8 不是一个有效的周枚举值
 ```
 
-> 注意，这只是一个 TypeScript 类型，只能用来约束类型，不可在运行时调用，运行时调用会抛出异常
+> 注意，这只是一个 TypeScript 类型，只能用来约束类型。不可在运行时调用，运行时调用会抛出异常。
 
 ---
 
@@ -500,7 +500,7 @@ const weekKey: typeof WeekEnum.keyType = 'Monday';
 const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 ```
 
-> 注意，这只是一个 TypeScript 类型，只能用来约束类型，不可在运行时调用，运行时调用会抛出异常
+> 注意，这只是一个 TypeScript 类型，只能用来约束类型。不可在运行时调用，运行时调用会抛出异常。
 
 ---
 
@@ -512,7 +512,12 @@ const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 
 与无参数的`raw`方法类似，只不过`raw`是一个运行时方法，而`rawType`是一个约束类型
 
-> 注意，这只是一个 TypeScript 类型，只能用来约束类型，不可在运行时调用，运行时调用会抛出异常
+```typescript
+type WeekRaw = typeof WeekEnum.rawType;
+// { Sunday: { value: 0, label: string }, Monday: { value: 1, label: string } }
+```
+
+> 注意，这只是一个 TypeScript 类型，只能用来约束类型。不可在运行时调用，运行时调用会抛出异常。
 
 ---
 
@@ -538,9 +543,9 @@ Enum.isEnum({}); // false
 设置全局的本地化函数，用来处理枚举类型名称和枚举项显示文本的本地化。
 
 ```js
-import i8n from 'i18next';
+import i18n from 'i18next';
 
-Enum.localize = (key) => i8n.t(key);
+Enum.localize = (key) => i18n.t(key);
 ```
 
 ---
@@ -549,7 +554,7 @@ Enum.localize = (key) => i8n.t(key);
 
 <sup>**_\[方法]_**</sup> &nbsp; `(obj: Record<string, unknown> | undefined) => void`
 
-为所有枚举对象添加全局扩展方法。
+为所有枚举对象添加全局扩展方法，更多详情请参考[全局扩展](#全局扩展)章节。
 
 ```js
 Enum.extends({
@@ -565,7 +570,7 @@ Enum.extends({
 
 <sup>**_\[方法]_**</sup> &nbsp; `(plugin: EnumPlugin, options?: any) => void`
 
-安装一个插件，插件可以为所有枚举添加新的功能
+安装一个插件，插件可以为所有枚举添加新的功能。更多详情请参考[插件体系](./docs/plugins.md)章节。
 
 ```js
 import i18nextPlugin from '@enum-plus/i18next';
@@ -573,7 +578,7 @@ import i18nextPlugin from '@enum-plus/i18next';
 Enum.install(i18nextPlugin);
 ```
 
-## 用法
+## 使用案例
 
 #### 拾取枚举值，与原生枚举用法一致
 
@@ -825,16 +830,16 @@ type FooProps = {
 ```js
 import { Enum } from 'enum-plus';
 
-const petTypes = await getPetsData();
+const data = await getPetsData();
 // [   { id: 1, code: 'dog', name: '狗' },
 //     { id: 2, code: 'cat', name: '猫' },
 //     { id: 3, code: 'rabbit', name: '兔子' }   ];
-const PetTypes = Enum(petTypes, {
+const PetTypes = Enum(data, {
   getValue: 'id',
   getLabel: 'name',
   getKey: 'code', // getKey可选
 });
-WeekEnum.items; // 输出如下:
+PetTypes.items; // 输出如下:
 // [   { value: 1, label: '狗', key: 'dog' },
 //     { value: 2, label: '猫', key: 'cat' },
 //     { value: 3, label: '兔子', key: 'rabbit' }   ]
@@ -852,141 +857,108 @@ const PetTypes = Enum(petTypes, {
 
 ---
 
-#### 命名冲突？
+## 插件系统
 
-这里为枚举使用添加一些边界情况，从上面的用例中可以看到，我们可以通过 `WeekEnum.XXX` 来快捷访问枚举项，但是万一枚举项的 key 与枚举方法命名冲突怎么办？
+`enum-plus` 提供了一个插件系统，允许你为枚举添加额外的功能。插件可以为所有枚举实例添加新的方法或属性，极大地扩展了枚举的功能。你可以选择性地安装需要的插件，而不是将所有功能都打包在一起，从而保持核心库的轻量和高效。
 
-我们知道枚举类型上还存在 `label`、`key` 等方法，如果与某个枚举项重名，枚举项的值优先级更高，会覆盖掉这些方法。但不用担心，你可以在 `items` 下访问到它们。请参考下面的代码示例：
+```ts
+import antdPlugin from '@enum-plus/plugin-antd';
+import { Enum } from 'enum-plus';
 
-```js
-const WeekEnum = Enum({
-  foo: { value: 1 },
-  bar: { value: 2 },
-  keys: { value: 3 }, // 命名冲突
-  label: { value: 4 }, // 命名冲突
-});
-
-WeekEnum.keys; // 3，枚举项优先级更高，会覆盖掉方法
-WeekEnum.label; // 4，枚举项优先级更高，会覆盖掉方法
-// 可以通过 Enum.items 访问到这些方法 🙂
-WeekEnum.items.keys; // ['foo', 'bar', 'keys', 'label']
-WeekEnum.items.label(1); // 'foo'
+Enum.install(antdPlugin);
 ```
 
-更极端一些，万一`items`与枚举项命名冲突怎么办？放心，你仍然可以通过别名字段访问到`items`数组。参考下面的示例：
+当你安装一个插件后，插件会为所有枚举实例添加新的方法或属性。例如，安装了 `@enum-plus/plugin-antd` 插件后，你可以使用 `enum.toSelect` 方法使用枚举生成一个 Select 组件。
 
-```js
-import { ITEMS } from 'enum-plus';
+可选的，你还可以为插件提供配置选项，以定制插件的行为，关于插件的配置选项，请参考各个插件的文档。
 
-const WeekEnum = Enum({
-  foo: { value: 1 },
-  bar: { value: 2 },
-  items: { value: 3 }, // 命名冲突
+```ts
+import antdPlugin from '@enum-plus/plugin-antd';
+import { Enum } from 'enum-plus';
+
+Enum.install(antdPlugin, {
+  toSelect: {
+    valueField: 'id', // 设置 toSelect 方法生成的数据对象中，关于值的字段名
+    labelField: 'name', // 设置 toSelect 方法生成的数据对象中，关于显示文本的字段名
+  },
 });
-
-WeekEnum.items; // 3，枚举项优先级更高，会覆盖掉 items
-WeekEnum[ITEMS]; // ITEMS 是一个别名Symbol
-// [
-//  { value: 1, key: 'foo', label: 'foo' },
-//  { value: 2, key: 'bar', label: 'bar' },
-//  { value: 3, key: 'items', label: 'items' }
-// ]
-// 等价于原来的 WeekEnum.items 🙂
 ```
 
----
+### 插件生态
 
-## 命名规范建议
+目前我们已经开发并发布了以下插件，你可以根据需要选择安装：
 
-1. **枚举类型命名：** 采用 `PascalCase` 大驼峰命名法，并以 `Enum` 作为后缀，如 _WeekEnum_、_ColorEnum_ 等。
-2. **枚举成员命名：** 使用 `PascalCase` 大驼峰命名法，如 _WeekEnum.Sunday_、_ColorEnum.Red_ 等。此命名方式突显了枚举成员的不可变性与静态特性，且在IDE智能提示中会在顶部显示，更方便拾取。
-3. **语义明确：** 确保枚举和成员名称具有清晰的语义，良好的语义命名能够自解释代码意图，降低理解成本。
-4. **单一职责原则：** 每个枚举类型应专注表达一组高内聚的相关常量，避免不同枚举类型之间的职责重叠。
-5. **提供JSDoc注释：** 为每个枚举项添加 Jsdoc 注释，说明其含义和用途。完善的JSDoc文档能在IDE中提供悬停提示，提升代码阅读体验。同样也建议为枚举类添加注释。
-6. **国际化架构：** 建议从开始就搭建国际化架构，可集成本库提供的 [本地化](#本地化) 机制。预先设计的国际化方案能够避免后期重构的高成本，并使应用更易于扩展到全球市场。
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd): Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next): i18next 本地化支持。
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react): React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
+- 我们正在开发以下插件：
+  - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
+  - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
+
+> 如果你没有找到需要的插件，或者你想开发自己的插件，请参阅 [插件开发指南](./docs/plugin-development.md)。你可以在enum-plus官方仓库中开发新插件，也可以将你开发的插件发布到 npm 上，并把你的插件链接分享在这里。我们真诚地需要你的帮助，来丰富插件生态系统！
 
 ---
 
 ## 本地化
 
-`enum-plus` 本身不内置国际化能力，但支持通过 `localize` 可选参数传入一个自定义方法，来实现本地化文本的转化。这是一个非常灵活的方案，这使你能够实现自定义的本地化函数，根据当前的语言环境将枚举的 `label` 值转换为适当的翻译文本。语言状态管理仍由你自己负责，你的 `localize` 方法决定返回哪种本地化文本。对于生产环境的应用程序，我们强烈建议使用成熟的国际化库（如 `i18next`），而不是创建自定义解决方案。
+enum-plus 默认不内置国际化能力，因此枚举项的`label`字段将被视为普通字符串，直接返回原始文本。
 
-以下是一个简单的示例，仅供参考。请注意，第一种方法由于缺乏灵活性，不建议在生产环境中使用，它仅用于演示基本概念。请考虑使用第二种及后面的示例。
+为 enum-plus 添加本地化支持，最简单的方式是安装对应的 [i18n插件](#插件生态)，例如 `@enum-plus/plugin-i18next`，它会自动将 `label` 和 `name` 字段的值传递给 i18next 进行翻译。
 
-```tsx
+```bash
+npm install @enum-plus/plugin-i18next i18next
+```
+
+然后在项目入口文件中安装插件：
+
+```js
+import i18nextPlugin from '@enum-plus/plugin-i18next';
 import { Enum } from 'enum-plus';
-import i18next from 'i18next';
-import Localize from './Localize';
 
-let lang = 'zh-CN';
-const setLang = (l: string) => {
-  lang = l;
-};
+Enum.install(i18nextPlugin);
+```
 
-// 👎 这不是一个好例子，仅供演示，不建议生产环境使用
-const sillyLocalize = (content: string) => {
-  if (lang === 'zh-CN') {
-    switch (content) {
-      case 'weekDays.name':
-        return '周';
-      case 'week.sunday':
-        return '星期日';
-      case 'week.monday':
-        return '星期一';
-      default:
-        return content;
-    }
-  } else {
-    switch (content) {
-      case 'weekDays.name':
-        return 'Week';
-      case 'week.sunday':
-        return 'Sunday';
-      case 'week.monday':
-        return 'Monday';
-      default:
-        return content;
-    }
-  }
-};
-// 👍 建议使用 i18next 或其他国际化库
-const i18nLocalize = (content: string | undefined) => i18next.t(content);
-// 👍 或者封装成一个基础组件
-const componentLocalize = (content: string | undefined) => <Localize value={content} />;
+安装了插件后，枚举的 `label` 和 `name` 字段将自动通过 i18next 进行翻译。
 
+```js
 const WeekEnum = Enum(
   {
     Sunday: { value: 0, label: 'week.sunday' },
     Monday: { value: 1, label: 'week.monday' },
   },
-  {
-    localize: sillyLocalize,
-    // localize: i18nLocalize, // 👍 推荐使用i18类库
-    // localize: componentLocalize, // 👍 推荐使用组件形式
-    name: 'weekDays.name', // 可选，枚举类型的本地化名称，一般显示为表格列或表单字段标题
-  }
+  { name: 'weekDays.name' }
 );
-setLang('zh-CN');
-WeekEnum.label(1); // 星期一
-WeekEnum.name; // 周
-setLang('en-US');
-WeekEnum.label(1); // Monday
-WeekEnum.name; // Week
+WeekEnum.label(1); // Monday 或 星期一，取决于当前语言环境
+WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环境
+WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
-当然，每个枚举类型都这样设置可能比较繁琐，`enum-plus` 提供了一种全局设置方案，可以通过 `Enum.localize` 全局方法，来全局设置本地化。如果两者同时存在，单个枚举的设置会覆盖全局设置。
+此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，更多详情请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options)。
+
+如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) 等插件。
+
+如果你使用的是其它国际化库，例如 `react-intl`、`vue-i18next` 或 `ngx-translate`，你可以通过 `Enum.localize` 方法来集成这些库。
+
+_index.js_
 
 ```js
-Enum.localize = i18nLocalize;
+import { Enum } from 'enum-plus';
+
+Enum.localize = (key) => {
+  // 这是一段伪代码，请根据你使用的国际化库进行调整
+  return intl.formatMessage({ id: key });
+};
 ```
+
+> 一旦你完成了 `Enum.localize` 的设置，强烈建议你把它发布成一个npm包，并分享在[插件生态](#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) 官方插件库中，详情请参阅 [插件开发指南](./docs/plugin-development.md)。
 
 ---
 
 ## 全局扩展
 
-虽然 `Enum` 提供了一套全面的内置方法，但如果这些还不能满足你的需求，你可以使用 `Enum.extends` API 扩展其功能，添加自定义方法。这些扩展会全局应用于所有枚举实例，包括在扩展应用之前创建的实例，并且会立即生效，无需任何其它设置。
+虽然 `Enum` 提供了一套全面的内置方法，但如果这些还不能满足你的需求，你可以使用 `Enum.extends` API 扩展其功能，添加自定义方法。这些扩展会全局应用于所有枚举实例，包括在扩展应用之前创建的实例，并且会立即生效，无需任何额外的设置。
 
-_**App.ts**_
+_App.ts_
 
 ```tsx
 Enum.extends({
@@ -1001,15 +973,15 @@ Enum.extends({
 WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: '星期一' }]
 ```
 
-如果你在使用 TypeScript，你可能需要再扩展一下枚举类型声明，这样可以获得更好的类型提示。在你的项目中创建或编辑一个声明文件（例如 `global.d.ts`），并在其中扩展全局类型。此文件可以放在项目的根目录或任意目录下，只要确保 TypeScript 能够找到它
+如果你在使用 TypeScript，你可能需要再扩展一下枚举类型声明，这样可以获得更好的类型提示。在你的项目中创建一个声明文件（例如 `enum-extension.d.ts`），并在其中扩展全局类型。
 
-_**global.d.ts**_
+> `enum-extension.d.ts` 文件可以放在项目的根目录或任意目录下。
+> 注意，请检查你的 `tsconfig.json` 配置中的 `include` 选项，以确保 TypeScript 能够找到你的声明文件。
 
-```tsx
-import type { EnumItemInit } from 'enum-plus';
-import type { EnumItemClass } from 'enum-plus/lib/enum-item';
+_enum-extension.d.ts_
 
-declare global {
+```typescript
+declare module 'enum-plus/extension' {
   export interface EnumExtension<T, K, V> {
     toMySelect: () => { value: V; title: string }[];
     reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
@@ -1017,15 +989,90 @@ declare global {
 }
 ```
 
-请注意，你不是必须导入`EnumItemInit`和`EnumItemClass`这些类型，这些仅在这个示例中被使用，为了添加更友好的类型提示。
+然后，在项目入口文件中导入这个声明文件。
 
-`EnumExtension`接口是一个泛型接口，它接受三个类型参数，分别是：
+_index.ts_
 
-- `T`: 枚举类型的初始化对象
-- `K`: 枚举项的键值
-- `V`: 枚举项的值
+```tsx
+import './enum-extension';
+```
 
-如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数，但这些都是可选的，如果你不需要，可以直接省略掉它们
+注意，在 `enum-extension.d.ts` 文件中，`EnumExtension` 接口是一个泛型接口，它接受三个类型参数，它们的含义分别是：
+
+- `T`: 表示枚举类型的初始化对象
+- `K`: 表示枚举项的键值
+- `V`: 表示枚举项的值
+
+如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数。
+
+> 这些类型参数是可选的，如果你不需要，可以直接省略掉它们。
+
+---
+
+## 命名冲突？
+
+`enum-plus` 设计时充分考虑了命名冲突的可能性。枚举项的命名空间与枚举实例的方法和属性是分开的，这样可以最大限度地减少冲突的可能性。例如，当枚举项的名称与某个方法名称相同时，你可以通过 `items` 属性访问那些被覆盖的方法。
+
+```js
+import { KEYS, VALUES } from 'enum-plus';
+
+const WeekEnum = Enum({
+  foo: { value: 1 },
+  bar: { value: 2 },
+  keys: { value: 3 }, // 命名冲突
+  values: { value: 4 }, // 命名冲突
+  label: { value: 5 }, // 命名冲突
+  named: { value: 6 }, // 命名冲突
+  toList: { value: 7 }, // 命名冲突
+});
+
+Week.foo; // 1
+Week.bar; // 2
+// 以下均为枚举项，优先级更高，会覆盖掉原来的方法
+WeekEnum.keys; // 3
+WeekEnum.values; // 4
+WeekEnum.label; // 5
+WeekEnum.named; // 6
+WeekEnum.toList; // 7
+
+// 可以 .items 访问到这些被覆盖的方法 🙂
+WeekEnum.items[KEYS]; // ['foo', 'bar', 'keys', 'values', 'label', 'named', 'toList']
+WeekEnum.items[VALUES]; // [1, 2, 3, 4, 5, 6, 7]
+WeekEnum.items.label(1); // 'foo'
+WeekEnum.items.named.foo; // { value: 1, label: 'foo', key: 'foo' }
+WeekEnum.items.toList(); // [{ value: 1, label: 'foo' }, ...]
+```
+
+> 请注意，`keys` 和 `values` 这两个属性比较特殊，因为它们是 JavaScript 数组的内置方法，为了避免改变 items 数组的行为，需要使用 `KEYS` 和 `VALUES` 两个符号作为别名来访问它们。
+
+再极端一点，万一 `items` 与枚举项命名冲突怎么办？放心，你仍然可以通过 `ITEMS` 别名来访问它。
+
+```js
+import { ITEMS } from 'enum-plus';
+
+const WeekEnum = Enum({
+  foo: { value: 1 },
+  bar: { value: 2 },
+  items: { value: 3 }, // 命名冲突
+  toList: { value: 4 }, // 命名冲突
+});
+
+WeekEnum.items; // 3，枚举项优先级更高，会覆盖掉 items
+WeekEnum[ITEMS].toList(); // 但可以通过 ITEMS 别名来访问它
+```
+
+---
+
+## 最佳实践
+
+在使用 `enum-plus` 创建和管理枚举时，遵循一些最佳实践可以帮助你编写更清晰、可维护的代码。以下是一些建议：
+
+1. **枚举类型命名：** 采用 `PascalCase` 大驼峰命名法，并以 `Enum` 作为后缀，如 _WeekEnum_、_ColorEnum_ 等。
+2. **枚举成员命名：** 使用 `PascalCase` 大驼峰命名法，如 _WeekEnum.Sunday_、_ColorEnum.Red_ 等。此命名方式突显了枚举成员的不可变性与静态特性，且在IDE智能提示中会在顶部显示，更方便拾取。
+3. **语义明确：** 确保枚举和成员名称具有清晰的语义，良好的语义命名能够自解释代码意图，降低理解成本。
+4. **单一职责原则：** 每个枚举类型应专注表达一组高内聚的相关常量，避免不同枚举类型之间的职责重叠。
+5. **提供JSDoc注释：** 为每个枚举项添加 Jsdoc 注释，说明其含义和用途。完善的JSDoc文档能在IDE中提供悬停提示，提升代码阅读体验。同样也建议为枚举类添加注释。
+6. **国际化架构：** 建议从开始就搭建国际化架构，可集成本库提供的 [本地化](#本地化) 机制。预先设计的国际化方案能够避免后期重构的高成本，并使应用更易于扩展到全球市场。
 
 ---
 

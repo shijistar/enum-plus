@@ -8,6 +8,8 @@
 
 `@enum-plus/i18next` is a plugin for `enum-plus` that automatically integrates with [i18next](https://www.i18next.com/) to achieve internationalization of enum labels. It allows you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
 
+> This plugin does not support automatic UI updates after switching languages, which requires integration with front-end frameworks (such as React, Vue, etc.). Please consider using the [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) plugins.
+
 ## Installation
 
 ```bash
@@ -59,19 +61,21 @@ Enum.use(i18nextPlugin, {
     },
   },
 });
+```
 
-// Directly return translated text
+You can even return a string directly in `tOptions` as the final translated text to have full control over the behavior of the `localize` method.
+
+````ts
 Enum.use(i18nextPlugin, {
   localize: {
-    tOptions: (key, instance) => {
+    tOptions: (key) => {
       if (key === 'week.sunday') {
-        return '周日'; // Directly return the custom translated text
+        return 'Sunday'; // Directly return the translated text
       }
-      return instance.t(key); // Use i18next instance to translate other keys
+      return instance.t(key); // Return the default translation in other cases
     },
   },
 });
-```
 
 ## Basic Usage
 
@@ -95,7 +99,7 @@ WeekEnum.name; // Week
 i18next.changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一
 WeekEnum.name; // 星期
-```
+````
 
 ## Other APIs
 
