@@ -990,9 +990,11 @@ Enum.localize = (key) => {
 
 ## Extensibility
 
-While `Enum` provides a comprehensive set of built-in methods, you can extend its functionality with custom methods using the `Enum.extends` API. These extensions are globally applied to all enum instances, including those created before the extension was applied, and take effect immediately without requiring any manual setup.
+Enum provides a wealth of built-in methods and properties that can satisfy most common use cases. However, if they are not sufficient, you can use `Enum.extends` to add more custom methods. These extensions will be globally applied to all enum instances, including those created before the extension was applied, and will take effect immediately without any additional setup.
 
-_App.ts_
+> In fact, the entire [Plugin System](#plugin-system) and the `Enum.install` method are implemented using `Enum.extends` at the underlying level.
+
+_my-enum-extension.ts_
 
 ```tsx
 Enum.extends({
@@ -1136,28 +1138,26 @@ enum-plus is designed to be compatible with a wide range of environments, includ
 
 ### Browser Environments
 
-- **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (such as webpack 5+, vite, rollup), `es` directory is imported, which targets `ES2020`. If you need to support earlier browsers, you can use `@babel/preset-env` to transpile to earlier syntax during the build process.
+- **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (such as webpack 5+, vite, rollup), imports will be resolved to the `es` directory, which targets **`ES2020`**.
 
-- **Legacy Bundlers**: For bundlers without [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration support (like Webpack 4), this library automatically falls back to the `main` field entry point, and `es-legacy` directory is imported, which targets `ES2015`.
+- **Legacy Bundlers**: For older bundlers without [exports](https://nodejs.org/api/packages.html#exports-sugar) support (like Webpack 4), imports will be resolved to the `es-legacy` directory, which targets **`ES2015`**.
 
-- **UMD Version**: For direct browser usage or static projects without bundlers, enum-plus provides UMD format files in the `umd` directory. These can be included via a `<script>` tag and accessed through `window.EnumPlus`. The UMD directory offers two versions:
-  - `enum-plus.min.js`: Targets **`ES2020`**, suitable for modern browsers.
-  - `enum-plus-legacy.min.js`: Targets **`ES2015`**, suitable for older browsers.
+- **UMD Version**: For direct browser usage or static projects without bundlers, enum-plus provides UMD format files in the `umd` directory. You can include it via a `<script>` tag and access it through the global `window.EnumPlus`. The UMD directory offers two versions:
+  - **enum-plus.min.js**: Targets **`ES2020`**, suitable for modern browsers.
+  - **enum-plus-legacy.min.js**: Targets **`ES2015`**, suitable for older browsers.
 
-- **Polyfill Strategy**: enum-plus ships no polyfills to minimize bundle size. For legacy browser support, you can include the following tools as needed:
+- **Polyfill Strategy**: enum-plus ships no polyfills to minimize bundle size. For legacy browser support, you can choose from the following polyfill strategies based on your project's needs:
   - `core-js`
   - `@babel/preset-env` with appropriate `useBuiltIns` settings
   - Alternative polyfill implementations
 
 ### **Node.js Environments**
 
-In Node.js environments, the EcmaScript version provided is **`ES2016`**.
+In Node.js environments, you can import enum-plus using either `require` or `import` syntax.
 
-Additionally, enum-plus supports both `CommonJS` and `ESModule` module formats.
+- **require**: For all Node.js versions that support CommonJS, you can import enum-plus using `require('enum-plus')`. The require statement will be resolved to the `lib` directory, which targets **`ES2015`**.
 
-- For versions that support the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (e.g., Node 14+), you can choose to use either `require` or `import` syntax to import the module.
-- For earlier Node.js versions, the default import is from the `lib` directory, which only supports the `CommonJS` module format, meaning you can only use the `require` syntax.
-- The minimum compatible version of Node.js is `v7.x`.
+- **import**: For modern versions of Node.js that support ES Modules (Node.js 14.13+), you can import enum-plus using `import { Enum } from 'enum-plus'`. The imports will be resolved to the `es` directory, which targets **`ES2020`**.
 
 ---
 
