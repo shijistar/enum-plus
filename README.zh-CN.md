@@ -29,9 +29,9 @@
 
 ⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [贡献](#贡献)&nbsp; ⬇️
 
-> `v3.0` 已经发布了！
+> **🎉 v3.0 发布了！**
 >
-> 新版本带来了很多令人兴奋的功能和改进，详情请参考 [发布说明](./docs/release-v3.md) 和 [迁移指南](./docs/migration-guide-v2-to-v3.md)。
+> 新版本是一个重大的里程碑版本，带来了很多令人兴奋的功能和改进，详情请参考 [发布说明](./docs/release-v3.zh-CN.md) 和 [迁移指南](./docs/migration-guide-v2-to-v3.zh-CN.md)。
 
 ## 简介
 
@@ -50,7 +50,7 @@
 - 完全兼容原生 `enum` 的用法
 - 支持`number`、`string`等多种数据类型
 - 增强的枚举项，支持自定义显示文本
-- 内置`本地化`能力，枚举项文本可实现国际化，可与任何 i18n 库集成
+- [本地化](#本地化)能力，枚举项文本可实现国际化，可与任何 i18n 库集成
 - 支持枚举值转换为显示文本，代码更简洁
 - 可扩展设计，允许给枚举项扩展元数据字段
 - 支持插件体系，一系列实用插件可选安装
@@ -637,9 +637,9 @@ const App = () => {
     <>
       <Select options={WeekEnum.items} />
       <Menu items={WeekEnum.toMenu()} />
-      <Table columns={[{ filters: WeekEnum.toFilter() }]} />;
-      <ProFormSelect valueEnum={WeekEnum.toValueMap()} />; // Select
-      <ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />; // Checkbox
+      <Table columns={[{ filters: WeekEnum.toFilter() }]} />
+      <ProFormSelect valueEnum={WeekEnum.toValueMap()} />
+      <ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />
     </>
   );
 };
@@ -688,7 +688,7 @@ setDay(8); // ❌ 错误，8 不是一个有效的枚举值
 
 ---
 
-#### 💡 添加元数据字段，可以作为静态全局配置系统
+#### 💡 添加元数据字段，可以作为静态全局配置系统使用
 
 ```js
 const ColorEnum = Enum({

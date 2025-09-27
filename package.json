@@ -107,6 +107,7 @@
     "es-legacy",
     "umd",
     "types-legacy",
+    "docs",
     "LICENSE",
     "CHANGELOG.md",
     "README.md",
