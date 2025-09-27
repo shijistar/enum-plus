@@ -35,9 +35,7 @@
 
 ## 简介
 
-`enum-plus`是一个增强版的枚举类库，完全兼容原生`enum`的基本用法，同时支持扩展显示文本、绑定到 UI 组件以及提供丰富的扩展方法，是原生`enum`的一个直接替代品。它是一个轻量级、零依赖、100% TypeScript 实现的工具，适用于多种前端框架，并支持本地化。
-
-枚举项扩展了显示名称后，可以与枚举值用来一键生成下拉框、复选框等组件。通过枚举的扩展方法，可以轻松遍历枚举项数组，获取某个枚举值的显示文本，判断某个值是否存在等。枚举项的显示文本支持本地化，可以根据当前语言环境返回对应的文本，这样可以使得枚举项的显示文本更加灵活，更加符合用户的需求。
+`enum-plus`是一个增强版的枚举类库，完全兼容原生`enum`的用法，是原生`enum`的直接替代品。支持为枚举项增加显示文本，以及扩展自定义元数据，可以作为一个静态配置系统。文本支持国际化，可以把数值转换为当前语言的显示文本，在UI回显业务数据时非常有帮助。枚举可以生成下拉框等各种UI组件，对于前端开发来说非常实用。类库还提供了丰富的扩展方法，支持对枚举项数组的遍历和数据转换。这是一个轻量级、零依赖、100% TypeScript 实现的工具，适用于多种前端框架。
 
 还有哪些令人兴奋的特性呢？请继续探索吧！或者不妨先看下这个使用视频。
 
@@ -49,17 +47,18 @@
 
 - 完全兼容原生 `enum` 的用法
 - 支持`number`、`string`等多种数据类型
-- 增强的枚举项，支持自定义显示文本
-- [本地化](#本地化)能力，枚举项文本可实现国际化，可与任何 i18n 库集成
-- 支持枚举值转换为显示文本，代码更简洁
-- 可扩展设计，允许给枚举项扩展元数据字段
-- 支持插件体系，一系列实用插件可选安装
-- 支持将枚举绑定到 [Ant Design](https://ant-design.antgroup.com/components/overview-cn)、[ElementPlus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 等 UI 库，一行代码将枚举转变下拉框
+- 枚举项支持设置显示文本
+- 文本支持国际化，可与任何 i18n 库集成
+- 快速将值转换为显示文本，在UI回显时非常有用
+- 枚举项支持扩展元数据字段，可以作为静态配置系统使用
+- 支持插件体系，可以通过安装插件扩展枚举功能
+- 支持数据类型约束，提高代码的类型安全性<sup>_&nbsp;&nbsp;TypeScript_</sup>
+- 枚举可以生成下拉框等UI组件，支持 [AntDesign](https://ant-design.antgroup.com/components/overview-cn)、[ElementPlus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 等多种组件库
 - 支持服务端渲染(SSR)
 - 支持在Web浏览器、Node.js、ReactNative、Taro、小程序等多种环境中使用
-- 零依赖，纯原生 JavaScript，可用于任何前端框架
+- 零依赖，纯原生 JavaScript，支持任何前端框架
 - 100% TypeScript 实现，具有全面的类型推断能力
-- 轻量(gzip 压缩后仅 2KB+)
+- 轻量（gzip 压缩后仅 2KB+）
 
 ## 安装
 
@@ -110,11 +109,11 @@ yarn add enum-plus
 ⬇️ **下载文件**:
 
 - [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.min.js.gz)
-- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (完整包，包含 sourcemap)
+- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus.umd.tar.gz) (含 sourcemap)
 - [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.min.js.gz)
-- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (完整包，包含 sourcemap)
+- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (含 sourcemap)
 
-> 你也可以在 [Github 发布](https://github.com/shijistar/enum-plus/releases) 中下载这些文件
+> 你也可以从 [Github发布](https://github.com/shijistar/enum-plus/releases/tag/v3.0.0) 下载这些文件
 
 ## 枚举定义
 
@@ -213,7 +212,6 @@ const WeekEnum = Enum(init);
 WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
 WeekEnum.Saturday; // 6
-WeekEnum.label('Sunday'); // Sunday
 ```
 
 ## API
@@ -540,7 +538,7 @@ Enum.isEnum({}); // false
 
 <sup>**_\[方法]_**</sup> &nbsp; `(key: string) => string`
 
-设置全局的本地化函数，用来处理枚举类型名称和枚举项显示文本的本地化。
+设置全局的本地化函数，用来处理枚举类型名称和枚举项显示文本的本地化，更多信息请参考[本地化](#本地化)章节。
 
 ```js
 import i18n from 'i18next';
@@ -568,12 +566,12 @@ Enum.extends({
 
 ### 💎 &nbsp; Enum.install
 
-<sup>**_\[方法]_**</sup> &nbsp; `(plugin: EnumPlugin, options?: any) => void`
+<sup>**_\[方法]_**</sup> &nbsp; `(plugin: Plugin, options?: any) => void`
 
-安装一个插件，插件可以为所有枚举添加新的功能。更多信息请参考[插件体系](./docs/plugins.md)章节。
+安装一个插件，插件可以为所有枚举添加新的功能。更多信息请参考[插件系统](#插件系统)章节。
 
 ```js
-import i18nextPlugin from '@enum-plus/i18next';
+import i18nextPlugin from '@enum-plus/plugin-i18next';
 
 Enum.install(i18nextPlugin);
 ```
@@ -597,7 +595,7 @@ if (today === WeekEnum.Sunday) {
 
 ---
 
-#### 检查是否一个有效的枚举值
+#### 💡 检查是否一个有效的枚举值
 
 ```js
 if (WeekEnum.has(value)) {
@@ -609,7 +607,7 @@ if (WeekEnum.has(value)) {
 
 ---
 
-#### 检查是否一个枚举对象
+#### 💡 检查是否一个枚举对象
 
 ```js
 let values: number[] | undefined;
@@ -939,6 +937,8 @@ npm install @enum-plus/plugin-i18next i18next
 
 然后在项目入口文件中安装插件：
 
+_index.js_
+
 ```js
 import i18nextPlugin from '@enum-plus/plugin-i18next';
 import { Enum } from 'enum-plus';
@@ -961,13 +961,13 @@ WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环�
 WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
-此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，更多信息请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options)。
+此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，更多信息请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next/README.zh-CN.md#插件选项)。
 
 如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) 等插件。
 
 如果你使用的是其它国际化库，例如 `react-intl`、`vue-i18next` 或 `ngx-translate`，你可以通过 `Enum.localize` 方法来集成这些库。
 
-_index.js_
+_my-extension.js_
 
 ```js
 import { Enum } from 'enum-plus';
@@ -986,49 +986,89 @@ Enum.localize = (key) => {
 
 Enum 提供了丰富的内置方法和属性，它们已经可以满足大多数常见的使用场景。如果这些还不够，你还可以使用 `Enum.extends` 扩展更多的自定义方法。这些扩展会全局应用于所有枚举实例，包括在扩展应用之前创建的实例，并且会立即生效，无需任何额外的设置。
 
-> 实际上，整个[插件系统](#插件系统)以及 `Enum.install` 方法的底层都是通过 `Enum.extends` 来实现的。
+> 实际上，整个[插件系统](#插件系统)以及 `Enum.install` 在底层都是通过 `Enum.extends` 来实现的。
 
-_my-enum-extension.ts_
+- **TypeScript 项目**
 
-```ts
-// 功能实现
-Enum.extends({
-  toMySelect(this: ReturnType<typeof Enum>) {
-    return this.items.map((item) => ({ value: item.value, title: item.label }));
-  },
-  reversedItems(this: ReturnType<typeof Enum>) {
-    return this.items.reverse();
-  },
-});
+  _my-enum-extension.ts_
 
-// 类型声明，以获得更好的类型提示，仅 TypeScript 项目
-declare module 'enum-plus/extension' {
-  export interface EnumExtension<T, K, V> {
-    toMySelect: () => { value: V; title: string }[];
-    reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+  ```ts
+  // 功能实现
+  Enum.extends({
+    toMySelect() {
+      return this.items.map((item) => ({ value: item.value, title: item.label }));
+    },
+    reversedItems() {
+      return this.items.reverse();
+    },
+  });
+
+  // 类型声明，以获得更好的类型提示
+  declare module 'enum-plus/extension' {
+    export interface EnumExtension<T, K, V> {
+      toMySelect: () => { value: V; title: string }[];
+      reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+    }
   }
-}
+  ```
 
-WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: '星期一' }]
-```
+  _index.js_
 
-如果你在使用 TypeScript，你可能需要再扩展一下枚举类型声明，这样可以获得更好的类型提示。在你的项目中创建一个声明文件（例如 `enum-extension.d.ts`），并在其中扩展全局类型。
+  然后在项目的入口文件中导入这个文件：
 
-_App.ts_
+  ```ts
+  import './my-enum-extension';
 
-```tsx
-import './my-enum-extension';
-```
+  WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: '星期一' }]
+  ```
 
-注意，在 `enum-extension.d.ts` 文件中，`EnumExtension` 接口是一个泛型接口，它接受三个类型参数，它们的含义分别是：
+- **JavaScript 项目**
+
+  _my-enum-extension.js_
+
+  ```js
+  import { Enum } from 'enum-plus';
+
+  Enum.extends({
+    toMySelect() {
+      return this.items.map((item) => ({ value: item.value, title: item.label }));
+    },
+    reversedItems() {
+      return this.items.reverse();
+    },
+  });
+  ```
+
+  _my-enum-extension.js.d.ts_
+
+  ```ts
+  import { EnumExtension, EnumItemClass, EnumItemInit } from 'enum-plus';
+
+  declare module 'enum-plus/extension' {
+    export interface EnumExtension<T, K, V> {
+      toMySelect: () => { value: V; title: string }[];
+      reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+    }
+  }
+  ```
+
+  _index.js_
+
+  然后在项目的入口文件中导入这个文件：
+
+  ```js
+  import './my-enum-extension';
+
+  WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: '星期一' }]
+  ```
+
+注意，`EnumExtension` 是一个泛型接口，它接受三个类型参数，它们的含义分别是：
 
 - `T`: 表示枚举类型的初始化对象
 - `K`: 表示枚举项的键值
 - `V`: 表示枚举项的值
 
-如果你希望在扩展方法中提供更友好的类型提示，你或许可能需要使用到这些类型参数。
-
-> 这些类型参数是可选的，如果你不需要，可以直接省略掉它们。
+> 如果你希望在扩展方法中提供更友好的类型提示，你可能需要使用到这些类型参数。当然，这些类型参数是可选的，如果你不需要，可以直接忽略掉它们。
 
 ---
 
@@ -1100,7 +1140,7 @@ WeekEnum[ITEMS].toList(); // 但可以通过 ITEMS 别名来访问它
 下面是一个示例，展示了如何结合上述最佳实践来定义一个枚举：
 
 ```js
-/** 表示一周枚举 */
+/** 表示一周工作时间的枚举 */
 const WeekEnum = Enum(
   {
     /** 星期日 */
@@ -1149,83 +1189,7 @@ enum-plus 设计之初就考虑了广泛的兼容性需求，可无缝运行于�
 
 ## 常见问题
 
-### 1. 如何基于 i18next 实现国际化？
-
-请参考下面的示例代码：
-
-_main.tsx_
-
-```tsx
-import { createRoot } from 'react-dom/client';
-import { Enum } from 'enum-plus';
-import i18next from 'i18next';
-import App from './App';
-import Locale from './components/Locale';
-import LocaleProvider from './components/LocaleProvider';
-import enUS from './locales/en-US';
-import zhCN from './locales/zh-CN';
-
-i18next.init({
-  lng: localStorage.getItem('my_lang'),
-  fallbackLng: 'en-US',
-  supportedLngs: ['en-US', 'zh-CN'],
-  resources: {
-    'en-US': { translation: enUS },
-    'zh-CN': { translation: zhCN },
-  },
-});
-i18next.on('languageChanged', (lang) => {
-  localStorage.setItem('my_lang', lang);
-});
-
-// 👀 这里是关键代码，通过 Enum.localize 方法全局设置，使用 Locale 组件来输出本地化文本
-Enum.localize = (key?: string) => <Locale value={key} />;
-
-const root = createRoot(document.getElementById('root'));
-root.render(
-  <LocaleProvider>
-    <App />
-  </LocaleProvider>
-);
-```
-
-_components/LocaleProvider.tsx_
-
-```tsx
-import type { FC, ReactNode } from 'react';
-import { createContext, useEffect, useState } from 'react';
-import i18next from 'i18next';
-
-export const LocaleContext = createContext<{
-  lang: string;
-  setLang: (lang: string) => void;
-}>({});
-
-const LocaleProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [lang, setLang] = useState(i18next.language);
-
-  useEffect(() => {
-    i18next.changeLanguage(lang);
-  }, [lang]);
-  return <LocaleContext.Provider value={{ lang, setLang }}>{children}</LocaleContext.Provider>;
-};
-export default LocaleProvider;
-```
-
-_components/Locale.tsx_
-
-```tsx
-import { useContext } from 'react';
-import i18next from 'i18next';
-import { LocaleContext } from './LocaleProvider';
-
-export default function Localize({ value }: { value: string }) {
-  const { lang } = useContext(LocaleContext);
-  return <>{i18next.t(value, { lng: lang })}</>;
-}
-```
-
-### 2. 实现国际化后，为什么antd下拉框的搜索功能失效了？
+### 1. 实现国际化后，为什么antd下拉框的搜索功能失效了？
 
 这是因为 antd 下拉框的内置搜索功能是基于 `label` 值来实现的，只能支持常规字符串。而支持了国际化后，`label` 实际返回的是一个组件，而不是常规字符串，因此 antd 无法正确进行字符串匹配。解决方法是可以给枚举扩展一个 `filterOption` 方法，帮助 Select 组件自定义搜索功能，这样就可以正确地支持搜索功能了。
 
@@ -1251,4 +1215,4 @@ Enum.extends({
 
 如果你发现安全问题，请遵循 [安全策略](SECURITY.md) 来负责任地报告。
 
-如果你觉得这个项目有用，请考虑在 GitHub 上给它一个星标 ⭐️。这有助于其他人发现这个项目，并鼓励我们继续开发。
+**如果你觉得这个项目有用，请考虑在 GitHub 上给它一个星标 ⭐️。这有助于更多人发现这个项目，并鼓励我们继续开发。**

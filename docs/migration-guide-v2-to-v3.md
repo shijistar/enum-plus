@@ -86,24 +86,36 @@ declare global {
 }
 ```
 
-In v3, the way to extend Enum types is using module declaration interface merging:
+In v3, module declaration is used for interface merging, and you can also combine the implementation and type declaration into one file.
 
-_enum-extension.d.ts_
+_my-enum-extension.ts_
 
 ```ts
-declare module 'enum-plus' {
+import { Enum } from 'enum-plus';
+
+// Implementation code
+Enum.extends({
+  hello() {
+    return 'Hello, EnumPlus!';
+  },
+});
+
+// Type declaration
+declare module 'enum-plus/extension' {
   export interface EnumExtension<T, K, V> {
     hello(): string;
   }
 }
 ```
 
-At the same time, import the `enum-extension.d.ts` module in the project entry file:
+Then import this file in the entry point of your project:
 
-_index.ts_
+_index.js_
 
 ```ts
-import './enum-extension';
+import './my-enum-extension';
+
+WeekEnum.hello(); // 'Hello, EnumPlus!'
 ```
 
 The advantage of this approach is that it avoids global namespace pollution and makes it clearer which module the extension is for.

@@ -179,7 +179,9 @@ export interface EnumInterface {
    *
    * @param obj Extension content, must be an object | 扩展内容，必须是一个对象
    */
-  extends: (obj: Record<string, unknown> | undefined) => void;
+  extends: (
+    obj: Record<string, (this: ReturnType<EnumInterface>, ...args: any[]) => unknown> | Record<string, unknown>
+  ) => void;
   /**
    * - **EN:** Install a plugin that enhances the functionality of the Enum class by adding new
    *   methods or properties.
