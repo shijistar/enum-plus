@@ -35,9 +35,7 @@
 
 ## Introduction
 
-`enum-plus` is an enhanced enum library that is fully compatible with the native `enum` and extends it with powerful features such as display text, localization, UI control binding, enum members traversal, and more useful extension methods. This lightweight, zero-dependency, TypeScript library works with any front-end framework.
-
-With the extended display text capability, enum members can be used to generate dropdowns, checkboxes, and other UI controls with a single line of code. By using the extension methods of the enum, you can easily traverse the array of enum members, get the display text of a certain enum value, determine whether a value exists, etc. The display text of the enum member supports localization, which can return the corresponding text according to the current language environment, making the display text of the enum member more flexible and more in line with user needs.
+`enum-plus` is an enhanced enumeration library that is fully compatible with the native `enum` usage and serves as a drop-in replacement library. It supports adding display text to enum items and extending more custom metadata fields, making it suitable as a static configuration system. The enum texts support internationalization, allowing you to convert values into display text in the current language, which is very helpful for UI rendering of business data. Enums can be generated into various UI components such as dropdowns, which is very useful for front-end development. The library also provides a series of extension methods for iterating over enum items and data transformations. It is a lightweight, zero-dependency library implemented in 100% TypeScript, and works with any front-end framework.
 
 What other exciting features are there? Please continue to explore! Or you can check out this usage video first.
 
@@ -47,19 +45,20 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 ## Features
 
-- Full compatibility with native `enum` behavior
-- Support for multiple data types including `number` and `string`
-- Enhanced enum members with customizable display text
-- [Localization](#localization) capabilities that integrate with any i18n library
-- Streamlined conversion from enum values to human-readable display text
-- Extensible design allowing unlimited metadata fields on enum members
-- Plugin system with a variety of practical plugins available for installation
-- Seamless integration with any UI libraries like [Ant Design](https://ant.design/components/overview), [ElementPlus](https://element-plus.org/en-US/component/overview.html), [Material-UI](https://mui.com/material-ui), in a single line of code
-- Support for server-side rendering (SSR)
-- Support for multiple environments including Web browsers, Node.js, ReactNative, Taro, and Mini Programs
-- Zero dependencies - pure JavaScript implementation usable in any front-end framework
-- First-class TypeScript support with comprehensive type inference
-- Lightweight (only 2KB+ gzipped)
+- Fully compatible with native `enum` usage
+- Supports multiple data types such as `number` and `string`
+- Enhanced enum items, supporting display text
+- Internationalization support for display text, can be integrated with any i18n library
+- Supports converting values to display text, making UI rendering easier
+- Extensible design, allowing custom metadata fields for enum items
+- Plugin system support, extending enum functionality through plugin installations
+- Supports type narrowing to enhance type safety<sup>_&nbsp;&nbsp;TypeScript_</sup>
+- Generates dropdowns from enums, compatible with UI libraries like [AntDesign](https://ant-design.antgroup.com/components/overview-cn), [ElementPlus](https://element-plus.org/zh-CN/component/select.html), [Material-UI](https://mui.com/material-ui) and more
+- Supports server-side rendering (SSR)
+- Compatible with various environments including Browsers, Node.js, ReactNative, Taro, and mini-programs
+- Zero dependencies, pure JavaScript library, compatible with any front-end framework
+- 100% TypeScript implementation, better type inference capabilities
+- Lightweight (only 2KB+ minzipped)
 
 ## Installation
 
@@ -114,7 +113,7 @@ yarn add enum-plus
 - [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.min.js.gz)
 - [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (Full package with sourcemap)
 
-> You can download them in [github release](https://github.com/shijistar/enum-plus/releases) assets too.
+> You can also download these files from the [Github Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.0.0).
 
 ## Enum Initialization
 
@@ -146,7 +145,7 @@ WeekEnum2.Monday; // 'Mon'
 
 ### 2. Standard Format (Recommended)
 
-The standard format includes both a `value` and a `label` for each enum member. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display text for each enum member, which can be used in UI components. For enabling localization support for the `label` field, please refer to the [Localization](#localization) section.
+The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display text for each enum item, which can be used in UI components. For enabling localization support for the `label` field, please refer to the [Localization](#localization) section.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -215,7 +214,6 @@ const WeekEnum = Enum(init);
 WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
 WeekEnum.Saturday; // 6
-WeekEnum.label('Sunday'); // Sunday
 ```
 
 ## API
@@ -237,7 +235,7 @@ WeekEnum.Monday; // 1
 
 `Record<string, EnumItemClass>`
 
-An object that aggregates all enum items, allowing quick access to a specific enum member object through its `key`.
+An object that aggregates all enum items, allowing quick access to a specific enum item object through its `key`.
 
 ```js
 WeekEnum.named.Monday; // { key: 'Monday', value: 1, label: 'Monday' }
@@ -247,7 +245,7 @@ WeekEnum.named.Monday; // { key: 'Monday', value: 1, label: 'Monday' }
 
 `{ value, label, key, raw }[]`
 
-Returns a read-only array of all enum members.
+Returns a read-only array of all enum items.
 
 ```js
 WeekEnum.items; // [ { value: 0, label: 'Sunday', key:  'Sunday' }, { value: 1, label: 'Monday', key: 'Monday' }, ... ]
@@ -259,7 +257,7 @@ WeekEnum.items; // [ { value: 0, label: 'Sunday', key:  'Sunday' }, { value: 1, 
 
 `(string | number)[]`
 
-Returns an array of all enum member `value`(s).
+Returns an array of all enum item `value`(s).
 
 ```js
 WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
@@ -271,7 +269,7 @@ WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
 
 `string[]`
 
-Returns an array of all enum member `label`(s).
+Returns an array of all enum item `label`(s).
 
 ```js
 WeekEnum.labels; // ['Sunday', 'Monday', ... 'Friday', 'Saturday']
@@ -283,7 +281,7 @@ WeekEnum.labels; // ['Sunday', 'Monday', ... 'Friday', 'Saturday']
 
 `string[]`
 
-Returns an array of all enum member `key`(s)
+Returns an array of all enum item `key`(s)
 
 ```js
 WeekEnum.keys; // ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -295,7 +293,7 @@ WeekEnum.keys; // ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frid
 
 `Record<string, any[]>`
 
-Returns an object containing arrays of custom field values for all enum members. Each key in the object corresponds to a custom field name, and the value is an array of that field's values across all enum members.
+Returns an object containing arrays of custom field values for all enum items. Each key in the object corresponds to a custom field name, and the value is an array of that field's values across all enum items.
 
 ```js
 const ColorEnum = Enum({
@@ -306,7 +304,7 @@ const ColorEnum = Enum({
 ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
 ```
 
-By the way, you can quickly access custom fields of a single enum member through the `named` property.
+By the way, you can quickly access custom fields of a single enum item through the `named` property.
 
 ```js
 ColorEnum.named.Red.raw.hex; // '#FF0000'
@@ -318,7 +316,7 @@ ColorEnum.named.Red.raw.hex; // '#FF0000'
 
 <sup>**_\[F]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
-Determine whether a certain enum member (value or key) exists.
+Determine whether a certain enum item (value or key) exists.
 
 ```js
 WeekEnum.has(1); // true
@@ -333,7 +331,7 @@ WeekEnum.has('Birthday'); // false
 
 <sup>**_\[F]_**</sup> &nbsp; `findBy(field: string, value: any): EnumItemClass | undefined`
 
-Find an enum member by a specific field and its value. Returns the enum member object if found, otherwise returns `undefined`.
+Find an enum item by a specific field and its value. Returns the enum item object if found, otherwise returns `undefined`.
 
 The `field` parameter can be one of the built-in fields: `key`, `value`, `label`, or any custom field defined in the enum.
 
@@ -342,7 +340,7 @@ WeekEnum.findBy('value', 1); // { key: 'Monday', value: 1, label: 'Monday' }
 WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: 'Monday' }
 ```
 
-> If you want to get the custom fields of a known enum member, it is recommended to use the `named` property to access it
+> If you want to get the custom fields of a known enum item, it is recommended to use the `named` property to access it
 
 ---
 
@@ -350,7 +348,7 @@ WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: 'Monday' 
 
 <sup>**_\[F]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-Gets the display text of an enum member based on a certain value or key. If localization has been set up, the localized text will be returned.
+Gets the display text of an enum item based on a certain value or key. If localization has been set up, the localized text will be returned.
 
 ```js
 WeekEnum.label(1); // Monday
@@ -363,7 +361,7 @@ WeekEnum.label('Monday'); // Monday, here is label, not key
 
 <sup>**_\[F]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
-Get the key of an enum member based on the enum value, if the key is not found, return `undefined`.
+Get the key of an enum item based on the enum value, if the key is not found, return `undefined`.
 
 ```js
 WeekEnum.key(1); // Monday (here is key, not label)
@@ -379,9 +377,9 @@ WeekEnum.key(1); // Monday (here is key, not label)
 
 The `raw` method is used to return the original initialization object of the enum collection, which is the object used to create the enum.
 
-The second overload method is used to return the original initialization object of a single enum member.
+The second overload method is used to return the original initialization object of a single enum item.
 
-The main purpose of the `raw` method is to get the extended custom fields of the enum members. Unlimited number of custom fields are allowed.
+The main purpose of the `raw` method is to get the extended custom fields of the enum items. Unlimited number of custom fields are allowed.
 
 ```js
 const WeekEnum = Enum({
@@ -403,7 +401,7 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday:
 <br/>
 <sup>**_\[F^2]_**</sup> &nbsp; `toList(options?: { valueField?: string; labelField?: string }): { [key: string]: any }[]`
 
-Converts the enum members to an array of objects, each containing `value` and `label` fields by default. You can customize the field names using the `options` parameter.
+Converts the enum items to an array of objects, each containing `value` and `label` fields by default. You can customize the field names using the `options` parameter.
 
 ```js
 WeekEnum.toList();
@@ -428,7 +426,7 @@ WeekEnum.toList({ valueField: 'id', labelField: 'name' });
 <br/>
 <sup>**_\[F^2]_**</sup> &nbsp; `toMap(options?: { keySelector?: string; valueSelector?: string }): Record<string, any>`
 
-Converts the enum members to a key-value map object, where the keys are the enum values and the values are the enum labels by default. You can customize the key and value fields using the `options` parameter.
+Converts the enum items to a key-value map object, where the keys are the enum values and the values are the enum labels by default. You can customize the key and value fields using the `options` parameter.
 
 ```js
 WeekEnum.toMap();
@@ -453,7 +451,7 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 Display name for Enum types. When creating an enum, you can assign it a display name using the optional `name` parameter. This name can be either a plain string or a localization key to support internationalized text. For more details on localization, see the [Localization](#localization) section.
 
-> Usually Enums are used to generate dropdown menus in form, or show member text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its members' labels, simplifying maintenance and ensuring consistency across your application.
+> Usually Enums are used to generate dropdown menus in form, or show item text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its items' labels, simplifying maintenance and ensuring consistency across your application.
 
 ```js
 const WeekEnum = Enum(
@@ -473,7 +471,7 @@ WeekEnum.label(1); // Monday
 
 ---
 
-### ⚡️ &nbsp; valueType &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; valueType &nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -492,7 +490,7 @@ const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ Type error, 8 is 
 
 ---
 
-### ⚡️ &nbsp; keyType &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; keyType &nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -509,7 +507,7 @@ const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 
 ---
 
-### ⚡️ &nbsp; rawType &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; rawType &nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
@@ -543,7 +541,7 @@ Enum.isEnum({}); // false
 
 <sup>**_\[F]_**</sup> &nbsp; `(key: string) => string`
 
-Set a global localization function for all enums. This function will be used to get the localized text for enum members and enum type names.
+Set a global localization function for all enums. This function will be used to get the localized text for enum items and enum type names. Please refer to the [Localization](#localization) section for more details.
 
 ```js
 import i18n from 'i18next';
@@ -571,12 +569,12 @@ Enum.extends({
 
 ### 💎 &nbsp; Enum.install
 
-<sup>**_\[F]_**</sup> &nbsp; `(plugin: EnumPlugin, options?: any) => void`
+<sup>**_\[F]_**</sup> &nbsp; `(plugin: Plugin, options?: any) => void`
 
 Install a plugin to extend the functionality of all enums. More details can be found in the [Plugin System](#plugin-system) section.
 
 ```js
-import i18nextPlugin from '@enum-plus/i18next';
+import i18nextPlugin from '@enum-plus/plugin-i18next';
 
 Enum.install(i18nextPlugin);
 ```
@@ -585,7 +583,7 @@ Enum.install(i18nextPlugin);
 
 ## User Stories
 
-#### 💡 Basic Usage, Replacing Magic Numbers
+#### 💡 Prevent Magic Numbers
 
 ```js
 const WeekEnum = Enum({
@@ -602,7 +600,7 @@ if (today === WeekEnum.Sunday) {
 
 ---
 
-#### 💡 Checks for Valid Enum Values
+#### 💡 Check for Valid Enum Values
 
 ```js
 if (WeekEnum.has(value)) {
@@ -614,7 +612,7 @@ if (WeekEnum.has(value)) {
 
 ---
 
-#### 💡 Checks for Enum Objects
+#### 💡 Check for Enum Objects
 
 ```js
 let values: number[] | undefined;
@@ -629,7 +627,7 @@ if (Enum.isEnum(data)) {
 
 ---
 
-#### 💡 Generate UI Components
+#### 💡 Generate UI Controls
 
 Take React and Ant Design as an example. Please refer to the [Supports Various Frontend Frameworks](#-supports-various-frontend-frameworks) section for more examples.
 
@@ -714,7 +712,7 @@ ColorEnum.named.Red.raw.icon; // '🔥'
 
 ---
 
-#### Supports Traversing Enum Members, in a Read-Only Manner
+#### Supports Traversing Enum Items, in a Read-Only Manner
 
 ```js
 Array.isArray(WeekEnum.items); // true
@@ -754,7 +752,7 @@ const AllColorEnum = Enum({
 
 ---
 
-#### 💡 Supports JSDoc Comments on Enum Members, Enabling Code Intelligence
+#### 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
 
 Supports inline documentation through JSDoc, allowing developers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](./docs/best-practices.md) section for writing good code.
 
@@ -935,7 +933,7 @@ The following plugins are available. You can choose to install them based on you
 
 ## Localization
 
-`enum-plus` does not include built-in internationalization capabilities by default. Therefore, the `label` field of enum members is treated as a plain string and returns the original text directly.
+`enum-plus` does not include built-in internationalization capabilities by default. Therefore, the `label` field of enum items is treated as a plain string and returns the original text directly.
 
 To add localization support to `enum-plus`, the simplest way is to install the corresponding [i18n plugin](#plugin-system), such as `@enum-plus/plugin-i18next`, which automatically passes the values of the `label` and `name` fields to i18next for translation.
 
@@ -944,6 +942,8 @@ npm install @enum-plus/plugin-i18next i18next
 ```
 
 Then install the plugin in the project entry file:
+
+_index.js_
 
 ```js
 import i18nextPlugin from '@enum-plus/plugin-i18next';
@@ -973,13 +973,13 @@ If you need to automatically update the UI after switching languages, this requi
 
 If you are using other internationalization libraries, such as `react-intl`, `vue-i18next`, or `ngx-translate`, you can integrate these libraries through the `Enum.localize` method.
 
-_index.js_
+_my-extension.js_
 
 ```js
 import { Enum } from 'enum-plus';
 
 Enum.localize = (key) => {
-  // 这是一段伪代码，请根据你使用的国际化库进行调整
+  // This is a pseudo code, please adjust it according to your own logic
   return intl.formatMessage({ id: key });
 };
 ```
@@ -994,60 +994,95 @@ Enum provides a wealth of built-in methods and properties that can satisfy most 
 
 > In fact, the entire [Plugin System](#plugin-system) and the `Enum.install` method are implemented using `Enum.extends` at the underlying level.
 
-_my-enum-extension.ts_
+- **TypeScript Projects**
 
-```tsx
-Enum.extends({
-  toMySelect(this: ReturnType<typeof Enum>) {
-    return this.items.map((item) => ({ value: item.value, title: item.label }));
-  },
-  reversedItems(this: ReturnType<typeof Enum>) {
-    return this.items.reverse();
-  },
-});
+  _my-enum-extension.ts_
 
-WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
-```
+  ```ts
+  // Implementation code
+  Enum.extends({
+    toMySelect() {
+      return this.items.map((item) => ({ value: item.value, title: item.label }));
+    },
+    reversedItems() {
+      return this.items.reverse();
+    },
+  });
 
-If you are using TypeScript, you probably need to further extend the enum type declaration to get better type hints. Create a declaration file in your project (e.g., `enum-extension.d.ts`), and extend the global types there.
-
-> `enum-extension.d.ts` file can be placed in the root directory of the project or any directory.
-> Note, please check the `include` option in your `tsconfig.json` configuration to ensure that TypeScript can find your declaration file.
-
-_enum-extension.d.ts_
-
-```typescript
-declare module 'enum-plus/extension' {
-  export interface EnumExtension<T, K, V> {
-    toMySelect: () => { value: V; title: string }[];
-    reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+  // Type declaration for better type hints
+  declare module 'enum-plus/extension' {
+    export interface EnumExtension<T, K, V> {
+      toMySelect: () => { value: V; title: string }[];
+      reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+    }
   }
-}
-```
+  ```
 
-Then import this declaration file in your project entry file.
+  _index.js_
 
-_index.ts_
+  Then import this file in the entry file of your project:
 
-```tsx
-import './enum-extension';
-```
+  ```js
+  import './my-enum-extension';
+
+  WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
+  ```
+
+- **JavaScript Projects**
+
+  _my-enum-extension.js_
+
+  ```js
+  import { Enum } from 'enum-plus';
+
+  // Implementation code
+  Enum.extends({
+    toMySelect() {
+      return this.items.map((item) => ({ value: item.value, title: item.label }));
+    },
+    reversedItems() {
+      return this.items.reverse();
+    },
+  });
+  ```
+
+  _my-enum-extension.js.d.ts_
+
+  ```ts
+  import { EnumExtension, EnumItemClass, EnumItemInit } from 'enum-plus';
+
+  // Type declaration for better type hints
+  declare module 'enum-plus/extension' {
+    export interface EnumExtension<T, K, V> {
+      toMySelect: () => { value: V; title: string }[];
+      reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
+    }
+  }
+  ```
+
+  _index.js_
+
+  Then import this file in the entry file of your project:
+
+  ```js
+  import './my-enum-extension';
+
+  WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
+  ```
 
 Please note that `EnumExtension` is a generic interface that accepts three type parameters, which represent:
 
 - `T`: Initialization object of the enum type (e.g., the object passed to `Enum()`)
-- `K`: Key of the enum member (e.g., Sunday, Monday)
-- `V`: Value of the enum members
+- `K`: Key of the enum item (e.g., Sunday, Monday)
+- `V`: Value of the enum items
 
-If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters.
-
-> However these are all optional, if you don't need them, you can omit them.
+> If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. However these are all optional, if you don't need them, you can omit them.
 
 ---
 
 ## Naming Conflicts?
 
-`enum-plus` is designed with naming conflicts in mind. The namespace of enum members is separate from the methods and properties of the enum instance, minimizing the chances of conflicts. For example, when an enum member's name conflicts with a method name, you can access the overridden methods through the `items` property.
+`enum-plus` is designed with naming conflicts in mind. The namespace of enum items is separate from the methods and properties of the enum instance, minimizing the chances of conflicts. For example, when an enum item's name conflicts with a method name, you can access the overridden methods through the `items` property.
 
 ```js
 import { KEYS, VALUES } from 'enum-plus';
@@ -1064,7 +1099,7 @@ const WeekEnum = Enum({
 
 Week.foo; // 1
 Week.bar; // 2
-// Below are all enum members, which take precedence and override the original methods
+// Below are all enum items, which take precedence and override the original methods
 WeekEnum.keys; // 3
 WeekEnum.values; // 4
 WeekEnum.label; // 5
@@ -1081,7 +1116,7 @@ WeekEnum.items.toList(); // [{ value: 1, label: 'foo' }, ...]
 
 > Note that `keys` and `values` are special because they are built-in methods of JavaScript arrays. To avoid altering the behavior of the `items` array, you need to use the `KEYS` and `VALUES` symbols as aliases to access them.
 
-For an even more extreme case, what if `items` conflicts with an enum member name? Don't worry, you can still access it via the `ITEMS` alias.
+For an even more extreme case, what if `items` conflicts with an enum item name? Don't worry, you can still access it via the `ITEMS` alias.
 
 ```js
 import { ITEMS } from 'enum-plus';
@@ -1093,7 +1128,7 @@ const WeekEnum = Enum({
   toList: { value: 4 }, // Naming conflict
 });
 
-WeekEnum.items; // 3, enum member takes precedence and overrides items
+WeekEnum.items; // 3, enum item takes precedence and overrides items
 WeekEnum[ITEMS].toList(); // But you can access it via the ITEMS alias
 ```
 
@@ -1104,10 +1139,10 @@ WeekEnum[ITEMS].toList(); // But you can access it via the ITEMS alias
 When using `enum-plus`, following these best practices can help ensure consistency, maintainability, and clarity in your codebase:
 
 1. **Enum Type Naming:** Use `PascalCase` and append with the `Enum` suffix (e.g., _WeekEnum_, _ColorEnum_).
-2. **Enum Member Naming:** Use `PascalCase` for enum members(e.g., _WeekEnum.Sunday_, _ColorEnum.Red_). This naming style highlights the immutability and static nature of enum members, and ensures they appear at the top in IDE IntelliSense suggestions for easier selection.
-3. **Semantic Clarity:** Ensure enum and member names have clear semantics. Good semantic naming serves as self-documentation, making code intent explicit and reducing cognitive overhead.
+2. **Enum Item Naming:** Use `PascalCase` for enum items (e.g., _WeekEnum.Sunday_, _ColorEnum.Red_). This naming style highlights the immutability and static nature of enum items, and ensures they appear at the top in IDE IntelliSense suggestions for easier selection.
+3. **Semantic Clarity:** Ensure enum and item names have clear semantics. Good semantic naming serves as self-documentation, making code intent explicit and reducing cognitive overhead.
 4. **Single Responsibility Principle:** Each enum type should represent a single, cohesive set of related constants. Avoiding overlapping responsibilities between different enum types.
-5. **Provide JSDoc Comments:** Provide JSDoc comments for each enum member and the enum type itself, explaining their purpose and usage. Comprehensive documentation enables IDE hover tooltips and improves code readability and maintainability.
+5. **Provide JSDoc Comments:** Provide JSDoc comments for each enum item and the enum type itself, explaining their purpose and usage. Comprehensive documentation enables IDE hover tooltips and improves code readability and maintainability.
 6. **Internationalization Architecture:** Plan for internationalization from the outset by leveraging the library's [localization](#localization) features. A well-designed internationalization architecture minimizes future refactoring and facilitates global scalability.
 
 Here is an example that combines the above best practices to define an enum:
@@ -1163,83 +1198,7 @@ In Node.js environments, you can import enum-plus using either `require` or `imp
 
 ## Q&A
 
-### 1. How to implement internationalization based on i18next?
-
-Please refer to the code example below:
-
-_main.tsx_
-
-```tsx
-import { createRoot } from 'react-dom/client';
-import { Enum } from 'enum-plus';
-import i18next from 'i18next';
-import App from './App';
-import Locale from './components/Locale';
-import LocaleProvider from './components/LocaleProvider';
-import enUS from './locales/en-US';
-import zhCN from './locales/zh-CN';
-
-i18next.init({
-  lng: localStorage.getItem('my_lang'),
-  fallbackLng: 'en-US',
-  supportedLngs: ['en-US', 'zh-CN'],
-  resources: {
-    'en-US': { translation: enUS },
-    'zh-CN': { translation: zhCN },
-  },
-});
-i18next.on('languageChanged', (lang) => {
-  localStorage.setItem('my_lang', lang);
-});
-
-// 👀 Here is the key code, set globally through Enum.localize method, use Locale component to output localized text
-Enum.localize = (key?: string) => <Locale value={key} />;
-
-const root = createRoot(document.getElementById('root'));
-root.render(
-  <LocaleProvider>
-    <App />
-  </LocaleProvider>
-);
-```
-
-_components/LocaleProvider.tsx_
-
-```tsx
-import type { FC, ReactNode } from 'react';
-import { createContext, useEffect, useState } from 'react';
-import i18next from 'i18next';
-
-export const LocaleContext = createContext<{
-  lang: string;
-  setLang: (lang: string) => void;
-}>({});
-
-const LocaleProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [lang, setLang] = useState(i18next.language);
-
-  useEffect(() => {
-    i18next.changeLanguage(lang);
-  }, [lang]);
-  return <LocaleContext.Provider value={{ lang, setLang }}>{children}</LocaleContext.Provider>;
-};
-export default LocaleProvider;
-```
-
-_components/Locale.tsx_
-
-```tsx
-import { useContext } from 'react';
-import i18next from 'i18next';
-import { LocaleContext } from './LocaleProvider';
-
-export default function Localize({ value }: { value: string }) {
-  const { lang } = useContext(LocaleContext);
-  return <>{i18next.t(value, { lng: lang })}</>;
-}
-```
-
-### 2. Why does the search function of the antd dropdown not work after localization?
+### 1. Why does the search function of the antd dropdown not work after localization?
 
 This occurs because Ant Design's dropdown search functionality performs string matching against the `label` property. When using React components for labels (after localization), the string matching fails since it's comparing against component objects rather than primitive strings.
 
@@ -1268,4 +1227,4 @@ Feel free to submit issues, pull requests, or suggestions for improvements. Your
 
 If you find a security issue, please follow the [Security Policy](SECURITY.md) to report it responsibly.
 
-If you find this project useful, please consider giving it a star ⭐️ on GitHub. It helps others discover the project and encourages further development.
+**If you find this project useful, please consider giving it a star ⭐️ on GitHub. It helps more people discover the project and encourages us to continue development.**

@@ -12,4 +12,5 @@ runs:
         sed -i "s|https://cdn.jsdelivr.net/npm/enum-plus@.*/|https://cdn.jsdelivr.net/npm/enum-plus@${{ inputs.version }}/|g" README.zh-CN.md
         sed -i "s|https://github.com/shijistar/enum-plus/releases/download/v.*/|https://github.com/shijistar/enum-plus/releases/download/${{ inputs.version }}/|g" README.md
         sed -i "s|https://github.com/shijistar/enum-plus/releases/download/v.*/|https://github.com/shijistar/enum-plus/releases/download/${{ inputs.version }}/|g" README.zh-CN.md
+        sed -i "s|https://github.com/shijistar/enum-plus/releases/tag/v.*/|https://github.com/shijistar/enum-plus/releases/tag/v${{ inputs.version }}/|g" README.md
       shell: bash
