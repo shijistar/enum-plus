@@ -29,9 +29,9 @@
 
 ⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Static Methods](#static-methods) | [User Stories](#user-stories) | [Plugin System](#plugin-system) | [Localization](#localization) | [Extensibility](#extensibility) | [Naming Conflicts](#naming-conflicts) | [Best Practices](#best-practices) | [Compatibility](#compatibility) | [Q&A](#qa) | [Contributing](#contributing)&nbsp; ⬇️
 
-> 🎉 `v3.0` Has Been Released!
+> **🎉 v3.0 is Released!**
 >
-> The new version brings more exciting features and improvements. Please check the [release notes](./docs/release-v3.md) and [migration guide](./docs/migration-guide-v2-to-v3.md) for details.
+> The new version is a major milestone that brings many exciting features and improvements. Please refer to the [Release Notes](./docs/release-v3.md) and [Migration Guide](./docs/migration-guide-v2-to-v3.md) for details.
 
 ## Introduction
 
@@ -50,7 +50,7 @@ What other exciting features are there? Please continue to explore! Or you can c
 - Full compatibility with native `enum` behavior
 - Support for multiple data types including `number` and `string`
 - Enhanced enum members with customizable display text
-- Built-in localization capabilities that integrate with any i18n library
+- [Localization](#localization) capabilities that integrate with any i18n library
 - Streamlined conversion from enum values to human-readable display text
 - Extensible design allowing unlimited metadata fields on enum members
 - Plugin system with a variety of practical plugins available for installation
@@ -642,9 +642,9 @@ const App = () => {
     <>
       <Select options={WeekEnum.items} />
       <Menu items={WeekEnum.toMenu()} />
-      <Table columns={[{ filters: WeekEnum.toFilter() }]} />;
-      <ProFormSelect valueEnum={WeekEnum.toValueMap()} />; // Select
-      <ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />; // Checkbox
+      <Table columns={[{ filters: WeekEnum.toFilter() }]} />
+      <ProFormSelect valueEnum={WeekEnum.toValueMap()} />
+      <ProFormCheckbox valueEnum={WeekEnum.toValueMap()} />
     </>
   );
 };
@@ -654,9 +654,9 @@ const App = () => {
 
 ---
 
-#### 💡 Supports Localization for Enum Labels
+#### 💡 Enable Localization for Enum Labels
 
-Support for globalization. Set the `label` field to a localization key, it can display the corresponding text based on the current language environment. For more information, please refer to the [Localization](#localization) section.
+Support internationalization. Set the `label` field to a localization key, it can display the corresponding text based on the current language environment. For more information, please refer to the [Localization](#localization) section.
 
 ```js
 WeekEnum.label(1); // Monday or 星期一, depending on the current locale
@@ -666,7 +666,7 @@ WeekEnum.name; // Week or 周, depending on the current locale
 
 ---
 
-#### 💡 Data Type Narrowing &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+#### 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
 
 ```ts
 type MyComponentProps = {
@@ -693,7 +693,9 @@ setDay(8); // ❌ Error, 8 is not a valid enum value
 
 ---
 
-#### 💡 Adds Metadata Fields. Can Be Used as Static Config System
+<!-- #### 💡 添加元数据字段，可以作为静态全局配置系统使用 -->
+
+#### 💡 Support Metadata Fields That Serves as a Static Configuration System
 
 ```js
 const ColorEnum = Enum({
@@ -1104,7 +1106,7 @@ When using `enum-plus`, following these best practices can help ensure consisten
 3. **Semantic Clarity:** Ensure enum and member names have clear semantics. Good semantic naming serves as self-documentation, making code intent explicit and reducing cognitive overhead.
 4. **Single Responsibility Principle:** Each enum type should represent a single, cohesive set of related constants. Avoiding overlapping responsibilities between different enum types.
 5. **Provide JSDoc Comments:** Provide JSDoc comments for each enum member and the enum type itself, explaining their purpose and usage. Comprehensive documentation enables IDE hover tooltips and improves code readability and maintainability.
-6. **Internationalization Architecture:** Plan for internationalization from the outset by leveraging the library’s built-in [localization](#localization) features. A well-designed internationalization architecture minimizes future refactoring and facilitates global scalability.
+6. **Internationalization Architecture:** Plan for internationalization from the outset by leveraging the library's [localization](#localization) features. A well-designed internationalization architecture minimizes future refactoring and facilitates global scalability.
 
 Here is an example that combines the above best practices to define an enum:
 
