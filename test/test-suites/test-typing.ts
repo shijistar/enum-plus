@@ -17,7 +17,6 @@ const testTyping = (engine: TestEngineBase) => {
         if (Enum.isEnum(value)) {
           engine.expect(value).toBe(weekEnum);
         } else {
-          // @ts-expect-error: because val is narrowed off Enum type, type casting will raise error
           console.log(value as typeof weekEnum);
         }
 
