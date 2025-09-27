@@ -81,11 +81,21 @@ declare global {
 }
 ```
 
-在 v3 中，扩展 Enum 类型的方式是使用模块声明的接口合并：
+在 v3 中，使用模块声明的方式进行接口合并，同时还可以把功能实现和类型声明合并到一个文件中。
 
-_enum-extension.d.ts_
+_my-enum-extension.ts_
 
 ```ts
+import { Enum } from 'enum-plus';
+
+// 功能实现
+Enum.extends({
+  hello() {
+    return '你好，EnumPlus！';
+  },
+});
+
+// 类型声明
 declare module 'enum-plus/extension' {
   export interface EnumExtension<T, K, V> {
     hello(): string;
@@ -93,12 +103,14 @@ declare module 'enum-plus/extension' {
 }
 ```
 
-同时，在项目入口文件中导入 `enum-extension.d.ts` 模块：
+然后在项目的入口文件中导入这个文件：
 
-_index.ts_
+_index.js_
 
 ```ts
-import './enum-extension';
+import './my-enum-extension';
+
+WeekEnum.hello(); // '你好，EnumPlus！'
 ```
 
 这样做的好处是避免了全局命名空间污染，并且可以更清晰地看到扩展是针对哪个模块的。
