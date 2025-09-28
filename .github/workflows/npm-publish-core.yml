@@ -1,4 +1,4 @@
-name: NPM Publish
+name: NPM Publish (Core Project)
 
 on:
   release:
@@ -11,13 +11,30 @@ permissions:
   statuses: write
 
 jobs:
+  check-release-tag-for-core:
+    runs-on: ubuntu-latest
+    outputs:
+      is_semver_tag: ${{ steps.check.outputs.is_semver_tag }}
+    steps:
+      - id: check
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9\.]+)?$ ]]; then
+            echo "is_semver_tag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_semver_tag=false" >> "$GITHUB_OUTPUT"
+          fi
+
   run-unit-tests:
+    if: needs.check-release-tag-for-core.outputs.is_semver_tag == 'true'
+    needs: check-release-tag-for-core
     uses: ./.github/workflows/reusable-test.yml
     with:
       use-matrix: true
 
   publish-npm:
-    needs: run-unit-tests
+    if: needs.check-release-tag-for-core.outputs.is_semver_tag == 'true'
+    needs: [check-release-tag-for-core, run-unit-tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,9 +43,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
 
       - name: Try to restore modern node_modules cache
         id: node_modules_cache
@@ -86,14 +103,14 @@ jobs:
       - name: Request the latest version of enum-plus
         id: get_latest_version_before_publish
         run: |
-          VERSION=$(npm view enum-plus version)
+          VERSION=$(npm view enum-plus version || echo 0.0.0)
           echo "LATEST_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Request the next version of enum-plus
         id: get_next_version_before_publish
         continue-on-error: true
         run: |
-          VERSION=$(npm view jsoneo@next version 2>/dev/null || echo 0.0.0)
+          VERSION=$(npm view enum-plus@next version 2>/dev/null || echo 0.0.0)
           echo "NEXT_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish a prerelease version to npm
@@ -143,6 +160,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: shijistar/enum-plus
+          # Give the current upload a unique identifier for easy grouping in the Codecov UI
+          flags: enum-plus-core
+          # Optional: Give this upload a name
+          name: enum-plus-core
 
       - name: Request the latest stable version of enum-plus
         id: get_latest_version_after_publish

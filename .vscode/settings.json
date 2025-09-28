@@ -3,6 +3,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["jsoneo", "shijistar", "tses", "Vuetify"],
+  "cSpell.words": ["jsoneo", "madhead", "shijistar", "tses", "Vuetify"],
   "i18n-ally.localesPaths": []
 }
