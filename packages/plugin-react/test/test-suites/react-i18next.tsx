@@ -5,6 +5,7 @@ import { act, render } from '@testing-library/react';
 import { changeLanguage } from 'i18next';
 import ReactI18nextLocale from '../../src/components/ReactI18nLocale';
 import { reactI18nextPlugin } from '../../src/index';
+import testIsMatch from './isMatch';
 
 const testLocalization = (engine: TestEngineBase) => {
   engine.describe('The react-i18next plugin', () => {
@@ -235,6 +236,8 @@ const testLocalization = (engine: TestEngineBase) => {
       }
     );
   });
+
+  testIsMatch(engine, { plugin: reactI18nextPlugin });
 };
 
 export default testLocalization;

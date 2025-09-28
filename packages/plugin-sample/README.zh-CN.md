@@ -6,18 +6,18 @@
 
 ## 简介
 
-`@enum-plus/sample` 是 `enum-plus` 的一个插件，添加了一个示例方法到枚举中，允许更方便地操作和使用枚举值。该插件旨在增强应用程序中枚举的功能。
+`@enum-plus/plugin-sample` 是 [enum-plus](https://github.com/shijistar/enum-plus) 的一个插件，添加了一个示例方法到枚举中，允许更方便地操作和使用枚举值。该插件旨在增强应用程序中枚举的功能。
 
 ## 安装
 
 ```bash
-npm install @enum-plus/sample
+npm install @enum-plus/plugin-sample
 ```
 
-在应用程序的入口文件中，导入 `@enum-plus/sample` 插件并安装：
+在应用程序的入口文件中，导入 `@enum-plus/plugin-sample` 插件并安装：
 
 ```js
-import samplePlugin from '@enum-plus/sample';
+import samplePlugin from '@enum-plus/plugin-sample';
 import { Enum } from 'enum-plus';
 
 Enum.install(samplePlugin);

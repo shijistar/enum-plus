@@ -51,13 +51,14 @@ What other exciting features are there? Please continue to explore! Or you can c
 - Internationalization support for display text, can be integrated with any i18n library
 - Supports converting values to display text, making UI rendering easier
 - Extensible design, allowing custom metadata fields for enum items
-- Plugin system support, extending enum functionality through plugin installations
+- Plugin system design, extending enum functionality through plugin installations
 - Supports type narrowing to enhance type safety<sup>_&nbsp;&nbsp;TypeScript_</sup>
-- Generates dropdowns from enums, compatible with UI libraries like [AntDesign](https://ant-design.antgroup.com/components/overview-cn), [ElementPlus](https://element-plus.org/zh-CN/component/select.html), [Material-UI](https://mui.com/material-ui) and more
+- Generates dropdowns from enums, compatible with UI libraries like [AntDesign](https://ant.design/components/overview), [ElementPlus](https://element-plus.org/en-US/component/overview), [Material-UI](https://mui.com/material-ui) and more
 - Supports server-side rendering (SSR)
 - Compatible with various environments including Browsers, Node.js, ReactNative, Taro, and mini-programs
-- Zero dependencies, pure JavaScript library, compatible with any front-end framework
-- 100% TypeScript implementation, better type inference capabilities
+- Compatible with any front-end development framework, including vanilla projects
+- TypeScript Oriented, providing excellent type inference and code completion capabilities
+- Zero dependencies
 - Lightweight (only 2KB+ minzipped)
 
 ## Installation
@@ -86,7 +87,7 @@ Or using yarn:
 yarn add enum-plus
 ```
 
-**Install in a browser**:
+**Zero‑Install Usage**:
 
 - The specific version:
 
@@ -648,7 +649,7 @@ const App = () => {
 };
 ```
 
-> Need to install [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) plugin
+> Need to install [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) plugin
 
 ---
 
@@ -813,7 +814,7 @@ You can see that this hover functionality reveals both documentation and enum va
 
   [ElementPlus](https://element-plus.org/en-US/component/select.html) Select
 
-  ```tsx
+  ```html
   <el-select>
     <el-option v-for="item in WeekEnum.items" v-bind="item" />
   </el-select>
@@ -821,13 +822,13 @@ You can see that this hover functionality reveals both documentation and enum va
 
   [Ant Design Vue](https://antdv.com/components/select) | [Arco Design](https://arco.design/vue/en-US/component/select) Select
 
-  ```tsx
+  ```html
   <a-select :options="WeekEnum.items" />
   ```
 
   [Vuetify](https://vuetifyjs.com/en/components/selects/) Select
 
-  ```tsx
+  ```html
   <v-select :items="WeekEnum.items" item-title="label" />
   ```
 
@@ -920,12 +921,13 @@ Enum.install(antdPlugin, {
 
 The following plugins are available. You can choose to install them based on your needs:
 
-- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd): Ant Design oriented features, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. With these methods, you can directly bind enums to the corresponding Ant Design components, greatly simplifying your code.
-- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next): i18next localization support.
-- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react): React integration, including support for `Enum.localize` to return React components, and listening for language changes to auto re-render components.
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd): Ant Design oriented features, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. With these methods, you can directly bind enums to the corresponding Ant Design components, greatly simplifying your code.
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next): Automatically adapts to [i18next](https://www.i18next.com) to enable internationalization support for enums.
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next): Automatically adapts to [react-i18next](https://react.i18next.com) to enable internationalization support for enums.
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react): React integration, including support for `Enum.localize` to return React components, and listening for language changes to auto re-render components.
 - We are working on the following plugins:
-  - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue integration, including support for `Enum.localize` to return Vue components, and listening for language changes to auto re-render components.
-  - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto re-render components. _We need your help to develop this plugin!_
+  - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue): Vue integration, including support for `Enum.localize` to return Vue components, and listening for language changes to auto re-render components.
+  - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto re-render components. _We need your help to develop this plugin!_
 
 > If the plugin you are searching for is not available, or if you want to develop your own plugin, please refer to the [Plugin Development Guide](./docs/plugin-development.md). You can develop new plugins in the official enum-plus repository or publish your developed plugins to npm and share your plugin links here. We sincerely need your help to enrich the plugin ecosystem!
 
@@ -967,7 +969,7 @@ WeekEnum.named.Monday.label; // Monday Or 星期一, depending on the current lo
 WeekEnum.name; // Week Or 周, depending on the current locale
 ```
 
-This plugin also supports custom i18next options, and even allows complete control over the `localize` method. For more details, please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options)。
+This plugin also supports custom i18next options, and even allows complete control over the `localize` method. For more details, please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options).
 
 If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue).
 
@@ -984,7 +986,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> Once you have completed the custom localization functionality, it is highly recommended to publish it as an npm package and share it in the [Awesome Plugins](#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](./docs/plugin-development.md).
+> Once you have completed this feature, it is recommended that you consider publishing it as an npm package and share it in the [Awesome Plugins](#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/main/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](./docs/plugin-development.md).
 
 ---
 
@@ -1018,11 +1020,11 @@ Enum provides a wealth of built-in methods and properties that can satisfy most 
   }
   ```
 
-  _index.js_
+  _index.ts_
 
   Then import this file in the entry file of your project:
 
-  ```js
+  ```ts
   import './my-enum-extension';
 
   WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
@@ -1097,8 +1099,8 @@ const WeekEnum = Enum({
   toList: { value: 7 }, // Naming conflict
 });
 
-Week.foo; // 1
-Week.bar; // 2
+WeekEnum.foo; // 1
+WeekEnum.bar; // 2
 // Below are all enum items, which take precedence and override the original methods
 WeekEnum.keys; // 3
 WeekEnum.values; // 4
@@ -1190,9 +1192,13 @@ enum-plus is designed to be compatible with a wide range of environments, includ
 
 In Node.js environments, you can import enum-plus using either `require` or `import` syntax.
 
-- **require**: For all Node.js versions that support CommonJS, you can import enum-plus using `require('enum-plus')`. The require statement will be resolved to the `lib` directory, which targets **`ES2015`**.
+- **require**
 
-- **import**: For modern versions of Node.js that support ES Modules (Node.js 14.13+), you can import enum-plus using `import { Enum } from 'enum-plus'`. The imports will be resolved to the `es` directory, which targets **`ES2020`**.
+  For all Node.js versions that support CommonJS, you can import enum-plus using `require('enum-plus')`. The require statement will be resolved to the `lib` directory, which targets **`ES2015`**. The minimum compatible version is Node.js `v7.x`.
+
+- **import**
+
+  For modern versions of Node.js that support ES Modules (Node.js 14.13+), you can import enum-plus using `import { Enum } from 'enum-plus'`. The imports will be resolved to the `es` directory, which targets **`ES2020`**.
 
 ---
 
