@@ -56,7 +56,7 @@
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "peerDependencies": {
-    "enum-plus": "^3.0.0",
+    "enum-plus": "^3.0.0-0",
     "i18next": ">=8.4.0"
   },
   "packageManager": "npm@10.9.2",
