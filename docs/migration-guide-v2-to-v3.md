@@ -72,8 +72,6 @@ The following methods are deprecated and permanently removed. However they both 
 
 ## 🛠 The typing declaration of extending Enums has changed
 
-<!-- 在 v2 中，扩展 Enum 类型的方式是使用全局类型的接口合并： -->
-
 In v2, the way to extend Enum types was using global type interface merging:
 
 _enum-extension.d.ts_

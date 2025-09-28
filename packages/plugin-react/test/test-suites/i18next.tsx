@@ -6,6 +6,7 @@ import { changeLanguage, createInstance } from 'i18next';
 import I18nextLocale from '../../src/components/I18nLocale';
 import { i18nextPlugin } from '../../src/index';
 import initInstance from '../data/initInstance';
+import testIsMatch from './isMatch';
 
 const testLocalization = (engine: TestEngineBase) => {
   engine.describe('The i18next plugin', () => {
@@ -162,6 +163,8 @@ const testLocalization = (engine: TestEngineBase) => {
       }
     );
   });
+
+  testIsMatch(engine, { plugin: i18nextPlugin });
 };
 
 export default testLocalization;

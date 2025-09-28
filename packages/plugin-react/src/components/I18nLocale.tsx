@@ -39,21 +39,7 @@ const I18nextLocale: FC<I18nextLocaleProps> = (props) => {
   const { i18nKey = '', instance = i18n, tOptions } = props;
 
   const getText = () => {
-    let options: TOptions | string | undefined;
-    if (typeof tOptions === 'function') {
-      options = tOptions(i18nKey, instance);
-    } else {
-      options = tOptions;
-    }
-    if (typeof options === 'string') {
-      return options;
-    } else if (options === undefined) {
-      // eslint-disable-next-line import/no-named-as-default-member
-      return instance.t(i18nKey as string);
-    } else {
-      // eslint-disable-next-line import/no-named-as-default-member
-      return instance.t(i18nKey, options as TOptions);
-    }
+    return translate({ i18nKey, instance, tOptions });
   };
   const getTextRef = useRef(getText);
   getTextRef.current = getText;
@@ -71,5 +57,30 @@ const I18nextLocale: FC<I18nextLocaleProps> = (props) => {
 
   return text;
 };
+
+export function translate(props: {
+  i18nKey: string | string[] | undefined;
+  instance?: typeof i18n;
+  tOptions?:
+    | TOptions
+    | ((key: string | undefined | (string | undefined)[], instance: typeof i18n) => TOptions | string);
+}) {
+  const { i18nKey, instance = i18n, tOptions } = props;
+  let options: TOptions | string | undefined;
+  if (typeof tOptions === 'function') {
+    options = tOptions(i18nKey, instance);
+  } else {
+    options = tOptions;
+  }
+  if (typeof options === 'string') {
+    return options;
+  } else if (options === undefined) {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return instance.t(i18nKey as string);
+  } else {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return instance.t(i18nKey as string, options as TOptions);
+  }
+}
 
 export default I18nextLocale;

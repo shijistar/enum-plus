@@ -6,18 +6,18 @@
 
 ## Introduction
 
-`@enum-plus/sample` is a plugin for `enum-plus` that adds a sample method to enums, allowing for easier manipulation and usage of enum values. This plugin is designed to enhance the functionality of enums in your application.
+`@enum-plus/plugin-sample` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that adds a sample method to enums, allowing for easier manipulation and usage of enum values. This plugin is designed to enhance the functionality of enums in your application.
 
 ## Installation
 
 ```bash
-npm install @enum-plus/sample
+npm install @enum-plus/plugin-sample
 ```
 
-Import the `@enum-plus/sample` plugin and install it in the entry file of your application:
+Import the `@enum-plus/plugin-sample` plugin and install it in the entry file of your application:
 
 ```js
-import samplePlugin from '@enum-plus/sample';
+import samplePlugin from '@enum-plus/plugin-sample';
 import { Enum } from 'enum-plus';
 
 Enum.use(samplePlugin);

@@ -6,34 +6,34 @@
 
 ## Introduction
 
-`@enum-plus/react` is a plugin for `enum-plus` that can be considered an advanced version of `@enum-plus/i18next`. It provides integration with [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/getting-started). The plugin allows you to use i18next localization keys in enum definitions and dynamically display the translated text for the current language, making it easier and more efficient to use i18next in React applications.
+`@enum-plus/plugin-react` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that can be considered an advanced version of [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next). It provides integration with [i18next](https://www.i18next.com/) and [react-i18next](https://react.i18next.com/getting-started). The plugin allows you to use i18next localization keys in enum definitions and dynamically display the translated text for the current language, making it easier and more efficient to use i18next in React applications. It automatically updates the UI after switching languages without need of refreshing the page.
 
-It differs from the `@enum-plus/i18next` plugin in the following ways:
+It differs from the `@enum-plus/plugin-i18next` plugin in the following ways:
 
-#### **@enum-plus/i18next**
+#### **@enum-plus/plugin-i18next**
 
 - Suitable for any JavaScript project, returning labels as string types, making it suitable for use in various mainstream frameworks.
 - Can be used directly for text search and other scenarios, such as using the `Array.includes` method to check if a label contains a certain substring, or binding to UI components like Select, where the search function works as expected.
 - Does not listen for language changes; when the language changes, you need to manually re-render components.
 
-#### **@enum-plus/react**
+#### **@enum-plus/plugin-react**
 
 - Designed specifically for React applications, returning labels as React components that can be used directly in JSX.
 - Listens for language changes; when the language changes, components automatically re-render without needing to refresh the page or manual intervention.
-- Since the return value is not a string type, it cannot be directly used for text search and other scenarios. For example, the `Array.includes` method cannot be used to check if a label contains a certain substring, or when bound to UI components like Select, the search function may fail. To solve this problem, it is recommended to use the `filterItem` and `filterItemCaseSensitive` methods provided in `@enum-plus/i18next`.
+- Since the return value is not a string type, it cannot be directly used for text search and other scenarios. For example, the `Array.includes` method cannot be used to check if a label contains a certain substring, or when bound to UI components like Select, the search function may fail. To solve this problem, it is recommended to use the [isMatch](#-ismatch) or [isMatchCaseSensitive](#-ismatchcasesensitive) method.
 
 ## Installation
 
 ```bash
-npm install @enum-plus/react
+npm install @enum-plus/plugin-react
 ```
 
-Import the `@enum-plus/react` plugin and install it in the entry file of your application:
+Import the `@enum-plus/plugin-react` plugin and install it in the entry file of your application:
 
 - If you are using `i18next`:
 
 ```js
-import { i18nextPlugin } from '@enum-plus/react';
+import { i18nextPlugin } from '@enum-plus/plugin-react';
 import { Enum } from 'enum-plus';
 
 Enum.install(i18nextPlugin);
@@ -42,7 +42,7 @@ Enum.install(i18nextPlugin);
 - If you are using `react-i18next`:
 
 ```js
-import { reactI18nextPlugin } from '@enum-plus/react';
+import { reactI18nextPlugin } from '@enum-plus/plugin-react';
 import { Enum } from 'enum-plus';
 
 Enum.install(reactI18nextPlugin);
@@ -68,6 +68,7 @@ Enum.install(i18nextPlugin, {
       // Other options supported by the i18next.t method
       // Please refer to https://www.i18next.com/translation-function/essentials#overview-options
     },
+    defaultSearchField: 'label', // Set the field used for searching in isMatch and isMatchCaseSensitive methods, defaults to 'label'
   },
 });
 ```
@@ -115,7 +116,7 @@ Enum.install(i18nextPlugin, {
 
 You can even return a string directly in `tOptions` as the final translated text to have full control over the behavior of the `localize` method.
 
-````ts
+```ts
 Enum.install(i18nextPlugin, {
   localize: {
     tOptions: (key) => {
@@ -126,8 +127,11 @@ Enum.install(i18nextPlugin, {
     },
   },
 });
+```
 
-## Basic Usage
+## Usage
+
+### Enum Labels Respond to Language Changes
 
 You can achieve internationalization of enum labels by using localization keys in the enum definition.
 
@@ -150,9 +154,9 @@ WeekEnum.name; // Week - ReactElement
 i18next.changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一 - ReactElement
 WeekEnum.name; // 星期 - ReactElement
-````
+```
 
-Binding to UI components:
+For the UI components generated from the enum, the labels will automatically update when the language changes:
 
 ```tsx
 import { Button, Select } from 'antd';
@@ -164,4 +168,60 @@ import { changeLanguage } from 'i18next';
 <Button onClick={() => changeLanguage('zh-CN')}>Switch Language</Button>;
 
 // After switching languages, the selected item's text will automatically update to: 星期一
+```
+
+### Dropdown Search
+
+Since the `label` of the enum has become a component instance rather than a string type, it cannot be directly used for text search. You can use the `isMatch` or `isMatchCaseSensitive` method to filter enum items.
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
+```
+
+## Other APIs
+
+### 💎 isMatch
+
+<sup>**_\[F]_**</sup> &nbsp; `isMatch(searchText: string, item: EnumItem): boolean`
+
+The `isMatch` method is used to filter enum items based on search text, supporting fuzzy matching of the `label` of enum items, and ignoring case sensitivity.
+
+> This method is only applicable when `Enum.localize` returns a non-string value. For example, in the React framework, `Enum.localize` returns a component to enable real-time UI updates when switching languages. In this case, string matching of the `label` of enum items is not possible, and you can consider using this method to filter enum items.
+
+- Dropdown search
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
+```
+
+- Regular filtering method
+
+```js
+WeekEnum.items.filter((item) => WeekEnum.isMatch('Mon', item)); // Filters enum items whose label contains 'Mon'
+```
+
+### 💎 isMatchCaseSensitive
+
+<sup>**_\[F]_**</sup> &nbsp; `isMatchCaseSensitive(searchText: string, item: EnumItem): boolean`
+
+The `isMatchCaseSensitive` method is similar to `isMatch`, but it performs case-sensitive matching.
+
+> This method is only applicable when `Enum.localize` returns a non-string value. For example, in the React framework, `Enum.localize` returns a component to enable real-time UI updates when switching languages. In this case, string matching of the `label` of enum items is not possible, and you can consider using this method to filter enum items.
+
+- Dropdown search
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatchCaseSensitive} />;
+```
+
+- Regular filtering
+
+```js
+WeekEnum.items.filter((item) => WeekEnum.isMatch('mon', item)); // Filters enum items whose label contains 'mon' (case-sensitive)
 ```

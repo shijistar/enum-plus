@@ -6,23 +6,23 @@
 
 ## Introduction
 
-`@enum-plus/plugin-i18next` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that automatically integrates with [i18next](https://www.i18next.com/) to achieve internationalization of enum labels. It allows you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
+`@enum-plus/plugin-react-i18next` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that automatically integrates with [react-i18next](https://react.i18next.com/getting-started) to achieve internationalization of enum labels. It allows you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
 
 > This plugin does not support automatic UI updates after switching languages, which requires integration with front-end frameworks (such as React, Vue, etc.). Please consider using the [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) plugins.
 
 ## Installation
 
 ```bash
-npm install @enum-plus/plugin-i18next
+npm install @enum-plus/plugin-react-i18next
 ```
 
-Import the `@enum-plus/plugin-i18next` plugin and install it in the entry file of your application:
+Import the `@enum-plus/plugin-react-i18next` plugin and install it in the entry file of your application:
 
 ```js
-import i18nextPlugin from '@enum-plus/plugin-i18next';
+import reactI18nextPlugin from '@enum-plus/plugin-react-i18next';
 import { Enum } from 'enum-plus';
 
-Enum.use(i18nextPlugin);
+Enum.use(reactI18nextPlugin);
 ```
 
 ## Plugin Options
@@ -30,7 +30,7 @@ Enum.use(i18nextPlugin);
 When installing the plugin, you can pass a configuration object to set global options for the plugin:
 
 ```ts
-Enum.use(i18nextPlugin, {
+Enum.use(reactI18nextPlugin, {
   localize: {
     // Set the i18next instance, defaults to the global i18next instance if necessary
     instance: i18next,
@@ -51,7 +51,7 @@ Enum.use(i18nextPlugin, {
 
 ```ts
 // Use function form to dynamically generate tOptions
-Enum.use(i18nextPlugin, {
+Enum.use(reactI18nextPlugin, {
   localize: {
     tOptions: (key) => {
       if (key === 'week.sunday') {
@@ -65,8 +65,8 @@ Enum.use(i18nextPlugin, {
 
 You can even return a string directly in `tOptions` as the final translated text to have full control over the behavior of the `localize` method.
 
-```ts
-Enum.use(i18nextPlugin, {
+````ts
+Enum.use(reactI18nextPlugin, {
   localize: {
     tOptions: (key) => {
       if (key === 'week.sunday') {
@@ -76,7 +76,6 @@ Enum.use(i18nextPlugin, {
     },
   },
 });
-```
 
 ## Basic Usage
 
@@ -100,4 +99,4 @@ WeekEnum.name; // Week
 i18next.changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一
 WeekEnum.name; // 星期
-```
+````

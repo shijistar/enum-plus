@@ -1,7 +1,7 @@
 {
-  "name": "@enum-plus/plugin-i18next",
+  "name": "@enum-plus/plugin-react-i18next",
   "version": "1.0.0",
-  "description": "A plugin for enum-plus that supports internationalization of enums through i18next",
+  "description": "A plugin for enum-plus that supports internationalization of enums through react-i18next",
   "keywords": [
     "enum",
     "enumeration",
@@ -10,6 +10,7 @@
     "typescript",
     "i18n",
     "i18next",
+    "react-i18next",
     "localization",
     "globalization",
     "internationalization",
@@ -57,7 +58,8 @@
   },
   "peerDependencies": {
     "enum-plus": "^3.0.0",
-    "i18next": ">=8.4.0"
+    "i18next": ">=14.0.1",
+    "react-i18next": ">=10.0.0"
   },
   "packageManager": "npm@10.9.2",
   "publishConfig": {

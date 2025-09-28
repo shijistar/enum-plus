@@ -6,58 +6,51 @@
 
 _UNRELEASED_
 
-**enum-plus v3** is coming! 🎉
+> 🎉 **v3.0 is Arrived!**
+>
+> This is a milestone release that brings many exciting features and improvements. Enjoy the new version!
+>
+> Please refer to the [Release Notes](./docs/release-v3.md) and [Migration Guide](./docs/migration-guide-v2-to-v3.md) for details.
 
 ### Features
 
-- 🔥 Introduces the new plugin system. Plugins are registered using `Enum.install`. The plugin system allows you to add new methods or properties to all enums. While similar to `Enum.extends`, the plugin system enables features to be packaged as `shareable` plugins, making it more flexible and widely applicable.
-- 🔥 introduce an official plugin `enum-plus-plugin` that provides a collection of highly shareable plugins.
-  - These plugins are designed to work in all scenarios and environments (including browser and Node.js), without introducing dependencies on third-party frameworks, component libraries, or platforms.
-  - If you have a good idea that might be specific to a certain framework or platform rather than universally applicable, we recommend creating a new plugin project (e.g., `enum-plus-plugin-xxx`). We are happy to see that, and hope that you submit a PR to `enum-plus-plugin` to link your project back.
-- 🛠 Add `const` modifier to Enum function to simplify the enum initialization. Inline initializations no longer requires `as const`. Thanks to @otomad.
+- 🔥 Introduce the new [Plugin System](./README.md#plugin-system). Many fantastic features can be shared as plugins, and you can enhance Enum by installing them.
+- Simplified enum initialization. No `as const` assertion is required on TypeScript ≥ 5.0. _Thanks to @otomad_.
+- New `enum.named` for quick access EnumItem by `key`.
+- New `enum.meta` to aggregate custom metadata fields across items.
+- New `enum.labels` returning a readonly array of labels.
+- New `enum.toList` to transform enum items to a list of `{ value, label }` objects. Supports remapping the field names via options.
+- New `enum.toMap` to transform enum items to a mapping object. Supports remapping the field names via options.
+- New `Enum.isEnum` for type guarding.
+- New `enum.findBy` to locate an item by built-in or metadata fields.
+- New `Enum.install` to install plugins.
+- Typing: `instanceof` narrowing for EnumCollection; updated `Enum.extend` typing; graceful downgrade across TS versions.
+- Ship UMD module format under `umd` folder for direct browser usage.
 
-```diff
-import { Enum } from 'enum-plus';
+### Notable Changes
 
-const MyEnum = Enum({
-  Foo: 1,
-  Bar: 2,
-- } as const);
-+ });
-```
-
-- ✨ Introduced **UMD module format** support, enabling direct browser usage without requiring a module bundler. Two variants are now available:
-
-  - `enum-plus.min.js` (ES2020) optimized for modern browsers.
-  - `enum-plus-legacy.min.js` (ES2015) for maximum compatibility.
-
-  This addition is ideal for rapid prototyping and integration with legacy systems that don't support contemporary module resolution. The UMD builds are accessible in the `umd` directory of the npm package or can be directly downloaded from [Github Releases](https://github.com/shijistar/enum-plus/releases).
-
-- The way of extending enums has been changed.
-
-```diff
--declare global {
-+declare module 'enum-plus-extend' {
-   interface EnumExtension<T, K, V> {
-     isWeekend(value: number): boolean;
-   }
-}
-```
+- The typing declaration of extending Enums has [changed](./docs/migration-guide-v2-to-v3.md#-the-typing-declaration-of-extending-enums-has-changed)
+- Recommended to upgrade TypeScript to 5.0
 
 ### Breaking Changes
 
-- 💣 the following deprecated methods are removed:
+- The following deprecated methods are removed:
   - `enums.values`
   - `enums.options`
   - `enums.menus`
   - `enums.filters`
   - `enums.valuesEnum`
-- Please use the new methods `Enum.items`, `Enum.toSelect`, `Enum.toMenu`, `Enum.toFilter`, and `Enum.toValueMap` instead, which are introduced since `v2.1.0`.
-- `ENUM_COLLECTION` symbol is renamed to `IS_ENUM`.
-- `ENUM_ITEM` symbol is renamed to `IS_ENUM_ITEM`.
-- `ENUM_ITEMS` symbol is renamed to `IS_ENUM_ITEMS`.
-- `EnumValuesArray` interface is renamed to `EnumItemsArray`, and the `...rest` parameter is removed.
-- `IEnumValues` interface is renamed to `IEnumItems`.
+- The following methods are removed from the core library and moved to the [@enum-plus/plugin-antd](https://www.npmjs.com/package/@enum-plus/plugin-antd) plugin. Please install the plugin to use them.
+  - `enums.toSelect`
+  - `enums.toMenu`
+  - `enums.toFilter`
+  - `enums.toValueMap`
+- The following symbols are renamed:
+  - `ENUM_COLLECTION` symbol is renamed to `IS_ENUM`.
+  - `ENUM_ITEM` symbol is renamed to `IS_ENUM_ITEM`.
+  - `ENUM_ITEMS` symbol is renamed to `IS_ENUM_ITEMS`.
+  - `EnumValuesArray` interface is renamed to `EnumItemsArray`, and the `...rest` parameter is removed.
+  - `IEnumValues` interface is renamed to `IEnumItems`.
 
 ### Bug Fixes
 

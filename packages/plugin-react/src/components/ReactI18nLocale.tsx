@@ -1,9 +1,9 @@
 import type { FC } from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 // eslint-disable-next-line import/no-named-as-default
-import type { TOptions } from 'i18next';
+import type { TFunction, TOptions } from 'i18next';
 import type { UseTranslationOptions as OriginalUseTranslationOptions } from 'react-i18next';
-import { useTranslation } from 'react-i18next';
+import { getI18n, useTranslation } from 'react-i18next';
 
 export interface ReactI18nextLocaleProps {
   /**
@@ -34,7 +34,12 @@ export interface ReactI18nextLocaleProps {
    *
    *   可以传递一个对象，也可以传递一个函数，函数的参数是当前的key，返回值是传递给`t`方法的选项，甚至可以直接返回一个字符串作为最终的翻译结果。
    */
-  tOptions?: TOptions | ((key: (string | undefined) | (string | undefined)[]) => TOptions | string);
+  tOptions?:
+    | TOptions
+    | ((
+        key: string | undefined | (string | undefined)[],
+        t: TFunction<string | string[], string>
+      ) => TOptions | string);
 }
 /**
  * - **EN:** A React component for rendering internationalized text using i18next. It listens for
@@ -53,26 +58,54 @@ const ReactI18nextLocale: FC<ReactI18nextLocaleProps> = (props) => {
   }, [i18nKey, useTranslationOptions]);
   const { t } = useTranslation(useOptions?.ns, useOptions);
 
-  const text = useMemo(() => {
-    let options: TOptions | string | undefined;
-    if (typeof tOptions === 'function') {
-      options = tOptions(i18nKey);
-    } else {
-      options = tOptions;
-    }
-    if (typeof options === 'string') {
-      return options;
-    } else if (options === undefined) {
-      // eslint-disable-next-line import/no-named-as-default-member
-      return t(i18nKey as string);
-    } else {
-      // eslint-disable-next-line import/no-named-as-default-member
-      return t(i18nKey, options as TOptions);
-    }
-  }, [i18nKey, t, tOptions]);
+  const getText = () => {
+    return translate({ i18nKey, t, tOptions });
+  };
+  const getTextRef = useRef(getText);
+  getTextRef.current = getText;
+  const [text, setText] = useState<string | null>(() => getText());
+
+  useEffect(() => {
+    const instance = getI18n();
+    const handler = () => {
+      setText(getTextRef.current());
+    };
+    instance.on('languageChanged', handler);
+    return () => {
+      instance.off('languageChanged', handler);
+    };
+  }, []);
 
   return text;
 };
+
+export function translate(props: {
+  i18nKey: string | string[] | undefined;
+  t: TFunction<string | string[], string>;
+  tOptions?:
+    | TOptions
+    | ((
+        key: string | undefined | (string | undefined)[],
+        t: TFunction<string | string[], string>
+      ) => TOptions | string);
+}) {
+  const { i18nKey, t, tOptions } = props;
+  let options: TOptions | string | undefined;
+  if (typeof tOptions === 'function') {
+    options = tOptions(i18nKey, t);
+  } else {
+    options = tOptions;
+  }
+  if (typeof options === 'string') {
+    return options;
+  } else if (options === undefined) {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return t(i18nKey as string);
+  } else {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return t(i18nKey as string, options as TOptions);
+  }
+}
 
 export type UseTranslationOptions<KPrefix = string> = OriginalUseTranslationOptions<KPrefix> & {
   /**
