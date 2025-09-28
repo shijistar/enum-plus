@@ -55,10 +55,11 @@
 - 支持数据类型约束，提高代码的类型安全性<sup>_&nbsp;&nbsp;TypeScript_</sup>
 - 枚举可以生成下拉框等UI组件，支持 [AntDesign](https://ant-design.antgroup.com/components/overview-cn)、[ElementPlus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 等多种组件库
 - 支持服务端渲染(SSR)
-- 支持在Web浏览器、Node.js、ReactNative、Taro、小程序等多种环境中使用
-- 零依赖，纯原生 JavaScript，支持任何前端框架
-- 100% TypeScript 实现，具有全面的类型推断能力
-- 轻量（gzip 压缩后仅 2KB+）
+- 支持 Web浏览器、Node.js、ReactNative、Taro、小程序等多种环境
+- 兼容任何前端开发框架，支持无框架的纯原生项目
+- 面向TypeScript设计，具有良好的类型推导和代码补全能力
+- 零依赖项
+- 轻量（gzip压缩后仅 2KB+）
 
 ## 安装
 
@@ -86,7 +87,7 @@ bun add enum-plus
 yarn add enum-plus
 ```
 
-**在浏览器中使用**:
+**免安装**:
 
 - 特定版本号:
 
@@ -643,13 +644,13 @@ const App = () => {
 };
 ```
 
-> 需要安装 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) 插件
+> 需要安装 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) 插件
 
 ---
 
 #### 💡 支持本地化显示文本
 
-可以支持多语言环境，将`label`字段设置为一个本地化键值，根据当前语言环境显示对应的文本。更多信息请参考 [本地化](./docs/localization.md) 章节。
+可以支持多语言环境，将`label`字段设置为一个本地化键值，根据当前语言环境显示对应的文本。更多信息请参考 [本地化](#本地化) 章节。
 
 ```js
 WeekEnum.label(1); // Monday 或 星期一，取决于当前语言环境
@@ -807,7 +808,7 @@ WeekEnum.Monday; // 将光标悬浮在 Monday 上
 
   [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
 
-  ```tsx
+  ```html
   <el-select>
     <el-option v-for="item in WeekEnum.items" v-bind="item" />
   </el-select>
@@ -815,13 +816,13 @@ WeekEnum.Monday; // 将光标悬浮在 Monday 上
 
   [Ant Design Vue](https://antdv.com/components/select-cn) | [Arco Design](https://arco.design/vue/component/select) Select
 
-  ```tsx
+  ```html
   <a-select :options="WeekEnum.items" />
   ```
 
   [Vuetify](https://vuetifyjs.com/zh-Hans/components/selects) Select
 
-  ```tsx
+  ```html
   <v-select :items="WeekEnum.items" item-title="label" />
   ```
 
@@ -894,7 +895,7 @@ import { Enum } from 'enum-plus';
 Enum.install(antdPlugin);
 ```
 
-当你安装一个插件后，插件会为所有枚举实例添加新的方法或属性。例如，安装了 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) 插件后，你可以使用 `enum.toSelect` 方法使用枚举生成一个 Select 组件。
+当你安装一个插件后，插件会为所有枚举实例添加新的方法或属性。例如，安装了 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) 插件后，你可以使用 `enum.toSelect` 方法使用枚举生成一个 Select 组件。
 
 你还可以设置插件的可选配置选项，以定制插件的行为，关于插件的配置选项，请参考各个插件的文档。
 
@@ -914,12 +915,13 @@ Enum.install(antdPlugin, {
 
 目前我们已经开发并发布了以下插件，你可以根据需要选择安装：
 
-- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd): Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
-- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next): i18next 本地化支持。
-- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react): React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd): Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next): 自动适配 [i18next](https://www.i18next.com) 以让枚举支持国际化。
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next): 自动适配 [react-i18next](https://react.i18next.com) 以让枚举支持国际化。
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react): React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
 - 我们正在开发以下插件：
-  - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
-  - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
+  - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
+  - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
 
 > 如果你没有找到需要的插件，或者你想开发自己的插件，请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。你可以在enum-plus官方仓库中开发新插件，也可以将你开发的插件发布到 npm 上，并把你的插件链接分享在这里。我们真诚地需要你的帮助，来丰富插件生态系统！
 
@@ -978,7 +980,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> 一旦你完成了自定义本地化功能，强烈建议你把它发布成一个 npm 包，并分享在[插件生态](#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。
+> 一旦你完成了这项功能，建议你考虑把它发布成一个 npm 包，并分享在[插件生态](#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/main/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。
 
 ---
 
@@ -1012,7 +1014,7 @@ Enum 提供了丰富的内置方法和属性，它们已经可以满足大多数
   }
   ```
 
-  _index.js_
+  _index.ts_
 
   然后在项目的入口文件中导入这个文件：
 
@@ -1089,8 +1091,8 @@ const WeekEnum = Enum({
   toList: { value: 7 }, // 命名冲突
 });
 
-Week.foo; // 1
-Week.bar; // 2
+WeekEnum.foo; // 1
+WeekEnum.bar; // 2
 // 以下均为枚举项，优先级更高，会覆盖掉原来的方法
 WeekEnum.keys; // 3
 WeekEnum.values; // 4
@@ -1182,8 +1184,13 @@ enum-plus 设计之初就考虑了广泛的兼容性需求，可无缝运行于�
 
 在 Node.js 环境下，支持通过 `require` 或 `import` 语法引入 enum-plus。
 
-- **require**: 对于所有支持 CommonJS 的 Node.js 版本，均可通过 `require('enum-plus')` 方式引入 enum-plus。代码引入的是 `lib` 目录，对应的 EcmaScript 版本是 **`ES2015`**。最低可以兼容到 Node.js `v7.x` 版本。
-- **import**: 对于支持 ES Module 的 Node.js 现代版本（Node.js 14.13+），可以通过 `import { Enum } from 'enum-plus'` 方式引入 enum-plus。代码引入的是 `es` 目录，对应的 EcmaScript 版本是 **`ES2020`**。
+- **require**
+
+  对于所有支持 CommonJS 的 Node.js 版本，均可通过 `require('enum-plus')` 方式引入 enum-plus。代码引入的是 `lib` 目录，对应的 EcmaScript 版本是 **`ES2015`**。Node.js版本最低可以向下兼容到 `v7.x`。
+
+- **import**
+
+  对于支持 ES Module 的 Node.js 现代版本（Node.js 14.13+），可以通过 `import { Enum } from 'enum-plus'` 方式引入 enum-plus。代码引入的是 `es` 目录，对应的 EcmaScript 版本是 **`ES2020`**。
 
 ---
 
