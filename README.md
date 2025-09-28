@@ -35,9 +35,13 @@
 
 ## Introduction
 
-`enum-plus` is an enhanced enumeration library that is fully compatible with the native `enum` usage and serves as a drop-in replacement library. It supports adding display text to enum items and extending more custom metadata fields, making it suitable as a static configuration system. The enum texts support internationalization, allowing you to convert values into display text in the current language, which is very helpful for UI rendering of business data. Enums can be generated into various UI components such as dropdowns, which is very useful for front-end development. The library also provides a series of extension methods for iterating over enum items and data transformations. It is a lightweight, zero-dependency library implemented in 100% TypeScript, and works with any front-end framework.
+`enum-plus` is an enhanced enumeration library that is fully compatible with the native `enum` and serves as a drop-in replacement library. It supports adding display text to enum items and extending more custom metadata fields. Enums can be generated into various UI components such as dropdowns, menus, which simplifies front-end developers a lot.
 
-What other exciting features are there? Please continue to explore! Or you can check out this usage video first.
+It also provides many extension methods for iterating over enum items and data transformations. You can convert values directly into names in the current language, since it supports internationalization. It's very useful for displaying business data on the UI.
+
+It is a lightweight, zero-dependency library that implemented in TypeScript, and it works with any front-end framework, including vanilla projects.
+
+What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
 <p align="center">
   <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
@@ -47,9 +51,9 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 - Fully compatible with native `enum` usage
 - Supports multiple data types such as `number` and `string`
-- Enhanced enum items, supporting display text
-- Internationalization support for display text, can be integrated with any i18n library
-- Supports converting values to display text, making UI rendering easier
+- Enhanced enum items with display names
+- Internationalization support for display names, can be integrated with any i18n library
+- Converts values directly into display names, simplifying data displaying in the UI
 - Extensible design, allowing custom metadata fields for enum items
 - Plugin system design, extending enum functionality through plugin installations
 - Supports type narrowing to enhance type safety<sup>_&nbsp;&nbsp;TypeScript_</sup>
@@ -146,7 +150,7 @@ WeekEnum2.Monday; // 'Mon'
 
 ### 2. Standard Format (Recommended)
 
-The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display text for each enum item, which can be used in UI components. For enabling localization support for the `label` field, please refer to the [Localization](#localization) section.
+The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display name for each enum item, which can be used in UI components. For enabling localization support for the `label` field, please refer to the [Localization](#localization) section.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -349,7 +353,7 @@ WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: 'Monday' 
 
 <sup>**_\[F]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-Gets the display text of an enum item based on a certain value or key. If localization has been set up, the localized text will be returned.
+Gets the display name of an enum item based on a certain value or key. If localization has been set up, the localized text will be returned.
 
 ```js
 WeekEnum.label(1); // Monday
@@ -755,7 +759,7 @@ const AllColorEnum = Enum({
 
 #### 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
 
-Supports inline documentation through JSDoc, allowing developers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](./docs/best-practices.md) section for writing good code.
+Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](./docs/best-practices.md) section for writing good code.
 
 ```js
 const WeekEnum = Enum({
@@ -1204,24 +1208,28 @@ In Node.js environments, you can import enum-plus using either `require` or `imp
 
 ## Q&A
 
-### Why do you need this library? TypeScript already has a built-in enum type
+### Why do I need this library? TypeScript already has the built-in enum
 
-TypeScript's built-in enum type (`enum`) only implements the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type), which is to prevent magic numbers and control flow. However, for a front-end engineer, the use cases for enums go beyond this. We also need:
+TypeScript's built-in enum type (`enum`) only implements the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type), which is to prevent magic numbers and conditional branching. However, as a front-end engineer, the needs for enumerations are not merely these. We also need:
 
-1. _Avoid magic numbers_
-2. _Control flow in `if` or `switch` statements_
-3. **Add display text to enums, so that enums can be directly used to generate various form controls, such as dropdowns, checkboxes, tabs, labels, etc.**
-4. **Enum text should ideally support internationalization**
-5. **Extend enums with additional metadata fields, such as color, icon, description, etc.**
-6. **Quickly convert a number to the corresponding internationalized text, making it easy to displayed business data**
+TypeScript's built-in enum only provides the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type): preventing magic numbers and regulating control flow. However, as a front-end engineer, the needs for enumerations are not merely these. We also need:
+
+1. _Eliminate magic numbers_
+2. _Used in the if or switch statements for conditional branching_
+3. **Add display names to enums, and should support internationalization**
+4. **Add custom metadata fields, such as color, icon, and description, etc.**
+5. **Enums can be generated into various form controls such as dropdowns, menus, tabs, etc.**
+6. **Convert values directly into localized names for displaying business data in the UI**
 
 If you need these features, then `enum-plus` is designed for you. If you are a front-end engineer, we strongly recommend you give it a try!
 
 ### It seems that TypeScript is going to deprecate enum?
 
-Regardless of whether the `enum` feature will be replaced in the future, the concept of **enumeration** will not disappear. It is one of the most basic features in many high-level languages. `enum-plus` was born to make up for the shortcomings of TypeScript's built-in enum, and it is a purely runtime library that will not be affected by the development of the TypeScript language. So you can use it with confidence. It will neither become obsolete nor be deprecated in the future.
+Whether the enum **feature** will be replaced in the future or not, the **concept** of enumeration will never disappear. It is one of the most basic features in many high-level languages.
 
-> The TypeScript team does not have a clear plan to abolish `enum`, but it may indeed be prohibited in [some cases](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly). The fundamental reason is that `enum` is neither a purely TypeScript type (completely removed at compile time) nor purely JavaScript runtime code, but a mixture of both, which brings significant complexity to the compiler.
+`enum-plus` was precisely created to make up for the shortcomings of TypeScript's built-in enum. It is a pure runtime library and will not be affected by the development of the TypeScript language. Therefore, you can use it with complete confidence. It will neither become outdated nor be deprecated in the future.
+
+> The TypeScript team does not have a clear plan to deprecate enum. However, it is indeed not supported in [some cases](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly). The key reason is that enum is neither a pure TypeScript type (which can be completely removed during compilation) nor pure JavaScript runtime code, but a mixture of the two, which brings significant complexity to the compiler.
 
 ### Why doesn't the search function work in Ant Design's Select component, after localization is enabled?
 
