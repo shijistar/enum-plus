@@ -1204,27 +1204,40 @@ In Node.js environments, you can import enum-plus using either `require` or `imp
 
 ## Q&A
 
-### 1. Why does the search function of the antd dropdown not work after localization?
+### Why do you need this library? TypeScript already has a built-in enum type
 
-This occurs because Ant Design's dropdown search functionality performs string matching against the `label` property. When using React components for labels (after localization), the string matching fails since it's comparing against component objects rather than primitive strings.
+TypeScript's built-in enum type (`enum`) only implements the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type), which is to prevent magic numbers and control flow. However, for a front-end engineer, the use cases for enums go beyond this. We also need:
 
-The solution is to extend an enum with a `filterOption` method to help the Select component customize the search function, which will allow it to support the search functionality correctly.
+1. _Avoid magic numbers_
+2. _Control flow in `if` or `switch` statements_
+3. **Add display text to enums, so that enums can be directly used to generate various form controls, such as dropdowns, checkboxes, tabs, labels, etc.**
+4. **Enum text should ideally support internationalization**
+5. **Extend enums with additional metadata fields, such as color, icon, description, etc.**
+6. **Quickly convert a number to the corresponding internationalized text, making it easy to displayed business data**
 
-You can refer to the code example below:
+If you need these features, then `enum-plus` is designed for you. If you are a front-end engineer, we strongly recommend you give it a try!
+
+### It seems that TypeScript is going to deprecate enum?
+
+Regardless of whether the `enum` feature will be replaced in the future, the concept of **enumeration** will not disappear. It is one of the most basic features in many high-level languages. `enum-plus` was born to make up for the shortcomings of TypeScript's built-in enum, and it is a purely runtime library that will not be affected by the development of the TypeScript language. So you can use it with confidence. It will neither become obsolete nor be deprecated in the future.
+
+> The TypeScript team does not have a clear plan to abolish `enum`, but it may indeed be prohibited in [some cases](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly). The fundamental reason is that `enum` is neither a purely TypeScript type (completely removed at compile time) nor purely JavaScript runtime code, but a mixture of both, which brings significant complexity to the compiler.
+
+### Why doesn't the search function work in Ant Design's Select component, after localization is enabled?
+
+This is because `Enum.localize` returns a component object instead of a regular string, causing antd to fail in performing string matching correctly. Please use the `enum.isMatch` method to implement custom search functionality. For more information, please refer to [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/next/packages/plugin-react#dropdown-search).
+
+```bash
+npm install @enum-plus/plugin-react
+```
 
 ```tsx
 import { Select } from 'antd';
-import { Enum, type EnumItemClass } from 'enum-plus';
 
-Enum.extends({
-  filterOption: (search?: string, option?: EnumItemClass<number | string>) => {
-    const label = $t(option?.raw?.label ?? '') ?? option?.value;
-    return !search || label?.toUpperCase().includes(search.toUpperCase());
-  },
-});
-
-// <Select options={WeekEnum.items} filterOption={WeekEnum.filterOption} />;
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
 ```
+
+> If you are using the `@enum-plus/plugin-i18next` plugin, or have implemented the `Enum.localize` method yourself and it returns a string, then the search functionality in the dropdown should work correctly.
 
 ## Contributing
 
