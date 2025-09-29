@@ -118,6 +118,10 @@ export class EnumItemsArray<
         });
       }
     });
+    // Freeze meta arrays
+    Object.keys(meta).forEach((k) => {
+      Object.freeze(meta[k as keyof typeof meta]);
+    });
 
     // Generate values array
     const values = parsed.map((item) => item.value);
@@ -399,7 +403,7 @@ export interface IEnumItems<
    * > 注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
    *
    * @returns {string | undefined} The localized name of the enum collection, or undefined if not
-   *   set.
+   *   set | 枚举集合的本地化名称，如果未设置则为 undefined
    */
   readonly name?: string;
   /**
@@ -560,7 +564,7 @@ export interface IEnumItems<
    * @param field The field to search by | 要查找的字段
    * @param value The value to search | 要查找的值
    *
-   * @returns The found enumeration item or undefined if not found | 找到的枚举项，如果未找到则返回 undefined
+   * @returns The found enumeration item or `undefined` if not found | 找到的枚举项，如果未找到则返回 `undefined`
    */
   findBy<FK extends 'key' | 'value' | 'label' | Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>, const FV>(
     field: FK,
@@ -592,6 +596,8 @@ export interface IEnumItems<
    *     { value: 0, label: 'Sunday' },
    *     { value: 1, label: 'Monday' },
    *   ];
+   *
+   * @returns An object array of all enumeration items | 所有枚举项的对象数组
    */
   toList(): ListItem<V, 'value', 'label'>[];
   /**
@@ -612,6 +618,9 @@ export interface IEnumItems<
    *
    * @param config Custom options, supports customizing value and label field names |
    *   自定义选项，支持自定义值和标签字段名
+   *
+   * @returns An object array of all enumeration items in the specified value and label fields |
+   *   所有枚举项的对象数组，按照指定的值和标签字段格式
    */
   toList<
     FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
@@ -636,6 +645,8 @@ export interface IEnumItems<
    *     "0": "Sunday",
    *     "1": "Monday"
    *   }
+   *
+   * @returns A mapping object of all enum items | 所有枚举项的映射对象
    */
   toMap(): MapResult<T, 'value', 'label', K, V>;
   /**
@@ -659,6 +670,9 @@ export interface IEnumItems<
    *   });
    *
    * @param config Custom options, supports customizing key and value fields | 自定义选项，支持自定义键和值字段
+   *
+   * @returns A mapping object of all enum items in the specified key and value fields |
+   *   所有枚举项的映射对象，按照指定的键和值字段格式
    */
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -3,11 +3,13 @@ import type { EnumItemInit, EnumKey, EnumValue, LocalizeInterface, ValueTypeFrom
 import { IS_ENUM_ITEM } from './utils';
 
 /**
- * Enum item class
+ * - **EN:** Represents a single item in an enumeration collection.
+ * - **CN:** 表示枚举集合中的单个枚举项
  *
- * @template V General type for item value
- * @template K General type for item key
- * @template T General type for item initialization object
+ * @template T Represents the type of the enum item's initialization object | 表示枚举项初始化对象的类型
+ * @template V Represents the type of the enum item's value (usually string or number) |
+ *   表示枚举项值的类型（通常是字符串或数字）
+ * @template K Represents the type of the enum item's key | 表示枚举项键的类型
  */
 export class EnumItemClass<
   T extends EnumItemInit<V>,
@@ -21,13 +23,14 @@ export class EnumItemClass<
   private _localize: (content: string | undefined) => any;
 
   /**
-   * Instantiate an enum item
+   * - **EN:** Creates an instance of EnumItemClass.
+   * - **CN:** 创建 EnumItemClass 的实例
    *
-   * @param key Enum item key
-   * @param value Enum item value
-   * @param label Enum item display name
-   * @param raw Original initialization object
-   * @param options Construction options
+   * @param key The key of the enum item | 枚举项键
+   * @param value The value of the enum item | 枚举项值
+   * @param label The display name of the enum item | 枚举项显示名称
+   * @param raw The original initialization object | 原始初始化对象
+   * @param options Optional settings for the enum item | 枚举项的可选设置
    */
   constructor(key: K, value: V, label: string, raw: T, options?: EnumItemOptions) {
     this.key = key;
@@ -127,36 +130,74 @@ export class EnumItemClass<
     return true;
   }
   /**
-   * Auto convert to a correct primitive type. This method is called when the object is used in a
-   * context that requires a primitive value.
+   * - **EN:** Auto convert to a correct primitive type. This method is called when the object is used
+   *   in a context that requires a primitive value.
    *
-   * The priority of this method is higher than both `valueOf` and `toString` methods.
+   * > The priority of this method is higher than both `valueOf` and `toString` methods.
    *
-   * @param hint 'number' | 'string' | 'default'
+   * - **CN:** 自动转换为正确的原始类型。当对象被用在需要原始值的上下文中时会调用此方法。
    *
-   * @returns V | string
+   * > 此方法的优先级高于 `valueOf` 和 `toString` 方法。
+   *
+   * @param hint {'number' | 'string' | 'default'} - A string indicating the preferred type of the
+   *   result | 指示结果的首选类型
+   *
+   * @returns The primitive value of the enum item, either its value or label based on the hint |
+   *   枚举项的原始值，根据提示返回其值或标签
    */
   // @ts-expect-error: because don't want show `Symbol` in vscode's intellisense, it should work in background
   private [Symbol.toPrimitive](this: EnumItemClass<T, K, V>, hint: 'number' | 'string' | 'default'): V | string {
     if (hint === 'number') {
-      // for cases like Number(value) or +value
+      // for the cases like Number(value) or +value
       return this.valueOf();
     } else if (hint === 'string') {
-      // for cases like String(value), `${value}`
+      // for the cases like String(value), `${value}`
       return this.toString();
     }
-    // for cases like '' + value, value == 1
+    // for the cases like '' + value, value == 1
     return this.valueOf();
   }
 
-  // The priority of the toString method is lower than the valueOf method
+  /**
+   * - **EN:** Returns the string representation of the enum item, which is its label. This method is
+   *   called when the object is used in a context that requires a string value, such as string
+   *   concatenation or template literals.
+   *
+   * > The priority of this method is lower than the `valueOf` method
+   *
+   * - **CN:** 返回枚举项的字符串表示形式，即其显示名称。当对象被用在需要字符串值的上下文中时会调用此方法，例如字符串连接或模板字面量。
+   *
+   * > 此方法的优先级低于 `valueOf` 方法
+   *
+   * @returns The display name of the enum item | 枚举项的显示名称
+   */
   toString() {
     return this.label;
   }
+  /**
+   * - **EN:** Returns the localized string representation of the enum item, which is its label. This
+   *   method is called when the object is used in a context that requires a localized string value,
+   *   such as `toLocaleString` method.
+   * - **CN:** 返回枚举项的本地化字符串表示形式，即其显示名称。当对象被用在需要本地化字符串值的上下文中时会调用此方法，例如 `toLocaleString` 方法。
+   *
+   * @returns The localized display name of the enum item | 枚举项的本地化显示名称
+   */
   toLocaleString() {
     return this.toString();
   }
-  // The priority of the valueOf method is lower than Symbol.toPrimitive method
+  /**
+   * - **EN:** Returns the primitive value of the enum item, which is its value. This method is called
+   *   when the object is used in a context that requires a primitive value, such as mathematical
+   *   operations.
+   *
+   * > The priority of this method is higher than the `toString` method
+   *
+   * - **CN:** 返回枚举项的原始值，即其值。当对象被用在需要原始值的上下文中时会调用此方法，例如数学运算。
+   *
+   * > 此方法的优先级高于 `toString` 方法
+   *
+   * @returns The value of the enum item | 枚举项的值
+   */
   valueOf() {
     return this.value;
   }

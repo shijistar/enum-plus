@@ -15,6 +15,10 @@ import type {
 import type { ENUM_OPTIONS, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
 import { IS_ENUM } from './utils';
 
+/**
+ * - **EN:** Create an enum collection
+ * - **CN:** 创建一个枚举集合
+ */
 export const Enum = (<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
@@ -340,6 +344,10 @@ export type IEnum<
          *
          * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
          * > any modification methods
+         *
+         * - **CN:** 获取枚举项的全部meta信息列表
+         *
+         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
          */
         readonly meta: IEnumItems<T, K, V>['meta'];
       });
