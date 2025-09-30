@@ -44,7 +44,7 @@ It is a lightweight, zero-dependency library, and it works with any front-end fr
 What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
 <p align="center">
-  <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
+  <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
 </p>
 
 <details>

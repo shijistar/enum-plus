@@ -44,7 +44,7 @@
 还有哪些令人兴奋的特性呢？请继续探索吧！或者不妨先看下这个使用视频。
 
 <p align="center">
-   <img src="./public/usage-screenshot.gif" width="500" alt="usage video" />
+   <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
 </p>
 
 <details>
