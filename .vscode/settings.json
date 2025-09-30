@@ -4,5 +4,6 @@
     "source.fixAll.eslint": "explicit"
   },
   "cSpell.words": ["jsoneo", "madhead", "shijistar", "softprops", "tses", "Vuetify"],
-  "i18n-ally.localesPaths": []
+  "i18n-ally.localesPaths": [],
+  "commentTranslate.hover.enabled": false
 }
