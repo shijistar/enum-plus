@@ -1,6 +1,6 @@
 {
   "name": "@enum-plus/plugin-antd",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "description": "A plugin for enum-plus that provides functionality to bind enums to Ant Design",
   "keywords": [
     "enum",
