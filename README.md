@@ -23,8 +23,8 @@
 
 [![Node compatibility](https://img.shields.io/node/v/enum-plus?logo=nodedotjs&label=Node.js&color=2185D0&cacheSeconds=86400)](https://github.com/shijistar/enum-plus)
 [![Web Browsers](https://img.shields.io/badge/Web%20Browser-2185D0?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAABa1BMVEUAAAD/1kZap04co1BLr1H/1kZKr0//zDbmXC6IzZv95Y390jpLr09Lr0//1kT/1kU8rE/aeibNi13NfUz3kUrDjVrZaTjZWib2YSn2YSj3iC33xRp7q1/91kX9211cuWxBsWv81VL/10f1jhX411Uqpk771Ub2byLNazVTq0xAq09Lr0/91EBAqk6SwFkipFD8zi/GZiz1dSHGYCb2dSDKykirw0oup0/6yiO2dzn2fhuzdDVKrlD1fxv1gBtHrU+hcCr4wRT3Vi1Lr1D/1kVHr1D+1T//10b3Uyr3TyUel+wWj+f2hhn6yiT3SR74wxOn2PmdzfINh+FErVA8rFAxqFD90Tf8zjD2Ow3j8/7g7/sinO8Zk+kRi+QIgt73RBin1fYto/EMgt3J58z88MLYvJxBrVA5qlAqplAkpFD0WC33QBOu3Pvf7vre7vqgzfG748v97rtRqk1knUSBiDembSftUiTFWBrhRxFiNA5aAAAAQnRSTlMAUQX89dtVBfv6+fHapqSJUQ39/f38/Pz7+/j48/Py8fHx7+7s6+fj4t7d3NjX1dXRz8/OzsHApqWTk46MiomAfUvELz/2AAABGUlEQVQoz52P11rCQBBGQ4mhKIK999577ytKEo2JgiaxgAIWsPfHd3Z2JXDLuTzn+ydZoWwiy0O+XK55cCVS6ld9sR1G03qRdk/LcgwKY8YJs5qGgTP377fMpCYXlw1+aPg3T0tDTV3LAdIrYaggn2Ze+85aum69tR5RtjFUEfJjJrOP1+eKksocUpYwVBLyYTZa4C9U1e4+A6YweAkhX7U69ZfHRuAUCBbCe72O/soI7AFBfgposxXqb547aBjjH6ekUyr4l8wuJcR/F4h607ZhPL32YXCxB46Cj57cdvr9XRPoRUlgEwzxu8SDZ4APOGt0EE/cexbQVwsFNtmgv30fAO8QHqGDedAi3nFwhxcnx3vEkEsSyuUPnANWVoDZ/WEAAAAASUVORK5CYII=)](https://www.npmjs.com/package/enum-plus)
-[![ReactNative](https://img.shields.io/badge/ReactNative-2185D0?logo=react)](https://reactnative.dev)
-[![MicroProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/en/dev/framework)
+[![React Native](https://img.shields.io/badge/ReactNative-2185D0?logo=react)](https://reactnative.dev)
+[![MiniProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/en/dev/framework)
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://docs.taro.zone/en/docs)
 
 ⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Static Methods](#static-methods) | [User Stories](#user-stories) | [Plugin System](#plugin-system) | [Localization](#localization) | [Extensibility](#extensibility) | [Naming Conflicts](#naming-conflicts) | [Best Practices](#best-practices) | [Compatibility](#compatibility) | [Q&A](#qa) | [Contributing](#contributing)&nbsp; ⬇️
@@ -35,11 +35,11 @@
 
 ## Introduction
 
-`enum-plus` is an enhanced enumeration library that is fully compatible with the native `enum` and serves as a drop-in replacement library. It supports adding display text to enum items and extending more custom metadata fields. Enums can be generated into various UI components such as dropdowns, menus, which simplifies front-end developers a lot.
+`enum-plus` is an enhanced enumeration library that is fully compatible with the native `enum` and serves as a drop-in replacement library. It supports adding display text to enum items and extending more custom metadata fields. Enums can be generated into various UI components such as dropdowns and menus, which greatly simplifies front-end development.
 
-It also provides many extension methods for iterating over enum items and data transformations. You can convert values directly into names in the current language, since it supports internationalization. It's very useful for displaying business data on the UI.
+It also provides many extension methods for iterating over enum items and data transformations. You can convert values directly into names in the current language, since it supports internationalization. It's very useful for displaying business data in the UI.
 
-It is a lightweight, zero-dependency library that implemented in TypeScript, and it works with any front-end framework, including vanilla projects.
+It is a lightweight, zero-dependency library, and it works with any front-end framework, including vanilla projects.
 
 What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
@@ -53,15 +53,15 @@ What other exciting features are there? Please continue to explore! Or you can c
 - Supports multiple data types such as `number` and `string`
 - Enhanced enum items with display names
 - Internationalization support for display names, can be integrated with any i18n library
-- Converts values directly into display names, simplifying data displaying in the UI
+- Converts values directly into display names, simplifying data display in the UI
 - Extensible design, allowing custom metadata fields for enum items
 - Plugin system design, extending enum functionality through plugin installations
 - Supports type narrowing to enhance type safety<sup>_&nbsp;&nbsp;TypeScript_</sup>
-- Generates dropdowns from enums, compatible with UI libraries like [AntDesign](https://ant.design/components/overview), [ElementPlus](https://element-plus.org/en-US/component/overview), [Material-UI](https://mui.com/material-ui) and more
+- Generates dropdowns from enums, compatible with UI libraries like [Ant Design](https://ant.design/components/overview), [Element Plus](https://element-plus.org/en-US/component/overview), [Material-UI](https://mui.com/material-ui) and more
 - Supports server-side rendering (SSR)
-- Compatible with various environments including Browsers, Node.js, ReactNative, Taro, and mini-programs
+- Compatible with various environments including Browsers, Node.js, React Native, Taro, and mini-programs
 - Compatible with any front-end development framework, including vanilla projects
-- TypeScript Oriented, providing excellent type inference and code completion capabilities
+- TypeScript‑oriented, providing excellent type inference and code completion capabilities
 - Zero dependencies
 - Lightweight (only 2KB+ minzipped)
 
@@ -118,7 +118,7 @@ yarn add enum-plus
 - [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.min.js.gz)
 - [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (Full package with sourcemap)
 
-> You can also download these files from the [Github Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.0.0).
+> You can also download these files from the [GitHub Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.0.0).
 
 ## Enum Initialization
 
@@ -148,9 +148,11 @@ const WeekEnum2 = Enum({
 WeekEnum2.Monday; // 'Mon'
 ```
 
+> If your project uses TypeScript and the version is below 5.0, it is recommended to add the `as const` type assertion to the parameter of the `Enum` method. In this way, the enum values will remain their original literal values instead of being converted to `number` or `string`. For more details, please refer to [here](#do-i-have-to-upgrade-typescript-to-version-50).
+
 ### 2. Standard Format (Recommended)
 
-The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display name for each enum item, which can be used in UI components. For enabling localization support for the `label` field, please refer to the [Localization](#localization) section.
+The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display name for each enum item, which can be used in UI components. Please refer to the [Localization](#localization) section for internationalization support.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -454,9 +456,9 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 `string`
 
-Display name for Enum types. When creating an enum, you can assign it a display name using the optional `name` parameter. This name can be either a plain string or a localization key to support internationalized text. For more details on localization, see the [Localization](#localization) section.
+Display name for Enum types. When creating an enum, you can assign it a display name using the optional `name` parameter. This name can be either a plain string or a localization key to support internationalized text. Please refer to the [Localization](#localization) section for more details.
 
-> Usually Enums are used to generate dropdown menus in form, or show item text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its items' labels, simplifying maintenance and ensuring consistency across your application.
+> Usually Enums are used to generate dropdown menus in forms, or show item text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its items' labels, simplifying maintenance and ensuring consistency across your application.
 
 ```js
 const WeekEnum = Enum(
@@ -499,7 +501,7 @@ const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ Type error, 8 is 
 
 `key1 | key2 | ...`
 
-Similar to `valueType`, provides an union type of all enum `key`(s)
+Similar to `valueType`, provides a union type of all enum `key`(s)
 
 ```typescript
 type WeekKeys = typeof WeekEnum.keyType; // 'Sunday' | 'Monday'
@@ -533,7 +535,7 @@ type WeekRaw = typeof WeekEnum.rawType;
 
 <sup>**_\[F]_**</sup> &nbsp; `isEnum(obj: any): boolean`
 
-Check if a given object is an instance which was created by `Enum` function.
+Check if a given object is an instance created by the `Enum` function.
 
 ```js
 Enum.isEnum(WeekEnum); // true
@@ -619,7 +621,7 @@ if (WeekEnum.has(value)) {
 
 #### 💡 Check for Enum Objects
 
-```js
+```ts
 let values: number[] | undefined;
 if (Enum.isEnum(data)) {
   values = data.values;
@@ -657,9 +659,9 @@ const App = () => {
 
 ---
 
-#### 💡 Enable Localization for Enum Labels
+#### 💡 Internationalization for Enum Names and Labels
 
-Support internationalization. Set the `label` field to a localization key, it can display the corresponding text based on the current language environment. For more information, please refer to the [Localization](#localization) section.
+Support internationalization. Set the `label` field to a localization key, so that it displays the corresponding text based on the current language environment. Please refer to the [Localization](#localization) section for more details.
 
 ```js
 WeekEnum.label(1); // Monday or 星期一, depending on the current locale
@@ -669,7 +671,7 @@ WeekEnum.name; // Week or 周, depending on the current locale
 
 ---
 
-#### 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+#### 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 ```ts
 type MyComponentProps = {
@@ -696,9 +698,7 @@ setDay(8); // ❌ Error, 8 is not a valid enum value
 
 ---
 
-<!-- #### 💡 添加元数据字段，可以作为静态全局配置系统使用 -->
-
-#### 💡 Support Metadata Fields That Serves as a Static Configuration System
+#### 💡 Support Metadata Fields That Can Serve as a Static Configuration System
 
 ```js
 const ColorEnum = Enum({
@@ -717,7 +717,7 @@ ColorEnum.named.Red.raw.icon; // '🔥'
 
 ---
 
-#### Supports Traversing Enum Items, in a Read-Only Manner
+#### Supports Traversing Enum Items in a Read-Only Manner
 
 ```js
 Array.isArray(WeekEnum.items); // true
@@ -816,7 +816,7 @@ You can see that this hover functionality reveals both documentation and enum va
 
 - **Vue-based UI libraries**
 
-  [ElementPlus](https://element-plus.org/en-US/component/select.html) Select
+  [Element Plus](https://element-plus.org/en-US/component/select.html) Select
 
   ```html
   <el-select>
@@ -871,12 +871,12 @@ const data = await getPetsData();
 // [   { id: 1, code: 'dog', name: 'Dog' },
 //     { id: 2, code: 'cat', name: 'Cat' },
 //     { id: 3, code: 'rabbit', name: 'Rabbit' }   ];
-const PetTypesEnum = Enum(data, {
+const PetTypeEnum = Enum(data, {
   getValue: 'id',
   getLabel: 'name',
   getKey: 'code', // getKey is optional
 });
-PetTypesEnum.items; // The output is:
+PetTypeEnum.items; // The output is:
 // [   { value: 1, label: 'Dog', key: 'dog' },
 //     { value: 2, label: 'Cat', key: 'cat' },
 //     { value: 3, label: 'Rabbit', key: 'rabbit' }   ]
@@ -885,7 +885,7 @@ PetTypesEnum.items; // The output is:
 `getValue`, `getLabel`, `getKey` can also be a function to handle more complex business logic, for example:
 
 ```js
-const PetTypesEnum = Enum(petTypes, {
+const PetTypeEnum = Enum(petTypes, {
   getValue: (item) => item.id,
   getLabel: (item) => `${item.name} (${item.code})`,
   getKey: (item) => item.code,
@@ -968,12 +968,12 @@ const WeekEnum = Enum(
   },
   { name: 'weekDays.name' }
 );
-WeekEnum.label(1); // Monday Or 星期一, depending on the current locale
-WeekEnum.named.Monday.label; // Monday Or 星期一, depending on the current locale
-WeekEnum.name; // Week Or 周, depending on the current locale
+WeekEnum.label(1); // Monday or 星期一, depending on the current locale
+WeekEnum.named.Monday.label; // Monday or 星期一, depending on the current locale
+WeekEnum.name; // Week or 周, depending on the current locale
 ```
 
-This plugin also supports custom i18next options, and even allows complete control over the `localize` method. For more details, please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options).
+This plugin also supports custom i18next options, and even allows complete control over the `localize` method. Please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options) for more details.
 
 If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue).
 
@@ -1011,7 +1011,7 @@ Enum provides a wealth of built-in methods and properties that can satisfy most 
       return this.items.map((item) => ({ value: item.value, title: item.label }));
     },
     reversedItems() {
-      return this.items.reverse();
+      return this.items.toReversed();
     },
   });
 
@@ -1047,7 +1047,7 @@ Enum provides a wealth of built-in methods and properties that can satisfy most 
       return this.items.map((item) => ({ value: item.value, title: item.label }));
     },
     reversedItems() {
-      return this.items.reverse();
+      return this.items.toReversed();
     },
   });
   ```
@@ -1192,7 +1192,7 @@ enum-plus is designed to be compatible with a wide range of environments, includ
   - `@babel/preset-env` with appropriate `useBuiltIns` settings
   - Alternative polyfill implementations
 
-### **Node.js Environments**
+### Node.js Environments
 
 In Node.js environments, you can import enum-plus using either `require` or `import` syntax.
 
@@ -1210,12 +1210,10 @@ In Node.js environments, you can import enum-plus using either `require` or `imp
 
 ### Why do I need this library? TypeScript already has the built-in enum
 
-TypeScript's built-in enum type (`enum`) only implements the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type), which is to prevent magic numbers and conditional branching. However, as a front-end engineer, the needs for enumerations are not merely these. We also need:
-
-TypeScript's built-in enum only provides the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type): preventing magic numbers and regulating control flow. However, as a front-end engineer, the needs for enumerations are not merely these. We also need:
+TypeScript's built-in enum only provides the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type): eliminating magic numbers, and regulating control flow. However, as a front-end engineer, the needs for enumerations are not merely these. We also need:
 
 1. _Eliminate magic numbers_
-2. _Used in the if or switch statements for conditional branching_
+2. _Used in the `if` or `switch` statements for conditional branching_
 3. **Add display names to enums, and should support internationalization**
 4. **Add custom metadata fields, such as color, icon, and description, etc.**
 5. **Enums can be generated into various form controls such as dropdowns, menus, tabs, etc.**
@@ -1231,9 +1229,23 @@ Whether the enum **feature** will be replaced in the future or not, the **concep
 
 > The TypeScript team does not have a clear plan to deprecate enum. However, it is indeed not supported in [some cases](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly). The key reason is that enum is neither a pure TypeScript type (which can be completely removed during compilation) nor pure JavaScript runtime code, but a mixture of the two, which brings significant complexity to the compiler.
 
-### Why doesn't the search function work in Ant Design's Select component, after localization is enabled?
+### How about the performance of this library?
 
-This is because `Enum.localize` returns a component object instead of a regular string, causing antd to fail in performing string matching correctly. Please use the `enum.isMatch` method to implement custom search functionality. For more information, please refer to [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/next/packages/plugin-react#dropdown-search).
+`enum-plus` always focuses on performance. One of its design goals is to maintain efficient performance while providing rich functionality.
+
+For the basic usage like `WeekEnum.Monday`, the performance is the same as the native enum, because they both directly access the member fields of a JavaScript object at the underlying level.
+
+For operations such as traversing or searching the array of enum items, the performance is the same as that of native arrays, because the underlying level of the Enum collection is a frozen native array.
+
+As you can see, the performance has almost reached its peak, and you can use it with complete confidence without worrying about performance issues.
+
+### Why doesn't Enum support reverse mapping?
+
+Please use the `enum.key(value)` method to get the key name according to its value. This reverse mapping method is applicable to both numeric and string enum values.
+
+### Why does the search function of the Ant Design Select stop working after enabling internationalization?
+
+This is because `Enum.localize` returns a component instance instead of a regular string, causing Ant Design to fail in performing string matching correctly. Please use the `enum.isMatch` method to enable the search functionality. Please refer to [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react#dropdown-search) for more details.
 
 ```bash
 npm install @enum-plus/plugin-react
@@ -1247,11 +1259,56 @@ import { Select } from 'antd';
 
 > If you are using the `@enum-plus/plugin-i18next` plugin, or have implemented the `Enum.localize` method yourself and it returns a string, then the search functionality in the dropdown should work correctly.
 
-## Contributing
+### Do I have to install TypeScript? What if my project is in JavaScript?
 
-If you would like to contribute to this project, please follow the [CONTRIBUTING](CONTRIBUTING.md) guidelines outlined in the repository.
-Feel free to submit issues, pull requests, or suggestions for improvements. Your contributions are greatly appreciated!
+Don't worry, whether your project is in TypeScript or JavaScript, `enum-plus` works perfectly fine. Both of them can benefit from type safety and intelligent code completion. You don't have to install TypeScript dependencies in your project, since modern code editors like VSCode have built-in support for TypeScript.
+
+### Do I have to upgrade TypeScript to version 5.0+?
+
+Not necessarily. The purpose of upgrading to TypeScript 5.0 is to provide a better development experience. If you choose not to upgrade, it will still work fine with just a little extra effort.
+
+```ts
+const WeekEnum = Enum({
+  Sunday: 0,
+  Monday: 1,
+} as const);
+```
+
+As you can see, in earlier versions of TypeScript, you may need to use the `as const` type assertion. `as const` allows the enum values to remain their original literal values instead of being converted to `number` or `string` types. Meanwhile, the `enum.valueType` will remain as `0 | 1` instead of becoming `number`. This makes TypeScript's type checking more accurate and enhances code safety. Additionally, please check your `tsconfig.json` file to ensure that the `moduleResolution` option is set to `node` or `node10`, which prevents the type declaration files of `enum-plus` from being automatically switched to the version of 5.0+.
+
+If you are using JavaScript, you can leverage `jsdoc` to help the editor accurately recognize types.
+
+```js
+/** @type {{ Sunday: 0; Monday: 1 }} */
+const weekInit = { Sunday: 0, Monday: 1 };
+
+const WeekEnum = Enum(weekInit);
+```
+
+### I saw in the release notes that you made Jest and Playwright share the same set of test code, which is interesting. Can you introduce how to achieve this?
+
+Yes, actually it wasn't easy from the beginning. The working principles of Jest and Playwright are quite different. Jest runs in a Node.js environment, while Playwright runs in a browser environment and then returns to the Node.js environment to execute assertions. To make them share a set of test code, we did the following:
+
+1. **Environment Adaptation**: We wrote an [adaptation layer](https://github.com/shijistar/enum-plus/tree/main/test/engines/index.ts) to handle the differences between the two testing frameworks.
+2. **Abstract Testing Logic**: We abstracted the testing logic into some independent modules, so that these test suites can be reused in different testing frameworks.
+3. **Enhanced Serialization Mechanism**: E2E tests require running in a browser environment and then passing the running results to the Node.js environment for assertions. To achieve this, we developed an [enhanced serialization library](https://github.com/shijistar/jsoneo). Since the `enum-plus` enums internally use types like `class`, `function`, `Symbol`, `Date`, and `RegExp`, built-in functions rewritten like `Symbol.toStringTag` and `Symbol.hasInstance`, and even including `Getter/Setter`, which are not serializable by `JSON.stringify`. We implemented support for these complex features through [jsoneo](https://github.com/shijistar/jsoneo). So complex objects can cross different environments through `serialization/deserialization` while retaining all dynamic behaviors. The transferred object remains "alive", just like the original object has not been serialized.
+
+Based on these efforts, we successfully share a set of test code between Jest and Playwright. It significantly improves the development efficiency of unit tests and reduces maintenance costs. You don't have to maintain two sets of test code. In the future, we will also consider separating the first part into an open-source project. If you are developing a "Universal JavaScript" project, you might also try this approach to share test code.
+
+### I have a great idea and would like to contribute to this project. What should I do?
+
+We are very glad to hear that! We sincerely welcome contributions from the community. Here are some guidelines to help you get started:
+
+Thanks to the high flexibility of [Plugin System](#plugin-system), it is quite easy to extend new features for enum-plus. Depending on the `generality` and `dependencies` of the feature, you can choose one of the following three ways to contribute:
+
+1. **Core Library** - The new feature is applicable to everyone and does not introduce external dependencies. You can contribute directly to the core library. Please refer to the [CONTRIBUTING](CONTRIBUTING.md) guide.
+2. **Official Plugin Library** - The new feature needs to depend on an `open` framework or library, and many people are already using this framework or library. You can contribute to the official plugin library. Please refer to the [Plugin Development Guide](./docs/plugin-development.md).
+3. **Custom Plugin** - The new feature needs to depend on a `private` external dependency, or the field is relatively niche. It is recommended that you publish an npm package yourself and share your plugin link in the [Awesome Plugins](#awesome-plugins) section, which can still be shared with everyone.
+
+## Security
 
 If you find a security issue, please follow the [Security Policy](SECURITY.md) to report it responsibly.
 
-**If you find this project useful, please consider giving it a star ⭐️ on GitHub. It helps more people discover the project and encourages us to continue development.**
+## Support & Star
+
+**If you find this project useful, please consider giving it a [STAR](https://github.com/shijistar/enum-plus) ⭐️ on GitHub. It helps more people discover the project and encourages us to continue development.**

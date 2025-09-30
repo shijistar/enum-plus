@@ -16,5 +16,13 @@ targetDirs.forEach((targetDir) => {
 });
 
 // Process for TypeScript version <5.0
-const enumDeclaration = readFileSync(`${pre5Dir}/enum.d.ts`, 'utf-8');
-writeFileSync(`${pre5Dir}/enum.d.ts`, enumDeclaration.replace(/const\s+(\w+\s+extends)/g, '$1'));
+fixFile(`${pre5Dir}/index.d.ts`, (content) => content.replace(/^/g, "import './extension';"));
+fixFile(`${pre5Dir}/enum.d.ts`, (content) => content.replace(/const\s+(\w+\s+extends)/g, '$1'));
+fixFile(`${pre5Dir}/enum-items.d.ts`, (content) => {
+  return content.replace(/const\s+(\w+\s+extends)/g, '$1').replace(/const FV/g, 'FV');
+});
+
+function fixFile(file: string, replace: (content: string) => string) {
+  const content = readFileSync(file, 'utf-8');
+  writeFileSync(file, replace(content));
+}

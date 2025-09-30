@@ -23,8 +23,8 @@
 
 [![Node compatibility](https://img.shields.io/node/v/enum-plus?logo=nodedotjs&label=Node.js&color=2185D0&cacheSeconds=86400)](https://github.com/shijistar/enum-plus)
 [![Web Browsers](https://img.shields.io/badge/Web%20Browser-2185D0?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAABa1BMVEUAAAD/1kZap04co1BLr1H/1kZKr0//zDbmXC6IzZv95Y390jpLr09Lr0//1kT/1kU8rE/aeibNi13NfUz3kUrDjVrZaTjZWib2YSn2YSj3iC33xRp7q1/91kX9211cuWxBsWv81VL/10f1jhX411Uqpk771Ub2byLNazVTq0xAq09Lr0/91EBAqk6SwFkipFD8zi/GZiz1dSHGYCb2dSDKykirw0oup0/6yiO2dzn2fhuzdDVKrlD1fxv1gBtHrU+hcCr4wRT3Vi1Lr1D/1kVHr1D+1T//10b3Uyr3TyUel+wWj+f2hhn6yiT3SR74wxOn2PmdzfINh+FErVA8rFAxqFD90Tf8zjD2Ow3j8/7g7/sinO8Zk+kRi+QIgt73RBin1fYto/EMgt3J58z88MLYvJxBrVA5qlAqplAkpFD0WC33QBOu3Pvf7vre7vqgzfG748v97rtRqk1knUSBiDembSftUiTFWBrhRxFiNA5aAAAAQnRSTlMAUQX89dtVBfv6+fHapqSJUQ39/f38/Pz7+/j48/Py8fHx7+7s6+fj4t7d3NjX1dXRz8/OzsHApqWTk46MiomAfUvELz/2AAABGUlEQVQoz52P11rCQBBGQ4mhKIK999577ytKEo2JgiaxgAIWsPfHd3Z2JXDLuTzn+ydZoWwiy0O+XK55cCVS6ld9sR1G03qRdk/LcgwKY8YJs5qGgTP377fMpCYXlw1+aPg3T0tDTV3LAdIrYaggn2Ze+85aum69tR5RtjFUEfJjJrOP1+eKksocUpYwVBLyYTZa4C9U1e4+A6YweAkhX7U69ZfHRuAUCBbCe72O/soI7AFBfgposxXqb547aBjjH6ekUyr4l8wuJcR/F4h607ZhPL32YXCxB46Cj57cdvr9XRPoRUlgEwzxu8SDZ4APOGt0EE/cexbQVwsFNtmgv30fAO8QHqGDedAi3nFwhxcnx3vEkEsSyuUPnANWVoDZ/WEAAAAASUVORK5CYII=)](https://www.npmjs.com/package/enum-plus)
-[![ReactNative](https://img.shields.io/badge/ReactNative-2185D0?logo=react)](https://reactnative.dev)
-[![MicroProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/dev/framework)
+[![React Native](https://img.shields.io/badge/ReactNative-2185D0?logo=react)](https://reactnative.dev)
+[![MiniProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/dev/framework)
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://taro.zone/)
 
 ⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [贡献](#贡献)&nbsp; ⬇️
@@ -35,9 +35,9 @@
 
 ## 简介
 
-`enum-plus`是一个增强版的枚举类库，完全兼容原生`enum`的用法，是原生枚举的直接替代品。支持为枚举项添加显示名称，以及添加自定义元数据字段。可以用枚举直接生成下拉框、多选框、菜单、选项卡等各种UI控件，对前端工程师非常实用。
+`enum-plus`是一个增强版的枚举类库，完全兼容原生`enum`的用法，是原生枚举的直接替代品。支持为枚举项添加显示名称，以及添加自定义元数据字段。可以用枚举直接生成下拉框、多选框、菜单、选项卡等各种 UI 控件，对前端工程师非常实用。
 
-为枚举增加了很多扩展方法，支持对枚举项数组的遍历和各种数据转换。你可以把数值转换为多种语言的枚举名称，因为它支持国际化，这在UI回显业务数据时非常有用。
+为枚举增加了很多扩展方法，支持对枚举项数组的遍历和各种数据转换。你可以把数值转换为多种语言的枚举名称，因为它支持国际化，这在 UI 回显业务数据时非常有用。
 
 这是一个轻量级、零依赖、100% TypeScript 实现的工具库，适用于任何前端框架，包括无框架的纯原生应用。
 
@@ -53,15 +53,15 @@
 - 支持`number`、`string`等多种数据类型
 - 枚举项支持设置显示名称
 - 支持国际化，可与任何 i18n 库集成
-- 快速将值转换为显示名称，在UI回显时非常有用
+- 快速将值转换为显示名称，在 UI 回显时非常有用
 - 枚举项支持扩展元数据字段，可以作为静态配置系统使用
 - 支持插件体系，可以通过安装插件扩展枚举功能
 - 支持数据类型约束，提高代码的类型安全性<sup>_&nbsp;&nbsp;TypeScript_</sup>
-- 枚举可以生成下拉框等UI组件，支持 [AntDesign](https://ant-design.antgroup.com/components/overview-cn)、[ElementPlus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 等多种组件库
+- 枚举可以生成下拉框等 UI 组件，支持 [Ant Design](https://ant-design.antgroup.com/components/overview-cn)、[Element Plus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 等多种组件库
 - 支持服务端渲染(SSR)
-- 支持 Web浏览器、Node.js、ReactNative、Taro、小程序等多种环境
+- 支持 Web浏览器、Node.js、React Native、Taro、小程序等多种环境
 - 兼容任何前端开发框架，支持无框架的纯原生项目
-- 面向TypeScript设计，具有良好的类型推导和代码补全能力
+- 面向 TypeScript 设计，具有良好的类型推导和代码补全能力
 - 零依赖项
 - 轻量（gzip压缩后仅 2KB+）
 
@@ -118,7 +118,7 @@ yarn add enum-plus
 - [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.min.js.gz)
 - [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.0.0/enum-plus-legacy.umd.tar.gz) (含 sourcemap)
 
-> 你也可以从 [Github发布](https://github.com/shijistar/enum-plus/releases/tag/v3.0.0) 下载这些文件
+> 你也可以从 [GitHub 发布](https://github.com/shijistar/enum-plus/releases/tag/v3.0.0) 下载这些文件
 
 ## 枚举定义
 
@@ -146,9 +146,11 @@ const WeekEnum2 = Enum({
 WeekEnum2.Monday; // 'Mon'
 ```
 
+> 如果你的项目使用 TypeScript 且版本低于 5.0，那么建议你为 Enum 方法的参数添加 `as const` 类型断言，这样枚举值将保持原始的字面量值，而不会变成`number`、`string`类型。关于更多详情，请参考 [这里](#typescript-版本必须升级到-50-吗)。
+
 ### 2. 标准格式（推荐）
 
-为每个枚举项指定 `value` (枚举值) 和 `label`（显示名称）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示名称，这些文本可以在UI组件中使用。关于为 `label` 字段启用本地化支持，请参考[本地化](#本地化)章节
+为每个枚举项指定 `value` (枚举值) 和 `label`（显示名称）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示名称，这些文本可以在 UI 组件中使用。关于为 `label` 字段启用本地化支持，请参考[本地化](#本地化)章节
 
 ```js
 import { Enum } from 'enum-plus';
@@ -450,9 +452,9 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 `string`
 
-枚举类型的显示名称。在创建枚举时，可以通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。关于本地化的更多信息，请参考[本地化](#本地化)章节。
+枚举类型的显示名称。在创建枚举时，可以通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。请参考[本地化](#本地化)章节，了解更多详情。
 
-> 在UI组件中，枚举通常用来作为数据源，生成下拉框表单项，或在表格单元格中显式枚举成员文本。而对应的表单项标签或列标题就是枚举类型的名称。通过使用`name`，我们可以集中管理枚举名称，和枚举成员的名称，也更方便使用。
+> 在 UI 组件中，枚举通常用来作为数据源，生成下拉框表单项，或在表格单元格中显示枚举成员文本。而对应的表单项标签或列标题就是枚举类型的名称。通过使用`name`，我们可以集中管理枚举名称，和枚举成员的名称，也更方便使用。
 
 ```js
 const WeekEnum = Enum(
@@ -472,7 +474,7 @@ WeekEnum.label(1); // 星期一
 
 ---
 
-### ⚡️ &nbsp; valueType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; valueType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 `value1 | value2 | ...`
 
@@ -491,7 +493,7 @@ const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ 类型错误，8 
 
 ---
 
-### ⚡️ &nbsp; keyType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; keyType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 `key1 | key2 | ...`
 
@@ -507,7 +509,7 @@ const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 
 ---
 
-### ⚡️ &nbsp; rawType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript ONLY]_**</sup>
+### ⚡️ &nbsp; rawType &nbsp;&nbsp;&nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 `{ value: V, label: string, [...] }`
 
@@ -543,7 +545,7 @@ Enum.isEnum({}); // false
 
 <sup>**_\[方法]_**</sup> &nbsp; `(key: string) => string`
 
-设置全局的本地化函数，用来处理枚举类型名称和枚举项显示名称的本地化，更多信息请参考[本地化](#本地化)章节。
+设置全局的本地化函数，用来处理枚举类型名称和枚举项显示名称的本地化。了解更多详情，请参考 [本地化](#本地化) 章节。
 
 ```js
 import i18n from 'i18next';
@@ -557,7 +559,7 @@ Enum.localize = (key) => i18n.t(key);
 
 <sup>**_\[方法]_**</sup> &nbsp; `(obj: Record<string, unknown> | undefined) => void`
 
-为所有枚举对象添加全局扩展方法，更多信息请参考[全局扩展](#全局扩展)章节。
+为所有枚举对象添加全局扩展方法，请参考[全局扩展](#全局扩展)章节，了解更多详情。
 
 ```js
 Enum.extends({
@@ -573,7 +575,7 @@ Enum.extends({
 
 <sup>**_\[方法]_**</sup> &nbsp; `(plugin: Plugin, options?: any) => void`
 
-安装一个插件，插件可以为所有枚举添加新的功能。更多信息请参考[插件系统](#插件系统)章节。
+安装一个插件，插件可以为所有枚举添加新的功能。了解更多详情，请参考[插件系统](#插件系统)章节。
 
 ```js
 import i18nextPlugin from '@enum-plus/plugin-i18next';
@@ -614,7 +616,7 @@ if (WeekEnum.has(value)) {
 
 #### 💡 检查是否一个枚举对象
 
-```js
+```ts
 let values: number[] | undefined;
 if (Enum.isEnum(data)) {
   values = data.values;
@@ -629,7 +631,7 @@ if (Enum.isEnum(data)) {
 
 #### 💡 生成 UI 组件
 
-以 React + Ant Design 为例，更多UI组件的案例请参考 [支持多种前端框架](#-支持多种前端框架) 章节
+以 React + Ant Design 为例，更多 UI 组件的案例请参考 [支持多种前端框架](#-支持多种前端框架) 章节
 
 ```jsx
 import { Menu, Select, Table } from 'antd';
@@ -652,9 +654,9 @@ const App = () => {
 
 ---
 
-#### 💡 枚举名称支持国际化
+#### 💡 枚举名称/标签支持国际化
 
-可以支持多语言环境，将`label`字段设置为一个本地化键值，根据当前语言环境显示对应的文本。更多信息请参考 [本地化](#本地化) 章节。
+可以支持多语言环境，将`label`字段设置为一个本地化键值，根据当前语言环境显示对应的文本。请参考 [本地化](#本地化) 章节，了解更多详情。
 
 ```js
 WeekEnum.label(1); // Monday 或 星期一，取决于当前语言环境
@@ -810,7 +812,7 @@ WeekEnum.Monday; // 将光标悬浮在 Monday 上
 
 - **Vue相关框架**
 
-  [ElementPlus](https://element-plus.org/zh-CN/component/select.html) Select
+  [Element Plus](https://element-plus.org/zh-CN/component/select.html) Select
 
   ```html
   <el-select>
@@ -865,12 +867,12 @@ const data = await getPetsData();
 // [   { id: 1, code: 'dog', name: '狗' },
 //     { id: 2, code: 'cat', name: '猫' },
 //     { id: 3, code: 'rabbit', name: '兔' }   ];
-const PetTypesEnum = Enum(data, {
+const PetTypeEnum = Enum(data, {
   getValue: 'id',
   getLabel: 'name',
   getKey: 'code', // getKey可选
 });
-PetTypesEnum.items; // 输出如下:
+PetTypeEnum.items; // 输出如下:
 // [   { value: 1, label: '狗', key: 'dog' },
 //     { value: 2, label: '猫', key: 'cat' },
 //     { value: 3, label: '兔', key: 'rabbit' }   ]
@@ -967,7 +969,7 @@ WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环�
 WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
-此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，更多信息请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next/README.zh-CN.md#插件选项)。
+此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next/README.zh-CN.md#插件选项)，了解更多详情。
 
 如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) 等插件。
 
@@ -1005,7 +1007,7 @@ Enum 提供了丰富的内置方法和属性，它们已经可以满足大多数
       return this.items.map((item) => ({ value: item.value, title: item.label }));
     },
     reversedItems() {
-      return this.items.reverse();
+      return this.items.toReversed();
     },
   });
 
@@ -1040,7 +1042,7 @@ Enum 提供了丰富的内置方法和属性，它们已经可以满足大多数
       return this.items.map((item) => ({ value: item.value, title: item.label }));
     },
     reversedItems() {
-      return this.items.reverse();
+      return this.items.toReversed();
     },
   });
   ```
@@ -1146,7 +1148,7 @@ WeekEnum[ITEMS].toList(); // 但可以通过 ITEMS 别名来访问它
 下面是一个示例，展示了如何结合上述最佳实践来定义一个枚举：
 
 ```js
-/** 表示一周工作时间的枚举 */
+/** 表示一周的枚举 */
 const WeekEnum = Enum(
   {
     /** 星期日 */
@@ -1171,13 +1173,13 @@ enum-plus 设计之初就考虑了广泛的兼容性需求，可无缝运行于�
 
 ### 浏览器环境
 
-- **现代打包工具**：对于支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 配置的打包工具（如 webpack 5+、vite、rollup），代码引入的是 `es` 目录，对应的 EcmaScript 版本是 **`ES2020`**。
+- **现代打包工具**：对于支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 配置的打包工具（如 webpack 5+、vite、rollup），代码引入的是 `es` 目录，对应的 ECMAScript 版本是 **`ES2020`**。
 
-- **旧版打包工具**：对于不支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 配置的旧版打包工具（如 webpack 4），代码引入的是 `es-legacy` 目录，对应的 EcmaScript 版本是 **`ES2015`**。
+- **旧版打包工具**：对于不支持 [exports](https://nodejs.org/api/packages.html#exports-sugar) 配置的旧版打包工具（如 webpack 4），代码引入的是 `es-legacy` 目录，对应的 ECMAScript 版本是 **`ES2015`**。
 
 - **UMD版本**：为了方便在浏览器中直接使用，或者在没有打包工具的静态项目中使用，enum-plus 还提供了 UMD 版本，存放在 `umd` 目录下。UMD 格式的文件可以通过 `<script>` 标签直接引入，通过 `window.EnumPlus` 获取类库内容。umd 目录提供了两种版本：
-  - **enum-plus.min.js**：对应的 EcmaScript 版本是 **`ES2020`**，适用于现代浏览器
-  - **enum-plus-legacy.min.js**：对应的 EcmaScript 版本是 **`ES2015`**，适用于旧版浏览器
+  - **enum-plus.min.js**：对应的 ECMAScript 版本是 **`ES2020`**，适用于现代浏览器
+  - **enum-plus-legacy.min.js**：对应的 ECMAScript 版本是 **`ES2015`**，适用于旧版浏览器
 
 - **Polyfill 策略**：为了最小化包的体积，除了 UMD 格式，enum-plus 不包含任何 polyfill。如果需要支持旧版浏览器，可以自行引入以下工具：
   - `core-js`
@@ -1190,17 +1192,17 @@ enum-plus 设计之初就考虑了广泛的兼容性需求，可无缝运行于�
 
 - **require**
 
-  对于所有支持 CommonJS 的 Node.js 版本，均可通过 `require('enum-plus')` 方式引入 enum-plus。代码引入的是 `lib` 目录，对应的 EcmaScript 版本是 **`ES2015`**。Node.js版本最低可以向下兼容到 `v7.x`。
+  对于所有支持 CommonJS 的 Node.js 版本，均可通过 `require('enum-plus')` 方式引入 enum-plus。代码引入的是 `lib` 目录，对应的 ECMAScript 版本是 **`ES2015`**。Node.js版本最低可以向下兼容到 `v7.x`。
 
 - **import**
 
-  对于支持 ES Module 的 Node.js 现代版本（Node.js 14.13+），可以通过 `import { Enum } from 'enum-plus'` 方式引入 enum-plus。代码引入的是 `es` 目录，对应的 EcmaScript 版本是 **`ES2020`**。
+  对于支持 ES Module 的 Node.js 现代版本（Node.js 14.13+），可以通过 `import { Enum } from 'enum-plus'` 方式引入 enum-plus。代码引入的是 `es` 目录，对应的 ECMAScript 版本是 **`ES2020`**。
 
 ---
 
 ## 常见问题
 
-### 为什么需要这个库？TypeScript 已经有内置的枚举类型了
+### 为什么需要这个库？TypeScript 已经有内置的枚举了
 
 TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.wikipedia.org/wiki/Enumerated_type)的基本功能，即消除魔法数字和流程控制。但对于一个前端工程师来说，枚举的需求远不止于此。我们还需要：
 
@@ -1221,9 +1223,23 @@ TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.w
 
 > TypeScript 官方并没有明确的计划废除 enum，但是确实在[一些情况](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly)下可能会禁止使用 enum。根本原因还是 enum 既不是纯粹的TypeScript类型（在编译时可以被彻底移除），也不是纯粹的JavaScript运行时代码，而是两者的混合体，这给编译器带来了较大的复杂性。
 
-### 启用国际化后，为什么 AntDesign 下拉框的搜索功能失效了？
+### 枚举库的性能怎么样？
 
-这是因为 `Enum.localize` 返回了一个组件对象，而不是常规字符串，导致 antd 无法正确进行字符串匹配。请使用 `enum.isMatch` 方法来实现自定义搜索功能。更多信息请参考 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/next/packages/plugin-react#dropdown-search)。
+`enum-plus` 始终关注性能。它的设计目标之一就是在提供丰富功能的同时，保持高效的性能表现。
+
+对于 `WeekEnum.Monday` 这种最基本的用法，性能表现与原生枚举是相同的，因为它们在底层都是直接访问JavaScript对象的成员字段。
+
+对于枚举项数组的遍历或查找等操作，与原生数组的性能是一样的，因为枚举项集合的底层就是一个被冻结的原生数组。
+
+由此可见，在性能方面几乎已经达到了极致，你完全可以放心使用它，而不必担心性能问题。
+
+### 为什么不支持反向映射？
+
+请使用 `enum.key(value)` 方法来获取枚举项的键名，这种反向映射的方式不但适用于数字类型的枚举值，也适用于字符串类型的枚举值。
+
+### 为什么启用国际化后，Ant Design下拉框的搜索功能失效了？
+
+这是因为 `Enum.localize` 返回了一个组件对象，而不是常规字符串，导致 antd 无法正确进行字符串匹配。请使用 `enum.isMatch` 方法来实现自定义搜索功能。请参考 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react#dropdown-search)，了解更多详情。
 
 ```bash
 npm install @enum-plus/plugin-react
@@ -1235,12 +1251,58 @@ import { Select } from 'antd';
 <Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
 ```
 
-> 如果你使用的是 `@enum-plus/plugin-i18next` 插件，或者自己实现了 `Enum.localize` 方法并且返回的是字符串，那么下拉框的搜索功能应该是正常的。
+> 如果你使用的是 `@enum-plus/plugin-i18next` 插件，或者自己实现了 `Enum.localize` 方法并且返回的是字符串，那么下拉框的搜索功能应该可以正常工作。
 
-## 贡献
+### 我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？
 
-如果你想为这个项目做出贡献，请遵循仓库中的 [CONTRIBUTING](CONTRIBUTING.md) 指南。 欢迎提交问题、拉取请求或改进建议。我们非常感谢你的贡献！
+不用担心，无论你的项目是 TypeScript 还是 JavaScript，`enum-plus` 都可以正常工作，并且两种项目都可以享受到类型安全和智能提示的好处。VSCode等现代代码编辑器已经内置了对 TypeScript 的支持，因此你并不需要在项目中安装 TypeScript 依赖。
+
+### TypeScript 版本必须升级到 5.0+ 吗？
+
+不是的。升级 TypeScript 5.0 是为了得到更好的开发体验，如果你选择不升级，它仍然是可以正常工作的，只需要一小点额外的工作。
+
+```ts
+const WeekEnum = Enum({
+  Sunday: 0,
+  Monday: 1,
+} as const);
+```
+
+可以看到，在较低版本的TypeScript中，你可能需要使用 `as const` 类型断言。`as const` 可以让枚举值保持原始的字面量值，而不会变成 `number`、`string` 类型，同时 `enum.valueType` 类型也会保持 `0 | 1`，而不会变成 `number` 类型。这让 TypeScript 的类型校验变得更准确，也可以提升代码的安全性。另外，请检查你的 `tsconfig.json` 文件，确保 `moduleResolution` 选项设置为 `node` 或 `node10`，避免 `enum-plus` 的类型声明文件被自动切换到 5.0+ 版本。
+
+如果你使用的是 JavaScript，那么你可以借助 `jsdoc` 来让编辑器精确识别类型。
+
+```js
+/** @type {{ Sunday: 0; Monday: 1 }} */
+const weekInit = { Sunday: 0, Monday: 1 };
+
+const WeekEnum = Enum(weekInit);
+```
+
+### 我在发行公告里看到，你们让 Jest 和 Playwright 共享了同一套测试代码，这很有意思。能介绍一下如何实现的吗？
+
+是的，这并不轻松。Jest 和 Playwright 的工作原理并不相同，Jest 运行在 Node.js 环境中，而 Playwright 运行在浏览器环境中。为了让它们共享一套测试代码，我们做了以下工作：
+
+1. **环境适配**：我们为不同的测试框架编写了一个[适配层](https://github.com/shijistar/enum-plus/tree/main/test/engines/index.ts)，处理它们之间的差异。
+2. **抽象测试逻辑**：我们将测试逻辑抽象出来，放在一些独立的模块中，这样就可以在不同的测试框架中复用这些测试套件。
+3. **增强的序列化机制**：e2e测试要求在浏览器环境中运行，然后把运行结果传递到 Node.js 环境中，再执行断言。为此，我们开发了一个[增强的序列化库](https://github.com/shijistar/jsoneo)。由于在 `enum-plus` 枚举的内部用到了 `类`、`function`、`Symbol`、`Date`、`RegExp` 类型，重写了 `Symbol.toStringTag`、`Symbol.hasInstance` 内置函数，甚至包括 `Getter/Setter` 这些特性，这些都是 JSON.stringify 无法序列化的，我们通过 [jsoneo](https://github.com/shijistar/jsoneo) 实现了对这些复杂特性的支持，从而可以让复杂对象经过 `序列化/反序列化` 跨越不同的环境，并且保留了所有的动态行为。传递后的对象仍然是`活`的，就像原始的对象没有经过序列化过一样。
+
+基于这些工作，我们成功地让 Jest 和 Playwright 共享了一套测试代码，大大提高了单元测试的开发效率，降低了维护成本，你不必维护两套测试代码。未来我们还会把 第1部分 独立成一个开源项目，如果你在开发一个 `通用JavaScript`（Universal JavaScript）项目，或许你也可以尝试这种方式来共享测试代码。
+
+### 我有一个很好的点子，希望为这个项目做贡献，我要怎么做？
+
+我非常欢迎你为这个项目做贡献！以下是一些指导原则，能帮助你决定如何贡献：
+
+得益于 enum-plus 的 [插件系统](#插件系统)，我们要为 enum-plus 扩展新功能变得非常容易。你可以根据功能的通用性和依赖关系，选择以下三种方式之一来贡献：
+
+1. **核心库** - 新功能对所有人都适用，且不引入外部依赖。你可以直接贡献到核心库，请参考 [CONTRIBUTING](CONTRIBUTING.md) 指南。
+2. **官方插件库** - 新功能需要依赖某个 `开放的` 框架或类库，并且在这个框架或类库已经有很多人在使用了。你可以贡献到官方插件库，请参考 [插件开发指南](./docs/plugin-development.zh-CN.md)。
+3. **自定义插件** - 新功能需要引入某个闭源的外部依赖，或者这个领域比较小众，建议你自己发布一个 npm 包，并把你的插件链接分享在 [插件生态](#插件生态) 章节中，同样可以共享给所有人。
+
+## 安全性
 
 如果你发现安全问题，请遵循 [安全策略](SECURITY.md) 来负责任地报告。
 
-**如果你觉得这个项目有用，请考虑在 GitHub 上给它一个星标 ⭐️。这有助于更多人发现这个项目，并鼓励我们继续开发。**
+## 支持 & 星标
+
+**如果你觉得这个项目有帮助，请考虑在 GitHub 上给它一个 [星标](https://github.com/shijistar/enum-plus)⭐️。这有助于更多人发现这个项目，并鼓励我们继续开发。**
