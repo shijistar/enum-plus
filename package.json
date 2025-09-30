@@ -1,6 +1,6 @@
 {
   "name": "enum-plus",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.4",
   "description": "A drop-in replacement for native enum. Like native enum but much better!",
   "keywords": [
     "enum",
