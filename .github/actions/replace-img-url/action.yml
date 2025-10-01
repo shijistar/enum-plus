@@ -6,8 +6,8 @@ runs:
     - run: |
         sed -i "s|./public/enum-plus.svg|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/enum-plus.svg|g" README.md
         sed -i "s|./public/enum-plus.svg|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/enum-plus.svg|g" README.zh-CN.md
-        sed -i "s|./public/usage-screenshot.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/usage-screenshot.gif|g" README.md
-        sed -i "s|./public/usage-screenshot.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/usage-screenshot.gif|g" README.zh-CN.md
+        sed -i "s|./public/usage-screenshot-v3.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/usage-screenshot-v3.gif|g" README.md
+        sed -i "s|./public/usage-screenshot-v3.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/usage-screenshot-v3.gif|g" README.zh-CN.md
         sed -i "s|./public/jsdoc-en.png|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/jsdoc-en.png|g" README.md
         sed -i "s|./public/jsdoc-chs.png|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/jsdoc-chs.png|g" README.zh-CN.md
       shell: bash
