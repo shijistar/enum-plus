@@ -27,7 +27,7 @@
 [![MiniProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/dev/framework)
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://taro.zone/)
 
-⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [贡献](#贡献)&nbsp; ⬇️
+⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [支持](#支持)&nbsp; ⬇️
 
 > **🎉 v3.0 发布了！**
 >
@@ -102,7 +102,7 @@ bun add enum-plus
 yarn add enum-plus
 ```
 
-**免安装**:
+**浏览器中运行**:
 
 - 特定版本号:
 
@@ -177,7 +177,7 @@ WeekEnum.label(0); // 星期日
 
 ### 3. Key-Label 格式
 
-当你希望使用`key`作为枚举值时，这种方式比较有用，此时`value`和`key`的值相同，`label`是显示名称
+只提供 `key` 和 `label` 字段创建枚举。如果省略了 `value` 字段，则它默认为与 `key` 字段相同。
 
 ```js
 import { Enum } from 'enum-plus';
@@ -188,12 +188,18 @@ const WeekEnum = Enum({
 });
 
 WeekEnum.Sunday; // 'Sunday'
-WeekEnum.label('Sunday'); // 星期日
+WeekEnum.items[0].key; // 'Sunday'
+WeekEnum.items[0].label; // 星期日
 ```
 
 ### 4. 数组格式
 
-数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。这种方式还允许[自定义字段映射](#数组格式初始化设置不同的字段映射)，这增加了灵活性，可以适配不同的数据格式
+数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。
+
+<!-- You can use dynamic field mapping rules to adapt to various different data structures. Please refer to the [Custom Field Mapping](#-custom-field-mapping-in-array-format-initialization) section for more details. -->
+<!-- 英文翻译 -->
+
+你可以动态映射字段以适应各种不同的数据结构。请参考 [数组格式初始化，设置不同的字段映射](#数组格式初始化设置不同的字段映射) 章节，了解更多详情。
 
 ```js
 import { Enum } from 'enum-plus';
@@ -360,7 +366,7 @@ WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: '星期�
 
 <sup>**_\[方法]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-根据某个枚举值或枚举 key，获取该枚举项的显示名称。如果设置了本地化，则会返回当前语言的内容。
+根据某个枚举值或枚举 key，获取该枚举项的显示名称。如果启用了[本地化](#本地化)，则会返回当前语言的内容。
 
 ```js
 WeekEnum.label(1); // 星期一
@@ -373,7 +379,7 @@ WeekEnum.label('Monday'); // 星期一
 
 <sup>**_\[方法]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
-根据枚举值获取该枚举项的 key，如果不存在则返回`undefined`
+根据枚举值获取该枚举项的`key`，这也被称为[反向映射](https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings)。如果不存在则返回`undefined`
 
 ```js
 WeekEnum.key(1); // 'Monday'
@@ -387,11 +393,11 @@ WeekEnum.key(1); // 'Monday'
 <br/>
 <sup>**_\[方法^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
-第一个重载方法，返回枚举集合的初始化对象，即用来初始化 Enum 原始 init 对象。
+`raw`方法有两种重载形式。第一种是返回整个枚举集合的原始初始化对象，即`Enum`方法的第一个参数。
 
-第二个重载方法，用来处理单个枚举项，根据获取单个枚举项的原始初始化对象。
+第二种是返回单个枚举项的原始初始化对象，即`Enum`方法的第一个参数中对应字段的子对象。
 
-这个方法主要作用是，用来获取枚举项的自定义字段，支持无限扩展字段
+这个方法主要作用是，用来获取枚举项的自定义字段。
 
 ```js
 const WeekEnum = Enum({
@@ -405,7 +411,7 @@ WeekEnum.raw('Monday'); // { value: 1, label: '星期一', happy: false }
 WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Monday: { value: 1, label: '星期一', happy: false } }
 ```
 
-> 如果要获取已知枚举项的自定义字段，推荐使用`named`属性来访问
+> 温馨提示：如果要获取某个已知枚举项的元数据字段，使用`enum.named.XXX.raw` 是一个不错的选择。
 
 ---
 
@@ -463,25 +469,23 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 `string`
 
-枚举类型的显示名称。在创建枚举时，可以通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。请参考[本地化](#本地化)章节，了解更多详情。
-
-> 在 UI 组件中，枚举通常用来作为数据源，生成下拉框表单项，或在表格单元格中显示枚举成员文本。而对应的表单项标签或列标题就是枚举类型的名称。通过使用`name`，我们可以集中管理枚举名称，和枚举成员的名称，也更方便使用。
+整个枚举集合的显示名称。可以在创建枚举时，通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。请参考[本地化](#本地化)章节，了解更多详情。
 
 ```js
 const WeekEnum = Enum(
   {
-    Sunday: { value: 0, label: '星期日', happy: true },
-    Monday: { value: 1, label: '星期一', happy: false },
+    Sunday: { value: 0, label: '星期日' },
+    Monday: { value: 1, label: '星期一' },
   },
   {
-    name: 'i18n.enums.week', // 可以是一个本地化键值
+    name: 'i18n.enums.week', // 可以普通字符串或者一个本地化键值
   }
 );
 
-WeekEnum.name; // 周
-WeekEnum.label(0); // 星期日
-WeekEnum.label(1); // 星期一
+WeekEnum.name; // Week 或 周，取决于当前语言
 ```
+
+> 在 UI 组件中，枚举通常用来作为数据源，生成下拉框表单项，或在表格单元格中显示枚举成员文本。而对应的表单项标签或列标题就是枚举类型的名称。通过使用`name`，我们可以集中管理枚举名称，和枚举成员的名称，也更方便使用。
 
 ---
 
@@ -491,13 +495,16 @@ WeekEnum.label(1); // 星期一
 
 在 TypeScript 中，提供了一个包含所有枚举值的联合类型，用于缩小变量或组件属性的数据类型。这种类型替代了像 `number` 或 `string` 这样宽泛的原始类型，使用精确的值集合，防止无效赋值，同时提高代码可读性和编译时类型安全性。
 
-```typescript
-type WeekValues = typeof WeekEnum.valueType; // 0 | 1
+```ts
+const weekValue: typeof WeekEnum.valueType = 1;
 
-const weekValue: typeof WeekEnum.valueType = 1; // ✅ 类型正确，1 是一个有效的周枚举值
-const weeks: (typeof WeekEnum.valueType)[] = [0, 1]; // ✅ 类型正确，0 和 1 是有效的周枚举值
-const badWeekValue: typeof WeekEnum.valueType = 8; // ❌ 类型错误，8 不是一个有效的周枚举值
-const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ 类型错误，8 不是一个有效的周枚举值
+function setToday(day: typeof WeekEnum.valueType) {
+  // ...
+}
+
+const MyComponent = (props: { day: typeof WeekEnum.valueType }) => {
+  // ...
+};
 ```
 
 > 注意，这只是一个 TypeScript 类型，只能用来约束类型。不可在运行时调用，运行时调用会抛出异常。
@@ -510,7 +517,7 @@ const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ 类型错误，8 
 
 与`valueType`类似，获取一个包含全部枚举 `key` 的联合类型
 
-```typescript
+```ts
 type WeekKeys = typeof WeekEnum.keyType; // 'Sunday' | 'Monday'
 const weekKey: typeof WeekEnum.keyType = 'Monday';
 const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
@@ -524,11 +531,11 @@ const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 
 `{ value: V, label: string, [...] }`
 
-获取初始化整个枚举集合的原始类型，即用来创建枚举集合的对象。
+获取初始化整个枚举集合的原始类型，即 `Enum` 函数的第一个参数的类型。
 
-与无参数的`raw`方法类似，只不过`raw`是一个运行时方法，而`rawType`是一个约束类型
+不要与 `raw` 方法混淆，`raw` 方法是一个运行时方法，而`rawType`是一个 TypeScript 的类型。
 
-```typescript
+```ts
 type WeekRaw = typeof WeekEnum.rawType;
 // { Sunday: { value: 0, label: string }, Monday: { value: 1, label: string } }
 ```
@@ -556,7 +563,7 @@ Enum.isEnum({}); // false
 
 <sup>**_\[方法]_**</sup> &nbsp; `(key: string) => string`
 
-设置全局的本地化函数，用来处理枚举类型名称和枚举项显示名称的本地化。了解更多详情，请参考 [本地化](#本地化) 章节。
+设置全局的本地化函数，用来处理枚举类型名称和枚举项显示名称的本地化。请参考 [本地化](#本地化) 章节，了解更多详情。
 
 ```js
 import i18n from 'i18next';
@@ -586,7 +593,7 @@ Enum.extends({
 
 <sup>**_\[方法]_**</sup> &nbsp; `(plugin: Plugin, options?: any) => void`
 
-安装一个插件，插件可以为所有枚举添加新的功能。了解更多详情，请参考[插件系统](#插件系统)章节。
+安装一个插件，插件可以为所有枚举添加新的功能。请参考[插件系统](#插件系统)章节，了解更多详情。
 
 ```js
 import i18nextPlugin from '@enum-plus/plugin-i18next';
@@ -596,7 +603,7 @@ Enum.install(i18nextPlugin);
 
 ## 使用案例
 
-#### 💡 基础用法，替代魔法数字
+#### 💡 基础用法，消除魔法数字
 
 ```js
 const WeekEnum = Enum({
@@ -677,7 +684,34 @@ WeekEnum.name; // Week 或 周，取决于当前语言环境
 
 ---
 
-#### 约束数据类型 (仅TypeScript)
+#### 约束数据类型 (仅 TypeScript)
+
+- 变量
+
+```ts
+type WeekValues = typeof WeekEnum.valueType; // 0 | 1 | ... | 5 | 6
+
+const weekValue: WeekValues = 1; // ✅ 正确，1 是一个有效的周枚举值
+const weeks: WeekValues[] = [0, 1]; // ✅ 正确，0 和 1 是有效的周枚举值
+
+const badWeekValue: WeekValues = "Weekend"; // ❌ 类型错误，"Weekend" 不是数字
+const badWeekValue: WeekValues = 8; // ❌ 错误，8 不是一个有效的周枚举值
+const badWeeks: WeekValues[] = [0, 8]; // ❌ 错误，8 不是一个有效的周枚举值
+```
+
+- 方法参数
+
+```ts
+function setDay(day: typeof WeekEnum.valueType) {
+  // day 的类型被约束为 0 | 1 | ... | 5 | 6
+}
+
+setDay(1); // ✅ 正确
+setDay('Monday'); // ❌ 类型错误，'Monday' 不是数字
+setDay(8); // ❌ 错误，8 不是一个有效的枚举值
+```
+
+- 组件属性
 
 ```ts
 type MyComponentProps = {
@@ -692,19 +726,9 @@ const MyComponent = (props: MyComponentProps) => {
 <MyComponent day={8} />; // ❌ 错误，8 不是一个有效的枚举值
 ```
 
-```ts
-function setDay(day: typeof WeekEnum.valueType) {
-  // day 的类型被约束为 0 | 1 | ... | 5 | 6
-}
-
-setDay(1); // ✅ 类型正确
-setDay('Monday'); // ❌ 类型错误
-setDay(8); // ❌ 错误，8 不是一个有效的枚举值
-```
-
 ---
 
-#### 💡 添加元数据字段，可以作为静态全局配置系统使用
+#### 💡 添加元数据字段，可以作为静态配置系统使用
 
 ```js
 const ColorEnum = Enum({
@@ -1314,6 +1338,6 @@ const WeekEnum = Enum(weekInit);
 
 如果你发现安全问题，请遵循 [安全策略](SECURITY.md) 来负责任地报告。
 
-## 支持 & 星标
+## 支持
 
-**如果你觉得这个项目有帮助，请考虑在 GitHub 上给它一个 [星标](https://github.com/shijistar/enum-plus)⭐️。这有助于更多人发现这个项目，并鼓励我们继续开发。**
+如果你觉得这个项目有帮助，请考虑在 GitHub 上给它一个 [星标](https://github.com/shijistar/enum-plus)⭐️。这有助于更多人发现这个项目，并鼓励我们继续开发。

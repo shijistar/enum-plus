@@ -27,7 +27,7 @@
 [![MiniProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/en/dev/framework)
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://docs.taro.zone/en/docs)
 
-⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Static Methods](#static-methods) | [User Stories](#user-stories) | [Plugin System](#plugin-system) | [Localization](#localization) | [Extensibility](#extensibility) | [Naming Conflicts](#naming-conflicts) | [Best Practices](#best-practices) | [Compatibility](#compatibility) | [Q&A](#qa) | [Contributing](#contributing)&nbsp; ⬇️
+⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Static Methods](#static-methods) | [User Stories](#user-stories) | [Plugin System](#plugin-system) | [Localization](#localization) | [Extensibility](#extensibility) | [Naming Conflicts](#naming-conflicts) | [Best Practices](#best-practices) | [Compatibility](#compatibility) | [Q&A](#qa) | [Support](#support)&nbsp; ⬇️
 
 > **🎉 v3.0 is Released!**
 >
@@ -102,7 +102,7 @@ Or using yarn:
 yarn add enum-plus
 ```
 
-**Zero‑Install Usage**:
+**Runs in the Browser**:
 
 - The specific version:
 
@@ -135,7 +135,7 @@ yarn add enum-plus
 
 This section shows the various ways to initialize enums using the `Enum` function. Understanding these different initialization formats allows you to choose the most convenient approach for your specific use case.
 
-### 1. Simple Key-Value Format
+### 1. Key-Value Format
 
 The simplest format is a direct mapping of keys to values. This is similar to the native enum format.
 
@@ -179,7 +179,7 @@ WeekEnum.label(0); // I love Sunday
 
 ### 3. Label-Only Format
 
-This is useful when you want to use the key as the value.
+Create an enumeration that only provides the `key` and `label` fields. If the `value` field is omitted, it defaults to the same value as the key  field.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -190,12 +190,15 @@ const WeekEnum = Enum({
 });
 
 WeekEnum.Sunday; // 'Sunday'
-WeekEnum.label('Sunday'); // I love Sunday
+WeekEnum.items[0].key; // 'Sunday'
+WeekEnum.items[0].label; // I love Sunday
 ```
 
 ### 4. Array Format
 
-The array format is useful when you need to create enums dynamically, such as from API data. This allows for flexibility in [Custom Field Mapping](#-custom-field-mapping-in-array-format-initialization) to adapt to different data structures.
+The array format is useful when you need to create enums with dynamic data, for example the data from an API.
+
+You can use dynamic field mapping rules to adapt to various different data structures. Please refer to the [Custom Field Mapping](#-custom-field-mapping-in-array-format-initialization) section for more details.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -236,7 +239,7 @@ WeekEnum.Saturday; // 6
 
 ## API
 
-### 💎 &nbsp; Picks an enum value
+### 💎 &nbsp; Pick enum values
 
 `Enum.XXX`
 
@@ -334,7 +337,7 @@ ColorEnum.named.Red.raw.hex; // '#FF0000'
 
 <sup>**_\[F]_**</sup> &nbsp; `has(keyOrValue?: string | number): boolean`
 
-Determine whether a certain enum item (value or key) exists.
+Check if the value or key of an enum item exists.
 
 ```js
 WeekEnum.has(1); // true
@@ -366,7 +369,7 @@ WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: 'Monday' 
 
 <sup>**_\[F]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-Gets the display name of an enum item based on a certain value or key. If localization has been set up, the localized text will be returned.
+Gets the display name of an enum item according to its value or key. If [localization](#localization) has been enabled, the localized text will be returned.
 
 ```js
 WeekEnum.label(1); // Monday
@@ -379,7 +382,7 @@ WeekEnum.label('Monday'); // Monday, here is label, not key
 
 <sup>**_\[F]_**</sup> &nbsp; `key(value?: string | number): string | undefined`
 
-Get the key of an enum item based on the enum value, if the key is not found, return `undefined`.
+Find the key of an enum item by its value. It's also known as [reverse mapping](https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings). If not found, `undefined` is returned.
 
 ```js
 WeekEnum.key(1); // Monday (here is key, not label)
@@ -393,11 +396,11 @@ WeekEnum.key(1); // Monday (here is key, not label)
 <br/>
 <sup>**_\[F^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
 
-The `raw` method is used to return the original initialization object of the enum collection, which is the object used to create the enum.
+The `raw` method has two overloads. The first one is to return the original initialization object of the whole enum collection, i.e. the first parameter of the `Enum` method.
 
-The second overload method is used to return the original initialization object of a single enum item.
+The second one is to return the original initialization object of a single enum item, i.e. the sub-object of the corresponding field in the first parameter of the `Enum` method.
 
-The main purpose of the `raw` method is to get the extended custom fields of the enum items. Unlimited number of custom fields are allowed.
+The main purpose of the `raw` method is to get the extended custom fields of the enum items.
 
 ```js
 const WeekEnum = Enum({
@@ -410,6 +413,8 @@ WeekEnum.raw(0); // { value: 0, label: 'Sunday', happy: true }
 WeekEnum.raw('Monday'); // { value: 1, label: 'Monday', happy: false }
 WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { value: 1, label: 'Monday', happy: false } }
 ```
+
+> Tips: If you want to access the metadata fields of a known enum item, using `enum.named.XXX.raw` is a good option, for example: `WeekEnum.named.Sunday.raw.happy`.
 
 ---
 
@@ -467,25 +472,23 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 `string`
 
-Display name for Enum types. When creating an enum, you can assign it a display name using the optional `name` parameter. This name can be either a plain string or a localization key to support internationalized text. Please refer to the [Localization](#localization) section for more details.
-
-> Usually Enums are used to generate dropdown menus in forms, or show item text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its items' labels, simplifying maintenance and ensuring consistency across your application.
+The display name of the whole enum collection. It's optional and can be set as the second parameter of the `Enum` method. This name can be either a plain string or a localization key to support internationalized text. Please refer to the [Localization](#localization) section for more details.
 
 ```js
 const WeekEnum = Enum(
   {
-    Sunday: { value: 0, label: 'Sunday', happy: true },
-    Monday: { value: 1, label: 'Monday', happy: false },
+    Sunday: { value: 0, label: 'Sunday' },
+    Monday: { value: 1, label: 'Monday' },
   },
   {
-    name: 'i18n.enums.week', // A localization key
+    name: 'i18n.enums.week', // A regular string or localization key
   }
 );
 
-WeekEnum.name; // Week
-WeekEnum.label(0); // Sunday
-WeekEnum.label(1); // Monday
+WeekEnum.name; // Week or 周, depending on the current language setting
 ```
+
+> Enums are usually used to generate dropdown menus in forms, or show item text in table cells. The display name of the enum type often serves as the form field label or table caption. By utilizing the `name` property, you can centralize the management of both the enum type's display name and its items' labels, simplifying maintenance and ensuring consistency across your application.
 
 ---
 
@@ -493,18 +496,21 @@ WeekEnum.label(1); // Monday
 
 `value1 | value2 | ...`
 
-In TypeScript, provides a union type containing all enum values, enabling precise type constraints for variables and component properties. This replaces broad primitive types like `number` or `string` with exact value sets, preventing invalid assignments while enhancing both code readability and compile-time type safety.
+In TypeScript, provides a union type containing all enum values. It's usually used for type constraints on variables and method parameters, or used in component properties.
 
-```typescript
-type WeekValues = typeof WeekEnum.valueType; // 0 | 1
+```ts
+const weekValue: typeof WeekEnum.valueType = 1;
 
-const weekValue: typeof WeekEnum.valueType = 1; // ✅ Type correct, 1 is a valid week enum value
-const weeks: (typeof WeekEnum.valueType)[] = [0, 1]; // ✅ Type correct, 0 and 1 are valid week enum values
-const badWeekValue: typeof WeekEnum.valueType = 8; // ❌ Type error, 8 is not a valid week enum value
-const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ Type error, 8 is not a valid week enum value
+function setToday(day: typeof WeekEnum.valueType) {
+  // ...
+}
+
+const MyComponent = (props: { day: typeof WeekEnum.valueType }) => {
+  // ...
+};
 ```
 
-> Note: This is a TypeScript type only and cannot be called at runtime. Calling it at runtime will throw an exception.
+> Note: This is a TypeScript type and cannot be called at runtime. Calling it at runtime will throw an error.
 
 ---
 
@@ -512,16 +518,16 @@ const badWeeks: (typeof WeekEnum.valueType)[] = [0, 8]; // ❌ Type error, 8 is 
 
 `key1 | key2 | ...`
 
-Similar to `valueType`, provides a union type of all enum `key`(s)
+Similar to `valueType`, provides a union type of all enum keys in TypeScript.
 
-```typescript
+```ts
 type WeekKeys = typeof WeekEnum.keyType; // 'Sunday' | 'Monday'
 
 const weekKey: typeof WeekEnum.keyType = 'Monday';
 const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 ```
 
-> Note: This is a TypeScript type only and cannot be called at runtime. Calling it at runtime will throw an exception.
+> Note: This is a TypeScript type and cannot be called at runtime. Calling it at runtime will throw an error.
 
 ---
 
@@ -529,14 +535,16 @@ const weekKeys: (typeof WeekEnum.keyType)[] = ['Sunday', 'Monday'];
 
 `{ value: V, label: string, [...] }`
 
-Provides a type of the original initialization object of the Enum collection.
+Provides a type of the original initialization object of the whole enum collection, i.e. the type of the first parameter of the `Enum` method.
 
-```typescript
+Do not confuse it with the `raw` method. The `raw` method is a runtime method, while `rawType` is a TypeScript type.
+
+```ts
 type WeekRaw = typeof WeekEnum.rawType;
 // { Sunday: { value: 0, label: string }, Monday: { value: 1, label: string } }
 ```
 
-> Note: This is a TypeScript type only and cannot be called at runtime. Calling it at runtime will throw an exception.
+> Note: This is a TypeScript type and cannot be called at runtime. Calling it at runtime will throw an error.
 
 ---
 
@@ -684,6 +692,33 @@ WeekEnum.name; // Week or 周, depending on the current locale
 
 #### 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
+- Variables
+
+```ts
+type WeekValues = typeof WeekEnum.valueType; // 0 | 1 | ... | 5 | 6
+
+const weekValue: WeekValues = 1; // ✅ Correct, 1 is a valid week enum value
+const weeks: WeekValues[] = [0, 1]; // ✅ Correct, 0 and 1 are valid week enum values
+
+const badWeekValue: WeekValues = "Weekend"; // ❌ Type error, "Weekend" is not a number
+const badWeekValue: WeekValues = 8; // ❌ Error, 8 is not a valid week enum value
+const badWeeks: WeekValues[] = [0, 8]; // ❌ Error, 8 is not a valid week enum value
+```
+
+- Function Parameters
+
+```ts
+function setDay(day: typeof WeekEnum.valueType) {
+  // The type of day is narrowed to 0 | 1 | ... | 5 | 6
+}
+
+setDay(1); // ✅ Correct
+setDay('Monday'); // ❌ Type error
+setDay(8); // ❌ Error, 8 is not a valid enum value
+```
+
+- Component Props
+
 ```ts
 type MyComponentProps = {
   day: typeof WeekEnum.valueType; // 0 | 1 | ... | 5 | 6
@@ -692,19 +727,9 @@ const MyComponent = (props: MyComponentProps) => {
   return <div>Today is {WeekEnum.label(props.day)}</div>;
 };
 
-<MyComponent day={1} />; // ✅ Type correct
-<MyComponent day="Monday" />; // ❌ Type error
+<MyComponent day={1} />; // ✅ Correct
+<MyComponent day="Monday" />; // ❌ Type error, "Monday" is not a number
 <MyComponent day={8} />; // ❌ Error, 8 is not a valid enum value
-```
-
-```ts
-function setDay(day: typeof WeekEnum.valueType) {
-  // The type of day is narrowed to 0 | 1 | ... | 5 | 6
-}
-
-setDay(1); // ✅ Type correct
-setDay('Monday'); // ❌ Type error
-setDay(8); // ❌ Error, 8 is not a valid enum value
 ```
 
 ---
@@ -1320,6 +1345,6 @@ Thanks to the high flexibility of [Plugin System](#plugin-system), it is quite e
 
 If you find a security issue, please follow the [Security Policy](SECURITY.md) to report it responsibly.
 
-## Support & Star
+## Support
 
-**If you find this project useful, please consider giving it a [STAR](https://github.com/shijistar/enum-plus) ⭐️ on GitHub. It helps more people discover the project and encourages us to continue development.**
+If you find this project useful, please consider giving it a [STAR](https://github.com/shijistar/enum-plus) ⭐️ on GitHub. It helps more people discover the project and encourages us to continue development.
