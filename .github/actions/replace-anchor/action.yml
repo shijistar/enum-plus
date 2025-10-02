@@ -1,0 +1,8 @@
+name: 'Replace anchor links'
+description: 'Add user-content- prefix to anchor links in README and README.zh-CN'
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        sed -i -E 's~(^|[^!])\[([^]]+)]\(#(user-content-)?([^)]+)\)~[\2](#user-content-\4)~g' README.md
+      shell: bash

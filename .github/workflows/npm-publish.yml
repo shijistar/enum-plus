@@ -146,6 +146,9 @@ jobs:
         with:
           version: ${{ github.event.release.tag_name }}
 
+      - name: Add 'user-content-' prefix to anchor links
+        uses: ./.github/actions/replace-anchor
+
       - name: Request the latest version of enum-plus
         id: get_latest_version_before_publish
         run: |
