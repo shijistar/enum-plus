@@ -273,6 +273,7 @@ jobs:
         run: npm ci
 
       - name: Build package
+        working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
         run: npm run build
 
       - name: Run tests (target plugin)
@@ -300,6 +301,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.AT_ENUM_PLUS_SCOPE_NPM_TOKEN }}
 
       - name: Publish a regular version to npm
+        working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
         run: npm publish --ignore-scripts --access=public
         if: github.event.release.prerelease == false
         env:
