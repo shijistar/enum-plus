@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import packageJson from '../package.json';
 
 const headerComment = (legacy: boolean) => `/**
- * ${packageJson.name} (${legacy ? 'ES2015' : 'ES2020'} version)
+ * ${packageJson.name} (${legacy ? 'ES2015' : 'ES2020'} compatible})
  * ${packageJson.description}
  *
  * @version: ${packageJson.version}

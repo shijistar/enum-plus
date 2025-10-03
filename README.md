@@ -60,7 +60,7 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 ## Features
 
-- Fully compatible with native `enum` usage
+- Compatible with the usage of native enums
 - Supports multiple data types such as `number` and `string`
 - Enhanced enum items with display names
 - Internationalization support for display names, can be integrated with any i18n library
@@ -174,7 +174,8 @@ const WeekEnum = Enum({
 });
 
 WeekEnum.Sunday; // 0
-WeekEnum.label(0); // I love Sunday
+WeekEnum.items[0].key; // 'Sunday'
+WeekEnum.items[0].label; // I love Sunday
 ```
 
 ### 3. Label-Only Format
@@ -198,7 +199,7 @@ WeekEnum.items[0].label; // I love Sunday
 
 The array format is useful when you need to create enums with dynamic data, for example the data from an API.
 
-You can use dynamic field mapping rules to adapt to various different data structures. Please refer to the [Custom Field Mapping](#-custom-field-mapping-in-array-format-initialization) section for more details.
+You can also use dynamic field mapping rules to adapt to various different data structures. Please refer to the [Custom Field Mapping](#-custom-field-mapping-in-array-format-initialization) section for more details.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -216,7 +217,7 @@ PetEnum.label(1); // Dog
 
 ### 5. Native Enum Format
 
-You can also create from native enums. It benefits from the native enum's `auto-incrementing` behavior.
+Create from native enums. It benefits from the native enum's `auto-incrementing` behavior.
 
 ```ts
 import { Enum } from 'enum-plus';
@@ -290,7 +291,7 @@ WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
 
 `string[]`
 
-Returns an array of all enum item `label`(s).
+Returns an array of all enum item `label`(s). If [localization](#localization) has been enabled, the localized texts of each enum item will be returned.
 
 ```js
 WeekEnum.labels; // ['Sunday', 'Monday', ... 'Friday', 'Saturday']
@@ -325,7 +326,7 @@ const ColorEnum = Enum({
 ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
 ```
 
-By the way, you can quickly access custom fields of a single enum item through the `named` property.
+Aditionally, you can quickly access custom fields of an enum item through the `named` and `raw` property.
 
 ```js
 ColorEnum.named.Red.raw.hex; // '#FF0000'
@@ -609,7 +610,7 @@ Enum.install(i18nextPlugin);
 
 ## User Stories
 
-#### 💡 Prevent Magic Numbers
+### 💡 Prevent Magic Numbers
 
 ```js
 const WeekEnum = Enum({
@@ -626,7 +627,7 @@ if (today === WeekEnum.Sunday) {
 
 ---
 
-#### 💡 Check for Valid Enum Values
+### 💡 Check for Valid Enum Values
 
 ```js
 if (WeekEnum.has(value)) {
@@ -638,7 +639,7 @@ if (WeekEnum.has(value)) {
 
 ---
 
-#### 💡 Check for Enum Objects
+### 💡 Check for Enum Objects
 
 ```ts
 let values: number[] | undefined;
@@ -653,9 +654,9 @@ if (Enum.isEnum(data)) {
 
 ---
 
-#### 💡 Generate UI Controls
+### 💡 Generate UI Controls
 
-Take React and Ant Design as an example. Please refer to the [Supports Various Frontend Frameworks](#-supports-various-frontend-frameworks) section for more examples.
+Take React and Ant Design as examples. Please refer to the [Supports Various Frontend Frameworks](#-supports-various-frontend-frameworks) section for more examples.
 
 ```jsx
 import { Menu, Select, Table } from 'antd';
@@ -678,9 +679,9 @@ const App = () => {
 
 ---
 
-#### 💡 Internationalization for Enum Names and Labels
+### 💡 Internationalization for Enum Names and Labels
 
-Support internationalization. Set the `label` field to a localization key, so that it displays the corresponding text based on the current language environment. Please refer to the [Localization](#localization) section for more details.
+Internationalization support . Set the `label` field to a localization key, so that it displays the corresponding text based on the current language environment. Please refer to the [Localization](#localization) section for more details.
 
 ```js
 WeekEnum.label(1); // Monday or 星期一, depending on the current locale
@@ -690,7 +691,9 @@ WeekEnum.name; // Week or 周, depending on the current locale
 
 ---
 
-#### 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript Only]_**</sup>
+### 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript Only]_**</sup>
+
+Type narrowing is a TypeScript-specific feature that allows you to use `valueType` to constrain the types of variables, function parameters, or component props. This prevents invalid assignments and enhances type safety in your code.
 
 - Variables
 
@@ -734,7 +737,7 @@ const MyComponent = (props: MyComponentProps) => {
 
 ---
 
-#### 💡 Support Metadata Fields That Can Serve as a Static Configuration System
+### 💡 Support Metadata Fields That Can Serve as a Static Configuration System
 
 ```js
 const ColorEnum = Enum({
@@ -753,7 +756,7 @@ ColorEnum.named.Red.raw.icon; // '🔥'
 
 ---
 
-#### Supports Traversing Enum Items in a Read-Only Manner
+### 💡 Supports Traversing Enum Items in a Read-Only Manner
 
 ```js
 Array.isArray(WeekEnum.items); // true
@@ -772,7 +775,7 @@ WeekEnum.items[0].label = 'foo'; // ❌ Not allowed, read-only
 
 ---
 
-#### 💡 Enum Composition (Merging)
+### 💡 Enum Composition (Merging)
 
 ```js
 const PrimaryColorEnum = Enum({
@@ -793,9 +796,9 @@ const AllColorEnum = Enum({
 
 ---
 
-#### 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
+### 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
 
-Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](./docs/best-practices.md) section for writing good code.
+Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](./docs/best-practices.md) section for how to write good code.
 
 ```js
 const WeekEnum = Enum({
@@ -810,13 +813,13 @@ WeekEnum.Monday; // Hover over Monday
 
 ![jsdoc](./public/jsdoc-en.png)
 
-You can see that this hover functionality reveals both documentation and enum values simultaneously, without leaving your current position in the code.
+We can see that both the enumeration value and the description of the enumeration item can be displayed at the same time, when the cursor hovers over an enumeration item. There is no need to jump away from the current position in the code to check the definitions.
 
 ---
 
-#### 💡 Supports Various Frontend Frameworks
+### 💡 Supports Various Frontend Frameworks
 
-`Enum.items` can be consumed as control data sources (using Select as an example).
+`Enum.items` can be consumed as the data source of UI components. Take `Select` component as examples.
 
 - **React-based UI libraries**
 
@@ -876,10 +879,10 @@ You can see that this hover functionality reveals both documentation and enum va
 
   [Angular Material](https://material.angular.io/components/select/overview) Select
 
-  ```jsx
+  ```html
   <mat-select>
     @for (item of WeekEnum.items; track item.value) {
-      <mat-option [value]="item.value">{{ item.label }}</mat-option>
+    <mat-option [value]="item.value">{{ item.label }}</mat-option>
     }
   </mat-select>
   ```
@@ -896,7 +899,7 @@ You can see that this hover functionality reveals both documentation and enum va
 
 ---
 
-#### 💡 Custom Field Mapping in Array Format Initialization
+### 💡 Custom Field Mapping in Array Format Initialization
 
 In [4. Array Format](#4-array-format) section, we know that you can build an enum from dynamic data from the backend, but it is very likely that the field names of dynamic data are not `value`, `label`, `key`, but other field names. In this case, you can pass in a custom option to map these to other field names.
 
@@ -1013,7 +1016,7 @@ This plugin also supports custom i18next options, and even allows complete contr
 
 If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue).
 
-If you are using other internationalization libraries, such as `react-intl`, `vue-i18next`, or `ngx-translate`, you can integrate these libraries through the `Enum.localize` method.
+If you are using other internationalization libraries, such as `react-intl`, `vue-i18next`, or `ngx-translate`, you can integrate these libraries by overwritting the `Enum.localize` method.
 
 _my-extension.js_
 
