@@ -1,5 +1,3 @@
-import { IS_ENUM_ITEM } from 'enum-plus';
-
 export interface IsMatchOptions {
   /**
    * - **EN:** The field used for searching in the `isMatch` function, default is `label`.
@@ -23,15 +21,11 @@ export function isMatchCore(options: {
     text = toString(item);
   } else if (typeof item === 'object' && item !== null) {
     let content: unknown;
-    if (item[IS_ENUM_ITEM]) {
-      if (item.raw?.[searchField] !== undefined) {
-        content = translate(item.raw[searchField]);
-      } else if (searchField === 'label') {
-        // label is not present in raw, auto fallback to key instead
-        content = item.key;
-      } else {
-        content = item[searchField];
-      }
+    if (item.raw?.[searchField] !== undefined) {
+      content = translate(item.raw[searchField]);
+    } else if (searchField === 'label' && item.key) {
+      // label is not present in raw, auto fallback to key instead
+      content = item.key;
     } else {
       content = item[searchField];
     }
