@@ -1,6 +1,6 @@
 {
   "name": "@enum-plus/react",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.0",
   "description": "A plugin for enum-plus that provides React components and hooks for enum handling",
   "keywords": [
     "enum",
