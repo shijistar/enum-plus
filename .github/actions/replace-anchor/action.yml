@@ -4,5 +4,5 @@ runs:
   using: 'composite'
   steps:
     - run: |
-        sed -i -E 's~(^|[^!])\[([^]]+)]\(#(user-content-)?([^)]+)\)~[\2](#user-content-\4)~g' README.md
+        sed -i -E 's~(^|\s)\[([^]]+)]\(#(user-content-)?([^)]+)\)~\1[\2](#user-content-\4)~g' README.md
       shell: bash
