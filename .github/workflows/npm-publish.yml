@@ -272,11 +272,14 @@ jobs:
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Build package
+      - name: Build the core package
+        run: npm run build
+
+      - name: Build the plugin package
         working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
         run: npm run build
 
-      - name: Run tests (target plugin)
+      - name: Run the plugin tests
         working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
         run: npm test
 
