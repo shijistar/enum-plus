@@ -35,7 +35,7 @@
 
 ## 简介
 
-`enum-plus`是一个增强版的枚举类库，完全兼容原生`enum`的用法，是原生枚举的直接替代品。支持为枚举项添加显示名称，以及添加自定义元数据字段。可以用枚举直接生成下拉框、多选框、菜单、选项卡等各种 UI 控件，对前端工程师非常实用。
+`enum-plus` 是一个增强版的枚举类库，完全兼容原生`enum`的用法，是原生枚举的直接替代品。支持为枚举项添加显示名称，以及添加自定义元数据字段。可以用枚举直接生成下拉框、多选框、菜单、选项卡等各种 UI 控件，对前端工程师非常实用。
 
 为枚举增加了很多扩展方法，支持对枚举项数组的遍历和各种数据转换。你可以把数值转换为多种语言的枚举名称，因为它支持国际化，这在 UI 回显业务数据时非常有用。
 
@@ -69,12 +69,12 @@
 - 支持插件体系，可以通过安装插件扩展枚举功能
 - 支持数据类型约束，提高代码的类型安全性<sup>_&nbsp;&nbsp;TypeScript_</sup>
 - 枚举可以生成下拉框等 UI 组件，支持 [Ant Design](https://ant-design.antgroup.com/components/overview-cn)、[Element Plus](https://element-plus.org/zh-CN/component/select.html)、[Material-UI](https://mui.com/material-ui) 等多种组件库
-- 支持服务端渲染(SSR)
 - 支持 Web浏览器、Node.js、React Native、Taro、小程序等多种环境
+- 支持服务端渲染 (SSR)
 - 兼容任何前端开发框架，支持无框架的纯原生项目
 - 面向 TypeScript 设计，具有良好的类型推导和代码补全能力
 - 零依赖项
-- 轻量（gzip压缩后仅 2KB+）
+- 轻量（gzip压缩后仅2KB+）
 
 ## 安装
 
@@ -197,9 +197,6 @@ WeekEnum.items[0].label; // 星期日
 
 数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。
 
-<!-- You can use dynamic field mapping rules to adapt to various different data structures. Please refer to the [Custom Field Mapping](#-custom-field-mapping-in-array-format-initialization) section for more details. -->
-<!-- 英文翻译 -->
-
 你可以动态映射字段以适应各种不同的数据结构。请参考 [数组格式初始化，设置不同的字段映射](#数组格式初始化设置不同的字段映射) 章节，了解更多详情。
 
 ```js
@@ -208,7 +205,7 @@ import { Enum } from 'enum-plus';
 const pets = [
   { value: 1, key: 'Dog', label: '狗' },
   { value: 2, key: 'Cat', label: '猫' },
-  { value: 3, key: 'Rabbit', label: '兔子' },
+  { value: 3, key: 'Rabbit', label: '兔' },
 ];
 const PetEnum = Enum(pets);
 
@@ -223,7 +220,7 @@ PetEnum.label(1); // 狗
 ```ts
 import { Enum } from 'enum-plus';
 
-enum init {
+enum WeekNative {
   Sunday = 0,
   Monday,
   Tuesday,
@@ -232,7 +229,7 @@ enum init {
   Friday,
   Saturday,
 }
-const WeekEnum = Enum(init);
+const WeekEnum = Enum(WeekNative);
 
 WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
@@ -320,9 +317,9 @@ WeekEnum.keys; // ['Sunday', 'Monday', ... 'Friday', 'Saturday']
 
 ```js
 const ColorEnum = Enum({
-  Red: { value: 1, label: 'Red', hex: '#FF0000' },
-  Green: { value: 2, label: 'Green', hex: '#00FF00' },
-  Blue: { value: 3, label: 'Blue', hex: '#0000FF' },
+  Red: { value: 1, label: '红色', hex: '#FF0000' },
+  Green: { value: 2, label: '绿色', hex: '#00FF00' },
+  Blue: { value: 3, label: '蓝色', hex: '#0000FF' },
 });
 ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
 ```
@@ -357,8 +354,9 @@ WeekEnum.has('Birthday'); // false
 字段名支持：`key`、`value`、`label`或元数据字段
 
 ```js
-WeekEnum.findBy('value', 1); // { key: 'Monday', value: 1, label: '星期一' }
-WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: '星期一' }
+ColorEnum.findBy('value', 1); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
+ColorEnum.findBy('key', 'Red'); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
+ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
 ```
 
 ---
@@ -427,15 +425,17 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Mond
 ```js
 WeekEnum.toList();
 // [
+//   { value: 0, label: '星期日' },
 //   { value: 1, label: '星期一' },
-//   { value: 2, label: '星期二' },
 //   ...
+//   { value: 6, label: '星期六' }
 // ]
 WeekEnum.toList({ valueField: 'id', labelField: 'name' });
 // [
+//   { id: 0, name: '星期日' },
 //   { id: 1, name: '星期一' },
-//   { id: 2, name: '星期二' },
 //   ...
+//   { id: 6, name: '星期六' }
 // ]
 ```
 
@@ -452,15 +452,17 @@ WeekEnum.toList({ valueField: 'id', labelField: 'name' });
 ```js
 WeekEnum.toMap();
 // {
+//   "0": '星期日',
 //   "1": '星期一',
-//   "2": '星期二',
 //   ...
+//   "6": '星期六'
 // }
 WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 // {
+//   "Sunday": 0,
 //   "Monday": 1,
-//   "Tuesday": 2,
 //   ...
+//   "Saturday": 6
 // }
 ```
 
@@ -576,7 +578,7 @@ Enum.localize = (key) => i18n.t(key);
 
 ### 💎 &nbsp; Enum.extends
 
-<sup>**_\[方法]_**</sup> &nbsp; `(obj: Record<string, unknown> | undefined) => void`
+<sup>**_\[方法]_**</sup> &nbsp; `(obj: Record<string, Function>) => void`
 
 为所有枚举对象添加全局扩展方法，请参考[全局扩展](#全局扩展)章节，了解更多详情。
 
@@ -697,8 +699,8 @@ type WeekValues = typeof WeekEnum.valueType; // 0 | 1 | ... | 5 | 6
 const weekValue: WeekValues = 1; // ✅ 正确，1 是一个有效的周枚举值
 const weeks: WeekValues[] = [0, 1]; // ✅ 正确，0 和 1 是有效的周枚举值
 
-const badWeekValue: WeekValues = "Weekend"; // ❌ 类型错误，"Weekend" 不是数字
-const badWeekValue: WeekValues = 8; // ❌ 错误，8 不是一个有效的周枚举值
+const badWeekValue1: WeekValues = 'Weekend'; // ❌ 类型错误，"Weekend" 不是数字
+const badWeekValue2: WeekValues = 8; // ❌ 错误，8 不是一个有效的周枚举值
 const badWeeks: WeekValues[] = [0, 8]; // ❌ 错误，8 不是一个有效的周枚举值
 ```
 
@@ -790,9 +792,9 @@ const AllColorEnum = Enum({
 
 ---
 
-### 💡 枚举项支持 Jsdoc 注释，启用代码智能提示
+### 💡 枚举项支持 JSDoc 注释，启用代码智能提示
 
-在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 Jsdoc 注释，而不必再转到枚举定义处查看。关于如何编写良好的代码，请参考 [最佳实践](./docs/best-practices.md) 章节。
+在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 JSDoc 注释，而不必再转到枚举定义处查看。关于如何编写良好的代码，请参考 [最佳实践](./docs/best-practices.md) 章节。
 
 ```js
 const WeekEnum = Enum({
@@ -805,7 +807,7 @@ const WeekEnum = Enum({
 WeekEnum.Monday; // 将光标悬浮在 Monday 上
 ```
 
-![jsdoc](./public/jsdoc-chs.png)
+![JSDoc](./public/jsdoc-chs.png)
 
 可以看到，当光标悬浮在枚举项上时，可以同时显示枚举值和枚举项的介绍。无需跳转离开当前光标位置，去查看枚举的定义，这在阅读代码时非常方便。
 
@@ -894,7 +896,7 @@ WeekEnum.Monday; // 将光标悬浮在 Monday 上
 
 ---
 
-### 💡 数组格式初始化，设置不同的字段映射
+### 💡 在数组初始化方式中，设置不同的字段映射
 
 在 [4. 数组格式](#4-数组格式) 章节中，介绍了可以通过后端动态数据来构建枚举，但是很可能动态数据的字段名并不是`value`、`label`、`key`，而是其它的字段名。这时你可以传入一个自定义选项，把这些映射到其它字段名上
 
@@ -1177,10 +1179,10 @@ WeekEnum[ITEMS].toList(); // 但可以通过 ITEMS 别名来访问它
 在使用 `enum-plus` 创建和管理枚举时，遵循一些最佳实践可以帮助你编写更清晰、可维护的代码。以下是一些建议：
 
 1. **枚举类型命名：** 采用 `PascalCase` 大驼峰命名法，并以 `Enum` 作为后缀，如 _WeekEnum_、_ColorEnum_ 等。
-2. **枚举成员命名：** 使用 `PascalCase` 大驼峰命名法，如 _WeekEnum.Sunday_、_ColorEnum.Red_ 等。此命名方式突显了枚举成员的不可变性与静态特性，且在IDE智能提示中会在顶部显示，更方便拾取。
+2. **枚举成员命名：** 使用 `PascalCase` 大驼峰命名法，如 _Sunday_、_Red_ 等。这种命名方式突显了枚举成员的静态与不可变性，并且在IDE智能提示中可以显示在顶部，而不是与其它方法名混在一起，更方便查看和拾取。
 3. **语义明确：** 确保枚举和成员名称具有清晰的语义，良好的语义命名能够自解释代码意图，降低理解成本。
 4. **单一职责原则：** 每个枚举类型应专注表达一组高内聚的相关常量，避免不同枚举类型之间的职责重叠。
-5. **提供JSDoc注释：** 为每个枚举项添加 Jsdoc 注释，说明其含义和用途。完善的JSDoc文档能在IDE中提供悬停提示，提升代码阅读体验。同样也建议为枚举类添加注释。
+5. **提供JSDoc注释：** 为每个枚举项添加 JSDoc 注释，说明其含义和用途。完善的JSDoc文档能在IDE中提供悬停提示，提升代码阅读体验。同样也建议为枚举类添加注释。
 6. **国际化架构：** 建议从开始就搭建国际化架构，可集成本库提供的 [本地化](#本地化) 机制。预先设计的国际化方案能够避免后期重构的高成本，并使应用更易于扩展到全球市场。
 
 下面是一个示例，展示了如何结合上述最佳实践来定义一个枚举：
@@ -1308,7 +1310,7 @@ const WeekEnum = Enum({
 
 可以看到，在较低版本的TypeScript中，你可能需要使用 `as const` 类型断言。`as const` 可以让枚举值保持原始的字面量值，而不会变成 `number`、`string` 类型，同时 `enum.valueType` 类型也会保持 `0 | 1`，而不会变成 `number` 类型。这让 TypeScript 的类型校验变得更准确，也可以提升代码的安全性。另外，请检查你的 `tsconfig.json` 文件，确保 `moduleResolution` 选项设置为 `node` 或 `node10`，避免 `enum-plus` 的类型声明文件被自动切换到 5.0+ 版本。
 
-如果你使用的是 JavaScript，那么你可以借助 `jsdoc` 来让编辑器精确识别类型。
+如果你使用的是 JavaScript，那么你可以借助 `JSDoc` 来让编辑器精确识别类型。
 
 ```js
 /** @type {{ Sunday: 0; Monday: 1 }} */

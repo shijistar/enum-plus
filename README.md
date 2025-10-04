@@ -69,12 +69,12 @@ What other exciting features are there? Please continue to explore! Or you can c
 - Plugin system design, extending enum functionality through plugin installations
 - Supports type narrowing to enhance type safety<sup>_&nbsp;&nbsp;TypeScript_</sup>
 - Generates dropdowns from enums, compatible with UI libraries like [Ant Design](https://ant.design/components/overview), [Element Plus](https://element-plus.org/en-US/component/overview), [Material-UI](https://mui.com/material-ui) and more
-- Supports server-side rendering (SSR)
 - Compatible with various environments including Browsers, Node.js, React Native, Taro, and mini-programs
+- Supports server-side rendering (SSR)
 - Compatible with any front-end development framework, including vanilla projects
 - TypeScript‑oriented, providing excellent type inference and code completion capabilities
 - Zero dependencies
-- Lightweight (only 2KB+ minzipped)
+- Lightweight (min+gzip 2KB+ only)
 
 ## Installation
 
@@ -180,7 +180,7 @@ WeekEnum.items[0].label; // I love Sunday
 
 ### 3. Label-Only Format
 
-Create an enumeration that only provides the `key` and `label` fields. If the `value` field is omitted, it defaults to the same value as the key  field.
+Create an enumeration that only provides the `key` and `label` fields. If the `value` field is omitted, it defaults to the same value as the `key` field.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -222,7 +222,7 @@ Create from native enums. It benefits from the native enum's `auto-incrementing`
 ```ts
 import { Enum } from 'enum-plus';
 
-enum init {
+enum WeekNative {
   Sunday = 0,
   Monday,
   Tuesday,
@@ -231,7 +231,7 @@ enum init {
   Friday,
   Saturday,
 }
-const WeekEnum = Enum(init);
+const WeekEnum = Enum(WeekNative);
 
 WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
@@ -270,7 +270,7 @@ WeekEnum.named.Monday; // { key: 'Monday', value: 1, label: 'Monday' }
 Returns a read-only array of all enum items.
 
 ```js
-WeekEnum.items; // [ { value: 0, label: 'Sunday', key:  'Sunday' }, { value: 1, label: 'Monday', key: 'Monday' }, ... ]
+WeekEnum.items; // [ { value: 0, label: 'Sunday', key: 'Sunday' }, { value: 1, label: 'Monday', key: 'Monday' }, ... ]
 ```
 
 ---
@@ -326,7 +326,7 @@ const ColorEnum = Enum({
 ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
 ```
 
-Aditionally, you can quickly access custom fields of an enum item through the `named` and `raw` property.
+Additionally, you can quickly access custom fields of an enum item through the `named` and `raw` properties.
 
 ```js
 ColorEnum.named.Red.raw.hex; // '#FF0000'
@@ -355,14 +355,15 @@ WeekEnum.has('Birthday'); // false
 
 Find an enum item by a specific field and its value. Returns the enum item object if found, otherwise returns `undefined`.
 
-The `field` parameter can be one of the built-in fields: `key`, `value`, `label`, or any custom field defined in the enum.
+The `field` parameter can be one of the built-in fields: `key`, `value`, `label`, or any meta field defined in the enum item.
 
 ```js
-WeekEnum.findBy('value', 1); // { key: 'Monday', value: 1, label: 'Monday' }
-WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: 'Monday' }
+ColorEnum.findBy('value', 1); // { key: 'Red', value: 1, label: 'Red', hex: '#FF0000' }
+ColorEnum.findBy('key', 'Red'); // { key: 'Red', value: 1, label: 'Red', hex: '#FF0000' }
+ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: 'Red', hex: '#FF0000' }
 ```
 
-> If you want to get the custom fields of a known enum item, it is recommended to use the `named` property to access it
+> If you need to get the meta fields of a known enum item, it is recommended to use the `named` and `raw` property, for example: `ColorEnum.named.Red.raw.hex`.
 
 ---
 
@@ -370,11 +371,11 @@ WeekEnum.findBy('key', 'Monday'); // { key: 'Monday', value: 1, label: 'Monday' 
 
 <sup>**_\[F]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-Gets the display name of an enum item according to its value or key. If [localization](#localization) has been enabled, the localized text will be returned.
+Gets the display name of an enum item according to its value or key. If [localization](#localization) is enabled, the localized text will be returned.
 
 ```js
 WeekEnum.label(1); // Monday
-WeekEnum.label('Monday'); // Monday, here is label, not key
+WeekEnum.label('Monday'); // Monday, this is label, not key
 ```
 
 ---
@@ -386,7 +387,7 @@ WeekEnum.label('Monday'); // Monday, here is label, not key
 Find the key of an enum item by its value. It's also known as [reverse mapping](https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings). If not found, `undefined` is returned.
 
 ```js
-WeekEnum.key(1); // Monday (here is key, not label)
+WeekEnum.key(1); // Monday (this is key, not label)
 ```
 
 ---
@@ -430,15 +431,17 @@ Converts the enum items to an array of objects, each containing `value` and `lab
 ```js
 WeekEnum.toList();
 // [
+//   { value: 0, label: 'Sunday' },
 //   { value: 1, label: 'Monday' },
-//   { value: 2, label: 'Tuesday' },
 //   ...
+//   { value: 6, label: 'Saturday' }
 // ]
 WeekEnum.toList({ valueField: 'id', labelField: 'name' });
 // [
+//   { id: 0, name: 'Sunday' },
 //   { id: 1, name: 'Monday' },
-//   { id: 2, name: 'Tuesday' },
 //   ...
+//   { id: 6, name: 'Saturday' }
 // ]
 ```
 
@@ -455,15 +458,17 @@ Converts the enum items to a key-value map object, where the keys are the enum v
 ```js
 WeekEnum.toMap();
 // {
+//   "0": 'Sunday',
 //   "1": 'Monday',
-//   "2": 'Tuesday',
 //   ...
+//   "6": 'Saturday'
 // }
 WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 // {
+//   "Sunday": 0,
 //   "Monday": 1,
-//   "Tuesday": 2,
 //   ...
+//   "Saturday": 6
 // }
 ```
 
@@ -580,7 +585,7 @@ Enum.localize = (key) => i18n.t(key);
 
 ### 💎 &nbsp; Enum.extends
 
-<sup>**_\[F]_**</sup> &nbsp; `(obj: Record<string, unknown> | undefined) => void`
+<sup>**_\[F]_**</sup> &nbsp; `(obj: Record<string, Function>) => void`
 
 Extend the `Enum` objects with custom methods. More details can be found in the [Extensibility](#extensibility) section.
 
@@ -681,7 +686,7 @@ const App = () => {
 
 ### 💡 Internationalization for Enum Names and Labels
 
-Internationalization support . Set the `label` field to a localization key, so that it displays the corresponding text based on the current language environment. Please refer to the [Localization](#localization) section for more details.
+Internationalization support. Set the `label` field to a localization key, so that it displays the corresponding text based on the current language environment. Please refer to the [Localization](#localization) section for more details.
 
 ```js
 WeekEnum.label(1); // Monday or 星期一, depending on the current locale
@@ -703,8 +708,8 @@ type WeekValues = typeof WeekEnum.valueType; // 0 | 1 | ... | 5 | 6
 const weekValue: WeekValues = 1; // ✅ Correct, 1 is a valid week enum value
 const weeks: WeekValues[] = [0, 1]; // ✅ Correct, 0 and 1 are valid week enum values
 
-const badWeekValue: WeekValues = "Weekend"; // ❌ Type error, "Weekend" is not a number
-const badWeekValue: WeekValues = 8; // ❌ Error, 8 is not a valid week enum value
+const badWeekValue1: WeekValues = 'Weekend'; // ❌ Type error, "Weekend" is not a number
+const badWeekValue2: WeekValues = 8; // ❌ Error, 8 is not a valid week enum value
 const badWeeks: WeekValues[] = [0, 8]; // ❌ Error, 8 is not a valid week enum value
 ```
 
@@ -811,7 +816,7 @@ const WeekEnum = Enum({
 WeekEnum.Monday; // Hover over Monday
 ```
 
-![jsdoc](./public/jsdoc-en.png)
+![JSDoc](./public/jsdoc-en.png)
 
 We can see that both the enumeration value and the description of the enumeration item can be displayed at the same time, when the cursor hovers over an enumeration item. There is no need to jump away from the current position in the code to check the definitions.
 
@@ -901,7 +906,7 @@ We can see that both the enumeration value and the description of the enumeratio
 
 ### 💡 Custom Field Mapping in Array Format Initialization
 
-In [4. Array Format](#4-array-format) section, we know that you can build an enum from dynamic data from the backend, but it is very likely that the field names of dynamic data are not `value`, `label`, `key`, but other field names. In this case, you can pass in a custom option to map these to other field names.
+In the [4. Array Format](#4-array-format) section, we know that enums can be created from dynamic data arrays. However, the field names in the real world may be different from the default `value`, `label`, and `key`. In such cases, you can pass in a custom option to map these to other field names.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -1016,7 +1021,7 @@ This plugin also supports custom i18next options, and even allows complete contr
 
 If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue).
 
-If you are using other internationalization libraries, such as `react-intl`, `vue-i18next`, or `ngx-translate`, you can integrate these libraries by overwritting the `Enum.localize` method.
+If you are using other internationalization libraries, such as `react-intl`, `vue-i18next`, or `ngx-translate`, you can integrate these libraries by overwriting the `Enum.localize` method.
 
 _my-extension.js_
 
@@ -1183,10 +1188,10 @@ WeekEnum[ITEMS].toList(); // But you can access it via the ITEMS alias
 
 When using `enum-plus`, following these best practices can help ensure consistency, maintainability, and clarity in your codebase:
 
-1. **Enum Type Naming:** Use `PascalCase` and append with the `Enum` suffix (e.g., _WeekEnum_, _ColorEnum_).
-2. **Enum Item Naming:** Use `PascalCase` for enum items (e.g., _WeekEnum.Sunday_, _ColorEnum.Red_). This naming style highlights the immutability and static nature of enum items, and ensures they appear at the top in IDE IntelliSense suggestions for easier selection.
+1. **Enum Type Naming:** Use `PascalCase` and end with `Enum` (e.g., _WeekEnum_, _ColorEnum_).
+2. **Enum Item Naming:** Use `PascalCase` (e.g., _Sunday_, _Red_). This naming approach highlights the static and immutable nature of enumeration members. Moreover, in the IDE's intelligent prompting, they will be displayed at the top instead of being mixed with other method names, making it more convenient for viewing and selection.
 3. **Semantic Clarity:** Ensure enum and item names have clear semantics. Good semantic naming serves as self-documentation, making code intent explicit and reducing cognitive overhead.
-4. **Single Responsibility Principle:** Each enum type should represent a single, cohesive set of related constants. Avoiding overlapping responsibilities between different enum types.
+4. **Single Responsibility Principle:** Each enum type should represent a single, cohesive set of related constants. Avoid overlapping responsibilities between different enum types.
 5. **Provide JSDoc Comments:** Provide JSDoc comments for each enum item and the enum type itself, explaining their purpose and usage. Comprehensive documentation enables IDE hover tooltips and improves code readability and maintainability.
 6. **Internationalization Architecture:** Plan for internationalization from the outset by leveraging the library's [localization](#localization) features. A well-designed internationalization architecture minimizes future refactoring and facilitates global scalability.
 
@@ -1249,7 +1254,7 @@ In Node.js environments, you can import enum-plus using either `require` or `imp
 
 ### Why do I need this library? TypeScript already has the built-in enums
 
-TypeScript's built-in enum only provides the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type): eliminating magic numbers, and regulating control flow. However, as a front-end engineer, the needs for enumerations are not merely these. We also need:
+TypeScript's built-in enum only provides the basic functionality of [Enumeration](https://en.wikipedia.org/wiki/Enumerated_type): eliminating magic numbers and structuring control flow (e.g. with if / switch). However, as a front-end engineer, the needs for enumerations are not merely these. We also need:
 
 1. _Eliminate magic numbers_
 2. _Used in the `if` or `switch` statements for conditional branching_
@@ -1315,7 +1320,7 @@ const WeekEnum = Enum({
 
 As you can see, in earlier versions of TypeScript, you may need to use the `as const` type assertion. `as const` allows the enum values to remain their original literal values instead of being converted to `number` or `string` types. Meanwhile, the `enum.valueType` will remain as `0 | 1` instead of becoming `number`. This makes TypeScript's type checking more accurate and enhances code safety. Additionally, please check your `tsconfig.json` file to ensure that the `moduleResolution` option is set to `node` or `node10`, which prevents the type declaration files of `enum-plus` from being automatically switched to the version of 5.0+.
 
-If you are using JavaScript, you can leverage `jsdoc` to help the editor accurately recognize types.
+If you are using JavaScript, you can leverage `JSDoc` to help the editor accurately recognize types.
 
 ```js
 /** @type {{ Sunday: 0; Monday: 1 }} */
