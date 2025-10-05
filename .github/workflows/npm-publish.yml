@@ -230,11 +230,11 @@ jobs:
           git branch -u origin/master
           git pull origin master
 
-      - name: Replace download url to the NPM latest version
+      - name: Replace download url to the releasing version
         if: github.event.release.prerelease == false
         uses: ./.github/actions/replace-path-url
         with:
-          version: ${{ steps.get_latest_version_after_publish.outputs.LATEST_VERSION }}
+          version: ${{ github.event.release.tag_name }}
 
       - name: Commit and push changes
         if: github.event.release.prerelease == false
