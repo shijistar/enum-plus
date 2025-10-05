@@ -1,6 +1,6 @@
 {
   "name": "@enum-plus/plugin-react-i18next",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "A plugin for enum-plus that supports internationalization of enums through react-i18next",
   "keywords": [
     "enum",
