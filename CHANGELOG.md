@@ -4,7 +4,7 @@
 
 ## 3.0.0
 
-_UNRELEASED_
+2025-10-5
 
 > 🎉 **v3.0 is Arrived!**
 >
@@ -54,7 +54,7 @@ _UNRELEASED_
 
 ### Bug Fixes
 
-- 🐞 Fix sourcemap resolution issues in CommonJS mode
+- 🐞 Fix sourcemap resolution issues in `CommonJS` mode
 
 ## 2.4.3
 
