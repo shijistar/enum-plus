@@ -17,7 +17,7 @@ const testTyping = (engine: TestEngineBase) => {
         if (Enum.isEnum(value)) {
           engine.expect(value).toBe(weekEnum);
         } else {
-          console.log(value as typeof weekEnum);
+          console.log(value);
         }
 
         validateEnum(engine, weekEnum, localeEN, WeekConfig);
