@@ -140,6 +140,8 @@ jobs:
 
       - name: Replace relative image url to cdn.jsdelivr.net
         uses: ./.github/actions/replace-img-url
+        with:
+          version: ${{ github.event.release.tag_name }}
 
       - name: Replace download url to the releasing version
         uses: ./.github/actions/replace-path-url

@@ -1,10 +1,14 @@
 name: 'Replace image urls in README'
 description: 'Replace image relative paths to cdn.jsdelivr.net in README and README.zh-CN'
+inputs:
+  version:
+    description: 'Version to use in URLs'
+    required: true
 runs:
   using: 'composite'
   steps:
     - run: |
-        sed -i "s|./public/enum-plus.svg|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v2.4.3/public/enum-plus.svg|g" README.md README.zh-CN.md
-        sed -i "s|./public/usage-screenshot-v3.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus/public/usage-screenshot-v3.gif|g" README.md README.zh-CN.md
-        sed -i "s|./public/jsdoc-en.png|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v2.4.3/public/jsdoc-en.png|g" README.md README.zh-CN.md
+        sed -i "s|./public/enum-plus.svg|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/enum-plus.svg|g" README.md README.zh-CN.md
+        sed -i "s|./public/usage-screenshot-v3.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/usage-screenshot-v3.gif|g" README.md README.zh-CN.md
+        sed -i "s|./public/jsdoc-en.png|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/jsdoc-en.png|g" README.md README.zh-CN.md
       shell: bash
