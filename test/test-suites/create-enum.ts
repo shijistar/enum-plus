@@ -464,18 +464,43 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'should be able to check if a value is a valid Enum',
+      'Enum.isEnum method should be able to check for enum instances',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const WeekConfig = StandardWeekConfig;
         const weekEnum = Enum(WeekConfig);
-        return { Enum, weekEnum, WeekConfig };
+        const isWeekEnum = Enum.isEnum(weekEnum);
+        const isWeekConfig = Enum.isEnum(WeekConfig);
+        const isNumberEnum = Enum.isEnum(1);
+        const isStringEnum = Enum.isEnum('Monday');
+        const isItemsEnum = Enum.isEnum(weekEnum.items);
+        return { isWeekEnum, isWeekConfig, isNumberEnum, isStringEnum, isItemsEnum };
       },
-      ({ Enum, weekEnum, WeekConfig }) => {
-        engine.expect(Enum.isEnum(weekEnum)).toBe(true);
-        engine.expect(Enum.isEnum(WeekConfig)).toBe(false);
-        engine.expect(Enum.isEnum(1)).toBe(false);
-        engine.expect(Enum.isEnum('Monday')).toBe(false);
-        engine.expect(Enum.isEnum(weekEnum.items)).toBe(false);
+      ({ isWeekEnum, isWeekConfig, isNumberEnum, isStringEnum, isItemsEnum }) => {
+        engine.expect(isWeekEnum).toBe(true);
+        engine.expect(isWeekConfig).toBe(false);
+        engine.expect(isNumberEnum).toBe(false);
+        engine.expect(isStringEnum).toBe(false);
+        engine.expect(isItemsEnum).toBe(false);
+      }
+    );
+    engine.test(
+      'instanceof operator should be able to check for enum instances',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const WeekConfig = StandardWeekConfig;
+        const weekEnum = Enum(WeekConfig);
+        const isWeekEnum = weekEnum instanceof Enum;
+        const isWeekConfig = WeekConfig instanceof Enum;
+        const isNumberEnum = (1 as unknown) instanceof Enum;
+        const isStringEnum = ('Monday' as unknown) instanceof Enum;
+        const isItemsEnum = (weekEnum.items as unknown) instanceof Enum;
+        return { isWeekEnum, isWeekConfig, isNumberEnum, isStringEnum, isItemsEnum };
+      },
+      ({ isWeekEnum, isWeekConfig, isNumberEnum, isStringEnum, isItemsEnum }) => {
+        engine.expect(isWeekEnum).toBe(true);
+        engine.expect(isWeekConfig).toBe(false);
+        engine.expect(isNumberEnum).toBe(false);
+        engine.expect(isStringEnum).toBe(false);
+        engine.expect(isItemsEnum).toBe(false);
       }
     );
   });

@@ -5,7 +5,7 @@ import type TestEngineBase from '../engines/base';
 const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum typings', () => {
     engine.test(
-      'the test codes should not report any TypeScript errors, even including @ts-expect-error comments',
+      'the Enum.isEnum should behave as type guard, and no TypeScript error should be raised',
       ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales, localeEN } }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const WeekConfig = StandardWeekConfig;
@@ -15,6 +15,26 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ weekEnum, Enum, WeekConfig, localeEN }) => {
         const value = weekEnum as typeof weekEnum | number;
         if (Enum.isEnum(value)) {
+          engine.expect(value).toBe(weekEnum);
+        } else {
+          console.log(value + 1);
+        }
+
+        validateEnum(engine, weekEnum, localeEN, WeekConfig);
+        validateEnum(engine, weekEnum.items, localeEN, WeekConfig);
+      }
+    );
+    engine.test(
+      'the instanceof operator on Enum should behave as type guard, and no TypeScript error should be raised',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales, localeEN } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const WeekConfig = StandardWeekConfig;
+        const weekEnum = Enum(StandardWeekConfig);
+        return { weekEnum, Enum, WeekConfig, localeEN };
+      },
+      ({ weekEnum, Enum, WeekConfig, localeEN }) => {
+        const value = weekEnum as typeof weekEnum | number;
+        if (value instanceof Enum) {
           engine.expect(value).toBe(weekEnum);
         } else {
           console.log(value + 1);
