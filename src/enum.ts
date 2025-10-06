@@ -174,7 +174,8 @@ export interface EnumInterface {
    * @returns `true` if the value is an Enum collection, otherwise `false` |
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
-  isEnum(value: unknown): value is IEnum<EnumInit<string, EnumValue>, string, EnumValue>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isEnum(value: unknown): value is IEnum<any, any, any>;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
    *   extension methods

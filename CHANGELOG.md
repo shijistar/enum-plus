@@ -2,6 +2,15 @@
 
 # enum-plus Changelog
 
+## 3.0.1
+
+2025-10-6
+
+### Features
+
+- 🛠 Improve type guard feature of `Enum.isEnum` method.
+- 📝 Add the badge of DeepWiki in README.
+
 ## 3.0.0
 
 2025-10-5
