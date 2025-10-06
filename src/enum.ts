@@ -64,6 +64,14 @@ Enum.isEnum = (value: unknown): value is IEnum<EnumInit<string, EnumValue>, stri
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return Boolean(value && typeof value === 'object' && (value as any)[IS_ENUM] === true);
 };
+Object.defineProperty(Enum, Symbol.hasInstance, {
+  value: function (instance: unknown) {
+    return Enum.isEnum(instance);
+  },
+  writable: false,
+  enumerable: false,
+  configurable: true,
+});
 
 function getInitMapFromArray<
   T extends EnumInit<K, V>,
@@ -88,6 +96,7 @@ function getInitMapFromArray<
 }
 
 export interface EnumInterface {
+  new (): never;
   /**
    * - **EN:** Generate an enum collection, the enum value supports `number` and `string` types. Enum
    *   names support localization schemes.
@@ -176,6 +185,17 @@ export interface EnumInterface {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isEnum(value: unknown): value is IEnum<any, any, any>;
+  /**
+   * - **EN:** Determines if a value is an instance of the Enum collection
+   * - **CN:** 确定一个值是否是枚举集合的实例
+   *
+   * @param value The value to check | 要检查的值
+   *
+   * @returns `true` if the value is an Enum collection, otherwise `false` |
+   *   如果值是枚举集合，则返回`true`，否则返回`false`
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [Symbol.hasInstance](value: unknown): value is IEnum<any, any, any>;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
    *   extension methods
