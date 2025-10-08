@@ -1,7 +1,7 @@
 {
-  "name": "@enum-plus/plugin-react-i18next",
+  "name": "@enum-plus/plugin-i18next-vue",
   "version": "1.0.0",
-  "description": "A plugin for enum-plus that supports internationalization of enums through react-i18next",
+  "description": "A plugin for enum-plus that supports internationalization of enums through i18next-vue",
   "keywords": [
     "enum",
     "enumeration",
@@ -10,7 +10,7 @@
     "typescript",
     "i18n",
     "i18next",
-    "react-i18next",
+    "i18next-vue",
     "localization",
     "globalization",
     "internationalization",
@@ -43,10 +43,9 @@
     "README.zh-CN.md"
   ],
   "scripts": {
-    "build": "run-p build:es build:es-legacy build:lib",
+    "build": "run-p build:es build:es-legacy",
     "build:es": "father build",
     "build:es-legacy": "cross-env LEGACY=1 father build",
-    "build:lib": "run-s ts2lib task:copy-lib",
     "prepublishOnly": "npm run build && npm run test",
     "task:copy-lib": "tsx ../../scripts/copy-lib.ts",
     "test": "jest",
@@ -54,20 +53,16 @@
     "test:browser": "npm run test:browser:bundle && playwright test",
     "test:browser:bundle": "node scripts/browser-test-bundle.js",
     "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
-    "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
-    "ts2lib": "tsc -p tsconfig.lib.json"
+    "test:browser:ui": "npm run test:browser:bundle && playwright test --ui"
   },
   "devDependencies": {
-    "@types/react": "^19.1.13",
-    "i18next": "^25.5.2",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-i18next": "^15.7.3"
+    "@testing-library/vue": "^8.1.0",
+    "vue": "^3.5.22"
   },
   "peerDependencies": {
     "enum-plus": "^3.0.0",
     "i18next": ">=14.0.1",
-    "react-i18next": ">=10.0.0"
+    "i18next-vue": ">=2.0.0"
   },
   "packageManager": "npm@10.9.2",
   "publishConfig": {

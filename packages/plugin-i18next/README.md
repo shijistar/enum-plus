@@ -22,7 +22,7 @@ Import the `@enum-plus/plugin-i18next` plugin and install it in the entry file o
 import i18nextPlugin from '@enum-plus/plugin-i18next';
 import { Enum } from 'enum-plus';
 
-Enum.use(i18nextPlugin);
+Enum.install(i18nextPlugin);
 ```
 
 ## Plugin Options
@@ -30,7 +30,7 @@ Enum.use(i18nextPlugin);
 When installing the plugin, you can pass a configuration object to set global options for the plugin:
 
 ```ts
-Enum.use(i18nextPlugin, {
+Enum.install(i18nextPlugin, {
   localize: {
     // Set the i18next instance, defaults to the global i18next instance if necessary
     instance: i18next,
@@ -51,7 +51,7 @@ Enum.use(i18nextPlugin, {
 
 ```ts
 // Use function form to dynamically generate tOptions
-Enum.use(i18nextPlugin, {
+Enum.install(i18nextPlugin, {
   localize: {
     tOptions: (key) => {
       if (key === 'week.sunday') {
@@ -66,7 +66,7 @@ Enum.use(i18nextPlugin, {
 You can even return a string directly in `tOptions` as the final translated text to have full control over the behavior of the `localize` method.
 
 ```ts
-Enum.use(i18nextPlugin, {
+Enum.install(i18nextPlugin, {
   localize: {
     tOptions: (key) => {
       if (key === 'week.sunday') {

@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@enum-plus/test/*": ["../../tses/test/*"],
+      "@enum-plus/*": ["../../es/*"],
+      "@enum-plus": ["../../es"]
+    }
+  },
+  "include": ["../../tses", "./src", "./test"],
+  "exclude": ["node_modules", "es", "lib"]
+}

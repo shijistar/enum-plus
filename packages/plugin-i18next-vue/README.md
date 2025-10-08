@@ -6,23 +6,23 @@
 
 ## Introduction
 
-`@enum-plus/plugin-react-i18next` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that automatically integrates with [react-i18next](https://react.i18next.com/getting-started) to achieve internationalization of enum labels. It allows you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
+`@enum-plus/plugin-i18next-vue` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that automatically integrates with [i18next-vue](https://i18next.github.io/i18next-vue) to achieve internationalization of enum labels. It allows you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
 
-> This plugin does not support automatic UI updates after switching languages, which requires integration with React framework. Please consider using the [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) plugin.
+> This plugin does not support automatic UI updates after switching languages, which requires integration with Vue framework. Please consider using the [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) plugin.
 
 ## Installation
 
 ```bash
-npm install @enum-plus/plugin-react-i18next
+npm install @enum-plus/plugin-i18next-vue
 ```
 
-Import the `@enum-plus/plugin-react-i18next` plugin and install it in the entry file of your application:
+Import the `@enum-plus/plugin-i18next-vue` plugin and install it in the entry file of your application:
 
 ```js
-import reactI18nextPlugin from '@enum-plus/plugin-react-i18next';
+import i18nextVuePlugin from '@enum-plus/plugin-i18next-vue';
 import { Enum } from 'enum-plus';
 
-Enum.install(reactI18nextPlugin);
+Enum.install(i18nextVuePlugin);
 ```
 
 ## Plugin Options
@@ -30,7 +30,7 @@ Enum.install(reactI18nextPlugin);
 When installing the plugin, you can pass a configuration object to set global options for the plugin:
 
 ```ts
-Enum.install(reactI18nextPlugin, {
+Enum.install(i18nextVuePlugin, {
   localize: {
     // Set the i18next instance, defaults to the global i18next instance if necessary
     instance: i18next,
@@ -51,7 +51,7 @@ Enum.install(reactI18nextPlugin, {
 
 ```ts
 // Use function form to dynamically generate tOptions
-Enum.install(reactI18nextPlugin, {
+Enum.install(i18nextVuePlugin, {
   localize: {
     tOptions: (key) => {
       if (key === 'week.sunday') {
@@ -66,7 +66,7 @@ Enum.install(reactI18nextPlugin, {
 You can even return a string directly in `tOptions` as the final translated text to have full control over the behavior of the `localize` method.
 
 ````ts
-Enum.install(reactI18nextPlugin, {
+Enum.install(i18nextVuePlugin, {
   localize: {
     tOptions: (key) => {
       if (key === 'week.sunday') {

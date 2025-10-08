@@ -1,16 +1,14 @@
 {
-  "name": "@enum-plus/plugin-react-i18next",
+  "name": "@enum-plus/plugin-vue",
   "version": "1.0.0",
-  "description": "A plugin for enum-plus that supports internationalization of enums through react-i18next",
+  "description": "A plugin for enum-plus that provides Vue components and hooks for enum handling",
   "keywords": [
     "enum",
     "enumeration",
     "enum-plus",
     "plugin",
     "typescript",
-    "i18n",
-    "i18next",
-    "react-i18next",
+    "vue",
     "localization",
     "globalization",
     "internationalization",
@@ -29,7 +27,6 @@
   "license": "MIT",
   "author": "李凤宝(Leo) <shijistar@gmail.com>",
   "sideEffects": false,
-  "type": "module",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "lib/index.d.ts",
@@ -58,16 +55,28 @@
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "devDependencies": {
-    "@types/react": "^19.1.13",
-    "i18next": "^25.5.2",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-i18next": "^15.7.3"
+    "@testing-library/vue": "^8.1.0",
+    "i18next-vue": "^5.3.0",
+    "vue": "^3.5.22",
+    "vue-i18n": "^11.1.12"
   },
   "peerDependencies": {
     "enum-plus": "^3.0.0",
-    "i18next": ">=14.0.1",
-    "react-i18next": ">=10.0.0"
+    "i18next": ">=8.4.0",
+    "i18next-vue": ">=2.0.0",
+    "vue": ">=3.0.0",
+    "vue-i18n": ">=9.0.0"
+  },
+  "peerDependenciesMeta": {
+    "i18next": {
+      "optional": true
+    },
+    "i18next-vue": {
+      "optional": true
+    },
+    "vue-i18n": {
+      "optional": true
+    }
   },
   "packageManager": "npm@10.9.2",
   "publishConfig": {

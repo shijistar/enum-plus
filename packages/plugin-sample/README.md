@@ -20,7 +20,7 @@ Import the `@enum-plus/plugin-sample` plugin and install it in the entry file of
 import samplePlugin from '@enum-plus/plugin-sample';
 import { Enum } from 'enum-plus';
 
-Enum.use(samplePlugin);
+Enum.install(samplePlugin);
 ```
 
 ## Plugin Options
@@ -28,7 +28,7 @@ Enum.use(samplePlugin);
 When installing the plugin, you can pass a configuration object to set global options for the plugin:
 
 ```ts
-Enum.use(samplePlugin, {
+Enum.install(samplePlugin, {
   foo: 'bar', // Example option
 });
 ```

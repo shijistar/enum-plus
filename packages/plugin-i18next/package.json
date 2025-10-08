@@ -55,6 +55,9 @@
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
+  "devDependencies": {
+    "i18next": "^25.5.2"
+  },
   "peerDependencies": {
     "enum-plus": "^3.0.0",
     "i18next": ">=8.4.0"
