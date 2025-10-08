@@ -2,7 +2,12 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
-# enum-plus for React
+# @enum-plus/plugin-react
+
+[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-react.svg)](https://www.npmjs.com/package/@enum-plus/plugin-react)
+[![license](https://img.shields.io/npm/l/@enum-plus/plugin-react.svg)](https://www.npmjs.com/package/@enum-plus/plugin-react)
+
+> Integrates with [i18next](https://www.i18next.com) and [react-i18next](https://react.i18next.com/getting-started) to enable internationalization of enum labels in React applications, with automatic UI updates after language switching.
 
 ## Introduction
 
@@ -153,7 +158,7 @@ WeekEnum.name; // Week - ReactElement
 
 i18next.changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一 - ReactElement
-WeekEnum.name; // 星期 - ReactElement
+WeekEnum.name; // 周 - ReactElement
 ```
 
 For the UI components generated from the enum, the labels will automatically update when the language changes:

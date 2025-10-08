@@ -4,7 +4,7 @@ import type TestEngineBase from '@enum-plus/test/engines/base';
 import { defaultLocalize } from 'enum-plus';
 import toFilterPlugin from '../../src/toFilter';
 
-const testEnumItems = (engine: TestEngineBase) => {
+const testEnumItems = (engine: TestEngineBase<'jest'>) => {
   engine.describe('The toFilter plugin', () => {
     engine.test(
       'should generate an object array for AntDesign Table',

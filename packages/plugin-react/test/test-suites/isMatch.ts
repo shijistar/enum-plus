@@ -8,7 +8,7 @@ import { changeLanguage } from 'i18next';
 import type { I18nextPluginOptions } from '../../src';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase, options: { plugin: P }) => {
+const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, options: { plugin: P }) => {
   engine.describe('The isMatch plugin', () => {
     engine.test(
       'should filter out enum items by label',

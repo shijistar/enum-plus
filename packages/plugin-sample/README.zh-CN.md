@@ -2,7 +2,12 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
-# enum-plus for 示例插件
+# @enum-plus/plugin-sample
+
+[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-sample.svg)](https://www.npmjs.com/package/@enum-plus/plugin-sample)
+[![license](https://img.shields.io/npm/l/@enum-plus/plugin-sample.svg)](https://www.npmjs.com/package/@enum-plus/plugin-sample)
+
+> 一个 enum-plus 的示例插件，向枚举添加一个示例方法，允许更方便地操作和使用枚举值。
 
 ## 简介
 

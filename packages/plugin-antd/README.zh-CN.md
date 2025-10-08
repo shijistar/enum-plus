@@ -2,7 +2,12 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
-# enum-plus for Ant Design
+# @enum-plus/plugin-antd
+
+[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-antd.svg)](https://www.npmjs.com/package/@enum-plus/plugin-antd)
+[![license](https://img.shields.io/npm/l/@enum-plus/plugin-antd.svg)](https://www.npmjs.com/package/@enum-plus/plugin-antd)
+
+> 支持枚举生成 Ant Design 组件，如 Select、Menu、Table 等
 
 ## 简介
 

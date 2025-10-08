@@ -2,13 +2,18 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
-# enum-plus for Globalization with i18next
+# @enum-plus/plugin-react-i18next
+
+[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-react-i18next.svg)](https://www.npmjs.com/package/@enum-plus/plugin-react-i18next)
+[![license](https://img.shields.io/npm/l/@enum-plus/plugin-react-i18next.svg)](https://www.npmjs.com/package/@enum-plus/plugin-react-i18next)
+
+> 集成 [react-i18next](https://react.i18next.com/getting-started) 并实现枚举标签的国际化
 
 ## 简介
 
 `@enum-plus/plugin-react-i18next` 是 [enum-plus](https://github.com/shijistar/enum-plus) 的一个插件，自动集成 [react-i18next](https://react.i18next.com/getting-started) 实现枚举标签的国际化。它允许你在枚举定义中使用 i18next 的本地化键，并动态显示为当前语言的翻译文本。
 
-> 该插件不支持切换语言后自动更新 UI，这需要结合前端框架（如 React、Vue 等）来实现。请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) 插件。
+> 该插件不支持切换语言后自动更新 UI，这需要结合 React 框架来实现。请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 插件。
 
 ## 安装
 
@@ -100,5 +105,5 @@ WeekEnum.name; // Week
 
 i18next.changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一
-WeekEnum.name; // 星期
+WeekEnum.name; // 周
 ```

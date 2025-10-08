@@ -4,6 +4,11 @@
 
 # enum-plus for Ant Design
 
+[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-antd.svg)](https://www.npmjs.com/package/@enum-plus/plugin-antd)
+[![license](https://img.shields.io/npm/l/@enum-plus/plugin-antd.svg)](https://www.npmjs.com/package/@enum-plus/plugin-antd)
+
+> Generate Ant Design components like Select, Menu, Table from enums
+
 ## Introduction
 
 `@enum-plus/plugin-antd` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that provides functionality to bind enums to [Ant Design](https://ant.design/components/overview) components. It allows you to easily convert enums into data sources for UI components like dropdowns, checkboxes, radio buttons, etc., simplifying the process of using enums in front-end applications.

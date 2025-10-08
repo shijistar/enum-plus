@@ -6,10 +6,11 @@ import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { parse, stringify } from 'jsoneo';
 import { getLocales, setLang } from '../data/week-config';
-import TestEngineBase, { type RuntimeContext } from './base';
+import TestEngineBase from './base';
 import type { MakeMatchers } from './playwright-types';
+import type { RuntimeContext } from './utils';
 
-export class PlaywrightEngine extends TestEngineBase {
+export class PlaywrightEngine extends TestEngineBase<'playwright'> {
   constructor() {
     super();
     this._type = 'playwright';
@@ -37,10 +38,9 @@ export class PlaywrightEngine extends TestEngineBase {
     // });
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  override expect<ActualType = unknown>(actual: ActualType): MakeMatchers<void, ActualType, {}> {
+  override expect<T>(actual: T, options?: Parameters<typeof expect>[1]) {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    return expect(actual) as unknown as MakeMatchers<void, ActualType, {}>;
+    return expect(actual, options) as MakeMatchers<void, T, {}>;
   }
 
   // Execute the test evaluation
@@ -54,17 +54,17 @@ export class PlaywrightEngine extends TestEngineBase {
       const EnumPlus = window.EnumPlus;
       const WeekConfig = window.WeekConfig;
       const WeekData = window.WeekData;
-      const jsoneo = window.jsoneo;
+      const Jsoneo = window.jsoneo;
 
       // Deserialize request
       const runtimeContext = {
         EnumPlus,
         WeekConfig,
         WeekData,
-        jsoneo,
+        Jsoneo,
       };
       // console.log('window', runtimeContext);
-      const { stringify, parse } = jsoneo;
+      const { stringify, parse } = Jsoneo;
       const args = parse(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
       const { evaluateFn, ...rest } = args;
 

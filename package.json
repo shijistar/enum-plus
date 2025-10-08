@@ -35,51 +35,44 @@
   "sideEffects": false,
   "exports": {
     ".": {
+      "types@>=5": "./lib/index.d.ts",
+      "types": "./types-legacy/pre-v5/index.d.ts",
+      "browser-legacy": "./es-legacy/index.js",
       "import": "./es/index.js",
       "require": "./lib/index.js",
-      "browser-legacy": "./es-legacy/index.js",
-      "default": "./lib/index.js",
-      "types@>=5": "./lib/index.d.ts",
-      "types": "./types-legacy/pre-v5/index.d.ts"
+      "default": "./lib/index.js"
     },
     "./enum": {
+      "types@>=5": "./lib/enum.d.ts",
+      "types": "./types-legacy/pre-v5/enum.d.ts",
+      "browser-legacy": "./es-legacy/enum.js",
       "import": "./es/enum.js",
       "require": "./lib/enum.js",
-      "browser-legacy": "./es-legacy/enum.js",
-      "default": "./lib/enum.js",
-      "types@>=5": "./lib/enum.d.ts",
-      "types": "./types-legacy/pre-v5/enum.d.ts"
+      "default": "./lib/enum.js"
     },
     "./enum-items": {
+      "types@>=5": "./lib/enum-items.d.ts",
+      "types": "./types-legacy/pre-v5/enum-items.d.ts",
+      "browser-legacy": "./es-legacy/enum-items.js",
       "import": "./es/enum-items.js",
       "require": "./lib/enum-items.js",
-      "browser-legacy": "./es-legacy/enum-items.js",
-      "default": "./lib/enum-items.js",
-      "types@>=5": "./lib/enum-items.d.ts",
-      "types": "./types-legacy/pre-v5/enum-items.d.ts"
+      "default": "./lib/enum-items.js"
     },
     "./enum-item": {
+      "types@>=5": "./lib/enum-item.d.ts",
+      "types": "./types-legacy/pre-v5/enum-item.d.ts",
+      "browser-legacy": "./es-legacy/enum-item.js",
       "import": "./es/enum-item.js",
       "require": "./lib/enum-item.js",
-      "browser-legacy": "./es-legacy/enum-item.js",
-      "default": "./lib/enum-item.js",
-      "types@>=5": "./lib/enum-item.d.ts",
-      "types": "./types-legacy/pre-v5/enum-item.d.ts"
+      "default": "./lib/enum-item.js"
     },
     "./utils": {
+      "types@>=5": "./lib/utils.d.ts",
+      "types": "./types-legacy/pre-v5/utils.d.ts",
+      "browser-legacy": "./es-legacy/utils.js",
       "import": "./es/utils.js",
       "require": "./lib/utils.js",
-      "browser-legacy": "./es-legacy/utils.js",
-      "default": "./lib/utils.js",
-      "types@>=5": "./lib/utils.d.ts",
-      "types": "./types-legacy/pre-v5/utils.d.ts"
-    },
-    "./es-legacy": {
-      "import": "./es-legacy/index.js",
-      "require": "./es-legacy/index.js",
-      "default": "./es-legacy/index.js",
-      "types@>=5": "./lib/index.d.ts",
-      "types": "./types-legacy/pre-v5/index.d.ts"
+      "default": "./lib/utils.js"
     },
     "./types": {
       "types@>=5": "./lib/types.d.ts",
@@ -88,6 +81,24 @@
     "./localize-interface": {
       "types@>=5": "./lib/localize-interface.d.ts",
       "types": "./types-legacy/pre-v5/localize-interface.d.ts"
+    },
+    "./esm": {
+      "types@>=5": "./es/index.d.mts",
+      "types": "./types-legacy/pre-v5/index.d.ts",
+      "import": "./es/index.js",
+      "default": "./es/index.js"
+    },
+    "./cjs": {
+      "types@>=5": "./lib/index.d.cts",
+      "types": "./types-legacy/pre-v5/index.d.ts",
+      "require": "./lib/index.js",
+      "default": "./lib/index.js"
+    },
+    "./es-legacy": {
+      "types@>=5": "./lib/index.d.ts",
+      "types": "./types-legacy/pre-v5/index.d.ts",
+      "import": "./es-legacy/index.js",
+      "default": "./es-legacy/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -148,7 +159,7 @@
     "task:update-lib-enum": "tsx scripts/update-enum-ts.ts lib",
     "task:update-tses-enum": "tsx scripts/update-enum-ts.ts tses",
     "test": "run-s gv task:jest",
-    "test-all": "run-s build task:jest test-node-cjs-core test-node-esm-core task:run-e2e",
+    "test-all": "run-s build task:bundle-e2e task:jest test-node-cjs-core test-node-esm-core task:run-e2e",
     "test-node-cjs": "run-s build:lib test-node-cjs-core",
     "test-node-cjs-core": "run-s ts2lib task:jest-cjs",
     "test-node-esm": "run-s build:es test-node-esm-core",
@@ -169,11 +180,11 @@
     "@tiny-codes/code-style-all-in-one": "^1.1.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.18.0",
+    "@vitest/browser": "^4.0.0-beta.17",
     "cross-env": "^10.0.0",
     "esbuild": "^0.25.9",
     "father": "^4.6.3",
     "glob": "^11.0.3",
-    "i18next": "^25.5.2",
     "jest": "^29.7.0",
     "jsoneo": "^1.0.1",
     "npm-run-all2": "^8.0.4",
@@ -182,9 +193,9 @@
     "serve": "^14.2.4",
     "shx": "^0.4.0",
     "ts-jest": "^29.4.1",
-    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vite": "^7.1.9"
   },
   "packageManager": "npm@11.4.2",
   "engines": {

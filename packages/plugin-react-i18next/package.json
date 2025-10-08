@@ -18,7 +18,7 @@
     "node.js",
     "ssr"
   ],
-  "homepage": "https://github.com/shijistar/enum-plus",
+  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react-i18next",
   "bugs": {
     "url": "https://github.com/shijistar/enum-plus/issues"
   },
@@ -55,6 +55,13 @@
     "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
     "ts2lib": "tsc -p tsconfig.lib.json"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.13",
+    "i18next": "^25.5.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-i18next": "^15.7.3"
   },
   "peerDependencies": {
     "enum-plus": "^3.0.0",

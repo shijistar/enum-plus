@@ -11,6 +11,7 @@ node_modules
 npm-debug.log
 e2e/fixtures/scripts
 e2e/test-results
+__screenshots__
 coverage/
 run
 .DS_Store

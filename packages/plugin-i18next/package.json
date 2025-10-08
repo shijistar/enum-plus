@@ -17,7 +17,7 @@
     "node.js",
     "ssr"
   ],
-  "homepage": "https://github.com/shijistar/enum-plus",
+  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next",
   "bugs": {
     "url": "https://github.com/shijistar/enum-plus/issues"
   },
@@ -54,6 +54,9 @@
     "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
     "ts2lib": "tsc -p tsconfig.lib.json"
+  },
+  "devDependencies": {
+    "i18next": "^25.5.2"
   },
   "peerDependencies": {
     "enum-plus": "^3.0.0",

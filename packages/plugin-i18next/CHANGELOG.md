@@ -24,4 +24,4 @@ Initial release of `@enum-plus/plugin-i18next`.
 
 - Automatic UI repaint after language change.
 
-> Please consider framework plugins like [@enum-plus/plugin-react](https://www.npmjs.com/package/@enum-plus/plugin-react) / [@enum-plus/plugin-vue](https://www.npmjs.com/package/@enum-plus/plugin-vue).
+> Please consider framework plugins like [@enum-plus/plugin-react](https://www.npmjs.com/package/@enum-plus/plugin-react) / [@enum-plus/plugin-i18next-vue](https://www.npmjs.com/package/@enum-plus/plugin-i18next-vue).

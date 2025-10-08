@@ -1,7 +1,7 @@
 import type { Enum as EnumType, PluginFunc } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 
-const testPlugin = (engine: TestEngineBase) => {
+const testPlugin = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum plugin', () => {
     engine.test(
       'Should be able to install custom plugin',

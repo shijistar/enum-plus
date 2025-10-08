@@ -1,0 +1,70 @@
+{
+  "name": "@enum-plus/plugin-vue-i18n",
+  "version": "1.0.0",
+  "description": "A plugin for enum-plus that supports internationalization of enums through vue-i18n",
+  "keywords": [
+    "enum",
+    "enumeration",
+    "enum-plus",
+    "plugin",
+    "typescript",
+    "i18n",
+    "vue",
+    "vue-i18n",
+    "localization",
+    "globalization",
+    "internationalization",
+    "front-end",
+    "node.js",
+    "ssr"
+  ],
+  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue-i18n",
+  "bugs": {
+    "url": "https://github.com/shijistar/enum-plus/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shijistar/enum-plus.git"
+  },
+  "license": "MIT",
+  "author": "李凤宝(Leo) <shijistar@gmail.com>",
+  "sideEffects": false,
+  "type": "module",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "es",
+    "es-legacy",
+    "LICENSE",
+    "CHANGELOG.md",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "scripts": {
+    "build": "run-p build:modern build:legacy",
+    "build:legacy": "cross-env LEGACY=1 father build",
+    "build:modern": "father build",
+    "prepublishOnly": "npm run build && npm run test",
+    "test": "run-s test:modern",
+    "test:legacy": "cross-env LEGACY=1 vitest",
+    "test:modern": "vitest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitest/browser-playwright": "^4.0.0-beta.17",
+    "@vue/test-utils": "^2.4.6",
+    "vitest": "^4.0.0-beta.17",
+    "vue": "^3.5.22",
+    "vue-i18n": "^9.14.5"
+  },
+  "peerDependencies": {
+    "enum-plus": "^3.0.0",
+    "vue-i18n": ">=9.2.0"
+  },
+  "packageManager": "npm@10.9.2",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}

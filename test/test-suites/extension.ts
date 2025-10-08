@@ -2,7 +2,7 @@ import type TestEngineBase from '../engines/base';
 
 // import './extension-type';
 
-const testExtension = (engine: TestEngineBase) => {
+const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum extends', () => {
     engine.test(
       'Should allow extend new methods',

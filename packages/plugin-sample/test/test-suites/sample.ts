@@ -4,7 +4,7 @@ import type TestEngineBase from '@enum-plus/test/engines/base';
 // import filterItemPlugin from '../../src/filterItem';
 import samplePlugin from '../../src/index';
 
-const testEnumItems = (engine: TestEngineBase) => {
+const testEnumItems = (engine: TestEngineBase<'jest'>) => {
   engine.describe('The sample plugin', () => {
     engine.test(
       'should extend sample method',
