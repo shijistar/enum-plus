@@ -1,9 +1,11 @@
 import type { EnumInterface, IEnum } from '@enum-plus';
 import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '@enum-plus/test/data/week-config';
 import type TestEngineBase from '@enum-plus/test/engines/base';
+import { render } from '@testing-library/vue';
 import { changeLanguage } from 'i18next';
 import rootPlugin from '../../src/index';
 import localizePlugin from '../../src/localize';
+import TextRender from '../components/TextRender.vue';
 import { getAltData } from '../data/altLocale';
 
 const testLocalization = (engine: TestEngineBase) => {
@@ -46,14 +48,12 @@ const testLocalization = (engine: TestEngineBase) => {
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
         Enum.install(localizePlugin);
         changeLanguage('en');
-        return {
-          ...getAssertData({
-            Enum,
-            StandardWeekConfig,
-            locales: localeEN,
-            noLocale,
-          }),
-        };
+        return getAssertData({
+          Enum,
+          StandardWeekConfig,
+          locales: localeEN,
+          noLocale,
+        });
       },
       (args) => assertEnum(args)
     );
@@ -188,8 +188,8 @@ const testLocalization = (engine: TestEngineBase) => {
   }) {
     const { Enum, StandardWeekConfig, locales, noLocale } = options;
     const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
-    const altData = getAltData({ locales, StandardWeekConfig });
-    const altWeekEnum = Enum(altData.AltStandardWeekConfig, { name: 'alternative:weekDay.name' });
+    const { AltLocales, AltStandardWeekConfig } = getAltData({ locales, StandardWeekConfig });
+    const altWeekEnum = Enum(AltStandardWeekConfig, { name: 'alternative:weekDay.name' });
     const Locales = Object.keys(noLocale).reduce(
       (acc, key) => {
         acc[noLocale[key as keyof typeof noLocale]] = (locales as Record<string, string>)[key] as never;
@@ -197,17 +197,94 @@ const testLocalization = (engine: TestEngineBase) => {
       },
       {} as { -readonly [key in (typeof noLocale)[keyof typeof noLocale]]: string }
     );
+    // await act(async () => {
+    //   changeLanguage('zh-CN');
+    // });
+    const weekName = render(TextRender, {
+      props: {
+        text: () => weekEnum.name,
+      },
+    }).container.textContent;
+    const weekLabels = render(TextRender, {
+      props: {
+        text: () => weekEnum.labels.join(','),
+      },
+    }).container.textContent.split(',');
+    const sundayLabel = render(TextRender, {
+      props: {
+        text: () => weekEnum.items[0].label,
+      },
+    }).container.textContent;
+    const sundayToString = render(TextRender, {
+      props: {
+        text: () => weekEnum.items[0].toString(),
+      },
+    }).container.textContent;
+    const sundayToLocaleString = render(TextRender, {
+      props: {
+        text: () => weekEnum.items[0].toLocaleString(),
+      },
+    }).container.textContent;
+    const altWeekName = render(TextRender, {
+      props: {
+        text: () => altWeekEnum.name,
+      },
+    }).container.textContent;
+    const altWeekLabels = render(TextRender, {
+      props: {
+        text: () => altWeekEnum.labels.join(','),
+      },
+    }).container.textContent.split(',');
+    const altSundayLabel = render(TextRender, {
+      props: {
+        text: () => altWeekEnum.items[0].label,
+      },
+    }).container.textContent;
+    const altSundayToString = render(TextRender, {
+      props: {
+        text: () => altWeekEnum.items[0].toString(),
+      },
+    }).container.textContent;
+    const altSundayToLocaleString = render(TextRender, {
+      props: {
+        text: () => altWeekEnum.items[0].toLocaleString(),
+      },
+    }).container.textContent;
+
     return {
       weekEnum,
       altWeekEnum,
       Locales,
-      ...altData,
+      AltLocales,
+      StandardWeekConfig,
+      AltStandardWeekConfig,
+      weekName,
+      weekLabels,
+      sundayLabel,
+      sundayToString,
+      sundayToLocaleString,
+      altWeekName,
+      altWeekLabels,
+      altSundayLabel,
+      altSundayToString,
+      altSundayToLocaleString,
     };
   }
 
   type WeekValue = (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'];
   function assertEnum(
     options: {
+      weekName: string;
+      weekLabels: string[];
+      sundayLabel: string;
+      sundayToString: string;
+      sundayToLocaleString: string;
+      altWeekName: string;
+      altWeekLabels: string[];
+      altSundayLabel: string;
+      altSundayToString: string;
+      altSundayToLocaleString: string;
+    } & {
       weekEnum: IEnum<typeof StandardWeekConfig, keyof typeof StandardWeekConfig, WeekValue>;
       altWeekEnum: IEnum<
         ReturnType<typeof getAltData>['AltStandardWeekConfig'],
@@ -217,24 +294,37 @@ const testLocalization = (engine: TestEngineBase) => {
       Locales: { -readonly [key in (typeof noLocale)[keyof typeof noLocale]]: string };
     } & ReturnType<typeof getAltData>
   ) {
-    const { weekEnum, altWeekEnum, Locales, AltLocales } = options;
-    engine.expect(weekEnum.name).toEqual(Locales['weekDay.name']);
-    engine.expect(weekEnum.labels).toEqual(Array.from(weekEnum.items).map((item) => Locales[item.raw.label]));
+    const {
+      weekName,
+      weekLabels,
+      sundayLabel,
+      sundayToString,
+      sundayToLocaleString,
+      altWeekName,
+      altWeekLabels,
+      altSundayLabel,
+      altSundayToString,
+      altSundayToLocaleString,
+      weekEnum,
+      altWeekEnum,
+      Locales,
+      AltLocales,
+    } = options;
+    engine.expect(weekName).toEqual(Locales['weekDay.name']);
+    engine.expect(weekLabels).toEqual(Array.from(weekEnum.items).map((item) => Locales[item.raw.label]));
 
-    const sunday = weekEnum.items[0];
-    engine.expect(sunday.label).toBe(Locales['weekday.sunday']);
-    engine.expect(sunday.toString()).toBe(Locales['weekday.sunday']);
-    engine.expect(sunday.toLocaleString()).toBe(Locales['weekday.sunday']);
+    engine.expect(sundayLabel).toBe(Locales['weekday.sunday']);
+    engine.expect(sundayToString).toBe(Locales['weekday.sunday']);
+    engine.expect(sundayToLocaleString).toBe(Locales['weekday.sunday']);
 
-    engine.expect(altWeekEnum.name).toEqual(AltLocales['alternative:weekDay.name']);
+    engine.expect(altWeekName).toEqual(AltLocales['alternative:weekDay.name']);
     engine
-      .expect(Array.from(altWeekEnum.labels))
+      .expect(altWeekLabels)
       .toEqual(Array.from(altWeekEnum.items).map((item) => AltLocales[item.raw.label as keyof typeof AltLocales]));
 
-    const altSunday = altWeekEnum.items[0];
-    engine.expect(altSunday.label).toBe(AltLocales['alternative:weekday.sunday']);
-    engine.expect(altSunday.toString()).toBe(AltLocales['alternative:weekday.sunday']);
-    engine.expect(altSunday.toLocaleString()).toBe(AltLocales['alternative:weekday.sunday']);
+    engine.expect(altSundayLabel).toBe(AltLocales['alternative:weekday.sunday']);
+    engine.expect(altSundayToString).toBe(AltLocales['alternative:weekday.sunday']);
+    engine.expect(altSundayToLocaleString).toBe(AltLocales['alternative:weekday.sunday']);
   }
 };
 

@@ -14,8 +14,8 @@ export default {
   transformIgnorePatterns: ['node_modules/(?!(i18next-vue|vue|@vueuse))/'],
   moduleNameMapper: {
     '^@enum-plus/test/(.*)$': '<rootDir>/../../tses/test/$1',
-    '^@enum-plus/(.*)$': '<rootDir>/../../lib/$1',
-    '^@enum-plus': '<rootDir>/../../lib',
+    '^@enum-plus/(.*)$': '<rootDir>/../../es/$1',
+    '^@enum-plus': '<rootDir>/../../es',
   },
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
