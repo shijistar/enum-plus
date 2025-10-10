@@ -29,7 +29,6 @@
   "license": "MIT",
   "author": "李凤宝(Leo) <shijistar@gmail.com>",
   "sideEffects": false,
-  "type": "module",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "lib/index.d.ts",
