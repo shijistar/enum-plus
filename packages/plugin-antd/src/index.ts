@@ -13,6 +13,16 @@ export * from './toMenu';
 export * from './toSelect';
 export * from './toValueMap';
 
+/**
+ * - **EN:** An `enum-plus` plugin that includes Ant Design related feature plugins
+ * - **CN:** 一个 `enum-plus` 插件，包含 Ant Design 相关的功能插件集合
+ *
+ * @example
+ *   import antdPlugins from '@enum-plus/plugin-antd';
+ *   import Enum from 'enum-plus';
+ *
+ *   Enum.install(antdPlugins);
+ */
 const antdPlugins: PluginFunc<{
   toSelect?: ToSelectPluginOptions;
   toMenu?: ToMenuPluginOptions;
