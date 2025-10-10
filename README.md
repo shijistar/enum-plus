@@ -71,7 +71,7 @@ What other exciting features are there? Please continue to explore! Or you can c
 - Extensible design, allowing custom metadata fields for enum items
 - Plugin system design, extending enum functionality through plugin installations
 - Supports type narrowing to enhance type safety<sup>_&nbsp;&nbsp;TypeScript_</sup>
-- Generates dropdowns from enums, compatible with UI libraries like [Ant Design](https://ant.design/components/overview), [Element Plus](https://element-plus.org/en-US/component/overview), [Material-UI](https://mui.com/material-ui) and more
+- Generates dropdowns from enums, compatible with UI libraries like [Ant Design](https://ant.design/components/overview), [Element Plus](https://element-plus.org/en-US/component/overview), [Material-UI](https://mui.com/material-ui)
 - Compatible with various environments including Browsers, Node.js, React Native, Taro, and mini-programs
 - Supports server-side rendering (SSR)
 - Compatible with any front-end development framework, including vanilla projects
