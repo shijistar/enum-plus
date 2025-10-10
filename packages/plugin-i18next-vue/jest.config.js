@@ -1,16 +1,19 @@
-import { createJsWithTsEsmPreset } from 'ts-jest';
+import { createJsWithBabelEsmPreset } from 'ts-jest';
 
+const presetConfig = createJsWithBabelEsmPreset({
+  tsconfig: './tsconfig.json',
+});
 /** @type {import('jest').Config} */
 export default {
-  ...createJsWithTsEsmPreset({
-    tsconfig: './tsconfig.json',
-  }),
-  // preset: 'ts-jest/presets/js-with-ts-esm',
-  // preset: 'ts-jest/presets/default-esm',
-  // preset: 'ts-jest',
+  ...presetConfig,
   testEnvironment: 'node',
   testMatch: ['<rootDir>/test/**/*.{spec,test}.{ts,tsx}'],
   setupFilesAfterEnv: ['<rootDir>/test/jest.setup.ts'],
+  transform: {
+    ...presetConfig.transform,
+    '^.+\\.vue$': '@vue/vue3-jest',
+    '^.+\\.[tj]sx?$': 'babel-jest',
+  },
   transformIgnorePatterns: ['node_modules/(?!(i18next-vue|vue|@vueuse))/'],
   moduleNameMapper: {
     '^@enum-plus/test/(.*)$': '<rootDir>/../../tses/test/$1',

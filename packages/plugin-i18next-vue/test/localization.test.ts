@@ -2,5 +2,4 @@
 import jest from '@enum-plus/test/engines/jest';
 import testLocalization from './test-suites/localization';
 
-// @ts-expect-error: because jest is CJS module
-testLocalization(jest.default);
+testLocalization(jest);
