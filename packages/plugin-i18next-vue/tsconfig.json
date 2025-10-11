@@ -3,12 +3,14 @@
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "paths": {
-      "@enum-plus/test/*": ["../../tslib/test/*"],
-      "@enum-plus/*": ["../../lib/*"],
-      "@enum-plus": ["../../lib"]
+      "@enum-plus/test/*": ["../../tses/test/*"],
+      "@enum-plus/*": ["../../es/*"],
+      "@enum-plus": ["../../es"]
     }
   },
-  "include": ["../../tslib", "./src", "./test"],
+  "include": ["../../tses", "./src", "./test"],
   "exclude": ["node_modules", "es", "lib"]
 }

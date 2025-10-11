@@ -35,51 +35,51 @@
   "sideEffects": false,
   "exports": {
     ".": {
+      "types@>=5": "./lib/index.d.ts",
+      "types": "./types-legacy/pre-v5/index.d.ts",
+      "browser-legacy": "./es-legacy/index.js",
       "import": "./es/index.js",
       "require": "./lib/index.js",
-      "browser-legacy": "./es-legacy/index.js",
-      "default": "./lib/index.js",
-      "types@>=5": "./lib/index.d.ts",
-      "types": "./types-legacy/pre-v5/index.d.ts"
+      "default": "./lib/index.js"
     },
     "./enum": {
+      "types@>=5": "./lib/enum.d.ts",
+      "types": "./types-legacy/pre-v5/enum.d.ts",
+      "browser-legacy": "./es-legacy/enum.js",
       "import": "./es/enum.js",
       "require": "./lib/enum.js",
-      "browser-legacy": "./es-legacy/enum.js",
-      "default": "./lib/enum.js",
-      "types@>=5": "./lib/enum.d.ts",
-      "types": "./types-legacy/pre-v5/enum.d.ts"
+      "default": "./lib/enum.js"
     },
     "./enum-items": {
+      "types@>=5": "./lib/enum-items.d.ts",
+      "types": "./types-legacy/pre-v5/enum-items.d.ts",
+      "browser-legacy": "./es-legacy/enum-items.js",
       "import": "./es/enum-items.js",
       "require": "./lib/enum-items.js",
-      "browser-legacy": "./es-legacy/enum-items.js",
-      "default": "./lib/enum-items.js",
-      "types@>=5": "./lib/enum-items.d.ts",
-      "types": "./types-legacy/pre-v5/enum-items.d.ts"
+      "default": "./lib/enum-items.js"
     },
     "./enum-item": {
+      "types@>=5": "./lib/enum-item.d.ts",
+      "types": "./types-legacy/pre-v5/enum-item.d.ts",
+      "browser-legacy": "./es-legacy/enum-item.js",
       "import": "./es/enum-item.js",
       "require": "./lib/enum-item.js",
-      "browser-legacy": "./es-legacy/enum-item.js",
-      "default": "./lib/enum-item.js",
-      "types@>=5": "./lib/enum-item.d.ts",
-      "types": "./types-legacy/pre-v5/enum-item.d.ts"
+      "default": "./lib/enum-item.js"
     },
     "./utils": {
+      "types@>=5": "./lib/utils.d.ts",
+      "types": "./types-legacy/pre-v5/utils.d.ts",
+      "browser-legacy": "./es-legacy/utils.js",
       "import": "./es/utils.js",
       "require": "./lib/utils.js",
-      "browser-legacy": "./es-legacy/utils.js",
-      "default": "./lib/utils.js",
-      "types@>=5": "./lib/utils.d.ts",
-      "types": "./types-legacy/pre-v5/utils.d.ts"
+      "default": "./lib/utils.js"
     },
     "./es-legacy": {
+      "types@>=5": "./lib/index.d.ts",
+      "types": "./types-legacy/pre-v5/index.d.ts",
       "import": "./es-legacy/index.js",
       "require": "./es-legacy/index.js",
-      "default": "./es-legacy/index.js",
-      "types@>=5": "./lib/index.d.ts",
-      "types": "./types-legacy/pre-v5/index.d.ts"
+      "default": "./es-legacy/index.js"
     },
     "./types": {
       "types@>=5": "./lib/types.d.ts",
@@ -148,7 +148,7 @@
     "task:update-lib-enum": "tsx scripts/update-enum-ts.ts lib",
     "task:update-tses-enum": "tsx scripts/update-enum-ts.ts tses",
     "test": "run-s gv task:jest",
-    "test-all": "run-s build task:jest test-node-cjs-core test-node-esm-core task:run-e2e",
+    "test-all": "run-s build task:bundle-e2e task:jest test-node-cjs-core test-node-esm-core task:run-e2e",
     "test-node-cjs": "run-s build:lib test-node-cjs-core",
     "test-node-cjs-core": "run-s ts2lib task:jest-cjs",
     "test-node-esm": "run-s build:es test-node-esm-core",

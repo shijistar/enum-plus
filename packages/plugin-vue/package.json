@@ -55,7 +55,6 @@
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "devDependencies": {
-    "@testing-library/vue": "^8.1.0",
     "i18next-vue": "^5.3.0",
     "vue": "^3.5.22",
     "vue-i18n": "^11.1.12"

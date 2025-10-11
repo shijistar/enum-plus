@@ -26,8 +26,18 @@ export class ViTestBrowserEngine extends TestEngineBase<'vitest-browser'> {
       assert(result);
     });
   }
-  override expect<T>(actual: T, options?: ExpectPollOptions) {
-    return expect.element(actual as Locator, options);
+  override expect<T>(actual: T, options?: ExpectPollOptions | string) {
+    if (
+      actual &&
+      typeof actual === 'object' &&
+      (actual instanceof Element ||
+        ['querySelector', 'getByTestId', 'getByRole', 'getByText'].some((method) => method in actual))
+    ) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return expect.element(actual as unknown as Locator, options as ExpectPollOptions) as any;
+    } else {
+      return expect(actual, options as string);
+    }
   }
 }
 

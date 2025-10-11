@@ -1,4 +1,4 @@
-import type { ExpectData, ExpectOptions, Matchers, TestEngine } from './types';
+import type { ExpectConfig, TestEngine } from './types';
 import type { RuntimeContext } from './utils';
 
 abstract class TestEngineBase<Engine extends TestEngine = 'jest'> {
@@ -17,7 +17,14 @@ abstract class TestEngineBase<Engine extends TestEngine = 'jest'> {
     evaluateContext?: Record<string, unknown>
   ): void;
 
-  abstract expect<T extends ExpectData[Engine]>(actual: T, options?: ExpectOptions[Engine]): Matchers<T>[Engine];
+  abstract expect<T extends ExpectConfig<unknown>[Engine][0][0]>(
+    actual: T,
+    options?: ExpectConfig<T>[Engine][0][1]
+  ): ExpectConfig<T>[Engine][0][2];
+  abstract expect<T extends ExpectConfig<unknown>[Engine][1][0]>(
+    actual: T,
+    options?: ExpectConfig<T>[Engine][1][1]
+  ): ExpectConfig<T>[Engine][1][2];
 }
 
 export default TestEngineBase;

@@ -5,7 +5,7 @@ export default defineComponent({
   name: 'TextRender',
   props: {
     text: {
-      type: Function as PropType<() => string>,
+      type: Function as PropType<() => string | undefined>,
       required: true,
     },
   },

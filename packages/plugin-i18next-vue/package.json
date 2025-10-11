@@ -29,6 +29,7 @@
   "license": "MIT",
   "author": "李凤宝(Leo) <shijistar@gmail.com>",
   "sideEffects": false,
+  "type": "module",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "lib/index.d.ts",
@@ -47,7 +48,7 @@
     "build:es-legacy": "cross-env LEGACY=1 father build",
     "prepublishOnly": "npm run build && npm run test",
     "task:copy-lib": "tsx ../../scripts/copy-lib.ts",
-    "test": "jest",
+    "test": "vitest",
     "test-legacy": "jest -c jest-legacy.config.js",
     "test:browser": "npm run test:browser:bundle && playwright test",
     "test:browser:bundle": "node scripts/browser-test-bundle.js",
@@ -55,9 +56,12 @@
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitest/browser-playwright": "^4.0.0-beta.15",
     "@vueuse/core": "^13.9.0",
     "i18next-vue": "^5.3.0",
-    "vitest": "^3.2.4",
+    "vite": "^7.1.9",
+    "vitest": "^4.0.0-beta.15",
     "vitest-browser-vue": "^1.1.0",
     "vue": "^3.5.22"
   },

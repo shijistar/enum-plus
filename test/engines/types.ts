@@ -14,11 +14,22 @@ export interface Matchers<T> {
   'vitest-browser': PromisifyDomAssertion<Awaited<Element | null>>;
 }
 
-export interface ExpectData {
-  jest: unknown;
-  playwright: unknown;
-  'vitest-node': unknown;
-  'vitest-browser': Locator;
+export interface ExpectConfig<T> {
+  jest: [[unknown, never, jest.JestMatchers<T>], [unknown, never, jest.JestMatchers<T>]];
+  playwright: [
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    [unknown, NonNullable<Parameters<typeof playwrightExpect>[1]>, MakeMatchers<void, T, {}>],
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    [unknown, NonNullable<Parameters<typeof playwrightExpect>[1]>, MakeMatchers<void, T, {}>],
+  ];
+  'vitest-node': [
+    [unknown, NonNullable<Parameters<typeof vitestExpect>[1]>, Assertion<T>],
+    [unknown, NonNullable<Parameters<typeof vitestExpect>[1]>, Assertion<T>],
+  ];
+  'vitest-browser': [
+    [unknown, string, Assertion<T>],
+    [Locator, ExpectPollOptions, PromisifyDomAssertion<Awaited<Element | null>>],
+  ];
 }
 
 export interface ExpectOptions {

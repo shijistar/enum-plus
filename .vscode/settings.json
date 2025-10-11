@@ -5,13 +5,12 @@
   },
   "cSpell.words": ["jsoneo", "madhead", "shijistar", "softprops", "tses", "Vuetify"],
   "i18n-ally.localesPaths": [],
-  "commentTranslate.hover.enabled": false,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "**/node_modules": true
+    "**/node_modules": false
   }
 }
