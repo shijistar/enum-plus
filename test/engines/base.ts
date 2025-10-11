@@ -1,16 +1,14 @@
-import type * as EnumPlusNamespace from '@enum-plus';
-import type * as JsoneoNamespace from 'jsoneo';
-import type * as WeekConfigNamespace from '../data/week-config';
-import type * as WeekDataNamespace from '../data/week-data';
-import type { TestEngine } from './config';
-import type { MakeMatchers } from './playwright-types';
+import type { ExpectData, ExpectOptions, Matchers, TestEngine } from './types';
+import type { RuntimeContext } from './utils';
 
-abstract class TestEngineBase {
-  protected _type?: TestEngine;
+abstract class TestEngineBase<Engine extends TestEngine = 'jest'> {
+  protected _type?: Engine;
 
   get type() {
     return this._type;
   }
+
+  abstract describe(name: string, fn: () => void): void;
 
   abstract test<Data = unknown>(
     name: string,
@@ -19,18 +17,7 @@ abstract class TestEngineBase {
     evaluateContext?: Record<string, unknown>
   ): void;
 
-  abstract expect<ActualType = unknown>(
-    actual: ActualType // eslint-disable-next-line @typescript-eslint/ban-types
-  ): jest.JestMatchers<ActualType> | MakeMatchers<void, ActualType, {}>;
-
-  abstract describe(name: string, fn: () => void): void;
+  abstract expect<T extends ExpectData[Engine]>(actual: T, options?: ExpectOptions[Engine]): Matchers<T>[Engine];
 }
 
-export interface RuntimeContext {
-  EnumPlus: typeof EnumPlusNamespace;
-  WeekConfig: typeof WeekConfigNamespace;
-  WeekData: typeof WeekDataNamespace;
-  jsoneo: typeof JsoneoNamespace;
-  [key: string]: unknown;
-}
 export default TestEngineBase;

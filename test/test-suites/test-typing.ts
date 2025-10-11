@@ -2,7 +2,7 @@ import type { IEnum, IEnumItems } from '@enum-plus';
 import type { localeEN, StandardWeekConfig } from '../data/week-config';
 import type TestEngineBase from '../engines/base';
 
-const testTyping = (engine: TestEngineBase) => {
+const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum typings', () => {
     engine.test(
       'the test codes should not report any TypeScript errors, even including @ts-expect-error comments',
@@ -48,7 +48,12 @@ function validateEnum<
         keyof typeof StandardWeekConfig,
         (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
       >,
->(engine: TestEngineBase, weekEnum: T, locale: typeof localeEN, WeekConfig: typeof StandardWeekConfig) {
+>(
+  engine: TestEngineBase<'jest' | 'playwright'>,
+  weekEnum: T,
+  locale: typeof localeEN,
+  WeekConfig: typeof StandardWeekConfig
+) {
   const value2 = 1 as 1 | { foo: number };
   const value3 = 'Monday' as 'Monday' | { foo: number };
   if (value2 instanceof weekEnum) {

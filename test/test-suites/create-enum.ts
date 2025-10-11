@@ -12,7 +12,7 @@ import {
 import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils/index';
 
-const testCreatingEnum = (engine: TestEngineBase) => {
+const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Create Enum using static init data', () => {
     engine.test(
       'Should be created with standard init data',

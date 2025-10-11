@@ -1,33 +1,33 @@
 import * as EnumPlus from '@enum-plus';
-import * as jsoneo from 'jsoneo';
+import * as Jsoneo from 'jsoneo';
 import * as WeekConfig from '../data/week-config';
 import * as WeekData from '../data/week-data';
-import type { RuntimeContext } from './base';
 import TestEngineBase from './base';
+import type { RuntimeContext } from './utils';
 
-export class JestEngine extends TestEngineBase {
+export class JestEngine extends TestEngineBase<'jest'> {
   constructor() {
     super();
     this._type = 'jest';
   }
 
+  override describe(name: string, fn: () => void): void {
+    describe(name, fn);
+  }
   override test<Data>(
     name: string,
     evaluate: (context: RuntimeContext) => Data | Promise<Data>,
     assert: (data: Data) => void,
     evaluateContext?: Record<string, unknown>
-  ): void {
+  ) {
     test(name, async () => {
       const runtimeContext = this.getRuntimeContext();
       const result = await evaluate({ ...runtimeContext, ...evaluateContext });
       assert(result);
     });
   }
-  override expect<ActualType = unknown>(actual: ActualType): jest.JestMatchers<ActualType> {
+  override expect<ActualType>(actual: ActualType) {
     return expect(actual);
-  }
-  override describe(name: string, fn: () => void): void {
-    describe(name, fn);
   }
 
   private getRuntimeContext(): RuntimeContext {
@@ -35,7 +35,7 @@ export class JestEngine extends TestEngineBase {
       EnumPlus,
       WeekConfig,
       WeekData,
-      jsoneo: jsoneo,
+      Jsoneo,
     };
   }
 }

@@ -12,7 +12,7 @@ import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils/index';
 import { addEnumItemsTestSuite } from './enum-items';
 
-const testEnumCollection = (engine: TestEngineBase) => {
+const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('The EnumCollectionClass api', () => {
     addEnumItemsTestSuite(engine);
 

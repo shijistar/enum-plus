@@ -4,13 +4,13 @@ import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
 import { pickArray } from '../utils/index';
 
-const testEnumItems = (engine: TestEngineBase) => {
+const testEnumItems = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('The EnumItemsArray api', () => {
     addEnumItemsTestSuite(engine);
   });
 };
 
-export function addEnumItemsTestSuite(engine: TestEngineBase) {
+export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwright'>) {
   engine.test(
     'should have [IS_ENUM_ITEMS] property to indicate that this is an enum items array',
     ({ EnumPlus: { Enum, IS_ENUM_ITEMS }, WeekConfig: { StandardWeekConfig } }) => {

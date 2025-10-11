@@ -5,7 +5,7 @@ import type { getStandardWeekData as getStandardWeekDataInterface } from '../dat
 import type TestEngineBase from '../engines/base';
 import { copyList, pickArray } from '../utils/index';
 
-const testLocalization = (engine: TestEngineBase) => {
+const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'Should have default localize method',

@@ -55,20 +55,16 @@
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.4",
-    "@babel/preset-env": "^7.28.3",
-    "@babel/preset-typescript": "^7.27.1",
-    "@testing-library/vue": "^8.1.0",
-    "@vue/compiler-sfc": "^3.5.22",
-    "@vue/vue3-jest": "^29.2.6",
     "@vueuse/core": "^13.9.0",
-    "babel-jest": "^29.7.0",
+    "i18next-vue": "^5.3.0",
+    "vitest": "^3.2.4",
+    "vitest-browser-vue": "^1.1.0",
     "vue": "^3.5.22"
   },
   "peerDependencies": {
     "enum-plus": "^3.0.0",
-    "i18next": ">=14.0.1",
-    "i18next-vue": ">=2.0.0"
+    "i18next": ">=23",
+    "i18next-vue": ">=3.0.0"
   },
   "packageManager": "npm@10.9.2",
   "publishConfig": {

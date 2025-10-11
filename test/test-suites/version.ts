@@ -1,7 +1,7 @@
 import { version as packageVersion } from '../../package.json';
 import type TestEngineBase from '../engines/base';
 
-const testVersion = (engine: TestEngineBase) => {
+const testVersion = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum version', () => {
     engine.test(
       'Should be equal to package.json version',

@@ -5,7 +5,7 @@ import { changeLanguage } from 'i18next';
 import rootPlugin from '../../src/index';
 import { getAltData } from '../data/altLocale';
 
-const testLocalization = (engine: TestEngineBase) => {
+const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'Should show English by default',

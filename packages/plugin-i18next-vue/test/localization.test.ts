@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import jest from '@enum-plus/test/engines/jest';
+import viTestBrowser from '@enum-plus/test/engines/vitest-browser';
 import testLocalization from './test-suites/localization';
 
-testLocalization(jest);
+testLocalization(viTestBrowser);

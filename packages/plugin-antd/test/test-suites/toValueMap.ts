@@ -4,7 +4,7 @@ import type TestEngineBase from '@enum-plus/test/engines/base';
 import { defaultLocalize } from 'enum-plus';
 import toValueMapPlugin from '../../src/toValueMap';
 
-const testEnumItems = (engine: TestEngineBase) => {
+const testEnumItems = (engine: TestEngineBase<'jest'>) => {
   engine.describe('The toValueMap plugin', () => {
     engine.test(
       'should generate an object array for AntDesignPro',

@@ -6,7 +6,7 @@ import { copyList, pickArray } from '@enum-plus/test/utils/index';
 import antdPlugin from '../../src/index';
 import toSelectPlugin from '../../src/toSelect';
 
-const testEnumItems = (engine: TestEngineBase) => {
+const testEnumItems = (engine: TestEngineBase<'jest'>) => {
   engine.describe('The toSelect plugin', () => {
     engine.test(
       'should generate an object array',

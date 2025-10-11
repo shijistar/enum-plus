@@ -1,7 +1,7 @@
 import { IS_ENUM_ITEM as IS_ENUM_ITEM_IN_NODE } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 
-const testEnumItem = (engine: TestEngineBase) => {
+const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('The EnumItemClass api', () => {
     engine.test(
       'Should be able to pick Enum values',

@@ -4,11 +4,11 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@enum-plus/test/*": ["../../tses/test/*"],
-      "@enum-plus/*": ["../../es/*"],
-      "@enum-plus": ["../../es"]
+      "@enum-plus/test/*": ["../../tslib/test/*"],
+      "@enum-plus/*": ["../../lib/*"],
+      "@enum-plus": ["../../lib"]
     }
   },
-  "include": ["../../tses", "./src", "./test"],
+  "include": ["../../tslib", "./src", "./test"],
   "exclude": ["node_modules", "es", "lib"]
 }

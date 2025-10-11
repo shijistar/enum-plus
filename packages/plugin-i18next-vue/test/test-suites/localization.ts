@@ -4,16 +4,15 @@ import type TestEngineBase from '@enum-plus/test/engines/base';
 import { render } from '@testing-library/vue';
 import { changeLanguage } from 'i18next';
 import rootPlugin from '../../src/index';
-import localizePlugin from '../../src/localize';
 import TextRender from '../components/TextRender.vue';
 import { getAltData } from '../data/altLocale';
 
-const testLocalization = (engine: TestEngineBase) => {
+const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'Should show English by default',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
-        Enum.install(localizePlugin);
+        Enum.install(rootPlugin);
         return {
           ...getAssertData({
             Enum,
@@ -46,7 +45,7 @@ const testLocalization = (engine: TestEngineBase) => {
     engine.test(
       'Should show English after changing back',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
-        Enum.install(localizePlugin);
+        Enum.install(rootPlugin);
         changeLanguage('en');
         return getAssertData({
           Enum,
@@ -61,8 +60,10 @@ const testLocalization = (engine: TestEngineBase) => {
     engine.test(
       'Should accept plugin options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
-        Enum.install(localizePlugin, {
-          tOptions: { ns: 'alternative' },
+        Enum.install(rootPlugin, {
+          localize: {
+            tOptions: { ns: 'alternative' },
+          },
         });
         changeLanguage('en');
         const { weekEnum, AltLocales } = getAssertData({
@@ -120,9 +121,11 @@ const testLocalization = (engine: TestEngineBase) => {
     engine.test(
       'Should accept plugin options with tOptions function',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
-        Enum.install(localizePlugin, {
-          tOptions: (key) => {
-            return { ns: key === 'weekDay.name' ? 'translation' : 'alternative' };
+        Enum.install(rootPlugin, {
+          localize: {
+            tOptions: (key) => {
+              return { ns: key === 'weekDay.name' ? 'translation' : 'alternative' };
+            },
           },
         });
         changeLanguage('en');
@@ -153,8 +156,10 @@ const testLocalization = (engine: TestEngineBase) => {
     engine.test(
       'Should allow plugin option overriding the t function',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
-        Enum.install(localizePlugin, {
-          tOptions: (key) => key + '(overridden)',
+        Enum.install(rootPlugin, {
+          localize: {
+            tOptions: (key) => key + '(overridden)',
+          },
         });
         changeLanguage('en');
         const { weekEnum } = getAssertData({

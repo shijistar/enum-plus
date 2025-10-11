@@ -10,7 +10,7 @@ import type { MenuItemOption } from '../../src/toMenu';
 import type { SelectItem } from '../../src/toSelect';
 import type { ValueMap } from '../../src/toValueMap';
 
-const testLocalization = (engine: TestEngineBase) => {
+const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'Should show English by default',

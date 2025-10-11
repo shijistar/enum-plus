@@ -7,7 +7,7 @@ import ReactI18nextLocale from '../../src/components/ReactI18nLocale';
 import { reactI18nextPlugin } from '../../src/index';
 import testIsMatch from './isMatch';
 
-const testLocalization = (engine: TestEngineBase) => {
+const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('The react-i18next plugin', () => {
     engine.test(
       'Should return an instance of Locale component',
