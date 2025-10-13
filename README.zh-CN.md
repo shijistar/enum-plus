@@ -964,14 +964,33 @@ Enum.install(antdPlugin, {
 
 目前我们已经开发并发布了以下插件，你可以根据需要选择安装：
 
-- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) - Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
-- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next) - 集成 [i18next](https://www.i18next.com) 并实现枚举标签的国际化。
-- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next) - 自动适配 [react-i18next](https://react.i18next.com) 以让枚举支持国际化。
-- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) - React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
-- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) - 集成 [i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
-- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue-i18n) - 集成 [vue-i18n](https://vue-i18n.intlify.dev) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
-- 我们正在开发以下插件：
-  - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd)
+
+  面向 [Ant Design](https://ant-design.antgroup.com) 的功能扩展，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
+
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next)
+
+  集成 [i18next](https://www.i18next.com) 并实现枚举标签的国际化。
+
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next)
+
+  自动适配 [react-i18next](https://react.i18next.com) 以让枚举支持国际化。
+
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react)
+
+  React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
+
+- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue)
+
+  集成 [i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
+
+- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue-i18n)
+
+  集成 [vue-i18n](https://vue-i18n.intlify.dev) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
+
+我们正在开发以下插件：
+
+- [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
 
 > 如果你没有找到需要的插件，或者你想开发自己的插件，请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。你可以在enum-plus官方仓库中开发新插件，也可以将你开发的插件发布到 npm 上，并把你的插件链接分享在这里。我们真诚地需要你的帮助，来丰富插件生态系统！
 

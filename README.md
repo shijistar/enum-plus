@@ -683,7 +683,7 @@ const App = () => {
 };
 ```
 
-> Need to install [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) plugin
+> Need to install [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) plugin
 
 ---
 
@@ -972,14 +972,33 @@ Enum.install(antdPlugin, {
 
 The following plugins are available. You can choose to install them based on your needs:
 
-- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) - Ant Design oriented features, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. With these methods, you can directly bind enums to the corresponding Ant Design components, greatly simplifying your code.
-- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next) - Integrates [i18next](https://www.i18next.com) to enable internationalization of enum labels.
-- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next) - Integrates [react-i18next](https://react.i18next.com) to enable internationalization of enum labels.
-- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) - React integration, including support for `Enum.localize` to return React components, and listening for language changes to auto update components.
-- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) - Integrates [i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) to enable internationalization of enum labels and listen for language changes to auto update components.
-- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue-i18n) - Integrates [vue-i18n](https://vue-i18n.intlify.dev) to enable internationalization of enum labels and listen for language changes to auto update components.
-- We are working on the following plugins:
-  - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto update components. _We need your help to develop this plugin!_
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd)
+
+  [Ant Design](https://ant.design) oriented features, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. With these methods, you can directly bind enums to the corresponding Ant Design components, greatly simplifying your code.
+
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next)
+
+  Integrates [i18next](https://www.i18next.com) to enable internationalization of enum labels.
+
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react-i18next)
+
+  Integrates [react-i18next](https://react.i18next.com) to enable internationalization of enum labels.
+
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react)
+
+  React integration, including support for `Enum.localize` to return React components, and listening for language changes to auto update components.
+
+- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next-vue)
+
+  Integrates [i18next-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next-vue) to enable internationalization of enum labels and listen for language changes to auto update components.
+
+- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue-i18n)
+
+  Integrates [vue-i18n](https://vue-i18n.intlify.dev) to enable internationalization of enum labels and listen for language changes to auto update components.
+
+We are working on the following plugins:
+
+- [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto update components. _We need your help to develop this plugin!_
 
 > If the plugin you are searching for is not available, or if you want to develop your own plugin, please refer to the [Plugin Development Guide](./docs/plugin-development.md). You can develop new plugins in the official enum-plus repository or publish your developed plugins to npm and share your plugin links here. We sincerely need your help to enrich the plugin ecosystem!
 
@@ -1021,9 +1040,9 @@ WeekEnum.named.Monday.label; // Monday or 星期一, depending on the current lo
 WeekEnum.name; // Week or 周, depending on the current locale
 ```
 
-This plugin also supports custom i18next options, and even allows complete control over the `localize` method. Please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options) for more details.
+This plugin also supports custom i18next options, and even allows complete control over the `localize` method. Please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next#plugin-options) for more details.
 
-If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue).
+If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue).
 
 If you are using other internationalization libraries, such as `react-intl`, `vue-i18next`, or `ngx-translate`, you can integrate these libraries by overwriting the `Enum.localize` method.
 
@@ -1038,7 +1057,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> Once you have completed this feature, it is recommended that you consider publishing it as an npm package and share it in the [Awesome Plugins](#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/main/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](./docs/plugin-development.md).
+> Once you have completed this feature, it is recommended that you consider publishing it as an npm package and share it in the [Awesome Plugins](#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](./docs/plugin-development.md).
 
 ---
 
@@ -1293,7 +1312,7 @@ Please use the `enum.key(value)` method to get the key name according to its val
 
 ### Why does the search function of the Ant Design Select stop working after enabling internationalization?
 
-This is because `Enum.localize` returns a component instance instead of a regular string, causing Ant Design to fail in performing string matching correctly. Please use the `enum.isMatch` method to enable the search functionality. Please refer to [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react#dropdown-search) for more details.
+This is because `Enum.localize` returns a component instance instead of a regular string, causing Ant Design to fail in performing string matching correctly. Please use the `enum.isMatch` method to enable the search functionality. Please refer to [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react#dropdown-search) for more details.
 
 ```bash
 npm install @enum-plus/plugin-react
@@ -1337,7 +1356,7 @@ const WeekEnum = Enum(weekInit);
 
 Yes, actually it wasn't easy from the beginning. The working principles of Jest and Playwright are quite different. Jest runs in a Node.js environment, while Playwright runs in a browser environment and then returns to the Node.js environment to execute assertions. To make them share a set of test code, we did the following:
 
-1. **Environment Adaptation**: We wrote an [adaptation layer](https://github.com/shijistar/enum-plus/tree/main/test/engines/index.ts) to handle the differences between the two testing frameworks.
+1. **Environment Adaptation**: We wrote an [adaptation layer](https://github.com/shijistar/enum-plus/tree/master/test/engines/index.ts) to handle the differences between the two testing frameworks.
 2. **Abstract Testing Logic**: We abstracted the testing logic into some independent modules, so that these test suites can be reused in different testing frameworks.
 3. **Enhanced Serialization Mechanism**: E2E tests require running in a browser environment and then passing the running results to the Node.js environment for assertions. To achieve this, we developed an [enhanced serialization library](https://github.com/shijistar/jsoneo). Since the `enum-plus` enums internally use types like `class`, `function`, `Symbol`, `Date`, and `RegExp`, built-in functions rewritten like `Symbol.toStringTag` and `Symbol.hasInstance`, and even including `Getter/Setter`, which are not serializable by `JSON.stringify`. We implemented support for these complex features through [jsoneo](https://github.com/shijistar/jsoneo). So complex objects can cross different environments through `serialization/deserialization` while retaining all dynamic behaviors. The transferred object remains "alive", just like the original object has not been serialized.
 
