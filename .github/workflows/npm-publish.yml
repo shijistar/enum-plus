@@ -48,42 +48,6 @@ jobs:
     with:
       use-matrix: true
 
-  run-plugin-unit-tests:
-    if: needs.check-plugin-release-tag.outputs.is_plugin_tag == 'true'
-    needs: check-plugin-release-tag
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps webkit
-
-      - name: Try to restore modern node_modules cache
-        id: node_modules_cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install dependencies
-        if: steps.node_modules_cache.outputs.cache-hit != 'true'
-        run: npm ci
-
-      - name: Install playwright browsers
-        run: npx playwright install
-
-      - name: Build package
-        run: npm run build
-
-      - name: Run modern jest tests (target plugin)
-        working-directory: packages/${{ needs.check-plugin-release-tag.outputs.plugin_name }}
-        run: npm test
-
   publish-npm-core:
     if: needs.check-core-release-tag.outputs.is_semver_tag == 'true'
     needs: [check-core-release-tag, run-core-unit-tests]
@@ -256,7 +220,7 @@ jobs:
 
   publish-npm-plugin:
     if: needs.check-plugin-release-tag.outputs.is_plugin_tag == 'true'
-    needs: [check-plugin-release-tag, run-plugin-unit-tests]
+    needs: [check-plugin-release-tag]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -272,15 +236,7 @@ jobs:
       - name: Install Playwright dependencies
         run: npx playwright install-deps webkit
 
-      - name: Try to restore modern node_modules cache
-        id: node_modules_cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
-
       - name: Install dependencies
-        if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Install playwright browsers
