@@ -269,6 +269,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
+      - name: Install Playwright dependencies
+        run: npx playwright install-deps webkit
+
       - name: Try to restore modern node_modules cache
         id: node_modules_cache
         uses: actions/cache@v4
@@ -279,6 +282,9 @@ jobs:
       - name: Install dependencies
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
+
+      - name: Install playwright browsers
+        run: npx playwright install
 
       - name: Build the core package
         run: npm run build
