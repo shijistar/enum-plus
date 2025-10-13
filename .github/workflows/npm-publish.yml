@@ -11,7 +11,7 @@ permissions:
   statuses: write
 
 jobs:
-  check-release-tag-core:
+  check-core-release-tag:
     runs-on: ubuntu-latest
     outputs:
       is_semver_tag: ${{ steps.check-core-release.outputs.is_semver_tag }}
@@ -25,7 +25,7 @@ jobs:
             echo "is_semver_tag=false" >> "$GITHUB_OUTPUT"
           fi
 
-  check-release-tag-plugin:
+  check-plugin-release-tag:
     runs-on: ubuntu-latest
     outputs:
       is_plugin_tag: ${{ steps.check-plugin-release.outputs.is_plugin_tag }}
@@ -41,16 +41,16 @@ jobs:
             echo "is_plugin_tag=false" >> "$GITHUB_OUTPUT"
           fi
 
-  run-unit-tests-core:
-    if: needs.check-release-tag-core.outputs.is_semver_tag == 'true'
-    needs: check-release-tag-core
+  run-core-unit-tests:
+    if: needs.check-core-release-tag.outputs.is_semver_tag == 'true'
+    needs: check-core-release-tag
     uses: ./.github/workflows/reusable-test.yml
     with:
       use-matrix: true
 
-  run-unit-tests-plugin:
-    if: needs.check-release-tag-plugin.outputs.is_plugin_tag == 'true'
-    needs: check-release-tag-plugin
+  run-plugin-unit-tests:
+    if: needs.check-plugin-release-tag.outputs.is_plugin_tag == 'true'
+    needs: check-plugin-release-tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,12 +81,12 @@ jobs:
         run: npm run build
 
       - name: Run modern jest tests (target plugin)
-        working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
+        working-directory: packages/${{ needs.check-plugin-release-tag.outputs.plugin_name }}
         run: npm test
 
   publish-npm-core:
-    if: needs.check-release-tag-core.outputs.is_semver_tag == 'true'
-    needs: [check-release-tag-core, run-unit-tests-core]
+    if: needs.check-core-release-tag.outputs.is_semver_tag == 'true'
+    needs: [check-core-release-tag, run-core-unit-tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -255,8 +255,8 @@ jobs:
           fi
 
   publish-npm-plugin:
-    if: needs.check-release-tag-plugin.outputs.is_plugin_tag == 'true'
-    needs: [check-release-tag-plugin, run-unit-tests-plugin]
+    if: needs.check-plugin-release-tag.outputs.is_plugin_tag == 'true'
+    needs: [check-plugin-release-tag, run-plugin-unit-tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -284,35 +284,35 @@ jobs:
         run: npm run build
 
       - name: Build the plugin package
-        working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
+        working-directory: packages/${{ needs.check-plugin-release-tag.outputs.plugin_name }}
         run: npm run build
 
       - name: Run the plugin tests
-        working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
+        working-directory: packages/${{ needs.check-plugin-release-tag.outputs.plugin_name }}
         run: npm test
 
-      - name: Request the latest version of @enum-plus/${{ needs.check-release-tag-plugin.outputs.plugin_name }} before publish
+      - name: Request the latest version of @enum-plus/${{ needs.check-plugin-release-tag.outputs.plugin_name }} before publish
         id: get_latest_version_before_publish
         run: |
-          VERSION=$(npm view @enum-plus/${{ needs.check-release-tag-plugin.outputs.plugin_name }} version || echo 0.0.0)
+          VERSION=$(npm view @enum-plus/${{ needs.check-plugin-release-tag.outputs.plugin_name }} version || echo 0.0.0)
           echo "LATEST_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Request the next version of @enum-plus/${{ needs.check-release-tag-plugin.outputs.plugin_name }} before publish
+      - name: Request the next version of @enum-plus/${{ needs.check-plugin-release-tag.outputs.plugin_name }} before publish
         id: get_next_version_before_publish
         continue-on-error: true
         run: |
-          VERSION=$(npm view @enum-plus/${{ needs.check-release-tag-plugin.outputs.plugin_name }}@next version 2>/dev/null || echo 0.0.0)
+          VERSION=$(npm view @enum-plus/${{ needs.check-plugin-release-tag.outputs.plugin_name }}@next version 2>/dev/null || echo 0.0.0)
           echo "NEXT_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish a prerelease version to npm
-        working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
+        working-directory: packages/${{ needs.check-plugin-release-tag.outputs.plugin_name }}
         run: npm publish --tag beta --ignore-scripts --access=public
         if: github.event.release.prerelease
         env:
           NODE_AUTH_TOKEN: ${{ secrets.AT_ENUM_PLUS_SCOPE_NPM_TOKEN }}
 
       - name: Publish a regular version to npm
-        working-directory: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}
+        working-directory: packages/${{ needs.check-plugin-release-tag.outputs.plugin_name }}
         run: npm publish --ignore-scripts --access=public
         if: github.event.release.prerelease == false
         env:
@@ -334,7 +334,7 @@ jobs:
         if: github.event.release.prerelease
         run: |
           if [ "${{ steps.new_vs_latest.outputs.comparison-result }}" = ">" ]; then
-            npm dist-tag add @enum-plus/${{ needs.check-release-tag-plugin.outputs.plugin_name }}@${{ github.event.release.tag_name }} next --access=public
+            npm dist-tag add @enum-plus/${{ needs.check-plugin-release-tag.outputs.plugin_name }}@${{ github.event.release.tag_name }} next --access=public
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.AT_ENUM_PLUS_SCOPE_NPM_TOKEN }}
@@ -343,7 +343,7 @@ jobs:
         if: github.event.release.prerelease == false
         run: |
           if [ "${{ steps.get_next_version_before_publish.outputs.NEXT_VERSION }}" != "0.0.0" ] && [ "${{ steps.new_vs_next.outputs.comparison-result }}" = ">" ]; then
-            npm dist-tag rm @enum-plus/${{ needs.check-release-tag-plugin.outputs.plugin_name }} next --access=public
+            npm dist-tag rm @enum-plus/${{ needs.check-plugin-release-tag.outputs.plugin_name }} next --access=public
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.AT_ENUM_PLUS_SCOPE_NPM_TOKEN }}
@@ -353,8 +353,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: shijistar/enum-plus
-          files: packages/${{ needs.check-release-tag-plugin.outputs.plugin_name }}/coverage/lcov.info
+          files: packages/${{ needs.check-plugin-release-tag.outputs.plugin_name }}/coverage/lcov.info
           # Give the current upload a unique identifier for easy grouping in the Codecov UI
-          flags: plugin-${{ needs.check-release-tag-plugin.outputs.plugin_name }}
+          flags: plugin-${{ needs.check-plugin-release-tag.outputs.plugin_name }}
           # Optional: Give this upload a name
-          name: ${{ needs.check-release-tag-plugin.outputs.plugin_name }}
+          name: ${{ needs.check-plugin-release-tag.outputs.plugin_name }}
