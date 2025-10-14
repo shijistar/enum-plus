@@ -1,6 +1,6 @@
 name: '🚀 Feature Request'
 description: 'Suggest a new feature or improvement'
-title: '[Request]: '
+title: '[Feature Request]: '
 labels: ['enhancement']
 
 body:
@@ -15,6 +15,29 @@ body:
       placeholder: |
         Problem Statement
         需求背景
+    validations:
+      required: true
+
+  # Choose a package scope
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Package Scope
+      description: |
+        Which package is this issue related to?
+        <br/>
+        这个需求是关于哪个项目的？
+      options:
+        - Please select a package
+        - enum-plus (core)
+        - '@enum-plus/plugin-antd'
+        - '@enum-plus/plugin-i18next'
+        - '@enum-plus/plugin-react-i18next'
+        - '@enum-plus/plugin-react'
+        - '@enum-plus/plugin-i18next-vue'
+        - '@enum-plus/plugin-vue-i18n'
+        - '@enum-plus/plugin-angular'
+        - other
     validations:
       required: true
 

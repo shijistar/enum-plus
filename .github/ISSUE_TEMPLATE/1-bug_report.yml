@@ -16,6 +16,26 @@ body:
         1. Please make sure you have tried to reproduce this issue with the latest version of enum-plus.
         2. Please check existing open or closed issues to ensure this issue is not a duplicate or has already been fixed.
 
+  # Choose a package scope
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Package Scope
+      description: Which package is this issue related to?
+      options:
+        - Please select a package
+        - enum-plus (core)
+        - '@enum-plus/plugin-antd'
+        - '@enum-plus/plugin-i18next'
+        - '@enum-plus/plugin-react-i18next'
+        - '@enum-plus/plugin-react'
+        - '@enum-plus/plugin-i18next-vue'
+        - '@enum-plus/plugin-vue-i18n'
+        - '@enum-plus/plugin-angular'
+        - other
+    validations:
+      required: true
+
   # Issue description
   - type: textarea
     id: description
