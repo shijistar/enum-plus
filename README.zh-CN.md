@@ -674,7 +674,7 @@ const App = () => {
 };
 ```
 
-> 需要安装 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) 插件
+> 需要安装 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) 插件
 
 ---
 
@@ -944,7 +944,7 @@ import { Enum } from 'enum-plus';
 Enum.install(antdPlugin);
 ```
 
-当你安装一个插件后，插件会为所有枚举实例添加新的方法或属性。例如，安装了 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) 插件后，你可以使用 `enum.toSelect` 方法使用枚举生成一个 Select 组件。
+当你安装一个插件后，插件会为所有枚举实例添加新的方法或属性。例如，安装了 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) 插件后，你可以使用 `enum.toSelect` 方法使用枚举生成一个 Select 组件。
 
 你还可以设置插件的可选配置选项，以定制插件的行为，关于插件的配置选项，请参考各个插件的文档。
 
@@ -964,33 +964,33 @@ Enum.install(antdPlugin, {
 
 目前我们已经开发并发布了以下插件，你可以根据需要选择安装：
 
-- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd)
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd)
 
   面向 [Ant Design](https://ant-design.antgroup.com) 的功能扩展，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
 
-- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next)
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next)
 
   集成 [i18next](https://www.i18next.com) 并实现枚举标签的国际化。
 
-- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next)
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react-i18next)
 
   自动适配 [react-i18next](https://react.i18next.com) 以让枚举支持国际化。
 
-- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react)
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react)
 
   React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
 
-- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue)
+- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next-vue)
 
-  集成 [i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
+  集成 [i18next-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next-vue) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
 
-- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue-i18n)
+- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue-i18n)
 
   集成 [vue-i18n](https://vue-i18n.intlify.dev) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
 
 我们正在开发以下插件：
 
-- [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
+- [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_
 
 > 如果你没有找到需要的插件，或者你想开发自己的插件，请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。你可以在enum-plus官方仓库中开发新插件，也可以将你开发的插件发布到 npm 上，并把你的插件链接分享在这里。我们真诚地需要你的帮助，来丰富插件生态系统！
 
@@ -1032,9 +1032,9 @@ WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环�
 WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
-此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next/README.zh-CN.md#插件选项)，了解更多详情。
+此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，请参考[插件文档](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next/README.zh-CN.md#插件选项)，了解更多详情。
 
-如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue) 等插件。
+如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue) 等插件。
 
 如果你使用的是其它国际化库，例如 `react-intl`、`vue-i18next` 或 `ngx-translate`，你可以通过 `Enum.localize` 方法来集成这些库。
 
@@ -1049,7 +1049,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> 一旦你完成了这项功能，建议你考虑把它发布成一个 npm 包，并分享在[插件生态](#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/main/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。
+> 一旦你完成了这项功能，建议你考虑把它发布成一个 npm 包，并分享在[插件生态](#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](./docs/plugin-development.zh-CN.md)。
 
 ---
 
@@ -1302,7 +1302,7 @@ TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.w
 
 ### 为什么启用国际化后，Ant Design下拉框的搜索功能失效了？
 
-这是因为 `Enum.localize` 返回了一个组件对象，而不是常规字符串，导致 antd 无法正确进行字符串匹配。请使用 `enum.isMatch` 方法来实现自定义搜索功能。请参考 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react#dropdown-search)，了解更多详情。
+这是因为 `Enum.localize` 返回了一个组件对象，而不是常规字符串，导致 antd 无法正确进行字符串匹配。请使用 `enum.isMatch` 方法来实现自定义搜索功能。请参考 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react#dropdown-search)，了解更多详情。
 
 ```bash
 npm install @enum-plus/plugin-react
@@ -1346,7 +1346,7 @@ const WeekEnum = Enum(weekInit);
 
 是的，这并不轻松。Jest 和 Playwright 的工作原理并不相同，Jest 运行在 Node.js 环境中，而 Playwright 运行在浏览器环境中。为了让它们共享一套测试代码，我们做了以下工作：
 
-1. **环境适配**：我们为不同的测试框架编写了一个[适配层](https://github.com/shijistar/enum-plus/tree/main/test/engines/index.ts)，处理它们之间的差异。
+1. **环境适配**：我们为不同的测试框架编写了一个[适配层](https://github.com/shijistar/enum-plus/tree/master/test/engines/index.ts)，处理它们之间的差异。
 2. **抽象测试逻辑**：我们将测试逻辑抽象出来，放在一些独立的模块中，这样就可以在不同的测试框架中复用这些测试套件。
 3. **增强的序列化机制**：e2e测试要求在浏览器环境中运行，然后把运行结果传递到 Node.js 环境中，再执行断言。为此，我们开发了一个[增强的序列化库](https://github.com/shijistar/jsoneo)。由于在 `enum-plus` 枚举的内部用到了 `类`、`function`、`Symbol`、`Date`、`RegExp` 类型，重写了 `Symbol.toStringTag`、`Symbol.hasInstance` 内置函数，甚至包括 `Getter/Setter` 这些特性，这些都是 JSON.stringify 无法序列化的，我们通过 [jsoneo](https://github.com/shijistar/jsoneo) 实现了对这些复杂特性的支持，从而可以让复杂对象经过 `序列化/反序列化` 跨越不同的环境，并且保留了所有的动态行为。传递后的对象仍然是`活`的，就像原始的对象没有经过序列化过一样。
 
