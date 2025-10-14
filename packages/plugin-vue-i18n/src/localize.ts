@@ -2,14 +2,23 @@ import type { PluginFunc } from 'enum-plus';
 import type { Composer, ComposerTranslation, I18n, TranslateOptions, UseI18nOptions } from 'vue-i18n';
 import { useI18n } from 'vue-i18n';
 
-export interface LocalizePluginOptions {
+export interface LocalizePluginOptions<Legacy extends boolean = false> {
+  /**
+   * - **EN:** Whether to enable legacy mode, which needs to be consistent with the `legacy` option of
+   *   `vue-i18n`. If set to true, `allowComposition` must also be set to true.
+   * - **CN:** 是否启用传统模式，需要跟`vue-i18n`的`legacy`选项保持一致。如果设置为true，需要同时设置`allowComposition`为true。
+   *
+   * @default false
+   */
+  legacy?: Legacy;
   /**
    * - **EN:** Set the default i18n instance. If you want to support using the enum's
    *   internationalization features in a non-component environment, you must pass in this
    *   instance.
    * - **CN:** 设置默认的i18n实例。如果要支持在非组件环境下使用枚举的国际化功能，必须传入该实例。
    */
-  instance?: I18n;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  instance?: I18n<Record<string, unknown>, Record<string, unknown>, Record<string, unknown>, any, false>;
   /**
    * - **EN:** Options to be passed to the `useI18n` function.
    * - **CN:** 传递给`useI18n`函数的选项。
@@ -37,10 +46,8 @@ const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) 
       const { t: translate } = useI18n(useI18nOptions);
       t = translate;
     } catch (error) {
-      console.warn(
-        `An error occurred in useI18n! Fallback to instance.t if instance is provided. The error is:`,
-        error
-      );
+      console.warn(`An error occurred in useI18n! Fallback to instance.t if instance is provided.`);
+      console.warn(`The error is:`, error);
       t = ((localeKey: string, named: Record<string, unknown>, options: TranslateOptions) => {
         if (instance) {
           return (instance.global as Composer).t(localeKey, named, options);

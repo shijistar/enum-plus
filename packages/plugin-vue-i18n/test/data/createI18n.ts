@@ -8,7 +8,7 @@ const createInstance = <T extends boolean>(
 ): I18n<Record<string, unknown>, Record<string, unknown>, Record<string, unknown>, string, T> => {
   const i18n = createI18n({
     legacy,
-    // allowComposition: true,
+    allowComposition: true,
     locale: 'en',
     fallbackLocale: 'en',
     messages: {
