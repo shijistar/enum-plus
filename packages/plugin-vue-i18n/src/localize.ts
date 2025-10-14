@@ -37,10 +37,8 @@ const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) 
       const { t: translate } = useI18n(useI18nOptions);
       t = translate;
     } catch (error) {
-      console.warn(
-        `An error occurred in useI18n! Fallback to instance.t if instance is provided. The error is:`,
-        error
-      );
+      console.warn(`An error occurred in useI18n! Fallback to instance.t if instance is provided.`);
+      console.warn(`The error is:`, error);
       t = ((localeKey: string, named: Record<string, unknown>, options: TranslateOptions) => {
         if (instance) {
           return (instance.global as Composer).t(localeKey, named, options);
