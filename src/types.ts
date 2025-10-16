@@ -2,6 +2,7 @@ import type { EnumLocaleExtends } from 'enum-plus/extension';
 
 export type { LocalizeInterface } from './localize-interface';
 
+// @ts-expect-error: because LocaleKeys is a user-defined type, so ignore the error here
 export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'] | NonNullable<string>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,11 +54,13 @@ export interface StandardEnumItemInit<V extends EnumValue> {
 }
 export interface ValueOnlyEnumItemInit<V extends EnumValue> {
   value: V;
+  label?: never;
 }
 export interface LabelOnlyEnumItemInit {
   label: EnumItemLabel;
+  value?: never;
 }
-export type CompactEnumItemInit = Record<string, never>; // 等价于{}
+export type CompactEnumItemInit = Record<string, never>; // equivalent to {}
 
 /**
  * - **EN:** Data structure of enumeration item options, used in `toList` method

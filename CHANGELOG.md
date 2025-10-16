@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## Unreleased
+
+2025-10-??
+
+### Features
+
+- ✨ Allow extending `EnumItemLabel` type for better type safety and IntelliSense support.
+
 ## 3.0.1
 
 2025-10-6

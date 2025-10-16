@@ -16,6 +16,7 @@ declare module 'enum-plus/extension' {
    *
    * **CN:** 枚举本地化的全局扩展
    */
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface EnumLocaleExtends {
     /**
      * **EN:** Key values of the localized text of the enumeration, which can be used to enhance the
@@ -23,6 +24,6 @@ declare module 'enum-plus/extension' {
      *
      * **CN:** 枚举本地化文本的Key值，可以用来增强编辑器的智能提示
      */
-    LocaleKeys: never;
+    // LocaleKeys: NonNullable<string>;
   }
 }
