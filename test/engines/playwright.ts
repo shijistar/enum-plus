@@ -1,7 +1,7 @@
 import * as utils from '@enum-plus/utils';
 import { defaultLocalize, Enum } from '@enum-plus';
 import { EnumExtensionClass } from '@enum-plus/enum-collection';
-import { localizer } from '@enum-plus/localizer';
+import { internalConfig, localizer } from '@enum-plus/global-config';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { parse, stringify } from 'jsoneo';
@@ -15,6 +15,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
     super();
     this._type = 'playwright';
   }
+
   override describe(name: string, fn: () => void): void {
     test.describe(name, fn);
   }
@@ -50,11 +51,12 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
     serializedEvaluateParams: string;
   }) {
     const { page, assert, serializedEvaluateParams } = options;
-    const resultStr = await page.evaluate((contextStr) => {
+    const resultStr = await page.evaluate(async (contextStr) => {
       const EnumPlus = window.EnumPlus;
       const WeekConfig = window.WeekConfig;
       const WeekData = window.WeekData;
       const Jsoneo = window.jsoneo;
+      const ClientHooks = window.ClientHooks;
 
       // Deserialize request
       const runtimeContext = {
@@ -62,14 +64,14 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
         WeekConfig,
         WeekData,
         Jsoneo,
+        ClientHooks,
       };
       // console.log('window', runtimeContext);
       const { stringify, parse } = Jsoneo;
       const args = parse(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
       const { evaluateFn, ...rest } = args;
 
-      // Set the initial state to en-US before executing evaluation, equal to setup in jest.
-      WeekConfig.setLang('en-US', EnumPlus.Enum, WeekConfig.getLocales, EnumPlus.defaultLocalize);
+      await ClientHooks.beforeEach?.();
 
       // Execute the evaluation
       const evaluateResult = evaluateFn({ ...runtimeContext, ...rest });
@@ -80,6 +82,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
       const serializedStr = stringify({
         _enumLocalize: EnumPlus.Enum.localize,
         _lang: WeekConfig.lang,
+        _config: EnumPlus.Enum.config,
         ...evaluateResult,
       });
       // console.log('serialize result');
@@ -87,7 +90,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
       return serializedStr;
     }, serializedEvaluateParams);
 
-    const globalClosure = { Enum, EnumExtensionClass, localizer, ...utils, exports: {} };
+    const globalClosure = { Enum, EnumExtensionClass, internalConfig, localizer, ...utils, exports: {} };
     const initialState = parse(resultStr, {
       closure: globalClosure,
       // debug: true,
@@ -98,6 +101,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
     if (!initialState._enumLocalize) {
       Enum.localize = undefined!;
     }
+    Object.assign(Enum.config, initialState._config);
 
     // the Enum object is used to "help" to access the Enum global function,
     // because the code is like `const localize = this._options?.localize ?? Enum.localize;`,

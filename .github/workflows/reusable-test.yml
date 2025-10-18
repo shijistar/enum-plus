@@ -114,7 +114,7 @@ jobs:
 
       - name: Downgrade package.json legacy dependencies
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
-        run: npm run prepare-legacy-node
+        run: npm run legacy-package
 
       - name: Install dependencies
         if: steps.node_modules_cache.outputs.cache-hit != 'true'

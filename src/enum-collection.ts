@@ -2,7 +2,7 @@ import type { EnumExtension } from 'enum-plus/extension';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
 import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
 import { EnumItemsArray } from './enum-items';
-import { localizer } from './localizer';
+import { localizer } from './global-config';
 import type {
   EnumInit,
   EnumKey,
@@ -31,18 +31,20 @@ export class EnumExtensionClass<
  * - **CN:** 枚举项集合
  */
 export class EnumCollectionClass<
-    T extends EnumInit<K, V>,
+    const T extends EnumInit<K, V>,
     K extends EnumKey<T> = EnumKey<T>,
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const P = any,
   >
   extends EnumExtensionClass<T, K, V>
-  implements InheritableEnumItems<T, K, V>
+  implements InheritableEnumItems<T, K, V, P>
 {
-  private readonly __options__: EnumItemOptions | undefined;
+  private readonly __options__: EnumItemOptions<T[K], K, V, P> | undefined;
   // used for e2e serialization
-  private readonly __items__!: EnumItemsArray<T, K, V>;
+  private readonly __items__!: EnumItemsArray<T, K, V, P>;
 
-  constructor(init: T = {} as T, options?: EnumItemOptions) {
+  constructor(init: T = {} as T, options?: EnumItemOptions<T[K], K, V, P>) {
     super();
     // Do not use class field here, because don't want print this field in Node.js
     Object.defineProperty(this, '__options__', {
@@ -54,7 +56,7 @@ export class EnumCollectionClass<
 
     const keys = Object.keys(init) as K[];
     // Generate enum items array
-    const items = new EnumItemsArray<T, K, V>(init, options);
+    const items = new EnumItemsArray<T, K, V, P>(init, options);
     Object.freeze(items);
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[keys.includes('items') ? ITEMS : 'items'] = items;
@@ -87,7 +89,7 @@ export class EnumCollectionClass<
     Object.defineProperty(this, keys.includes('labels') ? LABELS : 'labels', {
       enumerable: true,
       configurable: false,
-      get: function (this: EnumCollectionClass<T, K, V>) {
+      get: function (this: EnumCollectionClass<T, K, V, P>) {
         return this.__items__.labels;
       },
     });
@@ -107,7 +109,7 @@ export class EnumCollectionClass<
    * - **EN:** Get the options to initialize the enum.
    * - **CN:** 获取初始化枚举时的选项
    */
-  get [ENUM_OPTIONS](): EnumItemOptions | undefined {
+  get [ENUM_OPTIONS](): EnumItemOptions<T[K], K, V, P> | undefined {
     return this.__options__;
   }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
@@ -156,46 +158,46 @@ export class EnumCollectionClass<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  findBy(...rest: Parameters<EnumItemsArray<T, K, V>['findBy']>): any {
+  findBy(...rest: Parameters<EnumItemsArray<T, K, V, P>['findBy']>): any {
     return this.__items__.findBy(...rest);
   }
 
   toList(): ListItem<V, 'value', 'label'>[];
   toList<
-    FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
-    FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    FOV extends string | ((item: EnumItemClass<T[K], K, V, P>) => string),
+    FOL extends string | ((item: EnumItemClass<T[K], K, V, P>) => string),
   >(
-    config: ToListConfig<T, FOV, FOL, K, V>
+    config: ToListConfig<T, FOV, FOL, K, V, never, P>
   ): ListItem<
     V,
-    FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
-    FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+    FOV extends (item: EnumItemClass<T[K], K, V, P>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemClass<T[K], K, V, P>) => infer R ? R : FOL
   >[];
   toList<
-    FOV extends string | ((item: EnumItemClass<T[K], K, V>) => string),
-    FOL extends string | ((item: EnumItemClass<T[K], K, V>) => string),
+    FOV extends string | ((item: EnumItemClass<T[K], K, V, P>) => string),
+    FOL extends string | ((item: EnumItemClass<T[K], K, V, P>) => string),
   >(
-    config?: ToListConfig<T, FOV, FOL, K, V>
+    config?: ToListConfig<T, FOV, FOL, K, V, never, P>
   ):
     | ListItem<V, 'value', 'label'>[]
     | ListItem<
         V,
-        FOV extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOV,
-        FOL extends (item: EnumItemClass<T[K], K, V>) => infer R ? R : FOL
+        FOV extends (item: EnumItemClass<T[K], K, V, P>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemClass<T[K], K, V, P>) => infer R ? R : FOL
       >[] {
-    return this.__items__.toList(config as ToListConfig<T, FOV, FOL, K, V>);
+    return this.__items__.toList(config as ToListConfig<T, FOV, FOL, K, V, never, P>);
   }
 
-  toMap(): MapResult<T, 'value', 'label', K, V>;
+  toMap(): MapResult<T, 'value', 'label', K, V, P>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
-    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
-  >(config: ToMapConfig<T, KS, VS, K, V>): MapResult<T, KS, VS, K, V>;
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V, P>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V, P>) => R),
+  >(config: ToMapConfig<T, KS, VS, K, V, P>): MapResult<T, KS, VS, K, V, P>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V>) => R),
-    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V>) => R),
-  >(config?: ToMapConfig<T, KS, VS, K, V>): MapResult<T, KS, VS, K, V> {
-    return this.__items__.toMap(config as ToMapConfig<T, KS, VS, K, V>);
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V, P>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V, P>) => R),
+  >(config?: ToMapConfig<T, KS, VS, K, V, P>): MapResult<T, KS, VS, K, V, P> {
+    return this.__items__.toMap(config as ToMapConfig<T, KS, VS, K, V, P>);
   }
 
   get valueType() {

@@ -13,5 +13,6 @@
     "**/Thumbs.db": true,
     "**/node_modules": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "commentTranslate.hover.enabled": false
 }

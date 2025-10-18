@@ -9,6 +9,9 @@ declare global {
     WeekConfig: typeof WeekConfig;
     WeekData: typeof WeekData;
     jsoneo: typeof jsoneo;
+    ClientHooks: {
+      beforeEach?: () => void | Promise<void>;
+    };
   }
 }
 export {};

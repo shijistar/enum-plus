@@ -45,12 +45,12 @@ export function pickArray<T extends Record<string, any>>(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function copyList<T extends Record<string, any>>(
-  options: T[] | readonly T[],
-  valueField: keyof T = 'value',
-  labelField: keyof T = 'label'
-): T[] {
-  return Array.from(options).map(
+export function copyList<T>(
+  data: T[],
+  valueField: keyof T = 'value' as keyof T,
+  labelField: keyof T = 'label' as keyof T
+) {
+  return Array.from(data).map(
     (item) =>
       ({
         [valueField]: item[valueField],

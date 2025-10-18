@@ -79,7 +79,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(week.has(1)).toBe(week.items.has(1));
         engine.expect(week.findBy('key', 'Monday')).toBe(week.items.findBy('key', 'Monday'));
         engine.expect(week.findBy('value', 1)).toBe(week.items.findBy('value', 1));
-        engine.expect(week.findBy('label', 'weekday.monday')).toBe(week.items.findBy('label', 'weekday.monday'));
+        engine.expect(week.findBy('label', 'weekday.Monday')).toBe(week.items.findBy('label', 'weekday.Monday'));
         engine.expect(week.findBy('status', 'success')).toBe(week.items.findBy('status', 'success'));
         engine.expect(week.raw()).toBe(week.items.raw());
         engine.expect(defaultListItems).toEqual(week.items.toList());
