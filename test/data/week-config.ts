@@ -30,17 +30,17 @@ export const localeCN = {
 } as const;
 export const noLocale = {
   'weekDay.name': 'weekDay.name',
-  Sunday: 'weekday.sunday',
-  Monday: 'weekday.monday',
-  Tuesday: 'weekday.tuesday',
-  Wednesday: 'weekday.wednesday',
-  Thursday: 'weekday.thursday',
-  Friday: 'weekday.friday',
-  Saturday: 'weekday.saturday',
-  Yes: 'boolean.yes',
-  No: 'boolean.no',
-  FirstDay: 'date.firstDay',
-  LastDay: 'date.lastDay',
+  Sunday: 'weekday.Sunday',
+  Monday: 'weekday.Monday',
+  Tuesday: 'weekday.Tuesday',
+  Wednesday: 'weekday.Wednesday',
+  Thursday: 'weekday.Thursday',
+  Friday: 'weekday.Friday',
+  Saturday: 'weekday.Saturday',
+  Yes: 'boolean.Yes',
+  No: 'boolean.No',
+  FirstDay: 'date.FirstDay',
+  LastDay: 'date.LastDay',
 } as const;
 
 export let locales: typeof localeEN | typeof localeCN | typeof noLocale = noLocale;
@@ -62,7 +62,7 @@ export function setLang(
 ) {
   lang = value;
   locales = getLocales(value);
-  Enum.localize = setLang.genSillyLocalizer(value, getLocales, defaultLocalize);
+  Enum.localize = value ? setLang.genSillyLocalizer(value, getLocales, defaultLocalize) : defaultLocalize;
 }
 setLang.genSillyLocalizer = genSillyLocalizer;
 
@@ -73,23 +73,32 @@ export const clearLang = (Enum: typeof EnumType) => {
 };
 
 export const StandardWeekConfig = {
-  Sunday: { value: 0, label: 'weekday.sunday', status: 'error' },
-  Monday: { value: 1, label: 'weekday.monday', status: 'warning' },
-  Tuesday: { value: 2, label: 'weekday.tuesday', status: 'warning' },
-  Wednesday: { value: 3, label: 'weekday.wednesday', status: 'success' },
-  Thursday: { value: 4, label: 'weekday.thursday', status: 'success' },
-  Friday: { value: 5, label: 'weekday.friday', status: 'success' },
-  Saturday: { value: 6, label: 'weekday.saturday', status: 'error' },
+  Sunday: { value: 0, label: noLocale.Sunday, status: 'error' },
+  Monday: { value: 1, label: noLocale.Monday, status: 'warning' },
+  Tuesday: { value: 2, label: noLocale.Tuesday, status: 'warning' },
+  Wednesday: { value: 3, label: noLocale.Wednesday, status: 'success' },
+  Thursday: { value: 4, label: noLocale.Thursday, status: 'success' },
+  Friday: { value: 5, label: noLocale.Friday, status: 'success' },
+  Saturday: { value: 6, label: noLocale.Saturday, status: 'error' },
+} as const;
+export const ShortLabelStandardWeekConfig = {
+  Sunday: { value: 0, label: 'Sunday' },
+  Monday: { value: 1, label: 'Monday' },
+  Tuesday: { value: 2, label: 'Tuesday' },
+  Wednesday: { value: 3, label: 'Wednesday' },
+  Thursday: { value: 4, label: 'Thursday' },
+  Friday: { value: 5, label: 'Friday' },
+  Saturday: { value: 6, label: 'Saturday' },
 } as const;
 
 export const BooleanStandardConfig = {
-  Yes: { value: true, label: 'boolean.yes' },
-  No: { value: false, label: 'boolean.no' },
+  Yes: { value: true, label: 'boolean.Yes' },
+  No: { value: false, label: 'boolean.No' },
 } as const;
 
 export const DateStandardConfig = {
-  FirstDay: { value: new Date(2001, 1, 1), label: 'date.firstDay' },
-  LastDay: { value: new Date(2001, 12, 31), label: 'date.lastDay' },
+  FirstDay: { value: new Date(2001, 1, 1), label: 'date.FirstDay' },
+  LastDay: { value: new Date(2001, 12, 31), label: 'date.LastDay' },
 } as const;
 
 export const WeekConfigWithKey = Object.keys(StandardWeekConfig).reduce((acc, key) => {
@@ -165,8 +174,6 @@ export function genSillyLocalizer(
   getLocales: getLocalesType,
   defaultLocalize: typeof defaultLocalizeType
 ) {
-  if (!language) return defaultLocalize;
-
   // should use function here to avoid closure. this is important for the e2e test cases.
   function sillyLocalize(
     content: (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label'] | NonNullable<string> | undefined
@@ -175,27 +182,27 @@ export function genSillyLocalizer(
     switch (content) {
       case 'weekDay.name':
         return locales['weekDay.name'] as typeof content;
-      case 'weekday.sunday':
+      case 'weekday.Sunday':
         return locales.Sunday as typeof content;
-      case 'weekday.monday':
+      case 'weekday.Monday':
         return locales.Monday as typeof content;
-      case 'weekday.tuesday':
+      case 'weekday.Tuesday':
         return locales.Tuesday as typeof content;
-      case 'weekday.wednesday':
+      case 'weekday.Wednesday':
         return locales.Wednesday as typeof content;
-      case 'weekday.thursday':
+      case 'weekday.Thursday':
         return locales.Thursday as typeof content;
-      case 'weekday.friday':
+      case 'weekday.Friday':
         return locales.Friday as typeof content;
-      case 'weekday.saturday':
+      case 'weekday.Saturday':
         return locales.Saturday as typeof content;
-      case 'boolean.yes':
+      case 'boolean.youes':
         return locales.Yes as typeof content;
-      case 'boolean.no':
+      case 'boolean.No':
         return locales.No as typeof content;
-      case 'date.firstDay':
+      case 'date.FirstDay':
         return locales.FirstDay as typeof content;
-      case 'date.lastDay':
+      case 'date.LastDay':
         return locales.LastDay as typeof content;
       default:
         return content;

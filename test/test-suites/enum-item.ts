@@ -29,7 +29,8 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
     engine.test(
       'item.toString should return enum label',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { setLang, getLocales, StandardWeekConfig, localeEN } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         const sunday = weekEnum.items[0];
         return { weekEnum, sunday, localeEN };
@@ -74,7 +75,8 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
     engine.test(
       'item.toPrimitive should be auto converted to a correct primitive type',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, localeEN, getLocales, setLang } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         const sunday = weekEnum.items[0];
         const monday = weekEnum.items[1];
@@ -121,7 +123,8 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     // should be readonly
     engine.test(
       'Should be readonly',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, localeEN, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         const modifyValue = 'SHOULD NOT BE MODIFIED';
         const sunday = weekEnum.items[0];

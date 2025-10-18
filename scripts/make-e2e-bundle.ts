@@ -56,6 +56,17 @@ async function build() {
     format: 'iife',
     name: 'WeekData',
   });
+
+  // Bundle client hooks
+  const hooks = await rollup({
+    input: 'e2e/client-hooks.js',
+    plugins: [nodeResolve()],
+  });
+  await hooks.write({
+    file: 'e2e/fixtures/scripts/client-hooks-bundle.js',
+    format: 'iife',
+    name: 'ClientHooks',
+  });
 }
 
 build().catch((e) => {

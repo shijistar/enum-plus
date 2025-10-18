@@ -191,14 +191,14 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items.findBy('value', 1)).toBe(weekEnum.items[1]);
       engine.expect(weekEnum.items.findBy('value', 6)).toBe(weekEnum.items[6]);
       engine.expect(weekEnum.items.findBy('value', 99)).toBe(undefined);
-      engine.expect(weekEnum.items.findBy('label', 'weekday.monday')).toBe(weekEnum.items[1]);
-      engine.expect(weekEnum.items.findBy('label', 'weekday.saturday')).toBe(weekEnum.items[6]);
+      engine.expect(weekEnum.items.findBy('label', 'weekday.Monday')).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.items.findBy('label', 'weekday.Saturday')).toBe(weekEnum.items[6]);
       engine.expect(weekEnum.items.findBy('label', 'Invalid Label')).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('key', 'Monday')).toBe(compactWeekEnum.items[1]);
       engine.expect(compactWeekEnum.items.findBy('key', 'Invalid Key')).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('value', 1)).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('value', 99)).toBe(undefined);
-      engine.expect(compactWeekEnum.items.findBy('label', 'weekday.monday')).toBe(undefined);
+      engine.expect(compactWeekEnum.items.findBy('label', 'weekday.Monday')).toBe(undefined);
 
       // Custom meta field
       engine.expect(weekEnum.items.findBy('status', 'error')).toEqual(weekEnum.items[0]);
