@@ -2,13 +2,17 @@
 
 # enum-plus Changelog
 
-## Unreleased
+## 3.1.0
 
-2025-10-??
+2025-10-10
 
 ### Features
 
-- ✨ Allow extending `EnumItemLabel` type for better type safety and IntelliSense support.
+- Introduce `Enum.config` to manage global configuration for all Enums.
+  - `Enum.config.autoLabel` to enable/disable automatic label generation for enum items by specifying the label prefix.
+- Add `options.labelPrefix` to specify the label prefix for enum items during Enum creation.
+- Add `options.autoLabel` to enable/disable automatic label generation on Enum creation. It overrides the global configuration.
+- ✨ Allow extending `EnumItemLabel` type to support IntelliSense.
 
 ## 3.0.1
 
