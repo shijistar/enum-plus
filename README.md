@@ -28,7 +28,7 @@
 [![MiniProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/en/dev/framework)
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://docs.taro.zone/en/docs)
 
-⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Static Methods](#static-methods) | [User Stories](#user-stories) | [Plugin System](#plugin-system) | [Localization](#localization) | [Extensibility](#extensibility) | [Naming Conflicts](#naming-conflicts) | [Best Practices](#best-practices) | [Compatibility](#compatibility) | [Q&A](#qa) | [Support](#support)&nbsp; ⬇️
+⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Static Methods](#static-methods) | [Global Configuration](#global-configuration) | [User Stories](#user-stories) | [Plugin System](#plugin-system) | [Localization](#localization) | [Extensibility](#extensibility) | [Naming Conflicts](#naming-conflicts) | [Best Practices](#best-practices) | [Compatibility](#compatibility) | [Q&A](#qa) | [Support](#support)&nbsp; ⬇️
 
 > **🎉 v3.0 is Released!**
 >
@@ -242,6 +242,8 @@ WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
 WeekEnum.Saturday; // 6
 ```
+
+> You can pass in some optional configuration options to better control the behavior of the enum. Please refer to the [Enum Configuration Options](#-enum-configuration-options) section for details.
 
 ## API
 
@@ -616,7 +618,28 @@ import i18nextPlugin from '@enum-plus/plugin-i18next';
 Enum.install(i18nextPlugin);
 ```
 
----
+## Global Configuration
+
+`Enum.config` provides some global configuration options that affect the behavior and features of enums.
+
+### autoLabel
+
+`Enum.config.autoLabel` is a global configuration option used to automatically generate labels for enum items. It allows you to set the `options.labelPrefix` option when defining an enum, which sets a `label` prefix for all enum items. Enum items only need to set the base value and can even omit the `label` field (when same as the `key` field). This reduces repetitive code and improves the conciseness of enum definitions.
+
+`Enum.config.autoLabel` can be a boolean value or a function type to implement more complex logic.
+
+- `true` - The default value, enabling the automatic label generation feature. The final value of the enum item's `label` will be automatically set to `labelPrefix` + `label`. If the `label` field is omitted, the `labelPrefix` + `key` rule will be used. Of course, if the `labelPrefix` is not set when creating the enum, this option will have no effect.
+- `function` - A custom function used to customize the `label` generation rule for each enum item. This function accepts an options object parameter that contains: `item` (the enum item object) and `labelPrefix`, and returns a string as the final `label` value.
+
+  ```js
+  Enum.config.autoLabel = ({ item, labelPrefix }) => {
+    return `${labelPrefix}.${item.key.lowerFirst()}`;
+  };
+  ```
+
+- `false` - Disables the automatic label generation feature. Enum items must explicitly provide the `label` field.
+
+> Note that `autoLabel` is also an option that can be set when creating an enum as `options.autoLabel`. The usage is the same as `Enum.config.autoLabel`, and it overrides the global configuration for that specific enum.
 
 ## User Stories
 
@@ -923,6 +946,36 @@ We can see that both the enumeration value and the description of the enumeratio
     }
   </nz-select>
   ```
+
+---
+
+### 💡 Enum Configuration Options
+
+You can pass in an optional configuration object when creating an enum to customize its behavior and features. Here are some commonly used configuration options:
+
+```ts
+interface EnumOptions {
+  /** The name of the enum type, which can be a plain string or a localization key */
+  name?: string;
+  /**
+   * Set a label prefix for all enum items. For more details, please refer to the [Global
+   * Configuration] section
+   */
+  labelPrefix?: string;
+  /**
+   * The rule for automatically generating enum item labels. For more details, please refer to the
+   * [Global Configuration] section
+   */
+  autoLabel?: boolean | ((params: { item: EnumItemClass; labelPrefix?: string }) => string);
+  /**
+   * Enum instance-level localization function, which overrides the Enum.localize global
+   * configuration function
+   */
+  localize?: (localeKey: string) => string;
+}
+```
+
+For more configuration options, please refer to the next section.
 
 ---
 

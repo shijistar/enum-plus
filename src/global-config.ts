@@ -20,4 +20,6 @@ export const internalConfig: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         labelPrefix: any;
       }) => string);
-} = {};
+} = {
+  autoLabel: true,
+};

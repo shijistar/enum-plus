@@ -62,7 +62,7 @@ export class EnumItemClass<
           const labelPrefix = this._options?.labelPrefix;
           const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
           let localeKey = this._label;
-          if (autoLabel) {
+          if (autoLabel && labelPrefix != null) {
             if (typeof autoLabel === 'function') {
               localeKey = autoLabel({
                 item: this,
@@ -259,8 +259,8 @@ export interface EnumItemOptions<
    *   The prefix is set through `options.labelPrefix` when creating the Enum, which can be a string
    *   or an object.
    *
-   *   - `true` - Enable automatic concatenation of enum item localeKey in `options.labelPrefix` +
-   *       `label` format. `labelPrefix` only supports string in this case.
+   *   - `true` - Default value. Enable automatic concatenation of enum item localeKey in
+   *       `options.labelPrefix` + `label` format. `labelPrefix` only supports string in this case.
    *   - `Function` - Dynamically generate the localeKey for enum items. `labelPrefix` supports any type
    *       in this case.
    *   - `false` - Disable automatic label generation, completely relying on the `label` field defined
@@ -272,7 +272,7 @@ export interface EnumItemOptions<
    * - **CN:** 允许为枚举项设置label前缀，简化甚至可以省略枚举项的label定义，只有当开启国际化时才需要此选项。创建Enum时通过 `options.labelPrefix`
    *   设置前缀，可以是字符串，也可以是一个对象。
    *
-   *   - `true` - 启用自动拼接，`options.labelPrefix` + `label` 自动拼接生成标签，这种情况下 `labelPrefix` 只支持字符串形式
+   *   - `true` - 默认值，启用自动拼接，`options.labelPrefix` + `label` 自动拼接生成标签，这种情况下 `labelPrefix` 只支持字符串形式
    *   - `Function` - 动态生成枚举项localeKey，这种情况下 `labelPrefix` 支持任意类型
    *   - `false` - 禁用自动生成标签，完全依赖枚举项中定义的 `label` 字段
    *

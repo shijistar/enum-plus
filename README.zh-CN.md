@@ -28,7 +28,7 @@
 [![MiniProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/dev/framework)
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://taro.zone/)
 
-⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [支持](#支持)&nbsp; ⬇️
+⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [全局配置](#全局配置) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [支持](#支持)&nbsp; ⬇️
 
 > **🎉 v3.0 发布了！**
 >
@@ -240,6 +240,8 @@ WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
 WeekEnum.Saturday; // 6
 ```
+
+> 枚举还支持一些配置项，以更好地控制枚举的行为，详情请参考 [枚举配置选项](#-枚举配置选项) 章节。
 
 ## API
 
@@ -609,6 +611,29 @@ import i18nextPlugin from '@enum-plus/plugin-i18next';
 Enum.install(i18nextPlugin);
 ```
 
+## 全局配置
+
+`Enum.config` 提供了一些全局配置参数，用来影响枚举的行为和特性。
+
+### autoLabel
+
+`Enum.config.autoLabel` 是一个全局配置选项，用于自动生成枚举项的标签。它允许在定义枚举时，设置 `options.labelPrefix` 选项，为所有枚举项设置一个 `label` 前缀，枚举项只需要设置基础值即可，甚至可以省略 `label` 字段（与 `key` 字段相同）。这样可以减少重复代码，提高枚举定义的简洁性。
+
+`Enum.config.autoLabel` 的值可以是一个布尔值，也可以使用 `function` 类型的函数以实现更复杂的逻辑。
+
+- `true` - 默认值，启用自动标签生成功能。枚举项的 `label` 最终值将自动设置为 `labelPrefix`+`label`，如果省略了 `label` 字段，则使用 `labelPrefix`+`key` 规则。当然，如果创建枚举时没有设置 `labelPrefix`，则此选项将没有任何效果。
+- `function` - 一个自定义函数，用于自定义每个枚举项 `label` 生成规则。该函数接受一个选项对象参数，其中包含：`item`（枚举项对象）和 `labelPrefix`，并返回一个字符串作为最终的 `label` 值。
+
+  ```js
+  Enum.config.autoLabel = ({ item, labelPrefix }) => {
+    return `${labelPrefix}.${item.key.lowerFirst()}`;
+  };
+  ```
+
+- `false` - 禁用自动标签生成功能，枚举项必须显式提供 `label` 字段。
+
+> 请注意，在创建枚举时也可以通过 `options.autoLabel` 参数覆盖全局配置，其用法与 `Enum.config.autoLabel` 相同。
+
 ## 使用案例
 
 ### 💡 基础用法，消除魔法数字
@@ -915,6 +940,27 @@ WeekEnum.Monday; // 将光标悬浮在 Monday 上
     }
   </nz-select>
   ```
+
+---
+
+### 💡 枚举配置选项
+
+在创建枚举时，可以传入一个可选的配置对象，用来定制枚举的行为和特性。下面是一些常用的配置选项：
+
+```ts
+interface EnumOptions {
+  /** 枚举类型名称，可以是一个普通字符串，或者一个本地化键值 */
+  name?: string;
+  /** 为所有枚举项设置一个标签前缀，更多详情请参考 [全局配置] 章节 */
+  labelPrefix?: string;
+  /** 自动生成枚举项标签的规则，更多详情请参考 [全局配置] 章节 */
+  autoLabel?: boolean | ((params: { item: EnumItemClass; labelPrefix?: string }) => string);
+  /** 枚举实例级别的本地化函数，会覆盖 Enum.localize 全局配置函数 */
+  localize?: (localeKey: string) => string;
+}
+```
+
+更多配置选项，请参考下面一个章节。
 
 ---
 
