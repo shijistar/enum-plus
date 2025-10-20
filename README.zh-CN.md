@@ -179,6 +179,8 @@ WeekEnum.items[0].key; // 'Sunday'
 WeekEnum.items[0].label; // 星期日
 ```
 
+> 想要输入 `label` 时启用代码智能提示？请参考 [启用枚举项标签的智能提示](#-启用枚举项标签的智能提示) 章节，了解更多详情。
+
 ### 3. Key-Label 格式
 
 只提供 `key` 和 `label` 字段创建枚举。如果省略了 `value` 字段，则它默认为与 `key` 字段相同。
@@ -791,6 +793,23 @@ const AllColorEnum = Enum({
   ...PrimaryColorEnum.raw(),
   ...SecondaryColorEnum.raw(),
 });
+```
+
+---
+
+### 💡 启用枚举项标签的智能提示
+
+如果你启用了国际化，你可能想在输入枚举项标签时能够获得代码智能提示，列出所有可用的国际化资源的键值列表，简化输入过程。你可以通过为 `EnumLocaleExtends` 接口添加一个新的属性来实现这一点。
+
+_index.ts_
+
+```ts
+declare module 'enum-plus/extension' {
+  type EN = typeof import('./packages/locals/en').default;
+  interface EnumLocaleExtends {
+    LocaleKeys: keyof EN;
+  }
+}
 ```
 
 ---

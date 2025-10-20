@@ -181,6 +181,8 @@ WeekEnum.items[0].key; // 'Sunday'
 WeekEnum.items[0].label; // I love Sunday
 ```
 
+> Want to enable code completion when entering `label`? Please refer to the [Enable Code Intelligence for Enum Item Labels](#-enable-code-intelligence-for-enum-item-labels) section for more details.
+
 ### 3. Label-Only Format
 
 Create an enumeration that only provides the `key` and `label` fields. If the `value` field is omitted, it defaults to the same value as the `key` field.
@@ -800,6 +802,23 @@ const AllColorEnum = Enum({
   ...PrimaryColorEnum.raw(),
   ...SecondaryColorEnum.raw(),
 });
+```
+
+---
+
+### 💡 Enable Code Intelligence for Enum Item Labels
+
+If you have internationalization enabled, you may want to enable code intelligence when entering enum item labels, listing all available localization resource key values to simplify the input process. You can achieve this by adding a new property to the `EnumLocaleExtends` interface.
+
+_index.ts_
+
+```ts
+declare module 'enum-plus/extension' {
+  type EN = typeof import('./packages/locals/en').default;
+  interface EnumLocaleExtends {
+    LocaleKeys: keyof EN;
+  }
+}
 ```
 
 ---
