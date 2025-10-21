@@ -13,7 +13,7 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         return { weekEnum, Enum, WeekConfig, localeEN };
       },
       ({ weekEnum, Enum, WeekConfig, localeEN }) => {
-        const value = weekEnum as typeof weekEnum | number | string | undefined;
+        const value = weekEnum as typeof weekEnum | number;
         if (Enum.isEnum(value)) {
           engine.expect(value).toBe(weekEnum);
         } else {

@@ -17,7 +17,6 @@ import type {
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
 } from './types';
-import type { ITEMS } from './utils';
 import { IS_ENUM_ITEMS, KEYS, VALUES } from './utils';
 
 /**
@@ -385,32 +384,12 @@ export interface IEnumItems<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   P = any,
-> {
+> extends InheritableEnumItems<T, K, V, P> {
   /**
    * - **EN:** A boolean value indicates that this is an enum items array.
    * - **CN:** 布尔值，表示这是一个枚举项数组
    */
   [IS_ENUM_ITEMS]: true;
-  /**
-   * - **EN:** A method that determines if a constructor object recognizes an object as one of the
-   *   constructor’s instances. Called by the semantics of the `instanceof` operator.
-   * - **CN:** 一个方法，用于确定构造函数对象是否将对象识别为构造函数的实例之一。由 `instanceof` 运算符的语义调用。
-   */
-  [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V>;
-  /**
-   * - **EN:** The enum collection name, supports localization.
-   *
-   * > Note that it usually returns a string, but if a custom `localize` function is set, the return
-   * > value may vary depending on the implementation of the method.
-   *
-   * - **CN:** 枚举集合显示名称，支持本地化。
-   *
-   * > 注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
-   *
-   * @returns {string | undefined} The localized name of the enum collection, or undefined if not
-   *   set | 枚举集合的本地化名称，如果未设置则为 undefined
-   */
-  readonly name?: string;
   /**
    * - **EN:** Get all keys of the enumeration items as an array
    *
@@ -469,6 +448,36 @@ export interface IEnumItems<
     ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] }
     : // eslint-disable-next-line @typescript-eslint/ban-types
       {};
+}
+
+// typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
+export interface InheritableEnumItems<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  P = any,
+> {
+  /**
+   * - **EN:** A method that determines if a constructor object recognizes an object as one of the
+   *   constructor’s instances. Called by the semantics of the `instanceof` operator.
+   * - **CN:** 一个方法，用于确定构造函数对象是否将对象识别为构造函数的实例之一。由 `instanceof` 运算符的语义调用。
+   */
+  [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V>;
+  /**
+   * - **EN:** The enum collection name, supports localization.
+   *
+   * > Note that it usually returns a string, but if a custom `localize` function is set, the return
+   * > value may vary depending on the implementation of the method.
+   *
+   * - **CN:** 枚举集合显示名称，支持本地化。
+   *
+   * > 注意，通常情况下返回的是字符串，但如果设置了自定义的 `localize` 函数，则返回值可能有所不同，取决于方法的实现
+   *
+   * @returns {string | undefined} The localized name of the enum collection, or undefined if not
+   *   set | 枚举集合的本地化名称，如果未设置则为 undefined
+   */
+  readonly name?: string;
   /**
    * - **EN:** Get the label (also known as display name) of the enumeration item, supports getting by
    *   value or key
@@ -741,17 +750,6 @@ export interface IEnumItems<
    */
   rawType: T[K];
 }
-
-export type InheritableEnumItems<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  P = any,
-> = Omit<
-  IEnumItems<T, K, V, P>,
-  typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
->;
 
 /** More options for the options method */
 export interface ToListConfig<

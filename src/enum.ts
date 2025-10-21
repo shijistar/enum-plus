@@ -28,12 +28,14 @@ export const Enum = (<
 >(
   init: T | T[],
   options?: EnumInitOptions<T, K, V, P>
-): IEnum<T, K, V, P> & EnumExtension<T, K, V> => {
+): NativeEnumMembers<T, K, V> & IEnum<T, K, V, P> => {
   if (Array.isArray(init)) {
     const initMap = getInitMapFromArray<T, K, V, P>(init, options);
-    return new EnumCollectionClass<T, K, V, P>(initMap, options) as unknown as IEnum<T, K, V, P>;
+    return new EnumCollectionClass<T, K, V, P>(initMap, options) as unknown as NativeEnumMembers<T, K, V> &
+      IEnum<T, K, V, P>;
   } else {
-    return new EnumCollectionClass<T, K, V, P>(init, options) as unknown as IEnum<T, K, V, P>;
+    return new EnumCollectionClass<T, K, V, P>(init, options) as unknown as NativeEnumMembers<T, K, V> &
+      IEnum<T, K, V, P>;
   }
 }) as EnumInterface;
 
@@ -71,7 +73,7 @@ Enum.install = <T extends PluginFunc<any>>(plugin: T, options?: Parameters<T>[0]
   plugin(options, Enum);
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Enum.isEnum = (value: unknown): value is IEnum<EnumInit<string, EnumValue>, string, EnumValue, any> => {
+Enum.isEnum = (value: unknown): value is NativeEnumMembers<any, any, any> & IEnum<any, any, any, any> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return Boolean(value && typeof value === 'object' && (value as any)[IS_ENUM] === true);
 };
@@ -131,7 +133,7 @@ export interface EnumInterface {
   >(
     raw: T,
     options?: EnumInitOptions<T, K, V, P>
-  ): IEnum<T, K, V, P>;
+  ): NativeEnumMembers<T, K, V> & IEnum<T, K, V, P>;
 
   /**
    * - **EN:** Generate an enum based on an array
@@ -164,7 +166,7 @@ export interface EnumInterface {
     // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
     options?: EnumInitOptions<A[number], K, V, P>
     // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-  ): IEnum<ArrayToMap<A>, K, V>;
+  ): NativeEnumMembers<A, K, V> & IEnum<ArrayToMap<A>, K, V>;
 
   /**
    * - **EN:** Global configuration for Enum
@@ -226,7 +228,7 @@ export interface EnumInterface {
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isEnum(value: unknown): value is IEnum<any, any, any, any>;
+  isEnum(value: unknown): value is IEnum<any, any, any>;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
    *   extension methods
@@ -253,158 +255,130 @@ export interface EnumInterface {
  *   provides methods to access them.
  * - **CN:** 表示一个枚举集合，包含了枚举中的所有项，并提供访问它们的方法。
  */
-export type IEnum<
+export interface IEnum<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   P = any,
-> = InheritableEnumItems<T, K, V, P> &
-  EnumExtension<T, K, V> & {
-    /**
-     * - **EN:** A boolean value indicates that this is an Enum.
-     * - **CN:** 布尔值，表示这是一个枚举类
-     */
-    // this flag exists but is removed from interface, as it's replaced with isEnum method
-    // [IS_ENUM]: true;
-    [ENUM_OPTIONS]?: EnumInitOptions<T, K, V, P>;
-  } & {
-    // Add enum item values, just like native enums
-    [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } & (T extends { items: any }
-    ? {
-        /**
-         * - **EN:** Alias for the `items` array, when any enum key conflicts with `items`, you can
-         *   access all enum items through this alias
-         * - **CN:** `items`数组的别名，当任何枚举的key与`items`冲突时，可以通过此别名访问所有枚举项
-         */
-        readonly [ITEMS]: EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P>;
-      }
-    : {
-        /**
-         * - **EN:** All items in the enumeration as an array
-         *
-         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
-         * > any modification methods
-         *
-         * - **CN:** 所有枚举项的数组
-         *
-         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
-         */
-        readonly items: EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P>;
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { keys: any }
-    ? {
-        /**
-         * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can
-         *   access all enum keys through this alias
-         * - **CN:** `keys`数组的别名，当任何枚举的key与`keys`冲突时，可以通过此别名访问所有枚举项的keys
-         */
-        readonly [KEYS]: K[];
-      }
-    : {
-        /**
-         * - **EN:** Get all keys of the enumeration items as an array
-         *
-         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
-         * > any modification methods
-         *
-         * - **CN:** 获取枚举项的全部keys列表
-         *
-         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
-         */
-        readonly keys: K[];
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { values: any }
-    ? {
-        /**
-         * - **EN:** Alias for the `values` array, when any enum key conflicts with `values`, you can
-         *   access all enum values through this alias
-         * - **CN:** `values`数组的别名，当任何枚举的key与`values`冲突时，可以通过此别名访问所有枚举项的values
-         */
-        readonly [VALUES]: V[];
-      }
-    : {
-        /**
-         * - **EN:** Get all values of the enumeration items as an array
-         *
-         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
-         * > any modification methods
-         *
-         * - **CN:** 获取枚举项的全部values列表
-         *
-         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
-         */
-        readonly values: V[];
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { labels: any }
-    ? {
-        /**
-         * - **EN:** Alias for the `labels` array, when any enum key conflicts with `labels`, you can
-         *   access all enum labels through this alias
-         * - **CN:** `labels`数组的别名，当任何枚举的key与`labels`冲突时，可以通过此别名访问所有枚举项的labels
-         */
-        readonly [LABELS]: string[];
-      }
-    : {
-        /**
-         * - **EN:** Get all labels of the enumeration items as an array
-         *
-         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
-         * > any modification methods
-         *
-         * - **CN:** 获取枚举项的全部labels列表
-         *
-         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
-         */
-        readonly labels: string[];
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { named: any }
-    ? {
-        /**
-         * - **EN:** Alias for the `named` array, when any enum key conflicts with `named`, you can
-         *   access all enum names through this alias
-         * - **CN:** `named`数组的别名，当任何枚举的key与`named`冲突时，可以通过此别名访问所有枚举项的names
-         */
-        readonly [NAMED]: IEnumItems<T, K, V, P>['named'];
-      }
-    : {
-        /**
-         * - **EN:** Get all names of the enumeration items as an array
-         *
-         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
-         * > any modification methods
-         */
-        readonly named: IEnumItems<T, K, V, P>['named'];
-      }) &
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (T extends { meta: any }
-    ? {
-        /**
-         * - **EN:** Alias for the `meta` array, when any enum key conflicts with `meta`, you can
-         *   access all enum meta information through this alias
-         * - **CN:** `meta`数组的别名，当任何枚举的key与`meta`冲突时，可以通过此别名访问所有枚举项的meta信息
-         */
-        readonly [META]: IEnumItems<T, K, V, P>['meta'];
-      }
-    : {
-        /**
-         * - **EN:** Get all meta information of the enumeration items as an array
-         *
-         * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and
-         * > any modification methods
-         *
-         * - **CN:** 获取枚举项的全部meta信息列表
-         *
-         * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
-         */
-        readonly meta: IEnumItems<T, K, V, P>['meta'];
-      });
+> extends InheritableEnumItems<T, K, V, P>,
+    EnumExtension<T, K, V> {
+  /**
+   * - **EN:** A boolean value indicates that this is an Enum.
+   * - **CN:** 布尔值，表示这是一个枚举类
+   */
+  // this flag exists but is removed from interface, as it's replaced with isEnum method
+  // [IS_ENUM]: true;
+  /** - */
+  [ENUM_OPTIONS]?: EnumInitOptions<T, K, V, P>;
+  /**
+   * - **EN:** Alias for the `items` array, when any enum key conflicts with `items`, you can access
+   *   all enum items through this alias
+   * - **CN:** `items`数组的别名，当任何枚举的key与`items`冲突时，可以通过此别名访问所有枚举项
+   */
+  readonly [ITEMS]: T extends { items: unknown } ? EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P> : never;
+  /**
+   * - **EN:** All items in the enumeration as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 所有枚举项的数组
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly items: T extends { items: unknown } ? never : EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P>;
+  /**
+   * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can access all
+   *   enum keys through this alias
+   * - **CN:** `keys`数组的别名，当任何枚举的key与`keys`冲突时，可以通过此别名访问所有枚举项的keys
+   */
+  readonly [KEYS]: T extends { keys: unknown } ? K[] : never;
+  /**
+   * - **EN:** Get all keys of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 获取枚举项的全部keys列表
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly keys: T extends { keys: unknown } ? never : K[];
+  /**
+   * - **EN:** Alias for the `values` array, when any enum key conflicts with `values`, you can access
+   *   all enum values through this alias
+   * - **CN:** `values`数组的别名，当任何枚举的key与`values`冲突时，可以通过此别名访问所有枚举项的values
+   */
+  readonly [VALUES]: T extends { values: unknown } ? V[] : never;
+  /**
+   * - **EN:** Get all values of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 获取枚举项的全部values列表
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly values: T extends { values: unknown } ? never : V[];
+  /**
+   * - **EN:** Alias for the `labels` array, when any enum key conflicts with `labels`, you can access
+   *   all enum labels through this alias
+   * - **CN:** `labels`数组的别名，当任何枚举的key与`labels`冲突时，可以通过此别名访问所有枚举项的labels
+   */
+  readonly [LABELS]: T extends { labels: unknown } ? string[] : never;
+  /**
+   * - **EN:** Get all labels of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 获取枚举项的全部labels列表
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly labels: T extends { labels: unknown } ? never : string[];
+  /**
+   * - **EN:** Alias for the `named` array, when any enum key conflicts with `named`, you can access
+   *   all enum names through this alias
+   * - **CN:** `named`数组的别名，当任何枚举的key与`named`冲突时，可以通过此别名访问所有枚举项的names
+   */
+  readonly [NAMED]: T extends { named: unknown } ? IEnumItems<T, K, V, P>['named'] : never;
+  /**
+   * - **EN:** Get all names of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   */
+  readonly named: T extends { named: unknown } ? never : IEnumItems<T, K, V, P>['named'];
+  /**
+   * - **EN:** Alias for the `meta` array, when any enum key conflicts with `meta`, you can access all
+   *   enum meta information through this alias
+   * - **CN:** `meta`数组的别名，当任何枚举的key与`meta`冲突时，可以通过此别名访问所有枚举项的meta信息
+   */
+  readonly [META]: T extends { meta: unknown } ? IEnumItems<T, K, V, P>['meta'] : never;
+  /**
+   * - **EN:** Get all meta information of the enumeration items as an array
+   *
+   * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
+   * > modification methods
+   *
+   * - **CN:** 获取枚举项的全部meta信息列表
+   *
+   * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
+   */
+  readonly meta: T extends { meta: unknown } ? never : IEnumItems<T, K, V, P>['meta'];
+}
+
+export type NativeEnumMembers<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+> = {
+  // Add enum item values, just like native enums
+  [key in K]: ValueTypeFromSingleInit<T[key], key, T[K] extends number | undefined ? number : key>;
+};
 
 /**
  * - **EN:** Enum initialization options

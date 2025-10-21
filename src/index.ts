@@ -13,7 +13,7 @@ export type {
 export type { LocalizeInterface } from './localize-interface';
 export type { ToListConfig, IEnumItems } from './enum-items';
 export type { EnumItemClass, EnumItemOptions } from './enum-item';
-export type { IEnum, EnumInterface, EnumInitOptions } from './enum';
+export type { IEnum, NativeEnumMembers, EnumInterface, EnumInitOptions } from './enum';
 
 export { version } from './version';
 export {
