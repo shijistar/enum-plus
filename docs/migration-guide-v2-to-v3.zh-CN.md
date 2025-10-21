@@ -139,6 +139,9 @@ const WeekEnum = Enum({
 
 > **注意**：如果你无法升级到 TypeScript 5.0，请放心，v3 仍然能够自动平滑降级，以支持较早的 TypeScript 版本。但你需要继续使用 `as const` 断言来确保类型的正确推断。
 
-<!-- - `tsconfig.json` 中的 `moduleResolution` 配置：
-  - 对于 `node` 或 `node10`，需要 TypeScript 版本 `>=3.8`。由于不支持 [const 类型参数](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters)，你需要手动在 Enum 初始化时添加 `as const` 断言。
-  - 对于 `node16` 或 `nodenext`，需要 TypeScript 版本 `>=5.0`。 -->
+#### 修改 tsconfig.json
+
+请检查 `tsconfig.json` 中的 `moduleResolution` 配置，确保其与所使用的 TypeScript 版本兼容。
+
+- 如果 TypeScript 版本 `>=5.0`，建议将 `moduleResolution` 设置为 `node16` 或 `nodenext`。
+- 如果 TypeScript 版本 `<5.0`，请务必将 `moduleResolution` 设置为 `node` 或 `node10`，以确保使用的是兼容版本的类型定义。由于低版本的 TypeScript 不支持 [const 类型参数](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters)，会导致枚举类型变成 `any`。另外，在代码中初始化 Enum 时需要添加 `as const` 断言。

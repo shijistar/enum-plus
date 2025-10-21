@@ -131,6 +131,9 @@ const WeekEnum = Enum({
 
 > If you can't upgrade, don't worry. TypeScript `4.9` or earlier is still backward compatible. You just need to add `as const` manually, just like before.
 
-<!-- - `moduleResolution` in tsconfig.json
-  - `node` or `node10`, TypeScript version `>=3.8`. The [const Type Parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) is not supported, should add `as const` manually to the Enum initializations.
-  - `node16` or `nodenext`, TypeScript version `>=5.0` -->
+#### Modify tsconfig.json
+
+Please check the `moduleResolution` configuration in your `tsconfig.json` to ensure it is compatible with the TypeScript version you are using.
+
+- If TypeScript version is `>=5.0`, it is recommended to set `moduleResolution` to `node16` or `nodenext`.
+- If TypeScript version is `<5.0`, be sure to set `moduleResolution` to `node` or `node10` to ensure that you are using a compatible version of type definitions. Since earlier versions of TypeScript do not support [const type parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters), it will cause the enum type to become `any`. Additionally, you need to continue to use the `as const` assertion when initializing Enums in your code.
