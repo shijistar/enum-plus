@@ -222,8 +222,8 @@ export class EnumItemsArray<
     }
   }
 
-  has(keyOrValue?: string | V): boolean {
-    return this.some((i) => i.value === keyOrValue || i.key === keyOrValue);
+  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> {
+    return this.some((i) => i.value === (keyOrValue as unknown as V) || i.key === (keyOrValue as unknown as K));
   }
 
   findBy<FK extends 'key' | 'value' | 'label' | Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>, FV>(
@@ -560,7 +560,7 @@ export interface IEnumItems<
    *
    * @returns {boolean} Whether the enumeration item exists | 枚举项是否存在
    */
-  has(keyOrValue?: string | V): boolean;
+  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V>;
 
   /**
    * **EN:** Find an enumeration item by key or value, or by custom meta fields

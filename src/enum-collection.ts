@@ -154,7 +154,7 @@ export class EnumCollectionClass<
     }
   }
 
-  has(keyOrValue?: string | V) {
+  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> {
     return this.__items__.has(keyOrValue);
   }
 
