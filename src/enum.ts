@@ -3,7 +3,15 @@ import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
 import type { IEnumItems, InheritableEnumItems } from './enum-items';
 import { internalConfig, localizer } from './global-config';
-import type { ArrayToMap, EnumInit, EnumKey, EnumValue, LocalizeInterface, ValueTypeFromSingleInit } from './types';
+import type {
+  ArrayToMap,
+  EnumInit,
+  EnumItemLabel,
+  EnumKey,
+  EnumValue,
+  LocalizeInterface,
+  ValueTypeFromSingleInit,
+} from './types';
 import type { ENUM_OPTIONS, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
 import { IS_ENUM } from './utils';
 
@@ -409,6 +417,11 @@ export type EnumInitOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   P = any,
 > = {
+  /**
+   * - **EN:** Set the display name of the enum collection, supports string or localized resource key
+   * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
+   */
+  name?: EnumItemLabel;
   /**
    * - **EN:** The name of the field in the enumeration item that stores the value, or the function to
    *   get the key value, default is `value`. This option is only effective when initializing the

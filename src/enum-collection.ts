@@ -1,4 +1,5 @@
 import type { EnumExtension } from 'enum-plus/extension';
+import type { EnumInitOptions } from './enum';
 import type { EnumItemClass, EnumItemOptions } from './enum-item';
 import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
 import { EnumItemsArray } from './enum-items';
@@ -40,11 +41,11 @@ export class EnumCollectionClass<
   extends EnumExtensionClass<T, K, V>
   implements InheritableEnumItems<T, K, V, P>
 {
-  private readonly __options__: EnumItemOptions<T[K], K, V, P> | undefined;
+  private readonly __options__: EnumInitOptions<T, K, V, P> | undefined;
   // used for e2e serialization
   private readonly __items__!: EnumItemsArray<T, K, V, P>;
 
-  constructor(init: T = {} as T, options?: EnumItemOptions<T[K], K, V, P>) {
+  constructor(init: T = {} as T, options?: EnumInitOptions<T, K, V, P>) {
     super();
     // Do not use class field here, because don't want print this field in Node.js
     Object.defineProperty(this, '__options__', {

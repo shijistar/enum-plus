@@ -241,11 +241,6 @@ export interface EnumItemOptions<
    */
   localize?: LocalizeInterface;
   /**
-   * - **EN:** Set the display name of the enum collection, supports string or localized resource key
-   * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
-   */
-  name?: string;
-  /**
    * - **EN:** The label prefix for each enum item, which can be a string or an object. This option
    *   can simplify or even omit the label definition of enum items, and is only effective when
    *   internationalization is enabled.
