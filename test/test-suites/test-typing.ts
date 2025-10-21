@@ -17,7 +17,7 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         if (Enum.isEnum(value)) {
           engine.expect(value).toBe(weekEnum);
         } else {
-          console.log(value);
+          console.log(value + 1);
         }
 
         validateEnum(engine, weekEnum, localeEN, WeekConfig);

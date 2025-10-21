@@ -234,10 +234,6 @@ export interface EnumItemOptions<
    * - **EN:** Localization function, used to convert the text of the enumeration item to localized
    *   text
    * - **CN:** 本地化函数，用于把枚举项文本转换为本地化文本
-   *
-   * @param content Original text | 原始文本
-   *
-   * @returns Localized text, can return any type | 本地化文本，可以返回任意类型
    */
   localize?: LocalizeInterface;
   /**
