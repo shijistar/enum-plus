@@ -33,6 +33,8 @@
 > **🎉 v3.0 发布了！**
 >
 > 新版本是一个重大的里程碑版本，带来了很多令人兴奋的功能和改进，详情请参考 [发布说明](./docs/release-v3.zh-CN.md) 和 [迁移指南](./docs/migration-guide-v2-to-v3.zh-CN.md)。
+>
+> 如果升级后，你遇到枚举类型都变成 `any` 的问题，请看[这里](#为什么升级到-30-之后所有枚举的类型都变成了-any)。
 
 ## 简介
 
@@ -1396,7 +1398,7 @@ const WeekEnum = Enum({
 } as const);
 ```
 
-可以看到，在较低版本的TypeScript中，你可能需要使用 `as const` 类型断言。`as const` 可以让枚举值保持原始的字面量值，而不会变成 `number`、`string` 类型，同时 `enum.valueType` 类型也会保持 `0 | 1`，而不会变成 `number` 类型。这让 TypeScript 的类型校验变得更准确，也可以提升代码的安全性。另外，请检查你的 `tsconfig.json` 文件，确保 `moduleResolution` 选项设置为 `node` 或 `node10`，避免 `enum-plus` 的类型声明文件被自动切换到 5.0+ 版本。
+可以看到，在较低版本的TypeScript中，你可能需要使用 `as const` 类型断言。`as const` 可以让枚举值保持原始的字面量值，而不会变成 `number`、`string` 类型，同时 `enum.valueType` 类型也会保持 `0 | 1`，而不会变成 `number` 类型。这让 TypeScript 的类型校验变得更准确，也可以提升代码的安全性。关于如何升级TypeScript以及如何修改项目配置，请仔细阅读 [迁移指南](./docs/migration-guide-v2-to-v3.zh-CN.md#升级-typescript)。
 
 如果你使用的是 JavaScript，那么你可以借助 `JSDoc` 来让编辑器精确识别类型。
 
@@ -1406,6 +1408,10 @@ const weekInit = { Sunday: 0, Monday: 1 };
 
 const WeekEnum = Enum(weekInit);
 ```
+
+### 为什么升级到 3.0 之后，所有枚举的类型都变成了 any？
+
+这是因为 `tsconfig.json` 的配置不正确，请仔细阅读 [迁移指南](./docs/migration-guide-v2-to-v3.zh-CN.md#升级-typescript)。
 
 ### 我在发行公告里看到，你们让 Jest 和 Playwright 共享了同一套测试代码，这很有意思。能介绍一下如何实现的吗？
 

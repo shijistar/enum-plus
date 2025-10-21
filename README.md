@@ -33,6 +33,8 @@
 > **🎉 v3.0 is Released!**
 >
 > The new version is a major milestone that brings many exciting features and improvements. Please refer to the [Release Notes](./docs/release-v3.md) and [Migration Guide](./docs/migration-guide-v2-to-v3.md) for details.
+>
+> If all enum types become `any` after upgrading to v3.0, please see [here](#why-did-all-enum-types-become-any-after-upgrading-to-version-30).
 
 ## Introduction
 
@@ -1413,7 +1415,7 @@ const WeekEnum = Enum({
 } as const);
 ```
 
-As you can see, in earlier versions of TypeScript, you may need to use the `as const` type assertion. `as const` allows the enum values to remain their original literal values instead of being converted to `number` or `string` types. Meanwhile, the `enum.valueType` will remain as `0 | 1` instead of becoming `number`. This makes TypeScript's type checking more accurate and enhances code safety. Additionally, please check your `tsconfig.json` file to ensure that the `moduleResolution` option is set to `node` or `node10`, which prevents the type declaration files of `enum-plus` from being automatically switched to the version of 5.0+.
+As you can see, in earlier versions of TypeScript, you may need to use the `as const` type assertion. `as const` allows the enum values to remain their original literal values instead of being converted to `number` or `string` types. Meanwhile, the `enum.valueType` will remain as `0 | 1` instead of becoming `number`. This makes TypeScript's type checking more accurate and enhances code safety. About how to upgrade TypeScript and modify project configurations, please read the [Migration Guide](./docs/migration-guide-v2-to-v3.md#migrating-to-typescript-5) carefully.
 
 If you are using JavaScript, you can leverage `JSDoc` to help the editor accurately recognize types.
 
@@ -1423,6 +1425,10 @@ const weekInit = { Sunday: 0, Monday: 1 };
 
 const WeekEnum = Enum(weekInit);
 ```
+
+### Why did all enum types become `any` after upgrading to version 3.0?
+
+This is due to incorrect configuration in `tsconfig.json`. Please read the [Migration Guide](./docs/migration-guide-v2-to-v3.md#upgrade-typescript) carefully.
 
 ### I saw in the release notes that you made Jest and Playwright share the same set of test code, which is interesting. Can you introduce how to achieve this?
 

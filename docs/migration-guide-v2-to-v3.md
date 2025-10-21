@@ -122,18 +122,66 @@ The advantage of this approach is that it avoids global namespace pollution and 
 
 Although enum-plus v3 still supports TypeScript 3.8 and above, we strongly recommend upgrading to TypeScript 5.0 or above for the best experience. This is because v3 leverages some new features introduced in TypeScript 5.0, such as [const type parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters), which can significantly improve type inference and code maintainability. Now, you no longer need to use the `as const` assertion when initializing Enums. Enums can now be initialized with literal objects by default.
 
-```js
+#### Upgrade TypeScript
+
+```bash
+npm install typescript@^5.0 --save-dev
+```
+
+#### Modify tsconfig.json
+
+- **If you have upgraded to TypeScript 5.0 or above:**
+
+Please set `moduleResolution` to any value **other than** `node` or `node10`, then you don't need to make any additional changes.
+
+If you must set `moduleResolution` to `node` or `node10` for some reason, you will be automatically switched to a compatible mode type system and will not enjoy the convenience brought by automatic `as const`, so you may need to manually add `as const` assertions. If you insist on using modern version type definitions, please modify the `paths` configuration in `tsconfig.json` to manually map to modern mode type definitions:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "enum-plus": ["./node_modules/enum-plus/lib/index.d.ts"],
+      "enum-plus/*": ["./node_modules/enum-plus/lib/*"]
+    }
+  }
+}
+```
+
+- **If you are still using TypeScript version `4.x` or below:**
+
+Please ensure that `moduleResolution` is set to `node` or `node10` to use the compatible version type definitions. Since earlier versions of TypeScript do not support [const type parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters), the enum types will become `any`. Additionally, you need to add `as const` assertions when initializing Enums in your code.
+
+If for some reason you must set `moduleResolution` to a value other than `node` or `node10`, then you need to modify the `paths` configuration in `tsconfig.json` to manually map to compatible version type definitions:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "enum-plus": ["./node_modules/enum-plus/types-legacy/pre-v5/index.d.ts"],
+      "enum-plus/*": ["./node_modules/enum-plus/types-legacy/pre-v5/*"]
+    }
+  }
+}
+```
+
+#### Modify your code
+
+Before:
+
+```ts
+const WeekEnum = Enum({
+  Sunday: 0,
+  Monday: 1,
+} as const);
+```
+
+After:
+
+```ts
 const WeekEnum = Enum({
   Sunday: 0,
   Monday: 1,
 });
 ```
-
-> If you can't upgrade, don't worry. TypeScript `4.9` or earlier is still backward compatible. You just need to add `as const` manually, just like before.
-
-#### Modify tsconfig.json
-
-Please check the `moduleResolution` configuration in your `tsconfig.json` to ensure it is compatible with the TypeScript version you are using.
-
-- If TypeScript version is `>=5.0`, it is recommended to set `moduleResolution` to `node16` or `nodenext`.
-- If TypeScript version is `<5.0`, be sure to set `moduleResolution` to `node` or `node10` to ensure that you are using a compatible version of type definitions. Since earlier versions of TypeScript do not support [const type parameters](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters), it will cause the enum type to become `any`. Additionally, you need to continue to use the `as const` assertion when initializing Enums in your code.

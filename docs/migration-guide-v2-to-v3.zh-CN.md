@@ -119,6 +119,52 @@ WeekEnum.hello(); // '你好，EnumPlus！'
 
 虽然 enum-plus v3 仍然支持 TypeScript 3.8 及更高版本，但我们强烈建议升级到 TypeScript 5.0 或更高版本，以获得最佳体验。 这是因为 v3 利用了 TypeScript 5.0 引入的一些新特性，如 [const 类型参数](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters)，这些特性可以显著提升类型推断和代码的可维护性。现在，你不再需要在 Enum 初始化时使用 `as const` 断言。Enum 现在可以默认使用字面量对象进行初始化。
 
+#### 升级 TypeScript
+
+```bash
+npm install typescript@^5.0 --save-dev
+```
+
+#### 修改 tsconfig.json
+
+- **如果你已经升级到 TypeScript 5.0 或更高版本：**
+
+请检查 `tsconfig.json` 中的 `moduleResolution` 配置，确保其值是**除了** `node` 或 `node10` **之外**的其他值，那么你不需要做任何额外的修改。
+
+如果因为特殊原因，你必须将 `moduleResolution` 设置为 `node` 或 `node10`，那么你将被自动切换到兼容模式的类型系统，不会享受到自动 `as const` 带来的便利性，因此你可能需要手动添加 `as const` 断言。如果你坚持希望使用现代版本的类型定义，请修改 `tsconfig.json` 的 `paths` 配置，手动映射到现代模式的类型定义：
+
+```js
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "enum-plus": ["./node_modules/enum-plus/lib/index.d.ts"],
+      "enum-plus/*": ["./node_modules/enum-plus/lib/*"]
+    }
+  }
+}
+```
+
+- **如果你仍在使用 `4.x` 或更低版本的 TypeScript：**
+
+请检查 `tsconfig.json` 中的 `moduleResolution` 配置，确保其被设置为 `node` 或 `node10`，将确保你使用的是兼容版本的类型定义。兼容版本模式会自动从类型定义中移除 [const 类型参数](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters) 特性，否则会导致所有枚举的类型都变成 `any`。另外，你需要在初始化 Enum 时手动添加 `as const` 断言，以确保更优的类型推断。
+
+如果由于特殊原因你必须将 `moduleResolution` 设置为 `node` 或 `node10` 之外的其他值，那么你需要修改 `tsconfig.json` 的 `paths` 配置，手动映射到兼容版本的类型定义：
+
+```js
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "enum-plus": ["./node_modules/enum-plus/types-legacy/pre-v5/index.d.ts"],
+      "enum-plus/*": ["./node_modules/enum-plus/types-legacy/pre-v5/*"]
+    }
+  }
+}
+```
+
+#### 修改项目代码
+
 以前：
 
 ```ts
@@ -136,12 +182,3 @@ const WeekEnum = Enum({
   Monday: 1,
 });
 ```
-
-> **注意**：如果你无法升级到 TypeScript 5.0，请放心，v3 仍然能够自动平滑降级，以支持较早的 TypeScript 版本。但你需要继续使用 `as const` 断言来确保类型的正确推断。
-
-#### 修改 tsconfig.json
-
-请检查 `tsconfig.json` 中的 `moduleResolution` 配置，确保其与所使用的 TypeScript 版本兼容。
-
-- 如果 TypeScript 版本 `>=5.0`，建议将 `moduleResolution` 设置为 `node16` 或 `nodenext`。
-- 如果 TypeScript 版本 `<5.0`，请务必将 `moduleResolution` 设置为 `node` 或 `node10`，以确保使用的是兼容版本的类型定义。由于低版本的 TypeScript 不支持 [const 类型参数](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html#const-type-parameters)，会导致枚举类型变成 `any`。另外，在代码中初始化 Enum 时需要添加 `as const` 断言。
