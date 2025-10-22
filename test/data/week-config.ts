@@ -150,7 +150,8 @@ export const WeekEmptyConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = {};
     return acc;
   },
-  {} as { [key in TKey]: Record<string, never> }
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  {} as { [key in TKey]: {} }
 );
 
 export const WeekValueOnlyConfig = Object.keys(StandardWeekConfig).reduce(
@@ -167,6 +168,16 @@ export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce(
     return acc;
   },
   {} as { [key in TKey]: { label: TConfig[key]['label'] } }
+);
+
+export const WeekMetaOnlyConfig = Object.keys(StandardWeekConfig).reduce(
+  (acc, key) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { value, label, ...meta } = StandardWeekConfig[key as TKey];
+    acc[key as TKey] = meta as never;
+    return acc;
+  },
+  {} as { [key in TKey]: Omit<TConfig[key], 'value' | 'label'> }
 );
 
 export function genSillyLocalizer(

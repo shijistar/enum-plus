@@ -38,7 +38,7 @@ export function pickInitConfig<T extends Record<keyof T, StandardEnumItemInit<En
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function pickArray<T extends Record<string, any>>(
-  array: T[],
+  array: T[] | readonly T[],
   fieldNames: (keyof T)[] = Object.keys(array[0] || {}) as (keyof T)[]
 ): T[] {
   return array.map((item) => pickObject(item, fieldNames));

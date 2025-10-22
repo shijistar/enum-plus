@@ -88,6 +88,23 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
+      'Should be created with meta-only config',
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekMetaOnlyConfig, StandardWeekConfig } }) => {
+        const weekEnum = Enum(WeekMetaOnlyConfig);
+        return {
+          weekEnum,
+          StandardWeekConfig,
+        };
+      },
+      ({ weekEnum, StandardWeekConfig }) => {
+        engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
+        engine
+          .expect(Array.from(weekEnum.items).map((s) => s.raw))
+          .toEqual(Object.values(StandardWeekConfig).map(({ value, label, ...meta }) => meta));
+      }
+    );
+
+    engine.test(
       'Should be created with compact config',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekCompactConfig, WeekEmptyConfig } }) => {
         const weekEnum = Enum(WeekCompactConfig);
