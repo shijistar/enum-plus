@@ -67,7 +67,7 @@ body:
       required: true
 
   - type: input
-    id: version
+    id: typescript-version
     attributes:
       label: TypeScript version
       description: Which version of TypeScript are you installing?
