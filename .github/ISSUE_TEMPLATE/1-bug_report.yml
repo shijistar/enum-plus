@@ -100,6 +100,16 @@ body:
     validations:
       required: true
 
+  # Current version of TypeScript
+  - type: input
+    id: typescript-version
+    attributes:
+      label: TypeScript version
+      description: Which version of TypeScript are you installing?
+      placeholder: e.g. 5.9.3
+    validations:
+      required: true
+
   # Operating system
   - type: dropdown
     id: os

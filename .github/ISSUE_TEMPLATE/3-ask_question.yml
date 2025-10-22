@@ -90,6 +90,18 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: typescript-version
+    attributes:
+      label: TypeScript version
+      description: |
+        Which version of TypeScript are you installing?
+        <br/>
+        您安装的哪个版本的 TypeScript？
+      placeholder: e.g. 5.9.3
+    validations:
+      required: true
+
   - type: textarea
     id: additional
     attributes:
