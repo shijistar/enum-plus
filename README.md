@@ -34,7 +34,7 @@
 >
 > The new version is a major milestone that brings many exciting features and improvements. Please refer to the [Release Notes](./docs/release-v3.md) and [Migration Guide](./docs/migration-guide-v2-to-v3.md) for details.
 >
-> If all enum types become `any` after upgrading to v3.0, please see [here](#why-did-all-enum-types-become-any-after-upgrading-to-version-30).
+> If the enum types become `any` after upgrading to v3.0, please see [here](#why-did-all-enum-types-become-any-after-upgrading-to-version-30).
 
 ## Introduction
 
