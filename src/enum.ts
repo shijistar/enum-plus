@@ -93,7 +93,7 @@ function getInitMapFromArray<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const P = any,
->(init: T[], options?: EnumInitOptions<T, K, V, P>) {
+>(init: T[], options?: ArrayBasedEnumInitOptions<T, K, V, P>) {
   const { getValue = 'value' as keyof T, getLabel = 'label' as keyof T, getKey = 'key' as keyof T } = options ?? {};
   return init.reduce((acc, item) => {
     const value = typeof getValue === 'function' ? getValue(item) : (item[getValue] as V);
@@ -173,7 +173,7 @@ export interface EnumInterface {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const P = any,
     // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-    OP extends EnumInitOptions<A[number], K, V, P> = EnumInitOptions<A[number], K, V, P>,
+    OP extends ArrayBasedEnumInitOptions<A[number], K, V, P> = ArrayBasedEnumInitOptions<A[number], K, V, P>,
   >(
     init: A,
     options?: OP
@@ -432,13 +432,22 @@ export interface EnumInitOptions<
    * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
    */
   name?: EnumItemLabel;
+}
+
+export interface ArrayBasedEnumInitOptions<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  P = any,
+> extends EnumInitOptions<T, K, V, P> {
   /**
    * - **EN:** The name of the field in the enumeration item that stores the value, or the function to
    *   get the key value, default is `value`. This option is only effective when initializing the
    *   enum through an array.
    * - **CN:** 枚举项的value字段名，或者获取key值的函数，默认为 `value`。此选项只有在通过数组初始化枚举时才有效。
    */
-  getValue?: keyof T | ((item: T) => V);
+  getValue?: keyof T | ((item: T) => EnumValue);
   /**
    * - **EN:** The name of the field in the enumeration item that stores the label, or the function to
    *   get the key value, default is `label`. This option is only effective when initializing the
