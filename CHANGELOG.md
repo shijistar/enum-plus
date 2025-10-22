@@ -2,16 +2,28 @@
 
 # enum-plus Changelog
 
-## 3.1.0
+## 3.1.1
 
-2025-10-10
+2025-10-22
 
 ### Features
 
-- Introduce `Enum.config` to manage global configuration for all Enums.
+- ✨ Introduce `meta-only` mode in `Enum` creation, allowing the creation of Enums without `value` and `label` fields. This is useful for scenarios where only metadata is needed for enum items.
+- ✨ Implementation `instanceof` operator of `Enum` method, and add type guard to provide type narrowing functionality. This allows you to use `instanceof` to check if an object is an enum object created by `Enum`.
+- ✨ Add type guard to `Enum.has` method.
+- 🛠️ Allow the type extending for `Enum.name`, just like enum labels.
+- 📝 Add documentation for TypeScript 5.0 upgrade instructions
+
+## 3.1.0
+
+2025-10-21
+
+### Features
+
+- ✨ Introduce `Enum.config` to manage global configuration for all Enums.
   - `Enum.config.autoLabel` to enable/disable automatic label generation for enum items by specifying the label prefix.
-- Add `options.labelPrefix` to specify the label prefix for enum items during Enum creation.
-- Add `options.autoLabel` to enable/disable automatic label generation on Enum creation. It overrides the global configuration.
+- ✨ Add `options.labelPrefix` to specify the label prefix for enum items during Enum creation.
+- ✨ Add `options.autoLabel` to enable/disable automatic label generation on Enum creation. It overrides the global configuration.
 - ✨ Allow extending `EnumItemLabel` type to support IntelliSense.
 
 ## 3.0.1
@@ -35,18 +47,18 @@
 
 ### Features
 
-- 🔥 Introduce the new [Plugin System](./README.md#plugin-system). Many fantastic features can be shared as plugins, and you can enhance Enum by installing them.
-- Simplified enum initialization. No `as const` assertion is required on TypeScript ≥ 5.0. _Thanks to @otomad_.
-- New `enum.named` for quick access EnumItem by `key`.
-- New `enum.meta` to aggregate custom metadata fields across items.
-- New `enum.labels` returning a readonly array of labels.
-- New `enum.toList` to transform enum items to a list of `{ value, label }` objects. Supports remapping the field names via options.
-- New `enum.toMap` to transform enum items to a mapping object. Supports remapping the field names via options.
-- New `Enum.isEnum` for type guarding.
-- New `enum.findBy` to locate an item by built-in or metadata fields.
-- New `Enum.install` to install plugins.
-- Typing: `instanceof` narrowing for EnumCollection; updated `Enum.extend` typing; graceful downgrade across TS versions.
-- Ship UMD module format under `umd` folder for direct browser usage.
+- ✨ Introduce the new [Plugin System](./README.md#plugin-system). Many fantastic features can be shared as plugins, and you can enhance Enum by installing them.
+- 💄 Simplified enum initialization. No `as const` assertion is required on TypeScript ≥ 5.0. _Thanks to @otomad_.
+- ✨ New `enum.named` for quick access EnumItem by `key`.
+- ✨ New `enum.meta` to aggregate custom metadata fields across items.
+- ✨ New `enum.labels` returning a readonly array of labels.
+- ✨ New `enum.toList` to transform enum items to a list of `{ value, label }` objects. Supports remapping the field names via options.
+- ✨ New `enum.toMap` to transform enum items to a mapping object. Supports remapping the field names via options.
+- ✨ New `Enum.isEnum` for type guarding.
+- ✨ New `enum.findBy` to locate an item by built-in or metadata fields.
+- ✨ New `Enum.install` to install plugins.
+- 🛠️ Typing: `instanceof` narrowing for EnumCollection; updated `Enum.extend` typing; graceful downgrade across TS versions.
+- ✨ Ship UMD module format under `umd` folder for direct browser usage.
 
 ### Notable Changes
 
