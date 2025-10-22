@@ -13,11 +13,24 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         return { weekEnum, Enum, WeekConfig, localeEN };
       },
       ({ weekEnum, Enum, WeekConfig, localeEN }) => {
-        const value = weekEnum as typeof weekEnum | number;
-        if (Enum.isEnum(value)) {
-          engine.expect(value).toBe(weekEnum);
+        const enumObj = weekEnum as typeof weekEnum | number;
+        if (Enum.isEnum(enumObj)) {
+          engine.expect(enumObj).toBe(weekEnum);
         } else {
-          console.log(value + 1);
+          console.log(enumObj + 1);
+        }
+
+        const value = 1 as 1 | { foo: number };
+        if (weekEnum.has(value)) {
+          engine.expect(value.toFixed(1)).toBe('1.0');
+        } else {
+          console.log(value satisfies { foo: number });
+        }
+
+        if (value instanceof weekEnum) {
+          engine.expect(value.toFixed(1)).toBe('1.0');
+        } else {
+          console.log(value as { foo: number });
         }
 
         validateEnum(engine, weekEnum, localeEN, WeekConfig);
@@ -33,11 +46,11 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         return { weekEnum, Enum, WeekConfig, localeEN };
       },
       ({ weekEnum, Enum, WeekConfig, localeEN }) => {
-        const value = weekEnum as typeof weekEnum | number;
-        if (value instanceof Enum) {
-          engine.expect(value).toBe(weekEnum);
+        const enumObj = weekEnum as typeof weekEnum | number;
+        if (enumObj instanceof Enum) {
+          engine.expect(enumObj).toBe(weekEnum);
         } else {
-          console.log(value + 1);
+          console.log(enumObj + 1);
         }
 
         validateEnum(engine, weekEnum, localeEN, WeekConfig);
