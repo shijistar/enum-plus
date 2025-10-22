@@ -84,7 +84,7 @@ body:
   - type: textarea
     id: how-to-fix
     attributes:
-      label: How to Fix
+      label: Suggested Fix (Optional)
       description: If you have a suggestion for a fix or improvement, please describe it here. This is optional but can be helpful for the maintainers.
       placeholder: It's is optional, please do your best to describe it, but don't worry if you can't
     validations:
