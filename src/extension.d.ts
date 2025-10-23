@@ -24,6 +24,6 @@ declare module 'enum-plus/extension' {
      *
      * **CN:** 枚举本地化文本的Key值，可以用来增强编辑器的智能提示
      */
-    // LocaleKeys: NonNullable<string>;
+    LocaleKeys: NonNullable<string>;
   }
 }

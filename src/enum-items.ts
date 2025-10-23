@@ -878,14 +878,14 @@ function parseEnumItem<
           // type of {value, label}
           value = (init.value ?? key) as V;
           if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
-            label = init.label;
+            label = init.label as string;
           } else {
             label = key as string;
           }
         } else if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
           // typeof {label}
           value = key as unknown as V;
-          label = init.label ?? key;
+          label = init.label ?? (key as string);
         } else {
           // {} empty object
           value = key as unknown as V;

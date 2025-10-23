@@ -2,8 +2,7 @@ import type { EnumLocaleExtends } from 'enum-plus/extension';
 
 export type { LocalizeInterface } from './localize-interface';
 
-// @ts-expect-error: because LocaleKeys is a user-defined type, so ignore the error here
-export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'] & NonNullable<string>;
+export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumValue> =
