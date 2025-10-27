@@ -208,7 +208,7 @@ export interface EnumInterface {
       | boolean
       | ((options: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          item: EnumItemClass<any, string, any, any>;
+          item: Omit<EnumItemClass<any, string, any, any>, 'label'>;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           labelPrefix: any;
         }) => string);
