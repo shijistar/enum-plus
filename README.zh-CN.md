@@ -204,15 +204,15 @@ WeekEnum.items[0].label; // 星期日
 
 数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。
 
-你可以动态映射字段以适应各种不同的数据结构。请参考 [数组格式初始化，设置不同的字段映射](#数组格式初始化设置不同的字段映射) 章节，了解更多详情。
+你可以动态映射字段以适应各种不同的数据结构。请参考 [数组格式初始化，设置不同的字段映射](#-在数组初始化方式中设置不同的字段映射) 章节，了解更多详情。
 
 ```js
 import { Enum } from 'enum-plus';
 
 const pets = [
-  { value: 1, key: 'Dog', label: '狗' },
-  { value: 2, key: 'Cat', label: '猫' },
-  { value: 3, key: 'Rabbit', label: '兔' },
+  { value: 1, key: 'Dog', label: '可爱的小狗' },
+  { value: 2, key: 'Cat', label: '萌萌的小猫' },
+  { value: 3, key: 'Rabbit', label: '白白的小兔' },
 ];
 const PetEnum = Enum(pets);
 
@@ -335,11 +335,13 @@ const ColorEnum = Enum({
 ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
 ```
 
-顺便一提，可以通过 `named` 和 `raw` 属性快速访问单个枚举项的自定义字段
+顺便一提，你可以通过 `named` 和 `raw` 属性快速访问单个枚举项的自定义字段
 
 ```js
 ColorEnum.named.Red.raw.hex; // '#FF0000'
 ```
+
+---
 
 ### 💎 &nbsp; has
 
@@ -638,7 +640,7 @@ Enum.install(i18nextPlugin);
 
 > 请注意，在创建枚举时也可以通过 `options.autoLabel` 参数覆盖全局配置，其用法与 `Enum.config.autoLabel` 相同。
 
-## 使用案例
+## 应用案例
 
 ### 💡 基础用法，消除魔法数字
 
