@@ -2,6 +2,15 @@
 
 # enum-plus Changelog
 
+## 3.1.2
+
+2025-11-7
+
+### Features
+
+- 🛠 Export the `./extension` subpath in package.json to fix the `Cannot find module 'enum-plus/extension'"` error.
+- 🛠 Exclude `label` field from the type of `autoLabel` option.
+
 ## 3.1.1
 
 2025-10-22
