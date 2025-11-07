@@ -47,7 +47,7 @@ It is a lightweight, zero-dependency library, and it works with any front-end fr
 What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.1/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.2/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
@@ -113,9 +113,9 @@ yarn add enum-plus
 
 ```html
 <!-- Modern version, ES2020 compatible -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.1/umd/enum-plus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.2/umd/enum-plus.min.js"></script>
 <!-- Legacy version, ES2015 compatible -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.1/umd/enum-plus-legacy.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.2/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - The latest version:
@@ -129,10 +129,10 @@ yarn add enum-plus
 
 ⬇️ **Download**:
 
-- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.1/enum-plus.umd.min.js.gz)
-- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.1/enum-plus.umd.tar.gz) (Full package with sourcemap)
-- [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.1/enum-plus-legacy.umd.min.js.gz)
-- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.1/enum-plus-legacy.umd.tar.gz) (Full package with sourcemap)
+- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.2/enum-plus.umd.min.js.gz)
+- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.2/enum-plus.umd.tar.gz) (Full package with sourcemap)
+- [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.2/enum-plus-legacy.umd.min.js.gz)
+- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.2/enum-plus-legacy.umd.tar.gz) (Full package with sourcemap)
 
 > You can also download these files from the [GitHub Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.0.1).
 
