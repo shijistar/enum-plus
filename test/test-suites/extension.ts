@@ -1,3 +1,4 @@
+import type { EnumItemClass, IEnum } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 
 // import './extension-type';
@@ -31,6 +32,30 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine
           .expect(weekEnum.toMySelect?.())
           .toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
+      }
+    );
+    engine.test(
+      'Should allow extend getters',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const extend = {
+          get all() {
+            return (
+              this as unknown as IEnum<
+                typeof StandardWeekConfig,
+                keyof typeof StandardWeekConfig,
+                (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+              >
+            ).items;
+          },
+        };
+        Enum.extends(extend);
+        const weekEnum = Enum(StandardWeekConfig);
+        return { weekEnum, all: weekEnum.all };
+      },
+      ({ weekEnum, all }) => {
+        engine.expect(all).toBeInstanceOf(Array);
+        engine.expect(all.length).toBe(7);
+        engine.expect(all).toEqual(weekEnum.items);
       }
     );
     engine.test(
@@ -124,6 +149,8 @@ declare module 'enum-plus/extension' {
   interface EnumExtension<T, K, V> {
     isWeekend(value: number): boolean;
     toMySelect: () => { value: V; title: string }[];
+    // @ts-expect-error: because want to declare new getter
+    all: EnumItemClass<T[K], K, V>[];
   }
 }
 
