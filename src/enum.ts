@@ -67,7 +67,7 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
   if (obj !== undefined && Object.prototype.toString.call(obj) !== '[object Object]') {
     throw new Error('The extension of Enum must be an object');
   }
-  Object.assign(EnumExtensionClass.prototype, obj);
+  Object.defineProperties(EnumExtensionClass.prototype, Object.getOwnPropertyDescriptors(obj));
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Enum.install = <T extends PluginFunc<any>>(plugin: T, options?: Parameters<T>[0]) => {

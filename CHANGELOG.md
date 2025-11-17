@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.1.3
+
+2025-11-17
+
+### Features
+
+- ✨ Enhance `Enum.extends` method to support getter and setter properties in the extension object.
+
 ## 3.1.2
 
 2025-11-7
