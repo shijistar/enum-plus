@@ -13,7 +13,6 @@ import type {
   FindValueByMeta,
   ListItem,
   PrimitiveOf,
-  StandardEnumInit,
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
 } from './types';
@@ -444,7 +443,7 @@ export interface IEnumItems<
    *   the field names, and values are the raw values of each field
    * - **CN:** 获取枚举项的全部自定义元字段，返回一个对象，其中key为字段名，value为每个字段的原始值数组
    */
-  readonly meta: T extends StandardEnumInit<K, V>
+  readonly meta: T extends object
     ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] }
     : // eslint-disable-next-line @typescript-eslint/ban-types
       {};

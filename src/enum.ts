@@ -274,6 +274,17 @@ export interface EnumInterface {
 }
 
 /**
+ * - **EN:** A generic enum type that can be used to represent any enum collection
+ * - **CN:** 一个通用枚举类型，可以用来表示任何枚举集合
+ */
+export type AnyEnum = IEnum<EnumInit<string, EnumValue>> & NativeEnumMembers<EnumInit<string, EnumValue>>;
+// @ts-expect-error: because T does not satisfy EnumInit<K, V>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type GenericAnyEnum<T extends EnumInit<keyof any, EnumValue>> = IEnum<T> &
+  // @ts-expect-error: because T does not satisfy EnumInit<K, V>
+  NativeEnumMembers<T>;
+
+/**
  * - **EN:** Represents an enumeration collection, which includes all the items in the enumeration and
  *   provides methods to access them.
  * - **CN:** 表示一个枚举集合，包含了枚举中的所有项，并提供访问它们的方法。

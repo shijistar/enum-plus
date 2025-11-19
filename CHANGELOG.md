@@ -2,6 +2,15 @@
 
 # enum-plus Changelog
 
+## 3.1.4
+
+2025-11-19
+
+### Features
+
+- ✨ Add `AnyEnum` type as a generic enum type that can be used to represent any enum collection.
+- 🛠 Improve the type of `enum.meta`.
+
 ## 3.1.3
 
 2025-11-17
