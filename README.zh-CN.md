@@ -1417,6 +1417,10 @@ const WeekEnum = Enum(weekInit);
 
 这是因为 `tsconfig.json` 的配置不正确，请仔细阅读 [迁移指南](./docs/migration-guide-v2-to-v3.zh-CN.md#升级-typescript)。
 
+### 我想定义一个通用的枚举类型，可以表示任意枚举，目前的枚举类型定义太复杂了，有没有简单的办法？
+
+请使用 `AnyEnum` 类型，它是一个通用的枚举类型，可以表示任意枚举。
+
 ### 我在发行公告里看到，你们让 Jest 和 Playwright 共享了同一套测试代码，这很有意思。能介绍一下如何实现的吗？
 
 是的，这并不轻松。Jest 和 Playwright 的工作原理并不相同，Jest 运行在 Node.js 环境中，而 Playwright 运行在浏览器环境中。为了让它们共享一套测试代码，我们做了以下工作：

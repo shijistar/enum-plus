@@ -1432,6 +1432,10 @@ const WeekEnum = Enum(weekInit);
 
 This is due to incorrect configuration in `tsconfig.json`. Please read the [Migration Guide](./docs/migration-guide-v2-to-v3.md#upgrade-typescript) carefully.
 
+### I want to define a generic enum type that can represent any enum. The current enum type definition is too complex. Is there a simple way?
+
+Please use the `AnyEnum` type, which is a generic enum type that can represent any enum.
+
 ### I saw in the release notes that you made Jest and Playwright share the same set of test code, which is interesting. Can you introduce how to achieve this?
 
 Yes, actually it wasn't easy from the beginning. The working principles of Jest and Playwright are quite different. Jest runs in a Node.js environment, while Playwright runs in a browser environment and then returns to the Node.js environment to execute assertions. To make them share a set of test code, we did the following:
