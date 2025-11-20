@@ -101,6 +101,10 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine
           .expect(Array.from(weekEnum.items).map((s) => s.raw))
           .toEqual(Object.values(StandardWeekConfig).map(({ value, label, ...meta }) => meta));
+
+        engine.expect(weekEnum.meta).toEqual({
+          status: Object.values(StandardWeekConfig).map(({ status }) => status),
+        });
       }
     );
 

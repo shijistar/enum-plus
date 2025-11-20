@@ -103,7 +103,7 @@ export class EnumItemsArray<
 
       // Collect custom meta fields
       const itemRaw = raw[key];
-      if (itemRaw && typeof itemRaw === 'object' && 'value' in itemRaw) {
+      if (itemRaw && typeof itemRaw === 'object') {
         Object.keys(itemRaw).forEach((k) => {
           const metaKey = k as Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>;
           if (metaKey !== 'key' && metaKey !== 'value' && metaKey !== 'label') {
