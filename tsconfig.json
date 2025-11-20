@@ -27,9 +27,10 @@
     "allowJs": false,
     "paths": {
       "@enum-plus": ["./src/index.ts"],
-      "@enum-plus/*": ["./src/*"]
+      "@enum-plus/*": ["./src/*"],
+      "enum-plus/extension": ["./src/extension.d.ts"]
     }
   },
   "include": ["src", "scripts", "test", "test-browser", "*.ts", ".*.ts"],
-  "exclude": ["node_modules", "es", "es-legacy", "lib", "tslib", "tses", "types-legacy"]
+  "exclude": ["node_modules", "packages", "es", "es-legacy", "lib", "tslib", "tses", "types-legacy"]
 }

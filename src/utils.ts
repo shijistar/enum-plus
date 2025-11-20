@@ -74,6 +74,6 @@ export const IS_ENUM_ITEMS = Symbol.for('[IsEnumItems]');
  *   English, does not provide actual localization functions
  * - **CN:** 默认的全局本地化函数，仅用于将内置资源解析为英文，并不提供实际的本地化功能
  */
-export const defaultLocalize: LocalizeInterface = (content) => {
+export const defaultLocalize: LocalizeInterface = (content): string | undefined => {
   return content;
 };

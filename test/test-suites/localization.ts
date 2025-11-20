@@ -1,6 +1,7 @@
 import type { EnumItemClass, IEnum, ListItem } from '@enum-plus';
 import type { MapResult } from '@enum-plus/enum-items';
 import type {
+  FuncLabelStandardWeekConfig,
   localeCN,
   localeEN,
   noLocale,
@@ -28,19 +29,39 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should show English by default',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig);
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
-        return { weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap };
+        return {
+          weekEnum,
+          weekEnumFuncLabel,
+          localeEN,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+          defaultMap,
+          customMap,
+        };
       },
-      ({ weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        localeEN,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
         assertEnum(weekEnum, localeEN, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, localeEN, getStandardWeekData);
         assertListItems({ defaultListItems, idNameListItems, locales: localeEN, getStandardWeekData });
         assertMapItems({ defaultMap, customMap, locales: localeEN, getStandardWeekData });
       }
@@ -50,19 +71,39 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should show Chinese after changing lang',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, localeCN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
         setLang('zh-CN', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig);
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
-        return { weekEnum, localeCN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap };
+        return {
+          weekEnum,
+          weekEnumFuncLabel,
+          localeCN,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+          defaultMap,
+          customMap,
+        };
       },
-      ({ weekEnum, localeCN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        localeCN,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
         assertEnum(weekEnum, localeCN, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, localeCN, getStandardWeekData);
         assertListItems({ defaultListItems, idNameListItems, locales: localeCN, getStandardWeekData });
         assertMapItems({ defaultMap, customMap, locales: localeCN, getStandardWeekData });
       }
@@ -72,19 +113,39 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should show English after changing back',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, localeEN, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig);
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
-        return { weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap };
+        return {
+          weekEnum,
+          weekEnumFuncLabel,
+          localeEN,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+          defaultMap,
+          customMap,
+        };
       },
-      ({ weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        localeEN,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
         assertEnum(weekEnum, localeEN, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, localeEN, getStandardWeekData);
         assertListItems({ defaultListItems, idNameListItems, locales: localeEN, getStandardWeekData });
         assertMapItems({ defaultMap, customMap, locales: localeEN, getStandardWeekData });
       }
@@ -94,17 +155,19 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should show original label if no localization found',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig);
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
         return {
           weekEnum,
+          weekEnumFuncLabel,
           defaultLocalize,
           noLocale,
           getStandardWeekData,
@@ -114,8 +177,18 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           customMap,
         };
       },
-      ({ weekEnum, noLocale, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        noLocale,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
         assertEnum(weekEnum, noLocale, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, noLocale, getStandardWeekData);
         assertListItems({ defaultListItems, idNameListItems, locales: noLocale, getStandardWeekData });
         assertMapItems({ defaultMap, customMap, locales: noLocale, getStandardWeekData });
       }
@@ -125,20 +198,40 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should show original label if Enum.localize is explicitly set to undefined ',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, noLocale, getLocales },
         WeekData: { getStandardWeekData },
       }) => {
         setLang(undefined, Enum, getLocales, defaultLocalize);
         Enum.localize = undefined!;
         const weekEnum = Enum(StandardWeekConfig);
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig);
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
-        return { weekEnum, noLocale, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap };
+        return {
+          weekEnum,
+          weekEnumFuncLabel,
+          noLocale,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+          defaultMap,
+          customMap,
+        };
       },
-      ({ weekEnum, noLocale, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        noLocale,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
         assertEnum(weekEnum, noLocale, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, noLocale, getStandardWeekData);
         assertListItems({ defaultListItems, idNameListItems, locales: noLocale, getStandardWeekData });
         assertMapItems({ defaultMap, customMap, locales: noLocale, getStandardWeekData });
       }
@@ -148,63 +241,32 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should respect Enum options over global setting (Chinese over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
+        WeekConfig: {
+          StandardWeekConfig,
+          FuncLabelStandardWeekConfig,
+          setLang,
+          localeCN,
+          localeEN,
+          getLocales,
+          genSillyLocalizer,
+        },
         WeekData: { getStandardWeekData },
       }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+          localize: genSillyLocalizer('zh-CN', getLocales),
+        });
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig, {
+          localize: genSillyLocalizer('zh-CN', getLocales),
         });
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
-        return { weekEnum, localeCN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap };
-      },
-      ({ weekEnum, localeCN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
-        assertEnum(weekEnum, localeCN, getStandardWeekData);
-        assertListItems({ defaultListItems, idNameListItems, locales: localeCN, getStandardWeekData });
-        assertMapItems({ defaultMap, customMap, locales: localeCN, getStandardWeekData });
-      }
-    );
-    engine.test(
-      'Should respect Enum options over global setting (undefined over English)',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        const defaultListItems = weekEnum.toList();
-        const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
-        const defaultMap = weekEnum.toMap();
-        const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
-        return { weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap };
-      },
-      ({ weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
-        assertEnum(weekEnum, localeEN, getStandardWeekData);
-        assertListItems({ defaultListItems, idNameListItems, locales: localeEN, getStandardWeekData });
-        assertMapItems({ defaultMap, customMap, locales: localeEN, getStandardWeekData });
-      }
-    );
-    engine.test(
-      'Should respect Enum options over global setting (undefined over English), support delayed assign',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
-        WeekData: { getStandardWeekData },
-      }) => {
-        setLang(undefined, Enum, getLocales, defaultLocalize);
-        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        const defaultListItems = weekEnum.toList();
-        const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
-        const defaultMap = weekEnum.toMap();
-        const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
         return {
-          Enum,
           weekEnum,
+          weekEnumFuncLabel,
+          localeCN,
           localeEN,
           getStandardWeekData,
           defaultListItems,
@@ -213,8 +275,103 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           customMap,
         };
       },
-      ({ weekEnum, localeEN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        localeCN,
+        localeEN,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
+        assertEnum(weekEnum, localeCN, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, localeEN, getStandardWeekData);
+        assertListItems({ defaultListItems, idNameListItems, locales: localeCN, getStandardWeekData });
+        assertMapItems({ defaultMap, customMap, locales: localeCN, getStandardWeekData });
+      }
+    );
+    engine.test(
+      'Should respect Enum options over global setting (undefined over English)',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, localeEN, getLocales },
+        WeekData: { getStandardWeekData },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig, { localize: undefined });
+        const defaultListItems = weekEnum.toList();
+        const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
+        const defaultMap = weekEnum.toMap();
+        const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
+        return {
+          weekEnum,
+          weekEnumFuncLabel,
+          localeEN,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+          defaultMap,
+          customMap,
+        };
+      },
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        localeEN,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
         assertEnum(weekEnum, localeEN, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, localeEN, getStandardWeekData);
+        assertListItems({ defaultListItems, idNameListItems, locales: localeEN, getStandardWeekData });
+        assertMapItems({ defaultMap, customMap, locales: localeEN, getStandardWeekData });
+      }
+    );
+    engine.test(
+      'Should respect Enum options over global setting (undefined over English), support delayed assign',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, localeEN, getLocales },
+        WeekData: { getStandardWeekData },
+      }) => {
+        setLang(undefined, Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig, { localize: undefined });
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const defaultListItems = weekEnum.toList();
+        const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
+        const defaultMap = weekEnum.toMap();
+        const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
+        return {
+          Enum,
+          weekEnum,
+          weekEnumFuncLabel,
+          localeEN,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+          defaultMap,
+          customMap,
+        };
+      },
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        localeEN,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
+        assertEnum(weekEnum, localeEN, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, localeEN, getStandardWeekData);
         assertListItems({ defaultListItems, idNameListItems, locales: localeEN, getStandardWeekData });
         assertMapItems({ defaultMap, customMap, locales: localeEN, getStandardWeekData });
       }
@@ -223,25 +380,58 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should respect Enum options over global setting (Chinese over undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
+        WeekConfig: {
+          StandardWeekConfig,
+          FuncLabelStandardWeekConfig,
+          setLang,
+          localeCN,
+          noLocale,
+          getLocales,
+          genSillyLocalizer,
+        },
         WeekData: { getStandardWeekData },
       }) => {
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+          localize: genSillyLocalizer('zh-CN', getLocales),
+        });
+        const weekEnumFuncLabel = Enum(FuncLabelStandardWeekConfig, {
+          localize: genSillyLocalizer('zh-CN', getLocales),
         });
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
-        return { weekEnum, localeCN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap };
+        return {
+          weekEnum,
+          weekEnumFuncLabel,
+          localeCN,
+          noLocale,
+          getStandardWeekData,
+          defaultListItems,
+          idNameListItems,
+          defaultMap,
+          customMap,
+        };
       },
-      ({ weekEnum, localeCN, getStandardWeekData, defaultListItems, idNameListItems, defaultMap, customMap }) => {
+      ({
+        weekEnum,
+        weekEnumFuncLabel,
+        localeCN,
+        noLocale,
+        getStandardWeekData,
+        defaultListItems,
+        idNameListItems,
+        defaultMap,
+        customMap,
+      }) => {
         assertEnum(weekEnum, localeCN, getStandardWeekData);
+        assertEnum(weekEnumFuncLabel, noLocale, getStandardWeekData);
         assertListItems({ defaultListItems, idNameListItems, locales: localeCN, getStandardWeekData });
         assertMapItems({ defaultMap, customMap, locales: localeCN, getStandardWeekData });
       }
     );
+
     engine.test(
       'Should respect Enum options over global setting (both undefined)',
       ({
@@ -517,104 +707,147 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
     engine.test(
       'Enum name should support global localization (English)',
-      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales } }) => {
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales, resourceLocalizer },
+      }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnumWithoutName = Enum(StandardWeekConfig);
         const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
-        return { weekEnum, weekEnumWithoutName, localeEN };
+        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => resourceLocalizer('weekDay.name') });
+        return { weekEnum, weekEnumFuncName, weekEnumWithoutName, localeEN };
       },
-      ({ weekEnum, weekEnumWithoutName, localeEN }) => {
+      ({ weekEnum, weekEnumFuncName, weekEnumWithoutName, localeEN }) => {
         engine.expect(weekEnumWithoutName.name).toBe(undefined);
         engine.expect(weekEnum.name).toBe(localeEN['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(localeEN['weekDay.name']);
       }
     );
     engine.test(
       'Enum name should support global localization (Chinese)',
-      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales } }) => {
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, resourceLocalizer },
+      }) => {
         setLang('zh-CN', Enum, getLocales, defaultLocalize);
         const weekEnumWithoutName = Enum(StandardWeekConfig);
         const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
-        return { weekEnum, weekEnumWithoutName, localeCN };
+        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => resourceLocalizer('weekDay.name') });
+        return { weekEnum, weekEnumFuncName, weekEnumWithoutName, localeCN };
       },
-      ({ weekEnum, weekEnumWithoutName, localeCN }) => {
+      ({ weekEnum, weekEnumFuncName, weekEnumWithoutName, localeCN }) => {
         engine.expect(weekEnumWithoutName.name).toBe(undefined);
         engine.expect(weekEnum.name).toBe(localeCN['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(localeCN['weekDay.name']);
       }
     );
     engine.test(
       'Enum name should support global localization (No Locale)',
-      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales } }) => {
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales, resourceLocalizer },
+      }) => {
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
-        return { weekEnum, noLocale };
+        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => resourceLocalizer('weekDay.name') });
+        return { weekEnum, weekEnumFuncName, noLocale };
       },
-      ({ weekEnum, noLocale }) => {
+      ({ weekEnum, weekEnumFuncName, noLocale }) => {
         engine.expect(weekEnum.name).toBe(noLocale['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(noLocale['weekDay.name']);
       }
     );
     engine.test(
       'Enum name should support custom localization (English)',
       ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, localeEN, getLocales, genSillyLocalizer },
+        EnumPlus: { Enum },
+        WeekConfig: { StandardWeekConfig, localeEN, noLocale, getLocales, genSillyLocalizer, resourceLocalizer },
       }) => {
         const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('en-US', getLocales, defaultLocalize),
+          localize: genSillyLocalizer('en-US', getLocales),
           name: 'weekDay.name',
         });
-        return { weekEnum, localeEN };
+        const weekEnumFuncName = Enum(StandardWeekConfig, {
+          localize: genSillyLocalizer('en-US', getLocales),
+          name: () => resourceLocalizer('weekDay.name'),
+        });
+        return { weekEnum, weekEnumFuncName, localeEN, noLocale };
       },
-      ({ weekEnum, localeEN }) => {
+      ({ weekEnum, weekEnumFuncName, localeEN, noLocale }) => {
         engine.expect(weekEnum.name).toBe(localeEN['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(noLocale['weekDay.name']);
       }
     );
     engine.test(
       'Enum name should support custom localization (Chinese)',
       ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, localeCN, getLocales, genSillyLocalizer },
+        EnumPlus: { Enum },
+        WeekConfig: { StandardWeekConfig, localeCN, noLocale, getLocales, genSillyLocalizer, resourceLocalizer },
       }) => {
         const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+          localize: genSillyLocalizer('zh-CN', getLocales),
           name: 'weekDay.name',
         });
-        return { weekEnum, localeCN };
+        const weekEnumFuncName = Enum(StandardWeekConfig, {
+          localize: genSillyLocalizer('zh-CN', getLocales),
+          name: () => resourceLocalizer('weekDay.name'),
+        });
+        return { weekEnum, weekEnumFuncName, localeCN, noLocale };
       },
-      ({ weekEnum, localeCN }) => {
+      ({ weekEnum, weekEnumFuncName, localeCN, noLocale }) => {
         engine.expect(weekEnum.name).toBe(localeCN['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(noLocale['weekDay.name']);
       }
     );
     engine.test(
       'Enum name should support custom localization (No Locale)',
       ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, noLocale, getLocales, genSillyLocalizer },
+        EnumPlus: { Enum },
+        WeekConfig: { StandardWeekConfig, noLocale, getLocales, genSillyLocalizer, resourceLocalizer },
       }) => {
         const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer(undefined, getLocales, defaultLocalize),
+          localize: genSillyLocalizer(undefined, getLocales),
           name: 'weekDay.name',
         });
-        return { weekEnum, noLocale };
+        const weekEnumFuncName = Enum(StandardWeekConfig, {
+          localize: genSillyLocalizer(undefined, getLocales),
+          name: () => resourceLocalizer('weekDay.name'),
+        });
+        return { weekEnum, weekEnumFuncName, noLocale };
       },
-      ({ weekEnum, noLocale }) => {
+      ({ weekEnum, weekEnumFuncName, noLocale }) => {
         engine.expect(weekEnum.name).toBe(noLocale['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(noLocale['weekDay.name']);
       }
     );
     engine.test(
       'Enum name should respect Enum options over global setting (Chinese over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
+        WeekConfig: {
+          StandardWeekConfig,
+          setLang,
+          localeCN,
+          localeEN,
+          getLocales,
+          genSillyLocalizer,
+          resourceLocalizer,
+        },
       }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('zh-CN', getLocales, defaultLocalize),
+          localize: genSillyLocalizer('zh-CN', getLocales),
           name: 'weekDay.name',
         });
-        return { weekEnum, localeCN };
+        const weekEnumFuncName = Enum(StandardWeekConfig, {
+          localize: genSillyLocalizer('zh-CN', getLocales),
+          name: () => resourceLocalizer('weekDay.name'),
+        });
+        return { weekEnum, weekEnumFuncName, localeCN, localeEN };
       },
-      ({ weekEnum, localeCN }) => {
+      ({ weekEnum, weekEnumFuncName, localeCN, localeEN }) => {
         engine.expect(weekEnum.name).toBe(localeCN['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(localeEN['weekDay.name']);
       }
     );
     engine.test(
@@ -623,11 +856,13 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         Enum.localize = undefined!;
         const weekEnumWithoutName = Enum(StandardWeekConfig);
         const weekEnum = Enum(StandardWeekConfig, { name: 'Week Days' });
-        return { weekEnum, weekEnumWithoutName };
+        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => 'Week Days' });
+        return { weekEnum, weekEnumFuncName, weekEnumWithoutName };
       },
-      ({ weekEnum, weekEnumWithoutName }) => {
+      ({ weekEnum, weekEnumFuncName, weekEnumWithoutName }) => {
         engine.expect(weekEnumWithoutName.name).toBe(undefined);
         engine.expect(weekEnum.name).toBe('Week Days');
+        engine.expect(weekEnumFuncName.name).toBe('Week Days');
       }
     );
   });
@@ -638,6 +873,11 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           typeof StandardWeekConfig,
           keyof typeof StandardWeekConfig,
           (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+        >
+      | IEnum<
+          typeof FuncLabelStandardWeekConfig,
+          keyof typeof FuncLabelStandardWeekConfig,
+          (typeof FuncLabelStandardWeekConfig)[keyof typeof FuncLabelStandardWeekConfig]['value']
         >
       | IEnum<
           typeof ShortLabelStandardWeekConfig,

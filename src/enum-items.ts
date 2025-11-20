@@ -3,6 +3,7 @@ import { EnumItemClass } from './enum-item';
 import type {
   EnumInit,
   EnumItemInit,
+  EnumItemLabel,
   EnumKey,
   EnumValue,
   ExactEqual,
@@ -107,7 +108,7 @@ export class EnumItemsArray<
         Object.keys(itemRaw).forEach((k) => {
           const metaKey = k as Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>;
           if (metaKey !== 'key' && metaKey !== 'value' && metaKey !== 'label') {
-            if (!meta[metaKey]) {
+            if (meta[metaKey] == null) {
               meta[metaKey] = [];
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -865,11 +866,11 @@ function parseEnumItem<
   V extends EnumValue,
 >(init: T, key: K): StandardEnumItemInit<V> {
   let value: V;
-  let label: string;
+  let label: EnumItemLabel;
   if (init != null) {
     if (typeof init === 'number' || typeof init === 'string' || typeof init === 'symbol') {
       value = init as V;
-      label = key as string;
+      label = key as EnumItemLabel;
     } else if (typeof init === 'object') {
       // Initialize using object
       if (Object.prototype.toString.call(init) === '[object Object]') {
@@ -877,30 +878,30 @@ function parseEnumItem<
           // type of {value, label}
           value = (init.value ?? key) as V;
           if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
-            label = init.label as string;
+            label = init.label!;
           } else {
-            label = key as string;
+            label = key as EnumItemLabel;
           }
         } else if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
           // typeof {label}
           value = key as unknown as V;
-          label = init.label ?? (key as string);
+          label = init.label ?? (key as EnumItemLabel);
         } else {
           // {} empty object
           value = key as unknown as V;
-          label = key as string;
+          label = key as EnumItemLabel;
         }
       } else {
         // Probably Date, RegExp and other primitive types
         value = init as V;
-        label = key as string;
+        label = key as EnumItemLabel;
       }
     } else {
       throw new Error(`Invalid enum item: ${JSON.stringify(init)}`);
     }
   } else {
     value = key as unknown as V;
-    label = key as string;
+    label = key as EnumItemLabel;
   }
   return { value, label };
 }

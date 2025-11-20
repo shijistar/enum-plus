@@ -127,6 +127,9 @@ export class EnumCollectionClass<
    *   set.
    */
   get name(): string | undefined {
+    if (typeof this.__options__?.name === 'function') {
+      return this.__options__.name(undefined!);
+    }
     const localize = this.__options__?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
       return localize(this.__options__?.name);

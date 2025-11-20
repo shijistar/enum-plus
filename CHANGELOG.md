@@ -2,6 +2,18 @@
 
 # enum-plus Changelog
 
+## 3.1.5
+
+2025-11-20
+
+### Features
+
+- ✨ Enhance enum creation to support function labels and enum name.
+
+### Bug Fixes
+
+- 🐞 Fix the issue where `enum.meta` is always empty in `meta-only` mode.
+
 ## 3.1.4
 
 2025-11-19

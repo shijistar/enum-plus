@@ -1,4 +1,5 @@
-import type { defaultLocalize as defaultLocalizeType, Enum as EnumType } from '@enum-plus';
+import type { defaultLocalize as defaultLocalizeType, EnumItemClass, Enum as EnumType } from '@enum-plus';
+import type { EnumValue, StandardEnumItemInit } from '@enum-plus/types';
 
 export const localeEN = {
   'weekDay.name': 'Week Days',
@@ -45,24 +46,28 @@ export const noLocale = {
 
 export let locales: typeof localeEN | typeof localeCN | typeof noLocale = noLocale;
 
-export let lang: 'en-US' | 'zh-CN' | undefined = undefined;
+export let lang: LangType = undefined;
+export type LangType = 'en-US' | 'zh-CN' | undefined;
 
-export function getLocales(language: typeof lang) {
-  return language === 'zh-CN' ? getLocales.localeCN : language ? getLocales.localeEN : noLocale;
+export function getLocales(language: LangType) {
+  const { localeCN, localeEN, noLocale } = getLocales;
+  return language === 'zh-CN' ? localeCN : language ? localeEN : noLocale;
 }
 getLocales.localeCN = localeCN;
 getLocales.localeEN = localeEN;
+getLocales.noLocale = noLocale;
 
 type getLocalesType = typeof getLocales;
 export function setLang(
-  value: typeof lang | undefined,
+  value: LangType | undefined,
   Enum: typeof EnumType,
   getLocales: getLocalesType,
   defaultLocalize: typeof defaultLocalizeType
 ) {
+  const { genSillyLocalizer } = setLang;
   lang = value;
   locales = getLocales(value);
-  Enum.localize = value ? setLang.genSillyLocalizer(value, getLocales, defaultLocalize) : defaultLocalize;
+  Enum.localize = value ? genSillyLocalizer(value, getLocales) : defaultLocalize;
 }
 setLang.genSillyLocalizer = genSillyLocalizer;
 
@@ -80,6 +85,15 @@ export const StandardWeekConfig = {
   Thursday: { value: 4, label: noLocale.Thursday, status: 'success' },
   Friday: { value: 5, label: noLocale.Friday, status: 'success' },
   Saturday: { value: 6, label: noLocale.Saturday, status: 'error' },
+} as const;
+export const FuncLabelStandardWeekConfig = {
+  Sunday: { value: 0, label: labelLocalizer },
+  Monday: { value: 1, label: labelLocalizer },
+  Tuesday: { value: 2, label: labelLocalizer },
+  Wednesday: { value: 3, label: labelLocalizer },
+  Thursday: { value: 4, label: labelLocalizer },
+  Friday: { value: 5, label: labelLocalizer },
+  Saturday: { value: 6, label: labelLocalizer },
 } as const;
 export const ShortLabelStandardWeekConfig = {
   Sunday: { value: 0, label: 'Sunday' },
@@ -180,41 +194,38 @@ export const WeekMetaOnlyConfig = Object.keys(StandardWeekConfig).reduce(
   {} as { [key in TKey]: Omit<TConfig[key], 'value' | 'label'> }
 );
 
-export function genSillyLocalizer(
-  language: typeof lang,
-  getLocales: getLocalesType,
-  defaultLocalize: typeof defaultLocalizeType
-) {
+export function genSillyLocalizer(language: LangType, getLocales: getLocalesType) {
   // should use function here to avoid closure. this is important for the e2e test cases.
   function sillyLocalize(
-    content: (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['label'] | NonNullable<string> | undefined
-  ): typeof content {
-    const locales = sillyLocalize.locales;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    content: (typeof noLocale)[keyof typeof noLocale] | (string & {}) | undefined
+  ): string | undefined {
+    const { locales } = sillyLocalize;
     switch (content) {
       case 'weekDay.name':
-        return locales['weekDay.name'] as typeof content;
+        return locales['weekDay.name'];
       case 'weekday.Sunday':
-        return locales.Sunday as typeof content;
+        return locales.Sunday;
       case 'weekday.Monday':
-        return locales.Monday as typeof content;
+        return locales.Monday;
       case 'weekday.Tuesday':
-        return locales.Tuesday as typeof content;
+        return locales.Tuesday;
       case 'weekday.Wednesday':
-        return locales.Wednesday as typeof content;
+        return locales.Wednesday;
       case 'weekday.Thursday':
-        return locales.Thursday as typeof content;
+        return locales.Thursday;
       case 'weekday.Friday':
-        return locales.Friday as typeof content;
+        return locales.Friday;
       case 'weekday.Saturday':
-        return locales.Saturday as typeof content;
-      case 'boolean.youes':
-        return locales.Yes as typeof content;
+        return locales.Saturday;
+      case 'boolean.Yes':
+        return locales.Yes;
       case 'boolean.No':
-        return locales.No as typeof content;
+        return locales.No;
       case 'date.FirstDay':
-        return locales.FirstDay as typeof content;
+        return locales.FirstDay;
       case 'date.LastDay':
-        return locales.LastDay as typeof content;
+        return locales.LastDay;
       default:
         return content;
     }
@@ -222,6 +233,33 @@ export function genSillyLocalizer(
   sillyLocalize.locales = getLocales(language);
   return sillyLocalize;
 }
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function labelLocalizer(item: EnumItemClass<StandardEnumItemInit<EnumValue>>) {
+  const { genSillyLocalizer, getLocales, noLocale, lang } = labelLocalizer;
+  const localizer = genSillyLocalizer(lang, getLocales);
+  return localizer(noLocale[item.key as keyof typeof noLocale]);
+}
+labelLocalizer.genSillyLocalizer = genSillyLocalizer;
+labelLocalizer.getLocales = getLocales;
+labelLocalizer.noLocale = noLocale;
+labelLocalizer.lang = undefined as LangType;
+Object.defineProperty(labelLocalizer, 'lang', {
+  get: () => lang,
+});
+
+export function resourceLocalizer(content: (typeof noLocale)[keyof typeof noLocale] | undefined) {
+  const { genSillyLocalizer, getLocales, lang } = resourceLocalizer;
+  const localizer = genSillyLocalizer(lang, getLocales);
+  return localizer(content);
+}
+resourceLocalizer.genSillyLocalizer = genSillyLocalizer;
+resourceLocalizer.getLocales = getLocales;
+resourceLocalizer.noLocale = noLocale;
+resourceLocalizer.lang = undefined as LangType;
+Object.defineProperty(resourceLocalizer, 'lang', {
+  get: () => lang,
+});
 
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
@@ -238,8 +276,10 @@ export function localizeConfigData(
   getLocales: getLocalesType | typeof localeEN | typeof localeCN | typeof noLocale,
   defaultLocalize?: typeof defaultLocalizeType
 ) {
+  const { lang } = localizeConfigData;
   if (typeof getLocales === 'function' && defaultLocalize) {
-    const localizer = localizeConfigData.genSillyLocalizer(lang, getLocales, defaultLocalize);
+    const { genSillyLocalizer } = localizeConfigData;
+    const localizer = genSillyLocalizer(lang, getLocales);
     return Object.keys(config).reduce(
       (acc, key) => {
         // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
@@ -267,3 +307,7 @@ export function localizeConfigData(
   }
 }
 localizeConfigData.genSillyLocalizer = genSillyLocalizer;
+localizeConfigData.lang = undefined as LangType;
+Object.defineProperty(localizeConfigData, 'lang', {
+  get: () => lang,
+});

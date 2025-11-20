@@ -15,7 +15,7 @@ import { toPlainEnums } from '../utils/index';
 const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Create Enum using static init data', () => {
     engine.test(
-      'Should be created with standard init data',
+      'Should be created with standard init config',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum, locales };
@@ -24,7 +24,23 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(weekEnum).toBeDefined();
         engine.expect(weekEnum).not.toBeNull();
         engine.expect(weekEnum?.items?.length).toBe(7);
-        engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardWeekData(locales));
+        engine.expect(toPlainEnums(weekEnum?.items)).toEqual(getStandardWeekData(locales));
+      }
+    );
+    engine.test(
+      'Should be created with functional label init config',
+      ({ EnumPlus: { Enum }, WeekConfig: { FuncLabelStandardWeekConfig, locales } }) => {
+        const weekEnum = Enum(FuncLabelStandardWeekConfig);
+        return {
+          weekEnum,
+          locales,
+        };
+      },
+      ({ weekEnum, locales }) => {
+        engine.expect(weekEnum).toBeDefined();
+        engine.expect(weekEnum).not.toBeNull();
+        engine.expect(weekEnum?.items?.length).toBe(7);
+        engine.expect(toPlainEnums(weekEnum?.items)).toEqual(getStandardWeekData(locales));
       }
     );
 

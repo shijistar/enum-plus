@@ -79,12 +79,17 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
       // console.log(evaluateResult);
 
       // Serialize the evaluation result and pass it to assertion method
-      const serializedStr = stringify({
-        _enumLocalize: EnumPlus.Enum.localize,
-        _lang: WeekConfig.lang,
-        _config: EnumPlus.Enum.config,
-        ...evaluateResult,
-      });
+      const serializedStr = stringify(
+        {
+          _enumLocalize: EnumPlus.Enum.localize,
+          _lang: WeekConfig.lang,
+          _config: EnumPlus.Enum.config,
+          ...evaluateResult,
+        },
+        {
+          // debug: true,
+        }
+      );
       // console.log('serialize result');
       // console.log(serializeResult);
       return serializedStr;
@@ -94,7 +99,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
     const initialState = parse(resultStr, {
       closure: globalClosure,
       // debug: true,
-      prettyPrint: false,
+      prettyPrint: true,
     });
     // Restore the lang to the Enum.localize
     setLang(initialState._lang, Enum, getLocales, defaultLocalize);

@@ -1,5 +1,12 @@
 import { internalConfig, localizer } from './global-config';
-import type { EnumItemInit, EnumKey, EnumValue, LocalizeInterface, ValueTypeFromSingleInit } from './types';
+import type {
+  EnumItemInit,
+  EnumItemLabel,
+  EnumKey,
+  EnumValue,
+  LocalizeInterface,
+  ValueTypeFromSingleInit,
+} from './types';
 import { IS_ENUM_ITEM } from './utils';
 
 /**
@@ -20,7 +27,7 @@ export class EnumItemClass<
   const P = any,
 > {
   private _options: EnumItemOptions<T, K, V, P> | undefined;
-  private _label: string | undefined;
+  private _label: EnumItemLabel | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _localize: (content: string | undefined) => any;
 
@@ -34,10 +41,10 @@ export class EnumItemClass<
    * @param raw The original initialization object | 原始初始化对象
    * @param options Optional settings for the enum item | 枚举项的可选设置
    */
-  constructor(key: K, value: V, label: string, raw: T, options?: EnumItemOptions<T, K, V, P>) {
+  constructor(key: K, value: V, label: EnumItemLabel, raw: T, options?: EnumItemOptions<T, K, V, P>) {
     this.key = key;
     this.value = value;
-    this.label = label;
+    this.label = label as string;
     this.raw = raw;
 
     // Should use _label instead of label closure, to make sure it can be serialized correctly
@@ -62,6 +69,10 @@ export class EnumItemClass<
           const labelPrefix = this._options?.labelPrefix;
           const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
           let localeKey = this._label;
+          if (typeof localeKey === 'function') {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return localeKey(this as any);
+          }
           if (autoLabel && labelPrefix != null) {
             if (typeof autoLabel === 'function') {
               localeKey = autoLabel({
