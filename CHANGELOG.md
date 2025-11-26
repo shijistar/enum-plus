@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.1.6
+
+2025-11-26
+
+### Features
+
+- ✨ Expand the AnyEnum type to be compatible with all enumeration types.
+
 ## 3.1.5
 
 2025-11-20

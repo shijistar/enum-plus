@@ -9,6 +9,7 @@ import type {
   EnumItemLabel,
   EnumKey,
   EnumValue,
+  IsAny,
   LocalizeInterface,
   ValueTypeFromSingleInit,
 } from './types';
@@ -277,7 +278,8 @@ export interface EnumInterface {
  * - **EN:** A generic enum type that can be used to represent any enum collection
  * - **CN:** 一个通用枚举类型，可以用来表示任何枚举集合
  */
-export type AnyEnum = IEnum<EnumInit<string, EnumValue>> & NativeEnumMembers<EnumInit<string, EnumValue>>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyEnum = IEnum<any>;
 // @ts-expect-error: because T does not satisfy EnumInit<K, V>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericAnyEnum<T extends EnumInit<keyof any, EnumValue>> = IEnum<T> &
@@ -311,7 +313,13 @@ export interface IEnum<
    *   all enum items through this alias
    * - **CN:** `items`数组的别名，当任何枚举的key与`items`冲突时，可以通过此别名访问所有枚举项
    */
-  readonly [ITEMS]: T extends { items: unknown } ? EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P> : never;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly [ITEMS]: IsAny<T> extends true
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      EnumItemClass<any, string, EnumValue, P>[]
+    : T extends { items: unknown }
+      ? EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P>
+      : never;
   /**
    * - **EN:** All items in the enumeration as an array
    *
@@ -322,15 +330,20 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  readonly items: T extends { items: unknown }
-    ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>
-    : EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly items: IsAny<T> extends true
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      EnumItemClass<any, string, EnumValue, P>[] & IEnumItems<any, string, EnumValue, P>
+    : T extends { items: unknown }
+      ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>
+      : EnumItemClass<T[K], K, V, P>[] & IEnumItems<T, K, V, P>;
   /**
    * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can access all
    *   enum keys through this alias
    * - **CN:** `keys`数组的别名，当任何枚举的key与`keys`冲突时，可以通过此别名访问所有枚举项的keys
    */
-  readonly [KEYS]: T extends { keys: unknown } ? K[] : never;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly [KEYS]: IsAny<T> extends true ? string[] : T extends { keys: unknown } ? K[] : never;
   /**
    * - **EN:** Get all keys of the enumeration items as an array
    *
@@ -341,15 +354,19 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  readonly keys: T extends { keys: unknown }
-    ? ValueTypeFromSingleInit<T['keys'], 'keys', T[K] extends number | undefined ? number : 'keys'>
-    : K[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly keys: IsAny<T> extends true
+    ? string[]
+    : T extends { keys: unknown }
+      ? ValueTypeFromSingleInit<T['keys'], 'keys', T[K] extends number | undefined ? number : 'keys'>
+      : K[];
   /**
    * - **EN:** Alias for the `values` array, when any enum key conflicts with `values`, you can access
    *   all enum values through this alias
    * - **CN:** `values`数组的别名，当任何枚举的key与`values`冲突时，可以通过此别名访问所有枚举项的values
    */
-  readonly [VALUES]: T extends { values: unknown } ? V[] : never;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly [VALUES]: IsAny<T> extends true ? EnumValue[] : T extends { values: unknown } ? V[] : never;
   /**
    * - **EN:** Get all values of the enumeration items as an array
    *
@@ -360,15 +377,19 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  readonly values: T extends { values: unknown }
-    ? ValueTypeFromSingleInit<T['values'], 'values', T[K] extends number | undefined ? number : 'values'>
-    : V[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly values: IsAny<T> extends true
+    ? EnumValue[]
+    : T extends { values: unknown }
+      ? ValueTypeFromSingleInit<T['values'], 'values', T[K] extends number | undefined ? number : 'values'>
+      : V[];
   /**
    * - **EN:** Alias for the `labels` array, when any enum key conflicts with `labels`, you can access
    *   all enum labels through this alias
    * - **CN:** `labels`数组的别名，当任何枚举的key与`labels`冲突时，可以通过此别名访问所有枚举项的labels
    */
-  readonly [LABELS]: T extends { labels: unknown } ? string[] : never;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly [LABELS]: IsAny<T> extends true ? string[] : T extends { labels: unknown } ? string[] : never;
   /**
    * - **EN:** Get all labels of the enumeration items as an array
    *
@@ -379,30 +400,48 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  readonly labels: T extends { labels: unknown }
-    ? ValueTypeFromSingleInit<T['labels'], 'labels', T[K] extends number | undefined ? number : 'labels'>
-    : string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly labels: IsAny<T> extends true
+    ? string[]
+    : T extends { labels: unknown }
+      ? ValueTypeFromSingleInit<T['labels'], 'labels', T[K] extends number | undefined ? number : 'labels'>
+      : string[];
   /**
    * - **EN:** Alias for the `named` array, when any enum key conflicts with `named`, you can access
    *   all enum names through this alias
    * - **CN:** `named`数组的别名，当任何枚举的key与`named`冲突时，可以通过此别名访问所有枚举项的names
    */
-  readonly [NAMED]: T extends { named: unknown } ? IEnumItems<T, K, V, P>['named'] : never;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly [NAMED]: IsAny<T> extends true
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Record<string, EnumItemClass<any, string, EnumValue, P>>
+    : T extends { named: unknown }
+      ? IEnumItems<T, K, V, P>['named']
+      : never;
   /**
    * - **EN:** Get all names of the enumeration items as an array
    *
    * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
    * > modification methods
    */
-  readonly named: T extends { named: unknown }
-    ? ValueTypeFromSingleInit<T['named'], 'named', T[K] extends number | undefined ? number : 'named'>
-    : IEnumItems<T, K, V, P>['named'];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly named: IsAny<T> extends true
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Record<string, EnumItemClass<any, string, EnumValue, P>>
+    : T extends { named: unknown }
+      ? ValueTypeFromSingleInit<T['named'], 'named', T[K] extends number | undefined ? number : 'named'>
+      : IEnumItems<T, K, V, P>['named'];
   /**
    * - **EN:** Alias for the `meta` array, when any enum key conflicts with `meta`, you can access all
    *   enum meta information through this alias
    * - **CN:** `meta`数组的别名，当任何枚举的key与`meta`冲突时，可以通过此别名访问所有枚举项的meta信息
    */
-  readonly [META]: T extends { meta: unknown } ? IEnumItems<T, K, V, P>['meta'] : never;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly [META]: IsAny<T> extends true
+    ? Record<string, unknown[]>
+    : T extends { meta: unknown }
+      ? IEnumItems<T, K, V, P>['meta']
+      : never;
   /**
    * - **EN:** Get all meta information of the enumeration items as an array
    *
@@ -413,9 +452,12 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  readonly meta: T extends { meta: unknown }
-    ? ValueTypeFromSingleInit<T['meta'], 'meta', T[K] extends number | undefined ? number : 'meta'>
-    : IEnumItems<T, K, V, P>['meta'];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly meta: IsAny<T> extends true
+    ? Record<string, unknown[]>
+    : T extends { meta: unknown }
+      ? ValueTypeFromSingleInit<T['meta'], 'meta', T[K] extends number | undefined ? number : 'meta'>
+      : IEnumItems<T, K, V, P>['meta'];
 }
 
 export type NativeEnumMembers<

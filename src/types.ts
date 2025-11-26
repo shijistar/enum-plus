@@ -235,3 +235,5 @@ export type ArrayToMap<A extends Record<string, any>[] | readonly Record<string,
 export type ExactEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
 
 export type IsNever<T> = [T] extends [never] ? true : false;
+
+export type IsAny<T> = 0 extends 1 & T ? true : false;
