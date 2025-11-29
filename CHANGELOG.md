@@ -16,7 +16,7 @@
 
 ### Features
 
-- ✨ Enhance enum creation to support function labels and enum name.
+- ✨ Enhance enum creation to support `function` labels and enum name.
 
 ### Bug Fixes
 

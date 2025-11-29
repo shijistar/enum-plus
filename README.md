@@ -184,6 +184,8 @@ WeekEnum.items[0].label; // I love Sunday
 ```
 
 > Want to enable code completion when entering `label`? Please refer to the [Enable Code Intelligence for Enum Item Labels](#-enable-code-intelligence-for-enum-item-labels) section for more details.
+>
+> Want to customize the logic of the `label` field? You can pass in a function. Please refer to the [Custom Label Logic](#custom-label-logic) section for more details.
 
 ### 3. Label-Only Format
 
@@ -1134,6 +1136,30 @@ Enum.localize = (key) => {
 ```
 
 > Once you have completed this feature, it is recommended that you consider publishing it as an npm package and share it in the [Awesome Plugins](#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](./docs/plugin-development.md).
+
+### Custom Label Logic
+
+Of course, if you are not using any internationalization framework but want to control the localization rules of enum `label` yourself, or use different custom logic for each enum item, you can pass a function to the `label` field:
+
+```js
+const WeekEnum = Enum({
+  Sunday: { value: 0, label: () => 'Sunday' },
+  Monday: { value: 1, label: () => 'Monday' },
+});
+```
+
+Additionally, `enum.name` also supports using a custom function.
+
+```js
+const WeekEnum = Enum(
+  {
+    //...
+  },
+  {
+    name: () => 'Week',
+  }
+);
+```
 
 ---
 
