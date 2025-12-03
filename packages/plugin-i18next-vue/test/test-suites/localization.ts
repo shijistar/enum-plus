@@ -86,9 +86,9 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
           .expect(weekLabels)
           .toEqual(Array.from(weekEnum.items.map((item) => AltLocales[`alternative:${item.raw.label}`])));
         const sunday = weekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(AltLocales['alternative:weekday.sunday']);
-        engine.expect(text(() => sunday.toString())).toBe(AltLocales['alternative:weekday.sunday']);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(text(() => sunday.label)).toBe(AltLocales['alternative:weekday.Sunday']);
+        engine.expect(text(() => sunday.toString())).toBe(AltLocales['alternative:weekday.Sunday']);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(AltLocales['alternative:weekday.Sunday']);
       }
     );
     engine.test(
@@ -118,9 +118,9 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
           .expect(text(() => weekEnum.labels.join(',')).split(','))
           .toEqual(Array.from(weekEnum.items).map((item) => AltLocales[`alternative:foo.${item.raw.label}`]));
         const sunday = weekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(AltLocales['alternative:foo.weekday.sunday']);
-        engine.expect(text(() => sunday.toString())).toBe(AltLocales['alternative:foo.weekday.sunday']);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(AltLocales['alternative:foo.weekday.sunday']);
+        engine.expect(text(() => sunday.label)).toBe(AltLocales['alternative:foo.weekday.Sunday']);
+        engine.expect(text(() => sunday.toString())).toBe(AltLocales['alternative:foo.weekday.Sunday']);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(AltLocales['alternative:foo.weekday.Sunday']);
       }
     );
 
@@ -153,9 +153,9 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
           .expect(text(() => weekEnum.labels.join(',')).split(','))
           .toEqual(Array.from(weekEnum.items).map((item) => AltLocales[`alternative:${item.raw.label}`]));
         const sunday = weekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(AltLocales['alternative:weekday.sunday']);
-        engine.expect(text(() => sunday.toString())).toBe(AltLocales['alternative:weekday.sunday']);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(AltLocales['alternative:weekday.sunday']);
+        engine.expect(text(() => sunday.label)).toBe(AltLocales['alternative:weekday.Sunday']);
+        engine.expect(text(() => sunday.toString())).toBe(AltLocales['alternative:weekday.Sunday']);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(AltLocales['alternative:weekday.Sunday']);
       }
     );
 
@@ -184,9 +184,9 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
           .expect(text(() => weekEnum.labels.join(',')).split(','))
           .toEqual(Array.from(weekEnum.items).map((item) => `${item.raw.label}(overridden)`));
         const sunday = weekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(`weekday.sunday(overridden)`);
-        engine.expect(text(() => sunday.toString())).toBe(`weekday.sunday(overridden)`);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(`weekday.sunday(overridden)`);
+        engine.expect(text(() => sunday.label)).toBe(`weekday.Sunday(overridden)`);
+        engine.expect(text(() => sunday.toString())).toBe(`weekday.Sunday(overridden)`);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(`weekday.Sunday(overridden)`);
       }
     );
 
@@ -210,9 +210,9 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
         engine.expect(weekEnum.name).toBe(Locales['weekDay.name']);
         engine.expect(weekEnum.labels).toEqual(Array.from(weekEnum.items).map((item) => Locales[item.raw.label]));
         const sunday = weekEnum.items[0];
-        engine.expect(sunday.label).toBe(Locales['weekday.sunday']);
-        engine.expect(sunday.toString()).toBe(Locales['weekday.sunday']);
-        engine.expect(sunday.toLocaleString()).toBe(Locales['weekday.sunday']);
+        engine.expect(sunday.label).toBe(Locales['weekday.Sunday']);
+        engine.expect(sunday.toString()).toBe(Locales['weekday.Sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(Locales['weekday.Sunday']);
       }
     );
 
@@ -248,9 +248,9 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
           .expect(weekEnum.labels)
           .toEqual(Array.from(weekEnum.items).map((item) => AltLocales[`alternative:foo.${item.raw.label}`]));
         const sunday = weekEnum.items[0];
-        engine.expect(sunday.label).toBe(AltLocales['alternative:foo.weekday.sunday']);
-        engine.expect(sunday.toString()).toBe(AltLocales['alternative:foo.weekday.sunday']);
-        engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:foo.weekday.sunday']);
+        engine.expect(sunday.label).toBe(AltLocales['alternative:foo.weekday.Sunday']);
+        engine.expect(sunday.toString()).toBe(AltLocales['alternative:foo.weekday.Sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:foo.weekday.Sunday']);
       }
     );
 
@@ -286,9 +286,9 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
           .expect(weekEnum.labels)
           .toEqual(Array.from(weekEnum.items).map((item) => AltLocales[`alternative:foo.${item.raw.label}`]));
         const sunday = weekEnum.items[0];
-        engine.expect(sunday.label).toBe(AltLocales['alternative:foo.weekday.sunday']);
-        engine.expect(sunday.toString()).toBe(AltLocales['alternative:foo.weekday.sunday']);
-        engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:foo.weekday.sunday']);
+        engine.expect(sunday.label).toBe(AltLocales['alternative:foo.weekday.Sunday']);
+        engine.expect(sunday.toString()).toBe(AltLocales['alternative:foo.weekday.Sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(AltLocales['alternative:foo.weekday.Sunday']);
       }
     );
   });
@@ -384,18 +384,18 @@ const testLocalization = (engine: TestEngineBase<'vitest-browser'>) => {
     engine.expect(weekName).toEqual(Locales['weekDay.name']);
     engine.expect(weekLabels).toEqual(Array.from(weekEnum.items).map((item) => Locales[item.raw.label]));
 
-    engine.expect(sundayLabel).toBe(Locales['weekday.sunday']);
-    engine.expect(sundayToString).toBe(Locales['weekday.sunday']);
-    engine.expect(sundayToLocaleString).toBe(Locales['weekday.sunday']);
+    engine.expect(sundayLabel).toBe(Locales['weekday.Sunday']);
+    engine.expect(sundayToString).toBe(Locales['weekday.Sunday']);
+    engine.expect(sundayToLocaleString).toBe(Locales['weekday.Sunday']);
 
     engine.expect(altWeekName).toEqual(AltLocales['alternative:weekDay.name']);
     engine
       .expect(altWeekLabels)
       .toEqual(Array.from(altWeekEnum.items).map((item) => AltLocales[item.raw.label as keyof typeof AltLocales]));
 
-    engine.expect(altSundayLabel).toBe(AltLocales['alternative:weekday.sunday']);
-    engine.expect(altSundayToString).toBe(AltLocales['alternative:weekday.sunday']);
-    engine.expect(altSundayToLocaleString).toBe(AltLocales['alternative:weekday.sunday']);
+    engine.expect(altSundayLabel).toBe(AltLocales['alternative:weekday.Sunday']);
+    engine.expect(altSundayToString).toBe(AltLocales['alternative:weekday.Sunday']);
+    engine.expect(altSundayToLocaleString).toBe(AltLocales['alternative:weekday.Sunday']);
   }
 };
 

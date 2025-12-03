@@ -1,0 +1,71 @@
+{
+  "name": "@enum-plus/plugin-next-international",
+  "version": "1.0.0",
+  "description": "A plugin for enum-plus that supports internationalization of enums through next-international",
+  "keywords": [
+    "enum",
+    "enumeration",
+    "enum-plus",
+    "plugin",
+    "typescript",
+    "i18n",
+    "next-international",
+    "localization",
+    "globalization",
+    "internationalization",
+    "front-end",
+    "node.js",
+    "ssr"
+  ],
+  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next",
+  "bugs": {
+    "url": "https://github.com/shijistar/enum-plus/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shijistar/enum-plus.git"
+  },
+  "license": "MIT",
+  "author": "李凤宝(Leo) <shijistar@gmail.com>",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "es",
+    "es-legacy",
+    "LICENSE",
+    "CHANGELOG.md",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "scripts": {
+    "build": "run-p build:es build:es-legacy build:lib",
+    "build:es": "father build",
+    "build:es-legacy": "cross-env LEGACY=1 father build",
+    "build:lib": "run-s ts2lib task:copy-lib",
+    "prepublishOnly": "npm run build && npm run test",
+    "task:copy-lib": "tsx ../../scripts/copy-lib.ts",
+    "test": "jest",
+    "test-legacy": "jest -c jest-legacy.config.js",
+    "test:browser": "npm run test:browser:bundle && playwright test",
+    "test:browser:bundle": "node scripts/browser-test-bundle.js",
+    "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
+    "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
+    "ts2lib": "tsc -p tsconfig.lib.json"
+  },
+  "devDependencies": {
+    "next": "^16.0.8",
+    "next-international": "^1.3.1"
+  },
+  "peerDependencies": {
+    "enum-plus": "^3.0.0",
+    "next-international": ">=1.1.0",
+    "react": ">=16.0.0"
+  },
+  "packageManager": "npm@10.9.2",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}

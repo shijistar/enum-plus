@@ -93,9 +93,9 @@ const testLocalization = <L extends boolean>(
           .expect(weekLabels)
           .toEqual(Array.from(newWeekEnum.items.map((item) => Locales[item.raw.label as keyof typeof Locales] || '-')));
         const sunday = newWeekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(Locales['weekday.sunday']);
-        engine.expect(text(() => sunday.toString())).toBe(Locales['weekday.sunday']);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(Locales['weekday.sunday']);
+        engine.expect(text(() => sunday.label)).toBe(Locales['weekday.Sunday']);
+        engine.expect(text(() => sunday.toString())).toBe(Locales['weekday.Sunday']);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(Locales['weekday.Sunday']);
         engine.expect(text(() => newWeekEnum.named.WrongDay.label)).toBe('-');
       }
     );
@@ -134,9 +134,9 @@ const testLocalization = <L extends boolean>(
           .expect(weekLabels)
           .toEqual(Array.from(newWeekEnum.items.map((item) => Locales[item.raw.label as keyof typeof Locales] || '-')));
         const sunday = newWeekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(Locales['weekday.sunday']);
-        engine.expect(text(() => sunday.toString())).toBe(Locales['weekday.sunday']);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(Locales['weekday.sunday']);
+        engine.expect(text(() => sunday.label)).toBe(Locales['weekday.Sunday']);
+        engine.expect(text(() => sunday.toString())).toBe(Locales['weekday.Sunday']);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(Locales['weekday.Sunday']);
         engine.expect(text(() => newWeekEnum.named.WrongDay.label)).toBe('-');
       }
     );
@@ -166,9 +166,9 @@ const testLocalization = <L extends boolean>(
           .expect(text(() => weekEnum.labels.join(',')).split(','))
           .toEqual(Array.from(weekEnum.items).map((item) => `${item.raw.label}(overridden)`));
         const sunday = weekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(`weekday.sunday(overridden)`);
-        engine.expect(text(() => sunday.toString())).toBe(`weekday.sunday(overridden)`);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(`weekday.sunday(overridden)`);
+        engine.expect(text(() => sunday.label)).toBe(`weekday.Sunday(overridden)`);
+        engine.expect(text(() => sunday.toString())).toBe(`weekday.Sunday(overridden)`);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(`weekday.Sunday(overridden)`);
       }
     );
 
@@ -196,9 +196,9 @@ const testLocalization = <L extends boolean>(
         engine.expect(weekEnum.name).toBe(Locales['weekDay.name']);
         engine.expect(weekEnum.labels).toEqual(Array.from(weekEnum.items).map((item) => Locales[item.raw.label]));
         const sunday = weekEnum.items[0];
-        engine.expect(sunday.label).toBe(Locales['weekday.sunday']);
-        engine.expect(sunday.toString()).toBe(Locales['weekday.sunday']);
-        engine.expect(sunday.toLocaleString()).toBe(Locales['weekday.sunday']);
+        engine.expect(sunday.label).toBe(Locales['weekday.Sunday']);
+        engine.expect(sunday.toString()).toBe(Locales['weekday.Sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(Locales['weekday.Sunday']);
       }
     );
 
@@ -235,9 +235,9 @@ const testLocalization = <L extends boolean>(
           .expect(weekLabels)
           .toEqual(Array.from(newWeekEnum.items.map((item) => Locales[item.raw.label as keyof typeof Locales] || '-')));
         const sunday = newWeekEnum.items[0];
-        engine.expect(text(() => sunday.label)).toBe(Locales['weekday.sunday']);
-        engine.expect(text(() => sunday.toString())).toBe(Locales['weekday.sunday']);
-        engine.expect(text(() => sunday.toLocaleString())).toBe(Locales['weekday.sunday']);
+        engine.expect(text(() => sunday.label)).toBe(Locales['weekday.Sunday']);
+        engine.expect(text(() => sunday.toString())).toBe(Locales['weekday.Sunday']);
+        engine.expect(text(() => sunday.toLocaleString())).toBe(Locales['weekday.Sunday']);
         engine.expect(text(() => newWeekEnum.named.WrongDay.label)).toBe('-');
       }
     );
@@ -321,9 +321,9 @@ const testLocalization = <L extends boolean>(
     engine.expect(weekName).toEqual(Locales['weekDay.name']);
     engine.expect(weekLabels).toEqual(Array.from(weekEnum.items).map((item) => Locales[item.raw.label]));
 
-    engine.expect(sundayLabel).toBe(Locales['weekday.sunday']);
-    engine.expect(sundayToString).toBe(Locales['weekday.sunday']);
-    engine.expect(sundayToLocaleString).toBe(Locales['weekday.sunday']);
+    engine.expect(sundayLabel).toBe(Locales['weekday.Sunday']);
+    engine.expect(sundayToString).toBe(Locales['weekday.Sunday']);
+    engine.expect(sundayToLocaleString).toBe(Locales['weekday.Sunday']);
   }
 };
 
