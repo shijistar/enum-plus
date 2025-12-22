@@ -12,7 +12,7 @@ const clientLocalizePlugin: PluginFunc<ClientLocalizePluginOptions> = (pluginOpt
         '[enum-plus][plugin-next-international] is not initialized properly. Please make sure to use `PatchedI18nProviderClient` to wrap your application.'
       );
     }
-    return t?.(key as string, undefined!);
+    return t(key as string, undefined!);
   };
 };
 

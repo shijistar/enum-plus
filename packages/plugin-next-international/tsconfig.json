@@ -9,6 +9,6 @@
       "@enum-plus": ["../../lib"]
     }
   },
-  "include": ["../../tslib", "./src", "./test"],
+  "include": ["../../tslib", "./src", "./test", "app"],
   "exclude": ["node_modules", "es", "lib"]
 }

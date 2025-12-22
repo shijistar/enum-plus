@@ -11,23 +11,23 @@ export const getAltData = (options: {
     (acc, key) => {
       acc[key as keyof typeof StandardWeekConfig] = {
         ...StandardWeekConfig[key as keyof typeof StandardWeekConfig],
-        label: `alternative:${noLocale[key as keyof typeof noLocale]}` as never,
+        label: `alternative.${noLocale[key as keyof typeof noLocale]}` as never,
       } as never;
       return acc;
     },
     {} as {
       -readonly [key in keyof typeof StandardWeekConfig]: Omit<(typeof StandardWeekConfig)[key], 'label'> & {
-        label: `alternative:${(typeof noLocale)[key]}`;
+        label: `alternative.${(typeof noLocale)[key]}`;
       };
     }
   );
   const AltLocales = Object.keys(noLocale).reduce(
     (acc, key) => {
-      acc[`alternative:${noLocale[key as keyof typeof noLocale]}`] =
+      acc[`alternative.${noLocale[key as keyof typeof noLocale]}`] =
         `${(locales as Record<string, string>)[key]} 2` as never;
       return acc;
     },
-    {} as { -readonly [key in `alternative:${(typeof noLocale)[keyof typeof noLocale]}`]: string }
+    {} as { -readonly [key in `alternative.${(typeof noLocale)[keyof typeof noLocale]}`]: string }
   );
   return {
     AltStandardWeekConfig: altStandardWeekConfig,
