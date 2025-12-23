@@ -1,3 +1,5 @@
+'use client';
+
 import type { ImportedLocales } from 'international-types';
 import type { createI18nClient } from 'next-international/client';
 

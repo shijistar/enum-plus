@@ -4,16 +4,21 @@ import { localizeConfigData, StandardWeekConfig } from '@enum-plus/test/data/wee
 import type TestEngineBase from '@enum-plus/test/engines/base';
 // eslint-disable-next-line import/no-unresolved
 import { copyList, pickArray } from '@enum-plus/test/utils';
-import { changeLanguage } from 'i18next';
-import type { I18nextPluginOptions } from '../../src';
+import { act, render } from '@testing-library/react';
+import type { ClientLocalizePluginOptions } from '../../src';
+import AutoChangeLangPage from '../components/AutoChangeLang';
+import Page from '../components/Page';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, options: { plugin: P }) => {
   engine.describe('The isMatch plugin', () => {
     engine.test(
       'should filter out enum items by label',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
         Enum.install(options.plugin);
+        await act(async () => {
+          render(<Page />);
+        });
         const weekEnum = Enum(StandardWeekConfig);
         const findBy_Mon = weekEnum.items.filter((item) => weekEnum.isMatch('Mon', item));
         const findBy_mon = weekEnum.items.filter((item) => weekEnum.isMatch('mon', item));
@@ -200,8 +205,11 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
 
     engine.test(
       'should filter out plain objects by label',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(options.plugin);
+        await act(async () => {
+          render(<Page />);
+        });
         const weekEnum = Enum(StandardWeekConfig);
         const weekItems = [
           ...Object.values(StandardWeekConfig).map((item) => ({ value: item.value, label: item.label })),
@@ -227,9 +235,16 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
 
     engine.test(
       'should filter out items by label in Chinese',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeCN } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeCN } }) => {
         Enum.install(options.plugin);
-        changeLanguage('zh-CN');
+        // changeLanguage('zh-CN');
+        await act(async () => {
+          render(
+            <Page>
+              <AutoChangeLangPage locale="zh-CN" />
+            </Page>
+          );
+        });
         const weekEnum = Enum(StandardWeekConfig);
         const findBy_Mon = weekEnum.items.filter((item) => weekEnum.isMatch('一', item));
         const findBy_Mon_CaseSensitive = weekEnum.items.filter((item) => weekEnum.isMatchCaseSensitive('一', item));
@@ -254,11 +269,20 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
 
     engine.test(
       'should be able to modify the search field by plugin options',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
         Enum.install(options.plugin, {
-          defaultSearchField: 'value',
-        } satisfies I18nextPluginOptions);
-        changeLanguage('en');
+          isMatch: {
+            defaultSearchField: 'value',
+          },
+        } satisfies ClientLocalizePluginOptions);
+        // changeLanguage('en');
+        await act(async () => {
+          render(
+            <Page locale="zh-CN">
+              <AutoChangeLangPage locale="en" />
+            </Page>
+          );
+        });
         const weekEnum = Enum(StandardWeekConfig);
         const findBy_2 = weekEnum.items.filter((item) => weekEnum.isMatch('2', item));
         const findBy_2_CaseSensitive = weekEnum.items.filter((item) => weekEnum.isMatchCaseSensitive('2', item));
@@ -282,11 +306,13 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
     );
     engine.test(
       'should allow searching by incompatible fields',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
         Enum.install(options.plugin, {
-          defaultSearchField: 'raw',
-        } satisfies I18nextPluginOptions);
-        changeLanguage('en');
+          isMatch: {
+            defaultSearchField: 'raw',
+          },
+        } satisfies ClientLocalizePluginOptions);
+        // changeLanguage('en');
         const weekEnum = Enum(StandardWeekConfig);
         const findByRaw = weekEnum.items.filter((item) => weekEnum.isMatch('Mon', item));
         const findByRawCaseSensitive = weekEnum.items.filter((item) => weekEnum.isMatchCaseSensitive('Mon', item));
@@ -302,7 +328,7 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
       'should respect the options.translate function if provided',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
         Enum.install(options.plugin);
-        changeLanguage('en');
+        // changeLanguage('en');
         const weekEnum = Enum(StandardWeekConfig);
         const switchMondayTuesday = (key: string | undefined) => {
           const localeKey = Object.keys(noLocale).find((k) => noLocale[k as keyof typeof noLocale] === key);
@@ -311,12 +337,12 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
           else return localeEN[localeKey as keyof typeof localeEN];
         };
         const matchTue = weekEnum.items.filter((item) =>
-          weekEnum.isMatch('mon', item, {
+          weekEnum.isMatch('tue', item, {
             translate: switchMondayTuesday,
           })
         );
         const matchTueCaseSensitive = weekEnum.items.filter((item) =>
-          weekEnum.isMatchCaseSensitive('mon', item, {
+          weekEnum.isMatchCaseSensitive('tue', item, {
             translate: switchMondayTuesday,
           })
         );

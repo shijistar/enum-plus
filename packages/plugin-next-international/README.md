@@ -2,32 +2,32 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
-# @enum-plus/plugin-i18next
+# @enum-plus/plugin-next-international
 
-[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-i18next.svg)](https://www.npmjs.com/package/@enum-plus/plugin-i18next)
-[![license](https://img.shields.io/npm/l/@enum-plus/plugin-i18next.svg)](https://www.npmjs.com/package/@enum-plus/plugin-i18next)
+[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-next-international.svg)](https://www.npmjs.com/package/@enum-plus/plugin-next-international)
+[![license](https://img.shields.io/npm/l/@enum-plus/plugin-next-international.svg)](https://www.npmjs.com/package/@enum-plus/plugin-next-international)
 
-> Integrates with [i18next](https://www.i18next.com) to enable internationalization of enum labels.
+> Integrates [next-international](https://next-international.vercel.app) to achieve internationalization of enum labels
 
 ## Introduction
 
-`@enum-plus/plugin-i18next` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that automatically integrates with [i18next](https://www.i18next.com/) to achieve internationalization of enum labels. It allows you to use i18next localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
+`@enum-plus/plugin-next-international` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that automatically integrates with [next-international](https://next-international.vercel.app) to achieve internationalization of enum labels. It allows you to use next-international localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
 
-> This plugin does not support automatic UI updates after switching languages, which requires integration with front-end frameworks (such as React, Vue, etc.). Please consider using the [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) plugins.
+> ⚠️ Please note that this plugin only supports client-side environments and does not support server-side rendering.
 
 ## Installation
 
 ```bash
-npm install @enum-plus/plugin-i18next
+npm install @enum-plus/plugin-next-international
 ```
 
-Import the `@enum-plus/plugin-i18next` plugin and install it in the entry file of your application:
+Import the `@enum-plus/plugin-next-international` plugin and install it in the entry file of your application:
 
 ```js
-import i18nPlugin from '@enum-plus/plugin-i18next';
+import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
 import { Enum } from 'enum-plus';
 
-Enum.install(i18nPlugin);
+Enum.install(clientI18nPlugin);
 ```
 
 ## Plugin Options
@@ -35,61 +35,44 @@ Enum.install(i18nPlugin);
 When installing the plugin, you can pass a configuration object to set global options for the plugin:
 
 ```ts
-Enum.install(i18nextPlugin, {
+Enum.install(clientI18nPlugin, {
   localize: {
-    // Set the i18next instance, defaults to the global i18next instance if necessary
-    instance: i18next,
-    // Options to pass to the i18next.t method
-    tOptions: {
-      // Set the namespace
-      ns: 'my-namespace',
-      // Set the default value for the return value
-      defaultValue: '-',
-      // Other options supported by the i18next.t method
-      // Please refer to https://www.i18next.com/translation-function/essentials#overview-options
-    },
+    /**
+     * Localized output result, default is 'text'
+     *
+     * - `text`: Returns a plain text string that does not change with language
+     * - `component`: Returns a React component instance that automatically updates the displayed
+     *   content when the language is switched
+     */
+    mode: 'text',
   },
-});
-```
-
-`tOptions` also supports a function form to dynamically generate options, and can even directly return the final translated text.
-
-```ts
-// Use function form to dynamically generate tOptions
-Enum.install(i18nextPlugin, {
-  localize: {
-    tOptions: (key) => {
-      if (key === 'week.sunday') {
-        return { ns: 'my-namespace' };
-      }
-      return { ns: 'translation' }; // Default namespace
-    },
-  },
-});
-```
-
-You can even return a string directly in `tOptions` as the final translated text to have full control over the behavior of the `localize` method.
-
-```ts
-Enum.install(i18nextPlugin, {
-  localize: {
-    tOptions: (key) => {
-      if (key === 'week.sunday') {
-        return 'Sunday'; // Directly return the translated text
-      }
-      return instance.t(key); // Return the default translation in other cases
-    },
+  isMatch: {
+    defaultSearchField: 'label', // Default search field for isMatch method, default is 'label'
   },
 });
 ```
 
 ## Basic Usage
 
+### Enum Labels Respond to Language Changes
+
 You can achieve internationalization of enum labels by using localization keys in the enum definition.
 
-```js
-import { Enum } from 'enum-plus';
+- **Using Text Mode (Default)**
 
+```js
+import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
+import { Enum } from 'enum-plus';
+import { useChangeLocale } from './path/to/client';
+
+// index.js
+Enum.install(clientI18nPlugin, {
+  localize: {
+    mode: 'text',
+  },
+});
+
+// SomeComponent.js
 const WeekEnum = Enum(
   {
     Monday: { value: 1, label: 'week.monday' },
@@ -105,4 +88,106 @@ WeekEnum.name; // Week
 i18next.changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一
 WeekEnum.name; // 周
+```
+
+- **Using Component Mode**
+
+```js
+import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
+import { Enum } from 'enum-plus';
+import { useChangeLocale } from './path/to/client';
+
+// index.js
+Enum.install(clientI18nPlugin, {
+  localize: {
+    mode: 'component',
+  },
+});
+
+// SomeComponent.js
+const changeLanguage = useChangeLocale();
+const WeekEnum = Enum(
+  {
+    Monday: { value: 1, label: 'week.monday' },
+    Tuesday: { value: 2, label: 'week.tuesday' },
+  },
+  {
+    name: 'weekDays.name', // Optional enum type name
+  }
+);
+
+WeekEnum.label(1); // A ReactElement, displaying "Monday", that updates on language change
+WeekEnum.name; // A ReactElement, displaying "Week", that updates on language change
+
+changeLanguage('zh-CN');
+WeekEnum.label(1); // A ReactElement, displaying "星期一", that updates on language change
+WeekEnum.name; // A ReactElement, displaying "周", that updates on language change
+```
+
+From the generated enum UI components, when the language changes, the labels will automatically update:
+
+```tsx
+import { Button, Select } from 'antd';
+import { useChangeLocale } from './path/to/client';
+
+const changeLanguage = useChangeLocale();
+
+<Select options={WeekEnum.items} defaultValue={WeekEnum.Monday} />;
+// Selected and displayed: Monday
+
+<Button onClick={() => changeLanguage('zh-CN')}>切换到中文</Button>;
+
+// When the button is clicked, the Select component will automatically update to display "星期一"
+```
+
+### Dropdown Search
+
+In `component` mode, since the enum's `label` has become a component instance rather than a string type, it cannot be directly used for text search. You can use the `isMatch` or `isMatchCaseSensitive` methods to filter enum items.
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
+```
+
+## Other API
+
+### isMatch
+
+The `isMatch` method is used to filter enum items based on a search text, supporting fuzzy matching of the enum item's `label`, ignoring case sensitivity.
+
+<sup>**_[Method]_**</sup> &nbsp; `isMatch(searchText: string, item: EnumItem): boolean`
+
+- Dropdown Search
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
+```
+
+- Regular filtering
+
+```ts
+const results = WeekEnum.filter((item) => WeekEnum.isMatch('mon', item)); // Filters enum items whose label contains 'mon', ignoring case
+```
+
+### isMatchCaseSensitive
+
+The `isMatchCaseSensitive` method is used to filter enum items based on a search text, supporting fuzzy matching of the enum item's `label`, with case sensitivity.
+
+<sup>**_[Method]_**</sup> &nbsp; `isMatchCaseSensitive(searchText: string, item: EnumItem): boolean`
+
+- Dropdown Search
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatchCaseSensitive} />;
+```
+
+- Regular filtering
+
+```ts
+const results = WeekEnum.filter((item) => WeekEnum.isMatchCaseSensitive('Mon', item)); // Filters enum items whose label contains 'Mon', with case sensitivity
 ```

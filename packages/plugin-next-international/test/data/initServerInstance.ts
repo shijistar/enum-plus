@@ -15,12 +15,12 @@ export const initServerInstance = () => {
     en: async () => ({
       ...Object.keys(noLocale).reduce(
         (acc, key) => {
-          acc[('default.' + noLocale[key as keyof typeof noLocale]) as `default.${keyof typeof localeEN}`] = (
-            localeEN as Record<string, string>
-          )[key] as never;
+          acc[noLocale[key as keyof typeof noLocale] as keyof typeof localeEN] = (localeEN as Record<string, string>)[
+            key
+          ] as never;
           return acc;
         },
-        {} as { -readonly [key in `default.${keyof typeof localeEN}`]: string }
+        {} as { -readonly [key in keyof typeof localeEN]: string }
       ),
       ...Object.keys(noLocale).reduce(
         (acc, key) => {
@@ -34,12 +34,12 @@ export const initServerInstance = () => {
     'zh-CN': async () => ({
       ...Object.keys(noLocale).reduce(
         (acc, key) => {
-          acc[('default.' + noLocale[key as keyof typeof noLocale]) as `default.${keyof typeof localeEN}`] = (
-            localeCN as Record<string, string>
-          )[key] as never;
+          acc[noLocale[key as keyof typeof noLocale] as keyof typeof localeEN] = (localeCN as Record<string, string>)[
+            key
+          ] as never;
           return acc;
         },
-        {} as { -readonly [key in `default.${keyof typeof localeEN}`]: string }
+        {} as { -readonly [key in keyof typeof localeEN]: string }
       ),
       ...Object.keys(noLocale).reduce(
         (acc, key) => {

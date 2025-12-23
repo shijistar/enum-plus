@@ -3,9 +3,11 @@
  * It runs before EACH TEST FILE in the suite.
  */
 import { initClientInstance } from './data/initClientInstance';
+import { initServerInstance } from './data/initServerInstance';
 
 beforeAll(() => {
   initClientInstance();
+  initServerInstance();
   jest.spyOn(console, 'warn').mockImplementation(() => {
     // Mock console.warn to suppress warnings during tests
   });

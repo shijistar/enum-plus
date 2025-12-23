@@ -2,32 +2,32 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
-# @enum-plus/plugin-i18next
+# @enum-plus/plugin-next-international
 
-[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-i18next.svg)](https://www.npmjs.com/package/@enum-plus/plugin-i18next)
-[![license](https://img.shields.io/npm/l/@enum-plus/plugin-i18next.svg)](https://www.npmjs.com/package/@enum-plus/plugin-i18next)
+[![npm version](https://img.shields.io/npm/v/@enum-plus/plugin-next-international.svg)](https://www.npmjs.com/package/@enum-plus/plugin-next-international)
+[![license](https://img.shields.io/npm/l/@enum-plus/plugin-next-international.svg)](https://www.npmjs.com/package/@enum-plus/plugin-next-international)
 
-> 集成 [i18next](https://www.i18next.com) 并实现枚举标签的国际化
+> 集成 [next-international](https://next-international.vercel.app) 并实现枚举标签的国际化
 
 ## 简介
 
-`@enum-plus/plugin-i18next` 是 [enum-plus](https://github.com/shijistar/enum-plus) 的一个插件，自动集成 [i18next](https://www.i18next.com/) 实现枚举标签的国际化。它允许你在枚举定义中使用 i18next 的本地化键，并动态显示为当前语言的翻译文本。
+`@enum-plus/plugin-next-international` 是 [enum-plus](https://github.com/shijistar/enum-plus) 的一个插件，自动集成 [next-international](https://next-international.vercel.app) 实现枚举标签的国际化。它允许你在枚举定义中使用 next-international 的本地化键，并动态显示为当前语言的翻译文本。
 
-> 该插件不支持切换语言后自动更新 UI，这需要结合前端框架（如 React、Vue 等）来实现。请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) 插件。
+> ⚠️ 请注意，该插件仅支持在客户端环境，不支持在服务端渲染。
 
 ## 安装
 
 ```bash
-npm install @enum-plus/plugin-i18next
+npm install @enum-plus/plugin-next-international
 ```
 
-在应用程序的入口文件中，导入 `@enum-plus/plugin-i18next` 插件并安装：
+在应用程序的入口文件中，导入 `@enum-plus/plugin-next-international` 插件并安装：
 
 ```js
-import i18nPlugin from '@enum-plus/plugin-i18next';
+import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
 import { Enum } from 'enum-plus';
 
-Enum.install(i18nPlugin);
+Enum.install(clientI18nPlugin);
 ```
 
 ## 插件选项
@@ -35,61 +35,44 @@ Enum.install(i18nPlugin);
 安装插件时，可以传入一个配置对象，用于设置插件的全局选项：
 
 ```ts
-Enum.install(i18nextPlugin, {
+Enum.install(clientI18nPlugin, {
   localize: {
-    // 设置 i18next 实例，如果有必要，默认为全局的 i18next 实例
-    instance: i18next,
-    // 传递给 i18next.t 方法的默认选项
-    tOptions: {
-      // 设置命名空间
-      ns: 'my-namespace',
-      // 设置返回值的默认值
-      defaultValue: '-',
-      // 其它 i18next.t 方法支持的选项
-      // 请参考 https://www.i18next.com/translation-function/essentials#overview-options
-    },
+    /**
+     * 本地化输出结果，默认为 'text'
+     *
+     * - `text`: 返回纯文本字符串，不会随语言变化而变化
+     * - `component`: 返回 React 组件实例，切换语言后会自动更新显示内容
+     */
+    mode: 'text',
+  },
+  isMatch: {
+    defaultSearchField: 'label', // isMatch 方法的默认搜索字段，默认为 'label'
   },
 });
 ```
 
-`tOptions` 还支持函数形式，以便动态生成选项，
+## 用法
 
-```ts
-// 使用函数形式动态生成 tOptions
-Enum.install(i18nextPlugin, {
-  localize: {
-    tOptions: (key) => {
-      if (key === 'week.sunday') {
-        return { ns: 'my-namespace' };
-      }
-      return { ns: 'translation' }; // 默认命名空间
-    },
-  },
-});
-```
-
-你甚至可以在 `tOptions` 中直接返回一个字符串，作为最终的翻译文本，以完全控制 `localize` 方法的行为。
-
-```ts
-Enum.install(i18nextPlugin, {
-  localize: {
-    tOptions: (key) => {
-      if (key === 'week.sunday') {
-        return '周日'; // 直接返回翻译文本
-      }
-      return instance.t(key); // 其它情况返回默认翻译
-    },
-  },
-});
-```
-
-## 基本用法
+### 枚举标签响应语言的变化
 
 可以通过在枚举定义中使用本地化键，来实现枚举标签的国际化。
 
-```js
-import { Enum } from 'enum-plus';
+- **使用文本模式（默认）**
 
+```js
+import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
+import { Enum } from 'enum-plus';
+import { useChangeLocale } from './path/to/client';
+
+// index.js
+Enum.install(clientI18nPlugin, {
+  localize: {
+    mode: 'text',
+  },
+});
+
+// SomeComponent.js
+const changeLanguage = useChangeLocale();
 const WeekEnum = Enum(
   {
     Monday: { value: 1, label: 'week.monday' },
@@ -103,7 +86,109 @@ const WeekEnum = Enum(
 WeekEnum.label(1); // Monday
 WeekEnum.name; // Week
 
-i18next.changeLanguage('zh-CN');
+changeLanguage('zh-CN');
 WeekEnum.label(1); // 星期一
 WeekEnum.name; // 周
+```
+
+- **使用组件模式**
+
+```js
+import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
+import { Enum } from 'enum-plus';
+import { useChangeLocale } from './path/to/client';
+
+// index.js
+Enum.install(clientI18nPlugin, {
+  localize: {
+    mode: 'component',
+  },
+});
+
+// SomeComponent.js
+const changeLanguage = useChangeLocale();
+const WeekEnum = Enum(
+  {
+    Monday: { value: 1, label: 'week.monday' },
+    Tuesday: { value: 2, label: 'week.tuesday' },
+  },
+  {
+    name: 'weekDays.name', // 枚举类型名称，可选
+  }
+);
+
+WeekEnum.label(1); // React组件，显示为 Monday，可自动响应语言变化
+WeekEnum.name; // React组件，显示为 Week，可自动响应语言变化
+
+changeLanguage('zh-CN');
+WeekEnum.label(1); // React组件，显示为 星期一，可自动响应语言变化
+WeekEnum.name; // React组件，显示为 周，可自动响应语言变化
+```
+
+从枚举生成的UI组件，当语言变化时，标签会自动更新：
+
+```tsx
+import { Button, Select } from 'antd';
+import { useChangeLocale } from './path/to/client';
+
+const changeLanguage = useChangeLocale();
+
+<Select options={WeekEnum.items} defaultValue={WeekEnum.Monday} />;
+// 选中并显示: Monday
+
+<Button onClick={() => changeLanguage('zh-CN')}>切换语言</Button>;
+
+// 切换语言后，选中项的文本会自动更新为: 星期一
+```
+
+### 下拉框搜索
+
+在 `组件` 模式下，由于枚举的 `label` 已经变成了组件实例，而不是字符串类型，故无法直接用于文本搜索。可以使用 `isMatch` 或 `isMatchCaseSensitive` 方法来实现对枚举项的过滤。
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
+```
+
+## 其它API
+
+### 💎 isMatch
+
+<sup>**_\[方法]_**</sup> &nbsp; `isMatch(searchText: string, item: EnumItem): boolean`
+
+`isMatch` 方法用于根据搜索文本过滤枚举项，支持对枚举项的 `label` 进行模糊匹配，且忽略大小写。
+
+- 下拉框搜索
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatch} />;
+```
+
+- 常规过滤的用法
+
+```js
+WeekEnum.items.filter((item) => WeekEnum.isMatch('Mon', item)); // 过滤出 label 中包含 'Mon' 的枚举项
+```
+
+### 💎 isMatchCaseSensitive
+
+<sup>**_\[方法]_**</sup> &nbsp; `isMatchCaseSensitive(searchText: string, item: EnumItem): boolean`
+
+`isMatchCaseSensitive` 方法用于根据搜索文本过滤枚举项，支持对枚举项的 `label` 进行模糊匹配，且区分大小写。
+
+- 下拉框搜索
+
+```tsx
+import { Select } from 'antd';
+
+<Select options={WeekEnum.items} filterOption={WeekEnum.isMatchCaseSensitive} />;
+```
+
+- 常规过滤用法
+
+```js
+WeekEnum.items.filter((item) => WeekEnum.isMatch('mon', item)); // 过滤出 label 中包含 'mon' 的枚举项 (区分大小写)
 ```

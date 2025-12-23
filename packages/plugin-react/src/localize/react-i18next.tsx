@@ -4,6 +4,7 @@ import type { ReactI18nextLocaleProps } from '../components/ReactI18nLocale';
 import ReactI18nLocale, { translate as translateI18n } from '../components/ReactI18nLocale';
 import type { IsMatchOptions } from '../isMatch';
 import { isMatchCore } from '../isMatch';
+import '../isMatch/typing';
 
 export type ReactI18nextPluginOptions = Pick<ReactI18nextLocaleProps, 'useTranslationOptions' | 'tOptions'> &
   IsMatchOptions;

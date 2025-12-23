@@ -1,17 +1,16 @@
+'use client';
+
 import { type FC, type ReactNode, useEffect } from 'react';
 import type { ImportedLocales } from 'international-types';
 import type { createI18nClient } from 'next-international/client';
 import { runtime } from './internal';
+import type { PatchedContextType } from './PatchedContext';
+import PatchedContext from './PatchedContext';
 
 export type PatchedI18nProviderClientProps = Parameters<
   ReturnType<typeof createI18nClient<ImportedLocales>>['I18nProviderClient']
->[0] & {
-  /**
-   * - **EN:** The `I18n` instance created by `createI18nClient`.
-   * - **CN:** 通过 `createI18nClient` 创建的 `I18n` 实例。
-   */
-  I18n: ReturnType<typeof createI18nClient<ImportedLocales>>;
-};
+>[0] &
+  PatchedContextType;
 
 const PatchedI18nProviderClient: FC<PatchedI18nProviderClientProps> = (props) => {
   const { I18n, children, ...rest } = props;
@@ -19,7 +18,9 @@ const PatchedI18nProviderClient: FC<PatchedI18nProviderClientProps> = (props) =>
 
   return (
     <I18nProviderClient {...rest}>
-      <Inner I18n={I18n}>{children}</Inner>
+      <PatchedContext.Provider value={{ I18n }}>
+        <Inner I18n={I18n}>{children}</Inner>
+      </PatchedContext.Provider>{' '}
     </I18nProviderClient>
   );
 };
