@@ -4,24 +4,20 @@
 
 ## 1.0.0
 
-2025-10-5
+2025-12-23
 
-Initial release of `@enum-plus/plugin-i18next`.
+Initial release of `@enum-plus/plugin-next-international`.
 
 ### ✨ Features
 
-- Seamless integration of `enum-plus` with `i18next`.
-- Global `localize` options:
-  - `instance`: custom `i18next` instance (defaults to global).
-  - `tOptions`: static object passed to `i18next.t`.
-  - Functional `tOptions(key)` returning:
-    - A dynamic options object, or
-    - A final translated string (short‑circuit translation).
-- Supports enum item `label` fields as i18next keys (e.g. `week.monday`).
-- Supports enum type `name` localization key.
-
-### Not Included
-
-- Automatic UI repaint after language change.
-
-> Please consider framework plugins like [@enum-plus/plugin-react](https://www.npmjs.com/package/@enum-plus/plugin-react) / [@enum-plus/plugin-i18next-vue](https://www.npmjs.com/package/@enum-plus/plugin-i18next-vue).
+- React integration for `enum-plus` with automatic UI re-render on language change.
+- Enum labels & enum name localize to React elements (not plain strings).
+- Global localization configuration fields:
+  - `localize.mode`: localization mode (`text` or `component`).
+    - `text`: returns plain text, does not auto-update on language change.
+    - `component`: returns a React component that auto-updates on language change.
+  - `isMatch.defaultSearchField` (for search helpers)
+- Search helper APIs for non-string labels:
+  - `WeekEnum.isMatch(search, item)` (case-insensitive fuzzy match)
+  - `WeekEnum.isMatchCaseSensitive(search, item)`
+- Works seamlessly with enum-generated option arrays (e.g. for `<Select />`).
