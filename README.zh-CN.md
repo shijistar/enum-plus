@@ -1061,6 +1061,10 @@ Enum.install(antdPlugin, {
 
   集成 [vue-i18n](https://vue-i18n.intlify.dev) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
 
+- [@enum-plus/plugin-next-international](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-next-international)
+
+  在 Next.js 项目中，集成 [next-international](https://next-international.vercel.app/) 并实现枚举标签的国际化，支持切换语言后自动更新UI。
+
 我们正在开发以下插件：
 
 - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要你的帮助来开发这个插件！_

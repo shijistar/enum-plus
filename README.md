@@ -1074,6 +1074,10 @@ The following plugins are available. You can choose to install them based on you
 
   Integrates [vue-i18n](https://vue-i18n.intlify.dev) to enable internationalization of enum labels and listen for language changes to auto update components.
 
+- [@enum-plus/plugin-next-international](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-next-international)
+
+  Integrates [next-international](https://next-international.vercel.app/) in Next.js projects to enable internationalization of enum labels and listen for language changes to auto update components.
+
 We are working on the following plugins:
 
 - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto update components. _We need your help to develop this plugin!_
