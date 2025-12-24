@@ -13,7 +13,7 @@
 
 `@enum-plus/plugin-next-international` is a plugin for [enum-plus](https://github.com/shijistar/enum-plus) that automatically integrates with [next-international](https://next-international.vercel.app) to achieve internationalization of enum labels. It allows you to use next-international localization keys in your enum definitions, which are dynamically displayed as translated text for the current language.
 
-> ⚠️ Please note that this plugin only supports client-side environments and does not support server-side rendering.
+> ⚠️ Please note that this plugin only supports client-side environments. It does not support server-side rendering, as next-international's server-side API only supports asynchronous internationalization resolution.
 
 ## Installation
 
@@ -23,11 +23,45 @@ npm install @enum-plus/plugin-next-international
 
 Import the `@enum-plus/plugin-next-international` plugin and install it in the entry file of your application:
 
+_index.js_
+
 ```js
 import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
 import { Enum } from 'enum-plus';
 
 Enum.install(clientI18nPlugin);
+```
+
+_i18n/client.ts_
+
+```js
+'use client';
+
+import { createI18nClient } from 'next-international/client';
+
+export const i18nClient = createI18nClient({
+  'en-US': () => import('./locales/en-US.json'),
+  'zh-CN': () => import('./locales/zh-CN.json'),
+});
+
+export const { useI18n, useScopedI18n, I18nProviderClient } = i18nClient;
+```
+
+_app.tsx_
+
+Wrap your application with `PatchedI18nProviderClient` from the plugin to ensure proper initialization of the plugin.
+
+```tsx
+import { PatchedI18nProviderClient } from '@enum-plus/plugin-next-international';
+import { i18nClient } from './i18n/client';
+
+export default function App() {
+  return (
+    <PatchedI18nProviderClient locale="en-US" I18n={i18nClient}>
+      Hello enum-plus!
+    </PatchedI18nProviderClient>
+  );
+}
 ```
 
 ## Plugin Options

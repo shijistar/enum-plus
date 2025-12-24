@@ -13,7 +13,7 @@
 
 `@enum-plus/plugin-next-international` 是 [enum-plus](https://github.com/shijistar/enum-plus) 的一个插件，自动集成 [next-international](https://next-international.vercel.app) 实现枚举标签的国际化。它允许你在枚举定义中使用 next-international 的本地化键，并动态显示为当前语言的翻译文本。
 
-> ⚠️ 请注意，该插件仅支持在客户端环境，不支持在服务端渲染。
+> ⚠️ 请注意，该插件仅支持在客户端环境。不支持在服务端渲染，因为 next-international 的服务端 API 仅支持异步解析国际化。
 
 ## 安装
 
@@ -23,11 +23,45 @@ npm install @enum-plus/plugin-next-international
 
 在应用程序的入口文件中，导入 `@enum-plus/plugin-next-international` 插件并安装：
 
+_index.js_
+
 ```js
 import { clientI18nPlugin } from '@enum-plus/plugin-next-international';
 import { Enum } from 'enum-plus';
 
 Enum.install(clientI18nPlugin);
+```
+
+_i18n/client.ts_
+
+```js
+'use client';
+
+import { createI18nClient } from 'next-international/client';
+
+export const i18nClient = createI18nClient({
+  'en-US': () => import('./locales/en-US.json'),
+  'zh-CN': () => import('./locales/zh-CN.json'),
+});
+
+export const { useI18n, useScopedI18n, I18nProviderClient } = i18nClient;
+```
+
+_app.tsx_
+
+将应用程序包裹在来自插件的 `PatchedI18nProviderClient` 中，以确保正确初始化插件。
+
+```tsx
+import { PatchedI18nProviderClient } from '@enum-plus/plugin-next-international';
+import { i18nClient } from './i18n/client';
+
+export default function App() {
+  return (
+    <PatchedI18nProviderClient locale="en-US" I18n={i18nClient}>
+      Hello enum-plus!
+    </PatchedI18nProviderClient>
+  );
+}
 ```
 
 ## 插件选项
