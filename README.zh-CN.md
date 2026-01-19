@@ -1147,7 +1147,7 @@ const WeekEnum = Enum({
 
 另外，enum\.name 也支持使用自定义函数。
 
-````js
+```js
 const WeekEnum = Enum(
   {
     //...
@@ -1188,17 +1188,17 @@ Enum 提供了丰富的内置方法和属性，它们已经可以满足大多数
       reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
     }
   }
-````
+  ```
 
-_index.ts_
+  _index.ts_
 
-然后在项目的入口文件中导入这个文件：
+  然后在项目的入口文件中导入这个文件：
 
-```ts
-import './my-enum-extension';
+  ```ts
+  import './my-enum-extension';
 
-WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: '星期一' }]
-```
+  WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: '星期一' }]
+  ```
 
 - **JavaScript 项目**
 
