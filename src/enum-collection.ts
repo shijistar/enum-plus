@@ -157,7 +157,7 @@ export class EnumCollectionClass<
     }
   }
 
-  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> {
+  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> extends never ? typeof keyOrValue : Extract<KV, K | V> {
     return this.__items__.has(keyOrValue);
   }
 

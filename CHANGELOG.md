@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.1.7
+
+2026-1-26
+
+### Features
+
+- ✨ Update `has` method type signature for better type inference.
+
 ## 3.1.6
 
 2025-11-26

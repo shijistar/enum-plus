@@ -221,7 +221,7 @@ export class EnumItemsArray<
     }
   }
 
-  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> {
+  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> extends never ? typeof keyOrValue : Extract<KV, K | V> {
     return this.some((i) => i.value === (keyOrValue as unknown as V) || i.key === (keyOrValue as unknown as K));
   }
 
@@ -569,7 +569,7 @@ export interface InheritableEnumItems<
    *
    * @returns {boolean} Whether the enumeration item exists | 枚举项是否存在
    */
-  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V>;
+  has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> extends never ? typeof keyOrValue : Extract<KV, K | V>;
 
   /**
    * **EN:** Find an enumeration item by key or value, or by custom meta fields

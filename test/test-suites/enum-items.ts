@@ -145,7 +145,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items.label('Sunday')).toBe(locales.Sunday);
       engine.expect(weekEnum.items.label(6)).toBe(locales.Saturday);
       engine.expect(weekEnum.items.label('Saturday')).toBe(locales.Saturday);
-      engine.expect(weekEnum.items.label(7 as typeof weekEnum.valueType)).toBeUndefined();
+      engine.expect(weekEnum.items.label(7)).toBeUndefined();
     }
   );
 
@@ -158,7 +158,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
     ({ weekEnum }) => {
       engine.expect(weekEnum.items.key(0)).toBe('Sunday');
       engine.expect(weekEnum.items.key(6)).toBe('Saturday');
-      engine.expect(weekEnum.items.key(7 as typeof weekEnum.valueType)).toBeUndefined();
+      engine.expect(weekEnum.items.key(7)).toBeUndefined();
     }
   );
 
@@ -173,7 +173,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items.has('Sunday')).toBe(true);
       engine.expect(weekEnum.items.has(6)).toBe(true);
       engine.expect(weekEnum.items.has('Saturday')).toBe(true);
-      engine.expect(weekEnum.items.has(7 as typeof weekEnum.valueType)).toBe(false);
+      engine.expect(weekEnum.items.has(7)).toBe(false);
     }
   );
 
