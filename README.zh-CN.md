@@ -53,7 +53,7 @@
 还有哪些令人兴奋的特性呢？请继续探索吧！或者不妨先看下这个使用视频。
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.6/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.7/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
@@ -119,9 +119,9 @@ yarn add enum-plus
 
 ```html
 <!-- 兼容 ES2020 的现代版本 -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.6/umd/enum-plus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.7/umd/enum-plus.min.js"></script>
 <!-- 兼容 ES2015 的早期版本 -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.6/umd/enum-plus-legacy.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.7/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - 最新版本:
@@ -135,10 +135,10 @@ yarn add enum-plus
 
 ⬇️ **下载文件**:
 
-- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.6/enum-plus.umd.min.js.gz)
-- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.6/enum-plus.umd.tar.gz) (含 sourcemap)
-- [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.6/enum-plus-legacy.umd.min.js.gz)
-- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.6/enum-plus-legacy.umd.tar.gz) (含 sourcemap)
+- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.7/enum-plus.umd.min.js.gz)
+- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.7/enum-plus.umd.tar.gz) (含 sourcemap)
+- [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.7/enum-plus-legacy.umd.min.js.gz)
+- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.7/enum-plus-legacy.umd.tar.gz) (含 sourcemap)
 
 > 你也可以从 [GitHub 发布](https://github.com/shijistar/enum-plus/releases/tag/v3.0.1) 下载这些文件
 
