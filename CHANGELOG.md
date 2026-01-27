@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.1.8
+
+2026-1-28
+
+### Features
+
+- ✨ Enhance `EnumLocaleExtends` type definition to support global extension of `EnumItemLabel`.
+
 ## 3.1.7
 
 2026-1-26

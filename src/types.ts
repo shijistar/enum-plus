@@ -2,7 +2,11 @@ import type { EnumLocaleExtends } from 'enum-plus/extension';
 
 export type { LocalizeInterface } from './localize-interface';
 
-export type EnumItemLabel = EnumLocaleExtends['LocaleKeys'];
+// @ts-expect-error: because dynamic import types
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+type _EIL = import('enum-plus/extension').EnumLocaleExtends['EnumItemLabel'];
+
+export type EnumItemLabel = 'EnumItemLabel' extends keyof EnumLocaleExtends ? _EIL : EnumLocaleExtends['LocaleKeys'];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumValue> =
