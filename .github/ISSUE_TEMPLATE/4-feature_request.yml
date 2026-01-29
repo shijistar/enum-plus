@@ -37,6 +37,7 @@ body:
         - '@enum-plus/plugin-i18next-vue'
         - '@enum-plus/plugin-vue-i18n'
         - '@enum-plus/plugin-angular'
+        - '@enum-plus/plugin-next-international'
         - other
     validations:
       required: true

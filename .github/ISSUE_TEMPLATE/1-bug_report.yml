@@ -32,6 +32,7 @@ body:
         - '@enum-plus/plugin-i18next-vue'
         - '@enum-plus/plugin-vue-i18n'
         - '@enum-plus/plugin-angular'
+        - '@enum-plus/plugin-next-international'
         - other
     validations:
       required: true
@@ -109,6 +110,21 @@ body:
       placeholder: e.g. 5.9.3
     validations:
       required: true
+
+  - type: textarea
+    id: tsconfig-content
+    attributes:
+      label: tsconfig.json (Optional)
+      description: Please provide the core content of your tsconfig.json file, if your issue is related to TypeScript features. Some sensitive information should be omitted. This is optional but can help in diagnosing the issue.
+      placeholder: |
+        The core content of your tsconfig.json, e.g.:
+        {
+          "compilerOptions": {
+            "target": "ES2016",
+            "module": "NodeNext",
+            "moduleResolution": "NodeNext"
+          }
+        }
 
   # Operating system
   - type: dropdown
