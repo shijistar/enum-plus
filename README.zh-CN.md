@@ -58,6 +58,8 @@
   </a>
 </p>
 
+[为什么我的项目安装后没有 TypeScript 类型提示？](#为什么我的项目安装后没有-typescript-类型提示)
+
 <details>
   <summary>这里有几个常见问题，有兴趣也可以阅读一下</summary>
   
@@ -1449,9 +1451,9 @@ const weekInit = { Sunday: 0, Monday: 1 };
 const WeekEnum = Enum(weekInit);
 ```
 
-### 为什么升级到 3.0 之后，所有枚举的类型都变成了 any？
+### 为什么我的项目安装后没有 TypeScript 类型提示？
 
-这是因为 `tsconfig.json` 的配置不正确，请仔细阅读 [迁移指南](./docs/migration-guide-v2-to-v3.zh-CN.md#升级-typescript)。
+这是因为 tsconfig.json 中的配置不正确，请参考[这篇文档](./docs/migration-guide-v2-to-v3.zh-CN.md#修改-tsconfigjson)，了解更多详情。
 
 ### 我想定义一个通用的枚举类型，可以表示任意枚举，目前的枚举类型定义太复杂了，有没有简单的办法？
 

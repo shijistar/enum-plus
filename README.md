@@ -58,6 +58,8 @@ What other exciting features are there? Please continue to explore! Or you can c
   </a>
 </p>
 
+[Why my project has no TypeScript type hints after installation?](#why-my-project-has-no-typescript-type-hints-after-installation)
+
 <details>
   <summary>Here are some hot questions, feel free to check them out</summary>
   
@@ -1464,9 +1466,9 @@ const weekInit = { Sunday: 0, Monday: 1 };
 const WeekEnum = Enum(weekInit);
 ```
 
-### Why did all enum types become `any` after upgrading to version 3.0?
+### Why my project has no TypeScript type hints after installation?
 
-This is due to incorrect configuration in `tsconfig.json`. Please read the [Migration Guide](./docs/migration-guide-v2-to-v3.md#upgrade-typescript) carefully.
+This is due to incorrect configuration in `tsconfig.json`. Please refer to [this document](./docs/migration-guide-v2-to-v3.md#modify-tsconfigjson) for more details.
 
 ### I want to define a generic enum type that can represent any enum. The current enum type definition is too complex. Is there a simple way?
 
