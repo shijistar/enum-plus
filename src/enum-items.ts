@@ -626,10 +626,10 @@ export interface InheritableEnumItems<
    *     labelField: 'name',
    *   });
    *
-   *   [
-   *     { id: 0, name: 'Sunday' },
-   *     { id: 1, name: 'Monday' },
-   *   ];
+   *   // [
+   *   //   { id: 0, name: 'Sunday' },
+   *   //   { id: 1, name: 'Monday' },
+   *   // ];
    *
    * @param config Custom options, supports customizing value and label field names |
    *   自定义选项，支持自定义值和标签字段名
@@ -671,18 +671,18 @@ export interface InheritableEnumItems<
    * @example
    *   Week.toMap({ key: 'value', value: 'label' });
    *
-   *   ({ '0': 'Sunday', '1': 'Monday' });
+   *   // ({ '0': 'Sunday', '1': 'Monday' });
    *
-   *   /// Allow custom function, and meta fields can be used
+   *   // Allow custom function, and meta fields can be used
    *   Week.toMap({
    *     key: 'key',
    *     value: (item) => ({ id: item.value, name: item.label, foo: item.raw.foo }),
    *   });
    *
-   *   ({
-   *     Sunday: { id: 0, name: 'Sunday', foo: 'bar' },
-   *     Monday: { id: 1, name: 'Monday', foo: 'b' },
-   *   });
+   *   // ({
+   *   //   Sunday: { id: 0, name: 'Sunday', foo: 'bar' },
+   *   //   Monday: { id: 1, name: 'Monday', foo: 'b' },
+   *   // });
    *
    * @param config Custom options, supports customizing key and value fields | 自定义选项，支持自定义键和值字段
    *
