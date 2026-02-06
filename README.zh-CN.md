@@ -137,10 +137,10 @@ yarn add enum-plus
 
 ⬇️ **下载文件**:
 
-- [enum-plus.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus.umd.min.js.gz)
-- [enum-plus.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus.umd.tar.gz) (含 sourcemap)
-- [enum-plus-legacy.umd.min.js.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.min.js.gz)
-- [enum-plus-legacy.umd.tar.gz](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.tar.gz) (含 sourcemap)
+- [enum-plus.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus.umd.min.js)
+- [enum-plus.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus.umd.zip) (Full package with sourcemap)
+- [enum-plus-legacy.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.min.js)
+- [enum-plus-legacy.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.zip) (Full package with sourcemap)
 
 > 你也可以从 [GitHub 发布](https://github.com/shijistar/enum-plus/releases/tag/v3.0.1) 下载这些文件
 

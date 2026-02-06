@@ -81,31 +81,39 @@ jobs:
         run: npm test
 
       - name: Gzip umd files
+        shell: bash
         run: |
+          set -euo pipefail
+
+          if ! command -v zip >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y zip
+          fi
+
           cp -r umd/ umd-zip/
           mv umd-zip/enum-plus.min.js umd-zip/enum-plus.umd.min.js
           mv umd-zip/enum-plus-legacy.min.js umd-zip/enum-plus-legacy.umd.min.js
-          gzip -9 umd-zip/enum-plus.umd.min.js
-          gzip -9 umd-zip/enum-plus-legacy.umd.min.js
+
           cp -r umd/ umd-zip-full/
           mkdir -p umd-zip-full/modern
           mkdir -p umd-zip-full/legacy
           mv umd-zip-full/enum-plus.min.js* umd-zip-full/modern
           mv umd-zip-full/enum-plus-legacy.min.js* umd-zip-full/legacy
+
           cd umd-zip-full/modern
-          tar -cvf ../../enum-plus.umd.tar.gz *
+          zip -9 -r ../../enum-plus.umd.zip .
           cd ../legacy
-          tar -cvf ../../enum-plus-legacy.umd.tar.gz *
+          zip -9 -r ../../enum-plus-legacy.umd.zip .
           cd ../..
 
       - name: Add Assets to Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            umd-zip/enum-plus.umd.min.js.gz
-            umd-zip/enum-plus-legacy.umd.min.js.gz
-            enum-plus.umd.tar.gz
-            enum-plus-legacy.umd.tar.gz
+            umd-zip/enum-plus.umd.min.js
+            umd-zip/enum-plus-legacy.umd.min.js
+            enum-plus.umd.zip
+            enum-plus-legacy.umd.zip
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Replace relative image url to cdn.jsdelivr.net
