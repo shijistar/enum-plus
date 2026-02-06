@@ -142,7 +142,7 @@ yarn add enum-plus
 - [enum-plus-legacy.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.min.js)
 - [enum-plus-legacy.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.zip) (Full package with sourcemap)
 
-> 你也可以从 [GitHub 发布](https://github.com/shijistar/enum-plus/releases/tag/v3.0.1) 下载这些文件
+> 你也可以从 [GitHub 发布](https://github.com/shijistar/enum-plus/releases/tag/v3.1.8) 下载这些文件
 
 ## 枚举定义
 
