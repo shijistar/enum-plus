@@ -93,7 +93,6 @@ jobs:
           cp -r umd/ umd-zip/
           mv umd-zip/enum-plus.min.js umd-zip/enum-plus.umd.min.js
           mv umd-zip/enum-plus-legacy.min.js umd-zip/enum-plus-legacy.umd.min.js
-
           cp -r umd/ umd-zip-full/
           mkdir -p umd-zip-full/modern
           mkdir -p umd-zip-full/legacy
