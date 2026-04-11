@@ -2,6 +2,9 @@ const zhCN = {
   'storybook.preview.localeDescription': '文档语言',
   'storybook.preview.locale.zhCN': '中文',
   'storybook.preview.locale.enUS': 'English',
+  'storybook.preview.themeDescription': '故事主题',
+  'storybook.preview.theme.light': '浅色',
+  'storybook.preview.theme.dark': '深色',
   'storybook.preview.background.canvas': '暖色画布',
   'storybook.preview.background.slate': '石板灰',
 

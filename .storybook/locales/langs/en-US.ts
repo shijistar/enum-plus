@@ -2,6 +2,9 @@ const enUS = {
   'storybook.preview.localeDescription': 'Documentation locale',
   'storybook.preview.locale.zhCN': 'Chinese',
   'storybook.preview.locale.enUS': 'English',
+  'storybook.preview.themeDescription': 'Story theme',
+  'storybook.preview.theme.light': 'Light',
+  'storybook.preview.theme.dark': 'Dark',
   'storybook.preview.background.canvas': 'Warm Canvas',
   'storybook.preview.background.slate': 'Slate',
 

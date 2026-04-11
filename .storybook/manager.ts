@@ -1,16 +1,29 @@
+import { GLOBALS_UPDATED, SET_GLOBALS, UPDATE_GLOBALS } from 'storybook/internal/core-events';
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
+import { getGlobalValueFromUrl } from './utils/global';
+import { dark, light } from './utils/themes';
 
-addons.setConfig({
-  theme: create({
-    base: 'light',
-    brandTitle: 'enum-plus Storybook',
-    brandUrl: 'https://github.com/shijistar/enum-plus',
-    colorPrimary: '#0f766e',
-    colorSecondary: '#c2410c',
-    appBg: '#f6f1e8',
-    appContentBg: '#fffdf8',
-    appBorderColor: '#e6dccd',
-    appBorderRadius: 16,
-  }),
+const globalTheme = getGlobalValueFromUrl('theme');
+const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+function createManagerTheme(theme: 'light' | 'dark') {
+  if (theme === 'dark') {
+    return create(dark);
+  }
+  return create(light);
+}
+
+function applyManagerTheme(theme: 'light' | 'dark') {
+  document.documentElement.dataset.theme = theme;
+  addons.setConfig({
+    theme: createManagerTheme(theme),
+  });
+}
+
+applyManagerTheme((!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' : 'light');
+
+addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
+  const isDark = (!globals?.theme && isPreferDark) || globals?.theme === 'dark';
+  applyManagerTheme(isDark ? 'dark' : 'light');
 });
