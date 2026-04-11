@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, Descriptions, Segmented, Select, Space, Table, Typography } from 'antd';
-import { Enum } from '../../src';
+import { type AnyEnum, Enum, type EnumValue } from '../../src';
+import { storyT, useStoryT } from '../locales';
 import { CodePreview, JsonPreview, KpiRow, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
@@ -12,94 +13,118 @@ enum ReleaseChannelNative {
   Canary,
 }
 
-const initPresets = {
-  'Key-Value': {
-    code: `const PriorityEnum = Enum({
+type PresetKey = 'keyValue' | 'standard' | 'labelOnly' | 'array' | 'native';
+
+function getInitPresets(t: ReturnType<typeof useStoryT>): Record<
+  PresetKey,
+  {
+    label: string;
+    code: string;
+    create: () => AnyEnum;
+  }
+> {
+  return {
+    keyValue: {
+      label: t('storybook.stories.CoreInitialization.preset.keyValue'),
+      code: `const PriorityEnum = Enum({
   Low: 1,
   Medium: 2,
   High: 3,
 });`,
-    create: () =>
-      Enum(
-        {
-          Low: 1,
-          Medium: 2,
-          High: 3,
-        },
-        { name: '优先级' },
-      ),
-  },
-  标准格式: {
-    code: `const StatusEnum = Enum({
-  Draft: { value: 'draft', label: '草稿', tone: 'default' },
-  Review: { value: 'review', label: '审核中', tone: 'processing' },
-  Published: { value: 'published', label: '已发布', tone: 'success' },
+      create: () =>
+        Enum(
+          {
+            Low: 1,
+            Medium: 2,
+            High: 3,
+          },
+          { name: t('storybook.stories.CoreInitialization.sample.priorityName') },
+        ),
+    },
+    standard: {
+      label: t('storybook.stories.CoreInitialization.preset.standard'),
+      code: `const StatusEnum = Enum({
+  Draft: { value: 'draft', label: '${t('storybook.stories.CoreInitialization.sample.status.draft')}', tone: 'default' },
+  Review: { value: 'review', label: '${t('storybook.stories.CoreInitialization.sample.status.review')}', tone: 'processing' },
+  Published: { value: 'published', label: '${t('storybook.stories.CoreInitialization.sample.status.published')}', tone: 'success' },
 });`,
-    create: () =>
-      Enum(
-        {
-          Draft: { value: 'draft', label: '草稿', tone: 'default' },
-          Review: { value: 'review', label: '审核中', tone: 'processing' },
-          Published: { value: 'published', label: '已发布', tone: 'success' },
-        },
-        { name: '文章状态' },
-      ),
-  },
-  仅标签格式: {
-    code: `const LocaleEnum = Enum({
-  zhCN: { label: '简体中文' },
-  enUS: { label: 'English' },
-  jaJP: { label: '日本語' },
+      create: () =>
+        Enum(
+          {
+            Draft: {
+              value: 'draft',
+              label: t('storybook.stories.CoreInitialization.sample.status.draft'),
+              tone: 'default',
+            },
+            Review: {
+              value: 'review',
+              label: t('storybook.stories.CoreInitialization.sample.status.review'),
+              tone: 'processing',
+            },
+            Published: {
+              value: 'published',
+              label: t('storybook.stories.CoreInitialization.sample.status.published'),
+              tone: 'success',
+            },
+          },
+          { name: t('storybook.stories.CoreInitialization.sample.statusName') },
+        ),
+    },
+    labelOnly: {
+      label: t('storybook.stories.CoreInitialization.preset.labelOnly'),
+      code: `const LocaleEnum = Enum({
+  zhCN: { label: '${t('storybook.stories.CoreInitialization.sample.locale.zhCN')}' },
+  enUS: { label: '${t('storybook.stories.CoreInitialization.sample.locale.enUS')}' },
+  jaJP: { label: '${t('storybook.stories.CoreInitialization.sample.locale.jaJP')}' },
 });`,
-    create: () =>
-      Enum(
-        {
-          zhCN: { label: '简体中文' },
-          enUS: { label: 'English' },
-          jaJP: { label: '日本語' },
-        },
-        { name: '站点语言' },
-      ),
-  },
-  数组格式: {
-    code: `const PipelineEnum = Enum([
-  { value: 11, key: 'Backlog', label: '待处理' },
-  { value: 12, key: 'Doing', label: '进行中' },
-  { value: 13, key: 'Done', label: '已完成' },
+      create: () =>
+        Enum(
+          {
+            zhCN: { label: t('storybook.stories.CoreInitialization.sample.locale.zhCN') },
+            enUS: { label: t('storybook.stories.CoreInitialization.sample.locale.enUS') },
+            jaJP: { label: t('storybook.stories.CoreInitialization.sample.locale.jaJP') },
+          },
+          { name: t('storybook.stories.CoreInitialization.sample.localeName') },
+        ),
+    },
+    array: {
+      label: t('storybook.stories.CoreInitialization.preset.array'),
+      code: `const PipelineEnum = Enum([
+  { value: 11, key: 'Backlog', label: '${t('storybook.stories.CoreInitialization.sample.pipeline.backlog')}' },
+  { value: 12, key: 'Doing', label: '${t('storybook.stories.CoreInitialization.sample.pipeline.doing')}' },
+  { value: 13, key: 'Done', label: '${t('storybook.stories.CoreInitialization.sample.pipeline.done')}' },
 ]);`,
-    create: () =>
-      Enum(
-        [
-          { value: 11, key: 'Backlog', label: '待处理' },
-          { value: 12, key: 'Doing', label: '进行中' },
-          { value: 13, key: 'Done', label: '已完成' },
-        ],
-        { name: '任务泳道' },
-      ),
-  },
-  原生枚举: {
-    code: `enum ReleaseChannelNative {
+      create: () =>
+        Enum(
+          [
+            { value: 11, key: 'Backlog', label: t('storybook.stories.CoreInitialization.sample.pipeline.backlog') },
+            { value: 12, key: 'Doing', label: t('storybook.stories.CoreInitialization.sample.pipeline.doing') },
+            { value: 13, key: 'Done', label: t('storybook.stories.CoreInitialization.sample.pipeline.done') },
+          ],
+          { name: t('storybook.stories.CoreInitialization.sample.pipelineName') },
+        ) as AnyEnum,
+    },
+    native: {
+      label: t('storybook.stories.CoreInitialization.preset.native'),
+      code: `enum ReleaseChannelNative {
   Stable = 1,
   Beta,
   Canary,
 }
 
 const ChannelEnum = Enum(ReleaseChannelNative);`,
-    create: () => Enum(ReleaseChannelNative, { name: '发布通道' }),
-  },
-} as const;
-
-type PresetKey = keyof typeof initPresets;
-
-const presetOptions = Object.keys(initPresets) as PresetKey[];
+      create: () =>
+        Enum(ReleaseChannelNative, { name: t('storybook.stories.CoreInitialization.sample.channelName') }) as AnyEnum,
+    },
+  };
+}
 
 const meta: Meta = {
-  title: '核心能力/枚举初始化',
+  title: 'Core/Enum Initialization',
   parameters: {
     docs: {
       description: {
-        component:
-          '按照 README 中的初始化章节，把最常用的五种定义方式变成同一套可比较的可视化面板，方便观察 values、labels、items 和原始数据结构的差异。',
+        component: storyT('storybook.stories.CoreInitialization.metaDescription'),
       },
     },
   },
@@ -109,9 +134,19 @@ export default meta;
 type Story = StoryObj;
 
 function InitializationPlayground() {
-  const [preset, setPreset] = useState<PresetKey>('标准格式');
-  const enumInstance = useMemo(() => initPresets[preset].create(), [preset]);
-  const [selectedValue, setSelectedValue] = useState<string | number | undefined>(() => enumInstance.values[0]);
+  const t = useStoryT();
+  const initPresets = useMemo(() => getInitPresets(t), [t]);
+  const presetOptions = useMemo(
+    () =>
+      (Object.keys(initPresets) as PresetKey[]).map((key) => ({
+        label: initPresets[key].label,
+        value: key,
+      })),
+    [initPresets],
+  );
+  const [preset, setPreset] = useState<PresetKey>('standard');
+  const enumInstance = useMemo(() => initPresets[preset].create(), [initPresets, preset]);
+  const [selectedValue, setSelectedValue] = useState<EnumValue>(() => enumInstance.values[0]);
 
   useEffect(() => {
     setSelectedValue(enumInstance.values[0]);
@@ -127,44 +162,72 @@ function InitializationPlayground() {
 
   return (
     <StoryPage
-      title="把初始化格式变成可观察的运行结果"
-      description="README 中的各种枚举定义方式在语法上不同，但都指向同一个目标：建立稳定、可查询、可映射到 UI 的枚举集合。这个故事页把五种格式放到同一套面板里对比。"
-      highlights={['Key-Value', '标准格式', '数组格式', '原生 enum', '运行时可视化']}
+      title={t('storybook.stories.CoreInitialization.page.title')}
+      description={t('storybook.stories.CoreInitialization.page.description')}
+      highlights={[
+        t('storybook.stories.CoreInitialization.highlights.keyValue'),
+        t('storybook.stories.CoreInitialization.highlights.standard'),
+        t('storybook.stories.CoreInitialization.highlights.array'),
+        t('storybook.stories.CoreInitialization.highlights.nativeEnum'),
+        t('storybook.stories.CoreInitialization.highlights.runtime'),
+      ]}
     >
       <StorySection
-        title="切换初始化方式"
-        description="不同写法会影响原始数据结构，但不会改变枚举查询和转换 API 的基本体验。"
+        title={t('storybook.stories.CoreInitialization.section.switch.title')}
+        description={t('storybook.stories.CoreInitialization.section.switch.description')}
       >
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Segmented block options={presetOptions} value={preset} onChange={(value) => setPreset(value as PresetKey)} />
-          <CodePreview title="当前示例代码" code={initPresets[preset].code} />
+          <CodePreview
+            title={t('storybook.stories.CoreInitialization.card.currentCode')}
+            code={initPresets[preset].code}
+          />
         </Space>
       </StorySection>
 
-      <StorySection title="交互预览" description="选中一个值后，可以直接观察 label、key、raw 和基础统计信息。">
+      <StorySection
+        title={t('storybook.stories.CoreInitialization.section.interaction.title')}
+        description={t('storybook.stories.CoreInitialization.section.interaction.description')}
+      >
         <TwoColumn
           left={
-            <Card size="small" title="当前枚举状态">
+            <Card size="small" title={t('storybook.stories.CoreInitialization.card.currentState')}>
               <Space direction="vertical" size={16} style={{ width: '100%' }}>
                 <Select
                   value={selectedValue}
                   style={{ width: '100%' }}
                   options={enumInstance.items.map((item) => ({ value: item.value, label: item.label }))}
-                  onChange={(value) => setSelectedValue(value)}
+                  onChange={(value) => setSelectedValue(value as string | number)}
                 />
 
                 <Descriptions
                   size="small"
                   column={1}
                   items={[
-                    { key: 'name', label: '枚举名', children: enumInstance.name || '未设置' },
-                    { key: 'value', label: '当前值', children: String(selectedValue) },
-                    { key: 'label', label: '显示文本', children: currentItem?.label || '-' },
-                    { key: 'key', label: '枚举键', children: enumInstance.key(selectedValue) || '-' },
+                    {
+                      key: 'name',
+                      label: t('storybook.stories.CoreInitialization.field.enumName'),
+                      children: enumInstance.name || '-',
+                    },
+                    {
+                      key: 'value',
+                      label: t('storybook.stories.CoreInitialization.field.currentValue'),
+                      children: String(selectedValue),
+                    },
+                    {
+                      key: 'label',
+                      label: t('storybook.stories.CoreInitialization.field.displayText'),
+                      children: currentItem?.label || '-',
+                    },
+                    {
+                      key: 'key',
+                      label: t('storybook.stories.CoreInitialization.field.enumKey'),
+                      children: enumInstance.key(selectedValue) || '-',
+                    },
                     { key: 'has', label: 'has(value)', children: String(enumInstance.has(selectedValue)) },
                     {
                       key: 'raw',
-                      label: 'raw(value)',
+                      label: t('storybook.stories.CoreInitialization.field.rawValue'),
                       children: <Text code>{JSON.stringify(enumInstance.raw(selectedValue))}</Text>,
                     },
                   ]}
@@ -176,18 +239,24 @@ function InitializationPlayground() {
             <Space direction="vertical" size={16} style={{ width: '100%' }}>
               <KpiRow
                 items={[
-                  { label: 'items', value: enumInstance.items.length },
-                  { label: 'values', value: enumInstance.values.length },
-                  { label: 'labels', value: enumInstance.labels.length },
+                  { label: t('storybook.stories.CoreInitialization.kpi.items'), value: enumInstance.items.length },
+                  { label: t('storybook.stories.CoreInitialization.kpi.values'), value: enumInstance.values.length },
+                  { label: t('storybook.stories.CoreInitialization.kpi.labels'), value: enumInstance.labels.length },
                 ]}
               />
-              <JsonPreview title="toList() 结果" value={enumInstance.toList()} />
+              <JsonPreview
+                title={t('storybook.stories.CoreInitialization.card.listResult')}
+                value={enumInstance.toList()}
+              />
             </Space>
           }
         />
       </StorySection>
 
-      <StorySection title="枚举项明细" description="对于 UI 绑定来说，items 往往是最关键的运行时数据结构。">
+      <StorySection
+        title={t('storybook.stories.CoreInitialization.section.items.title')}
+        description={t('storybook.stories.CoreInitialization.section.items.description')}
+      >
         <Table
           className="ep-table"
           rowKey="key"
@@ -202,15 +271,20 @@ function InitializationPlayground() {
         />
       </StorySection>
 
-      <StorySection title="派生属性对比" description="这些属性会在后续 API、插件和 UI 组件绑定中频繁使用。">
+      <StorySection
+        title={t('storybook.stories.CoreInitialization.section.derived.title')}
+        description={t('storybook.stories.CoreInitialization.section.derived.description')}
+      >
         <TwoColumn
           left={
             <JsonPreview
-              title="keys / values / labels"
+              title={t('storybook.stories.CoreInitialization.card.derived')}
               value={{ keys: enumInstance.keys, values: enumInstance.values, labels: enumInstance.labels }}
             />
           }
-          right={<JsonPreview title="toMap()" value={enumInstance.toMap()} />}
+          right={
+            <JsonPreview title={t('storybook.stories.CoreInitialization.card.map')} value={enumInstance.toMap()} />
+          }
         />
       </StorySection>
     </StoryPage>
@@ -218,38 +292,57 @@ function InitializationPlayground() {
 }
 
 function ArrayFieldMappingDemo() {
+  const t = useStoryT();
   const sourceRows = [
-    { id: 101, code: 'draft', title: '草稿', group: '编辑阶段' },
-    { id: 102, code: 'review', title: '审核中', group: '编辑阶段' },
-    { id: 103, code: 'published', title: '已发布', group: '线上阶段' },
+    {
+      id: 101,
+      code: 'draft',
+      title: t('storybook.stories.CoreInitialization.array.sample.title.draft'),
+      group: t('storybook.stories.CoreInitialization.array.sample.group.editing'),
+    },
+    // {
+    //   id: 102,
+    //   code: 'review',
+    //   title: t('storybook.stories.CoreInitialization.array.sample.title.review'),
+    //   group: t('storybook.stories.CoreInitialization.array.sample.group.editing'),
+    // },
+    // {
+    //   id: 103,
+    //   code: 'published',
+    //   title: t('storybook.stories.CoreInitialization.array.sample.title.published'),
+    //   group: t('storybook.stories.CoreInitialization.array.sample.group.online'),
+    // },
   ] as const;
 
-  const mappedEnum = useMemo(
-    () =>
-      Enum(sourceRows, {
-        getValue: 'id',
-        getKey: 'code',
-        getLabel: 'title',
-        name: '流程状态',
-      }),
-    [],
-  );
+  const mappedEnum = useMemo(() => {
+    const s = Enum(sourceRows, {
+      getValue: 'id',
+      getKey: 'code',
+      getLabel: 'title',
+      name: t('storybook.stories.CoreInitialization.array.sample.enumName'),
+    });
+    return s;
+  }, [sourceRows, t]);
   const [selectedValue, setSelectedValue] = useState<number>(101);
 
   return (
     <StoryPage
-      title="数组格式的字段映射"
-      description="README 里特别强调数组初始化适合 API 数据。本故事把后端返回结构映射成 enum，再反向生成给 Select 使用的字段，形成完整闭环。"
-      highlights={['动态数据', '字段映射', 'Select 绑定']}
+      title={t('storybook.stories.CoreInitialization.array.title')}
+      description={t('storybook.stories.CoreInitialization.array.description')}
+      highlights={[
+        t('storybook.stories.CoreInitialization.array.highlights.dynamicData'),
+        t('storybook.stories.CoreInitialization.array.highlights.fieldMapping'),
+        t('storybook.stories.CoreInitialization.array.highlights.selectBinding'),
+      ]}
     >
       <StorySection
-        title="源数据与映射规则"
-        description="通过 getValue / getKey / getLabel，可以适配任意后端字段命名。"
+        title={t('storybook.stories.CoreInitialization.array.section.source.title')}
+        description={t('storybook.stories.CoreInitialization.array.section.source.description')}
       >
         <TwoColumn
           left={
             <CodePreview
-              title="映射代码"
+              title={t('storybook.stories.CoreInitialization.array.card.mappingCode')}
               code={`const FlowEnum = Enum(sourceRows, {
   getValue: 'id',
   getKey: 'code',
@@ -257,13 +350,13 @@ function ArrayFieldMappingDemo() {
 });`}
             />
           }
-          right={<JsonPreview title="API 原始数据" value={sourceRows} />}
+          right={<JsonPreview title={t('storybook.stories.CoreInitialization.array.card.apiRaw')} value={sourceRows} />}
         />
       </StorySection>
 
       <StorySection
-        title="映射后的交互结果"
-        description="同一份 enum 数据既可以做业务查询，也可以定制成 antd 所需的字段名。"
+        title={t('storybook.stories.CoreInitialization.array.section.result.title')}
+        description={t('storybook.stories.CoreInitialization.array.section.result.description')}
       >
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Select
@@ -273,7 +366,7 @@ function ArrayFieldMappingDemo() {
             options={mappedEnum.toList({
               valueField: 'id',
               labelField: 'name',
-              extra: (item) => ({ group: item.raw.group }),
+              extra: (item) => ({ group: (item.raw as any)?.group }),
             })}
             onChange={(value) => setSelectedValue(value)}
           />
@@ -284,7 +377,7 @@ function ArrayFieldMappingDemo() {
             column={1}
             items={[
               { key: 'label', label: 'label(value)', children: mappedEnum.label(selectedValue) },
-              { key: 'key', label: 'key(value)', children: mappedEnum.key(selectedValue) },
+              { key: 'key', label: 'key(value)', children: mappedEnum.key(selectedValue as any) as string },
               {
                 key: 'raw',
                 label: 'raw(value)',

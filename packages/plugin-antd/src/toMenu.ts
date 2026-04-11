@@ -7,7 +7,7 @@ export interface ToMenuPluginOptions {}
 const toMenuPlugin: PluginFunc<ToMenuPluginOptions> = (options, Enum) => {
   Enum.extends({
     toMenu(this: IEnum<StandardEnumInit<string, EnumValue>, string, EnumValue>): MenuItemOption<EnumValue>[] {
-      return Array.from(this.items.map(({ value, label }) => ({ key: value, label })));
+      return Array.from(this.items.map(({ value, label }) => ({ type: 'item', key: value, label })));
     },
   });
 };
@@ -40,7 +40,8 @@ declare module 'enum-plus/extension' {
  * - **EN:** Data structure of menu items of ant-design Menu component
  * - **CN:** ant-design Menu 组件的菜单项数据结构
  */
-export interface MenuItemOption<V> {
+export type MenuItemOption<V> = {
+  type: 'item';
   /**
    * - **EN:** Unique key of the menu item, usually corresponds to the value of the enum item
    * - **CN:** 菜单项的唯一键，通常对应枚举项的值
@@ -51,4 +52,6 @@ export interface MenuItemOption<V> {
    * - **CN:** 菜单项的显示标签
    */
   label: string;
-}
+} & {
+  [Key in `data-${string}`]?: unknown;
+};

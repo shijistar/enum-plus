@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import antdPlugin from '../../packages/plugin-antd/src';
 import { Card, Descriptions, Menu, Select, Space, Table, Typography } from 'antd';
 import { Enum } from '../../src';
+import { storyT, useStoryT } from '../locales';
 import { JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
@@ -13,17 +14,16 @@ function ensureAntdPlugin() {
   if (antdPluginInstalled) {
     return;
   }
-  Enum.install(antdPlugin);
+  Enum.install(antdPlugin as any);
   antdPluginInstalled = true;
 }
 
 const meta: Meta = {
-  title: '插件/Ant Design 绑定',
+  title: 'Plugins/Ant Design Integration',
   parameters: {
     docs: {
       description: {
-        component:
-          '参考 packages/plugin-antd/README，把 toSelect、toMenu、toFilter、toValueMap 直接接到 Ant Design 控件上，验证 enum-plus 与 antd 的 UI 绑定体验。',
+        component: storyT('storybook.stories.PluginAntd.metaDescription'),
       },
     },
   },
@@ -32,27 +32,21 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-type AntdEnhancedEnum = ReturnType<typeof Enum> & {
-  toSelect(config?: unknown): Record<string, unknown>[];
-  toMenu(): { key: string; label: string }[];
-  toFilter(): { text: string; value: string }[];
-  toValueMap(): Record<string, { text: string }>;
-};
-
 function AntdBindingDemo() {
   ensureAntdPlugin();
+  const t = useStoryT();
 
   const shiftEnum = useMemo(
     () =>
       Enum(
         {
-          Morning: { value: 'morning', label: '早班' },
-          Afternoon: { value: 'afternoon', label: '中班' },
-          Night: { value: 'night', label: '晚班' },
+          Morning: { value: 'morning', label: t('storybook.stories.PluginAntd.sample.morning') },
+          Afternoon: { value: 'afternoon', label: t('storybook.stories.PluginAntd.sample.afternoon') },
+          Night: { value: 'night', label: t('storybook.stories.PluginAntd.sample.night') },
         },
-        { name: '排班类型' },
-      ) as AntdEnhancedEnum,
-    [],
+        { name: t('storybook.stories.PluginAntd.sample.shiftName') },
+      ),
+    [t],
   );
   const [selectedShift, setSelectedShift] = useState<string>('morning');
   const [menuKey, setMenuKey] = useState<string>('morning');
@@ -66,20 +60,31 @@ function AntdBindingDemo() {
 
   return (
     <StoryPage
-      title="把 enum 直接变成 antd 数据源"
-      description="@enum-plus/plugin-antd 的核心价值在于减少重复的数据转换代码。定义一次 enum，就能同时生成 Select、Menu、Table filters 等多种 UI 所需结构。"
-      highlights={['toSelect()', 'toMenu()', 'toFilter()', 'toValueMap()', 'React + antd']}
+      title={t('storybook.stories.PluginAntd.page.title')}
+      description={t('storybook.stories.PluginAntd.page.description')}
+      highlights={[
+        t('storybook.stories.PluginAntd.highlights.select'),
+        t('storybook.stories.PluginAntd.highlights.menu'),
+        t('storybook.stories.PluginAntd.highlights.filter'),
+        t('storybook.stories.PluginAntd.highlights.valueMap'),
+        t('storybook.stories.PluginAntd.highlights.stack'),
+      ]}
     >
-      <StorySection title="Select 与 Menu" description="同一份 enum 即可生成多个控件的数据源，不需要在组件层手写映射。">
+      <StorySection
+        title={t('storybook.stories.PluginAntd.section.binding.title')}
+        description={t('storybook.stories.PluginAntd.section.binding.description')}
+      >
         <TwoColumn
           left={
-            <Card size="small" title="Select 绑定">
+            <Card size="small" title={t('storybook.stories.PluginAntd.card.select')}>
               <Space direction="vertical" size={16} style={{ width: '100%' }}>
                 <Select
                   value={selectedShift}
                   style={{ width: '100%' }}
                   options={
-                    shiftEnum.toSelect({ firstOption: { value: '', label: '全部班次' } }) as {
+                    shiftEnum.toSelect({
+                      firstOption: { value: '', label: t('storybook.stories.PluginAntd.allShifts') },
+                    }) as {
                       value: string;
                       label: string;
                     }[]
@@ -90,11 +95,17 @@ function AntdBindingDemo() {
                   size="small"
                   column={1}
                   items={[
-                    { key: 'value', label: '当前值', children: selectedShift || '全部' },
+                    {
+                      key: 'value',
+                      label: t('storybook.stories.PluginAntd.field.currentValue'),
+                      children: selectedShift || t('storybook.stories.PluginAntd.all'),
+                    },
                     {
                       key: 'label',
-                      label: 'label(value)',
-                      children: selectedShift ? shiftEnum.label(selectedShift) : '全部班次',
+                      label: t('storybook.stories.PluginAntd.field.labelValue'),
+                      children: selectedShift
+                        ? shiftEnum.label(selectedShift)
+                        : t('storybook.stories.PluginAntd.allShifts'),
                     },
                   ]}
                 />
@@ -102,7 +113,7 @@ function AntdBindingDemo() {
             </Card>
           }
           right={
-            <Card size="small" title="Menu 绑定">
+            <Card size="small" title={t('storybook.stories.PluginAntd.card.menu')}>
               <Menu
                 selectedKeys={[menuKey]}
                 items={shiftEnum.toMenu()}
@@ -114,8 +125,8 @@ function AntdBindingDemo() {
       </StorySection>
 
       <StorySection
-        title="Table filters 与 ValueMap"
-        description="toFilter 直接适配 antd Table，toValueMap 适合与 Ant Design Pro 等场景对接。"
+        title={t('storybook.stories.PluginAntd.section.table.title')}
+        description={t('storybook.stories.PluginAntd.section.table.description')}
       >
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Table
@@ -123,9 +134,9 @@ function AntdBindingDemo() {
             rowKey="id"
             pagination={false}
             columns={[
-              { title: '员工', dataIndex: 'employee' },
+              { title: t('storybook.stories.PluginAntd.table.employee'), dataIndex: 'employee' },
               {
-                title: '班次',
+                title: t('storybook.stories.PluginAntd.table.shift'),
                 dataIndex: 'shift',
                 filters: shiftEnum.toFilter(),
                 onFilter: (value, record) => record.shift === value,
@@ -141,14 +152,17 @@ function AntdBindingDemo() {
               <JsonPreview
                 title="toValueMap()"
                 value={shiftEnum.toValueMap()}
-                note="该结果特别适合 Ant Design Pro 的 valueEnum 场景。"
+                note={t('storybook.stories.PluginAntd.card.valueMapNote')}
               />
             }
           />
         </Space>
       </StorySection>
 
-      <StorySection title="数据结构校验" description="如果你想接到自定义组件层，仍然可以直接检查插件生成的对象结构。">
+      <StorySection
+        title={t('storybook.stories.PluginAntd.section.structure.title')}
+        description={t('storybook.stories.PluginAntd.section.structure.description')}
+      >
         <Descriptions
           bordered
           size="small"

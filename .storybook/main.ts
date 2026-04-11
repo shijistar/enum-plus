@@ -13,7 +13,7 @@ const config: StorybookConfig = {
     options: {},
   },
   docs: {
-    defaultName: '文档',
+    defaultName: 'Docs',
   },
   async viteFinal(baseConfig) {
     return mergeConfig(baseConfig, {

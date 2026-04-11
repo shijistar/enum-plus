@@ -1,32 +1,8 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import LocalizedDoc from '../components/LocalizedDoc';
+import IntroduceEN from '../docs-localized/Introduce.en-US.mdx';
+import IntroduceCN from '../docs-localized/Introduce.zh-CN.mdx';
 
-<Meta title="文档/概览" />
+<Meta title="Introduce" />
 
-# enum-plus Storybook
-
-这是根据仓库 README 整理出的可视化文档入口，目标不是简单复刻文字内容，而是把最重要的枚举建模、查询、转换、插件绑定和本地化能力转成可交互的 Storybook 演示。
-
-## 你可以在这里看到什么
-
-- `核心能力`：覆盖枚举初始化、常用 API、数据转换、命名冲突处理、枚举组合与扩展。
-- `插件`：使用 React + Ant Design 演示 UI 绑定、表格筛选、菜单数据源，以及 React 场景下的 i18n 自动更新。
-- `文档`：把 README 中最常用的安装、快速开始和使用建议整理成更适合浏览的 Storybook 页面。
-
-## 为什么适合 Storybook
-
-`enum-plus` 虽然不是 React 组件库，但它非常适合可视化文档，因为它最终会落在 UI 数据源和业务状态映射上。Storybook 能把以下能力直观展示出来：
-
-- 不同初始化格式生成出来的枚举结构差异。
-- `items`、`labels`、`values`、`toList`、`toMap` 等 API 的真实结果。
-- 与 Ant Design 的 `Select`、`Menu`、`Table` 结合时的数据形态。
-- React 国际化插件在切换语言后的自动刷新效果。
-
-## 建议浏览顺序
-
-1. 先看 `快速开始` 了解推荐使用方式。
-2. 再看 `核心能力/枚举初始化` 和 `核心能力/查询与转换 API`。
-3. 最后看 `插件/Ant Design 绑定` 与 `插件/React 国际化`。
-
-## 覆盖范围说明
-
-本套 Storybook 优先覆盖 README 中最适合“可视化”的内容。像 `valueType`、`keyType`、`rawType` 这类 TypeScript 纯类型能力，适合通过源码和 IDE 提示理解，因此以文档说明为主，没有强行做成运行时演示。
+<LocalizedDoc docEn={IntroduceEN} docCn={IntroduceCN} />

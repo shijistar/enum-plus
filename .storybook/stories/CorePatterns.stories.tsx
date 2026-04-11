@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, Descriptions, Segmented, Select, Space, Tag, Typography } from 'antd';
 import { Enum } from '../../src';
+import { storyT, useStoryLocale, useStoryT } from '../locales';
 import { JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
@@ -34,12 +35,11 @@ function ensureCustomExtension() {
 }
 
 const meta: Meta = {
-  title: '核心能力/本地化、组合与扩展',
+  title: 'Core/Localization, Composition and Extension',
   parameters: {
     docs: {
       description: {
-        component:
-          '这个页面把 README 中较容易被忽略但非常实用的能力放到一起：字符串本地化、autoLabel、枚举组合、只读遍历，以及通过 Enum.extends 增加全局扩展方法。',
+        component: storyT('storybook.stories.CorePatterns.metaDescription'),
       },
     },
   },
@@ -49,7 +49,13 @@ export default meta;
 type Story = StoryObj;
 
 function LocalizationDemo() {
-  const [locale, setLocale] = useState<'zh-CN' | 'en-US'>('zh-CN');
+  const t = useStoryT();
+  const storyLocale = useStoryLocale();
+  const [locale, setLocale] = useState<'zh-CN' | 'en-US'>(storyLocale);
+
+  useEffect(() => {
+    setLocale(storyLocale);
+  }, [storyLocale]);
 
   const dictionary: Record<'zh-CN' | 'en-US', Record<string, string>> = {
     'zh-CN': {
@@ -87,11 +93,19 @@ function LocalizationDemo() {
 
   return (
     <StoryPage
-      title="字符串本地化与 autoLabel"
-      description="这是一种跨框架也适用的本地化方式。通过 localize + labelPrefix，可以把枚举项 label 变成资源 key，而不是直接写死文本。"
-      highlights={['localize', 'labelPrefix', 'autoLabel', '跨框架']}
+      title={t('storybook.stories.CorePatterns.localization.title')}
+      description={t('storybook.stories.CorePatterns.localization.description')}
+      highlights={[
+        t('storybook.stories.CorePatterns.localization.highlights.localize'),
+        t('storybook.stories.CorePatterns.localization.highlights.labelPrefix'),
+        t('storybook.stories.CorePatterns.localization.highlights.autoLabel'),
+        t('storybook.stories.CorePatterns.localization.highlights.crossFramework'),
+      ]}
     >
-      <StorySection title="语言切换" description="切换后，枚举名、下拉标签和派生 labels 会同步变化。">
+      <StorySection
+        title={t('storybook.stories.CorePatterns.localization.section.title')}
+        description={t('storybook.stories.CorePatterns.localization.section.description')}
+      >
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Segmented
             value={locale}
@@ -101,7 +115,7 @@ function LocalizationDemo() {
 
           <TwoColumn
             left={
-              <Card size="small" title="当前枚举">
+              <Card size="small" title={t('storybook.stories.CorePatterns.localization.card.current')}>
                 <Space direction="vertical" size={16} style={{ width: '100%' }}>
                   <Select
                     value={selectedValue}
@@ -126,7 +140,10 @@ function LocalizationDemo() {
               </Card>
             }
             right={
-              <JsonPreview title="labels / toMap()" value={{ labels: statusEnum.labels, map: statusEnum.toMap() }} />
+              <JsonPreview
+                title={t('storybook.stories.CorePatterns.localization.card.derived')}
+                value={{ labels: statusEnum.labels, map: statusEnum.toMap() }}
+              />
             }
           />
         </Space>
@@ -137,22 +154,39 @@ function LocalizationDemo() {
 
 function CompositionDemo() {
   ensureCustomExtension();
+  const t = useStoryT();
 
   const baseEnum = useMemo(
     () =>
       Enum({
-        Draft: { value: 'draft', label: '草稿', color: 'default' },
-        Review: { value: 'review', label: '审核中', color: 'processing' },
+        Draft: {
+          value: 'draft',
+          label: t('storybook.stories.CorePatterns.composition.sample.draft'),
+          color: 'default',
+        },
+        Review: {
+          value: 'review',
+          label: t('storybook.stories.CorePatterns.composition.sample.review'),
+          color: 'processing',
+        },
       }),
-    [],
+    [t],
   );
   const terminalEnum = useMemo(
     () =>
       Enum({
-        Published: { value: 'published', label: '已发布', color: 'success' },
-        Archived: { value: 'archived', label: '已归档', color: 'warning' },
+        Published: {
+          value: 'published',
+          label: t('storybook.stories.CorePatterns.composition.sample.published'),
+          color: 'success',
+        },
+        Archived: {
+          value: 'archived',
+          label: t('storybook.stories.CorePatterns.composition.sample.archived'),
+          color: 'warning',
+        },
       }),
-    [],
+    [t],
   );
   const mergedEnum = useMemo(
     () =>
@@ -161,20 +195,28 @@ function CompositionDemo() {
           ...baseEnum.raw(),
           ...terminalEnum.raw(),
         },
-        { name: '完整内容流程' },
-      ) as typeof baseEnum & {
+        { name: t('storybook.stories.CorePatterns.composition.sample.fullFlow') },
+      ) as unknown as typeof baseEnum & {
         toBadgeMap(): Record<string, { label: string; color?: string }>;
       },
-    [baseEnum, terminalEnum],
+    [baseEnum, t, terminalEnum],
   );
 
   return (
     <StoryPage
-      title="枚举组合与全局扩展"
-      description="把多个枚举合并成一个完整流程后，还可以通过 Enum.extends 把统一的数据变换方法挂到所有 enum 实例上。"
-      highlights={['Enum.extends', 'raw()', '合并枚举', '只读结构']}
+      title={t('storybook.stories.CorePatterns.composition.title')}
+      description={t('storybook.stories.CorePatterns.composition.description')}
+      highlights={[
+        t('storybook.stories.CorePatterns.composition.highlights.extends'),
+        t('storybook.stories.CorePatterns.composition.highlights.raw'),
+        t('storybook.stories.CorePatterns.composition.highlights.merge'),
+        t('storybook.stories.CorePatterns.composition.highlights.readonly'),
+      ]}
     >
-      <StorySection title="组合结果" description="利用 raw() 回收原始定义，再重新组合成新的 enum。">
+      <StorySection
+        title={t('storybook.stories.CorePatterns.composition.section.result.title')}
+        description={t('storybook.stories.CorePatterns.composition.section.result.description')}
+      >
         <TwoColumn
           left={
             <Descriptions
@@ -182,16 +224,24 @@ function CompositionDemo() {
               size="small"
               column={1}
               items={[
-                { key: 'name', label: '枚举名', children: mergedEnum.name || '-' },
-                { key: 'frozenEnum', label: 'Object.isFrozen(enum)', children: String(Object.isFrozen(mergedEnum)) },
+                {
+                  key: 'name',
+                  label: t('storybook.stories.CorePatterns.composition.field.enumName'),
+                  children: mergedEnum.name || '-',
+                },
+                {
+                  key: 'frozenEnum',
+                  label: t('storybook.stories.CorePatterns.composition.field.frozenEnum'),
+                  children: String(Object.isFrozen(mergedEnum)),
+                },
                 {
                   key: 'frozenItems',
-                  label: 'Object.isFrozen(items)',
+                  label: t('storybook.stories.CorePatterns.composition.field.frozenItems'),
                   children: String(Object.isFrozen(mergedEnum.items)),
                 },
                 {
                   key: 'labels',
-                  label: '所有 label',
+                  label: t('storybook.stories.CorePatterns.composition.field.allLabels'),
                   children: (
                     <Space wrap>
                       {mergedEnum.labels.map((item) => (
@@ -208,8 +258,8 @@ function CompositionDemo() {
       </StorySection>
 
       <StorySection
-        title="自定义扩展方法"
-        description="这里通过 Enum.extends 增加了 toBadgeMap()，把枚举统一转成适合展示状态徽标的数据结构。"
+        title={t('storybook.stories.CorePatterns.composition.section.extension.title')}
+        description={t('storybook.stories.CorePatterns.composition.section.extension.description')}
       >
         <JsonPreview title="mergedEnum.toBadgeMap()" value={mergedEnum.toBadgeMap()} />
       </StorySection>

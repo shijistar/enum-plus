@@ -1,27 +1,37 @@
-import { useEffect, useMemo, useState } from 'react';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import i18next from 'i18next';
 import { Button, Card, Descriptions, Input, Select, Space, Table, Tag, Typography } from 'antd';
 import { reactI18nextPlugin } from '../../packages/plugin-react/src';
 import { Enum } from '../../src';
+import { storyT, useStoryLocale, useStoryT } from '../locales';
 import { StoryPage, StorySection, TwoColumn } from './shared/demo';
 import { ensureStoryI18n } from './shared/i18n';
 
-Enum.install(reactI18nextPlugin, {
-  useTranslationOptions: { ns: 'translation' },
-  defaultSearchField: 'label',
-});
+let reactI18nextPluginInstalled = false;
+
+function ensureReactI18nextPlugin() {
+  if (reactI18nextPluginInstalled) {
+    return;
+  }
+
+  Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0], {
+    useTranslationOptions: { ns: 'translation' },
+    defaultSearchField: 'label',
+  });
+
+  reactI18nextPluginInstalled = true;
+}
 
 const { Text } = Typography;
 const activeI18n = i18next;
 
 const meta: Meta = {
-  title: '插件/React 国际化',
+  title: 'Plugins/React I18n',
   parameters: {
     docs: {
       description: {
-        component:
-          '参考 packages/plugin-react/README，用 react-i18next 驱动枚举 label，把语言切换、Select 自动刷新，以及 isMatch 搜索能力都放进一个可互动面板。',
+        component: storyT('storybook.stories.PluginReactI18n.metaDescription'),
       },
     },
   },
@@ -35,12 +45,31 @@ type ReactLocalizedEnum = ReturnType<typeof Enum> & {
   isMatchCaseSensitive(search: string | undefined, item: unknown): boolean;
 };
 
+interface LocalizedStatusItem {
+  key: string;
+  value: string;
+  label: ReactNode;
+}
+
 function ReactI18nDemo() {
+  ensureReactI18nextPlugin();
+  const t = useStoryT();
+  const storyLocale = useStoryLocale();
   const instance = ensureStoryI18n();
   const [readyVersion, setReadyVersion] = useState(0);
   const [selectedValue, setSelectedValue] = useState<string>('draft');
-  const [searchText, setSearchText] = useState('re');
+  const [searchText, setSearchText] = useState(
+    storyLocale === 'en-US'
+      ? t('storybook.stories.PluginReactI18n.defaultSearch.enUS')
+      : t('storybook.stories.PluginReactI18n.defaultSearch.zhCN'),
+  );
   const [language, setLanguage] = useState(instance.language);
+
+  useEffect(() => {
+    if (instance.language !== storyLocale) {
+      void instance.changeLanguage(storyLocale);
+    }
+  }, [instance, storyLocale]);
 
   useEffect(() => {
     const previousLocalize = Enum.localize;
@@ -49,6 +78,11 @@ function ReactI18nDemo() {
 
     const handleLanguage = (nextLanguage: string) => {
       setLanguage(nextLanguage);
+      setSearchText(
+        nextLanguage === 'en-US'
+          ? t('storybook.stories.PluginReactI18n.defaultSearch.enUS')
+          : t('storybook.stories.PluginReactI18n.defaultSearch.zhCN'),
+      );
     };
     instance.on('languageChanged', handleLanguage);
 
@@ -56,7 +90,7 @@ function ReactI18nDemo() {
       instance.off('languageChanged', handleLanguage);
       Enum.localize = previousLocalize;
     };
-  }, [instance]);
+  }, [instance, t]);
 
   const localizedStatusEnum = useMemo(
     () =>
@@ -73,35 +107,42 @@ function ReactI18nDemo() {
       ) as ReactLocalizedEnum,
     [readyVersion],
   );
+  const localizedItems = localizedStatusEnum.items as unknown as LocalizedStatusItem[];
 
-  const fuzzyRows = localizedStatusEnum.items.filter((item) => localizedStatusEnum.isMatch(searchText, item));
-  const strictRows = localizedStatusEnum.items.filter((item) =>
-    localizedStatusEnum.isMatchCaseSensitive(searchText, item),
-  );
+  const fuzzyRows = localizedItems.filter((item) => localizedStatusEnum.isMatch(searchText, item));
+  const strictRows = localizedItems.filter((item) => localizedStatusEnum.isMatchCaseSensitive(searchText, item));
 
   return (
     <StoryPage
-      title="React 场景下的动态国际化枚举"
-      description="@enum-plus/plugin-react 会把 label 变成 React 可渲染内容，并监听 react-i18next 的语言切换，让已选项、下拉列表和枚举名自动刷新。"
-      highlights={['react-i18next', '自动刷新', 'isMatch()', 'Select 搜索']}
+      title={t('storybook.stories.PluginReactI18n.page.title')}
+      description={t('storybook.stories.PluginReactI18n.page.description')}
+      highlights={[
+        t('storybook.stories.PluginReactI18n.highlights.reactI18next'),
+        t('storybook.stories.PluginReactI18n.highlights.refresh'),
+        t('storybook.stories.PluginReactI18n.highlights.isMatch'),
+        t('storybook.stories.PluginReactI18n.highlights.selectSearch'),
+      ]}
     >
-      <StorySection title="语言切换与自动刷新" description="切换语言后，不需要重建组件，选中的标签和枚举名会自动更新。">
+      <StorySection
+        title={t('storybook.stories.PluginReactI18n.section.language.title')}
+        description={t('storybook.stories.PluginReactI18n.section.language.description')}
+      >
         <TwoColumn
           left={
-            <Card size="small" title="交互区">
+            <Card size="small" title={t('storybook.stories.PluginReactI18n.card.interaction')}>
               <Space direction="vertical" size={16} style={{ width: '100%' }}>
                 <Space wrap>
                   <Button
                     type={language === 'zh-CN' ? 'primary' : 'default'}
                     onClick={() => void activeI18n.changeLanguage('zh-CN')}
                   >
-                    中文
+                    {storyT('storybook.preview.locale.zhCN')}
                   </Button>
                   <Button
                     type={language === 'en-US' ? 'primary' : 'default'}
                     onClick={() => void activeI18n.changeLanguage('en-US')}
                   >
-                    English
+                    {storyT('storybook.preview.locale.enUS')}
                   </Button>
                 </Space>
 
@@ -109,7 +150,7 @@ function ReactI18nDemo() {
                   value={selectedValue}
                   showSearch
                   style={{ width: '100%' }}
-                  options={localizedStatusEnum.items as unknown as { value: string; label: string }[]}
+                  options={localizedItems}
                   filterOption={(input, option) => localizedStatusEnum.isMatch(input, option)}
                   onChange={(value) => setSelectedValue(value)}
                 />
@@ -118,18 +159,30 @@ function ReactI18nDemo() {
                   size="small"
                   column={1}
                   items={[
-                    { key: 'lang', label: '当前语言', children: language },
-                    { key: 'name', label: 'enum.name', children: localizedStatusEnum.name || '-' },
-                    { key: 'label', label: 'label(value)', children: localizedStatusEnum.label(selectedValue) },
+                    {
+                      key: 'lang',
+                      label: t('storybook.stories.PluginReactI18n.field.currentLanguage'),
+                      children: language,
+                    },
+                    {
+                      key: 'name',
+                      label: t('storybook.stories.PluginReactI18n.field.enumName'),
+                      children: localizedStatusEnum.name || '-',
+                    },
+                    {
+                      key: 'label',
+                      label: t('storybook.stories.PluginReactI18n.field.labelValue'),
+                      children: localizedStatusEnum.label(selectedValue),
+                    },
                   ]}
                 />
               </Space>
             </Card>
           }
           right={
-            <Card size="small" title="当前 options 预览">
+            <Card size="small" title={t('storybook.stories.PluginReactI18n.card.options')}>
               <Space wrap>
-                {localizedStatusEnum.items.map((item) => (
+                {localizedItems.map((item) => (
                   <Tag key={item.key} color="blue">
                     {item.label}
                   </Tag>
@@ -141,14 +194,14 @@ function ReactI18nDemo() {
       </StorySection>
 
       <StorySection
-        title="搜索能力：isMatch / isMatchCaseSensitive"
-        description="当 label 不再是纯字符串时，建议使用插件附带的匹配函数来恢复可搜索性。"
+        title={t('storybook.stories.PluginReactI18n.section.search.title')}
+        description={t('storybook.stories.PluginReactI18n.section.search.description')}
       >
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Input
             value={searchText}
             style={{ maxWidth: 320 }}
-            addonBefore="搜索词"
+            addonBefore={t('storybook.stories.PluginReactI18n.input.search')}
             onChange={(event) => setSearchText(event.target.value)}
           />
 
@@ -157,24 +210,24 @@ function ReactI18nDemo() {
             rowKey="mode"
             pagination={false}
             columns={[
-              { title: '匹配模式', dataIndex: 'mode', width: 180 },
+              { title: t('storybook.stories.PluginReactI18n.table.matchMode'), dataIndex: 'mode', width: 180 },
               {
-                title: '命中项',
+                title: t('storybook.stories.PluginReactI18n.table.matchedItems'),
                 dataIndex: 'items',
-                render: (items: typeof localizedStatusEnum.items) => (
+                render: (items: LocalizedStatusItem[]) => (
                   <Space wrap>
                     {items.length > 0 ? (
                       items.map((item) => <Tag key={item.key}>{item.label}</Tag>)
                     ) : (
-                      <Text type="secondary">无结果</Text>
+                      <Text type="secondary">{t('storybook.stories.PluginReactI18n.noResult')}</Text>
                     )}
                   </Space>
                 ),
               },
             ]}
             dataSource={[
-              { mode: 'isMatch', items: fuzzyRows },
-              { mode: 'isMatchCaseSensitive', items: strictRows },
+              { mode: t('storybook.stories.PluginReactI18n.mode.match'), items: fuzzyRows },
+              { mode: t('storybook.stories.PluginReactI18n.mode.matchCaseSensitive'), items: strictRows },
             ]}
           />
         </Space>

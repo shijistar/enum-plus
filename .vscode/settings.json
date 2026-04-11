@@ -4,7 +4,17 @@
     "source.fixAll.eslint": "explicit"
   },
   "cSpell.words": ["jsoneo", "madhead", "shijistar", "softprops", "tses", "Vuetify"],
-  "i18n-ally.localesPaths": [],
+  "i18n-ally.localesPaths": [".storybook/locales/langs"],
+  "i18n-ally.enabledFrameworks": ["react"],
+  "i18n-ally.pathMatcher": "{locale}.ts",
+  "i18n-ally.extract.autoDetect": true,
+  "i18n-ally.displayLanguage": "zh-CN",
+  "i18n-ally.enabledParsers": ["ts"],
+  "i18n-ally.includeSubfolders": false,
+  "i18n-ally.readonly": false,
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.fullReloadOnChanged": true,
+  "i18n-ally.annotationInPlace": true,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

@@ -1,0 +1,61 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Install (zh-CN)" />
+
+# 安装
+
+## 主包
+
+```bash
+npm install enum-plus
+```
+
+也可以使用其他包管理器：
+
+```bash
+pnpm add enum-plus
+yarn add enum-plus
+bun add enum-plus
+```
+
+## 浏览器场景
+
+README 中同时提供了现代浏览器和 legacy 浏览器的 UMD 构建，可直接通过 CDN 引入：
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
+```
+
+## 插件安装
+
+如果你希望把枚举结果直接喂给 UI 组件，或者让 React 场景下的枚举标签支持 i18n 自动刷新，可以额外安装插件：
+
+```bash
+npm install @enum-plus/plugin-antd
+npm install @enum-plus/plugin-react
+```
+
+安装后通过 Enum.install(...) 挂载到全局扩展体系：
+
+```ts
+import { reactI18nextPlugin } from '@enum-plus/plugin-react';
+import { Enum } from 'enum-plus';
+import antdPlugin from '@enum-plus/plugin-antd';
+
+Enum.install(antdPlugin);
+Enum.install(reactI18nextPlugin);
+```
+
+## 本地开发 Storybook
+
+```bash
+npm install
+npm run storybook
+```
+
+构建静态文档：
+
+```bash
+npm run build-storybook
+```
