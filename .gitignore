@@ -17,3 +17,4 @@ run
 .DS_Store
 .cache
 .eslintcache
+storybook-static

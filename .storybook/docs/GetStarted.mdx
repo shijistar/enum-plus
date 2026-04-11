@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="文档/快速开始" />
+
+# 快速开始
+
+## 1. 先用标准格式定义业务枚举
+
+这是 README 中最推荐的方式，因为它同时具备：
+
+- 明确的枚举值。
+- 用于 UI 展示的 `label`。
+- 可继续扩展元数据字段。
+
+```ts
+import { Enum } from 'enum-plus';
+
+const StatusEnum = Enum({
+  Draft: { value: 'draft', label: '草稿', color: 'default' },
+  Review: { value: 'review', label: '审核中', color: 'processing' },
+  Published: { value: 'published', label: '已发布', color: 'success' },
+});
+```
+
+## 2. 在业务代码里直接做查询和回显
+
+```ts
+StatusEnum.Draft;
+StatusEnum.label('review');
+StatusEnum.key('published');
+StatusEnum.findBy('color', 'success');
+StatusEnum.toList();
+StatusEnum.toMap();
+```
+
+## 3. React + Ant Design 场景推荐安装插件
+
+如果你的目标是把枚举直接接入前端页面，可以把 Storybook 里的这两类故事视为推荐组合：
+
+- `插件/Ant Design 绑定`：把枚举直接转成 `Select`、`Menu`、`Table filters` 数据源。
+- `插件/React 国际化`：让语言切换后，`label` 和枚举名在 React 界面中自动刷新。
+
+示例：
+
+```tsx
+import { Enum } from 'enum-plus';
+import antdPlugin from '@enum-plus/plugin-antd';
+
+Enum.install(antdPlugin);
+
+const WeekEnum = Enum({
+  Monday: { value: 'MON', label: '星期一' },
+  Tuesday: { value: 'TUE', label: '星期二' },
+});
+
+<Select options={WeekEnum.toSelect()} />;
+```
+
+## 4. 国际化建议
+
+如果是跨框架或字符串场景，优先使用普通 `localize` 函数；如果是 React 应用并且希望切换语言后自动刷新界面，优先使用 `@enum-plus/plugin-react`。
+
+## 5. 下一步
+
+打开左侧故事页，重点查看以下几个页面：
+
+- `核心能力/枚举初始化`
+- `核心能力/查询与转换 API`
+- `核心能力/本地化、组合与扩展`
+- `插件/Ant Design 绑定`
+- `插件/React 国际化`
