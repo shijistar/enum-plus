@@ -183,7 +183,7 @@ export interface EnumInterface {
     init: A,
     options?: OP,
     // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-  ): IEnum<ArrayToMap<A>, K, V, OP> & NativeEnumMembers<A, K, V>;
+  ): IEnum<ArrayToMap<A>, K, V, LP, OP> & NativeEnumMembers<A, K, V>;
 
   /**
    * - **EN:** Global configuration for Enum

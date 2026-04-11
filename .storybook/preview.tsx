@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/blocks';
 import type { Preview, ReactRenderer } from '@storybook/react-vite';
 import type { StoryContext } from 'storybook/internal/csf';
-import { themes } from 'storybook/theming';
 import { App as AntdApp, ConfigProvider as AntdConfigProvider, theme as antTheme } from 'antd';
 import 'antd/dist/reset.css';
 import enUS from 'antd/locale/en_US';
@@ -39,7 +38,7 @@ function StorybookDecorator({ Story, context }: { Story: React.ComponentType; co
   const [prevTheme, setPrevTheme] = useState(themeName);
 
   // Reload the page if the theme changes.
-  useMemo(() => {
+  useEffect(() => {
     if (themeName !== prevTheme) {
       setPrevTheme(themeName);
       (window.top ?? window.parent ?? window).location.reload();

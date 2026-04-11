@@ -1,4 +1,4 @@
-import { GLOBALS_UPDATED, SET_GLOBALS, UPDATE_GLOBALS } from 'storybook/internal/core-events';
+import { GLOBALS_UPDATED } from 'storybook/internal/core-events';
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
 import { getGlobalValueFromUrl } from './utils/global';
