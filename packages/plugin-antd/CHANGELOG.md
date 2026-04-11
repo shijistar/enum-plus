@@ -2,6 +2,14 @@
 
 # Changelog
 
+## 1.0.1
+
+2026-4-11
+
+### Features
+
+- ✨ Add `type: 'item'` in `toMenu` results.
+
 ## 1.0.0
 
 2025-10-5

@@ -1,0 +1,61 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Install (en-US)" />
+
+# Install
+
+## Main package
+
+```bash
+npm install enum-plus
+```
+
+You can use any other package manager as well:
+
+```bash
+pnpm add enum-plus
+yarn add enum-plus
+bun add enum-plus
+```
+
+## Browser usage
+
+The README also provides modern browser and legacy browser UMD builds, which can be loaded through a CDN:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
+```
+
+## Plugin installation
+
+If you want to feed enum output directly into UI components, or let enum labels refresh automatically with i18n in React, install the related plugins:
+
+```bash
+npm install @enum-plus/plugin-antd
+npm install @enum-plus/plugin-react
+```
+
+After installation, mount them through Enum.install(...):
+
+```ts
+import { reactI18nextPlugin } from '@enum-plus/plugin-react';
+import { Enum } from 'enum-plus';
+import antdPlugin from '@enum-plus/plugin-antd';
+
+Enum.install(antdPlugin);
+Enum.install(reactI18nextPlugin);
+```
+
+## Local Storybook development
+
+```bash
+npm install
+npm run storybook
+```
+
+Build the static docs:
+
+```bash
+npm run build-storybook
+```

@@ -17,6 +17,7 @@ import { IS_ENUM_ITEM } from './utils';
  * @template V Represents the type of the enum item's value (usually string or number) |
  *   表示枚举项值的类型（通常是字符串或数字）
  * @template K Represents the type of the enum item's key | 表示枚举项键的类型
+ * @template LP Represents the type of the enum item's label prefix | 表示枚举项标签的前缀值
  */
 export class EnumItemClass<
   const T extends EnumItemInit<V>,
@@ -24,9 +25,9 @@ export class EnumItemClass<
   K extends EnumKey<any> = string,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const P = any,
+  const LP = any,
 > {
-  private _options: EnumItemOptions<T, K, V, P> | undefined;
+  private _options: EnumItemOptions<T, K, V, LP> | undefined;
   private _label: EnumItemLabel | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _localize: (content: string | undefined) => any;
@@ -41,7 +42,7 @@ export class EnumItemClass<
    * @param raw The original initialization object | 原始初始化对象
    * @param options Optional settings for the enum item | 枚举项的可选设置
    */
-  constructor(key: K, value: V, label: EnumItemLabel, raw: T, options?: EnumItemOptions<T, K, V, P>) {
+  constructor(key: K, value: V, label: EnumItemLabel, raw: T, options?: EnumItemOptions<T, K, V, LP>) {
     this.key = key;
     this.value = value;
     this.label = label as string;
@@ -65,7 +66,7 @@ export class EnumItemClass<
         configurable: false,
       },
       label: {
-        get: function (this: EnumItemClass<T, K, V, P>) {
+        get: function (this: EnumItemClass<T, K, V, LP>) {
           const labelPrefix = this._options?.labelPrefix;
           const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
           let localeKey = this._label;
@@ -77,7 +78,7 @@ export class EnumItemClass<
             if (typeof autoLabel === 'function') {
               localeKey = autoLabel({
                 item: this,
-                labelPrefix: labelPrefix as P,
+                labelPrefix: labelPrefix as LP,
               });
             } else {
               localeKey = `${labelPrefix as string}${this._label}`;
@@ -110,7 +111,7 @@ export class EnumItemClass<
     });
     this._localize = undefined!;
     Object.defineProperty(this, '_localize', {
-      value: function (this: EnumItemClass<T, K, V, P>, content: string | undefined) {
+      value: function (this: EnumItemClass<T, K, V, LP>, content: string | undefined) {
         const localize = this._options?.localize ?? localizer.localize;
         if (typeof localize === 'function') {
           return localize(content);
@@ -239,7 +240,7 @@ export interface EnumItemOptions<
   K extends EnumKey<any> = string,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  P = any,
+  LP = any,
 > {
   /**
    * - **EN:** Localization function, used to convert the text of the enumeration item to localized
@@ -253,7 +254,7 @@ export interface EnumItemOptions<
    *   internationalization is enabled.
    * - **CN:** 每个枚举项的label前缀，可以是字符串，也可以是一个对象。此选项可以简化甚至省略枚举项的label定义，只有当开启国际化时才需要此选项。
    */
-  labelPrefix?: P;
+  labelPrefix?: LP;
 
   /**
    * - **EN:** Allow setting a label prefix for enum items, simplifying or even omitting the label
@@ -280,5 +281,5 @@ export interface EnumItemOptions<
    *
    * > 此选项与 `Enum.config.autoLabel` 作用相同，但优先级高于全局配置，仅对当前枚举实例生效。
    */
-  autoLabel?: boolean | ((options: { item: EnumItemClass<T, K, V, P>; labelPrefix: P }) => string);
+  autoLabel?: boolean | ((options: { item: EnumItemClass<T, K, V, LP>; labelPrefix: LP }) => string);
 }

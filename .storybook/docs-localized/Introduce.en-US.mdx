@@ -1,0 +1,32 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduce (en-US)" />
+
+# enum-plus Storybook
+
+This visual documentation entry is organized from the repository README. The goal is not to merely restate the text, but to turn the most important enum modeling, querying, mapping, plugin binding, and localization capabilities into interactive Storybook demos.
+
+## What you can inspect here
+
+- Core: covers enum initialization, common APIs, data transforms, naming conflict handling, enum composition, and extension.
+- Plugins: uses React + Ant Design to demonstrate UI binding, table filters, menu data sources, and automatic i18n refresh in React flows.
+- Docs: restructures the most practical installation, quick-start, and usage guidance from the README into pages that are easier to browse.
+
+## Why Storybook works here
+
+enum-plus is not a React component library, but it still fits visual documentation well because it eventually feeds UI data sources and business state mapping. Storybook makes the following easier to inspect:
+
+- How different initialization shapes produce different enum structures.
+- The actual output of items, labels, values, toList, and toMap.
+- The data structures used by Select, Menu, and Table when wired to Ant Design.
+- The automatic refresh behavior of the React i18n plugin after switching language.
+
+## Suggested reading order
+
+1. Start with Get Started to understand the recommended usage flow.
+2. Then read Core / Enum Initialization and Core / Query and Transform API.
+3. Finally inspect Plugins / Ant Design Integration and Plugins / React I18n.
+
+## Scope note
+
+This Storybook prioritizes the parts of the README that are the most visual. Pure TypeScript type capabilities such as valueType, keyType, and rawType are still better understood through source code and IDE hints, so they remain documentation-first instead of being forced into runtime demos.
