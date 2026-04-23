@@ -189,7 +189,7 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "@tiny-codes/code-style-all-in-one": "^2.0.0",
+    "@tiny-codes/code-style-all-in-one": "^2.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.19.15",
     "@types/react": "^19.1.13",
