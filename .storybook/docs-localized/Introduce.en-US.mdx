@@ -8,7 +8,29 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 This GitHub Pages site is now the primary long-form guide. The GitHub README stays intentionally lighter and points here when you want the full docs and demos.
 
-## Why people use it
+## Start here
+
+Choose the fastest path based on what you want to do:
+
+- **Evaluate the library quickly** → [Get Started](?path=/docs/get-started--docs)
+- **Understand the core surface area** → [API Guide](?path=/docs/api-guide--docs)
+- **Copy production-friendly patterns** → [Recipes](?path=/docs/recipes--docs)
+- **Check migration notes and edge cases** → [FAQ](?path=/docs/faq--docs)
+- **See concrete UI output first** → [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
+
+## The problem it helps remove
+
+Teams usually do not struggle with enums themselves. They struggle with the duplicated runtime plumbing around enums:
+
+- repeated `value -> label` lookup tables
+- repeated Select, Menu, and Table filter generation
+- scattered metadata such as color, icon, or permission tags
+- localization glued on later with extra mapping layers
+- drift between business constants and UI-facing data structures
+
+`enum-plus` pulls those concerns back into one reusable runtime enum object.
+
+## Why teams keep it around
 
 - Keep enum values readable in business logic, just like native `enum`.
 - Attach labels and metadata once, then reuse them everywhere.
@@ -16,25 +38,42 @@ This GitHub Pages site is now the primary long-form guide. The GitHub README sta
 - Localize enum names and labels without duplicating lookup tables.
 - Share one enum definition across React, Vue, Node.js, browser, mini-program, and SSR scenarios.
 
-## What to read first
+## Recommended adoption path
 
-- [Install](?path=/docs/install--docs) — package installation, browser usage, plugin packages, and compatibility.
-- [Get Started](?path=/docs/get-started--docs) — the fastest path from enum definition to UI usage.
-- [API Guide](?path=/docs/api-guide--docs) — a readable map of the core API, static methods, and TypeScript helpers.
-- [Recipes](?path=/docs/recipes--docs) — practical patterns for UI binding, localization, metadata, extension, and best practices.
-- [FAQ](?path=/docs/faq--docs) — migration notes, type-hint issues, performance, compatibility, and contribution entry points.
+1. Read [Install](?path=/docs/install--docs) to choose the right package and runtime setup.
+2. Copy one example from [Get Started](?path=/docs/get-started--docs) to go from enum definition to UI usage.
+3. Keep [API Guide](?path=/docs/api-guide--docs) open while wiring real business logic.
+4. Pull production patterns from [Recipes](?path=/docs/recipes--docs) when you hit UI, i18n, or metadata needs.
+5. Use [FAQ](?path=/docs/faq--docs) for migration questions, type-hint issues, and compatibility checks.
 
-## Interactive demos
+## Demos worth opening first
 
-Storybook works especially well for `enum-plus` because many features eventually surface in the UI.
+If you prefer to judge the project by concrete output instead of prose, start here:
 
-- [Core / Enum Initialization](?path=/story/core-enum-initialization--playground)
-- [Core / Array Field Mapping](?path=/story/core-enum-initialization--array-field-mapping)
-- [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
-- [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts)
-- [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel)
-- [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground)
-- [Plugins / React I18n](?path=/story/plugins-react-i18n--playground)
+- [Core / Enum Initialization](?path=/story/core-enum-initialization--playground) — compare supported enum definition styles
+- [Core / Array Field Mapping](?path=/story/core-enum-initialization--array-field-mapping) — map structured fields into enum items
+- [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer) — inspect `items`, `label`, `findBy`, `toList`, and `toMap`
+- [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts) — see how business keys coexist with built-in API names
+- [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel) — see localization and extension patterns
+- [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground) — generate UI-ready data structures
+- [Plugins / React I18n](?path=/story/plugins-react-i18n--playground) — see language-aware React rendering
+
+## Docs map
+
+- [Install](?path=/docs/install--docs) — package installation, browser usage, plugin packages, and compatibility
+- [Get Started](?path=/docs/get-started--docs) — the fastest path from enum definition to UI usage
+- [API Guide](?path=/docs/api-guide--docs) — a readable map of the core API, static methods, and TypeScript helpers
+- [Recipes](?path=/docs/recipes--docs) — practical patterns for UI binding, localization, metadata, extension, and best practices
+- [FAQ](?path=/docs/faq--docs) — migration notes, type-hint issues, performance, compatibility, and contribution entry points
+
+## Plugin entry points
+
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-antd/README.md)
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-react/README.md)
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-i18next/README.md)
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-react-i18next/README.md)
+- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-vue-i18n/README.md)
+- [@enum-plus/plugin-next-international](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-next-international/README.md)
 
 ## Project links
 
