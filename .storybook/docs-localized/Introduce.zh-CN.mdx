@@ -2,31 +2,60 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Introduce (zh-CN)" />
 
-# enum-plus Storybook
+# enum-plus
 
-这是根据仓库 README 整理出的可视化文档入口，目标不是简单复刻文字内容，而是把最重要的枚举建模、查询、转换、插件绑定和本地化能力转成可交互的 Storybook 演示。
+`enum-plus` 是一个面向运行时的枚举类库，适用于 TypeScript 和 JavaScript 项目。它保留了原生枚举直观的使用方式，同时补上了真实业务里最常见的能力：显示名称、元数据、本地化、UI 数据源生成，以及基于插件的框架集成。
 
-## 你可以在这里看到什么
+现在 GitHub Pages 已经成为主要的长文档入口，GitHub README 会刻意保持更轻量，把完整说明、API 导览和可交互演示集中放到这里。
 
-- 核心能力：覆盖枚举初始化、常用 API、数据转换、命名冲突处理、枚举组合与扩展。
-- 插件：使用 React + Ant Design 演示 UI 绑定、表格筛选、菜单数据源，以及 React 场景下的 i18n 自动更新。
-- 文档：把 README 中最常用的安装、快速开始和使用建议整理成更适合浏览的 Storybook 页面。
+## 为什么会用它
 
-## 为什么适合 Storybook
+- 在业务代码里继续像原生 `enum` 一样直接使用枚举值。
+- 为枚举一次性补充 label 和元数据，然后在整个项目里复用。
+- 直接生成 Select、Menu、Table filters 等 UI 所需结构。
+- 不再手写重复的值到展示文本映射表，并且更容易接入国际化。
+- 在 React、Vue、Node.js、浏览器、小程序和 SSR 场景里共享同一份枚举定义。
 
-enum-plus 虽然不是 React 组件库，但它非常适合可视化文档，因为它最终会落在 UI 数据源和业务状态映射上。Storybook 能把以下能力直观展示出来：
+## 推荐先看这些页面
 
-- 不同初始化格式生成出来的枚举结构差异。
-- items、labels、values、toList、toMap 等 API 的真实结果。
-- 与 Ant Design 的 Select、Menu、Table 结合时的数据形态。
-- React 国际化插件在切换语言后的自动刷新效果。
+- [Install](?path=/docs/install--docs) —— 安装方式、浏览器使用、插件包和兼容性。
+- [Get Started](?path=/docs/get-started--docs) —— 从定义 enum 到接入 UI 的最短路径。
+- [API Guide](?path=/docs/api-guide--docs) —— 用可读的方式梳理核心 API、静态方法和 TypeScript 辅助类型。
+- [Recipes](?path=/docs/recipes--docs) —— 汇总 UI 绑定、本地化、元数据、扩展能力和最佳实践。
+- [FAQ](?path=/docs/faq--docs) —— 汇总迁移、类型提示、性能、兼容性与贡献相关问题。
 
-## 建议浏览顺序
+## 可交互演示
 
-1. 先看快速开始，了解推荐使用方式。
-2. 再看 Core / Enum Initialization 和 Core / Query and Transform API。
-3. 最后看 Plugins / Ant Design Integration 与 Plugins / React I18n。
+`enum-plus` 特别适合用 Storybook 展示，因为很多能力最终都会落到 UI 上：
 
-## 覆盖范围说明
+- [Core / Enum Initialization](?path=/story/core-enum-initialization--playground)
+- [Core / Array Field Mapping](?path=/story/core-enum-initialization--array-field-mapping)
+- [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
+- [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts)
+- [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel)
+- [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground)
+- [Plugins / React I18n](?path=/story/plugins-react-i18n--playground)
 
-本套 Storybook 优先覆盖 README 中最适合可视化的内容。像 valueType、keyType、rawType 这类 TypeScript 纯类型能力，更适合通过源码和 IDE 提示理解，因此以文档说明为主，没有强行做成运行时演示。
+## 项目链接
+
+- [GitHub 仓库](https://github.com/shijistar/enum-plus)
+- [npm 包：enum-plus](https://www.npmjs.com/package/enum-plus)
+- [v3 发布说明](https://github.com/shijistar/enum-plus/blob/master/docs/release-v3.zh-CN.md)
+- [v2 → v3 迁移指南](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md)
+- [插件开发指南](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.zh-CN.md)
+
+## 什么时候适合用 enum-plus
+
+当你的项目需要的不只是“编译期常量”时，`enum-plus` 就很合适：
+
+- 业务状态需要显示名称
+- 表单、菜单、表格筛选等数据结构希望从 enum 直接生成
+- 枚举项需要颜色、图标、描述、权限等元数据
+- 枚举名称和标签需要国际化
+- 希望在多个层之间共享同一个可查询、可转换的运行时 enum 对象
+
+如果你只需要纯粹的常量集合，不涉及运行时查询、UI 映射或本地化，那么原生 enum 或字符串联合类型也可能已经足够。
+
+## 支持项目
+
+如果这个项目帮你节省了时间，欢迎在 GitHub 上点一个 Star。它能帮助更多开发者发现这个库，也能让项目继续稳定演进。

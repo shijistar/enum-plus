@@ -1,0 +1,114 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Recipes (zh-CN)" />
+
+# Recipes
+
+这个页面把原来分散在超长 README 里的实战模式收拢到一起：UI 生成、本地化、元数据、命名冲突、扩展能力，以及推荐用法。
+
+## 用一份 enum 定义直接生成 UI 数据
+
+只需要普通数据结构时，可以直接使用核心 API：
+
+```ts
+StatusEnum.toList();
+StatusEnum.toMap();
+```
+
+如果希望直接产出框架可用的结构，就安装插件：
+
+```ts
+import { Enum } from 'enum-plus';
+import antdPlugin from '@enum-plus/plugin-antd';
+
+Enum.install(antdPlugin);
+
+StatusEnum.toSelect();
+StatusEnum.toMenu();
+StatusEnum.toFilter();
+StatusEnum.toValueMap();
+```
+
+对应演示： [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground)
+
+## 不再手写重复的本地化映射表
+
+常见有两条路径：
+
+1. **跨框架方式**：使用 `localize`、`labelPrefix` 和 `autoLabel`，输出普通字符串。
+2. **框架集成方式**：使用 `@enum-plus/plugin-react`、`@enum-plus/plugin-i18next`、`@enum-plus/plugin-vue-i18n` 等插件。
+
+```ts
+const StatusEnum = Enum(
+  {
+    Draft: { value: 'draft', label: 'draft' },
+    Review: { value: 'review', label: 'review' },
+  },
+  {
+    name: 'status.enumName',
+    labelPrefix: 'status.',
+    autoLabel: true,
+    localize: (key) => dictionary[key] ?? key,
+  },
+);
+```
+
+对应演示：
+
+- [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel)
+- [Plugins / React I18n](?path=/story/plugins-react-i18n--playground)
+
+## 把 metadata 当成轻量静态配置系统
+
+这是它和原生 enum 差异最大的能力之一。
+
+```ts
+const WorkflowEnum = Enum({
+  Draft: { value: 'draft', label: '草稿', color: 'default', permission: 'edit' },
+  Published: { value: 'published', label: '已发布', color: 'success', permission: 'read' },
+});
+
+WorkflowEnum.meta.color;
+WorkflowEnum.findBy('permission', 'read');
+```
+
+这样可以把展示逻辑和业务元数据收敛在 enum 定义附近，而不是在项目各处维护分散的 lookup table。
+
+## 遇到命名冲突也不必放弃业务命名
+
+当枚举项 key 与内置 API 名称重叠时，enum-plus 会保留业务字段本身，并通过 `ITEMS`、`KEYS`、`VALUES` 等符号别名暴露原始能力。
+
+对应演示： [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts)
+
+## 组合枚举，并添加全局共享方法
+
+可以用 `raw()` 重建定义，再通过 `Enum.extends()` 给所有 enum 增加共享助手：
+
+```ts
+Enum.extends({
+  toBadgeMap() {
+    return this.toMap({
+      keySelector: 'value',
+      valueSelector: (item) => ({ label: item.label, color: item.raw.color }),
+    });
+  },
+});
+```
+
+对应演示： [Core / Composition and Extension](?path=/story/core-localization-composition-and-extension--composition-and-extension)
+
+## 推荐习惯
+
+- 为 enum 类型使用语义明确的 `PascalCase` 命名。
+- 面向业务场景时优先使用标准格式。
+- 把 label 和 metadata 放在 enum 附近，而不是额外维护一堆 map。
+- 如果 label 要面向用户显示，尽早确定本地化策略。
+- 插件按需安装，保持核心包轻量。
+- 在源码里为关键 enum 和枚举项写 JSDoc，增强 IDE 提示体验。
+
+## 插件入口
+
+- [`@enum-plus/plugin-antd`](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-antd/README.zh-CN.md)
+- [`@enum-plus/plugin-react`](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-react/README.zh-CN.md)
+- [`@enum-plus/plugin-i18next`](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-i18next/README.zh-CN.md)
+- [`@enum-plus/plugin-react-i18next`](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-react-i18next/README.zh-CN.md)

@@ -2,31 +2,60 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Introduce (en-US)" />
 
-# enum-plus Storybook
+# enum-plus
 
-This visual documentation entry is organized from the repository README. The goal is not to merely restate the text, but to turn the most important enum modeling, querying, mapping, plugin binding, and localization capabilities into interactive Storybook demos.
+`enum-plus` is a runtime-first enum library for TypeScript and JavaScript projects. It keeps the directness of native enums, then adds the things product code usually needs in practice: display labels, metadata, localization, UI data-source generation, and plugin-based framework integration.
 
-## What you can inspect here
+This GitHub Pages site is now the primary long-form guide. The GitHub README stays intentionally lighter and points here when you want the full docs and demos.
 
-- Core: covers enum initialization, common APIs, data transforms, naming conflict handling, enum composition, and extension.
-- Plugins: uses React + Ant Design to demonstrate UI binding, table filters, menu data sources, and automatic i18n refresh in React flows.
-- Docs: restructures the most practical installation, quick-start, and usage guidance from the README into pages that are easier to browse.
+## Why people use it
 
-## Why Storybook works here
+- Keep enum values readable in business logic, just like native `enum`.
+- Attach labels and metadata once, then reuse them everywhere.
+- Generate UI-friendly structures such as Select options, Menu items, and Table filters.
+- Localize enum names and labels without duplicating lookup tables.
+- Share one enum definition across React, Vue, Node.js, browser, mini-program, and SSR scenarios.
 
-enum-plus is not a React component library, but it still fits visual documentation well because it eventually feeds UI data sources and business state mapping. Storybook makes the following easier to inspect:
+## What to read first
 
-- How different initialization shapes produce different enum structures.
-- The actual output of items, labels, values, toList, and toMap.
-- The data structures used by Select, Menu, and Table when wired to Ant Design.
-- The automatic refresh behavior of the React i18n plugin after switching language.
+- [Install](?path=/docs/install--docs) — package installation, browser usage, plugin packages, and compatibility.
+- [Get Started](?path=/docs/get-started--docs) — the fastest path from enum definition to UI usage.
+- [API Guide](?path=/docs/api-guide--docs) — a readable map of the core API, static methods, and TypeScript helpers.
+- [Recipes](?path=/docs/recipes--docs) — practical patterns for UI binding, localization, metadata, extension, and best practices.
+- [FAQ](?path=/docs/faq--docs) — migration notes, type-hint issues, performance, compatibility, and contribution entry points.
 
-## Suggested reading order
+## Interactive demos
 
-1. Start with Get Started to understand the recommended usage flow.
-2. Then read Core / Enum Initialization and Core / Query and Transform API.
-3. Finally inspect Plugins / Ant Design Integration and Plugins / React I18n.
+Storybook works especially well for `enum-plus` because many features eventually surface in the UI.
 
-## Scope note
+- [Core / Enum Initialization](?path=/story/core-enum-initialization--playground)
+- [Core / Array Field Mapping](?path=/story/core-enum-initialization--array-field-mapping)
+- [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
+- [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts)
+- [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel)
+- [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground)
+- [Plugins / React I18n](?path=/story/plugins-react-i18n--playground)
 
-This Storybook prioritizes the parts of the README that are the most visual. Pure TypeScript type capabilities such as valueType, keyType, and rawType are still better understood through source code and IDE hints, so they remain documentation-first instead of being forced into runtime demos.
+## Project links
+
+- [GitHub repository](https://github.com/shijistar/enum-plus)
+- [npm package: enum-plus](https://www.npmjs.com/package/enum-plus)
+- [Release Notes for v3](https://github.com/shijistar/enum-plus/blob/master/docs/release-v3.md)
+- [Migration Guide v2 → v3](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.md)
+- [Plugin development guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md)
+
+## When enum-plus is a good fit
+
+Choose `enum-plus` when your project needs more than compile-time constants:
+
+- business states that need user-facing labels
+- form, table, menu, or filter data generated from enums
+- metadata such as color, icon, or permission tags
+- localization for enum names and labels
+- a reusable runtime enum object shared across application layers
+
+If all you need is a plain compile-time constant list with no runtime querying or UI mapping, native enums or string unions may still be enough.
+
+## Support
+
+If this project saves you time, please consider starring it on GitHub. Stars help more developers discover the library and help the project keep moving.
