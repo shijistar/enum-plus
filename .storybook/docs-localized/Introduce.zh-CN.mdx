@@ -8,7 +8,29 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 现在 GitHub Pages 已经成为主要的长文档入口，GitHub README 会刻意保持更轻量，把完整说明、API 导览和可交互演示集中放到这里。
 
-## 为什么会用它
+## 从这里开始
+
+按你的目标选择最快入口：
+
+- **想快速判断这个库值不值得用** → [Get Started](?path=/docs/get-started--docs)
+- **想先看核心能力边界** → [API Guide](?path=/docs/api-guide--docs)
+- **想直接抄可落地模式** → [Recipes](?path=/docs/recipes--docs)
+- **想先排查迁移说明和边界问题** → [FAQ](?path=/docs/faq--docs)
+- **想马上看真实 UI 输出** → [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
+
+## 它主要帮你消掉什么问题
+
+很多团队真正痛的不是 enum 本身，而是围绕 enum 不断重复的运行时胶水代码：
+
+- 反复维护 `value -> label` 映射表
+- 反复手写 Select、Menu、Table filters 的数据结构
+- 颜色、图标、权限等元数据散落在不同文件
+- 国际化总是在后期再额外补一层映射
+- 业务常量和 UI 数据结构逐渐漂移
+
+`enum-plus` 的目标，就是把这些东西重新收拢成一个可复用的运行时 enum 对象。
+
+## 为什么团队会持续用它
 
 - 在业务代码里继续像原生 `enum` 一样直接使用枚举值。
 - 为枚举一次性补充 label 和元数据，然后在整个项目里复用。
@@ -16,25 +38,42 @@ import { Meta } from '@storybook/addon-docs/blocks';
 - 不再手写重复的值到展示文本映射表，并且更容易接入国际化。
 - 在 React、Vue、Node.js、浏览器、小程序和 SSR 场景里共享同一份枚举定义。
 
-## 推荐先看这些页面
+## 推荐采用路径
 
-- [Install](?path=/docs/install--docs) —— 安装方式、浏览器使用、插件包和兼容性。
-- [Get Started](?path=/docs/get-started--docs) —— 从定义 enum 到接入 UI 的最短路径。
-- [API Guide](?path=/docs/api-guide--docs) —— 用可读的方式梳理核心 API、静态方法和 TypeScript 辅助类型。
-- [Recipes](?path=/docs/recipes--docs) —— 汇总 UI 绑定、本地化、元数据、扩展能力和最佳实践。
-- [FAQ](?path=/docs/faq--docs) —— 汇总迁移、类型提示、性能、兼容性与贡献相关问题。
+1. 先读 [Install](?path=/docs/install--docs)，确定安装方式和运行环境。
+2. 从 [Get Started](?path=/docs/get-started--docs) 复制一个最接近你业务的例子。
+3. 真正接业务代码时，把 [API Guide](?path=/docs/api-guide--docs) 打开在旁边。
+4. 碰到 UI、本地化、metadata 设计时，再查 [Recipes](?path=/docs/recipes--docs)。
+5. 如果你在迁移旧版本、排查类型提示或确认兼容性，再看 [FAQ](?path=/docs/faq--docs)。
 
-## 可交互演示
+## 推荐优先打开的 Demo
 
-`enum-plus` 特别适合用 Storybook 展示，因为很多能力最终都会落到 UI 上：
+如果你更愿意先看真实输出，而不是先读说明，建议从这些页面开始：
 
-- [Core / Enum Initialization](?path=/story/core-enum-initialization--playground)
-- [Core / Array Field Mapping](?path=/story/core-enum-initialization--array-field-mapping)
-- [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
-- [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts)
-- [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel)
-- [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground)
-- [Plugins / React I18n](?path=/story/plugins-react-i18n--playground)
+- [Core / Enum Initialization](?path=/story/core-enum-initialization--playground) —— 对比不同 enum 定义方式
+- [Core / Array Field Mapping](?path=/story/core-enum-initialization--array-field-mapping) —— 看结构化字段如何映射到 enum item
+- [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer) —— 直接查看 `items`、`label`、`findBy`、`toList`、`toMap` 的效果
+- [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts) —— 看业务 key 与内置 API 名称如何共存
+- [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel) —— 看本地化、组合和扩展方式
+- [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground) —— 看 UI 数据结构如何直接生成
+- [Plugins / React I18n](?path=/story/plugins-react-i18n--playground) —— 看 React + 多语言场景下的表现
+
+## 文档地图
+
+- [Install](?path=/docs/install--docs) —— 安装方式、浏览器使用、插件包和兼容性
+- [Get Started](?path=/docs/get-started--docs) —— 从定义 enum 到接入 UI 的最短路径
+- [API Guide](?path=/docs/api-guide--docs) —— 用可读的方式梳理核心 API、静态方法和 TypeScript 辅助类型
+- [Recipes](?path=/docs/recipes--docs) —— 汇总 UI 绑定、本地化、元数据、扩展能力和最佳实践
+- [FAQ](?path=/docs/faq--docs) —— 汇总迁移、类型提示、性能、兼容性与贡献相关问题
+
+## 插件入口
+
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-antd/README.zh-CN.md)
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-react/README.zh-CN.md)
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-i18next/README.zh-CN.md)
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-react-i18next/README.zh-CN.md)
+- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-vue-i18n/README.zh-CN.md)
+- [@enum-plus/plugin-next-international](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-next-international/README.zh-CN.md)
 
 ## 项目链接
 
