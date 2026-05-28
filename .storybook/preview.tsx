@@ -134,7 +134,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ['Introduce', 'Install', 'Get Started', 'Core', 'Plugins'],
+        order: ['Introduce', 'Install', 'Get Started', 'API Guide', 'Recipes', 'FAQ', 'Core', 'Plugins'],
       },
     },
   },

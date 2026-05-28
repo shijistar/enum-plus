@@ -1,0 +1,86 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="API Guide (zh-CN)" />
+
+# API Guide
+
+这个页面用更适合浏览的方式，替代了 README 里那种超长 API 逐条展开说明。想看真实运行结果，请打开每个主题后面的交互式 Storybook 页面。
+
+## 1. 先选择初始化格式
+
+`enum-plus` 支持多种初始化方式，但最终都会落到同一套运行时 enum 能力上：
+
+- **Key-Value** —— 最接近原生枚举
+- **标准格式** —— 最推荐，适合前端业务，天然包含 `value`、`label` 和 metadata
+- **仅标签格式** —— 当 `value` 希望默认等于 `key` 时很方便
+- **数组格式** —— 非常适合接口返回或动态数据
+- **原生 enum 输入** —— 复用已有的 TypeScript 原生枚举
+
+推荐从这里开始： [Core / Enum Initialization](?path=/story/core-enum-initialization--playground)
+
+## 2. 核心实例 API
+
+| API | 作用 | 示例 |
+| --- | --- | --- |
+| `EnumValue = StatusEnum.Draft` | 直接拾取枚举值 | `StatusEnum.Draft` |
+| `named` | 通过 key 获取完整枚举项 | `StatusEnum.named.Published.label` |
+| `items` | 遍历稳定的运行时枚举项数组 | `StatusEnum.items.map(...)` |
+| `values` / `keys` / `labels` | 读取派生数组 | `StatusEnum.values` |
+| `meta` | 聚合自定义字段 | `StatusEnum.meta.color` |
+| `has(value)` | 校验一个输入值是否合法 | `StatusEnum.has(input)` |
+| `findBy(field, value)` | 通过 metadata 查询项 | `StatusEnum.findBy('slug', 'draft')` |
+| `label(value)` / `key(value)` | 回显展示文本或反查 key | `StatusEnum.label('draft')` |
+| `raw(value?)` | 查看原始定义结构 | `StatusEnum.raw()` |
+| `toList(...)` / `toMap(...)` | 生成适合业务层使用的数据结构 | `StatusEnum.toList()` |
+| `name` | 获取枚举类型名称 | `StatusEnum.name` |
+
+对应演示： [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
+
+## 3. 命名冲突是显式可处理的
+
+如果业务字段与内置 API 名称冲突，比如 `items`、`values`、`meta`，那么枚举项字段本身仍然优先，同时可以通过符号别名取回原来的 enum 能力。
+
+需要时使用这些导出：
+
+- `ITEMS`
+- `KEYS`
+- `VALUES`
+- `LABELS`
+- `META`
+- `NAMED`
+
+对应演示： [Core / Naming Conflicts](?path=/story/core-query-and-transform-api--naming-conflicts)
+
+## 4. 静态方法
+
+| API | 作用 |
+| --- | --- |
+| `Enum.isEnum(obj)` | 判断一个值是否为 enum-plus 实例 |
+| `Enum.localize = fn` | 安装全局本地化函数 |
+| `Enum.extends({...})` | 为所有 enum 实例增加共享方法 |
+| `Enum.install(plugin, options?)` | 安装 Ant Design、i18n 等插件 |
+
+## 5. 全局配置
+
+`Enum.config` 用于控制跨项目默认行为。其中最关键的是 `Enum.config.autoLabel`，它能配合 `labelPrefix` 自动生成标签，减少重复定义。
+
+对应演示： [Core / Localization, Composition and Extension](?path=/story/core-localization-composition-and-extension--localization-and-autolabel)
+
+## 6. TypeScript 专属辅助类型
+
+这部分更适合结合 IDE 和源码理解，而不是运行时截图：
+
+- `valueType`
+- `keyType`
+- `rawType`
+- `AnyEnum`
+- `GenericAnyEnum`
+- 通过 `enum-plus/extension` 做自定义扩展方法的类型增强
+
+源码参考： [`src/enum.ts`](https://github.com/shijistar/enum-plus/blob/master/src/enum.ts)
+
+## 7. API 继续往哪里看
+
+- 想看运行时对比和可视化输出，请继续看 Storybook stories。
+- 想看更贴近业务的使用模式，请看 [Recipes](?path=/docs/recipes--docs)。
+- 想看插件专属 API，请阅读仓库中的插件 README，例如 [`@enum-plus/plugin-antd`](https://github.com/shijistar/enum-plus/blob/master/packages/plugin-antd/README.zh-CN.md)。

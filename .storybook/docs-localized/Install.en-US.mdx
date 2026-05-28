@@ -10,7 +10,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 npm install enum-plus
 ```
 
-You can use any other package manager as well:
+You can use any package manager you prefer:
 
 ```bash
 pnpm add enum-plus
@@ -18,44 +18,65 @@ yarn add enum-plus
 bun add enum-plus
 ```
 
-## Browser usage
+## Browser and CDN usage
 
-The README also provides modern browser and legacy browser UMD builds, which can be loaded through a CDN:
+`enum-plus` ships both modern and legacy UMD bundles:
 
 ```html
+<!-- Modern browsers (ES2020) -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+<!-- Legacy browsers (ES2015) -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
 ```
 
-## Plugin installation
+If you need a pinned version, replace `enum-plus` with `enum-plus@x.y.z`.
 
-If you want to feed enum output directly into UI components, or let enum labels refresh automatically with i18n in React, install the related plugins:
+Download links are also available from the [GitHub Releases page](https://github.com/shijistar/enum-plus/releases).
 
-```bash
-npm install @enum-plus/plugin-antd
-npm install @enum-plus/plugin-react
-```
+## Optional packages you may want next
 
-After installation, mount them through Enum.install(...):
+Install only the packages that match your stack:
+
+- `@enum-plus/plugin-antd` — generate Ant Design Select, Menu, Table filters, and value maps.
+- `@enum-plus/plugin-react` — keep enum labels reactive in React i18n flows.
+- `@enum-plus/plugin-i18next` — translate enum labels and names through i18next.
+- `@enum-plus/plugin-react-i18next` — combine React and i18next integration.
+- `@enum-plus/plugin-vue-i18n` / `@enum-plus/plugin-i18next-vue` / `@enum-plus/plugin-next-international` — framework-specific localization helpers.
+
+Example:
 
 ```ts
-import { reactI18nextPlugin } from '@enum-plus/plugin-react';
 import { Enum } from 'enum-plus';
 import antdPlugin from '@enum-plus/plugin-antd';
+import { reactI18nextPlugin } from '@enum-plus/plugin-react';
 
 Enum.install(antdPlugin);
 Enum.install(reactI18nextPlugin);
 ```
 
-## Local Storybook development
+## Compatibility snapshot
+
+- **Modern bundlers** such as Vite, Rollup, and webpack 5 resolve to the `es` build (`ES2020`).
+- **Legacy bundlers** without `exports` support can fall back to `es-legacy` (`ES2015`).
+- **Node.js** supports both `require()` and modern `import` usage.
+- **UMD builds** support direct browser usage and static projects without a bundler.
+- **Polyfills are not bundled** (except in the UMD scenario), so older environments should provide their own polyfills if needed.
+
+## Local docs development
 
 ```bash
 npm install
 npm run storybook
 ```
 
-Build the static docs:
+Build the static GitHub Pages site locally:
 
 ```bash
 npm run build-storybook
 ```
+
+## Related references
+
+- [Get Started](?path=/docs/get-started--docs)
+- [API Guide](?path=/docs/api-guide--docs)
+- [Plugin development guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md)

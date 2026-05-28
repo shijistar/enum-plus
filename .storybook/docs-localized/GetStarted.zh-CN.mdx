@@ -4,13 +4,11 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # 快速开始
 
-## 1. 先用标准格式定义业务枚举
+要最快感受到 `enum-plus` 的价值，推荐先用标准格式定义一个业务 enum，然后让同一个 enum 同时承担回显、查询和 UI 映射。
 
-这是 README 中最推荐的方式，因为它同时具备：
+## 1. 先用标准格式定义
 
-- 明确的枚举值。
-- 用于 UI 展示的 label。
-- 可继续扩展的元数据字段。
+这是前端项目里最实用的格式，因为它把 value、label 和 metadata 放在同一个地方。
 
 ```ts
 import { Enum } from 'enum-plus';
@@ -22,7 +20,7 @@ const StatusEnum = Enum({
 });
 ```
 
-## 2. 在业务代码里直接做查询和回显
+## 2. 在业务代码里直接查询和回显
 
 ```ts
 StatusEnum.Draft;
@@ -33,14 +31,9 @@ StatusEnum.toList();
 StatusEnum.toMap();
 ```
 
-## 3. React + Ant Design 场景推荐安装插件
+## 3. 把同一个 enum 直接接到 UI 组件
 
-如果你的目标是把枚举直接接入前端页面，可以把 Storybook 里的这两类故事视为推荐组合：
-
-- Plugins / Ant Design Integration：把枚举直接转成 Select、Menu、Table filters 数据源。
-- Plugins / React I18n：让语言切换后，label 和枚举名在 React 界面中自动刷新。
-
-示例：
+对于 React + Ant Design 项目，下一步最推荐的是 `@enum-plus/plugin-antd`。
 
 ```tsx
 import { Enum } from 'enum-plus';
@@ -56,16 +49,19 @@ const WeekEnum = Enum({
 <Select options={WeekEnum.toSelect()} />;
 ```
 
-## 4. 国际化建议
+相关演示见 [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground)。
 
-如果是跨框架或字符串场景，优先使用普通 localize 函数；如果是 React 应用并且希望切换语言后自动刷新界面，优先使用 @enum-plus/plugin-react。
+## 4. 决定本地化方案
 
-## 5. 下一步
+- 如果你只需要跨框架的字符串翻译，可以直接使用 `localize` 或 `@enum-plus/plugin-i18next` 这类 i18n 插件。
+- 如果你希望 React 组件在切换语言后自动刷新，推荐使用 `@enum-plus/plugin-react`（例如它导出的 `reactI18nextPlugin`）。
+- 如果你只想接入 react-i18next，但不需要自动刷新 UI，可以使用 `@enum-plus/plugin-react-i18next`。
 
-打开左侧故事页，重点查看以下几个页面：
+相关演示见 [Plugins / React I18n](?path=/story/plugins-react-i18n--playground)。
 
-- Core / Enum Initialization
-- Core / Query and Transform API
-- Core / Localization, Composition and Extension
-- Plugins / Ant Design Integration
-- Plugins / React I18n
+## 5. 按问题继续深入
+
+- 想比较不同初始化格式？→ [Core / Enum Initialization](?path=/story/core-enum-initialization--playground)
+- 想查看 `label`、`findBy`、`toList`、`toMap` 的真实效果？→ [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
+- 想看紧凑版方法和类型导览？→ [API Guide](?path=/docs/api-guide--docs)
+- 想看业务化实践和推荐模式？→ [Recipes](?path=/docs/recipes--docs)

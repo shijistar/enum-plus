@@ -4,13 +4,11 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Get Started
 
-## 1. Define business enums with the standard shape first
+The fastest way to benefit from `enum-plus` is to define one business enum in the standard shape, then let that same enum drive rendering, lookup, and UI mapping.
 
-This is the most recommended shape in the README because it gives you:
+## 1. Start with the standard shape
 
-- Explicit enum values.
-- A label for UI display.
-- Additional metadata fields that can keep growing.
+This is the most practical format for frontend work because it gives you value, label, and metadata in one place.
 
 ```ts
 import { Enum } from 'enum-plus';
@@ -22,7 +20,7 @@ const StatusEnum = Enum({
 });
 ```
 
-## 2. Query and render directly in business code
+## 2. Query and render in business code
 
 ```ts
 StatusEnum.Draft;
@@ -33,14 +31,9 @@ StatusEnum.toList();
 StatusEnum.toMap();
 ```
 
-## 3. In React + Ant Design, install the plugins
+## 3. Plug the same enum into UI components
 
-If your goal is to wire enums directly into frontend pages, the two Storybook pages below form the recommended combination:
-
-- Plugins / Ant Design Integration: turns enums into Select, Menu, and Table filters data sources.
-- Plugins / React I18n: keeps labels and enum names in sync after language switches.
-
-Example:
+For React + Ant Design projects, the recommended next step is `@enum-plus/plugin-antd`.
 
 ```tsx
 import { Enum } from 'enum-plus';
@@ -56,16 +49,19 @@ const WeekEnum = Enum({
 <Select options={WeekEnum.toSelect()} />;
 ```
 
-## 4. Localization guidance
+See the live demo at [Plugins / Ant Design Integration](?path=/story/plugins-ant-design-integration--playground).
 
-If you are in a cross-framework or string-only context, prefer the plain localize function. If you are in a React app and want UI to refresh automatically after language switching, prefer @enum-plus/plugin-react.
+## 4. Choose a localization path
 
-## 5. Next
+- If you only need string translation in a framework-agnostic environment, use `localize` or an i18n plugin such as `@enum-plus/plugin-i18next`.
+- If you want React components to refresh after language switching, use `@enum-plus/plugin-react` (for example via its `reactI18nextPlugin` export).
+- Use `@enum-plus/plugin-react-i18next` when you want react-i18next integration without automatic UI refresh behavior.
 
-Focus on the following pages from the left navigation first:
+See the live demo at [Plugins / React I18n](?path=/story/plugins-react-i18n--playground).
 
-- Core / Enum Initialization
-- Core / Query and Transform API
-- Core / Localization, Composition and Extension
-- Plugins / Ant Design Integration
-- Plugins / React I18n
+## 5. Keep exploring the right layer
+
+- Want to compare initialization styles? → [Core / Enum Initialization](?path=/story/core-enum-initialization--playground)
+- Want to inspect `label`, `findBy`, `toList`, and `toMap`? → [Core / Query and Transform API](?path=/story/core-query-and-transform-api--explorer)
+- Want a compact reference for methods and types? → [API Guide](?path=/docs/api-guide--docs)
+- Want practical business patterns? → [Recipes](?path=/docs/recipes--docs)

@@ -10,7 +10,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 npm install enum-plus
 ```
 
-也可以使用其他包管理器：
+也可以使用你习惯的其他包管理器：
 
 ```bash
 pnpm add enum-plus
@@ -18,44 +18,65 @@ yarn add enum-plus
 bun add enum-plus
 ```
 
-## 浏览器场景
+## 浏览器与 CDN 用法
 
-README 中同时提供了现代浏览器和 legacy 浏览器的 UMD 构建，可直接通过 CDN 引入：
+`enum-plus` 同时提供现代浏览器和 legacy 浏览器的 UMD 构建：
 
 ```html
+<!-- 现代浏览器（ES2020） -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus.min.js"></script>
+<!-- 旧版浏览器（ES2015） -->
 <script src="https://cdn.jsdelivr.net/npm/enum-plus/umd/enum-plus-legacy.min.js"></script>
 ```
 
-## 插件安装
+如果你希望锁定版本，把上面的 `enum-plus` 改成 `enum-plus@x.y.z` 即可。
 
-如果你希望把枚举结果直接喂给 UI 组件，或者让 React 场景下的枚举标签支持 i18n 自动刷新，可以额外安装插件：
+你也可以直接从 [GitHub Releases](https://github.com/shijistar/enum-plus/releases) 页面下载构建产物。
 
-```bash
-npm install @enum-plus/plugin-antd
-npm install @enum-plus/plugin-react
-```
+## 可能会一起安装的扩展包
 
-安装后通过 Enum.install(...) 挂载到全局扩展体系：
+按需安装和你的技术栈匹配的插件即可：
+
+- `@enum-plus/plugin-antd` —— 生成 Ant Design 的 Select、Menu、Table filters 与 value map。
+- `@enum-plus/plugin-react` —— 让 React 场景下的枚举标签跟随 i18n 自动刷新。
+- `@enum-plus/plugin-i18next` —— 通过 i18next 翻译枚举标签和枚举名。
+- `@enum-plus/plugin-react-i18next` —— 组合 React 与 i18next 的能力。
+- `@enum-plus/plugin-vue-i18n` / `@enum-plus/plugin-i18next-vue` / `@enum-plus/plugin-next-international` —— 面向特定框架的本地化集成。
+
+示例：
 
 ```ts
-import { reactI18nextPlugin } from '@enum-plus/plugin-react';
 import { Enum } from 'enum-plus';
 import antdPlugin from '@enum-plus/plugin-antd';
+import { reactI18nextPlugin } from '@enum-plus/plugin-react';
 
 Enum.install(antdPlugin);
 Enum.install(reactI18nextPlugin);
 ```
 
-## 本地开发 Storybook
+## 兼容性速览
+
+- **现代打包工具**（Vite、Rollup、webpack 5 等）默认解析到 `es` 构建（`ES2020`）。
+- **不支持 `exports` 的旧版打包工具** 可以回退到 `es-legacy`（`ES2015`）。
+- **Node.js** 同时支持 `require()` 和现代 `import` 用法。
+- **UMD 构建** 适合浏览器直接引入，以及没有打包器的静态项目。
+- **库本身不内置 polyfill**（UMD 场景除外），旧环境如有需要请自行补充。
+
+## 本地开发文档站
 
 ```bash
 npm install
 npm run storybook
 ```
 
-构建静态文档：
+本地构建 GitHub Pages 静态站点：
 
 ```bash
 npm run build-storybook
 ```
+
+## 相关阅读
+
+- [Get Started](?path=/docs/get-started--docs)
+- [API Guide](?path=/docs/api-guide--docs)
+- [插件开发指南](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.zh-CN.md)
