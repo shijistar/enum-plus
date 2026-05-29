@@ -1,65 +1,6 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+import content from '../docs-source/FAQ.en-US.md?raw';
 
 <Meta title="FAQ (en-US)" />
 
-# FAQ
-
-## Why use this instead of native TypeScript enums?
-
-Native enums solve constants and control-flow branching, but frontend applications usually need more at runtime: labels, metadata, localized display, and direct UI mapping. `enum-plus` is built for that runtime layer.
-
-## Is TypeScript deprecating `enum`?
-
-The enum **concept** is not going away. TypeScript may tighten or discourage some syntax in specific configurations, but `enum-plus` is a runtime library and does not depend on TypeScript preserving native enum behavior forever.
-
-## How is the performance?
-
-The direct value-pick path is still plain object property access, so the basic usage cost is very small. Collection operations such as iterating `items` or `findBy(...)` behave like normal JavaScript array/object work.
-
-## Why is there no reverse mapping like native numeric enums?
-
-Use `key(value)` instead. It works for both numeric and string enum values.
-
-## Why can Ant Design Select search stop working after localization?
-
-Once labels become localized React-rendered content instead of plain strings, component-level search may need plugin helpers or custom filter logic. In React + i18n projects, prefer the React-related enum plugins and their matching helpers.
-
-## Do I need TypeScript?
-
-No. The library works in JavaScript projects too. TypeScript simply gives you better inference and editor feedback.
-
-## Do I need TypeScript 5.0+?
-
-No, but TypeScript 5+ gives the best type experience. For older versions, add `as const` where appropriate and review the migration notes if literal types widen unexpectedly.
-
-- [Migration Guide v2 → v3](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.md)
-
-## Why did type hints disappear after installation?
-
-The most common cause is an incompatible `tsconfig.json` setup. Check the migration guide section for the required TypeScript compiler options.
-
-- [Fix tsconfig for v3 type hints](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.md#modify-tsconfigjson)
-
-## Is there a simple "any enum" type?
-
-Yes. Use `AnyEnum`, and use `GenericAnyEnum<T>` when you want to keep some source-shape information.
-
-## How did the project make Jest and Playwright share test suites?
-
-The repository extracts shared test-suite logic into reusable files, then runs the same intent through different engines. See the testing docs and `test/engines/*` in the repository if you want to follow the same approach.
-
-- [Testing guide](https://github.com/shijistar/enum-plus/blob/master/docs/testing.md)
-
-## Where should I start if I want to contribute?
-
-Start with the repository issues, release notes, and existing test suites. If you add behavior, try to keep docs and demos aligned so the Pages site stays trustworthy.
-
-## Security
-
-If you believe you found a security-sensitive issue, prefer responsible disclosure instead of posting exploit details publicly first. You can reach the maintainer via GitHub or the package author email shown in the repository metadata.
-
-## Support
-
-- [GitHub repository](https://github.com/shijistar/enum-plus)
-- [npm package](https://www.npmjs.com/package/enum-plus)
-- If `enum-plus` helps your project, a GitHub star is always appreciated.
+<Markdown>{content}</Markdown>
