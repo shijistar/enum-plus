@@ -1,65 +1,6 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+import content from '../docs-source/FAQ.zh-CN.md?raw';
 
 <Meta title="FAQ (zh-CN)" />
 
-# FAQ
-
-## 为什么不直接使用 TypeScript 原生 enum？
-
-原生 enum 主要解决常量表达和流程分支问题，但前端应用在运行时往往还需要更多能力：显示名称、元数据、本地化，以及直接生成 UI 数据结构。`enum-plus` 正是为这个运行时层设计的。
-
-## TypeScript 是不是要废弃 `enum`？
-
-被讨论的是某些语法配置和使用方式，而不是“枚举这个概念”本身。`enum-plus` 是一个运行时库，并不依赖 TypeScript 永远保留原生 enum 的全部行为。
-
-## 性能怎么样？
-
-直接拾取枚举值本质上仍然是普通对象属性访问，所以基础用法的成本非常小。像 `items` 遍历、`findBy(...)` 这类集合操作，本质上也只是普通的 JavaScript 数组 / 对象处理。
-
-## 为什么没有像原生数字 enum 那样的反向映射？
-
-直接使用 `key(value)` 即可，而且它同时支持数字值和字符串值。
-
-## 为什么国际化后 Ant Design Select 的搜索可能失效？
-
-当 label 不再是普通字符串，而变成国际化后的 React 可渲染内容时，组件层搜索通常就需要借助插件提供的匹配函数，或者自行定制筛选逻辑。在 React + i18n 项目中，推荐优先使用对应的 React 插件。
-
-## 必须使用 TypeScript 吗？
-
-不是。这个库同样支持 JavaScript 项目，TypeScript 只是能提供更好的推导和 IDE 提示。
-
-## 必须升级到 TypeScript 5.0+ 吗？
-
-不是必须，但 TypeScript 5+ 的类型体验最好。对于更低版本，如果遇到字面量类型被放宽的问题，请在合适的位置使用 `as const`，并参考迁移文档。
-
-- [v2 → v3 迁移指南](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md)
-
-## 为什么安装后类型提示消失了？
-
-最常见的原因是 `tsconfig.json` 配置不兼容。请检查迁移指南里关于编译器选项的说明。
-
-- [修复 v3 的 tsconfig 类型提示问题](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md#修改-tsconfigjson)
-
-## 有没有简单的“任意 enum”类型？
-
-有。可以使用 `AnyEnum`；如果你还想保留一部分源结构信息，可以使用 `GenericAnyEnum<T>`。
-
-## 项目里是怎么让 Jest 和 Playwright 共享测试用例的？
-
-仓库把共享测试逻辑拆到了可复用的 test suite 文件里，然后让不同的测试引擎去执行同一组测试意图。想复用这种思路，可以看 testing 文档和仓库里的 `test/engines/*`。
-
-- [测试指南](https://github.com/shijistar/enum-plus/blob/master/docs/testing.zh-CN.md)
-
-## 如果我想贡献，应该从哪里开始？
-
-建议先看仓库 issues、发布说明和现有测试用例。如果你新增了能力，也尽量同步更新文档和演示，这样 Pages 站点才能持续可信。
-
-## 安全性
-
-如果你发现了安全相关问题，建议优先走负责任披露流程，而不是先公开完整利用细节。你可以通过 GitHub 或仓库元数据中的维护者邮箱联系作者。
-
-## 支持
-
-- [GitHub 仓库](https://github.com/shijistar/enum-plus)
-- [npm 包](https://www.npmjs.com/package/enum-plus)
-- 如果 `enum-plus` 对你的项目有帮助，也欢迎点一个 GitHub Star。
+<Markdown>{content}</Markdown>
