@@ -129,7 +129,7 @@ ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: '红色', 
 
 <sup>**_\[方法]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-根据某个枚举值或枚举 key，获取该枚举项的显示名称。如果启用了[本地化](?path=/docs/recipes--docs&globals=locale:zh-CN#本地化)，则会返回当前语言的内容。
+根据某个枚举值或枚举 key，获取该枚举项的显示名称。如果启用了[本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化)，则会返回当前语言的内容。
 
 ```js
 WeekEnum.label(1); // 星期一
@@ -236,7 +236,7 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 `string`
 
-整个枚举集合的显示名称。可以在创建枚举时，通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。请参考[本地化](?path=/docs/recipes--docs&globals=locale:zh-CN#本地化)章节，了解更多详情。
+整个枚举集合的显示名称。可以在创建枚举时，通过传入一个可选的 `name` 参数来为枚举类型命名。这个名称可以是一个普通字符串，也可以是一个本地化键值，以支持国际化文本。请参考[本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化)章节，了解更多详情。
 
 ```js
 const WeekEnum = Enum(
@@ -330,7 +330,7 @@ Enum.isEnum({}); // false
 
 <sup>**_\[方法]_**</sup> &nbsp; `(key: string) => string`
 
-设置全局的本地化函数，用来处理枚举类型名称和枚举项显示名称的本地化。请参考 [本地化](?path=/docs/recipes--docs&globals=locale:zh-CN#本地化) 章节，了解更多详情。
+设置全局的本地化函数，用来处理枚举类型名称和枚举项显示名称的本地化。请参考 [本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化) 章节，了解更多详情。
 
 ```js
 import i18n from 'i18next';
@@ -344,7 +344,7 @@ Enum.localize = (key) => i18n.t(key);
 
 <sup>**_\[方法]_**</sup> &nbsp; `(obj: Record<string, Function>) => void`
 
-为所有枚举对象添加全局扩展方法，请参考[全局扩展](?path=/docs/recipes--docs&globals=locale:zh-CN#全局扩展)章节，了解更多详情。
+为所有枚举对象添加全局扩展方法，请参考[全局扩展](?path=/docs/extensibility--docs&globals=locale:zh-CN#全局扩展)章节，了解更多详情。
 
 ```js
 Enum.extends({
@@ -360,33 +360,10 @@ Enum.extends({
 
 <sup>**_\[方法]_**</sup> &nbsp; `(plugin: Plugin, options?: any) => void`
 
-安装一个插件，插件可以为所有枚举添加新的功能。请参考[插件系统](?path=/docs/recipes--docs&globals=locale:zh-CN#插件系统)章节，了解更多详情。
+安装一个插件，插件可以为所有枚举添加新的功能。请参考[插件系统](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件系统)章节，了解更多详情。
 
 ```js
 import i18nextPlugin from '@enum-plus/plugin-i18next';
 
 Enum.install(i18nextPlugin);
 ```
-
-## 全局配置
-
-`Enum.config` 提供了一些全局配置参数，用来影响枚举的行为和特性。
-
-### autoLabel
-
-`Enum.config.autoLabel` 是一个全局配置选项，用于自动生成枚举项的标签。它允许在定义枚举时，设置 `options.labelPrefix` 选项，为所有枚举项设置一个 `label` 前缀，枚举项只需要设置基础值即可，甚至可以省略 `label` 字段（与 `key` 字段相同）。这样可以减少重复代码，提高枚举定义的简洁性。
-
-`Enum.config.autoLabel` 的值可以是一个布尔值，也可以使用 `function` 类型的函数以实现更复杂的逻辑。
-
-- `true` - 默认值，启用自动标签生成功能。枚举项的 `label` 最终值将自动设置为 `labelPrefix`+`label`，如果省略了 `label` 字段，则使用 `labelPrefix`+`key` 规则。当然，如果创建枚举时没有设置 `labelPrefix`，则此选项将没有任何效果。
-- `function` - 一个自定义函数，用于自定义每个枚举项 `label` 生成规则。该函数接受一个选项对象参数，其中包含：`item`（枚举项对象）和 `labelPrefix`，并返回一个字符串作为最终的 `label` 值。
-
-  ```js
-  Enum.config.autoLabel = ({ item, labelPrefix }) => {
-    return `${labelPrefix}.${item.key.lowerFirst()}`;
-  };
-  ```
-
-- `false` - 禁用自动标签生成功能，枚举项必须显式提供 `label` 字段。
-
-> 请注意，在创建枚举时也可以通过 `options.autoLabel` 参数覆盖全局配置，其用法与 `Enum.config.autoLabel` 相同。

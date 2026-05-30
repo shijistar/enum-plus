@@ -3,6 +3,7 @@ import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
+import './global-styles.css';
 
 const globalTheme = getGlobalValueFromUrl('theme');
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

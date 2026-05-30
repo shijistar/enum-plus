@@ -1,7 +1,5 @@
 <!-- markdownlint-disable MD001 MD009 MD033 MD041 -->
 
-[English](?path=/docs/introduce--docs) | [中文](?path=/docs/introduce--docs&globals=locale:zh-CN) | [CHANGELOG](https://github.com/shijistar/enum-plus/blob/master/CHANGELOG.md)
-
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
     <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/enum-plus.svg" width="240" alt="enum-plus" />
@@ -20,7 +18,7 @@
 [![code coverage](https://codecov.io/gh/shijistar/enum-plus/graph/badge.svg?token=JMCDJKLT0B)](https://app.codecov.io/gh/shijistar/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=ff8000&cacheSeconds=86400)
 
-⬇️ &nbsp;[Introduction](?path=/docs/introduce--docs#introduction) | [Features](?path=/docs/introduce--docs#features) | [Installation](?path=/docs/install--docs#installation) | [Enum Initialization](?path=/docs/get-started--docs#enum-initialization) | [API](?path=/docs/api-guide--docs#api) | [Static Methods](?path=/docs/api-guide--docs#static-methods) | [Global Configuration](?path=/docs/api-guide--docs#global-configuration) | [User Stories](?path=/docs/recipes--docs#user-stories) | [Plugin System](?path=/docs/recipes--docs#plugin-system) | [Localization](?path=/docs/recipes--docs#localization) | [Extensibility](?path=/docs/recipes--docs#extensibility) | [Naming Conflicts](?path=/docs/recipes--docs#naming-conflicts) | [Best Practices](?path=/docs/recipes--docs#best-practices) | [Compatibility](?path=/docs/recipes--docs#compatibility) | [Q&A](?path=/docs/faq--docs#qa) | [Support](?path=/docs/faq--docs#support)&nbsp; ⬇️
+⬇️ &nbsp;[Introduction](?path=/docs/introduce--docs#introduction) | [Features](?path=/docs/introduce--docs#features) | [Installation](?path=/docs/install--docs#installation) | [Enum Initialization](?path=/docs/get-started--docs#enum-initialization) | [API](?path=/docs/api-guide--docs#api) | [Static Methods](?path=/docs/api-guide--docs#static-methods) | [Global Configuration](?path=/docs/global-configuration--docs#global-configuration) | [User Stories](?path=/docs/user-stories--docs#user-stories) | [Plugin System](?path=/docs/plugin-system--docs#plugin-system) | [Localization](?path=/docs/localization--docs#localization) | [Extensibility](?path=/docs/extensibility--docs#extensibility) | [Naming Conflicts](?path=/docs/naming-conflicts--docs#naming-conflicts) | [Best Practices](?path=/docs/best-practices--docs#best-practices) | [Compatibility](?path=/docs/compatibility--docs#compatibility) | [Q&A](?path=/docs/faq--docs#qa) | [Security](?path=/docs/security--docs#security) | [Support](?path=/docs/support--docs#support)&nbsp; ⬇️
 
 > **🎉 v3.0 is Released!**
 >

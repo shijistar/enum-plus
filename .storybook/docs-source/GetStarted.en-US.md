@@ -30,7 +30,7 @@ WeekEnum2.Monday; // 'Mon'
 
 ### 2. Standard Format (Recommended)
 
-The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display name for each enum item, which can be used in UI components. Please refer to the [Localization](?path=/docs/recipes--docs#localization) section for internationalization support.
+The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display name for each enum item, which can be used in UI components. Please refer to the [Localization](?path=/docs/localization--docs#localization) section for internationalization support.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -45,9 +45,9 @@ WeekEnum.items[0].key; // 'Sunday'
 WeekEnum.items[0].label; // I love Sunday
 ```
 
-> Want to enable code completion when entering `label`? Please refer to the [Enable Code Intelligence for Enum Item Labels](?path=/docs/recipes--docs#-enable-code-intelligence-for-enum-item-labels) section for more details.
+> Want to enable code completion when entering `label`? Please refer to the [Enable Code Intelligence for Enum Item Labels](?path=/docs/user-stories--docs#-enable-code-intelligence-for-enum-item-labels) section for more details.
 >
-> Want to customize the logic of the `label` field? You can pass in a function. Please refer to the [Custom Label Logic](?path=/docs/recipes--docs#custom-label-logic) section for more details.
+> Want to customize the logic of the `label` field? You can pass in a function. Please refer to the [Custom Label Logic](?path=/docs/localization--docs#custom-label-logic) section for more details.
 
 ### 3. Label-Only Format
 
@@ -70,7 +70,7 @@ WeekEnum.items[0].label; // I love Sunday
 
 The array format is useful when you need to create enums with dynamic data, for example the data from an API.
 
-You can also use dynamic field mapping rules to adapt to various different data structures. Please refer to the [Custom Field Mapping](?path=/docs/recipes--docs#-custom-field-mapping-in-array-format-initialization) section for more details.
+You can also use dynamic field mapping rules to adapt to various different data structures. Please refer to the [Custom Field Mapping](?path=/docs/user-stories--docs#-custom-field-mapping-in-array-format-initialization) section for more details.
 
 ```js
 import { Enum } from 'enum-plus';
@@ -111,4 +111,4 @@ WeekEnum.Saturday; // 6
 
 > Please note that when creating enums, all enum items must maintain a consistent data structure. For example, you cannot use both Key-Value format and Standard format in the same enum.
 >
-> You can pass in some optional configuration options to better control the behavior of the enum. Please refer to the [Enum Configuration Options](?path=/docs/recipes--docs#-enum-configuration-options) section for details.
+> You can pass in some optional configuration options to better control the behavior of the enum. Please refer to the [Enum Configuration Options](?path=/docs/user-stories--docs#-enum-configuration-options) section for details.

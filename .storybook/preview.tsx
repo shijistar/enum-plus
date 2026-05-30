@@ -10,7 +10,7 @@ import zhCN from 'antd/locale/zh_CN';
 import storyI18n, { storyT } from './locales';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
-import './styles.css';
+import './story-styles.css';
 
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -130,11 +130,6 @@ const preview: Preview = {
     docs: {
       container: (props: PropsWithChildren<DocsContainerProps<ReactRenderer>>) => {
         return <StorybookDocsContainer {...props} />;
-      },
-    },
-    options: {
-      storySort: {
-        order: ['Introduce', 'Install', 'Get Started', 'API Guide', 'Recipes', 'FAQ', 'Core', 'Plugins'],
       },
     },
   },

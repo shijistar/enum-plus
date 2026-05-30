@@ -51,7 +51,7 @@ WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
 
 `string[]`
 
-Returns an array of all enum item `label`(s). If [localization](?path=/docs/recipes--docs#localization) has been enabled, the localized texts of each enum item will be returned.
+Returns an array of all enum item `label`(s). If [localization](?path=/docs/localization--docs#localization) has been enabled, the localized texts of each enum item will be returned.
 
 ```js
 WeekEnum.labels; // ['Sunday', 'Monday', ... 'Friday', 'Saturday']
@@ -131,7 +131,7 @@ ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: 'Red', hex
 
 <sup>**_\[F]_**</sup> &nbsp; `label(keyOrValue?: string | number): string | undefined`
 
-Gets the display name of an enum item according to its value or key. If [localization](?path=/docs/recipes--docs#localization) is enabled, the localized text will be returned.
+Gets the display name of an enum item according to its value or key. If [localization](?path=/docs/localization--docs#localization) is enabled, the localized text will be returned.
 
 ```js
 WeekEnum.label(1); // Monday
@@ -238,7 +238,7 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 
 `string`
 
-The display name of the whole enum collection. It's optional and can be set as the second parameter of the `Enum` method. This name can be either a plain string or a localization key to support internationalized text. Please refer to the [Localization](?path=/docs/recipes--docs#localization) section for more details.
+The display name of the whole enum collection. It's optional and can be set as the second parameter of the `Enum` method. This name can be either a plain string or a localization key to support internationalized text. Please refer to the [Localization](?path=/docs/localization--docs#localization) section for more details.
 
 ```js
 const WeekEnum = Enum(
@@ -333,7 +333,7 @@ Enum.isEnum({}); // false
 
 <sup>**_\[F]_**</sup> &nbsp; `(key: string) => string`
 
-Set a global localization function for all enums. This function will be used to get the localized text for enum items and enum type names. Please refer to the [Localization](?path=/docs/recipes--docs#localization) section for more details.
+Set a global localization function for all enums. This function will be used to get the localized text for enum items and enum type names. Please refer to the [Localization](?path=/docs/localization--docs#localization) section for more details.
 
 ```js
 import i18n from 'i18next';
@@ -347,7 +347,7 @@ Enum.localize = (key) => i18n.t(key);
 
 <sup>**_\[F]_**</sup> &nbsp; `(obj: Record<string, Function>) => void`
 
-Extend the `Enum` objects with custom methods. More details can be found in the [Extensibility](?path=/docs/recipes--docs#extensibility) section.
+Extend the `Enum` objects with custom methods. More details can be found in the [Extensibility](?path=/docs/extensibility--docs#extensibility) section.
 
 ```js
 Enum.extends({
@@ -363,33 +363,10 @@ Enum.extends({
 
 <sup>**_\[F]_**</sup> &nbsp; `(plugin: Plugin, options?: any) => void`
 
-Install a plugin to extend the functionality of all enums. More details can be found in the [Plugin System](?path=/docs/recipes--docs#plugin-system) section.
+Install a plugin to extend the functionality of all enums. More details can be found in the [Plugin System](?path=/docs/plugin-system--docs#plugin-system) section.
 
 ```js
 import i18nextPlugin from '@enum-plus/plugin-i18next';
 
 Enum.install(i18nextPlugin);
 ```
-
-## Global Configuration
-
-`Enum.config` provides some global configuration options that affect the behavior and features of enums.
-
-### autoLabel
-
-`Enum.config.autoLabel` is a global configuration option used to automatically generate labels for enum items. It allows you to set the `options.labelPrefix` option when defining an enum, which sets a `label` prefix for all enum items. Enum items only need to set the base value and can even omit the `label` field (when same as the `key` field). This reduces repetitive code and improves the conciseness of enum definitions.
-
-`Enum.config.autoLabel` can be a boolean value or a function type to implement more complex logic.
-
-- `true` - The default value, enabling the automatic label generation feature. The final value of the enum item's `label` will be automatically set to `labelPrefix` + `label`. If the `label` field is omitted, the `labelPrefix` + `key` rule will be used. Of course, if the `labelPrefix` is not set when creating the enum, this option will have no effect.
-- `function` - A custom function used to customize the `label` generation rule for each enum item. This function accepts an options object parameter that contains: `item` (the enum item object) and `labelPrefix`, and returns a string as the final `label` value.
-
-  ```js
-  Enum.config.autoLabel = ({ item, labelPrefix }) => {
-    return `${labelPrefix}.${item.key.lowerFirst()}`;
-  };
-  ```
-
-- `false` - Disables the automatic label generation feature. Enum items must explicitly provide the `label` field.
-
-> Note that `autoLabel` is also an option that can be set when creating an enum as `options.autoLabel`. The usage is the same as `Enum.config.autoLabel`, and it overrides the global configuration for that specific enum.

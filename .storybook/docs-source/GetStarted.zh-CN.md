@@ -28,7 +28,7 @@ WeekEnum2.Monday; // 'Mon'
 
 ### 2. 标准格式（推荐）
 
-为每个枚举项指定 `value` (枚举值) 和 `label`（显示名称）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示名称，这些文本可以在 UI 组件中使用。关于为 `label` 字段启用本地化支持，请参考[本地化](?path=/docs/recipes--docs&globals=locale:zh-CN#本地化)章节
+为每个枚举项指定 `value` (枚举值) 和 `label`（显示名称）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示名称，这些文本可以在 UI 组件中使用。关于为 `label` 字段启用本地化支持，请参考[本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化)章节
 
 ```js
 import { Enum } from 'enum-plus';
@@ -43,9 +43,9 @@ WeekEnum.items[0].key; // 'Sunday'
 WeekEnum.items[0].label; // 星期日
 ```
 
-> 想要输入 `label` 时启用代码智能提示？请参考 [启用枚举项标签的智能提示](?path=/docs/recipes--docs&globals=locale:zh-CN#-启用枚举项标签的智能提示) 章节，了解更多详情。
+> 想要输入 `label` 时启用代码智能提示？请参考 [启用枚举项标签的智能提示](?path=/docs/user-stories--docs&globals=locale:zh-CN#-启用枚举项标签的智能提示) 章节，了解更多详情。
 >
-> 希望自定义 `label` 字段逻辑？可以传入一个函数，请参考 [自定义 label 逻辑](?path=/docs/recipes--docs&globals=locale:zh-CN#自定义-label-逻辑) 章节，了解更多详情。
+> 希望自定义 `label` 字段逻辑？可以传入一个函数，请参考 [自定义 label 逻辑](?path=/docs/localization--docs&globals=locale:zh-CN#自定义-label-逻辑) 章节，了解更多详情。
 
 ### 3. Key-Label 格式
 
@@ -68,7 +68,7 @@ WeekEnum.items[0].label; // 星期日
 
 数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。
 
-你可以动态映射字段以适应各种不同的数据结构。请参考 [数组格式初始化，设置不同的字段映射](?path=/docs/recipes--docs&globals=locale:zh-CN#-在数组初始化方式中设置不同的字段映射) 章节，了解更多详情。
+你可以动态映射字段以适应各种不同的数据结构。请参考 [数组格式初始化，设置不同的字段映射](?path=/docs/user-stories--docs&globals=locale:zh-CN#-在数组初始化方式中设置不同的字段映射) 章节，了解更多详情。
 
 ```js
 import { Enum } from 'enum-plus';
@@ -109,4 +109,4 @@ WeekEnum.Saturday; // 6
 
 > 请注意：当创建枚举对象时，所有枚举项的数据结构必须保持一致。例如，不能在同一个枚举中同时使用 Key-Value 格式和标准格式。
 >
-> 枚举还支持一些配置项，以更好地控制枚举的行为，详情请参考 [枚举配置选项](?path=/docs/recipes--docs&globals=locale:zh-CN#-枚举配置选项) 章节。
+> 枚举还支持一些配置项，以更好地控制枚举的行为，详情请参考 [枚举配置选项](?path=/docs/user-stories--docs&globals=locale:zh-CN#-枚举配置选项) 章节。

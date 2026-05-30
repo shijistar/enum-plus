@@ -9,6 +9,9 @@ runs:
   steps:
     - run: |
         sed -i "s|./public/enum-plus.svg|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/enum-plus.svg|g" README.md README.zh-CN.md
+        sed -i "s|./public/enum-plus.svg|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/enum-plus.svg|g" .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md
         sed -i "s|./public/usage-screenshot-v3.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/usage-screenshot-v3.gif|g" README.md README.zh-CN.md
+        sed -i "s|./public/usage-screenshot-v3.gif|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/usage-screenshot-v3.gif|g" .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md
         sed -i "s|./public/jsdoc-en.png|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/jsdoc-en.png|g" README.md README.zh-CN.md
+        sed -i "s|./public/jsdoc-en.png|https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/public/jsdoc-en.png|g" .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md
       shell: bash

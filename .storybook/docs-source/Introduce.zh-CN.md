@@ -1,7 +1,5 @@
 <!-- markdownlint-disable MD001 MD009 MD033 MD041 -->
 
-[English](?path=/docs/introduce--docs) | [中文](?path=/docs/introduce--docs&globals=locale:zh-CN) | [CHANGELOG](https://github.com/shijistar/enum-plus/blob/master/CHANGELOG.md)
-
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
     <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/enum-plus.svg" width="240" alt="enum-plus" />
@@ -20,7 +18,7 @@
 [![code coverage](https://codecov.io/gh/shijistar/enum-plus/graph/badge.svg?token=JMCDJKLT0B)](https://app.codecov.io/gh/shijistar/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=ff8000&cacheSeconds=86400)
 
-⬇️ &nbsp;[简介](?path=/docs/introduce--docs&globals=locale:zh-CN#简介) | [特性](?path=/docs/introduce--docs&globals=locale:zh-CN#特性) | [安装](?path=/docs/install--docs&globals=locale:zh-CN#安装) | [枚举定义](?path=/docs/get-started--docs&globals=locale:zh-CN#枚举定义) | [API](?path=/docs/api-guide--docs&globals=locale:zh-CN#api) | [静态方法](?path=/docs/api-guide--docs&globals=locale:zh-CN#静态方法) | [全局配置](?path=/docs/api-guide--docs&globals=locale:zh-CN#全局配置) | [使用案例](?path=/docs/recipes--docs&globals=locale:zh-CN#使用案例) | [插件系统](?path=/docs/recipes--docs&globals=locale:zh-CN#插件系统) | [本地化](?path=/docs/recipes--docs&globals=locale:zh-CN#本地化) | [全局扩展](?path=/docs/recipes--docs&globals=locale:zh-CN#全局扩展) | [命名冲突](?path=/docs/recipes--docs&globals=locale:zh-CN#命名冲突) | [最佳实践](?path=/docs/recipes--docs&globals=locale:zh-CN#最佳实践)| [兼容性](?path=/docs/recipes--docs&globals=locale:zh-CN#兼容性) | [常见问题](?path=/docs/faq--docs&globals=locale:zh-CN#常见问题) | [支持](?path=/docs/faq--docs&globals=locale:zh-CN#支持)&nbsp; ⬇️
+⬇️ &nbsp;[简介](?path=/docs/introduce--docs&globals=locale:zh-CN#简介) | [特性](?path=/docs/introduce--docs&globals=locale:zh-CN#特性) | [安装](?path=/docs/install--docs&globals=locale:zh-CN#安装) | [枚举定义](?path=/docs/get-started--docs&globals=locale:zh-CN#枚举定义) | [API](?path=/docs/api-guide--docs&globals=locale:zh-CN#api) | [静态方法](?path=/docs/api-guide--docs&globals=locale:zh-CN#静态方法) | [全局配置](?path=/docs/global-configuration--docs&globals=locale:zh-CN#全局配置) | [使用案例](?path=/docs/user-stories--docs&globals=locale:zh-CN#使用案例) | [插件系统](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件系统) | [本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化) | [全局扩展](?path=/docs/extensibility--docs&globals=locale:zh-CN#全局扩展) | [命名冲突](?path=/docs/naming-conflicts--docs&globals=locale:zh-CN#命名冲突) | [最佳实践](?path=/docs/best-practices--docs&globals=locale:zh-CN#最佳实践)| [兼容性](?path=/docs/compatibility--docs&globals=locale:zh-CN#兼容性) | [常见问题](?path=/docs/faq--docs&globals=locale:zh-CN#常见问题) | [安全性](?path=/docs/security--docs&globals=locale:zh-CN#安全性) | [支持](?path=/docs/support--docs&globals=locale:zh-CN#支持)&nbsp; ⬇️
 
 > **🎉 v3.0 发布了！**
 >
