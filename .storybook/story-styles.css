@@ -25,6 +25,14 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   padding-top: 16px !important;
 }
 
+.enum-story-shell[data-theme='dark'] .docblock-source {
+  border-color: #42688d;
+}
+
+.enum-story-shell[data-theme='light'] .docblock-source {
+  border-color: #94cdc4;
+}
+
 /* ------------- override css end --------------- */
 
 .enum-story-shell {
