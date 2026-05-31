@@ -298,7 +298,7 @@ type WeekRaw = typeof WeekEnum.rawType;
 
 > 注意，这只是一个 TypeScript 类型，只能用来约束类型。不可在运行时调用，运行时调用会抛出异常。
 
----
+# 静态方法
 
 # 构造函数选项
 

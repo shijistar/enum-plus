@@ -64,13 +64,13 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 <details>
   <summary>Here are some hot questions, feel free to check them out</summary>
-  
-  - [Why do I need this library? TypeScript already has the built-in enums](?path=/docs/faq--docs#-why-do-i-need-this-library-typescript-already-has-the-built-in-enums)
-  - [Do I have to install TypeScript? What if my project is in JavaScript?](?path=/docs/faq--docs#-do-i-have-to-install-typescript-what-if-my-project-is-in-javascript)
-  - [How about the performance of this library?](?path=/docs/faq--docs#-how-about-the-performance-of-this-library)
-  - [It seems that TypeScript is going to deprecate enum?](?path=/docs/faq--docs#-it-seems-that-typescript-is-going-to-deprecate-enum)
-  - [I have a great idea and would like to contribute to this project. What should I do?](?path=/docs/faq--docs#-i-have-a-great-idea-and-would-like-to-contribute-to-this-project-what-should-i-do)
-  
+
+- [Why do I need this library? TypeScript already has the built-in enums](?path=/docs/faq--docs#-why-do-i-need-this-library-typescript-already-has-the-built-in-enums)
+- [Do I have to install TypeScript? What if my project is in JavaScript?](?path=/docs/faq--docs#-do-i-have-to-install-typescript-what-if-my-project-is-in-javascript)
+- [How about the performance of this library?](?path=/docs/faq--docs#-how-about-the-performance-of-this-library)
+- [It seems that TypeScript is going to deprecate enum?](?path=/docs/faq--docs#-it-seems-that-typescript-is-going-to-deprecate-enum)
+- [I have a great idea and would like to contribute to this project. What should I do?](?path=/docs/faq--docs#-i-have-a-great-idea-and-would-like-to-contribute-to-this-project-what-should-i-do)
+
 </details>
 
 # Features
