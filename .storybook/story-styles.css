@@ -2,6 +2,31 @@
   color-scheme: light;
 }
 
+/* ------------- override css start --------------- */
+
+p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p) {
+  /* stylelint-disable-next-line declaration-no-important */
+  font-size: 16px !important;
+}
+
+pre:not(.sb-anchor, .sb-unstyled, .sb-unstyled pre) pre,
+pre:not(.sb-anchor, .sb-unstyled, .sb-unstyled pre).prismjs {
+  /* stylelint-disable-next-line declaration-no-important */
+  font-size: 15px !important;
+}
+
+li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
+  /* stylelint-disable-next-line declaration-no-important */
+  font-size: 16px !important;
+}
+
+.sbdocs.sbdocs-wrapper {
+  /* stylelint-disable-next-line declaration-no-important */
+  padding-top: 16px !important;
+}
+
+/* ------------- override css end --------------- */
+
 .enum-story-shell {
   --ep-page-text: #1f2937;
   --ep-page-muted: #4f6460;

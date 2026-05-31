@@ -1,10 +1,8 @@
 <!-- markdownlint-disable MD001 MD009 MD033 MD041 -->
 
-[English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
-
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="./public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -35,30 +33,44 @@
 &nbsp;
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://taro.zone/)
 
-⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](#安装) | [枚举定义](#枚举定义) | [API](#api) | [静态方法](#静态方法) | [全局配置](#全局配置) | [使用案例](#使用案例) | [插件系统](#插件系统) | [本地化](#本地化) | [全局扩展](#全局扩展) | [命名冲突](#命名冲突) | [最佳实践](#最佳实践)| [兼容性](#兼容性) | [常见问题](#常见问题) | [支持](#支持)&nbsp; ⬇️
+⬇️ &nbsp;[简介](?path=/docs/introduce--docs&globals=locale:zh-CN#简介) | [特性](?path=/docs/introduce--docs&globals=locale:zh-CN#特性) | [安装](?path=/docs/install--docs&globals=locale:zh-CN#安装) | [枚举定义](?path=/docs/get-started--docs&globals=locale:zh-CN#枚举定义) | [API](?path=/docs/api-guide--docs&globals=locale:zh-CN#api) | [静态方法](?path=/docs/api-guide--docs&globals=locale:zh-CN#静态方法) | [全局配置](?path=/docs/global-configuration--docs&globals=locale:zh-CN#全局配置) | [使用案例](?path=/docs/user-stories--docs&globals=locale:zh-CN#使用案例) | [插件系统](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件系统) | [本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化) | [全局扩展](?path=/docs/extensibility--docs&globals=locale:zh-CN#全局扩展) | [命名冲突](?path=/docs/naming-conflicts--docs&globals=locale:zh-CN#命名冲突) | [最佳实践](?path=/docs/best-practices--docs&globals=locale:zh-CN#最佳实践)| [兼容性](?path=/docs/compatibility--docs&globals=locale:zh-CN#兼容性) | [常见问题](?path=/docs/faq--docs&globals=locale:zh-CN#常见问题) | [安全性](?path=/docs/security--docs&globals=locale:zh-CN#安全性) | [支持](?path=/docs/support--docs&globals=locale:zh-CN#支持)&nbsp; ⬇️
 
-## 为什么使用 enum-plus
+> **🎉 v3.0 发布了！**
+>
+> 新版本是一个重大的里程碑版本，带来了很多令人兴奋的功能和改进，详情请参考 [发布说明](https://github.com/shijistar/enum-plus/blob/master/docs/release-v3.zh-CN.md) 和 [迁移指南](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md)。
+>
+> 如果升级后，你遇到枚举类型都变成 `any` 的问题，请看[这里](?path=/docs/faq--docs&globals=locale:zh-CN#为什么我的项目安装后没有-typescript-类型提示)。
 
-原生 enum 很适合表达常量，但真实业务的运行时需求往往更多：
+&nbsp;
 
-- 用户友好的显示名称
-- 扩展颜色、图标、权限等元数据
-- 渲染下拉框、复选框、菜单、表格筛选等 UI 组件
-- 枚举值转换标签文本
-- 渲染颜色徽章
-- 国际化
-- 枚举元数据查找
-- 枚举值校验
+## 简介
 
-`enum-plus` 保留了直观的枚举式使用体验，并把这些运行时能力收敛到同一个对象里。
+`enum-plus` 是一个增强版的枚举类库，完全兼容原生`enum`的用法，是原生枚举的直接替代品。支持为枚举项添加显示名称，以及添加自定义元数据字段。可以用枚举直接生成下拉框、多选框、菜单、选项卡等各种 UI 控件，对前端工程师非常实用。
 
-这是一套完整的前端业务字典解决方案，更像是一个轻量级的数据源，应该是前端基础设施的一部分。
+为枚举增加了很多扩展方法，支持对枚举项数组的遍历和各种数据转换。你可以把数值转换为多种语言的枚举名称，因为它支持国际化，这在 UI 回显业务数据时非常有用。
+
+这是一个轻量级、零依赖、100% TypeScript 实现的工具库，适用于任何前端框架，包括无框架的纯原生应用。
+
+还有哪些令人兴奋的特性呢？请继续探索吧！或者不妨先看下这个使用视频。
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.8/public/usage-screenshot-high-v3.mp4" target="_blank">
-    <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
+
+[为什么我的项目安装后没有 TypeScript 类型提示？](?path=/docs/faq--docs&globals=locale:zh-CN#为什么我的项目安装后没有-typescript-类型提示)
+
+<details>
+  <summary>这里有几个常见问题，有兴趣也可以阅读一下</summary>
+  
+  - [为什么需要这个库？TypeScript 已经有内置的枚举了](?path=/docs/faq--docs&globals=locale:zh-CN#为什么需要这个库typescript-已经有内置的枚举了)
+  - [我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？](?path=/docs/faq--docs&globals=locale:zh-CN#我必须使用-typescript-吗我的是-javascript-项目要怎么办)
+  - [枚举库的性能怎么样？](?path=/docs/faq--docs&globals=locale:zh-CN#枚举库的性能怎么样)
+  - [好像 TypeScript 要废弃 enum 了？](?path=/docs/faq--docs&globals=locale:zh-CN#好像-typescript-要废弃-enum-了)
+  - [我有一个很好的点子，希望为这个项目做贡献，我要怎么做？](?path=/docs/faq--docs&globals=locale:zh-CN#我有一个很好的点子希望为这个项目做贡献我要怎么做)
+  
+</details>
 
 ## 特性
 
@@ -77,45 +89,3 @@
 - 面向 TypeScript 设计，具有良好的类型推导和代码补全能力
 - 零依赖项
 - 轻量（gzip压缩后仅2KB+）
-
-## 安装
-
-```bash
-npm install enum-plus
-```
-
-## 快速示例
-
-```ts
-import { Enum } from 'enum-plus';
-
-const StatusEnum = Enum({
-  Draft: { value: 'draft', label: '草稿', color: 'default' },
-  Review: { value: 'review', label: '审核中', color: 'processing' },
-  Published: { value: 'published', label: '已发布', color: 'success' },
-});
-
-StatusEnum.Review; // 2
-StatusEnum.label(2); // '审核中'
-StatusEnum.key(2); // 'Review'
-StatusEnum.items; // [{ key: 'Draft', value: 1, label: '草稿' }, ...]
-StatusEnum.values; // [1, 2, 3]
-StatusEnum.labels; // ['草稿', '审核中', '已发布']
-StatusEnum.meta; // { color: [ 'default', 'processing', 'success' ] }
-StatusEnum.findBy('color', 'success')?.key; // 'Published'
-StatusEnum.toList({ valueField: 'value', labelField: 'label' }); // [{ value: 1, label: '草稿' }, ...]
-```
-
-## 插件生态
-
-- [@enum-plus/plugin-react](./packages/plugin-react/README.zh-CN.md)
-- [@enum-plus/plugin-react-i18next](./packages/plugin-react-i18next/README.zh-CN.md)
-- [@enum-plus/plugin-i18next](./packages/plugin-i18next/README.zh-CN.md)
-- [@enum-plus/plugin-i18next-vue](./packages/plugin-i18next-vue/README.zh-CN.md)
-- [@enum-plus/plugin-vue-i18n](./packages/plugin-vue-i18n/README.zh-CN.md)
-- [@enum-plus/plugin-next-international](./packages/plugin-next-international/README.zh-CN.md)
-- [@enum-plus/plugin-antd](./packages/plugin-antd/README.zh-CN.md)
-
-## 支持
-
-如果这个项目对你有帮助，请给它一个 GitHub [星标⭐️](https://github.com/shijistar/enum-plus)，这将鼓励我们继续开发和维护这个项目。

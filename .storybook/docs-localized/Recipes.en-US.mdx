@@ -1,0 +1,18 @@
+import { Markdown, Meta } from '@storybook/addon-docs/blocks';
+import bestPracticesContent from '../docs-source/Recipes.en-US.best-practices.md?raw';
+import compatibilityContent from '../docs-source/Recipes.en-US.compatibility.md?raw';
+import extensibilityContent from '../docs-source/Recipes.en-US.extensibility.md?raw';
+import localizationContent from '../docs-source/Recipes.en-US.localization.md?raw';
+import namingConflictsContent from '../docs-source/Recipes.en-US.naming-conflicts.md?raw';
+import pluginSystemContent from '../docs-source/Recipes.en-US.plugin-system.md?raw';
+import userStoriesContent from '../docs-source/Recipes.en-US.user-stories.md?raw';
+
+<Meta title="Recipes (en-US)" />
+
+<Markdown>{userStoriesContent}</Markdown>
+<Markdown>{pluginSystemContent}</Markdown>
+<Markdown>{localizationContent}</Markdown>
+<Markdown>{extensibilityContent}</Markdown>
+<Markdown>{namingConflictsContent}</Markdown>
+<Markdown>{bestPracticesContent}</Markdown>
+<Markdown>{compatibilityContent}</Markdown>

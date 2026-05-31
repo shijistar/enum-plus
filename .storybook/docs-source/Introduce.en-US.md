@@ -1,10 +1,8 @@
 <!-- markdownlint-disable MD001 MD009 MD033 MD041 -->
 
-[English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
-
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="./public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -35,31 +33,44 @@
 &nbsp;
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://docs.taro.zone/en/docs)
 
-⬇️ &nbsp;[Introduction](#introduction) | [Features](#features) | [Installation](#installation) | [Enum Initialization](#enum-initialization) | [API](#api) | [Static Methods](#static-methods) | [Global Configuration](#global-configuration) | [User Stories](#user-stories) | [Plugin System](#plugin-system) | [Localization](#localization) | [Extensibility](#extensibility) | [Naming Conflicts](#naming-conflicts) | [Best Practices](#best-practices) | [Compatibility](#compatibility) | [Q&A](#qa) | [Support](#support)&nbsp; ⬇️
+⬇️ &nbsp;[Introduction](?path=/docs/introduce--docs#introduction) | [Features](?path=/docs/introduce--docs#features) | [Installation](?path=/docs/install--docs#installation) | [Enum Initialization](?path=/docs/get-started--docs#enum-initialization) | [API](?path=/docs/api-guide--docs#api) | [Static Methods](?path=/docs/api-guide--docs#static-methods) | [Global Configuration](?path=/docs/global-configuration--docs#global-configuration) | [User Stories](?path=/docs/user-stories--docs#user-stories) | [Plugin System](?path=/docs/plugin-system--docs#plugin-system) | [Localization](?path=/docs/localization--docs#localization) | [Extensibility](?path=/docs/extensibility--docs#extensibility) | [Naming Conflicts](?path=/docs/naming-conflicts--docs#naming-conflicts) | [Best Practices](?path=/docs/best-practices--docs#best-practices) | [Compatibility](?path=/docs/compatibility--docs#compatibility) | [Q&A](?path=/docs/faq--docs#qa) | [Security](?path=/docs/security--docs#security) | [Support](?path=/docs/support--docs#support)&nbsp; ⬇️
 
-## Why enum-plus
+> **🎉 v3.0 is Released!**
+>
+> The new version is a major milestone that brings many exciting features and improvements. Please refer to the [Release Notes](https://github.com/shijistar/enum-plus/blob/master/docs/release-v3.md) and [Migration Guide](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.md) for details.
+>
+> If the enum types become `any` after upgrading to v3.0, please see [here](?path=/docs/faq--docs#why-my-project-has-no-typescript-type-hints-after-installation).
 
-Native enums are great for constants, but product code usually needs more at runtime:
+&nbsp;
 
-- human-readable label,
-- metadata such as color, icon, or permission
-- dropdowns, checkboxes, and menus,
-- table filters,
-- render a label in a table,
-- render a badge color,
-- localization,
-- metadata lookups,
-- validation and lookup helpers.
+## Introduction
 
-`enum-plus` keeps the direct enum-style experience, then adds those runtime capabilities in one place.
+`enum-plus` is an enhanced enumeration library that is fully compatible with the native `enum` and serves as a drop-in replacement library. It supports adding display text to enum items and extending more custom metadata fields. Enums can be generated into various UI components such as dropdowns and menus, which greatly simplifies front-end development.
 
-It's a front-end business dictionary solution, that provides a lightweight data source. It's part of the front-end infrastructure.
+It also provides many extension methods for iterating over enum items and data transformations. You can convert values directly into names in the current language, since it supports internationalization. It's very useful for displaying business data in the UI.
+
+It is a lightweight, zero-dependency library, and it works with any front-end framework, including vanilla projects.
+
+What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.8/public/usage-screenshot-high-v3.mp4" target="_blank">
-    <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
+
+[Why my project has no TypeScript type hints after installation?](?path=/docs/faq--docs#why-my-project-has-no-typescript-type-hints-after-installation)
+
+<details>
+  <summary>Here are some hot questions, feel free to check them out</summary>
+  
+  - [Why do I need this library? TypeScript already has the built-in enums](?path=/docs/faq--docs#why-do-i-need-this-library-typescript-already-has-the-built-in-enums)
+  - [Do I have to install TypeScript? What if my project is in JavaScript?](?path=/docs/faq--docs#do-i-have-to-install-typescript-what-if-my-project-is-in-javascript)
+  - [How about the performance of this library?](?path=/docs/faq--docs#how-about-the-performance-of-this-library)
+  - [It seems that TypeScript is going to deprecate enum?](?path=/docs/faq--docs#it-seems-that-typescript-is-going-to-deprecate-enum)
+  - [I have a great idea and would like to contribute to this project. What should I do?](?path=/docs/faq--docs#i-have-a-great-idea-and-would-like-to-contribute-to-this-project-what-should-i-do)
+  
+</details>
 
 ## Features
 
@@ -78,45 +89,3 @@ It's a front-end business dictionary solution, that provides a lightweight data 
 - TypeScript‑oriented, providing excellent type inference and code completion capabilities
 - Zero dependencies
 - Lightweight (min+gzip 2KB+ only)
-
-## Installation
-
-```bash
-npm install enum-plus
-```
-
-## Quick example
-
-```ts
-import { Enum } from 'enum-plus';
-
-const StatusEnum = Enum({
-  Draft: { value: 1, label: 'Draft', color: 'default' },
-  Review: { value: 2, label: 'In Review', color: 'processing' },
-  Published: { value: 3, label: 'Published', color: 'success' },
-});
-
-StatusEnum.Review; // 2
-StatusEnum.label(2); // 'In Review'
-StatusEnum.key(2); // 'Review'
-StatusEnum.items; // [{ key: 'Draft', value: 1, label: 'Draft' }, ...]
-StatusEnum.values; // [1, 2, 3]
-StatusEnum.labels; // ['Draft', 'In Review', 'Published']
-StatusEnum.meta; // { color: [ 'default', 'processing', 'success' ] }
-StatusEnum.findBy('color', 'success')?.key; // 'Published'
-StatusEnum.toList({ valueField: 'value', labelField: 'label' }); // [{ value: 1, label: 'Draft' }, ...]
-```
-
-## Ecosystem
-
-- [@enum-plus/plugin-react](./packages/plugin-react/README.zh-CN.md)
-- [@enum-plus/plugin-react-i18next](./packages/plugin-react-i18next/README.zh-CN.md)
-- [@enum-plus/plugin-i18next](./packages/plugin-i18next/README.zh-CN.md)
-- [@enum-plus/plugin-i18next-vue](./packages/plugin-i18next-vue/README.zh-CN.md)
-- [@enum-plus/plugin-vue-i18n](./packages/plugin-vue-i18n/README.zh-CN.md)
-- [@enum-plus/plugin-next-international](./packages/plugin-next-international/README.zh-CN.md)
-- [@enum-plus/plugin-antd](./packages/plugin-antd/README.zh-CN.md)
-
-## Support
-
-If this project helps you, please consider giving it a [star ⭐️](https://github.com/shijistar/enum-plus) on GitHub. This will encourage us to continue developing and maintaining this project.
