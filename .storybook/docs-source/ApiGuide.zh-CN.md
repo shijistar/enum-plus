@@ -311,7 +311,7 @@ type WeekRaw = typeof WeekEnum.rawType;
 
 ---
 
-## 静态方法
+## Static Methods (静态方法)
 
 ### 💎 &nbsp; Enum.isEnum
 
