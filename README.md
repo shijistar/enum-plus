@@ -119,4 +119,4 @@ StatusEnum.toList({ valueField: 'value', labelField: 'label' }); // [{ value: 1,
 
 ## Support
 
-If this project helps you, please consider giving it a [star ⭐️](https://github.com/shijistar/enum-plus) on GitHub. This will encourage us to continue developing and maintaining this project.
+If this project helps you, please consider giving it a [Star ⭐️](https://github.com/shijistar/enum-plus) on GitHub. This will encourage us to continue developing and maintaining this project.
