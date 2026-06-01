@@ -19,7 +19,7 @@ function ensureAntdPlugin() {
 }
 
 const meta: Meta = {
-  title: 'Plugins/Ant Design Integration',
+  title: 'Plugins/01 Ant Design',
   parameters: {
     docs: {
       description: {

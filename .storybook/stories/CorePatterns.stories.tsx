@@ -35,7 +35,7 @@ function ensureCustomExtension() {
 }
 
 const meta: Meta = {
-  title: 'Core/Localization, Composition and Extension',
+  title: 'Core/05 Localization, Composition and Extension',
   parameters: {
     docs: {
       description: {

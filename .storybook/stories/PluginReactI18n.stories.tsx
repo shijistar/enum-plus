@@ -27,7 +27,7 @@ const { Text } = Typography;
 const activeI18n = i18next;
 
 const meta: Meta = {
-  title: 'Plugins/React I18n',
+  title: 'Plugins/03 React',
   parameters: {
     docs: {
       description: {
