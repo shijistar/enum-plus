@@ -1,4 +1,6 @@
-## Best Practices
+# Best Practices
+
+&nbsp;
 
 When using `enum-plus`, following these best practices can help ensure consistency, maintainability, and clarity in your codebase:
 

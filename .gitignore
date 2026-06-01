@@ -16,5 +16,6 @@ coverage/
 run
 .DS_Store
 .cache
+.copilot-tools.log
 .eslintcache
 storybook-static

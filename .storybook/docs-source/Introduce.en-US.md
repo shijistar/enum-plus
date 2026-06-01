@@ -43,7 +43,7 @@
 
 &nbsp;
 
-## Introduction
+# Introduction
 
 `enum-plus` is an enhanced enumeration library that is fully compatible with the native `enum` and serves as a drop-in replacement library. It supports adding display text to enum items and extending more custom metadata fields. Enums can be generated into various UI components such as dropdowns and menus, which greatly simplifies front-end development.
 
@@ -72,7 +72,7 @@ What other exciting features are there? Please continue to explore! Or you can c
   
 </details>
 
-## Features
+# Features
 
 - Compatible with the usage of native enums
 - Supports multiple data types such as `number` and `string`

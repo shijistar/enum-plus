@@ -1,4 +1,4 @@
-## 本地化
+# 本地化
 
 enum-plus 默认不内置国际化能力，因此枚举项的`label`字段将被视为普通字符串，直接返回原始文本。
 
@@ -53,7 +53,7 @@ Enum.localize = (key) => {
 
 > 一旦你完成了这项功能，建议你考虑把它发布成一个 npm 包，并分享在[插件生态](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.zh-CN.md)。
 
-### 自定义 label 逻辑
+## 自定义 label 逻辑
 
 当然，如果不使用任何国际化框架，而是希望自己控制枚举 `label` 的本地化规则，或者为每个枚举项使用不同的自定义逻辑，你可以为 `label` 字段传入一个函数：
 

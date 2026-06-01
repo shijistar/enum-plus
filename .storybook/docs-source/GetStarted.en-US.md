@@ -1,8 +1,10 @@
-## Enum Initialization
+# Enum Initialization
+
+&nbsp;
 
 This section shows the various ways to initialize enums using the `Enum` function. Understanding these different initialization formats allows you to choose the most convenient approach for your specific use case.
 
-### 1. Key-Value Format
+## 1. Key-Value Format
 
 The simplest format is a direct mapping of keys to values. This is similar to the native enum format.
 
@@ -28,7 +30,7 @@ WeekEnum2.Monday; // 'Mon'
 
 > If your project uses TypeScript and the version is below 5.0, it is recommended to add the `as const` type assertion to the parameter of the `Enum` method. In this way, the enum values will remain their original literal values instead of being converted to `number` or `string`. For more details, please refer to [here](?path=/docs/faq--docs#do-i-have-to-upgrade-typescript-to-version-50).
 
-### 2. Standard Format (Recommended)
+## 2. Standard Format (Recommended)
 
 The standard format includes both a `value` and a `label` for each enum item. This is the most commonly used format and is recommended for most cases. This format allows you to specify a display name for each enum item, which can be used in UI components. Please refer to the [Localization](?path=/docs/localization--docs#localization) section for internationalization support.
 
@@ -49,7 +51,7 @@ WeekEnum.items[0].label; // I love Sunday
 >
 > Want to customize the logic of the `label` field? You can pass in a function. Please refer to the [Custom Label Logic](?path=/docs/localization--docs#custom-label-logic) section for more details.
 
-### 3. Label-Only Format
+## 3. Label-Only Format
 
 Create an enumeration that only provides the `key` and `label` fields. If the `value` field is omitted, it defaults to the same value as the `key` field.
 
@@ -66,7 +68,7 @@ WeekEnum.items[0].key; // 'Sunday'
 WeekEnum.items[0].label; // I love Sunday
 ```
 
-### 4. Array Format
+## 4. Array Format
 
 The array format is useful when you need to create enums with dynamic data, for example the data from an API.
 
@@ -86,7 +88,7 @@ PetEnum.Dog; // 1
 PetEnum.label(1); // Dog
 ```
 
-### 5. Native Enum Format
+## 5. Native Enum Format
 
 Create from native enums. It benefits from the native enum's `auto-incrementing` behavior.
 

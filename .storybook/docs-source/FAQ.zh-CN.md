@@ -1,6 +1,8 @@
-## 常见问题
+# 常见问题
 
-### • 为什么需要这个库？TypeScript 已经有内置的枚举了
+&nbsp;
+
+## • 为什么需要这个库？TypeScript 已经有内置的枚举了
 
 TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.wikipedia.org/wiki/Enumerated_type)的基本功能，即消除魔法数字和流程控制。但对于一个前端工程师来说，枚举的需求远不止于此。我们还需要：
 
@@ -13,7 +15,7 @@ TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.w
 
 如果你需要这些功能，那么 `enum-plus` 就是为你量身打造的。如果你是一个前端工程师，强烈建议你尝试一下！
 
-### • 好像 TypeScript 要废弃 enum 了？
+## • 好像 TypeScript 要废弃 enum 了？
 
 无论 enum 这个**特性**是否未来会被替代，但枚举这个**概念**不会消失，在很多高级语言中这是最基础的特性之一。
 
@@ -21,7 +23,7 @@ TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.w
 
 > TypeScript 官方并没有明确的计划废除 enum，但是确实在[一些情况](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly)下可能会禁止使用 enum。根本原因还是 enum 既不是纯粹的TypeScript类型（在编译时可以被彻底移除），也不是纯粹的JavaScript运行时代码，而是两者的混合体，这给编译器带来了较大的复杂性。
 
-### • 枚举库的性能怎么样？
+## • 枚举库的性能怎么样？
 
 `enum-plus` 始终关注性能。它的设计目标之一就是在提供丰富功能的同时，保持高效的性能表现。
 
@@ -31,11 +33,11 @@ TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.w
 
 由此可见，在性能方面几乎已经达到了极致，你完全可以放心使用它，而不必担心性能问题。
 
-### • 为什么不支持反向映射？
+## • 为什么不支持反向映射？
 
 请使用 `enum.key(value)` 方法来获取枚举项的键名，这种反向映射的方式不但适用于数字类型的枚举值，也适用于字符串类型的枚举值。
 
-### • 为什么启用国际化后，Ant Design下拉框的搜索功能失效了？
+## • 为什么启用国际化后，Ant Design下拉框的搜索功能失效了？
 
 这是因为 `Enum.localize` 返回了一个组件对象，而不是常规字符串，导致 antd 无法正确进行字符串匹配。请使用 `enum.isMatch` 方法来实现自定义搜索功能。请参考 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react#dropdown-search)，了解更多详情。
 
@@ -51,11 +53,11 @@ import { Select } from 'antd';
 
 > 如果你使用的是 `@enum-plus/plugin-i18next` 插件，或者自己实现了 `Enum.localize` 方法并且返回的是字符串，那么下拉框的搜索功能应该可以正常工作。
 
-### • 我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？
+## • 我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？
 
 不用担心，无论你的项目是 TypeScript 还是 JavaScript，`enum-plus` 都可以正常工作，并且两种项目都可以享受到类型安全和智能提示的好处。VSCode等现代代码编辑器已经内置了对 TypeScript 的支持，因此你并不需要在项目中安装 TypeScript 依赖。
 
-### • TypeScript 版本必须升级到 5.0+ 吗？
+## • TypeScript 版本必须升级到 5.0+ 吗？
 
 不是的。升级 TypeScript 5.0 是为了得到更好的开发体验，如果你选择不升级，它仍然是可以正常工作的，只需要一小点额外的工作。
 
@@ -77,15 +79,15 @@ const weekInit = { Sunday: 0, Monday: 1 };
 const WeekEnum = Enum(weekInit);
 ```
 
-### • 为什么我的项目安装后没有 TypeScript 类型提示？
+## • 为什么我的项目安装后没有 TypeScript 类型提示？
 
 这是因为 tsconfig.json 中的配置不正确，请参考[这篇文档](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md#修改-tsconfigjson)，了解更多详情。
 
-### • 我想定义一个通用的枚举类型，可以表示任意枚举，目前的枚举类型定义太复杂了，有没有简单的办法？
+## • 我想定义一个通用的枚举类型，可以表示任意枚举，目前的枚举类型定义太复杂了，有没有简单的办法？
 
 请使用 `AnyEnum` 类型，它是一个通用的枚举类型，可以表示任意枚举。
 
-### • 我在发行公告里看到，你们让 Jest 和 Playwright 共享了同一套测试代码，这很有意思。能介绍一下如何实现的吗？
+## • 我在发行公告里看到，你们让 Jest 和 Playwright 共享了同一套测试代码，这很有意思。能介绍一下如何实现的吗？
 
 是的，这并不轻松。Jest 和 Playwright 的工作原理并不相同，Jest 运行在 Node.js 环境中，而 Playwright 运行在浏览器环境中。为了让它们共享一套测试代码，我们做了以下工作：
 
@@ -95,7 +97,7 @@ const WeekEnum = Enum(weekInit);
 
 基于这些工作，我们成功地让 Jest 和 Playwright 共享了一套测试代码，大大提高了单元测试的开发效率，降低了维护成本，你不必维护两套测试代码。未来我们还会把 第1部分 独立成一个开源项目，如果你在开发一个 `通用JavaScript`（Universal JavaScript）项目，或许你也可以尝试这种方式来共享测试代码。
 
-### • 我有一个很好的点子，希望为这个项目做贡献，我要怎么做？
+## • 我有一个很好的点子，希望为这个项目做贡献，我要怎么做？
 
 我非常欢迎你为这个项目做贡献！以下是一些指导原则，能帮助你决定如何贡献：
 

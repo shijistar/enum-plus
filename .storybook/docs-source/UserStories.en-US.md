@@ -1,6 +1,8 @@
-## User Stories
+# User Stories
 
-### 💡 Prevent Magic Numbers
+&nbsp;
+
+## 💡 Prevent Magic Numbers
 
 ```js
 const WeekEnum = Enum({
@@ -17,7 +19,7 @@ if (today === WeekEnum.Sunday) {
 
 ---
 
-### 💡 Check for Valid Enum Values
+## 💡 Check for Valid Enum Values
 
 ```js
 if (WeekEnum.has(value)) {
@@ -29,7 +31,7 @@ if (WeekEnum.has(value)) {
 
 ---
 
-### 💡 Check for Enum Objects
+## 💡 Check for Enum Objects
 
 ```ts
 let values: number[] | undefined;
@@ -44,7 +46,7 @@ if (Enum.isEnum(data)) {
 
 ---
 
-### 💡 Generate UI Controls
+## 💡 Generate UI Controls
 
 Take React and Ant Design as examples. Please refer to the [Supports Various Frontend Frameworks](?path=/docs/user-stories--docs#-supports-various-frontend-frameworks) section for more examples.
 
@@ -69,7 +71,7 @@ const App = () => {
 
 ---
 
-### 💡 Internationalization for Enum Names and Labels
+## 💡 Internationalization for Enum Names and Labels
 
 Internationalization support. Set the `label` field to a localization key, so that it displays the corresponding text based on the current language environment. Please refer to the [Localization](?path=/docs/localization--docs#localization) section for more details.
 
@@ -81,7 +83,7 @@ WeekEnum.name; // Week or 周, depending on the current locale
 
 ---
 
-### 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript Only]_**</sup>
+## 💡 Type Narrowing &nbsp; <sup>**_\[TypeScript Only]_**</sup>
 
 Type narrowing is a TypeScript-specific feature that allows you to use `valueType` to constrain the types of variables, function parameters, or component props. This prevents invalid assignments and enhances type safety in your code.
 
@@ -127,7 +129,7 @@ const MyComponent = (props: MyComponentProps) => {
 
 ---
 
-### 💡 Support Metadata Fields That Can Serve as a Static Configuration System
+## 💡 Support Metadata Fields That Can Serve as a Static Configuration System
 
 ```js
 const ColorEnum = Enum({
@@ -146,7 +148,7 @@ ColorEnum.named.Red.raw.icon; // '🔥'
 
 ---
 
-### 💡 Supports Traversing Enum Items in a Read-Only Manner
+## 💡 Supports Traversing Enum Items in a Read-Only Manner
 
 ```js
 Array.isArray(WeekEnum.items); // true
@@ -165,7 +167,7 @@ WeekEnum.items[0].label = 'foo'; // ❌ Not allowed, read-only
 
 ---
 
-### 💡 Enum Composition (Merging)
+## 💡 Enum Composition (Merging)
 
 ```js
 const PrimaryColorEnum = Enum({
@@ -186,7 +188,7 @@ const AllColorEnum = Enum({
 
 ---
 
-### 💡 Enable Code Intelligence for Enum Item Labels
+## 💡 Enable Code Intelligence for Enum Item Labels
 
 If you have internationalization enabled, you may want to enable code intelligence when entering enum item labels, listing all available localization resource key values to simplify the input process. You can achieve this by adding a new property to the `EnumLocaleExtends` interface.
 
@@ -203,7 +205,7 @@ declare module 'enum-plus/extension' {
 
 ---
 
-### 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
+## 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
 
 Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](https://github.com/shijistar/enum-plus/blob/master/docs/best-practices.md) section for how to write good code.
 
@@ -224,7 +226,7 @@ We can see that both the enumeration value and the description of the enumeratio
 
 ---
 
-### 💡 Supports Various Frontend Frameworks
+## 💡 Supports Various Frontend Frameworks
 
 `Enum.items` can be consumed as the data source of UI components. Take `Select` component as examples.
 
@@ -306,7 +308,7 @@ We can see that both the enumeration value and the description of the enumeratio
 
 ---
 
-### 💡 Enum Configuration Options
+## 💡 Enum Configuration Options
 
 You can pass in an optional configuration object when creating an enum to customize its behavior and features. Here are some commonly used configuration options:
 
@@ -336,7 +338,7 @@ For more configuration options, please refer to the next section.
 
 ---
 
-### 💡 Custom Field Mapping in Array Format Initialization
+## 💡 Custom Field Mapping in Array Format Initialization
 
 In the [4. Array Format](?path=/docs/get-started--docs#4-array-format) section, we know that enums can be created from dynamic data arrays. However, the field names in the real world may be different from the default `value`, `label`, and `key`. In such cases, you can pass in a custom option to map these to other field names.
 

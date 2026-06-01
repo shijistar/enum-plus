@@ -1,4 +1,6 @@
-## Installation
+# Installation
+
+&nbsp;
 
 Install using npm:
 

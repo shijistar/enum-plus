@@ -1,8 +1,8 @@
-## Compatibility
+# Compatibility
 
 enum-plus is designed to be compatible with a wide range of environments, including modern browsers, Node.js, and various build tools. Below are the compatibility details for different environments:
 
-### Browser Environments
+## Browser Environments
 
 - **Modern Bundlers**: For bundlers supporting the [exports](https://nodejs.org/api/packages.html#exports-sugar) configuration (such as webpack 5+, vite, rollup), imports will be resolved to the `es` directory, which targets **`ES2020`**.
 
@@ -17,7 +17,7 @@ enum-plus is designed to be compatible with a wide range of environments, includ
   - `@babel/preset-env` with appropriate `useBuiltIns` settings
   - Alternative polyfill implementations
 
-### Node.js Environments
+## Node.js Environments
 
 In Node.js environments, you can import enum-plus using either `require` or `import` syntax.
 

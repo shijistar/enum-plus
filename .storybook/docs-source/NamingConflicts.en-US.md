@@ -1,4 +1,4 @@
-## Naming Conflicts?
+# Naming Conflicts?
 
 `enum-plus` is designed with naming conflicts in mind. The namespace of enum items is separate from the methods and properties of the enum instance, minimizing the chances of conflicts. For example, when an enum item's name conflicts with a method name, you can access the overridden methods through the `items` property.
 

@@ -1,4 +1,4 @@
-## Localization
+# Localization
 
 `enum-plus` does not include built-in internationalization capabilities by default. Therefore, the `label` field of enum items is treated as a plain string and returns the original text directly.
 
@@ -53,7 +53,7 @@ Enum.localize = (key) => {
 
 > Once you have completed this feature, it is recommended that you consider publishing it as an npm package and share it in the [Awesome Plugins](?path=/docs/plugin-system--docs#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md).
 
-### Custom Label Logic
+## Custom Label Logic
 
 Of course, if you are not using any internationalization framework but want to control the localization rules of enum `label` yourself, or use different custom logic for each enum item, you can pass a function to the `label` field:
 

@@ -1,8 +1,10 @@
-## 枚举定义
+# 枚举定义
+
+&nbsp;
 
 本节展示了使用 `Enum` 函数初始化枚举的多种方式，你可以根据不同的使用场景选择最合适的方法
 
-### 1. Key-Value 格式
+## 1. Key-Value 格式
 
 ```js
 import { Enum } from 'enum-plus';
@@ -26,7 +28,7 @@ WeekEnum2.Monday; // 'Mon'
 
 > 如果你的项目使用 TypeScript 且版本低于 5.0，那么建议你为 Enum 方法的参数添加 `as const` 类型断言，这样枚举值将保持原始的字面量值，而不会变成`number`、`string`类型。关于更多详情，请参考 [这里](?path=/docs/faq--docs&globals=locale:zh-CN#typescript-版本必须升级到-50-吗)。
 
-### 2. 标准格式（推荐）
+## 2. 标准格式（推荐）
 
 为每个枚举项指定 `value` (枚举值) 和 `label`（显示名称）字段，这是最常用的格式，也是推荐的格式。这种格式允许你为每个枚举项设置显示名称，这些文本可以在 UI 组件中使用。关于为 `label` 字段启用本地化支持，请参考[本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化)章节
 
@@ -47,7 +49,7 @@ WeekEnum.items[0].label; // 星期日
 >
 > 希望自定义 `label` 字段逻辑？可以传入一个函数，请参考 [自定义 label 逻辑](?path=/docs/localization--docs&globals=locale:zh-CN#自定义-label-逻辑) 章节，了解更多详情。
 
-### 3. Key-Label 格式
+## 3. Key-Label 格式
 
 只提供 `key` 和 `label` 字段创建枚举。如果省略了 `value` 字段，则它默认为与 `key` 字段相同。
 
@@ -64,7 +66,7 @@ WeekEnum.items[0].key; // 'Sunday'
 WeekEnum.items[0].label; // 星期日
 ```
 
-### 4. 数组格式
+## 4. 数组格式
 
 数组格式在需要动态创建枚举时很有用，例如从 API 获取数据中动态创建一个枚举。
 
@@ -84,7 +86,7 @@ PetEnum.Dog; // 1
 PetEnum.label(1); // 狗
 ```
 
-### 5. 原生枚举格式
+## 5. 原生枚举格式
 
 如果你已经有一个原生的枚举，你可以直接传递给`Enum`函数，它会自动转换为增强版的枚举，这样可以借用原生枚举的`枚举值自动递增`特性
 

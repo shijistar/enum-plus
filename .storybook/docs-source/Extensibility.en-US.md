@@ -1,84 +1,86 @@
-## Extensibility
+# Extensibility
 
 Enum provides a wealth of built-in methods and properties that can satisfy most common use cases. However, if they are not sufficient, you can use `Enum.extends` to add more custom methods. These extensions will be globally applied to all enum instances, including those created before the extension was applied, and will take effect immediately without any additional setup.
 
 > In fact, the entire [Plugin System](?path=/docs/plugin-system--docs#plugin-system) and the `Enum.install` method are implemented using `Enum.extends` at the underlying level.
 
-- **TypeScript Projects**
+&nbsp;
 
-  _my-enum-extension.ts_
+## TypeScript Projects
 
-  ```ts
-  // Implementation code
-  Enum.extends({
-    toMySelect() {
-      return this.items.map((item) => ({ value: item.value, title: item.label }));
-    },
-    reversedItems() {
-      return this.items.toReversed();
-    },
-  });
+_my-enum-extension.ts_
 
-  // Type declaration for better type hints
-  declare module 'enum-plus/extension' {
-    export interface EnumExtension<T, K, V> {
-      toMySelect: () => { value: V; title: string }[];
-      reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
-    }
+```ts
+// Implementation code
+Enum.extends({
+  toMySelect() {
+    return this.items.map((item) => ({ value: item.value, title: item.label }));
+  },
+  reversedItems() {
+    return this.items.toReversed();
+  },
+});
+
+// Type declaration for better type hints
+declare module 'enum-plus/extension' {
+  export interface EnumExtension<T, K, V> {
+    toMySelect: () => { value: V; title: string }[];
+    reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
   }
-  ```
+}
+```
 
-  _index.ts_
+_index.ts_
 
-  Then import this file in the entry file of your project:
+Then import this file in the entry file of your project:
 
-  ```ts
-  import './my-enum-extension';
+```ts
+import './my-enum-extension';
 
-  WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
-  ```
+WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
+```
 
-- **JavaScript Projects**
+## JavaScript Projects
 
-  _my-enum-extension.js_
+_my-enum-extension.js_
 
-  ```js
-  import { Enum } from 'enum-plus';
+```js
+import { Enum } from 'enum-plus';
 
-  // Implementation code
-  Enum.extends({
-    toMySelect() {
-      return this.items.map((item) => ({ value: item.value, title: item.label }));
-    },
-    reversedItems() {
-      return this.items.toReversed();
-    },
-  });
-  ```
+// Implementation code
+Enum.extends({
+  toMySelect() {
+    return this.items.map((item) => ({ value: item.value, title: item.label }));
+  },
+  reversedItems() {
+    return this.items.toReversed();
+  },
+});
+```
 
-  _my-enum-extension.js.d.ts_
+_my-enum-extension.js.d.ts_
 
-  ```ts
-  import { EnumExtension, EnumItemClass, EnumItemInit } from 'enum-plus';
+```ts
+import { EnumExtension, EnumItemClass, EnumItemInit } from 'enum-plus';
 
-  // Type declaration for better type hints
-  declare module 'enum-plus/extension' {
-    export interface EnumExtension<T, K, V> {
-      toMySelect: () => { value: V; title: string }[];
-      reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
-    }
+// Type declaration for better type hints
+declare module 'enum-plus/extension' {
+  export interface EnumExtension<T, K, V> {
+    toMySelect: () => { value: V; title: string }[];
+    reversedItems: () => EnumItemClass<EnumItemInit<V>, K, V>[];
   }
-  ```
+}
+```
 
-  _index.js_
+_index.js_
 
-  Then import this file in the entry file of your project:
+Then import this file in the entry file of your project:
 
-  ```js
-  import './my-enum-extension';
+```js
+import './my-enum-extension';
 
-  WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
-  ```
+WeekEnum.toMySelect(); // [{ value: 0, title: 'Sunday' }, { value: 1, title: 'Monday' }]
+```
 
 Please note that `EnumExtension` is a generic interface that accepts three type parameters, which represent:
 

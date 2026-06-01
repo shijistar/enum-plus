@@ -1,8 +1,12 @@
-## 全局配置
+# 全局配置
+
+&nbsp;
 
 `Enum.config` 提供了一些全局配置参数，用来影响枚举的行为和特性。
 
-### autoLabel
+&nbsp;
+
+## 🧩 autoLabel
 
 `Enum.config.autoLabel` 是一个全局配置选项，用于自动生成枚举项的标签。它允许在定义枚举时，设置 `options.labelPrefix` 选项，为所有枚举项设置一个 `label` 前缀，枚举项只需要设置基础值即可，甚至可以省略 `label` 字段（与 `key` 字段相同）。这样可以减少重复代码，提高枚举定义的简洁性。
 

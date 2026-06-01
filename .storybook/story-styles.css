@@ -4,6 +4,10 @@
 
 /* ------------- override css start --------------- */
 
+h1:not(.sb-anchor, .sb-unstyled, .sb-unstyled h1) {
+  margin-bottom: 12px;
+}
+
 p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p) {
   /* stylelint-disable-next-line declaration-no-important */
   font-size: 16px !important;
@@ -31,6 +35,10 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 
 .enum-story-shell[data-theme='light'] .docblock-source {
   border-color: #94cdc4;
+}
+
+.docblock-source [data-radix-scroll-area-viewport] {
+  border-radius: 16px;
 }
 
 /* ------------- override css end --------------- */

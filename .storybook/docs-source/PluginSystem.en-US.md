@@ -1,4 +1,6 @@
-## Plugin System
+# Plugin System
+
+&nbsp;
 
 `enum-plus` provides a plugin system that allows you to extend the functionality of all enums. Plugins can add new methods or properties to all enum instances, greatly enhancing their capabilities. You can choose to install only the plugins you need, keeping the core library lightweight and efficient.
 
@@ -25,7 +27,7 @@ Enum.install(antdPlugin, {
 });
 ```
 
-### Awesome Plugins
+## Awesome Plugins
 
 The following plugins are available. You can choose to install them based on your needs:
 
