@@ -2,7 +2,7 @@
 
 &nbsp;
 
-## 🏷️ Pick enum values
+## 🅿️ Pick enum values
 
 `Enum.XXX`
 
@@ -13,7 +13,7 @@ WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
 ```
 
-## 🏷️ named
+## 🅿️ named
 
 `Record<string, EnumItemClass>`
 
@@ -23,7 +23,7 @@ An object that aggregates all enum items, allowing quick access to a specific en
 WeekEnum.named.Monday; // { key: 'Monday', value: 1, label: 'Monday' }
 ```
 
-## 🏷️ items
+## 🅿️ items
 
 `{ value, label, key, raw }[]`
 
@@ -33,7 +33,7 @@ Returns a read-only array of all enum items.
 WeekEnum.items; // [ { value: 0, label: 'Sunday', key: 'Sunday' }, { value: 1, label: 'Monday', key: 'Monday' }, ... ]
 ```
 
-## 🏷️ values
+## 🅿️ values
 
 `(string | number)[]`
 
@@ -43,7 +43,7 @@ Returns an array of all enum item `value`(s).
 WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
 ```
 
-## 🏷️ labels
+## 🅿️ labels
 
 `string[]`
 
@@ -53,7 +53,7 @@ Returns an array of all enum item `label`(s). If [localization](?path=/docs/loca
 WeekEnum.labels; // ['Sunday', 'Monday', ... 'Friday', 'Saturday']
 ```
 
-## 🏷️ keys
+## 🅿️ keys
 
 `string[]`
 
@@ -63,7 +63,7 @@ Returns an array of all enum item `key`(s)
 WeekEnum.keys; // ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 ```
 
-## 🏷️ meta
+## 🅿️ meta
 
 `Record<string, any[]>`
 
@@ -84,7 +84,7 @@ Additionally, you can quickly access custom fields of an enum item through the `
 ColorEnum.named.Red.raw.hex; // '#FF0000'
 ```
 
-## 🧩 has
+## Ⓜ️ has
 
 `has(keyOrValue?: string | number): boolean`
 
@@ -97,7 +97,7 @@ WeekEnum.has(9); // false
 WeekEnum.has('Birthday'); // false
 ```
 
-## 🧩 findBy
+## Ⓜ️ findBy
 
 `findBy(field: string, value: any): EnumItemClass | undefined`
 
@@ -113,7 +113,7 @@ ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: 'Red', hex
 
 > If you need to get the meta fields of a known enum item, it is recommended to use the `named` and `raw` property, for example: `ColorEnum.named.Red.raw.hex`.
 
-## 🧩 label
+## Ⓜ️ label
 
 `label(keyOrValue?: string | number): string | undefined`
 
@@ -124,7 +124,7 @@ WeekEnum.label(1); // Monday
 WeekEnum.label('Monday'); // Monday, this is label, not key
 ```
 
-## 🧩 key
+## Ⓜ️ key
 
 `key(value?: string | number): string | undefined`
 
@@ -134,7 +134,7 @@ Find the key of an enum item by its value. It's also known as [reverse mapping](
 WeekEnum.key(1); // Monday (this is key, not label)
 ```
 
-## 🧩 raw
+## Ⓜ️ raw
 
 `raw(): Record<K, T[K]>`
 <br/>
@@ -160,7 +160,7 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday:
 
 > Tips: If you want to access the metadata fields of a known enum item, using `enum.named.XXX.raw` is a good option, for example: `WeekEnum.named.Sunday.raw.happy`.
 
-## 🧩 toList
+## Ⓜ️ toList
 
 `toList(): { value, label }[]`
 <br/>
@@ -185,7 +185,7 @@ WeekEnum.toList({ valueField: 'id', labelField: 'name' });
 // ]
 ```
 
-## 🧩 toMap
+## Ⓜ️ toMap
 
 `toMap(): Record<string, string | number>`
 <br/>
@@ -210,7 +210,7 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 // }
 ```
 
-## 🏷️ name
+## 🅿️ name
 
 `string`
 
@@ -284,7 +284,7 @@ type WeekRaw = typeof WeekEnum.rawType;
 
 # Static Methods
 
-## 🧩 Enum.isEnum
+## Ⓜ️ Enum.isEnum
 
 `isEnum(obj: any): boolean`
 
@@ -295,7 +295,7 @@ Enum.isEnum(WeekEnum); // true
 Enum.isEnum({}); // false
 ```
 
-## 🧩 Enum.localize
+## Ⓜ️ Enum.localize
 
 `(key: string) => string`
 
@@ -307,7 +307,7 @@ import i18n from 'i18next';
 Enum.localize = (key) => i18n.t(key);
 ```
 
-## 🧩 Enum.extends
+## Ⓜ️ Enum.extends
 
 `(obj: Record<string, Function>) => void`
 
@@ -321,7 +321,7 @@ Enum.extends({
 });
 ```
 
-## 🧩 Enum.install
+## Ⓜ️ Enum.install
 
 `(plugin: Plugin, options?: any) => void`
 

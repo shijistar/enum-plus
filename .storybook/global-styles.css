@@ -2,8 +2,9 @@
 
 .sidebar-item > a,
 .sidebar-item > button {
+  align-items: center;
   /* stylelint-disable-next-line declaration-no-important */
-  font-size: 16px !important;
+  font-size: 20px !important;
 }
 
 /* ------------- override css end --------------- */

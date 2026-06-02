@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/blocks';
 import type { Preview, ReactRenderer } from '@storybook/react-vite';
 import type { StoryContext } from 'storybook/internal/csf';
@@ -15,6 +15,7 @@ import { dark, light } from './utils/themes';
 import './story-styles.css';
 
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+let currentTheme: string | undefined = undefined;
 
 function getThemeKey(theme: unknown) {
   return (!theme && isPreferDark) || theme === 'dark' ? 'dark' : 'light';
@@ -23,6 +24,27 @@ function getThemeKey(theme: unknown) {
 function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<ReactRenderer>>) {
   const globalTheme = getGlobalValueFromUrl('theme');
   const themeKey = getThemeKey(globalTheme);
+  const localeKey = props.context.store?.userGlobals.globals.locale;
+  const themeName = props.context.store?.userGlobals.globals.theme;
+  console.log(props);
+  // Reload the page if the theme changes.
+  useEffect(() => {
+    if (!currentTheme) {
+      currentTheme = themeName;
+    }
+    if (themeName !== currentTheme) {
+      currentTheme = themeName;
+      (window.top ?? window.parent ?? window).location.reload();
+    }
+  }, [themeName]);
+
+  useEffect(() => {
+    if (storyI18n.language !== localeKey) {
+      void storyI18n.changeLanguage(localeKey).then(() => {
+        // (window.top ?? window.parent ?? window).location.reload();
+      });
+    }
+  }, [localeKey]);
 
   return (
     <div className={`enum-story-shell enum-story-shell-${themeKey} enum-story-docs`} data-theme={themeKey}>
@@ -50,7 +72,7 @@ function StorybookDecorator({ Story, context }: { Story: React.ComponentType; co
   useEffect(() => {
     if (storyI18n.language !== localeKey) {
       void storyI18n.changeLanguage(localeKey).then(() => {
-        (window.top ?? window.parent ?? window).location.reload();
+        // (window.top ?? window.parent ?? window).location.reload();
       });
     }
   }, [localeKey]);

@@ -1,4 +1,3 @@
-import { GLOBALS_UPDATED } from 'storybook/internal/core-events';
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
 import { getGlobalValueFromUrl } from './utils/global';
@@ -8,24 +7,9 @@ import './global-styles.css';
 const globalTheme = getGlobalValueFromUrl('theme');
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-function applyCustomTitleSuffix() {
-  if (document.title.endsWith('⋅ Storybook')) {
-    document.title = document.title.replace(/⋅\s*Storybook$/, `⋅ ${light.brandTitle}`);
-  }
-}
-
 applyManagerTheme((!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' : 'light');
 monitorTitleChanges();
 applyCustomTitleSuffix();
-monitorThemeChange();
-
-function monitorThemeChange() {
-  // FIXME: the monitor seems does not work
-  addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
-    const isDark = (!globals?.theme && isPreferDark) || globals?.theme === 'dark';
-    applyManagerTheme(isDark ? 'dark' : 'light');
-  });
-}
 
 function applyManagerTheme(theme: 'light' | 'dark') {
   document.documentElement.dataset.theme = theme;
@@ -49,5 +33,11 @@ function monitorTitleChanges() {
     }).observe(titleElement, {
       childList: true,
     });
+  }
+}
+
+function applyCustomTitleSuffix() {
+  if (document.title.endsWith('⋅ Storybook')) {
+    document.title = document.title.replace(/⋅\s*Storybook$/, `⋅ ${light.brandTitle}`);
   }
 }

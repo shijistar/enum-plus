@@ -2,7 +2,7 @@
 
 &nbsp;
 
-## 🏷️ 拾取枚举值
+## 🅿️ 拾取枚举值
 
 `Enum.XXX`
 
@@ -13,7 +13,7 @@ WeekEnum.Sunday; // 0
 WeekEnum.Monday; // 1
 ```
 
-## 🏷️ named
+## 🅿️ named
 
 `Record<string, EnumItemClass>`
 
@@ -23,7 +23,7 @@ WeekEnum.Monday; // 1
 WeekEnum.named.Monday; // { key: 'Monday', value: 1, label: '星期一' }
 ```
 
-## 🏷️ items
+## 🅿️ items
 
 `{ value, label, key, raw }[]`
 
@@ -33,7 +33,7 @@ WeekEnum.named.Monday; // { key: 'Monday', value: 1, label: '星期一' }
 WeekEnum.items; // [ { value: 0, label: '星期日', key: 'Sunday' }, { value: 1, label: '星期一', key: 'Monday' }, ... ]
 ```
 
-## 🏷️ values
+## 🅿️ values
 
 `(string | number)[]`
 
@@ -43,7 +43,7 @@ WeekEnum.items; // [ { value: 0, label: '星期日', key: 'Sunday' }, { value: 1
 WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
 ```
 
-## 🏷️ labels
+## 🅿️ labels
 
 `string[]`
 
@@ -53,7 +53,7 @@ WeekEnum.values; // [0, 1, 2, 3, 4, 5, 6]
 WeekEnum.labels; // ['星期日', '星期一', ... '星期五', '星期六']
 ```
 
-## 🏷️ keys
+## 🅿️ keys
 
 `string[]`
 
@@ -63,7 +63,7 @@ WeekEnum.labels; // ['星期日', '星期一', ... '星期五', '星期六']
 WeekEnum.keys; // ['Sunday', 'Monday', ... 'Friday', 'Saturday']
 ```
 
-## 🏷️ meta
+## 🅿️ meta
 
 `Record<string, any[]>`
 
@@ -84,7 +84,7 @@ ColorEnum.meta.hex; // ['#FF0000', '#00FF00', '#0000FF']
 ColorEnum.named.Red.raw.hex; // '#FF0000'
 ```
 
-## 🧩​ has
+## Ⓜ️​ has
 
 `has(keyOrValue?: string | number): boolean`
 
@@ -97,7 +97,7 @@ WeekEnum.has(9); // false
 WeekEnum.has('Birthday'); // false
 ```
 
-## 🧩 findBy
+## Ⓜ️ findBy
 
 `findBy(field: string, value: any): EnumItemClass | undefined`
 
@@ -111,7 +111,7 @@ ColorEnum.findBy('key', 'Red'); // { key: 'Red', value: 1, label: '红色', hex:
 ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
 ```
 
-## 🧩 label
+## Ⓜ️ label
 
 `label(keyOrValue?: string | number): string | undefined`
 
@@ -122,7 +122,7 @@ WeekEnum.label(1); // 星期一
 WeekEnum.label('Monday'); // 星期一
 ```
 
-## 🧩 key
+## Ⓜ️ key
 
 `key(value?: string | number): string | undefined`
 
@@ -132,7 +132,7 @@ WeekEnum.label('Monday'); // 星期一
 WeekEnum.key(1); // 'Monday'
 ```
 
-## 🧩 raw
+## Ⓜ️ raw
 
 `raw(): Record<K, T[K]>`
 <br/>
@@ -158,7 +158,7 @@ WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Mond
 
 > 温馨提示：如果要获取某个已知枚举项的元数据字段，使用`enum.named.XXX.raw` 是一个不错的选择。
 
-## 🧩 toList
+## Ⓜ️ toList
 
 `toList(): { value, label }[]`
 <br/>
@@ -183,7 +183,7 @@ WeekEnum.toList({ valueField: 'id', labelField: 'name' });
 // ]
 ```
 
-## 🧩 toMap
+## Ⓜ️ toMap
 
 `toMap(): Record<string, string | number>`
 <br/>
@@ -208,7 +208,7 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 // }
 ```
 
-## 🏷️ name
+## 🅿️ name
 
 `string`
 
@@ -281,7 +281,7 @@ type WeekRaw = typeof WeekEnum.rawType;
 
 # 静态方法
 
-## 🧩 Enum.isEnum
+## Ⓜ️ Enum.isEnum
 
 `isEnum(obj: any): boolean`
 
@@ -292,7 +292,7 @@ Enum.isEnum(WeekEnum); // true
 Enum.isEnum({}); // false
 ```
 
-## 🧩 Enum.localize
+## Ⓜ️ Enum.localize
 
 `(key: string) => string`
 
@@ -304,7 +304,7 @@ import i18n from 'i18next';
 Enum.localize = (key) => i18n.t(key);
 ```
 
-## 🧩 Enum.extends
+## Ⓜ️ Enum.extends
 
 `(obj: Record<string, Function>) => void`
 
@@ -318,7 +318,7 @@ Enum.extends({
 });
 ```
 
-## 🧩 Enum.install
+## Ⓜ️ Enum.install
 
 `(plugin: Plugin, options?: any) => void`
 
