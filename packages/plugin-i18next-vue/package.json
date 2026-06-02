@@ -64,7 +64,7 @@
     "i18next": ">=23",
     "i18next-vue": ">=3.0.0"
   },
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@11.12.1",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   }

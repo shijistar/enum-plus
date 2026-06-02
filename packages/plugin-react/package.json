@@ -47,11 +47,11 @@
     "prepublishOnly": "npm run build && npm run test",
     "task:copy-lib": "tsx ../../scripts/copy-lib.ts",
     "test": "jest",
-    "test-legacy": "jest -c jest-legacy.config.js",
     "test:browser": "npm run test:browser:bundle && playwright test",
     "test:browser:bundle": "node scripts/browser-test-bundle.js",
     "test:browser:debug": "npm run test:browser:bundle && playwright test --debug",
     "test:browser:ui": "npm run test:browser:bundle && playwright test --ui",
+    "test-legacy": "jest -c jest-legacy.config.js",
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "devDependencies": {
@@ -77,7 +77,7 @@
       "optional": true
     }
   },
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@11.12.1",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   }

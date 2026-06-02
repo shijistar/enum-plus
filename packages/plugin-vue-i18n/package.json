@@ -63,7 +63,7 @@
     "enum-plus": "^3.0.0",
     "vue-i18n": ">=9.2.0"
   },
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@11.12.1",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   }
