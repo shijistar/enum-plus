@@ -24,7 +24,9 @@ function getThemeKey(theme: unknown) {
 function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<ReactRenderer>>) {
   const globalTheme = getGlobalValueFromUrl('theme');
   const themeKey = getThemeKey(globalTheme);
+  // @ts-expect-error: because store is an internal api
   const localeKey = props.context.store?.userGlobals.globals.locale;
+  // @ts-expect-error: because store is an internal api
   const themeName = props.context.store?.userGlobals.globals.theme;
   console.log(props);
   // Reload the page if the theme changes.
