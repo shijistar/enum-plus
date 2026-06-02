@@ -43,7 +43,7 @@ function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<Reac
   useEffect(() => {
     if (storyI18n.language !== localeKey) {
       void storyI18n.changeLanguage(localeKey).then(() => {
-        // (window.top ?? window.parent ?? window).location.reload();
+        (window.top ?? window.parent ?? window).location.reload();
       });
     }
   }, [localeKey]);
@@ -74,7 +74,7 @@ function StorybookDecorator({ Story, context }: { Story: React.ComponentType; co
   useEffect(() => {
     if (storyI18n.language !== localeKey) {
       void storyI18n.changeLanguage(localeKey).then(() => {
-        // (window.top ?? window.parent ?? window).location.reload();
+        (window.top ?? window.parent ?? window).location.reload();
       });
     }
   }, [localeKey]);

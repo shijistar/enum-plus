@@ -7,4 +7,10 @@
   font-size: 20px !important;
 }
 
+.sidebar-item > a svg,
+.sidebar-item > button svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* ------------- override css end --------------- */
