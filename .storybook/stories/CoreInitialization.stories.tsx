@@ -120,7 +120,7 @@ const ChannelEnum = Enum(ReleaseChannelNative);`,
 }
 
 const meta: Meta = {
-  title: 'Core/Enum Initialization',
+  title: 'Core/02 Initialization Patterns',
   parameters: {
     docs: {
       description: {

@@ -231,6 +231,22 @@ const enUS = {
   'storybook.stories.PluginReactI18n.mode.matchCaseSensitive': 'isMatchCaseSensitive',
   'storybook.stories.PluginReactI18n.defaultSearch.zhCN': '审',
   'storybook.stories.PluginReactI18n.defaultSearch.enUS': 're',
+  'storybook.stories.CoreWhyEnumPlus.metaDescription':
+    'Shows the business motivation before the API details: replace duplicated constants, label maps, Select options, table filters, and badge maps with one enum source.',
+  'storybook.stories.CoreUiOutputs.metaDescription':
+    'Focuses on the practical frontend payoff: one enum can feed select options, status cards, table badges, and static maps without rebuilding UI-specific data repeatedly.',
+  'storybook.stories.PluginI18next.metaDescription':
+    'Demonstrates the plain i18next integration: enum labels resolve through i18next, while UI refresh still depends on the host framework rerendering.',
+  'storybook.stories.PluginReactI18next.metaDescription':
+    'Shows the lightweight react-i18next integration package: it reads translations from the shared React i18n instance, but automatic UI refresh still belongs to plugin-react.',
+  'storybook.stories.PluginNextInternational.metaDescription':
+    'Shows the client-side next-international integration: PatchedI18nProviderClient wires runtime translation into enum-plus so labels and search can react to locale changes.',
+  'storybook.stories.PluginVueI18n.metaDescription':
+    'Demonstrates the vue-i18n integration from a React shell by using the plugin fallback path with a provided vue-i18n instance.',
+  'storybook.stories.PluginI18nextVue.metaDescription':
+    'Shows the i18next-vue integration through its non-component fallback path so the plugin contract can still be demonstrated from Storybook React.',
+  'storybook.stories.PluginSample.metaDescription':
+    'Explains the plugin authoring model itself by showing how the sample plugin adds one extension method to every enum instance through Enum.extends.',
 } as const;
 
 export default enUS;

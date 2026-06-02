@@ -229,6 +229,22 @@ const zhCN = {
   'storybook.stories.PluginReactI18n.mode.matchCaseSensitive': 'isMatchCaseSensitive',
   'storybook.stories.PluginReactI18n.defaultSearch.zhCN': '审',
   'storybook.stories.PluginReactI18n.defaultSearch.enUS': 're',
+  'storybook.stories.CoreWhyEnumPlus.metaDescription':
+    '先把业务动机讲清楚：用一份 enum 来源替代重复的常量、labelMap、Select options、表格筛选和 badge 映射。',
+  'storybook.stories.CoreUiOutputs.metaDescription':
+    '聚焦前端最实际的收益：同一份 enum 可以同时驱动下拉 options、状态卡片、表格徽标和静态 map，不必反复重建 UI 专用结构。',
+  'storybook.stories.PluginI18next.metaDescription':
+    '展示最基础的 i18next 接入：枚举 label 能通过 i18next 翻译，但界面刷新仍取决于宿主框架是否重渲染。',
+  'storybook.stories.PluginReactI18next.metaDescription':
+    '展示轻量版 react-i18next 接入：它会读取共享的 React i18n 实例，但真正的自动界面刷新仍应交给 plugin-react。',
+  'storybook.stories.PluginNextInternational.metaDescription':
+    '展示 next-international 的客户端接入：PatchedI18nProviderClient 会把运行时翻译能力注入 enum-plus，让 label 与搜索跟随 locale 自动变化。',
+  'storybook.stories.PluginVueI18n.metaDescription':
+    '展示 vue-i18n 的回退接入路径：即使在 React Storybook 壳中，也能通过传入 vue-i18n instance 验证插件契约。',
+  'storybook.stories.PluginI18nextVue.metaDescription':
+    '展示 i18next-vue 的非组件回退路径：即使没有真实 Vue 页面，也能在 React Storybook 中验证插件输出契约。',
+  'storybook.stories.PluginSample.metaDescription':
+    '用 sample plugin 解释插件 authoring 机制：它通过 Enum.extends 给每个 enum 实例挂上一个新增方法。',
 } as const;
 
 export default zhCN;

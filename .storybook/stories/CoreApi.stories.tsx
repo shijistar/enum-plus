@@ -52,7 +52,7 @@ function createConflictEnum(t: ReturnType<typeof useStoryT>) {
 }
 
 const meta: Meta = {
-  title: 'Core/Query and Transform API',
+  title: 'Core/03 Query, Meta and Transform',
   parameters: {
     docs: {
       description: {
