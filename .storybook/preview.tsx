@@ -4,12 +4,14 @@ import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/bl
 import type { Preview, ReactRenderer } from '@storybook/react-vite';
 import type { StoryContext } from 'storybook/internal/csf';
 import { App as AntdApp, ConfigProvider as AntdConfigProvider, theme as antTheme } from 'antd';
+// @ts-expect-error
 import 'antd/dist/reset.css';
 import enUS from 'antd/locale/en_US';
 import zhCN from 'antd/locale/zh_CN';
 import storyI18n, { storyT } from './locales';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
+// @ts-expect-error
 import './story-styles.css';
 
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -61,6 +63,7 @@ function StorybookDecorator({ Story, context }: { Story: React.ComponentType; co
         token: {
           colorPrimary: isDark ? dark.colorPrimary : light.colorPrimary,
           borderRadius: 16,
+          fontSize: 16,
           fontFamily: 'SF Pro Display, Segoe UI, PingFang SC, Helvetica Neue, Arial, sans-serif',
         },
       }}

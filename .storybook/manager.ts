@@ -8,11 +8,23 @@ import './global-styles.css';
 const globalTheme = getGlobalValueFromUrl('theme');
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-function createManagerTheme(theme: 'light' | 'dark') {
-  if (theme === 'dark') {
-    return create(dark);
+function applyCustomTitleSuffix() {
+  if (document.title.endsWith('⋅ Storybook')) {
+    document.title = document.title.replace(/⋅\s*Storybook$/, `⋅ ${light.brandTitle}`);
   }
-  return create(light);
+}
+
+applyManagerTheme((!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' : 'light');
+monitorTitleChanges();
+applyCustomTitleSuffix();
+monitorThemeChange();
+
+function monitorThemeChange() {
+  // FIXME: the monitor seems does not work
+  addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
+    const isDark = (!globals?.theme && isPreferDark) || globals?.theme === 'dark';
+    applyManagerTheme(isDark ? 'dark' : 'light');
+  });
 }
 
 function applyManagerTheme(theme: 'light' | 'dark') {
@@ -22,9 +34,20 @@ function applyManagerTheme(theme: 'light' | 'dark') {
   });
 }
 
-applyManagerTheme((!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' : 'light');
+function createManagerTheme(theme: 'light' | 'dark') {
+  if (theme === 'dark') {
+    return create(dark);
+  }
+  return create(light);
+}
 
-addons.getChannel().on(GLOBALS_UPDATED, ({ globals }) => {
-  const isDark = (!globals?.theme && isPreferDark) || globals?.theme === 'dark';
-  applyManagerTheme(isDark ? 'dark' : 'light');
-});
+function monitorTitleChanges() {
+  const titleElement = document.querySelector('title');
+  if (titleElement) {
+    new MutationObserver(() => {
+      applyCustomTitleSuffix();
+    }).observe(titleElement, {
+      childList: true,
+    });
+  }
+}
