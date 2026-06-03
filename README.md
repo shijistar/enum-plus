@@ -60,6 +60,9 @@ It's a front-end business dictionary solution, that provides a lightweight data 
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
+<p align="center">
+  <em>Click the image to view the high-definition video</em>
+</p>
 
 ## Features
 

@@ -58,6 +58,9 @@
     <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
+<p align="center">
+  <em>点击图片查看高清视频</em>
+</p>
 
 [为什么我的项目安装后没有 TypeScript 类型提示？](?path=/docs/faq--docs&globals=locale:zh-CN#为什么我的项目安装后没有-typescript-类型提示)
 

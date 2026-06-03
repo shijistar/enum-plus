@@ -59,6 +59,9 @@
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
+<p align="center">
+  <em>点击图片查看高清视频</em>
+</p>
 
 ## 特性
 
