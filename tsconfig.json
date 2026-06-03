@@ -31,6 +31,6 @@
       "enum-plus/extension": ["./src/extension.d.ts"]
     }
   },
-  "include": ["src", "scripts", "test", ".storybook/**/*.ts", ".storybook/**/*.mdx", "*.ts", ".*.ts"],
+  "include": ["src", "scripts", "test", ".storybook/**/*.ts*", ".storybook/**/*.mdx", "*.ts", ".*.ts"],
   "exclude": ["node_modules", "packages", "es", "es-legacy", "lib", "tslib", "tses", "types-legacy"]
 }

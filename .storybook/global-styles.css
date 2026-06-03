@@ -7,10 +7,15 @@
   font-size: 20px !important;
 }
 
-.sidebar-item > a svg,
-.sidebar-item > button svg {
+.sidebar-item > a svg[type],
+.sidebar-item > button svg[type] {
   width: 18px;
   height: 18px;
+  margin-right: 4px;
+}
+
+.sidebar-subheading [data-action='collapse-root'] {
+  font-size: 13px;
 }
 
 /* ------------- override css end --------------- */

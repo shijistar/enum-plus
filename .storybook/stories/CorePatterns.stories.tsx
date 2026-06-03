@@ -8,6 +8,38 @@ import { JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 const { Text } = Typography;
 
 let extensionInstalled = false;
+const meta: Meta = {
+  title: 'Core/Localization, Composition and Extension',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '核心/本地化、组合与扩展',
+  parameters: {
+    docs: {
+      description: {
+        component: storyT('storybook.stories.CorePatterns.metaDescription'),
+      },
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj;
+export const LocalizationAndAutoLabel: Story = {
+  name: 'Localization and Auto Label',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '本地化与自动标签',
+  render: function Render() {
+    return <LocalizationDemo />;
+  },
+};
+
+export const CompositionAndExtension: Story = {
+  name: 'Composition and Extension',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '组合与扩展',
+  render: function Render() {
+    return <CompositionDemo />;
+  },
+};
 
 function ensureCustomExtension() {
   if (extensionInstalled) {
@@ -33,20 +65,6 @@ function ensureCustomExtension() {
 
   extensionInstalled = true;
 }
-
-const meta: Meta = {
-  title: 'Core/Localization, Composition and Extension',
-  parameters: {
-    docs: {
-      description: {
-        component: storyT('storybook.stories.CorePatterns.metaDescription'),
-      },
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj;
 
 function LocalizationDemo() {
   const t = useStoryT();
@@ -266,15 +284,3 @@ function CompositionDemo() {
     </StoryPage>
   );
 }
-
-export const LocalizationAndAutoLabel: Story = {
-  render: function Render() {
-    return <LocalizationDemo />;
-  },
-};
-
-export const CompositionAndExtension: Story = {
-  render: function Render() {
-    return <CompositionDemo />;
-  },
-};

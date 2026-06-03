@@ -11,6 +11,7 @@ node_modules
 npm-debug.log
 e2e/fixtures/scripts
 e2e/test-results
+.storybook/docs/titles.json
 __screenshots__
 coverage/
 run
@@ -20,3 +21,4 @@ run
 .ai-auto-collection.state
 .eslintcache
 storybook-static
+debug-storybook.log

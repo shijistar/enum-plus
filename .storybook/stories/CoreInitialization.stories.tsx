@@ -14,6 +14,39 @@ enum ReleaseChannelNative {
 }
 
 type PresetKey = 'keyValue' | 'standard' | 'labelOnly' | 'array' | 'native';
+type Story = StoryObj;
+
+const meta: Meta = {
+  title: 'Core/Enum Initialization',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '核心/枚举初始化',
+  parameters: {
+    docs: {
+      description: {
+        component: storyT('storybook.stories.CoreInitialization.metaDescription'),
+      },
+    },
+  },
+};
+export default meta;
+
+export const Playground: Story = {
+  name: 'Playground',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '游乐场',
+  render: function Render() {
+    return <InitializationPlayground />;
+  },
+};
+
+export const ArrayFieldMapping: Story = {
+  name: 'Array Field Mapping',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '数组字段映射',
+  render: function Render() {
+    return <ArrayFieldMappingDemo />;
+  },
+};
 
 function getInitPresets(t: ReturnType<typeof useStoryT>): Record<
   PresetKey,
@@ -118,20 +151,6 @@ const ChannelEnum = Enum(ReleaseChannelNative);`,
     },
   };
 }
-
-const meta: Meta = {
-  title: 'Core/Enum Initialization',
-  parameters: {
-    docs: {
-      description: {
-        component: storyT('storybook.stories.CoreInitialization.metaDescription'),
-      },
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj;
 
 function InitializationPlayground() {
   const t = useStoryT();
@@ -390,15 +409,3 @@ function ArrayFieldMappingDemo() {
     </StoryPage>
   );
 }
-
-export const Playground: Story = {
-  render: function Render() {
-    return <InitializationPlayground />;
-  },
-};
-
-export const ArrayFieldMapping: Story = {
-  render: function Render() {
-    return <ArrayFieldMappingDemo />;
-  },
-};

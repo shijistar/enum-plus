@@ -6,6 +6,40 @@ import { storyT, useStoryT } from '../locales';
 import { JsonPreview, StoryPage, StorySection, TagGroup, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
+type Story = StoryObj;
+
+const meta: Meta = {
+  title: 'Core/Query and Transform API',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '核心/查询与转换 API',
+  parameters: {
+    docs: {
+      description: {
+        component: storyT('storybook.stories.CoreApi.metaDescription'),
+      },
+    },
+  },
+};
+
+export default meta;
+
+export const Explorer: Story = {
+  name: 'Explorer',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '探索',
+  render: function Render() {
+    return <ApiExplorer />;
+  },
+};
+
+export const NamingConflicts: Story = {
+  name: 'Naming Conflicts',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '命名冲突',
+  render: function Render() {
+    return <NamingConflictDemo />;
+  },
+};
 
 function createWorkflowStatusEnum(t: ReturnType<typeof useStoryT>) {
   return Enum(
@@ -50,20 +84,6 @@ function createConflictEnum(t: ReturnType<typeof useStoryT>) {
     meta: { value: 'meta', label: t('storybook.stories.CoreApi.sample.conflict.meta') },
   });
 }
-
-const meta: Meta = {
-  title: 'Core/Query and Transform API',
-  parameters: {
-    docs: {
-      description: {
-        component: storyT('storybook.stories.CoreApi.metaDescription'),
-      },
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj;
 
 function ApiExplorer() {
   const t = useStoryT();
@@ -323,15 +343,3 @@ function NamingConflictDemo() {
     </StoryPage>
   );
 }
-
-export const Explorer: Story = {
-  render: function Render() {
-    return <ApiExplorer />;
-  },
-};
-
-export const NamingConflicts: Story = {
-  render: function Render() {
-    return <NamingConflictDemo />;
-  },
-};

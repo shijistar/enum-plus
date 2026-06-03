@@ -10,16 +10,10 @@ const { Text } = Typography;
 
 let antdPluginInstalled = false;
 
-function ensureAntdPlugin() {
-  if (antdPluginInstalled) {
-    return;
-  }
-  Enum.install(antdPlugin as any);
-  antdPluginInstalled = true;
-}
-
 const meta: Meta = {
   title: 'Plugins/Ant Design Integration',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '插件/Ant Design 集成',
   parameters: {
     docs: {
       description: {
@@ -31,6 +25,22 @@ const meta: Meta = {
 
 export default meta;
 type Story = StoryObj;
+export const Playground: Story = {
+  name: 'Playground',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '游乐场',
+  render: function Render() {
+    return <AntdBindingDemo />;
+  },
+};
+
+function ensureAntdPlugin() {
+  if (antdPluginInstalled) {
+    return;
+  }
+  Enum.install(antdPlugin as any);
+  antdPluginInstalled = true;
+}
 
 function AntdBindingDemo() {
   ensureAntdPlugin();
@@ -185,9 +195,3 @@ function AntdBindingDemo() {
     </StoryPage>
   );
 }
-
-export const Playground: Story = {
-  render: function Render() {
-    return <AntdBindingDemo />;
-  },
-};

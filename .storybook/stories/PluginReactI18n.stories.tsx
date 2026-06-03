@@ -9,6 +9,31 @@ import { StoryPage, StorySection, TwoColumn } from './shared/demo';
 import { ensureStoryI18n } from './shared/i18n';
 
 let reactI18nextPluginInstalled = false;
+const { Text } = Typography;
+const activeI18n = i18next;
+
+const meta: Meta = {
+  title: 'Plugins/React I18n',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '插件/React I18n',
+  parameters: {
+    docs: {
+      description: {
+        component: storyT('storybook.stories.PluginReactI18n.metaDescription'),
+      },
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj;
+export const Playground: Story = {
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '游乐场',
+  render: function Render() {
+    return <ReactI18nDemo />;
+  },
+};
 
 function ensureReactI18nextPlugin() {
   if (reactI18nextPluginInstalled) {
@@ -22,23 +47,6 @@ function ensureReactI18nextPlugin() {
 
   reactI18nextPluginInstalled = true;
 }
-
-const { Text } = Typography;
-const activeI18n = i18next;
-
-const meta: Meta = {
-  title: 'Plugins/React I18n',
-  parameters: {
-    docs: {
-      description: {
-        component: storyT('storybook.stories.PluginReactI18n.metaDescription'),
-      },
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj;
 
 type ReactLocalizedEnum = ReturnType<typeof Enum> & {
   isMatch(search: string | undefined, item: unknown): boolean;
@@ -235,9 +243,3 @@ function ReactI18nDemo() {
     </StoryPage>
   );
 }
-
-export const Playground: Story = {
-  render: function Render() {
-    return <ReactI18nDemo />;
-  },
-};
