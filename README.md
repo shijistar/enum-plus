@@ -61,7 +61,7 @@ It's a front-end business dictionary solution, that provides a lightweight data 
   </a>
 </p>
 <p align="center">
-  <em>Click the image to view the high-definition video</em>
+  <em>Click image for HD video</em>
 </p>
 
 ## Features
