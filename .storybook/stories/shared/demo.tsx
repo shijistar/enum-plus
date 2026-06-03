@@ -7,13 +7,14 @@ export function StoryPage(props: {
   eyebrow?: string;
   title: string;
   description: ReactNode;
+  size?: 'normal' | 'large';
   highlights?: string[];
   children: ReactNode;
 }) {
-  const { eyebrow = 'enum-plus', title, description, highlights = [], children } = props;
+  const { eyebrow = 'enum-plus', title, description, size = 'normal', highlights = [], children } = props;
 
   return (
-    <div className="ep-page">
+    <div className={`ep-page ep-page-${size}`}>
       <section className="ep-hero">
         <div className="ep-hero-copy">
           <div className="ep-eyebrow">{eyebrow}</div>

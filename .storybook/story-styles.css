@@ -139,6 +139,10 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   color: var(--ep-page-text);
 }
 
+.ep-page-large {
+  max-width: 1600px;
+}
+
 .ep-hero {
   display: flex;
   flex-wrap: wrap;
@@ -173,7 +177,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 }
 
 .ep-subtitle {
-  max-width: 780px;
+  /* max-width: 780px; */
   /* stylelint-disable-next-line declaration-no-important */
   margin: 0 !important;
   color: var(--ep-page-muted);
@@ -314,8 +318,9 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 .enum-story-shell .ant-descriptions-view {
   overflow: hidden;
   background: var(--ep-surface-raised);
-  border: 1px solid var(--ep-page-border);
-  border-radius: 16px;
+
+  /* border: 1px solid var(--ep-page-border);
+  border-radius: 16px; */
 }
 
 .enum-story-shell .ant-descriptions-bordered .ant-descriptions-item-label,
@@ -355,7 +360,12 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   background: var(--ep-table-head-bg) !important;
 }
 
-.enum-story-shell .ant-table-wrapper .ant-table-tbody > tr:hover > td {
+.enum-story-shell
+  .ant-table-wrapper
+  .ant-table-tbody
+  > tr:hover
+  > td:not(.ant-table-cell-fix-left)
+  :not(.ant-table-cell-fix-right) {
   /* stylelint-disable-next-line declaration-no-important */
   background: var(--ep-table-row-hover) !important;
 }

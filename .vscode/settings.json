@@ -12,7 +12,16 @@
   "i18n-ally.enabledParsers": ["ts"],
   "i18n-ally.includeSubfolders": false,
   "i18n-ally.readonly": false,
-  "i18n-ally.keystyle": "nested",
+  "i18n-ally.keystyle": "flat",
+  "i18n-ally.regex.usageMatchAppend": [
+    "storyT\\(['\"]([\\w-_]+?\\.[\\w-_.]+)['\"]\\)",
+    "title:\\s*['\"]([\\w-_]+?\\.[\\w-_.]+)['\"]",
+    "label:\\s*['\"]([\\w-_]+?\\.[\\w-_.]+)['\"]",
+    "text:\\s*['\"]([\\w-_]+?\\.[\\w-_.]+)['\"]",
+    "name:\\s*['\"]([\\w-_]+?\\.[\\w-_.]+)['\"]",
+    "hint:\\s*['\"]([\\w-_]+?\\.[\\w-_.]+)['\"]",
+    "placeholder:\\s*['\"]([\\w-_]+?\\.[\\w-_.]+)['\"]"
+  ],
   "i18n-ally.fullReloadOnChanged": true,
   "i18n-ally.annotationInPlace": true,
   "files.exclude": {
@@ -23,6 +32,6 @@
     "**/Thumbs.db": true,
     "**/node_modules": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "commentTranslate.hover.enabled": false
 }

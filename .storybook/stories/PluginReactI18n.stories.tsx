@@ -2,13 +2,11 @@ import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import i18next from 'i18next';
 import { Button, Card, Descriptions, Input, Select, Space, Table, Tag, Typography } from 'antd';
-import { reactI18nextPlugin } from '../../packages/plugin-react/src';
 import { Enum } from '../../src';
 import { storyT, useStoryLocale, useStoryT } from '../locales';
 import { StoryPage, StorySection, TwoColumn } from './shared/demo';
 import { ensureStoryI18n } from './shared/i18n';
 
-let reactI18nextPluginInstalled = false;
 const { Text } = Typography;
 const activeI18n = i18next;
 
@@ -28,25 +26,13 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 export const Playground: Story = {
+  name: 'Playground',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: '游乐场',
+  nameCN: 'Demo',
   render: function Render() {
     return <ReactI18nDemo />;
   },
 };
-
-function ensureReactI18nextPlugin() {
-  if (reactI18nextPluginInstalled) {
-    return;
-  }
-
-  Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0], {
-    useTranslationOptions: { ns: 'translation' },
-    defaultSearchField: 'label',
-  });
-
-  reactI18nextPluginInstalled = true;
-}
 
 type ReactLocalizedEnum = ReturnType<typeof Enum> & {
   isMatch(search: string | undefined, item: unknown): boolean;
@@ -60,7 +46,6 @@ interface LocalizedStatusItem {
 }
 
 function ReactI18nDemo() {
-  ensureReactI18nextPlugin();
   const t = useStoryT();
   const storyLocale = useStoryLocale();
   const instance = ensureStoryI18n();
