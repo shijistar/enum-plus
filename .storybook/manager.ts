@@ -1,15 +1,22 @@
 import type { API_ComponentEntry } from 'storybook/internal/types';
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
+import antdPlugin from '../packages/plugin-antd/src';
+import { reactI18nextPlugin } from '../packages/plugin-react/src';
+import { Enum } from '../src';
 import CoreApiStory, * as CoreApiSubStories from './stories/CoreApi.stories';
 import CoreInitializationStory, * as CoreInitializationSubStories from './stories/CoreInitialization.stories';
 import CorePatternsStory, * as CorePatternsSubStories from './stories/CorePatterns.stories';
 import PluginAntdStory, * as PluginAntdSubStories from './stories/PluginAntd.stories';
 import PluginReactI18nStory, * as PluginReactI18nSubStories from './stories/PluginReactI18n.stories';
+import WorkbenchDemoStory, * as WorkbenchDemoSubStories from './stories/WorkbenchDemo.stories';
 import docTitles from './docs/titles.json';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
 import './global-styles.css';
+
+Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0]);
+Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
 
 const globalTheme = getGlobalValueFromUrl('theme');
 const globalLocale = getGlobalValueFromUrl('locale');
@@ -21,6 +28,7 @@ const stories: { fileName: string; story: typeof CoreApiStory }[] = [
   { fileName: '.storybook/stories/CorePatterns.stories.tsx', story: CorePatternsStory },
   { fileName: '.storybook/stories/PluginAntd.stories.tsx', story: PluginAntdStory },
   { fileName: '.storybook/stories/PluginReactI18n.stories.tsx', story: PluginReactI18nStory },
+  { fileName: '.storybook/stories/WorkbenchDemo.stories.tsx', story: WorkbenchDemoStory },
 ];
 const subStories = [
   ...getSubStories(CoreApiSubStories, '.storybook/stories/CoreApi.stories.tsx'),
@@ -28,6 +36,7 @@ const subStories = [
   ...getSubStories(CorePatternsSubStories, '.storybook/stories/CorePatterns.stories.tsx'),
   ...getSubStories(PluginAntdSubStories, '.storybook/stories/PluginAntd.stories.tsx'),
   ...getSubStories(PluginReactI18nSubStories, '.storybook/stories/PluginReactI18n.stories.tsx'),
+  ...getSubStories(WorkbenchDemoSubStories, '.storybook/stories/WorkbenchDemo.stories.tsx'),
 ];
 
 const sidebarTitles: Partial<(typeof docTitles)[number]>[] = [

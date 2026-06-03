@@ -1,5 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
-import { dirname, resolve } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mergeConfig } from 'vite';
 
@@ -17,24 +17,7 @@ const config: StorybookConfig = {
     defaultName: 'Docs',
   },
   async viteFinal(baseConfig) {
-    return mergeConfig(baseConfig, {
-      resolve: {
-        alias: {
-          'enum-plus': resolve(currentDir, '../src/index.ts'),
-          'enum-plus/extension': resolve(currentDir, '../src/extension.d.ts'),
-          '@enum-plus/plugin-antd': resolve(currentDir, '../packages/plugin-antd/src/index.ts'),
-          '@enum-plus/plugin-react': resolve(currentDir, '../packages/plugin-react/src/index.ts'),
-          '@enum-plus/plugin-react-i18next': resolve(currentDir, '../packages/plugin-react-i18next/src/index.ts'),
-          '@enum-plus/plugin-i18n': resolve(currentDir, '../packages/plugin-i18n/src/index.ts'),
-          '@enum-plus/plugin-i18next-vue': resolve(currentDir, '../packages/plugin-i18next-vue/src/index.ts'),
-          '@enum-plus/plugin-vue-i18n': resolve(currentDir, '../packages/plugin-vue-i18n/src/index.ts'),
-          '@enum-plus/plugin-next-international': resolve(
-            currentDir,
-            '../packages/plugin-next-international/src/index.ts',
-          ),
-        },
-      },
-    });
+    return mergeConfig(baseConfig, {});
   },
 };
 

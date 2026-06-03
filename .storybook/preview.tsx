@@ -3,14 +3,20 @@ import { useEffect, useState } from 'react';
 import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/blocks';
 import type { Preview, ReactRenderer } from '@storybook/react-vite';
 import type { StoryContext } from 'storybook/internal/csf';
+import antdPlugin from '../packages/plugin-antd/src';
 import { App as AntdApp, ConfigProvider as AntdConfigProvider, theme as antTheme } from 'antd';
 import 'antd/dist/reset.css';
 import enUS from 'antd/locale/en_US';
 import zhCN from 'antd/locale/zh_CN';
+import { reactI18nextPlugin } from '../packages/plugin-react/src';
+import { Enum } from '../src';
 import storyI18n, { storyT } from './locales';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
 import './story-styles.css';
+
+Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0]);
+Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
 
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 let currentTheme: string | undefined = undefined;
@@ -84,7 +90,6 @@ function StorybookDecorator({ Story, context }: { Story: React.ComponentType; co
         algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
         token: {
           colorPrimary: isDark ? dark.colorPrimary : light.colorPrimary,
-          borderRadius: 16,
           fontSize: 16,
           fontFamily: 'SF Pro Display, Segoe UI, PingFang SC, Helvetica Neue, Arial, sans-serif',
         },

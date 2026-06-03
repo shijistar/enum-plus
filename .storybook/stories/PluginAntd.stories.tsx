@@ -1,14 +1,11 @@
 import { useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import antdPlugin from '../../packages/plugin-antd/src';
 import { Card, Descriptions, Menu, Select, Space, Table, Typography } from 'antd';
 import { Enum } from '../../src';
 import { storyT, useStoryT } from '../locales';
 import { JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
-
-let antdPluginInstalled = false;
 
 const meta: Meta = {
   title: 'Plugins/Ant Design Integration',
@@ -28,36 +25,24 @@ type Story = StoryObj;
 export const Playground: Story = {
   name: 'Playground',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: '游乐场',
+  nameCN: 'Demo',
   render: function Render() {
     return <AntdBindingDemo />;
   },
 };
 
-function ensureAntdPlugin() {
-  if (antdPluginInstalled) {
-    return;
-  }
-  Enum.install(antdPlugin as any);
-  antdPluginInstalled = true;
-}
+const ShiftEnum = Enum(
+  {
+    Morning: { value: 'morning', label: 'storybook.stories.PluginAntd.sample.morning' },
+    Afternoon: { value: 'afternoon', label: 'storybook.stories.PluginAntd.sample.afternoon' },
+    Night: { value: 'night', label: 'storybook.stories.PluginAntd.sample.night' },
+  },
+  { name: 'storybook.stories.PluginAntd.sample.shiftName' },
+);
 
 function AntdBindingDemo() {
-  ensureAntdPlugin();
   const t = useStoryT();
 
-  const shiftEnum = useMemo(
-    () =>
-      Enum(
-        {
-          Morning: { value: 'morning', label: t('storybook.stories.PluginAntd.sample.morning') },
-          Afternoon: { value: 'afternoon', label: t('storybook.stories.PluginAntd.sample.afternoon') },
-          Night: { value: 'night', label: t('storybook.stories.PluginAntd.sample.night') },
-        },
-        { name: t('storybook.stories.PluginAntd.sample.shiftName') },
-      ),
-    [t],
-  );
   const [selectedShift, setSelectedShift] = useState<string>('morning');
   const [menuKey, setMenuKey] = useState<string>('morning');
 
@@ -92,7 +77,7 @@ function AntdBindingDemo() {
                   value={selectedShift}
                   style={{ width: '100%' }}
                   options={
-                    shiftEnum.toSelect({
+                    ShiftEnum.toSelect({
                       firstOption: { value: '', label: t('storybook.stories.PluginAntd.allShifts') },
                     }) as {
                       value: string;
@@ -114,7 +99,7 @@ function AntdBindingDemo() {
                       key: 'label',
                       label: t('storybook.stories.PluginAntd.field.labelValue'),
                       children: selectedShift
-                        ? shiftEnum.label(selectedShift)
+                        ? ShiftEnum.label(selectedShift)
                         : t('storybook.stories.PluginAntd.allShifts'),
                     },
                   ]}
@@ -126,7 +111,7 @@ function AntdBindingDemo() {
             <Card size="small" title={t('storybook.stories.PluginAntd.card.menu')}>
               <Menu
                 selectedKeys={[menuKey]}
-                items={shiftEnum.toMenu()}
+                items={ShiftEnum.toMenu()}
                 onClick={(info) => setMenuKey(String(info.key))}
               />
             </Card>
@@ -148,20 +133,20 @@ function AntdBindingDemo() {
               {
                 title: t('storybook.stories.PluginAntd.table.shift'),
                 dataIndex: 'shift',
-                filters: shiftEnum.toFilter(),
+                filters: ShiftEnum.toFilter(),
                 onFilter: (value, record) => record.shift === value,
-                render: (value: string) => shiftEnum.label(value),
+                render: (value: string) => ShiftEnum.label(value),
               },
             ]}
             dataSource={dataSource}
           />
 
           <TwoColumn
-            left={<JsonPreview title="toFilter()" value={shiftEnum.toFilter()} />}
+            left={<JsonPreview title="toFilter()" value={ShiftEnum.toFilter()} />}
             right={
               <JsonPreview
                 title="toValueMap()"
-                value={shiftEnum.toValueMap()}
+                value={ShiftEnum.toValueMap()}
                 note={t('storybook.stories.PluginAntd.card.valueMapNote')}
               />
             }
@@ -181,13 +166,41 @@ function AntdBindingDemo() {
             {
               key: 'select',
               label: 'toSelect()[0]',
-              children: <Text code>{JSON.stringify(shiftEnum.toSelect()[0])}</Text>,
+              children: (
+                <Text code>
+                  {JSON.stringify(
+                    ShiftEnum.toSelect().map((item) => ({
+                      ...item,
+                      label: t(ShiftEnum.raw(item.value)?.label ?? ''),
+                    }))[0],
+                  )}
+                </Text>
+              ),
             },
-            { key: 'menu', label: 'toMenu()[0]', children: <Text code>{JSON.stringify(shiftEnum.toMenu()[0])}</Text> },
+            {
+              key: 'menu',
+              label: 'toMenu()[0]',
+              children: (
+                <Text code>
+                  {JSON.stringify(
+                    ShiftEnum.toMenu().map((item) => ({ ...item, label: t(ShiftEnum.raw(item.key)?.label ?? '') }))[0],
+                  )}
+                </Text>
+              ),
+            },
             {
               key: 'filter',
               label: 'toFilter()[0]',
-              children: <Text code>{JSON.stringify(shiftEnum.toFilter()[0])}</Text>,
+              children: (
+                <Text code>
+                  {JSON.stringify(
+                    ShiftEnum.toFilter().map((item) => ({
+                      ...item,
+                      text: t(ShiftEnum.raw(item.value)?.label ?? ''),
+                    }))[0],
+                  )}
+                </Text>
+              ),
             },
           ]}
         />
