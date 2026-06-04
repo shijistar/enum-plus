@@ -1,5 +1,8 @@
 :root {
+  font-size: 100%;
   color-scheme: light;
+  text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* ------------- override css start --------------- */
@@ -10,18 +13,18 @@ h1:not(.sb-anchor, .sb-unstyled, .sb-unstyled h1) {
 
 p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p) {
   /* stylelint-disable-next-line declaration-no-important */
-  font-size: 16px !important;
+  font-size: 1rem !important;
 }
 
 pre:not(.sb-anchor, .sb-unstyled, .sb-unstyled pre) pre,
 pre:not(.sb-anchor, .sb-unstyled, .sb-unstyled pre).prismjs {
   /* stylelint-disable-next-line declaration-no-important */
-  font-size: 15px !important;
+  font-size: 0.9375rem !important;
 }
 
 li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   /* stylelint-disable-next-line declaration-no-important */
-  font-size: 16px !important;
+  font-size: 1rem !important;
 }
 
 .sbdocs.sbdocs-wrapper {
@@ -45,6 +48,18 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 
 .enum-story-shell {
   --ep-page-text: #1f2937;
+
+  min-height: 100vh;
+  padding: 28px;
+  color: var(--ep-page-text);
+
+  font-size: 1rem;
+  background: var(--ep-shell-bg);
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    background 180ms ease;
+
   --ep-page-muted: #4f6460;
   --ep-page-soft: #64817b;
   --ep-page-border: rgb(120 170 160 / 22%);
@@ -70,15 +85,6 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   --ep-table-row-hover: rgb(15 118 110 / 6%);
   --ep-scrollbar-thumb: rgb(113 113 122 / 32%);
   --ep-scrollbar-track: rgb(255 255 255 / 10%);
-
-  min-height: 100vh;
-  padding: 28px;
-  color: var(--ep-page-text);
-  background: var(--ep-shell-bg);
-  transition:
-    background-color 180ms ease,
-    color 180ms ease,
-    background 180ms ease;
 }
 
 .enum-story-shell[data-theme='dark'] {
@@ -162,7 +168,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   margin-bottom: 10px;
   color: var(--ep-accent);
   font-weight: 700;
-  font-size: 12px;
+  font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
@@ -177,7 +183,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   /* stylelint-disable-next-line declaration-no-important */
   margin: 0 !important;
   color: var(--ep-page-muted);
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.75;
 }
 
@@ -236,7 +242,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   margin: 0;
   color: var(--ep-page-soft);
   font-weight: 400;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .ep-pre {
@@ -244,7 +250,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   padding: 16px 18px;
   overflow: auto;
   color: var(--ep-code-text);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.65;
   background: var(--ep-code-bg);
   border-radius: 18px;
@@ -258,7 +264,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 .ep-note {
   margin-top: 12px;
   color: var(--ep-page-soft);
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .ep-inline-list {
@@ -280,7 +286,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   display: block;
   margin-bottom: 6px;
   color: var(--ep-page-soft);
-  font-size: 12px;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -288,7 +294,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 .ep-kpi-value {
   color: var(--ep-page-text);
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .ep-table .ant-table {
@@ -384,11 +390,51 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 }
 
 @media (width <= 900px) {
+  :root {
+    font-size: 112.5%;
+  }
+
   .enum-story-shell {
     padding: 16px;
   }
 
   .ep-hero {
     padding: 22px;
+  }
+
+  /* Portal-based Ant Design overlays mount outside .enum-story-shell,
+     so mobile font sizing must also target the iframe body. */
+  body .ant-typography,
+  body .ant-btn,
+  body .ant-form-item-label > label,
+  body .ant-form-item-explain,
+  body .ant-form-item-extra,
+  body .ant-input,
+  body .ant-input-affix-wrapper,
+  body .ant-input::placeholder,
+  body .ant-select,
+  body .ant-select-selection-item,
+  body .ant-select-selection-placeholder,
+  body .ant-select-item,
+  body .ant-select-item-option-content,
+  body .ant-radio-wrapper,
+  body .ant-checkbox-wrapper,
+  body .ant-segmented-item-label,
+  body .ant-tabs-tab-btn,
+  body .ant-descriptions-item-label,
+  body .ant-descriptions-item-content,
+  body .ant-table,
+  body .ant-table-cell,
+  body .ant-tag,
+  body .ant-dropdown,
+  body .ant-dropdown-menu,
+  body .ant-dropdown-menu-item,
+  body .ant-dropdown-menu-submenu-title,
+  body .ant-dropdown-menu-title-content,
+  body .ant-menu-item,
+  body .ant-modal-title,
+  body .ant-modal-body,
+  body .ant-modal-footer {
+    font-size: 1rem;
   }
 }
