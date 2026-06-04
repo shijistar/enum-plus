@@ -37,6 +37,8 @@
 
 [Introduction](https://shijistar.github.io/enum-plus/?path=/docs/introduce--docs) • [Get Started](https://shijistar.github.io/enum-plus/?path=/docs/get-started--docs) • [API Reference](https://shijistar.github.io/enum-plus/?path=/docs/api-reference--docs) • [Global Configuration](https://shijistar.github.io/enum-plus/?path=/docs/global-configuration--docs) • [User Stories](https://shijistar.github.io/enum-plus/?path=/docs/user-stories--docs) • [Plugin System](https://shijistar.github.io/enum-plus/?path=/docs/plugin-system--docs) • [Localization](https://shijistar.github.io/enum-plus/?path=/docs/localization--docs) • [Extensibility](https://shijistar.github.io/enum-plus/?path=/docs/extensibility--docs) • [Best Practices](https://shijistar.github.io/enum-plus/?path=/docs/best-practices--docs) • [Compatibility](https://shijistar.github.io/enum-plus/?path=/docs/compatibility--docs) • [FAQ](https://shijistar.github.io/enum-plus/?path=/docs/faq--docs)
 
+📝 Practical article: [Stop rebuilding label maps: a practical case for `enum-plus` in frontend apps](./docs/articles/stop-rebuilding-label-maps.md)
+
 ## Why enum-plus
 
 Native enums are great for constants, but product code usually needs more at runtime:
