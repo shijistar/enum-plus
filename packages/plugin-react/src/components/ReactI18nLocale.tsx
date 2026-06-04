@@ -38,7 +38,7 @@ export interface ReactI18nextLocaleProps {
     | TOptions
     | ((
         key: string | undefined | (string | undefined)[],
-        t: TFunction<string | string[], string>
+        t: TFunction<string | string[], string>,
       ) => TOptions | string);
 }
 /**
@@ -86,7 +86,7 @@ export function translate(props: {
     | TOptions
     | ((
         key: string | undefined | (string | undefined)[],
-        t: TFunction<string | string[], string>
+        t: TFunction<string | string[], string>,
       ) => TOptions | string);
 }) {
   const { i18nKey, t, tOptions } = props;
@@ -100,10 +100,10 @@ export function translate(props: {
     return options;
   } else if (options === undefined) {
     // eslint-disable-next-line import/no-named-as-default-member
-    return t(i18nKey as string);
+    return t(i18nKey as string) as string;
   } else {
-    // eslint-disable-next-line import/no-named-as-default-member
-    return t(i18nKey as string, options as TOptions);
+    // eslint-disable-next-line import/no-named-as-default-member, @typescript-eslint/no-explicit-any
+    return t(i18nKey as string, options as any) as string;
   }
 }
 

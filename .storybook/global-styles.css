@@ -4,7 +4,7 @@
 .sidebar-item > button {
   align-items: center;
   /* stylelint-disable-next-line declaration-no-important */
-  font-size: 20px !important;
+  font-size: 18px !important;
 }
 
 .sidebar-item > a svg[type],

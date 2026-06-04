@@ -78,8 +78,8 @@ export function translate(props: {
     // eslint-disable-next-line import/no-named-as-default-member
     return instance.t(i18nKey as string);
   } else {
-    // eslint-disable-next-line import/no-named-as-default-member
-    return instance.t(i18nKey as string, options as TOptions);
+    // eslint-disable-next-line import/no-named-as-default-member, @typescript-eslint/no-explicit-any
+    return instance.t(i18nKey as string, options as any) as string;
   }
 }
 

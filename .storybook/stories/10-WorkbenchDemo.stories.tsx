@@ -45,9 +45,9 @@ import {
 const { Paragraph, Text } = Typography;
 
 const meta: Meta = {
-  title: 'Demo/Workbench',
+  title: 'Demo/Full Demo',
   // @ts-expect-error: because titleCN is an extension field
-  titleCN: '演示/工作台',
+  titleCN: '演示/完整示例',
   parameters: {
     docs: {
       description: {
@@ -710,7 +710,7 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
 }
 
 export const Playground: Story = {
-  name: 'Playground',
+  name: 'Demo',
   // @ts-expect-error: because nameCN is an extension field
   nameCN: 'Demo',
   render: function Render() {

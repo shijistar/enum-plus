@@ -31,9 +31,9 @@ const meta: Meta = {
 export default meta;
 
 export const Playground: Story = {
-  name: 'Playground',
+  name: 'Demo',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: '游乐场',
+  nameCN: 'Demo',
   render: function Render() {
     return <InitializationPlayground />;
   },

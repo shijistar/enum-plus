@@ -64,6 +64,8 @@ It's a front-end business dictionary solution, that provides a lightweight data 
   <sup><em>Click image for HD video</em></sup>
 </p>
 
+> Want to see what enum-plus can do and how it can improve your front-end development efficiency? [Open the Full Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground)
+
 ## Features
 
 - Compatible with the usage of native enums

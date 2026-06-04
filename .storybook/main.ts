@@ -13,6 +13,11 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  staticDirs: ['../public'],
+  managerHead: (head) => `
+    ${head}
+    <link rel="icon" type="image/svg+xml" href="/logo/enum-plus2.svg" />
+  `,
   docs: {
     defaultName: 'Docs',
   },

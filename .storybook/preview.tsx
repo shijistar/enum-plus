@@ -11,12 +11,14 @@ import zhCN from 'antd/locale/zh_CN';
 import { reactI18nextPlugin } from '../packages/plugin-react/src';
 import { Enum } from '../src';
 import storyI18n, { storyT } from './locales';
+import { ensureStoryI18n } from './stories/shared/i18n';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
 import './story-styles.css';
 
 Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0]);
 Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
+ensureStoryI18n();
 
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 let currentTheme: string | undefined = undefined;
@@ -32,7 +34,7 @@ function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<Reac
   const localeKey = props.context.store?.userGlobals.globals.locale;
   // @ts-expect-error: because store is an internal api
   const themeName = props.context.store?.userGlobals.globals.theme;
-  console.log(props);
+
   // Reload the page if the theme changes.
   useEffect(() => {
     if (!currentTheme) {

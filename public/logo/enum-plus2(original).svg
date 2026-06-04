@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- <path d="M0 0L80 0L80 80L0 80L0 0Z" fill="#ffffff" fill-rule="nonzero" opacity="1" stroke="none" /> -->
+  <g id="图层-1" transform="matrix(1 0 0 1 0 0)">
+    <text fill="#01befe" font-family="Roboto" font-weight="700" font-size="60" opacity="1" stroke="none" text-anchor="start" transform="matrix(1 0 0 1 6.14365 4.69668)" x="0" y="0">
+      <tspan textLength="33.7443" x="0" y="55.6641">
+        <![CDATA[E]]>
+      </tspan>
+    </text>
+    <text fill="#f5891d" font-family="Roboto" font-weight="700" font-size="40" opacity="1" stroke="none" text-anchor="start" transform="matrix(1 0 0 1 48.2457 4.2)" x="0" y="0">
+      <tspan textLength="21.7954" x="0" y="37.1094">
+        <![CDATA[+]]>
+      </tspan>
+    </text>
+  </g>
+</svg>

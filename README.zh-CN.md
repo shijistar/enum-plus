@@ -63,6 +63,8 @@
   <sup><em>点击图片查看高清视频</em></sup>
 </p>
 
+> 想看看 enum-plus 能做什么，以及如何能提高前端开发效率？[查看完整 Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground&globals=locale:zh-CN)
+
 ## 特性
 
 - 完全兼容原生 `enum` 的用法
@@ -121,4 +123,4 @@ StatusEnum.toList({ valueField: 'value', labelField: 'label' }); // [{ value: 1,
 
 ## 支持
 
-如果这个项目对你有帮助，请给它一个 GitHub [星标⭐️](https://github.com/shijistar/enum-plus)，这将鼓励我们继续开发和维护这个项目。
+如果这个项目对你有帮助，请给它一个 GitHub [星标 ⭐️](https://github.com/shijistar/enum-plus)，这将鼓励我们继续开发和维护这个项目。

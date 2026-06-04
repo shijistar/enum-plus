@@ -1,22 +1,16 @@
 import type { API_ComponentEntry } from 'storybook/internal/types';
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
-import antdPlugin from '../packages/plugin-antd/src';
-import { reactI18nextPlugin } from '../packages/plugin-react/src';
-import { Enum } from '../src';
-import CoreApiStory, * as CoreApiSubStories from './stories/CoreApi.stories';
-import CoreInitializationStory, * as CoreInitializationSubStories from './stories/CoreInitialization.stories';
-import CorePatternsStory, * as CorePatternsSubStories from './stories/CorePatterns.stories';
-import PluginAntdStory, * as PluginAntdSubStories from './stories/PluginAntd.stories';
-import PluginReactI18nStory, * as PluginReactI18nSubStories from './stories/PluginReactI18n.stories';
-import WorkbenchDemoStory, * as WorkbenchDemoSubStories from './stories/WorkbenchDemo.stories';
+import WorkbenchDemoStory, * as WorkbenchDemoSubStories from './stories/10-WorkbenchDemo.stories';
+import CoreApiStory, * as CoreApiSubStories from './stories/30-CoreApi.stories';
+import CoreInitializationStory, * as CoreInitializationSubStories from './stories/31-CoreInitialization.stories';
+import CorePatternsStory, * as CorePatternsSubStories from './stories/32-CorePatterns.stories';
+import PluginReactI18nStory, * as PluginReactI18nSubStories from './stories/50-PluginReactI18n.stories';
+import PluginAntdStory, * as PluginAntdSubStories from './stories/51-PluginAntd.stories';
 import docTitles from './docs/titles.json';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
 import './global-styles.css';
-
-Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0]);
-Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
 
 const globalTheme = getGlobalValueFromUrl('theme');
 const globalLocale = getGlobalValueFromUrl('locale');
