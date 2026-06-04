@@ -63,7 +63,7 @@
   <sup><em>点击图片查看高清视频</em></sup>
 </p>
 
-> 想看看 enum-plus 能做什么，以及如何能提高前端开发效率？[查看完整 Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground&globals=locale:zh-CN)
+> 💡 想看看 enum-plus 能做什么，以及如何能提高前端开发效率？[查看完整 Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground&globals=locale:zh-CN)
 
 ## 特性
 
