@@ -52,7 +52,6 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   min-height: 100vh;
   padding: 28px;
   color: var(--ep-page-text);
-
   font-size: 1rem;
   background: var(--ep-shell-bg);
   transition:
