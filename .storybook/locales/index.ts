@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { createInstance, type i18n } from 'i18next';
 import { getGlobalValueFromUrl } from '../utils/global';
-import enUS from './langs/en-US';
-import zhCN from './langs/zh-CN';
+import enUS from './langs/en-US.json';
+import zhCN from './langs/zh-CN.json';
 
 export const resources = {
   en: { translation: enUS },
