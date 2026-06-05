@@ -116,13 +116,13 @@ StatusEnum.toList({ valueField: 'value', labelField: 'label' }); // [{ value: 1,
 
 ## Ecosystem
 
-- [@enum-plus/plugin-react](./packages/plugin-react/README.zh-CN.md)
-- [@enum-plus/plugin-react-i18next](./packages/plugin-react-i18next/README.zh-CN.md)
-- [@enum-plus/plugin-i18next](./packages/plugin-i18next/README.zh-CN.md)
-- [@enum-plus/plugin-i18next-vue](./packages/plugin-i18next-vue/README.zh-CN.md)
-- [@enum-plus/plugin-vue-i18n](./packages/plugin-vue-i18n/README.zh-CN.md)
-- [@enum-plus/plugin-next-international](./packages/plugin-next-international/README.zh-CN.md)
-- [@enum-plus/plugin-antd](./packages/plugin-antd/README.zh-CN.md)
+- [@enum-plus/plugin-react](./packages/plugin-react/README.md)
+- [@enum-plus/plugin-react-i18next](./packages/plugin-react-i18next/README.md)
+- [@enum-plus/plugin-i18next](./packages/plugin-i18next/README.md)
+- [@enum-plus/plugin-i18next-vue](./packages/plugin-i18next-vue/README.md)
+- [@enum-plus/plugin-vue-i18n](./packages/plugin-vue-i18n/README.md)
+- [@enum-plus/plugin-next-international](./packages/plugin-next-international/README.md)
+- [@enum-plus/plugin-antd](./packages/plugin-antd/README.md)
 
 ## Support
 
