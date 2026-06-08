@@ -23,3 +23,13 @@
   ```
 
 > 请注意，在创建枚举时也可以通过 `options.autoLabel` 参数覆盖全局配置，其用法与 `Enum.config.autoLabel` 相同。
+
+---
+
+<!-- docs-prev-next-nav -->
+
+## 继续阅读
+
+| 上一步                                                             | 下一步                                                            |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| [← API 文档](?path=/docs/api-reference--docs&globals=locale:zh-CN) | [典型用法 →](?path=/docs/user-stories--docs&globals=locale:zh-CN) |

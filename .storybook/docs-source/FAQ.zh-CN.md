@@ -106,3 +106,13 @@ const WeekEnum = Enum(weekInit);
 1. **核心库** - 新功能对所有人都适用，且不引入外部依赖。你可以直接贡献到核心库，请参考 [CONTRIBUTING](https://github.com/shijistar/enum-plus/blob/master/CONTRIBUTING.md) 指南。
 2. **官方插件库** - 新功能需要依赖某个 `开放的` 框架或类库，并且在这个框架或类库已经有很多人在使用了。你可以贡献到官方插件库，请参考 [插件开发指南](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.zh-CN.md)。
 3. **自定义插件** - 新功能需要引入某个闭源的外部依赖，或者这个领域比较小众，建议你自己发布一个 npm 包，并把你的插件链接分享在 [插件生态](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件生态) 章节中，同样可以共享给所有人。
+
+---
+
+<!-- docs-prev-next-nav -->
+
+## 继续阅读
+
+| 上一步                                                           | 下一步                                                    |
+| ---------------------------------------------------------------- | --------------------------------------------------------- |
+| [← 兼容性](?path=/docs/compatibility--docs&globals=locale:zh-CN) | [安全 →](?path=/docs/security--docs&globals=locale:zh-CN) |

@@ -371,3 +371,11 @@ const PetTypeEnum = Enum(petTypes, {
 ```
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+## Continue reading
+
+| Previous                                                         | Next                                                 |
+| ---------------------------------------------------------------- | ---------------------------------------------------- |
+| [← Global Configuration](?path=/docs/global-configuration--docs) | [Best Practices →](?path=/docs/best-practices--docs) |

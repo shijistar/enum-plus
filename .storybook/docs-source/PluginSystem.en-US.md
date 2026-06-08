@@ -66,3 +66,11 @@ We are working on the following plugins:
 > If the plugin you are searching for is not available, or if you want to develop your own plugin, please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md). You can develop new plugins in the official enum-plus repository or publish your developed plugins to npm and share your plugin links here. We sincerely need your help to enrich the plugin ecosystem!
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+## Continue reading
+
+| Previous                                             | Next                                               |
+| ---------------------------------------------------- | -------------------------------------------------- |
+| [← Best Practices](?path=/docs/best-practices--docs) | [Extensibility →](?path=/docs/extensibility--docs) |

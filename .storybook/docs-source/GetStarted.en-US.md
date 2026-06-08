@@ -114,3 +114,13 @@ WeekEnum.Saturday; // 6
 > Please note that when creating enums, all enum items must maintain a consistent data structure. For example, you cannot use both Key-Value format and Standard format in the same enum.
 >
 > You can pass in some optional configuration options to better control the behavior of the enum. Please refer to the [Enum Configuration Options](?path=/docs/user-stories--docs#-enum-configuration-options) section for details.
+
+---
+
+<!-- docs-prev-next-nav -->
+
+## Continue reading
+
+| Previous                               | Next                                               |
+| -------------------------------------- | -------------------------------------------------- |
+| [← Install](?path=/docs/install--docs) | [API Reference →](?path=/docs/api-reference--docs) |

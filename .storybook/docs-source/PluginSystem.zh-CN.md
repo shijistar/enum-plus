@@ -66,3 +66,11 @@ Enum.install(antdPlugin, {
 > 如果你没有找到需要的插件，或者你想开发自己的插件，请参阅 [插件开发指南](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.zh-CN.md)。你可以在enum-plus官方仓库中开发新插件，也可以将你开发的插件发布到 npm 上，并把你的插件链接分享在这里。我们真诚地需要你的帮助，来丰富插件生态系统！
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+## 继续阅读
+
+| 上一步                                                              | 下一步                                                             |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [← 最佳实践](?path=/docs/best-practices--docs&globals=locale:zh-CN) | [全局扩展 →](?path=/docs/extensibility--docs&globals=locale:zh-CN) |

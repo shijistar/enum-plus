@@ -33,8 +33,6 @@
 &nbsp;
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://taro.zone/)
 
-⬇️ &nbsp;[简介](#简介) | [特性](#特性) | [安装](?path=/docs/install--docs&globals=locale:zh-CN#安装) | [枚举定义](?path=/docs/get-started--docs&globals=locale:zh-CN#枚举定义) | [API](?path=/docs/api-reference--docs&globals=locale:zh-CN#api) | [全局配置](?path=/docs/global-configuration--docs&globals=locale:zh-CN#全局配置) | [使用案例](?path=/docs/user-stories--docs&globals=locale:zh-CN#使用案例) | [插件系统](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件系统) | [本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化) | [全局扩展](?path=/docs/extensibility--docs&globals=locale:zh-CN#全局扩展) | [命名冲突](?path=/docs/naming-conflicts--docs&globals=locale:zh-CN#命名冲突) | [最佳实践](?path=/docs/best-practices--docs&globals=locale:zh-CN#最佳实践)| [兼容性](?path=/docs/compatibility--docs&globals=locale:zh-CN#兼容性) | [常见问题](?path=/docs/faq--docs&globals=locale:zh-CN#常见问题) | [安全性](?path=/docs/security--docs&globals=locale:zh-CN#安全性) | [支持](?path=/docs/support--docs&globals=locale:zh-CN#支持)&nbsp; ⬇️
-
 > **🎉 v3.0 发布了！**
 >
 > 新版本是一个重大的里程碑版本，带来了很多令人兴奋的功能和改进，详情请参考 [发布说明](https://github.com/shijistar/enum-plus/blob/master/docs/release-v3.zh-CN.md) 和 [迁移指南](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md)。
@@ -92,3 +90,13 @@
 - 面向 TypeScript 设计，具有良好的类型推导和代码补全能力
 - 零依赖项
 - 轻量（gzip压缩后仅2KB+）
+
+---
+
+<!-- docs-prev-next-nav -->
+
+## 继续阅读
+
+| 上一步 | 下一步                                                   |
+| ------ | -------------------------------------------------------- |
+| —      | [安装 →](?path=/docs/install--docs&globals=locale:zh-CN) |
