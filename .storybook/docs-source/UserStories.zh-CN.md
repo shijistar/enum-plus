@@ -363,3 +363,9 @@ const PetTypeEnum = Enum(petTypes, {
 ```
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+| 上一篇                                                                    | 下一篇                                                              |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [← 全局配置](?path=/docs/global-configuration--docs&globals=locale:zh-CN) | [最佳实践 →](?path=/docs/best-practices--docs&globals=locale:zh-CN) |

@@ -30,3 +30,9 @@ In Node.js environments, you can import enum-plus using either `require` or `imp
   For modern versions of Node.js that support ES Modules (Node.js 14.13+), you can import enum-plus using `import { Enum } from 'enum-plus'`. The imports will be resolved to the `es` directory, which targets **`ES2020`**.
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+| Previous                                                 | Next                           |
+| -------------------------------------------------------- | ------------------------------ |
+| [← Naming Conflicts](?path=/docs/naming-conflicts--docs) | [FAQ →](?path=/docs/faq--docs) |

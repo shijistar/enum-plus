@@ -41,6 +41,28 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   border-radius: 16px;
 }
 
+/* Bottom pre-next navbar */
+.sbdocs-wrapper > .sbdocs-content > div > table:last-child {
+  width: 100%;
+  font-size: 18px;
+}
+
+.sbdocs-wrapper > .sbdocs-content > div > table:last-child * {
+  border: none;
+}
+
+.sbdocs-wrapper > .sbdocs-content > div > table:last-child th:first-child,
+.sbdocs-wrapper > .sbdocs-content > div > table:last-child td:first-child {
+  width: 50%;
+  text-align: left;
+}
+
+.sbdocs-wrapper > .sbdocs-content > div > table:last-child th:last-child,
+.sbdocs-wrapper > .sbdocs-content > div > table:last-child td:last-child {
+  width: 50%;
+  text-align: right;
+}
+
 /* ------------- override css end --------------- */
 
 .enum-story-shell {

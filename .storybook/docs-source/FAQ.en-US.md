@@ -106,3 +106,11 @@ Thanks to the high flexibility of [Plugin System](?path=/docs/plugin-system--doc
 1. **Core Library** - The new feature is applicable to everyone and does not introduce external dependencies. You can contribute directly to the core library. Please refer to the [CONTRIBUTING](https://github.com/shijistar/enum-plus/blob/master/CONTRIBUTING.md) guide.
 2. **Official Plugin Library** - The new feature needs to depend on an `open` framework or library, and many people are already using this framework or library. You can contribute to the official plugin library. Please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md).
 3. **Custom Plugin** - The new feature needs to depend on a `private` external dependency, or the field is relatively niche. It is recommended that you publish an npm package yourself and share your plugin link in the [Awesome Plugins](?path=/docs/plugin-system--docs#awesome-plugins) section, which can still be shared with everyone.
+
+---
+
+<!-- docs-prev-next-nav -->
+
+| Previous                                           | Next                                     |
+| -------------------------------------------------- | ---------------------------------------- |
+| [← Compatibility](?path=/docs/compatibility--docs) | [Security →](?path=/docs/security--docs) |

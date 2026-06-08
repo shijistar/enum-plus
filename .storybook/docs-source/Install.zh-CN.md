@@ -54,3 +54,11 @@ yarn add enum-plus
 - [enum-plus-legacy.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.zip) (Full package with sourcemap)
 
 > 你也可以从 [GitHub 发布](https://github.com/shijistar/enum-plus/releases/tag/v3.1.8) 下载这些文件
+
+---
+
+<!-- docs-prev-next-nav -->
+
+| 上一篇                                                     | 下一篇                                                           |
+| ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| [← 介绍](?path=/docs/introduce--docs&globals=locale:zh-CN) | [快速上手 →](?path=/docs/get-started--docs&globals=locale:zh-CN) |

@@ -112,3 +112,11 @@ WeekEnum.Saturday; // 6
 > 请注意：当创建枚举对象时，所有枚举项的数据结构必须保持一致。例如，不能在同一个枚举中同时使用 Key-Value 格式和标准格式。
 >
 > 枚举还支持一些配置项，以更好地控制枚举的行为，详情请参考 [枚举配置选项](?path=/docs/user-stories--docs&globals=locale:zh-CN#-枚举配置选项) 章节。
+
+---
+
+<!-- docs-prev-next-nav -->
+
+| 上一篇                                                   | 下一篇                                                             |
+| -------------------------------------------------------- | ------------------------------------------------------------------ |
+| [← 安装](?path=/docs/install--docs&globals=locale:zh-CN) | [API 文档 →](?path=/docs/api-reference--docs&globals=locale:zh-CN) |

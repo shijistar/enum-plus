@@ -91,3 +91,9 @@ Please note that `EnumExtension` is a generic interface that accepts three type 
 > If you want to provide more friendly type hints in the extension methods, you may need to use these type parameters. However these are all optional, if you don't need them, you can omit them.
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+| Previous                                           | Next                                             |
+| -------------------------------------------------- | ------------------------------------------------ |
+| [← Plugin System](?path=/docs/plugin-system--docs) | [Localization →](?path=/docs/localization--docs) |

@@ -89,3 +89,9 @@ WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: 
 > 如果你希望在扩展方法中提供更友好的类型提示，你可能需要使用到这些类型参数。当然，这些类型参数是可选的，如果你不需要，可以直接忽略掉它们。
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+| 上一篇                                                             | 下一篇                                                          |
+| ------------------------------------------------------------------ | --------------------------------------------------------------- |
+| [← 插件系统](?path=/docs/plugin-system--docs&globals=locale:zh-CN) | [本地化 →](?path=/docs/localization--docs&globals=locale:zh-CN) |

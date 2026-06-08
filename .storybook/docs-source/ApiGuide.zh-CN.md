@@ -329,3 +329,11 @@ import i18nextPlugin from '@enum-plus/plugin-i18next';
 
 Enum.install(i18nextPlugin);
 ```
+
+---
+
+<!-- docs-prev-next-nav -->
+
+| 上一篇                                                           | 下一篇                                                                    |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| [← 快速上手](?path=/docs/get-started--docs&globals=locale:zh-CN) | [全局配置 →](?path=/docs/global-configuration--docs&globals=locale:zh-CN) |

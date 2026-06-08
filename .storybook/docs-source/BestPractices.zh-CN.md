@@ -32,3 +32,9 @@ const WeekEnum = Enum(
 ```
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+| 上一篇                                                            | 下一篇                                                             |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [← 典型用法](?path=/docs/user-stories--docs&globals=locale:zh-CN) | [插件系统 →](?path=/docs/plugin-system--docs&globals=locale:zh-CN) |

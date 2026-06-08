@@ -51,3 +51,9 @@ WeekEnum[ITEMS].toList(); // But you can access it via the ITEMS alias
 ```
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+| Previous                                         | Next                                               |
+| ------------------------------------------------ | -------------------------------------------------- |
+| [← Localization](?path=/docs/localization--docs) | [Compatibility →](?path=/docs/compatibility--docs) |

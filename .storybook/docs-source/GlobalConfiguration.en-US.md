@@ -23,3 +23,11 @@
   ```
 
 > Note that `autoLabel` is also an option that can be set when creating an enum as `options.autoLabel`. The usage is the same as `Enum.config.autoLabel`, and it overrides the global configuration for that specific enum.
+
+---
+
+<!-- docs-prev-next-nav -->
+
+| Previous                                           | Next                                             |
+| -------------------------------------------------- | ------------------------------------------------ |
+| [← API Reference](?path=/docs/api-reference--docs) | [User Stories →](?path=/docs/user-stories--docs) |

@@ -78,3 +78,9 @@ const WeekEnum = Enum(
 ```
 
 ---
+
+<!-- docs-prev-next-nav -->
+
+| 上一篇                                                             | 下一篇                                                                |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| [← 全局扩展](?path=/docs/extensibility--docs&globals=locale:zh-CN) | [命名冲突 →](?path=/docs/naming-conflicts--docs&globals=locale:zh-CN) |
