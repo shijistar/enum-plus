@@ -54,8 +54,6 @@ WeekEnum[ITEMS].toList(); // 但可以通过 ITEMS 别名来访问它
 
 <!-- docs-prev-next-nav -->
 
-## 继续阅读
-
-| 上一步                                                          | 下一步                                                           |
+| 上一篇                                                          | 下一篇                                                           |
 | --------------------------------------------------------------- | ---------------------------------------------------------------- |
 | [← 本地化](?path=/docs/localization--docs&globals=locale:zh-CN) | [兼容性 →](?path=/docs/compatibility--docs&globals=locale:zh-CN) |

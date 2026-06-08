@@ -59,8 +59,6 @@ yarn add enum-plus
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                   | Next                                           |
 | ------------------------------------------ | ---------------------------------------------- |
 | [← Introduce](?path=/docs/introduce--docs) | [Get Started →](?path=/docs/get-started--docs) |

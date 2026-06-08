@@ -119,8 +119,6 @@ WeekEnum.Saturday; // 6
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                               | Next                                               |
 | -------------------------------------- | -------------------------------------------------- |
 | [← Install](?path=/docs/install--docs) | [API Reference →](?path=/docs/api-reference--docs) |

@@ -337,8 +337,6 @@ Enum.install(i18nextPlugin);
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                       | Next                                                             |
 | ---------------------------------------------- | ---------------------------------------------------------------- |
 | [← Get Started](?path=/docs/get-started--docs) | [Global Configuration →](?path=/docs/global-configuration--docs) |

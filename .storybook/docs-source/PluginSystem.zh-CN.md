@@ -69,8 +69,6 @@ Enum.install(antdPlugin, {
 
 <!-- docs-prev-next-nav -->
 
-## 继续阅读
-
-| 上一步                                                              | 下一步                                                             |
+| 上一篇                                                              | 下一篇                                                             |
 | ------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | [← 最佳实践](?path=/docs/best-practices--docs&globals=locale:zh-CN) | [全局扩展 →](?path=/docs/extensibility--docs&globals=locale:zh-CN) |

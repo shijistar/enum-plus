@@ -111,8 +111,6 @@ const WeekEnum = Enum(weekInit);
 
 <!-- docs-prev-next-nav -->
 
-## 继续阅读
-
-| 上一步                                                           | 下一步                                                    |
+| 上一篇                                                           | 下一篇                                                    |
 | ---------------------------------------------------------------- | --------------------------------------------------------- |
 | [← 兼容性](?path=/docs/compatibility--docs&globals=locale:zh-CN) | [安全 →](?path=/docs/security--docs&globals=locale:zh-CN) |

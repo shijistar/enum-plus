@@ -69,8 +69,6 @@ We are working on the following plugins:
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                             | Next                                               |
 | ---------------------------------------------------- | -------------------------------------------------- |
 | [← Best Practices](?path=/docs/best-practices--docs) | [Extensibility →](?path=/docs/extensibility--docs) |

@@ -35,8 +35,6 @@ const WeekEnum = Enum(
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                         | Next                                               |
 | ------------------------------------------------ | -------------------------------------------------- |
 | [← User Stories](?path=/docs/user-stories--docs) | [Plugin System →](?path=/docs/plugin-system--docs) |

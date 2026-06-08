@@ -28,8 +28,6 @@
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                           | Next                                             |
 | -------------------------------------------------- | ------------------------------------------------ |
 | [← API Reference](?path=/docs/api-reference--docs) | [User Stories →](?path=/docs/user-stories--docs) |

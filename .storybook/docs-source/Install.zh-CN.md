@@ -59,8 +59,6 @@ yarn add enum-plus
 
 <!-- docs-prev-next-nav -->
 
-## 继续阅读
-
-| 上一步                                                     | 下一步                                                           |
+| 上一篇                                                     | 下一篇                                                           |
 | ---------------------------------------------------------- | ---------------------------------------------------------------- |
 | [← 介绍](?path=/docs/introduce--docs&globals=locale:zh-CN) | [快速上手 →](?path=/docs/get-started--docs&globals=locale:zh-CN) |

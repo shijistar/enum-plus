@@ -95,8 +95,6 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous | Next                                   |
 | -------- | -------------------------------------- |
-| —        | [Install →](?path=/docs/install--docs) |
+| \-\-     | [Install →](?path=/docs/install--docs) |

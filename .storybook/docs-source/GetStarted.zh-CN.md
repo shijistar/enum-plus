@@ -117,8 +117,6 @@ WeekEnum.Saturday; // 6
 
 <!-- docs-prev-next-nav -->
 
-## 继续阅读
-
-| 上一步                                                   | 下一步                                                             |
+| 上一篇                                                   | 下一篇                                                             |
 | -------------------------------------------------------- | ------------------------------------------------------------------ |
 | [← 安装](?path=/docs/install--docs&globals=locale:zh-CN) | [API 文档 →](?path=/docs/api-reference--docs&globals=locale:zh-CN) |

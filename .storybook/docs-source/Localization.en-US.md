@@ -81,8 +81,6 @@ const WeekEnum = Enum(
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                           | Next                                                     |
 | -------------------------------------------------- | -------------------------------------------------------- |
 | [← Extensibility](?path=/docs/extensibility--docs) | [Naming Conflicts →](?path=/docs/naming-conflicts--docs) |

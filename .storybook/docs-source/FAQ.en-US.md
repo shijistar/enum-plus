@@ -111,8 +111,6 @@ Thanks to the high flexibility of [Plugin System](?path=/docs/plugin-system--doc
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                           | Next                                     |
 | -------------------------------------------------- | ---------------------------------------- |
 | [← Compatibility](?path=/docs/compatibility--docs) | [Security →](?path=/docs/security--docs) |

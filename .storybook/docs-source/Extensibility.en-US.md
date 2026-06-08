@@ -94,8 +94,6 @@ Please note that `EnumExtension` is a generic interface that accepts three type 
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                           | Next                                             |
 | -------------------------------------------------- | ------------------------------------------------ |
 | [← Plugin System](?path=/docs/plugin-system--docs) | [Localization →](?path=/docs/localization--docs) |

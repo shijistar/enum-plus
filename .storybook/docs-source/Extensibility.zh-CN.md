@@ -92,8 +92,6 @@ WeekEnum.toMySelect(); // [{ value: 0, title: '星期日' }, { value: 1, title: 
 
 <!-- docs-prev-next-nav -->
 
-## 继续阅读
-
-| 上一步                                                             | 下一步                                                          |
+| 上一篇                                                             | 下一篇                                                          |
 | ------------------------------------------------------------------ | --------------------------------------------------------------- |
 | [← 插件系统](?path=/docs/plugin-system--docs&globals=locale:zh-CN) | [本地化 →](?path=/docs/localization--docs&globals=locale:zh-CN) |

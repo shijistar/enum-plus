@@ -33,8 +33,6 @@ In Node.js environments, you can import enum-plus using either `require` or `imp
 
 <!-- docs-prev-next-nav -->
 
-## Continue reading
-
 | Previous                                                 | Next                           |
 | -------------------------------------------------------- | ------------------------------ |
 | [← Naming Conflicts](?path=/docs/naming-conflicts--docs) | [FAQ →](?path=/docs/faq--docs) |
