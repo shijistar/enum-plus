@@ -7,13 +7,11 @@
   "storybook.preview.theme.dark": "深色",
   "storybook.preview.background.canvas": "暖色画布",
   "storybook.preview.background.slate": "石板灰",
-
   "story.status.enumName": "内容状态",
   "story.status.draft": "草稿",
   "story.status.review": "审核中",
   "story.status.published": "已发布",
   "story.status.archived": "已归档",
-
   "storybook.stories.CoreInitialization.metaDescription": "按照 README 的初始化章节，把最常用的定义方式放到同一个可视化面板里，方便直接观察 values、labels、items 和原始结构的运行时差异。",
   "storybook.stories.CoreInitialization.page.title": "把初始化格式变成可观察的运行结果",
   "storybook.stories.CoreInitialization.page.description": "README 中的多种枚举定义方式写法不同，但目标一致：建立稳定、可查询、可映射到 UI 的枚举集合。这个页面把它们放到同一套交互面板中对比。",
@@ -79,7 +77,6 @@
   "storybook.stories.CoreInitialization.array.sample.group.editing": "编辑阶段",
   "storybook.stories.CoreInitialization.array.sample.group.online": "线上阶段",
   "storybook.stories.CoreInitialization.array.sample.enumName": "流程状态",
-
   "storybook.stories.CoreApi.metaDescription": "这一组故事集中展示 README 里的高频 API：label、key、raw、findBy、toList、toMap、items、meta，以及命名冲突时的符号常量回退方案。",
   "storybook.stories.CoreApi.page.title": "把 enum 当成真正的业务查询层",
   "storybook.stories.CoreApi.page.description": "相比原生 enum，enum-plus 的价值不仅在定义阶段，而在于它把查询、回显、映射和元数据读取统一到了一个稳定对象上。",
@@ -117,7 +114,6 @@
   "storybook.stories.CoreApi.sample.conflict.items": "字段 items",
   "storybook.stories.CoreApi.sample.conflict.values": "字段 values",
   "storybook.stories.CoreApi.sample.conflict.meta": "字段 meta",
-
   "storybook.stories.CorePatterns.metaDescription": "这个页面把 README 中较容易被忽略但非常实用的能力放到一起：字符串本地化、autoLabel、枚举组合、只读结构，以及通过 Enum.extends 增加全局扩展方法。",
   "storybook.stories.CorePatterns.localization.title": "字符串本地化与 autoLabel",
   "storybook.stories.CorePatterns.localization.description": "这是一种跨框架也适用的本地化方式。通过 localize + labelPrefix，可以把枚举项 label 变成资源 key，而不是写死展示文本。",
@@ -152,7 +148,6 @@
   "storybook.stories.CorePatterns.composition.sample.published": "已发布",
   "storybook.stories.CorePatterns.composition.sample.archived": "已归档",
   "storybook.stories.CorePatterns.composition.sample.fullFlow": "完整内容流程",
-
   "storybook.stories.PluginAntd.metaDescription": "参考 packages/plugin-antd/README，把 toSelect、toMenu、toFilter、toValueMap 直接接到 Ant Design 控件上，验证 enum-plus 与 antd 的 UI 绑定体验。",
   "storybook.stories.PluginAntd.page.title": "把 enum 直接变成 antd 数据源",
   "storybook.stories.PluginAntd.page.description": "@enum-plus/plugin-antd 的核心价值在于减少重复的数据转换代码。定义一次 enum，就能同时生成 Select、Menu、Table filters 等结构。",
@@ -180,7 +175,6 @@
   "storybook.stories.PluginAntd.sample.morning": "早班",
   "storybook.stories.PluginAntd.sample.afternoon": "中班",
   "storybook.stories.PluginAntd.sample.night": "晚班",
-
   "storybook.stories.PluginReactI18n.metaDescription": "参考 packages/plugin-react/README，用 react-i18next 驱动枚举 label，把语言切换、Select 自动刷新，以及 isMatch 搜索能力都放进一个可互动面板。",
   "storybook.stories.PluginReactI18n.page.title": "React 场景下的动态国际化枚举",
   "storybook.stories.PluginReactI18n.page.description": "@enum-plus/plugin-react 会把 label 变成 React 可渲染内容，并监听 react-i18next 的语言切换，让已选项、下拉列表和枚举名自动刷新。",
@@ -205,7 +199,6 @@
   "storybook.stories.PluginReactI18n.mode.matchCaseSensitive": "isMatchCaseSensitive",
   "storybook.stories.PluginReactI18n.defaultSearch.zhCN": "审",
   "storybook.stories.PluginReactI18n.defaultSearch.enUS": "re",
-
   "storybook.stories.workbenchDemo.metaDescription": "一个贴近企业后台真实场景的离线 CRUD playground，演示 enum-plus 如何以单一枚举源驱动表格筛选、弹窗表单、状态徽标、国际化标签以及多种 Ant Design 输入控件。",
   "storybook.stories.workbenchDemo.eyebrow": "企业级 Playground",
   "storybook.stories.workbenchDemo.page.title": "由枚举驱动的离线请求工作台",
@@ -235,7 +228,7 @@
   "storybook.stories.workbenchDemo.table.flags": "标记",
   "storybook.stories.workbenchDemo.table.updatedAt": "更新时间",
   "storybook.stories.workbenchDemo.table.actions": "操作",
-  "storybook.stories.workbenchDemo.action.newRecord": "新建请求",
+  "storybook.stories.workbenchDemo.action.newRecord": "添加请求",
   "storybook.stories.workbenchDemo.action.edit": "编辑",
   "storybook.stories.workbenchDemo.action.delete": "删除",
   "storybook.stories.workbenchDemo.card.recordSummary": "记录摘要",

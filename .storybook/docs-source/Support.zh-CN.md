@@ -6,6 +6,6 @@
 
 <!-- docs-prev-next-nav -->
 
-| 上一篇                                                    | 下一篇 |
-| --------------------------------------------------------- | ------ |
-| [← 安全](?path=/docs/security--docs&globals=locale:zh-CN) | \-\-   |
+| 上一篇                                                    | 下一篇                                                                     |
+| --------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [← 安全](?path=/docs/security--docs&globals=locale:zh-CN) | [完整Demo →](?path=/story/demo-full-demo--playground&globals=locale:zh-CN) |

@@ -89,7 +89,6 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   --ep-kpi-border: rgb(72 150 137 / 18%);
   --ep-surface-raised: rgb(255 255 255 / 70%);
   --ep-table-head-bg: rgb(237 248 245 / 92%);
-  --ep-table-row-hover: rgb(15 118 110 / 6%);
   --ep-scrollbar-thumb: rgb(113 113 122 / 32%);
   --ep-scrollbar-track: rgb(255 255 255 / 10%);
 
@@ -129,7 +128,6 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   --ep-kpi-border: rgb(61 214 194 / 24%);
   --ep-surface-raised: rgb(255 255 255 / 4%);
   --ep-table-head-bg: rgb(20 32 41 / 88%);
-  --ep-table-row-hover: rgb(61 214 194 / 10%);
   --ep-scrollbar-thumb: rgb(148 163 184 / 42%);
   --ep-scrollbar-track: rgb(15 23 42 / 40%);
 }
@@ -380,16 +378,6 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   color: var(--ep-page-text);
   /* stylelint-disable-next-line declaration-no-important */
   background: var(--ep-table-head-bg) !important;
-}
-
-.enum-story-shell
-  .ant-table-wrapper
-  .ant-table-tbody
-  > tr:hover
-  > td:not(.ant-table-cell-fix-left)
-  :not(.ant-table-cell-fix-right) {
-  /* stylelint-disable-next-line declaration-no-important */
-  background: var(--ep-table-row-hover) !important;
 }
 
 .enum-story-shell .ant-menu-item-selected {

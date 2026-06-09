@@ -6,6 +6,6 @@ If you find this project useful, please consider giving it a [STAR](https://gith
 
 <!-- docs-prev-next-nav -->
 
-| Previous                                 | Next |
-| ---------------------------------------- | ---- |
-| [← Security](?path=/docs/security--docs) | \-\- |
+| Previous                                 | Next                                                   |
+| ---------------------------------------- | ------------------------------------------------------ |
+| [← Security](?path=/docs/security--docs) | [Full Demo →](?path=/story/demo-full-demo--playground) |

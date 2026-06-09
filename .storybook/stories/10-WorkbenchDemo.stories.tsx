@@ -22,6 +22,7 @@ import {
   Typography,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { storyT, useStoryLocale } from '../locales';
 import { CodePreview, JsonPreview, KpiRow, StoryPage, StorySection, TwoColumn } from './shared/demo';
 import { ensureStoryI18n } from './shared/i18n';
@@ -270,7 +271,6 @@ function WorkbenchDemoBody() {
       title: t('storybook.stories.workbenchDemo.table.id'),
       dataIndex: 'id',
       width: 120,
-      fixed: 'left',
       render: (value: string) => <Text strong>{value}</Text>,
     },
     {
@@ -343,16 +343,12 @@ function WorkbenchDemoBody() {
     {
       title: t('storybook.stories.workbenchDemo.table.actions'),
       key: 'actions',
-      width: 160,
+      width: 90,
       fixed: 'right',
       render: (_value, record) => (
         <Space>
-          <Button size="small" onClick={() => openEditModal(record)}>
-            {t('storybook.stories.workbenchDemo.action.edit')}
-          </Button>
-          <Button size="small" danger onClick={() => removeRecord(record.id)}>
-            {t('storybook.stories.workbenchDemo.action.delete')}
-          </Button>
+          <Button size="small" type="text" icon={<EditOutlined />} onClick={() => openEditModal(record)} />
+          <Button size="small" danger type="text" icon={<DeleteOutlined />} onClick={() => removeRecord(record.id)} />
         </Space>
       ),
     },
@@ -383,14 +379,9 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
   return (
     <StoryPage
       size="large"
-      eyebrow={t('storybook.stories.workbenchDemo.eyebrow')}
-      title={t('storybook.stories.workbenchDemo.page.title')}
-      description={t('storybook.stories.workbenchDemo.page.description')}
-    >
-      <StorySection
-        title={t('storybook.stories.workbenchDemo.section.overview.title')}
-        description={t('storybook.stories.workbenchDemo.section.overview.description')}
-        extra={
+      eyebrow={
+        <Flex justify="space-between">
+          {t('storybook.stories.workbenchDemo.eyebrow')}{' '}
           <Space wrap>
             <Button
               type={language === 'zh-CN' ? 'primary' : 'default'}
@@ -404,14 +395,20 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
             >
               {storyT('storybook.preview.locale.enUS')}
             </Button>
-            <Button type="primary" onClick={openCreateModal}>
-              {t('storybook.stories.workbenchDemo.action.newRecord')}
-            </Button>
           </Space>
-        }
+        </Flex>
+      }
+      title={t('storybook.stories.workbenchDemo.page.title')}
+      description={t('storybook.stories.workbenchDemo.page.description')}
+    >
+      <StorySection
+        title={t('storybook.stories.workbenchDemo.section.overview.title')}
+        description={t('storybook.stories.workbenchDemo.section.overview.description')}
       >
-        <KpiRow items={kpis} />
-        <Paragraph>{t('storybook.stories.workbenchDemo.overview.note')}</Paragraph>
+        <Space direction="vertical" size={16}>
+          <KpiRow items={kpis} />
+          <Paragraph>{t('storybook.stories.workbenchDemo.overview.note')}</Paragraph>
+        </Space>{' '}
       </StorySection>
 
       <StorySection
@@ -430,6 +427,11 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
               console.log(value);
               setTableMode(value as typeof TableModeEnum.valueType);
             }}
+            tabBarExtraContent={
+              <Button type="text" icon={<PlusOutlined />} onClick={openCreateModal}>
+                {t('storybook.stories.workbenchDemo.action.newRecord')}
+              </Button>
+            }
           />
           <Flex gap={12} wrap>
             <Select
