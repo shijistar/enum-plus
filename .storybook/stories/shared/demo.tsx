@@ -4,7 +4,7 @@ import { Card, Col, Row, Space, Tag, Typography } from 'antd';
 const { Paragraph, Text, Title } = Typography;
 
 export function StoryPage(props: {
-  eyebrow?: string;
+  eyebrow?: ReactNode;
   title: string;
   description: ReactNode;
   size?: 'normal' | 'large';
