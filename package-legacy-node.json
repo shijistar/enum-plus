@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@jest/globals": "25.5.0",
     "@tiny-codes/code-style-all-in-one": "1.1.4",
     "@types/jest": "24.0.25",
     "cross-env": "5.2.1",
@@ -8,5 +9,8 @@
     "npm-run-all": "4.1.5",
     "shx": "0.3.4",
     "typescript": "5.0.2"
+  },
+  "scripts": {
+    "prepare": "run-s gv init-husky"
   }
 }

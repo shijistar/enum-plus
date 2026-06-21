@@ -104,13 +104,12 @@ function getInitMapFromArray<
     if (getKey) {
       key = typeof getKey === 'function' ? (getKey(item) as K) : (item[getKey] as K);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-    const { key: _key, ...rest } = item as EnumInit<K, V> & { key?: any };
-    acc[(key ?? value) as unknown as K] = {
-      ...rest,
+    const rawItem = Object.assign({}, item, {
       label: label || (key ?? '') || (value != null ? value.toString() : value),
       value,
-    } as unknown as T[K];
+    }) as T[K];
+    delete (rawItem as { key?: unknown }).key;
+    acc[(key ?? value) as unknown as K] = rawItem;
     return acc;
   }, {} as T);
 }
