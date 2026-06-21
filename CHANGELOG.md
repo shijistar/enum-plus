@@ -2,6 +2,15 @@
 
 # enum-plus Changelog
 
+## 3.2.0
+
+2026-6-21
+
+### Features
+
+- ✨ Add `item` method to quickly access enum items by key or value.
+- ✨ Add `autoLocalizeMeta` option to automatically localize meta fields, just like `label`.
+
 ## 3.1.8
 
 2026-1-28

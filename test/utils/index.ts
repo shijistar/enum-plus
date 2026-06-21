@@ -1,5 +1,5 @@
 import type { EnumInit, EnumKey, EnumValue, IEnumItems, ValueTypeFromSingleInit } from '@enum-plus';
-import type { EnumItemClass } from '@enum-plus/enum-item';
+import type { EnumItemInterface } from '@enum-plus/enum-item';
 import type { StandardEnumItemInit } from '@enum-plus/types';
 
 export function toPlainEnums<
@@ -7,9 +7,8 @@ export function toPlainEnums<
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  enums: EnumItemClass<T[K], K, V>[] & IEnumItems<T, K, V>,
-  fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label']
+  enums: EnumItemInterface<T[K], K, V>[] & IEnumItems<T, K, V>,
+  fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label'],
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
   return Array.from(enums).map((item) => {
     const obj: { value?: EnumValue; key?: keyof T; label?: string } = {};
@@ -28,7 +27,7 @@ export function toPlainEnums<
 
 export function pickInitConfig<T extends Record<keyof T, StandardEnumItemInit<EnumValue>>>(
   obj: T,
-  fieldNames: (keyof T[keyof T])[] = ['value', 'label']
+  fieldNames: (keyof T[keyof T])[] = ['value', 'label'],
 ): T {
   return Object.keys(obj).reduce((acc, key) => {
     (acc as Record<string, unknown>)[key] = pickObject(obj[key as keyof T], fieldNames);
@@ -39,7 +38,7 @@ export function pickInitConfig<T extends Record<keyof T, StandardEnumItemInit<En
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function pickArray<T extends Record<string, any>>(
   array: T[] | readonly T[],
-  fieldNames: (keyof T)[] = Object.keys(array[0] || {}) as (keyof T)[]
+  fieldNames: (keyof T)[] = Object.keys(array[0] || {}) as (keyof T)[],
 ): T[] {
   return array.map((item) => pickObject(item, fieldNames));
 }
@@ -48,27 +47,27 @@ export function pickArray<T extends Record<string, any>>(
 export function copyList<T>(
   data: T[],
   valueField: keyof T = 'value' as keyof T,
-  labelField: keyof T = 'label' as keyof T
+  labelField: keyof T = 'label' as keyof T,
 ) {
   return Array.from(data).map(
     (item) =>
       ({
         [valueField]: item[valueField],
         [labelField]: item[labelField],
-      }) as T
+      }) as T,
   );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function pickObject<T extends Record<string, any>, K extends keyof T>(
   obj: T,
-  fieldNames: K[] = Object.keys(obj) as K[]
+  fieldNames: K[] = Object.keys(obj) as K[],
 ) {
   return fieldNames.reduce(
     (acc, key) => {
       acc[key] = obj[key];
       return acc;
     },
-    {} as { [key in K]: T[key] }
+    {} as { [key in K]: T[key] },
   );
 }

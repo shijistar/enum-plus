@@ -1,11 +1,12 @@
 import type { EnumExtension } from 'enum-plus/extension';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
-import type { EnumItemClass, EnumItemOptions } from './enum-item';
+import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { IEnumItems, InheritableEnumItems } from './enum-items';
 import { internalConfig, localizer } from './global-config';
 import type {
   ArrayToMap,
   EnumInit,
+  EnumItemInit,
   EnumItemLabel,
   EnumKey,
   EnumValue,
@@ -16,6 +17,7 @@ import type {
 import type { ENUM_OPTIONS, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from './utils';
 import { IS_ENUM } from './utils';
 
+const define = Object.defineProperty;
 /**
  * - **EN:** Create an enum collection
  * - **CN:** 创建一个枚举集合
@@ -46,14 +48,14 @@ export const Enum = (<
  * Use defineProperty here to prevent circular dependencies.
  */
 // Enum.config = {};
-Object.defineProperty(Enum, 'config', {
+define(Enum, 'config', {
   get: function () {
     return internalConfig;
   },
   enumerable: true,
   configurable: false,
 });
-Object.defineProperty(Enum, 'localize', {
+define(Enum, 'localize', {
   get: function () {
     return localizer.localize;
   },
@@ -79,12 +81,11 @@ Enum.isEnum = (value: unknown): value is IEnum<any, any, any, any> & NativeEnumM
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return Boolean(value && typeof value === 'object' && (value as any)[IS_ENUM] === true);
 };
-Object.defineProperty(Enum, Symbol.hasInstance, {
+define(Enum, Symbol.hasInstance, {
   value: function (instance: unknown) {
     return Enum.isEnum(instance);
   },
   writable: false,
-  enumerable: false,
   configurable: true,
 });
 
@@ -103,8 +104,10 @@ function getInitMapFromArray<
     if (getKey) {
       key = typeof getKey === 'function' ? (getKey(item) as K) : (item[getKey] as K);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+    const { key: _key, ...rest } = item as EnumInit<K, V> & { key?: any };
     acc[(key ?? value) as unknown as K] = {
-      ...item,
+      ...rest,
       label: label || (key ?? '') || (value != null ? value.toString() : value),
       value,
     } as unknown as T[K];
@@ -213,7 +216,7 @@ export interface EnumInterface {
       | boolean
       | ((options: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          item: Omit<EnumItemClass<any, string, any, any>, 'label'>;
+          item: Omit<EnumItemInterface<EnumItemInit, string, EnumValue, any>, 'label'>;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           labelPrefix: any;
         }) => string);
@@ -326,9 +329,9 @@ export interface IEnum<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [ITEMS]: IsAny<T> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      EnumItemClass<any, string, EnumValue, LP>[]
+      EnumItemInterface<any, string, EnumValue, LP>[]
     : T extends { items: unknown }
-      ? EnumItemClass<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>
+      ? EnumItemInterface<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>
       : never;
   /**
    * - **EN:** All items in the enumeration as an array
@@ -343,10 +346,10 @@ export interface IEnum<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly items: IsAny<T> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      EnumItemClass<any, string, EnumValue, LP>[] & IEnumItems<any, string, EnumValue, LP>
+      EnumItemInterface<any, string, EnumValue, LP>[] & IEnumItems<any, string, EnumValue, LP>
     : T extends { items: unknown }
       ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>
-      : EnumItemClass<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>;
+      : EnumItemInterface<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>;
   /**
    * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can access all
    *   enum keys through this alias
@@ -424,7 +427,7 @@ export interface IEnum<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [NAMED]: IsAny<T> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Record<string, EnumItemClass<any, string, EnumValue, LP>>
+      Record<string, EnumItemInterface<any, string, EnumValue, LP>>
     : T extends { named: unknown }
       ? IEnumItems<T, K, V, LP>['named']
       : never;
@@ -437,7 +440,7 @@ export interface IEnum<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly named: IsAny<T> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Record<string, EnumItemClass<any, string, EnumValue, LP>>
+      Record<string, EnumItemInterface<any, string, EnumValue, LP>>
     : T extends { named: unknown }
       ? ValueTypeFromSingleInit<T['named'], 'named', T[K] extends number | undefined ? number : 'named'>
       : IEnumItems<T, K, V, LP>['named'];

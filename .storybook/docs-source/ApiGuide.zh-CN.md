@@ -97,6 +97,46 @@ WeekEnum.has(9); // false
 WeekEnum.has('Birthday'); // false
 ```
 
+## Ⓜ️ label
+
+`label(keyOrValue?: string | number): string | undefined`
+
+根据某个枚举值或枚举 key，获取该枚举项的显示名称。如果启用了[本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化)，则会返回当前语言的内容。
+
+```js
+WeekEnum.label(1); // 星期一
+WeekEnum.label('Monday'); // 星期一
+```
+
+## Ⓜ️ item
+
+`item(keyOrValue?: string | number): EnumItemClass | undefined`
+
+根据某个枚举值或枚举 key，获取完整的枚举项对象。如果不存在，则返回 `undefined`。
+
+当你需要的不只是显示名称，而是 `key`、`value`、`label` 或自定义元数据字段时，可以使用 `item()`。
+
+```js
+const WeekEnum = Enum({
+  Sunday: { value: 0, label: '星期日', weekend: true },
+  Monday: { value: 1, label: '星期一', weekend: false },
+});
+
+WeekEnum.item(1); // { key: 'Monday', value: 1, label: '星期一', weekend: false }
+WeekEnum.item('Sunday'); // { key: 'Sunday', value: 0, label: '星期日', weekend: true }
+WeekEnum.item(9); // undefined
+```
+
+## Ⓜ️ key
+
+`key(value?: string | number): string | undefined`
+
+根据枚举值获取该枚举项的`key`，这也被称为[反向映射](https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings)。如果不存在则返回`undefined`
+
+```js
+WeekEnum.key(1); // 'Monday'
+```
+
 ## Ⓜ️ findBy
 
 `findBy(field: string, value: any): EnumItemClass | undefined`
@@ -109,27 +149,6 @@ WeekEnum.has('Birthday'); // false
 ColorEnum.findBy('value', 1); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
 ColorEnum.findBy('key', 'Red'); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
 ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
-```
-
-## Ⓜ️ label
-
-`label(keyOrValue?: string | number): string | undefined`
-
-根据某个枚举值或枚举 key，获取该枚举项的显示名称。如果启用了[本地化](?path=/docs/localization--docs&globals=locale:zh-CN#本地化)，则会返回当前语言的内容。
-
-```js
-WeekEnum.label(1); // 星期一
-WeekEnum.label('Monday'); // 星期一
-```
-
-## Ⓜ️ key
-
-`key(value?: string | number): string | undefined`
-
-根据枚举值获取该枚举项的`key`，这也被称为[反向映射](https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings)。如果不存在则返回`undefined`
-
-```js
-WeekEnum.key(1); // 'Monday'
 ```
 
 ## Ⓜ️ raw
@@ -278,6 +297,136 @@ type WeekRaw = typeof WeekEnum.rawType;
 ```
 
 > 注意，这只是一个 TypeScript 类型，只能用来约束类型。不可在运行时调用，运行时调用会抛出异常。
+
+---
+
+# 构造函数选项
+
+在创建枚举时，第二个参数可以传入一个可选的配置对象，用来定制枚举的行为和特性。
+
+```ts
+const WeekEnum = Enum(enumInit, {
+  // 构建选项...
+});
+```
+
+## ⚙️ name
+
+`string | (() => string)`
+
+设置整个枚举集合的显示名称。它可以是普通字符串、本地化键值，也可以是一个返回显示名称的函数。
+
+```js
+const WeekEnum = Enum(enumInit, {
+  name: 'week.name',
+});
+
+WeekEnum.name; // 周
+```
+
+## ⚙️ localize
+
+`(localeKey: string) => string | undefined`
+
+设置枚举实例级别的本地化函数。它会覆盖当前枚举实例的全局 `Enum.localize` 函数。
+
+```js
+const WeekEnum = Enum(enumInit, {
+  localize: (key) => i18n.t(key),
+});
+```
+
+## ⚙️ autoLabel
+
+`boolean | ((params: { item: EnumItemClass; labelPrefix?: any }) => string)`
+
+控制枚举项标签的生成方式。
+
+- `true` - 默认值，根据 `labelPrefix` 和每个枚举项的 label 或 key 生成标签。
+- `false` - 禁用自动生成，使用枚举项中显式定义的 label。
+- `function` - 使用自定义逻辑生成标签。
+
+```js
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: 'sunday' }, // 等价于 'week.sunday'
+    Monday: { value: 1, label: 'monday' }, // 等价于 'week.monday'
+  },
+  {
+    autoLabel: true,
+    labelPrefix: 'week.',
+  },
+);
+```
+
+## ⚙️ labelPrefix
+
+`string | any`
+
+设置 `autoLabel` 生成枚举项标签时使用的前缀。在默认的 `autoLabel: true` 模式下，`labelPrefix` 会与每个枚举项的 label 或 key 组合。
+
+## ⚙️ autoLocalizeMeta
+
+`boolean | string[]`
+
+控制自定义元数据字段是否和 `label`、`name` 一样经过本地化函数处理。
+
+- `false` - 默认值，不本地化元数据字段。
+- `true` - 本地化所有自定义元数据字段。
+- `string[]` - 只本地化指定的元数据字段。
+
+```js
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: 'week.sunday', abbr: 'week.abbr.sun', color: 'red' },
+    Monday: { value: 1, label: 'week.monday', abbr: 'week.abbr.mon', color: 'blue' },
+  },
+  {
+    autoLocalizeMeta: ['abbr'],
+  },
+);
+
+WeekEnum.items[0].abbr; // 周日
+WeekEnum.named.Sunday.abbr; // 周日
+```
+
+## ⚙️ getValue
+
+`string | ((item: any) => string | number)`
+
+仅在通过数组初始化枚举时生效。设置枚举项 value 字段名，或者返回 value 的函数。此选项只在通过数组初始化枚举时生效。
+
+```js
+const PetEnum = Enum(pets, {
+  getValue: 'id',
+});
+```
+
+## ⚙️ getLabel
+
+`string | ((item: any) => string)`
+
+仅在通过数组初始化枚举时生效。设置枚举项 label 字段名，或者返回 label 的函数。此选项只在通过数组初始化枚举时生效。
+
+```js
+const PetEnum = Enum(pets, {
+  getLabel: 'name',
+});
+```
+
+## ⚙️ getKey
+
+`string | ((item: any) => string)`
+
+仅在通过数组初始化枚举时生效。设置枚举项 key 字段名，或者返回 key 的函数。此选项只在通过数组初始化枚举时生效。
+
+```js
+const PetEnum = Enum(pets, {
+  getKey: 'code',
+});
+```
+
+---
 
 # 静态方法
 

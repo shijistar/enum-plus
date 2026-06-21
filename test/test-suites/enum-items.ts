@@ -23,7 +23,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items[ENUM_ITEMS_IN_NODE]).toBe(true);
       // @ts-expect-error: because IS_ENUM_ITEMS and Symbol.for('[IsEnumItems]') are equal
       engine.expect(weekEnum.items[Symbol.for('[IsEnumItems]')]).toBe(true);
-    }
+    },
   );
 
   engine.test(
@@ -39,7 +39,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(('Saturday' as unknown) instanceof week.items).toBeTruthy();
       engine.expect((7 as unknown) instanceof week.items).toBeFalsy();
       engine.expect(('[Not Exists]' as unknown) instanceof week.items).toBeFalsy();
-    }
+    },
   );
 
   engine.test(
@@ -50,7 +50,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
     },
     ({ week, StandardWeekConfig }) => {
       engine.expect(week.items[KEYS]).toEqual(Object.keys(StandardWeekConfig));
-    }
+    },
   );
   engine.test(
     'enum.items[VALUES] should return an array of enum values',
@@ -60,7 +60,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
     },
     ({ week, WeekNumberConfig }) => {
       engine.expect(week.items[VALUES]).toEqual(Object.values(WeekNumberConfig));
-    }
+    },
   );
 
   engine.test(
@@ -72,7 +72,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
     ({ week, StandardWeekConfig }) => {
       engine.expect(week.items.labels).toBeInstanceOf(Array);
       engine.expect(week.items.labels).toHaveLength(Object.keys(StandardWeekConfig).length);
-    }
+    },
   );
 
   engine.test(
@@ -94,7 +94,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine
         .expect(conflictNameEnum.items.named.named)
         .toBe(conflictNameEnum.items.find((item) => item.key === 'named'));
-    }
+    },
   );
 
   engine.test(
@@ -114,8 +114,8 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
         .expect(week.items.meta.status)
         .toEqual(
           Object.keys(StandardWeekConfig).map(
-            (key) => StandardWeekConfig[key as keyof typeof StandardWeekConfig].status
-          )
+            (key) => StandardWeekConfig[key as keyof typeof StandardWeekConfig].status,
+          ),
         );
       engine
         .expect(nullMetaEnum.items.meta.status)
@@ -128,10 +128,10 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
             nullMetaEnum.items
               // @ts-expect-error: because some items have no type field
               .map((item) => item.raw.type)
-              .filter(Boolean)
-          )
+              .filter(Boolean),
+          ),
         );
-    }
+    },
   );
 
   engine.test(
@@ -141,12 +141,12 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       return { weekEnum, locales };
     },
     ({ weekEnum, locales }) => {
-      engine.expect(weekEnum.items.label(0)).toBe(locales.Sunday);
-      engine.expect(weekEnum.items.label('Sunday')).toBe(locales.Sunday);
-      engine.expect(weekEnum.items.label(6)).toBe(locales.Saturday);
-      engine.expect(weekEnum.items.label('Saturday')).toBe(locales.Saturday);
+      engine.expect(weekEnum.items.label(0)).toBe(locales['weekday.Sunday']);
+      engine.expect(weekEnum.items.label('Sunday')).toBe(locales['weekday.Sunday']);
+      engine.expect(weekEnum.items.label(6)).toBe(locales['weekday.Saturday']);
+      engine.expect(weekEnum.items.label('Saturday')).toBe(locales['weekday.Saturday']);
       engine.expect(weekEnum.items.label(7)).toBeUndefined();
-    }
+    },
   );
 
   engine.test(
@@ -159,7 +159,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items.key(0)).toBe('Sunday');
       engine.expect(weekEnum.items.key(6)).toBe('Saturday');
       engine.expect(weekEnum.items.key(7)).toBeUndefined();
-    }
+    },
   );
 
   engine.test(
@@ -174,7 +174,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items.has(6)).toBe(true);
       engine.expect(weekEnum.items.has('Saturday')).toBe(true);
       engine.expect(weekEnum.items.has(7)).toBe(false);
-    }
+    },
   );
 
   engine.test(
@@ -206,7 +206,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items.findBy('status', 'success')).toEqual(weekEnum.items[3]);
       engine.expect(weekEnum.items.findBy('status', 'invalid')).toEqual(undefined);
       engine.expect(compactWeekEnum.items.findBy('status' as 'key', 'success')).toEqual(undefined);
-    }
+    },
   );
 
   engine.test(
@@ -235,7 +235,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(defaultListItems2).toEqual(defaultData);
       engine.expect(defaultListItems3).toEqual(defaultData);
       engine.expect(defaultListItems4).toEqual(defaultData);
-    }
+    },
   );
 
   engine.test(
@@ -271,28 +271,28 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           name: item.label,
-        }))
+        })),
       );
       engine.expect(valueNameListItems).toEqual(
         getStandardWeekData(locales).map((item) => ({
           value: item.value,
           name: item.label,
-        }))
+        })),
       );
       engine.expect(idLabelListItems).toEqual(
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           label: item.label,
-        }))
+        })),
       );
       engine.expect(idNameStatusListItems).toEqual(
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           name: item.label,
           status: StandardWeekConfig[item.key as keyof typeof StandardWeekConfig].status,
-        }))
+        })),
       );
-    }
+    },
   );
 
   engine.test(
@@ -338,29 +338,29 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           name: item.label,
-        }))
+        })),
       );
       engine.expect(Array.from(staticFieldStatusListItems)).toEqual(
         getStandardWeekData(locales).map((item) => ({
           id: item.value,
           name: item.label,
           status: StandardWeekConfig[item.key as keyof typeof StandardWeekConfig].status,
-        }))
+        })),
       );
       engine.expect(Array.from(dynamicFieldListItems)).toEqual(
         getStandardWeekData(locales).map((item) => ({
           ['id-' + item.value]: item.value,
           ['name-' + item.value]: item.label,
-        }))
+        })),
       );
       engine.expect(Array.from(dynamicFieldStatusListItems)).toEqual(
         getStandardWeekData(locales).map((item) => ({
           ['id-' + item.value]: item.value,
           ['name-' + item.value]: item.label,
           status: StandardWeekConfig[item.key as keyof typeof StandardWeekConfig].status,
-        }))
+        })),
       );
-    }
+    },
   );
 
   engine.test(
@@ -375,11 +375,11 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
           acc[value] = label;
           return acc;
         },
-        {} as Record<number, string>
+        {} as Record<number, string>,
       );
       engine.expect(weekEnum.items.toMap({ keySelector: 'value' })).toEqual(defaultMapData);
       engine.expect(weekEnum.items.toMap({ valueSelector: 'label' })).toEqual(defaultMapData);
-    }
+    },
   );
 
   engine.test(
@@ -394,7 +394,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
           weekEnum.items.toMap({
             keySelector: 'key',
             valueSelector: 'value',
-          })
+          }),
         )
         .toEqual(
           Object.keys(StandardWeekConfig).reduce(
@@ -402,10 +402,10 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
               acc[key] = StandardWeekConfig[key as keyof typeof StandardWeekConfig].value;
               return acc;
             },
-            {} as Record<string, number>
-          )
+            {} as Record<string, number>,
+          ),
         );
-    }
+    },
   );
 
   engine.test(
@@ -420,7 +420,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
           weekEnum.items.toMap({
             keySelector: 'key',
             valueSelector: (item) => ({ value: item.value }),
-          })
+          }),
         )
         .toEqual(
           Object.keys(StandardWeekConfig).reduce(
@@ -428,15 +428,15 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
               acc[key] = { value: StandardWeekConfig[key as keyof typeof StandardWeekConfig].value };
               return acc;
             },
-            {} as Record<string, { value: number }>
-          )
+            {} as Record<string, { value: number }>,
+          ),
         );
       engine
         .expect(
           weekEnum.items.toMap({
             keySelector: (item) => item.value,
             valueSelector: 'key',
-          })
+          }),
         )
         .toEqual(
           Object.keys(StandardWeekConfig).reduce(
@@ -445,15 +445,15 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
               acc[item.value] = key;
               return acc;
             },
-            {} as Record<string, string>
-          )
+            {} as Record<string, string>,
+          ),
         );
       engine
         .expect(
           weekEnum.items.toMap({
             keySelector: (item) => item.key,
             valueSelector: (item) => item.value,
-          })
+          }),
         )
         .toEqual(
           Object.keys(StandardWeekConfig).reduce(
@@ -462,15 +462,15 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
               acc[key] = item.value;
               return acc;
             },
-            {} as Record<string, number>
-          )
+            {} as Record<string, number>,
+          ),
         );
       engine
         .expect(
           weekEnum.items.toMap({
             keySelector: (item) => item.key,
             valueSelector: (item) => ({ value: item.value, status: item.raw.status }),
-          })
+          }),
         )
         .toEqual(
           Object.keys(StandardWeekConfig).reduce(
@@ -479,10 +479,10 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
               acc[key] = { value: item.value, status: item.status };
               return acc;
             },
-            {} as Record<string, { value: number; status: string }>
-          )
+            {} as Record<string, { value: number; status: string }>,
+          ),
         );
-    }
+    },
   );
 
   engine.test(
@@ -502,7 +502,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(weekEnum.items.raw('Monday').status).toEqual('warning');
       engine.expect(weekEnum.items.raw('Friday').status).toEqual('success');
       engine.expect(weekEnum.items.raw(7 as typeof weekEnum.valueType)).toBeUndefined();
-    }
+    },
   );
 }
 

@@ -25,7 +25,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ week, getStandardWeekData, locales }) => {
         engine.expect(Array.isArray(week.items)).toBeTruthy();
         engine.expect(toPlainEnums(week.items)).toEqual(getStandardWeekData(locales));
-      }
+      },
     );
 
     engine.test(
@@ -93,7 +93,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(customFuncWithStatusListItems).toEqual(customWithStatusData);
         engine.expect(defaultMapItems).toEqual(week.items.toMap());
         engine.expect(customMapItems).toEqual(week.items.toMap({ keySelector: 'key', valueSelector: 'value' }));
-      }
+      },
     );
 
     engine.test(
@@ -109,7 +109,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(NAMED).toBe(NODE_NAMED);
         engine.expect(META).toBe(NODE_META);
         engine.expect(ENUM_OPTIONS).toBe(NODE_ENUM_OPTIONS);
-      }
+      },
     );
 
     engine.test(
@@ -122,7 +122,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(weekEnum[ENUM_OPTIONS as typeof NODE_ENUM_OPTIONS]).toEqual({
           name: 'weekDay.name',
         });
-      }
+      },
     );
     engine.test(
       'the system fields should be protected and auto renamed to fallback names in case of conflicting with enum members',
@@ -184,7 +184,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine
           .expect(strangeEnum[LABELS as typeof NODE_LABELS] as string[])
           .toEqual(
-            Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].label)
+            Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].label),
           );
         engine.expect(strangeEnum.named).toBe(104);
         strangeEnum.items.forEach((item) => {
@@ -196,7 +196,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine
           .expect(strangeEnum[META as typeof NODE_META].type)
           .toEqual(
-            Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].type)
+            Object.keys(strangeEnumConfig).map((key) => strangeEnumConfig[key as keyof typeof strangeEnumConfig].type),
           );
         engine.expect(Array.from(strangeEnum.items.map((i) => i.key))).toEqual(Object.keys(strangeEnumConfig));
 
@@ -213,13 +213,13 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
             strangeEnum.items.toList().map((i) => ({
               value: i.value,
               label: i.label,
-            }))
+            })),
           )
           .toEqual(
             Object.values(strangeEnumConfig).map((i) => ({
               value: i.value,
               label: i.label,
-            }))
+            })),
           );
         engine.expect(strangeEnum.toMap).toBe(5);
         const map: Record<string, string> = {};
@@ -244,7 +244,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine
           .expect(strangerEnum[LABELS as typeof NODE_LABELS])
           .toEqual(Object.values(strangerEnumConfig).map((i) => i.label));
-      }
+      },
     );
 
     engine.test(
@@ -259,7 +259,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(NODE_IS_ENUM in week && week[NODE_IS_ENUM]).toBe(true);
         // @ts-expect-error: because IS_ENUM and Symbol.for('[IsEnum]') are equal
         engine.expect(week[Symbol.for('[IsEnum]')]).toBe(true);
-      }
+      },
     );
 
     engine.test(
@@ -269,14 +269,13 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         return { week };
       },
       ({ week }) => {
-        // console.log(week.__items__);
         engine.expect((0 as unknown) instanceof week).toBeTruthy();
         engine.expect(('Sunday' as unknown) instanceof week).toBeTruthy();
         engine.expect((6 as unknown) instanceof week).toBeTruthy();
         engine.expect(('Saturday' as unknown) instanceof week).toBeTruthy();
         engine.expect((7 as unknown) instanceof week).toBeFalsy();
         engine.expect(('[Not Exists]' as unknown) instanceof week).toBeFalsy();
-      }
+      },
     );
 
     engine.test(
@@ -293,7 +292,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ error }) => {
         engine.expect(error).toBeDefined();
-      }
+      },
     );
 
     engine.test(
@@ -310,7 +309,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ error }) => {
         engine.expect(error).toBeDefined();
-      }
+      },
     );
 
     engine.test(
@@ -327,7 +326,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ error }) => {
         engine.expect(error).toBeDefined();
-      }
+      },
     );
   });
 };

@@ -6,7 +6,7 @@
 
 &nbsp;
 
-## 🅿️ Ⓜ️ autoLabel
+## ⚙️ autoLabel
 
 `Enum.config.autoLabel` is a global configuration option used to automatically generate labels for enum items. It allows you to set the `options.labelPrefix` option when defining an enum, which sets a `label` prefix for all enum items. Enum items only need to set the base value and can even omit the `label` field (when same as the `key` field). This reduces repetitive code and improves the conciseness of enum definitions.
 

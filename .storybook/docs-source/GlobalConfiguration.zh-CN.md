@@ -6,7 +6,7 @@
 
 &nbsp;
 
-## 🅿️ Ⓜ️ autoLabel
+## ⚙️ autoLabel
 
 `Enum.config.autoLabel` 是一个全局配置选项，用于自动生成枚举项的标签。它允许在定义枚举时，设置 `options.labelPrefix` 选项，为所有枚举项设置一个 `label` 前缀，枚举项只需要设置基础值即可，甚至可以省略 `label` 字段（与 `key` 字段相同）。这样可以减少重复代码，提高枚举定义的简洁性。
 

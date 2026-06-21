@@ -1,4 +1,4 @@
-import type { EnumItemClass, IEnum } from '@enum-plus';
+import type { EnumItemInterface, IEnum } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 
 // import './extension-type';
@@ -32,7 +32,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine
           .expect(weekEnum.toMySelect?.())
           .toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
-      }
+      },
     );
     engine.test(
       'Should allow extend getters',
@@ -56,7 +56,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(all).toBeInstanceOf(Array);
         engine.expect(all.length).toBe(7);
         engine.expect(all).toEqual(weekEnum.items);
-      }
+      },
     );
     engine.test(
       'Should allow clearing global extension',
@@ -72,7 +72,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum }) => {
         engine.expect(weekEnum.isWeekend).toBeUndefined();
-      }
+      },
     );
     engine.test(
       'Should allow extends for objects only',
@@ -104,7 +104,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
             Enum.extends(true);
           })
           .toThrow();
-      }
+      },
     );
 
     engine.test(
@@ -139,7 +139,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine
           .expect(weekEnumSecond.toMySelect?.())
           .toEqual(weekEnumSecond.items.map((item) => ({ value: item.value, title: item.label })));
-      }
+      },
     );
   });
 };
@@ -149,8 +149,9 @@ declare module 'enum-plus/extension' {
   interface EnumExtension<T, K, V> {
     isWeekend(value: number): boolean;
     toMySelect: () => { value: V; title: string }[];
-    // @ts-expect-error: because want to declare new getter
-    all: EnumItemClass<T[K], K, V>[];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    all: EnumItemInterface<T[K], K, V>[];
   }
 }
 

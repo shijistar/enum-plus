@@ -1,6 +1,6 @@
 import type { EnumExtension } from 'enum-plus/extension';
 import type { EnumInitOptions } from './enum';
-import type { EnumItemClass, EnumItemOptions } from './enum-item';
+import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
 import { EnumItemsArray } from './enum-items';
 import { localizer } from './global-config';
@@ -43,30 +43,23 @@ export class EnumCollectionClass<
 {
   private readonly __options__: EnumInitOptions<T, K, V, LP> | undefined;
   // used for e2e serialization
-  private readonly __items__!: EnumItemsArray<T, K, V, LP>;
+  private readonly _ds!: EnumItemsArray<T, K, V, LP>;
 
   constructor(init: T = {} as T, options?: EnumInitOptions<T, K, V, LP>) {
     super();
+
+    const define = Object.defineProperty;
+    const freeze = Object.freeze;
     // Do not use class field here, because don't want print this field in Node.js
-    Object.defineProperty(this, '__options__', {
-      value: options,
-      writable: false,
-      enumerable: false,
-      configurable: false,
-    });
+    define(this, '__options__', { value: options });
 
     const keys = Object.keys(init) as K[];
     // Generate enum items array
     const items = new EnumItemsArray<T, K, V, LP>(init, options);
-    Object.freeze(items);
+    freeze(items);
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[keys.includes('items') ? ITEMS : 'items'] = items;
-    Object.defineProperty(this, '__items__', {
-      value: items,
-      writable: false,
-      enumerable: false,
-      configurable: false,
-    });
+    define(this, '_ds', { value: items });
 
     // @ts-expect-error: because use KEYS to avoid naming conflicts in case of 'keys' field name is taken
     this[keys.includes('keys') ? KEYS : 'keys'] = items[KEYS];
@@ -87,15 +80,14 @@ export class EnumCollectionClass<
     });
 
     // @ts-expect-error: because use LABELS to avoid naming conflicts in case of 'labels' field name is taken
-    Object.defineProperty(this, keys.includes('labels') ? LABELS : 'labels', {
-      enumerable: true,
-      configurable: false,
+    define(this, keys.includes('labels') ? LABELS : 'labels', {
       get: function (this: EnumCollectionClass<T, K, V, LP>) {
-        return this.__items__.labels;
+        return this._ds.labels;
       },
+      enumerable: true,
     });
 
-    Object.freeze(this);
+    freeze(this);
   }
   /**
    * - **EN:** A boolean value indicates that this is an enum collection instance.
@@ -114,7 +106,7 @@ export class EnumCollectionClass<
     return this.__options__;
   }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
-    return instance instanceof this.__items__;
+    return instance instanceof this._ds;
   }
   /**
    * The enum collection name, supports localization. Note that it usually returns a string, but if
@@ -127,22 +119,27 @@ export class EnumCollectionClass<
    *   set.
    */
   get name(): string | undefined {
-    if (typeof this.__options__?.name === 'function') {
-      return this.__options__.name(undefined!);
+    const opts = this.__options__;
+    if (typeof opts?.name === 'function') {
+      return opts.name(undefined!);
     }
-    const localize = this.__options__?.localize ?? localizer.localize;
+    const localize = opts?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
-      return localize(this.__options__?.name);
+      return localize(opts?.name);
     }
-    return this.__options__?.name;
+    return opts?.name;
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {
-    return this.__items__.label(keyOrValue);
+    return this._ds.label(keyOrValue);
   }
 
   key<IV extends V | NonNullable<PrimitiveOf<V>> | undefined>(value?: IV) {
-    return this.__items__.key(value);
+    return this._ds.key(value);
+  }
+
+  item<KV extends K | V | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {
+    return this._ds.item(keyOrValue);
   }
 
   raw(): T;
@@ -151,66 +148,66 @@ export class EnumCollectionClass<
   ): IK extends K ? T[IK] : IK extends V ? T[FindEnumKeyByValue<T, IK>] : T[K] | undefined;
   raw<IK extends EnumValue>(value?: IK | unknown): T | T[K] | T[FindEnumKeyByValue<T, IK>] | undefined {
     if (value != null) {
-      return this.__items__.raw(value as keyof T | EnumValue) as T[K];
+      return this._ds.raw(value as keyof T | EnumValue) as T[K];
     } else {
-      return this.__items__.raw();
+      return this._ds.raw();
     }
   }
 
   has<KV>(keyOrValue?: KV): keyOrValue is Extract<KV, K | V> extends never ? typeof keyOrValue : Extract<KV, K | V> {
-    return this.__items__.has(keyOrValue);
+    return this._ds.has(keyOrValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   findBy(...rest: Parameters<EnumItemsArray<T, K, V, LP>['findBy']>): any {
-    return this.__items__.findBy(...rest);
+    return this._ds.findBy(...rest);
   }
 
   toList(): ListItem<V, 'value', 'label'>[];
   toList<
-    FOV extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
-    FOL extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
+    FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+    FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
   >(
     config: ToListConfig<T, FOV, FOL, K, V, never, LP>,
   ): ListItem<
     V,
-    FOV extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOV,
-    FOL extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOL
+    FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL
   >[];
   toList<
-    FOV extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
-    FOL extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
+    FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+    FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
   >(
     config?: ToListConfig<T, FOV, FOL, K, V, never, LP>,
   ):
     | ListItem<V, 'value', 'label'>[]
     | ListItem<
         V,
-        FOV extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOV,
-        FOL extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOL
+        FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL
       >[] {
-    return this.__items__.toList(config as ToListConfig<T, FOV, FOL, K, V, never, LP>);
+    return this._ds.toList(config as ToListConfig<T, FOV, FOL, K, V, never, LP>);
   }
 
   toMap(): MapResult<T, 'value', 'label', K, V, LP>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V, LP>) => R),
-    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V, LP>) => R),
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T[K], K, V, LP>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemInterface<T[K], K, V, LP>) => R),
   >(config: ToMapConfig<T, KS, VS, K, V, LP>): MapResult<T, KS, VS, K, V, LP>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemClass<T[K], K, V, LP>) => R),
-    VS extends EnumItemFields | (<R>(item: EnumItemClass<T[K], K, V, LP>) => R),
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T[K], K, V, LP>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemInterface<T[K], K, V, LP>) => R),
   >(config?: ToMapConfig<T, KS, VS, K, V, LP>): MapResult<T, KS, VS, K, V, LP> {
-    return this.__items__.toMap(config as ToMapConfig<T, KS, VS, K, V, LP>);
+    return this._ds.toMap(config as ToMapConfig<T, KS, VS, K, V, LP>);
   }
 
   get valueType() {
-    return this.__items__.valueType;
+    return this._ds.valueType;
   }
   get keyType() {
-    return this.__items__.keyType;
+    return this._ds.keyType;
   }
   get rawType() {
-    return this.__items__.rawType;
+    return this._ds.rawType;
   }
 }

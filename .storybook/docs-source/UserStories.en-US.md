@@ -31,6 +31,21 @@ if (WeekEnum.has(value)) {
 
 ---
 
+## 💡 Get the Complete Enum Item
+
+```js
+const item = WeekEnum.item(value);
+
+if (item) {
+  item.key; // Monday
+  item.value; // 1
+  item.label; // Monday
+  item.raw; // Original enum item config
+}
+```
+
+---
+
 ## 💡 Check for Enum Objects
 
 ```ts
@@ -79,6 +94,21 @@ Internationalization support. Set the `label` field to a localization key, so th
 WeekEnum.label(1); // Monday or 星期一, depending on the current locale
 WeekEnum.named.Monday.label; // Monday or 星期一, depending on the current locale
 WeekEnum.name; // Week or 周, depending on the current locale
+```
+
+Custom metadata can be localized as well. Use `autoLocalizeMeta` when fields such as abbreviations, descriptions, or hints are also localization keys.
+
+```js
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: 'week.sunday', abbr: 'week.abbr.sun' },
+    Monday: { value: 1, label: 'week.monday', abbr: 'week.abbr.mon' },
+  },
+  { autoLocalizeMeta: ['abbr'] },
+);
+
+WeekEnum.items[0].abbr; // Sun
+WeekEnum.named.Sunday.abbr; // Sun
 ```
 
 ---
@@ -305,36 +335,6 @@ We can see that both the enumeration value and the description of the enumeratio
     }
   </nz-select>
   ```
-
----
-
-## 💡 Enum Configuration Options
-
-You can pass in an optional configuration object when creating an enum to customize its behavior and features. Here are some commonly used configuration options:
-
-```ts
-interface EnumOptions {
-  /** The name of the enum type, which can be a plain string or a localization key */
-  name?: string;
-  /**
-   * Set a label prefix for all enum items. For more details, please refer to the [Global
-   * Configuration] section
-   */
-  labelPrefix?: string;
-  /**
-   * The rule for automatically generating enum item labels. For more details, please refer to the
-   * [Global Configuration] section
-   */
-  autoLabel?: boolean | ((params: { item: EnumItemClass; labelPrefix?: string }) => string);
-  /**
-   * Enum instance-level localization function, which overrides the Enum.localize global
-   * configuration function
-   */
-  localize?: (localeKey: string) => string;
-}
-```
-
-For more configuration options, please refer to the next section.
 
 ---
 

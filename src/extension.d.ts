@@ -25,10 +25,13 @@ declare module 'enum-plus/extension' {
      * **CN:** 枚举本地化文本的Key值，可以用来增强编辑器的智能提示
      */
     LocaleKeys: // eslint-disable-next-line @typescript-eslint/ban-types
-    | (string & {})
+      | (string & {})
       | ((
           // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-          item: import('./enum-item').EnumItemClass<import('./types').StandardEnumItemInit<import('./types').EnumValue>>
+          item: import('./enum-item').EnumItemInterface<
+            // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+            import('./types').StandardEnumItemInit<import('./types').EnumValue>
+          >,
         ) => string | undefined);
   }
 }

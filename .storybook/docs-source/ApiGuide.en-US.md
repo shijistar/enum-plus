@@ -97,6 +97,46 @@ WeekEnum.has(9); // false
 WeekEnum.has('Birthday'); // false
 ```
 
+## Ⓜ️ label
+
+`label(keyOrValue?: string | number): string | undefined`
+
+Gets the display name of an enum item according to its value or key. If [localization](?path=/docs/localization--docs#localization) is enabled, the localized text will be returned.
+
+```js
+WeekEnum.label(1); // Monday
+WeekEnum.label('Monday'); // Monday, this is label, not key
+```
+
+## Ⓜ️ item
+
+`item(keyOrValue?: string | number): EnumItemClass | undefined`
+
+Gets the complete enum item object by its value or key. It returns `undefined` if the enum item does not exist.
+
+Use `item()` when you need more than the display label, such as `key`, `value`, `label`, or custom metadata fields.
+
+```js
+const WeekEnum = Enum({
+  Sunday: { value: 0, label: 'Sunday', weekend: true },
+  Monday: { value: 1, label: 'Monday', weekend: false },
+});
+
+WeekEnum.item(1); // { key: 'Monday', value: 1, label: 'Monday', weekend: false }
+WeekEnum.item('Sunday'); // { key: 'Sunday', value: 0, label: 'Sunday', weekend: true }
+WeekEnum.item(9); // undefined
+```
+
+## Ⓜ️ key
+
+`key(value?: string | number): string | undefined`
+
+Find the key of an enum item by its value. It's also known as [reverse mapping](https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings). If not found, `undefined` is returned.
+
+```js
+WeekEnum.key(1); // Monday (this is key, not label)
+```
+
 ## Ⓜ️ findBy
 
 `findBy(field: string, value: any): EnumItemClass | undefined`
@@ -112,27 +152,6 @@ ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: 'Red', hex
 ```
 
 > If you need to get the meta fields of a known enum item, it is recommended to use the `named` and `raw` property, for example: `ColorEnum.named.Red.raw.hex`.
-
-## Ⓜ️ label
-
-`label(keyOrValue?: string | number): string | undefined`
-
-Gets the display name of an enum item according to its value or key. If [localization](?path=/docs/localization--docs#localization) is enabled, the localized text will be returned.
-
-```js
-WeekEnum.label(1); // Monday
-WeekEnum.label('Monday'); // Monday, this is label, not key
-```
-
-## Ⓜ️ key
-
-`key(value?: string | number): string | undefined`
-
-Find the key of an enum item by its value. It's also known as [reverse mapping](https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings). If not found, `undefined` is returned.
-
-```js
-WeekEnum.key(1); // Monday (this is key, not label)
-```
 
 ## Ⓜ️ raw
 
@@ -281,6 +300,136 @@ type WeekRaw = typeof WeekEnum.rawType;
 ```
 
 > Note: This is a TypeScript type and cannot be called at runtime. Calling it at runtime will throw an error.
+
+---
+
+# Constructor Options
+
+You can pass in an optional configuration object when creating an enum to customize its behavior and features.
+
+```ts
+const WeekEnum = Enum(enumInit, {
+  // Constructor options...
+});
+```
+
+## ⚙️ name
+
+`string | (() => string)`
+
+Sets the display name of the enum collection. It can be a plain string, a localization key, or a function that returns the display name.
+
+```js
+const WeekEnum = Enum(enumInit, {
+  name: 'week.name',
+});
+
+WeekEnum.name; // Week
+```
+
+## ⚙️ localize
+
+`(localeKey: string) => string | undefined`
+
+Sets an enum instance-level localization function. It overrides the global `Enum.localize` function for the current enum instance.
+
+```js
+const WeekEnum = Enum(enumInit, {
+  localize: (key) => i18n.t(key),
+});
+```
+
+## ⚙️ autoLabel
+
+`boolean | ((params: { item: EnumItemClass; labelPrefix?: any }) => string)`
+
+Controls how enum item labels are generated.
+
+- `true` - Default. Generate labels from `labelPrefix` plus each item label or key.
+- `false` - Disable automatic label generation and use the label defined on each enum item.
+- `function` - Generate labels with custom logic.
+
+```js
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: 'sunday' }, // equivalent to 'week.sunday'
+    Monday: { value: 1, label: 'monday' }, // equivalent to 'week.monday'
+  },
+  {
+    autoLabel: true,
+    labelPrefix: 'week.',
+  },
+);
+```
+
+## ⚙️ labelPrefix
+
+`string | any`
+
+Sets a prefix used by `autoLabel` when generating enum item labels. In the default `autoLabel: true` mode, `labelPrefix` is combined with each item label or key.
+
+## ⚙️ autoLocalizeMeta
+
+`boolean | string[]`
+
+Controls whether custom meta fields should be localized with the same localization function used by `label` and `name`.
+
+- `false` - Default. Do not localize meta fields.
+- `true` - Localize all custom meta fields.
+- `string[]` - Localize only the specified meta fields.
+
+```js
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: 'week.sunday', abbr: 'week.abbr.sun', color: 'red' },
+    Monday: { value: 1, label: 'week.monday', abbr: 'week.abbr.mon', color: 'blue' },
+  },
+  {
+    autoLocalizeMeta: ['abbr'],
+  },
+);
+
+WeekEnum.items[0].abbr; // Sun
+WeekEnum.named.Sunday.abbr; // Sun
+```
+
+## ⚙️ getValue
+
+`string | ((item: any) => string | number)`
+
+This option is only effective when initializing an enum from an array. Sets the field name that stores the enum value, or a function that returns it. This option is only effective when initializing an enum from an array.
+
+```js
+const PetEnum = Enum(pets, {
+  getValue: 'id',
+});
+```
+
+## ⚙️ getLabel
+
+`string | ((item: any) => string)`
+
+This option is only effective when initializing an enum from an array. Sets the field name that stores the enum label, or a function that returns it. This option is only effective when initializing an enum from an array.
+
+```js
+const PetEnum = Enum(pets, {
+  getLabel: 'name',
+});
+```
+
+## ⚙️ getKey
+
+`string | ((item: any) => string)`
+
+This option is only effective when initializing an enum from an array. Sets the field name that stores the enum key, or a function that returns it. This option is only effective when initializing an enum from an array.
+
+```js
+const PetEnum = Enum(pets, {
+  getKey: 'code',
+});
+```
+
+---
 
 # Static Methods
 

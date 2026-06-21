@@ -95,7 +95,7 @@ export type ListItem<
 export type EnumValue = keyof any | bigint | boolean | Date | RegExp;
 
 /** Enum key collection */
-export type EnumKey<T> = keyof T;
+export type EnumKey<T> = Exclude<keyof T, symbol>;
 
 /** Infer the value type from the initialization object of the enumeration item */
 export type ValueTypeFromSingleInit<T, Key = string, Fallback = Key> = T extends EnumValue // literal类型
@@ -205,7 +205,8 @@ export type FindKeyByMeta<T, MK extends keyof T[keyof T], MV> = {
 }[keyof T];
 
 export type FindValueByMeta<T, MK extends keyof T[keyof T], MV> = {
-  [K in keyof T]: T[K] extends Record<MK, MV> ? T[K][MK] : never;
+  // @ts-expect-error: because K includes string
+  [K in keyof T]: T[K] extends Record<MK, MV> ? FindValueByKey<T, K> : never;
 }[keyof T];
 
 export type PrimitiveOf<T> = T extends string

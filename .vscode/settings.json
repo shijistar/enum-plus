@@ -33,5 +33,5 @@
     "**/node_modules": true
   },
   "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "commentTranslate.hover.enabled": false
+  "commentTranslate.source": "Bing"
 }

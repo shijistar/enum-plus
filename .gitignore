@@ -18,7 +18,7 @@ run
 .DS_Store
 .cache
 .copilot-tools.log
-.ai-auto-collection.state
+.ai-auto-collection.state.json
 .eslintcache
 storybook-static
 debug-storybook.log

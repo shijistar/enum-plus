@@ -9,6 +9,19 @@ import type {
 } from './types';
 import { IS_ENUM_ITEM } from './utils';
 
+export type EnumItemInterface<
+  T extends EnumItemInit<V>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  K extends EnumKey<any> = string,
+  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  LP = any,
+> = EnumItemClass<T, K, V, LP> &
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  {
+    [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
+  };
+
 /**
  * - **EN:** Represents a single item in an enumeration collection.
  * - **CN:** 表示枚举集合中的单个枚举项
@@ -27,10 +40,9 @@ export class EnumItemClass<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LP = any,
 > {
-  private _options: EnumItemOptions<T, K, V, LP> | undefined;
-  private _label: EnumItemLabel | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _localize: (content: string | undefined) => any;
+  private _options?: EnumItemOptions<any, any, any, any>;
+  private _label: EnumItemLabel | undefined;
 
   /**
    * - **EN:** Creates an instance of EnumItemClass.
@@ -48,82 +60,56 @@ export class EnumItemClass<
     this.label = label as string;
     this.raw = raw;
 
-    // Should use _label instead of label closure, to make sure it can be serialized correctly
-    Object.defineProperty(this, '_label', {
-      value: label,
-      writable: false,
-      enumerable: false,
-      configurable: false,
-    });
-    // Use defineProperties instead of direct field, to:
-    // 1. Make fields readonly
-    // 2. Preserve getters after serialized/deserialized
-    Object.defineProperties(this, {
-      value: {
-        value,
-        writable: false,
-        enumerable: true,
-        configurable: false,
-      },
-      label: {
-        get: function (this: EnumItemClass<T, K, V, LP>) {
-          const labelPrefix = this._options?.labelPrefix;
-          const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
-          let localeKey = this._label;
-          if (typeof localeKey === 'function') {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            return localeKey(this as any);
-          }
-          if (autoLabel && labelPrefix != null) {
-            if (typeof autoLabel === 'function') {
-              localeKey = autoLabel({
-                item: this,
-                labelPrefix: labelPrefix as LP,
-              });
-            } else {
-              localeKey = `${labelPrefix as string}${this._label}`;
-            }
-          }
-          return this._localize(localeKey) ?? localeKey;
-        },
-        enumerable: true,
-        configurable: false,
-      },
-      key: {
-        value: key,
-        writable: false,
-        enumerable: true,
-        configurable: false,
-      },
-      raw: {
-        value: raw,
-        writable: false,
-        enumerable: true,
-        configurable: false,
-      },
-    });
-    // Do not use class field here, because don't want print this field in Node.js
-    Object.defineProperty(this, '_options', {
-      value: options,
-      writable: false,
-      enumerable: false,
-      configurable: false,
-    });
-    this._localize = undefined!;
-    Object.defineProperty(this, '_localize', {
-      value: function (this: EnumItemClass<T, K, V, LP>, content: string | undefined) {
-        const localize = this._options?.localize ?? localizer.localize;
-        if (typeof localize === 'function') {
-          return localize(content);
-        }
-        return content;
-      },
-      writable: false,
-      enumerable: false,
-      configurable: false,
+    const defines = Object.defineProperties;
+    const freeze = Object.freeze;
+    defines(this, {
+      _label: { value: label },
+      _options: { value: options },
     });
 
-    Object.freeze(this);
+    // Determines whether a property should be auto localized based on the autoLocalizeMeta option
+    const autoLocalizePropMap: PropertyDescriptorMap = {};
+    if (typeof raw === 'object') {
+      const autoLocalizeMeta = options?.autoLocalizeMeta;
+      Object.keys(raw).forEach((metaKey) => {
+        if (!['value', 'label'].includes(metaKey)) {
+          if (
+            autoLocalizeMeta === true ||
+            (Array.isArray(autoLocalizeMeta) && autoLocalizeMeta.includes(metaKey as never))
+          ) {
+            const descriptor = {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              get: function get(this: EnumItemClass<T, K, V, LP>): any {
+                // @ts-expect-error: because _metaKey is dynamically added to the getter function
+                const { _metaKey } = get;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                return this._localizeResource((this.raw as any)[_metaKey]);
+              },
+              enumerable: true,
+            };
+            autoLocalizePropMap[metaKey] = descriptor;
+            // @ts-expect-error: because _metaKey is dynamically added to the getter function
+            descriptor.get._metaKey = metaKey;
+          } else {
+            this[metaKey as keyof this] = (raw as object)[metaKey as never];
+          }
+        }
+      });
+    }
+
+    // Define getters to localize i18n key into localized text
+    defines(this, {
+      ...autoLocalizePropMap,
+      label: {
+        get: function (this: EnumItemClass<T, K, V, LP>) {
+          return this._localizeResource(this._label);
+        },
+        enumerable: true,
+      },
+    });
+
+    freeze(this);
+    freeze(EnumItemClass.prototype);
   }
 
   /**
@@ -232,6 +218,34 @@ export class EnumItemClass<
   valueOf() {
     return this.value;
   }
+
+  private _localize(content: string | undefined) {
+    const localize = this._options?.localize ?? localizer.localize;
+    if (typeof localize === 'function') {
+      return localize(content);
+    }
+    return content;
+  }
+  private _localizeResource(resource: EnumItemLabel | undefined) {
+    const labelPrefix = this._options?.labelPrefix;
+    const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
+    let localeKey = resource;
+    if (typeof localeKey === 'function') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return localeKey(this as any);
+    }
+    if (autoLabel && labelPrefix != null) {
+      if (typeof autoLabel === 'function') {
+        localeKey = autoLabel({
+          item: this,
+          labelPrefix: labelPrefix as LP,
+        });
+      } else {
+        localeKey = `${labelPrefix as string}${resource}`;
+      }
+    }
+    return this._localize(localeKey) ?? localeKey;
+  }
 }
 
 export interface EnumItemOptions<
@@ -282,4 +296,19 @@ export interface EnumItemOptions<
    * > 此选项与 `Enum.config.autoLabel` 作用相同，但优先级高于全局配置，仅对当前枚举实例生效。
    */
   autoLabel?: boolean | ((options: { item: EnumItemClass<T, K, V, LP>; labelPrefix: LP }) => string);
+
+  /**
+   * - **EN:** Set the array of meta information fields to be automatically localized, similar to the
+   *   handling of `label`.
+   *
+   *   - `true` - Automatically localize all meta information fields.
+   *   - `false` - The default value. Do not automatically localize meta information fields.
+   *   - `string[]` - Specify the meta field names to be automatically localized.
+   * - **CN:** 设置自动本地化的元信息字段数组，类似`label`的处理方式。
+   *
+   *   - `true` - 自动本地化所有元信息字段。
+   *   - `false` - 默认值，不自动本地化元信息字段。
+   *   - `string[]` - 指定要自动本地化的元信息字段名。
+   */
+  autoLocalizeMeta?: boolean | Exclude<keyof T, 'key' | 'value' | 'label'>[];
 }

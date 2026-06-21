@@ -31,6 +31,21 @@ if (WeekEnum.has(value)) {
 
 ---
 
+## 💡 获取完整的枚举项对象
+
+```js
+const item = WeekEnum.item(value);
+
+if (item) {
+  item.key; // Monday
+  item.value; // 1
+  item.label; // 星期一
+  item.raw; // 原始枚举项配置
+}
+```
+
+---
+
 ## 💡 检查是否一个枚举对象
 
 ```ts
@@ -79,6 +94,21 @@ const App = () => {
 WeekEnum.label(1); // Monday 或 星期一，取决于当前语言环境
 WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环境
 WeekEnum.name; // Week 或 周，取决于当前语言环境
+```
+
+自定义元数据字段也可以本地化。当缩写、描述、提示文案等字段也是本地化键值时，可以使用 `autoLocalizeMeta`。
+
+```js
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0, label: 'week.sunday', abbr: 'week.abbr.sun' },
+    Monday: { value: 1, label: 'week.monday', abbr: 'week.abbr.mon' },
+  },
+  { autoLocalizeMeta: ['abbr'] },
+);
+
+WeekEnum.items[0].abbr; // 周日
+WeekEnum.named.Sunday.abbr; // 周日
 ```
 
 ---
@@ -317,12 +347,14 @@ WeekEnum.Monday; // 将光标悬浮在 Monday 上
 interface EnumOptions {
   /** 枚举类型名称，可以是一个普通字符串，或者一个本地化键值 */
   name?: string;
+  /** 枚举实例级别的本地化函数，会覆盖 Enum.localize 全局配置函数 */
+  localize?: (localeKey: string) => string;
   /** 为所有枚举项设置一个标签前缀，更多详情请参考 [全局配置] 章节 */
   labelPrefix?: string;
   /** 自动生成枚举项标签的规则，更多详情请参考 [全局配置] 章节 */
   autoLabel?: boolean | ((params: { item: EnumItemClass; labelPrefix?: string }) => string);
-  /** 枚举实例级别的本地化函数，会覆盖 Enum.localize 全局配置函数 */
-  localize?: (localeKey: string) => string;
+  /** 是否自动本地化枚举元数据，默认为 false。可以是布尔值，也可以是需要本地化的字段数组 */
+  autoLocalizeMeta?: boolean | string[];
 }
 ```
 

@@ -1,3 +1,5 @@
+// import { Enum } from './enum';
+
 export type {
   EnumInit,
   EnumItemInit,
@@ -12,7 +14,7 @@ export type {
 } from './types';
 export type { LocalizeInterface } from './localize-interface';
 export type { ToListConfig, IEnumItems } from './enum-items';
-export type { EnumItemClass, EnumItemOptions } from './enum-item';
+export type { EnumItemInterface, EnumItemOptions } from './enum-item';
 export type { IEnum, NativeEnumMembers, AnyEnum, GenericAnyEnum, EnumInterface, EnumInitOptions } from './enum';
 
 export { version } from './version';
@@ -31,3 +33,13 @@ export {
 } from './utils';
 export type { PluginFunc } from './enum';
 export { Enum } from './enum';
+
+// Enum(
+//   {
+//     Monday: { value: 1, abbr: 'Mon', x: 1 },
+//     Tuesday: { value: 2, abbr: 'Tue', x: 2 },
+//   },
+//   {
+//     autoLocalizeMeta: ['abbr'],
+//   },
+// ).meta.abbr;

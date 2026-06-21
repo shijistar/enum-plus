@@ -1,52 +1,73 @@
-import type { defaultLocalize as defaultLocalizeType, EnumItemClass, Enum as EnumType } from '@enum-plus';
-import type { EnumValue, StandardEnumItemInit } from '@enum-plus/types';
+import type { defaultLocalize as defaultLocalizeType, EnumItemInterface, Enum as EnumType } from '../../src';
+import type { EnumValue, StandardEnumItemInit } from '../../src/types';
 
 export const localeEN = {
   'weekDay.name': 'Week Days',
-  Sunday: 'Sunday',
-  Monday: 'Monday',
-  Tuesday: 'Tuesday',
-  Wednesday: 'Wednesday',
-  Thursday: 'Thursday',
-  Friday: 'Friday',
-  Saturday: 'Saturday',
-  Yes: 'Yes',
-  No: 'No',
-  FirstDay: 'First Day',
-  LastDay: 'Last Day',
+  'weekday.Sunday': 'Sunday',
+  'weekday.Monday': 'Monday',
+  'weekday.Tuesday': 'Tuesday',
+  'weekday.Wednesday': 'Wednesday',
+  'weekday.Thursday': 'Thursday',
+  'weekday.Friday': 'Friday',
+  'weekday.Saturday': 'Saturday',
+  'weekday.SundayAbbr': 'Sun',
+  'weekday.MondayAbbr': 'Mon',
+  'weekday.TuesdayAbbr': 'Tue',
+  'weekday.WednesdayAbbr': 'Wed',
+  'weekday.ThursdayAbbr': 'Thu',
+  'weekday.FridayAbbr': 'Fri',
+  'weekday.SaturdayAbbr': 'Sat',
+  'boolean.Yes': 'Yes',
+  'boolean.No': 'No',
+  'date.FirstDay': 'First Day',
+  'date.LastDay': 'Last Day',
 } as const;
 export const localeCN = {
   'weekDay.name': '星期',
-  Sunday: '星期日',
-  Monday: '星期一',
-  Tuesday: '星期二',
-  Wednesday: '星期三',
-  Thursday: '星期四',
-  Friday: '星期五',
-  Saturday: '星期六',
-  Yes: '是',
-  No: '否',
-  FirstDay: '第一天',
-  LastDay: '最后一天',
+  'weekday.Sunday': '星期日',
+  'weekday.Monday': '星期一',
+  'weekday.Tuesday': '星期二',
+  'weekday.Wednesday': '星期三',
+  'weekday.Thursday': '星期四',
+  'weekday.Friday': '星期五',
+  'weekday.Saturday': '星期六',
+  'weekday.SundayAbbr': '日',
+  'weekday.MondayAbbr': '一',
+  'weekday.TuesdayAbbr': '二',
+  'weekday.WednesdayAbbr': '三',
+  'weekday.ThursdayAbbr': '四',
+  'weekday.FridayAbbr': '五',
+  'weekday.SaturdayAbbr': '六',
+  'boolean.Yes': '是',
+  'boolean.No': '否',
+  'date.FirstDay': '第一天',
+  'date.LastDay': '最后一天',
 } as const;
 export const noLocale = {
   'weekDay.name': 'weekDay.name',
-  Sunday: 'weekday.Sunday',
-  Monday: 'weekday.Monday',
-  Tuesday: 'weekday.Tuesday',
-  Wednesday: 'weekday.Wednesday',
-  Thursday: 'weekday.Thursday',
-  Friday: 'weekday.Friday',
-  Saturday: 'weekday.Saturday',
-  Yes: 'boolean.Yes',
-  No: 'boolean.No',
-  FirstDay: 'date.FirstDay',
-  LastDay: 'date.LastDay',
+  'weekday.Sunday': 'weekday.Sunday',
+  'weekday.Monday': 'weekday.Monday',
+  'weekday.Tuesday': 'weekday.Tuesday',
+  'weekday.Wednesday': 'weekday.Wednesday',
+  'weekday.Thursday': 'weekday.Thursday',
+  'weekday.Friday': 'weekday.Friday',
+  'weekday.Saturday': 'weekday.Saturday',
+  'weekday.SundayAbbr': 'weekday.SundayAbbr',
+  'weekday.MondayAbbr': 'weekday.MondayAbbr',
+  'weekday.TuesdayAbbr': 'weekday.TuesdayAbbr',
+  'weekday.WednesdayAbbr': 'weekday.WednesdayAbbr',
+  'weekday.ThursdayAbbr': 'weekday.ThursdayAbbr',
+  'weekday.FridayAbbr': 'weekday.FridayAbbr',
+  'weekday.SaturdayAbbr': 'weekday.SaturdayAbbr',
+  'boolean.Yes': 'boolean.Yes',
+  'boolean.No': 'boolean.No',
+  'date.FirstDay': 'date.FirstDay',
+  'date.LastDay': 'date.LastDay',
 } as const;
 
 export let locales: typeof localeEN | typeof localeCN | typeof noLocale = noLocale;
 
-export let lang: LangType = undefined;
+export let lang = undefined as LangType | undefined;
 export type LangType = 'en-US' | 'zh-CN' | undefined;
 
 export function getLocales(language: LangType) {
@@ -62,10 +83,13 @@ export function setLang(
   value: LangType | undefined,
   Enum: typeof EnumType,
   getLocales: getLocalesType,
-  defaultLocalize: typeof defaultLocalizeType
+  defaultLocalize: typeof defaultLocalizeType,
 ) {
   const { genSillyLocalizer } = setLang;
   lang = value;
+  getTranslator.lang = lang;
+  resourceLocalizer.lang = lang;
+  localizeConfigData.lang = lang;
   locales = getLocales(value);
   Enum.localize = value ? genSillyLocalizer(value, getLocales) : defaultLocalize;
 }
@@ -76,24 +100,26 @@ export const clearLang = (Enum: typeof EnumType) => {
   locales = noLocale;
   Enum.localize = undefined!;
 };
+const labelTranslator = getTranslator('label');
+const abbrTranslator = getTranslator('abbr');
 
 export const StandardWeekConfig = {
-  Sunday: { value: 0, label: noLocale.Sunday, status: 'error' },
-  Monday: { value: 1, label: noLocale.Monday, status: 'warning' },
-  Tuesday: { value: 2, label: noLocale.Tuesday, status: 'warning' },
-  Wednesday: { value: 3, label: noLocale.Wednesday, status: 'success' },
-  Thursday: { value: 4, label: noLocale.Thursday, status: 'success' },
-  Friday: { value: 5, label: noLocale.Friday, status: 'success' },
-  Saturday: { value: 6, label: noLocale.Saturday, status: 'error' },
+  Sunday: { value: 0, label: 'weekday.Sunday', status: 'error', abbr: 'weekday.SundayAbbr' },
+  Monday: { value: 1, label: 'weekday.Monday', status: 'warning', abbr: 'weekday.MondayAbbr' },
+  Tuesday: { value: 2, label: 'weekday.Tuesday', status: 'warning', abbr: 'weekday.TuesdayAbbr' },
+  Wednesday: { value: 3, label: 'weekday.Wednesday', status: 'success', abbr: 'weekday.WednesdayAbbr' },
+  Thursday: { value: 4, label: 'weekday.Thursday', status: 'success', abbr: 'weekday.ThursdayAbbr' },
+  Friday: { value: 5, label: 'weekday.Friday', status: 'success', abbr: 'weekday.FridayAbbr' },
+  Saturday: { value: 6, label: 'weekday.Saturday', status: 'error', abbr: 'weekday.SaturdayAbbr' },
 } as const;
 export const FuncLabelStandardWeekConfig = {
-  Sunday: { value: 0, label: labelLocalizer },
-  Monday: { value: 1, label: labelLocalizer },
-  Tuesday: { value: 2, label: labelLocalizer },
-  Wednesday: { value: 3, label: labelLocalizer },
-  Thursday: { value: 4, label: labelLocalizer },
-  Friday: { value: 5, label: labelLocalizer },
-  Saturday: { value: 6, label: labelLocalizer },
+  Sunday: { value: 0, label: labelTranslator, abbr: abbrTranslator },
+  Monday: { value: 1, label: labelTranslator, abbr: abbrTranslator },
+  Tuesday: { value: 2, label: labelTranslator, abbr: abbrTranslator },
+  Wednesday: { value: 3, label: labelTranslator, abbr: abbrTranslator },
+  Thursday: { value: 4, label: labelTranslator, abbr: abbrTranslator },
+  Friday: { value: 5, label: labelTranslator, abbr: abbrTranslator },
+  Saturday: { value: 6, label: labelTranslator, abbr: abbrTranslator },
 } as const;
 export const ShortLabelStandardWeekConfig = {
   Sunday: { value: 0, label: 'Sunday' },
@@ -140,7 +166,7 @@ export const WeekNumberConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = StandardWeekConfig[key as TKey].value as never;
     return acc;
   },
-  {} as { [key in TKey]: TConfig[key]['value'] }
+  {} as { [key in TKey]: TConfig[key]['value'] },
 );
 
 export const WeekStringConfig = Object.keys(StandardWeekConfig).reduce(
@@ -148,7 +174,7 @@ export const WeekStringConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = key as never;
     return acc;
   },
-  {} as { [key in TKey]: key }
+  {} as { [key in TKey]: key },
 );
 
 export const WeekCompactConfig = Object.keys(StandardWeekConfig).reduce(
@@ -156,7 +182,7 @@ export const WeekCompactConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = undefined;
     return acc;
   },
-  {} as { [key in TKey]: undefined }
+  {} as { [key in TKey]: undefined },
 );
 
 export const WeekEmptyConfig = Object.keys(StandardWeekConfig).reduce(
@@ -165,7 +191,7 @@ export const WeekEmptyConfig = Object.keys(StandardWeekConfig).reduce(
     return acc;
   },
   // eslint-disable-next-line @typescript-eslint/ban-types
-  {} as { [key in TKey]: {} }
+  {} as { [key in TKey]: {} },
 );
 
 export const WeekValueOnlyConfig = Object.keys(StandardWeekConfig).reduce(
@@ -173,7 +199,7 @@ export const WeekValueOnlyConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = { value: StandardWeekConfig[key as TKey].value } as never;
     return acc;
   },
-  {} as { [key in TKey]: { value: TConfig[key]['value'] } }
+  {} as { [key in TKey]: { value: TConfig[key]['value'] } },
 );
 
 export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce(
@@ -181,7 +207,7 @@ export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = { label: StandardWeekConfig[key as TKey].label } as never;
     return acc;
   },
-  {} as { [key in TKey]: { label: TConfig[key]['label'] } }
+  {} as { [key in TKey]: { label: TConfig[key]['label'] } },
 );
 
 export const WeekMetaOnlyConfig = Object.keys(StandardWeekConfig).reduce(
@@ -191,62 +217,43 @@ export const WeekMetaOnlyConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = meta as never;
     return acc;
   },
-  {} as { [key in TKey]: Omit<TConfig[key], 'value' | 'label'> }
+  {} as { [key in TKey]: Omit<TConfig[key], 'value' | 'label'> },
 );
 
 export function genSillyLocalizer(language: LangType, getLocales: getLocalesType) {
   // should use function here to avoid closure. this is important for the e2e test cases.
   function sillyLocalize(
     // eslint-disable-next-line @typescript-eslint/ban-types
-    content: (typeof noLocale)[keyof typeof noLocale] | (string & {}) | undefined
+    content: (typeof noLocale)[keyof typeof noLocale] | (string & {}) | undefined,
   ): string | undefined {
     const { locales } = sillyLocalize;
-    switch (content) {
-      case 'weekDay.name':
-        return locales['weekDay.name'];
-      case 'weekday.Sunday':
-        return locales.Sunday;
-      case 'weekday.Monday':
-        return locales.Monday;
-      case 'weekday.Tuesday':
-        return locales.Tuesday;
-      case 'weekday.Wednesday':
-        return locales.Wednesday;
-      case 'weekday.Thursday':
-        return locales.Thursday;
-      case 'weekday.Friday':
-        return locales.Friday;
-      case 'weekday.Saturday':
-        return locales.Saturday;
-      case 'boolean.Yes':
-        return locales.Yes;
-      case 'boolean.No':
-        return locales.No;
-      case 'date.FirstDay':
-        return locales.FirstDay;
-      case 'date.LastDay':
-        return locales.LastDay;
-      default:
-        return content;
-    }
+    return locales[content as keyof typeof locales] ?? content;
   }
   sillyLocalize.locales = getLocales(language);
   return sillyLocalize;
 }
 
+// export function labelLocalizer
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function labelLocalizer(item: EnumItemClass<StandardEnumItemInit<EnumValue>>) {
-  const { genSillyLocalizer, getLocales, noLocale, lang } = labelLocalizer;
-  const localizer = genSillyLocalizer(lang, getLocales);
-  return localizer(noLocale[item.key as keyof typeof noLocale]);
+export function getTranslator(field: string) {
+  function translator(item: EnumItemInterface<StandardEnumItemInit<EnumValue>>) {
+    const { parent, parentField } = translator;
+    const { genSillyLocalizer, standardWeekConfig, getLocales, lang } = parent;
+    const localizer = genSillyLocalizer(lang, getLocales);
+    const rawValue =
+      standardWeekConfig[item.key as keyof typeof standardWeekConfig][
+        parentField as keyof (typeof standardWeekConfig)[keyof typeof standardWeekConfig]
+      ];
+    return localizer(rawValue as string);
+  }
+  translator.parent = getTranslator;
+  translator.parentField = field;
+  return translator;
 }
-labelLocalizer.genSillyLocalizer = genSillyLocalizer;
-labelLocalizer.getLocales = getLocales;
-labelLocalizer.noLocale = noLocale;
-labelLocalizer.lang = undefined as LangType;
-Object.defineProperty(labelLocalizer, 'lang', {
-  get: () => lang,
-});
+getTranslator.genSillyLocalizer = genSillyLocalizer;
+getTranslator.getLocales = getLocales;
+getTranslator.standardWeekConfig = StandardWeekConfig;
+getTranslator.lang = lang;
 
 export function resourceLocalizer(content: (typeof noLocale)[keyof typeof noLocale] | undefined) {
   const { genSillyLocalizer, getLocales, lang } = resourceLocalizer;
@@ -256,25 +263,22 @@ export function resourceLocalizer(content: (typeof noLocale)[keyof typeof noLoca
 resourceLocalizer.genSillyLocalizer = genSillyLocalizer;
 resourceLocalizer.getLocales = getLocales;
 resourceLocalizer.noLocale = noLocale;
-resourceLocalizer.lang = undefined as LangType;
-Object.defineProperty(resourceLocalizer, 'lang', {
-  get: () => lang,
-});
+resourceLocalizer.lang = lang;
 
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
-  locales: typeof localeEN | typeof localeCN | typeof noLocale
+  locales: typeof localeEN | typeof localeCN | typeof noLocale,
 ): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
   // eslint-disable-next-line @typescript-eslint/unified-signatures
   getLocales: getLocalesType,
-  defaultLocalize: typeof defaultLocalizeType
+  defaultLocalize: typeof defaultLocalizeType,
 ): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
   getLocales: getLocalesType | typeof localeEN | typeof localeCN | typeof noLocale,
-  defaultLocalize?: typeof defaultLocalizeType
+  defaultLocalize?: typeof defaultLocalizeType,
 ) {
   const { lang } = localizeConfigData;
   if (typeof getLocales === 'function' && defaultLocalize) {
@@ -289,7 +293,7 @@ export function localizeConfigData(
         };
         return acc;
       },
-      {} as typeof config
+      {} as typeof config,
     );
   } else {
     const locales = getLocales;
@@ -302,12 +306,9 @@ export function localizeConfigData(
         };
         return acc;
       },
-      {} as typeof config
+      {} as typeof config,
     );
   }
 }
 localizeConfigData.genSillyLocalizer = genSillyLocalizer;
-localizeConfigData.lang = undefined as LangType;
-Object.defineProperty(localizeConfigData, 'lang', {
-  get: () => lang,
-});
+localizeConfigData.lang = lang;

@@ -25,23 +25,24 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(weekEnum).not.toBeNull();
         engine.expect(weekEnum?.items?.length).toBe(7);
         engine.expect(toPlainEnums(weekEnum?.items)).toEqual(getStandardWeekData(locales));
-      }
+      },
     );
     engine.test(
       'Should be created with functional label init config',
-      ({ EnumPlus: { Enum }, WeekConfig: { FuncLabelStandardWeekConfig, locales } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { FuncLabelStandardWeekConfig, lang, locales } }) => {
         const weekEnum = Enum(FuncLabelStandardWeekConfig);
         return {
           weekEnum,
           locales,
+          lang,
         };
       },
-      ({ weekEnum, locales }) => {
+      ({ weekEnum, locales, lang }) => {
         engine.expect(weekEnum).toBeDefined();
         engine.expect(weekEnum).not.toBeNull();
         engine.expect(weekEnum?.items?.length).toBe(7);
         engine.expect(toPlainEnums(weekEnum?.items)).toEqual(getStandardWeekData(locales));
-      }
+      },
     );
 
     engine.test(
@@ -52,7 +53,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
-      }
+      },
     );
 
     engine.test(
@@ -63,7 +64,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
-      }
+      },
     );
 
     engine.test(
@@ -74,7 +75,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
-      }
+      },
     );
 
     engine.test(
@@ -88,8 +89,8 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
               acc[key] = { ...acc[key], label: undefined as unknown as string };
               return acc;
             },
-            {} as Record<string, { label: string }>
-          )
+            {} as Record<string, { label: string }>,
+          ),
         );
         return {
           weekEnum,
@@ -100,7 +101,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ weekEnum, weekWithEmptyLabel, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyNoValueHasLabel(locales));
         engine.expect(toPlainEnums(weekWithEmptyLabel.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
-      }
+      },
     );
 
     engine.test(
@@ -120,8 +121,9 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
         engine.expect(weekEnum.meta).toEqual({
           status: Object.values(StandardWeekConfig).map(({ status }) => status),
+          abbr: Object.values(StandardWeekConfig).map(({ abbr }) => abbr),
         });
-      }
+      },
     );
 
     engine.test(
@@ -134,7 +136,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ weekEnum, weekEnum2 }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
         engine.expect(toPlainEnums(weekEnum2.items)).toEqual(getWeekDataHasKeyEmptyObjectValueNoLabel());
-      }
+      },
     );
 
     engine.test(
@@ -145,7 +147,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardBooleanData(locales));
-      }
+      },
     );
 
     engine.test(
@@ -156,7 +158,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardDateData(locales));
-      }
+      },
     );
 
     engine.test(
@@ -167,7 +169,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum }) => {
         engine.expect(weekEnum.items.length).toBe(0);
-      }
+      },
     );
 
     engine.test(
@@ -178,7 +180,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ weekEnum }) => {
         engine.expect(weekEnum.items.length).toBe(0);
-      }
+      },
     );
 
     engine.test(
@@ -197,7 +199,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           .expect(toPlainEnums(regexpEnum.items))
           .toEqual([{ key: 'foo', value: /\sregexp\s/, label: 'foo' }]);
         engine.expect(toPlainEnums(dateEnum.items)).toEqual([{ key: 'foo', value: date, label: 'foo' }]);
-      }
+      },
     );
 
     engine.test(
@@ -214,7 +216,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ error }) => {
         engine.expect(error).toBeDefined();
-      }
+      },
     );
   });
 
@@ -229,7 +231,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(weekEnum).toBeDefined();
         engine.expect(weekEnum).not.toBeNull();
         engine.expect(weekEnum?.items?.length).toBe(7);
-      }
+      },
     );
 
     engine.test(
@@ -252,7 +254,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(toPlainEnums(weekWithDefaultFields.items)).toEqual(getStandardWeekData(locales));
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getStandardWeekData(locales));
         engine.expect(toPlainEnums(weekWithFieldFunctions.items)).toEqual(getStandardWeekData(locales));
-      }
+      },
     );
 
     engine.test(
@@ -273,7 +275,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ weekEnum, weekWithDefaultKey, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasValueHasLabelNoKey(locales));
         engine.expect(toPlainEnums(weekWithDefaultKey.items)).toEqual(getStandardWeekData(locales));
-      }
+      },
     );
 
     engine.test(
@@ -297,7 +299,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ weekEnum, weekWithDefaultLabel, locales }) => {
         engine.expect(toPlainEnums(weekEnum.items)).toEqual(getWeekDataHasKeyHasValueNoLabel());
         engine.expect(toPlainEnums(weekWithDefaultLabel.items)).toEqual(getStandardWeekData(locales));
-      }
+      },
     );
 
     engine.test(
@@ -325,7 +327,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
             label: undefined,
           },
         ]);
-      }
+      },
     );
 
     engine.test(
@@ -345,7 +347,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(weekEnum.raw('Saturday').status).toEqual('error');
         engine.expect(weekEnum.raw('Monday').status).toEqual('warning');
         engine.expect(weekEnum.raw('Friday').status).toEqual('success');
-      }
+      },
     );
   });
 
@@ -420,7 +422,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           { value: 9, label: 'F', key: 'F' },
           { value: 10, label: 'G', key: 'G' },
         ]);
-      }
+      },
     );
 
     engine.test(
@@ -480,7 +482,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           { value: 10, label: 'G', key: 'G' },
           { value: 'KKK', label: 'K', key: 'K' },
         ]);
-      }
+      },
     );
 
     engine.test(
@@ -501,7 +503,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(isNumberEnum).toBe(false);
         engine.expect(isStringEnum).toBe(false);
         engine.expect(isItemsEnum).toBe(false);
-      }
+      },
     );
     engine.test(
       'instanceof operator should be able to check for enum instances',
@@ -521,7 +523,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(isNumberEnum).toBe(false);
         engine.expect(isStringEnum).toBe(false);
         engine.expect(isItemsEnum).toBe(false);
-      }
+      },
     );
   });
 };

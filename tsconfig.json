@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "rootDir": ".",
-    "baseUrl": ".",
     "target": "ES2016",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",

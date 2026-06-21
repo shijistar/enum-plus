@@ -1,5 +1,4 @@
-import type { EnumItemOptions } from './enum-item';
-import { EnumItemClass } from './enum-item';
+import { EnumItemClass, type EnumItemInterface, type EnumItemOptions } from './enum-item';
 import type {
   EnumInit,
   EnumItemInit,
@@ -26,7 +25,7 @@ import { IS_ENUM_ITEMS, KEYS, VALUES } from './utils';
  *
  * @class EnumItemsArray
  *
- * @extends {EnumItemClass<T, K, V>[]}
+ * @extends {EnumItemInterface<T, K, V>[]}
  *
  * @implements {IEnumItems<T, K, V>}
  */
@@ -37,7 +36,7 @@ export class EnumItemsArray<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LP = any,
 >
-  extends Array<EnumItemClass<T[K], K, V, LP>>
+  extends Array<EnumItemInterface<T[K], K, V, LP>>
   implements IEnumItems<T, K, V, LP>
 {
   private __raw__!: T;
@@ -54,7 +53,7 @@ export class EnumItemsArray<
   readonly [VALUES]!: V[];
   readonly labels!: string[];
   readonly named!: {
-    [key in keyof T]: EnumItemClass<
+    [key in keyof T]: EnumItemInterface<
       // @ts-expect-error: because the first type parameter T is a union type, T[key] cannot satisfy each one of T.
       T[key],
       key,
@@ -75,29 +74,31 @@ export class EnumItemsArray<
    */
   constructor(raw: T, options: EnumItemOptions<T[K], K, V, LP> | undefined) {
     super();
-    // Do not use class field here, because don't want print this field in Node.js
-    Object.defineProperty(this, '__raw__', {
-      value: raw,
-      enumerable: false,
-      writable: false,
-      configurable: false,
-    });
 
+    const define = Object.defineProperty;
+    const freeze = Object.freeze;
     // Generate keys array
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
     const keys = parseKeys<T, K, V>(raw);
     const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V>(raw[key], key));
-    this[KEYS] = keys;
-    Object.freeze(keys);
+    // this[KEYS] = keys;
+    define(this, KEYS, { value: keys });
+    freeze(keys);
 
-    const items: EnumItemClass<T[K], K, V, LP>[] = [];
-    const meta = {} as { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] };
+    const items: EnumItemInterface<T[K], K, V, LP>[] = [];
+    const named = {} as Record<K, EnumItemInterface<T[K], K, V, LP>>;
+    this.named = named as unknown as typeof this.named;
+    const meta = {} as { [K in Exclude<keyof T[keyof T], 'value' | 'label'>]: T[keyof T][K][] };
     this.meta = meta as IEnumItems<T, K, V, LP>['meta'];
-    const named = {} as Record<K, EnumItemClass<T[K], K, V, LP>>;
-    this.named = named as IEnumItems<T, K, V, LP>['named'];
     keys.forEach((key, index) => {
       const { value, label } = parsed[index];
-      const item = new EnumItemClass<T[K], K, V, LP>(key, value, label, raw[key], options);
+      const item: EnumItemInterface<T[K], K, V, LP> = new EnumItemClass<T[K], K, V, LP>(
+        key,
+        value,
+        label,
+        raw[key],
+        options,
+      ) as EnumItemInterface<T[K], K, V, LP>;
       items.push(item);
       this.push(item);
       named[key] = item;
@@ -106,13 +107,12 @@ export class EnumItemsArray<
       const itemRaw = raw[key];
       if (itemRaw && typeof itemRaw === 'object') {
         Object.keys(itemRaw).forEach((k) => {
-          const metaKey = k as Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>;
-          if (metaKey !== 'key' && metaKey !== 'value' && metaKey !== 'label') {
+          const metaKey = k as Exclude<keyof T[keyof T], 'value' | 'label'>;
+          if (!['value', 'label'].includes(k)) {
             if (meta[metaKey] == null) {
               meta[metaKey] = [];
             }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const metaValue = (itemRaw as any)[metaKey];
+            const metaValue = item[k as never];
             if (metaValue != null) {
               meta[metaKey].push(metaValue);
             }
@@ -120,36 +120,65 @@ export class EnumItemsArray<
         });
       }
     });
+
+    const autoLocalizeMeta = options?.autoLocalizeMeta;
     // Freeze meta arrays
     Object.keys(meta).forEach((k) => {
-      Object.freeze(meta[k as keyof typeof meta]);
+      const autoLocalize = autoLocalizeMeta && (autoLocalizeMeta === true || autoLocalizeMeta.includes(k as never));
+      if (autoLocalize) {
+        const descriptor = {
+          get: function get(): unknown[] {
+            return (
+              // @ts-expect-error: because we attach items array to the getter function
+              Array.from(this._items)
+                // @ts-expect-error: because we attach items array to the getter function
+                .map((item: EnumItemInterface<T[K], K, V, LP>) => item[get._key as never])
+                .filter((v: unknown) => v != null)
+            );
+          },
+          enumerable: true,
+          configurable: false,
+        };
+        // @ts-expect-error: because we attach items array to the getter function
+        descriptor.get._key = k;
+        define(meta, k, descriptor);
+      } else {
+        freeze(meta[k as keyof typeof meta]);
+      }
     });
+    if (autoLocalizeMeta) {
+      define(meta, '_items', { value: this });
+    }
 
     // Generate values array
     const values = parsed.map((item) => item.value);
-    this[VALUES] = values;
+    // Do not use class field here, because don't want print this field in Node.js
+    define(this, VALUES, { value: values });
     Object.freeze(values);
 
     // Generate labels array
-    Object.defineProperty(this, 'labels', {
+    define(this, 'labels', {
       get: function (this: EnumItemsArray<T, K, V, LP>) {
         // Cannot save to static array because labels may be localized contents
         // Should not use `items` in the closure because the getter function cannot be fully serialized
         return Array.from(this).map((item) => item.label);
       },
       enumerable: true,
-      configurable: false,
     });
 
+    // Do not use class field here, because don't want print this field in Node.js
+    define(this, '__raw__', { value: raw });
     this._runtimeError = undefined!;
-    Object.defineProperty(this, '_runtimeError', {
+    define(this, '_runtimeError', {
       value: function (this: EnumItemsArray<T, K, V, LP>, name: string) {
         return `The ${name} property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the typeof operator in the ts type, for example: typeof Week.${name}`;
       },
-      writable: false,
       enumerable: false,
-      configurable: false,
     });
+
+    freeze(EnumItemsArray.prototype);
+    // Do not freeze in constructor. See the enum-collection.
+    // freeze(this);
   }
 
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
@@ -182,6 +211,31 @@ export class EnumItemsArray<
     // Find by value, then try key
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue))?.label as any;
+  }
+
+  item<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
+    keyOrValue: KV,
+  ):
+    | (undefined extends KV ? undefined : never)
+    | (KV extends undefined
+        ? undefined
+        : NonNullable<KV> extends K
+          ? // @ts-expect-error: because the type infer is not clever enough, KV here should be one of K
+            EnumItemInterface<T[NonNullable<KV>], NonNullable<KV>, FindValueByKey<T, NonNullable<KV>>>
+          : NonNullable<KV> extends V
+            ? EnumItemInterface<
+                // @ts-expect-error: because the type infer is not clever enough, KV here should be one of V
+                T[FindEnumKeyByValue<T, NonNullable<KV>>],
+                FindEnumKeyByValue<T, NonNullable<KV>>,
+                NonNullable<KV>
+              >
+            : PrimitiveOf<K> extends KV
+              ? EnumItemInterface<T[K], K, V> | undefined
+              : PrimitiveOf<V> extends KV
+                ? EnumItemInterface<T[K], K, V> | undefined
+                : undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (this.find((i) => i.value === keyOrValue) ?? this.find((i) => i.key === keyOrValue)) as any;
   }
 
   key<IV extends V | NonNullable<PrimitiveOf<V>> | undefined>(
@@ -231,20 +285,20 @@ export class EnumItemsArray<
   ): FK extends 'key'
     ? FV extends K
       ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of K
-        EnumItemClass<T[FV], FV, FindValueByKey<T, FV>>
-      : EnumItemClass<T[K], K, V, LP> | undefined
+        EnumItemInterface<T[FV], FV, FindValueByKey<T, FV>>
+      : EnumItemInterface<T[K], K, V, LP> | undefined
     : FK extends 'value'
       ? FV extends V
         ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of V
-          EnumItemClass<T[FindEnumKeyByValue<T, FV>], FindEnumKeyByValue<T, FV>, FV>
-        : EnumItemClass<T[K], K, V, LP> | undefined
+          EnumItemInterface<T[FindEnumKeyByValue<T, FV>], FindEnumKeyByValue<T, FV>, FV>
+        : EnumItemInterface<T[K], K, V, LP> | undefined
       : FK extends 'label'
-        ? EnumItemClass<T[K], K, V, LP> | undefined
+        ? EnumItemInterface<T[K], K, V, LP> | undefined
         : // @ts-expect-error: because the type infer is not clever enough, FK here should be one of keyof Raw
           FV extends T[keyof T][FK]
           ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of T[keyof T][FK]
-            EnumItemClass<T[FindKeyByMeta<T, FK, FV>], FindKeyByMeta<T, FK, FV>, FindValueByMeta<T, FK, FV>>
-          : EnumItemClass<T[K], K, V, LP> | undefined {
+            EnumItemInterface<T[FindKeyByMeta<T, FK, FV>], FindKeyByMeta<T, FK, FV>, FindValueByMeta<T, FK, FV>>
+          : EnumItemInterface<T[K], K, V, LP> | undefined {
     return this.find((item) => {
       if (field === 'key' || field === 'value') {
         return item[field as keyof typeof item] === value;
@@ -262,20 +316,20 @@ export class EnumItemsArray<
 
   toList(): ListItem<V, 'value', 'label'>[];
   toList<
-    FOV extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
-    FOL extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
+    FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+    FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
     R extends Record<string, unknown> = never,
   >(
     config: ToListConfig<T, FOV, FOL, K, V, R, LP>,
   ): ListItem<
     V,
-    FOV extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOV,
-    FOL extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOL,
+    FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL,
     R
   >[];
   toList<
-    FOV extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
-    FOL extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
+    FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+    FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
     R extends Record<string, unknown> = never,
   >(
     config?: ToListConfig<T, FOV, FOL, K, V, R, LP>,
@@ -283,8 +337,8 @@ export class EnumItemsArray<
     | ListItem<V, 'value', 'label'>[]
     | ListItem<
         V,
-        FOV extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOV,
-        FOL extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOL,
+        FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL,
         R
       >[] {
     const { valueField = 'value' as FOV, labelField = 'label' as FOL, extra } = config ?? {};
@@ -298,8 +352,8 @@ export class EnumItemsArray<
         ...extraData,
       } as ListItem<
         V,
-        FOV extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOV,
-        FOL extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOL,
+        FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL,
         R
       >;
       return listItem;
@@ -309,15 +363,15 @@ export class EnumItemsArray<
   toMap(): MapResult<T, 'value', 'label', K, V, LP>;
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    KS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+    KS extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+    VS extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
   >(config: ToMapConfig<T, KS, VS, K, V, LP>): MapResult<T, KS, VS, K, V, LP>;
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    KS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+    KS extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+    VS extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
   >(config?: ToMapConfig<T, KS, VS, K, V, LP>): MapResult<T, KS, VS, K, V, LP> {
     if (!config) {
       return this.reduce(
@@ -336,14 +390,14 @@ export class EnumItemsArray<
         if (typeof keySelector === 'function') {
           key = keySelector(cur);
         } else {
-          key = cur[keySelector as keyof EnumItemClass<T[K], K, V, LP>] as string | symbol;
+          key = cur[keySelector as keyof EnumItemInterface<T[K], K, V, LP>] as string | symbol;
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let value: any;
         if (typeof valueSelector === 'function') {
           value = valueSelector(cur);
         } else {
-          value = cur[valueSelector as keyof EnumItemClass<T[K], K, V, LP>] as unknown;
+          value = cur[valueSelector as keyof EnumItemInterface<T[K], K, V, LP>] as unknown;
         }
         prev[key as keyof MapResult<T, KS, VS, K, V, LP>] = value;
         return prev;
@@ -430,7 +484,7 @@ export interface IEnumItems<
    * - **CN:** 枚举键到其对应的枚举项类的映射，对于快速访问枚举项非常有用
    */
   named: {
-    [key in keyof T]: EnumItemClass<
+    [key in keyof T]: EnumItemInterface<
       // @ts-expect-error: because the first type parameter T is a union type, T[key] cannot satisfy each one of T.
       T[key],
       key,
@@ -530,6 +584,38 @@ export interface InheritableEnumItems<
             : undefined);
 
   /**
+   * - **EN:** Get the label (also known as display name) of the enumeration item, supports getting by
+   *   value or key
+   * - **CN:** 获取枚举项的标签（亦称显示名称），支持通过枚举项的 value 或 key 获取
+   *
+   * @param keyOrValue - The value or key of the enumeration item | 枚举项的 value 或 key
+   *
+   * @returns The label of the enumeration item or the key if the label is not defined | 枚举项的标签或
+   *   key（如果标签未定义）
+   */
+  item<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(
+    keyOrValue: KV,
+  ):
+    | (undefined extends KV ? undefined : never)
+    | (KV extends undefined
+        ? undefined
+        : NonNullable<KV> extends K
+          ? // @ts-expect-error: because the type infer is not clever enough, KV here should be one of K
+            EnumItemInterface<T[NonNullable<KV>], NonNullable<KV>, FindValueByKey<T, NonNullable<KV>>>
+          : NonNullable<KV> extends V
+            ? EnumItemInterface<
+                // @ts-expect-error: because the type infer is not clever enough, KV here should be one of V
+                T[FindEnumKeyByValue<T, NonNullable<KV>>],
+                FindEnumKeyByValue<T, NonNullable<KV>>,
+                NonNullable<KV>
+              >
+            : PrimitiveOf<K> extends KV
+              ? EnumItemInterface<T[K], K, V> | undefined
+              : PrimitiveOf<V> extends KV
+                ? EnumItemInterface<T[K], K, V> | undefined
+                : undefined);
+
+  /**
    * - **EN:** Get the enumeration item by key or value
    * - **CN:** 获取枚举集合的初始化对象
    *
@@ -587,20 +673,20 @@ export interface InheritableEnumItems<
   ): FK extends 'key'
     ? FV extends K
       ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of K
-        EnumItemClass<T[FV], FV, FindValueByKey<T, FV>>
-      : EnumItemClass<T[K], K, V, LP> | undefined
+        EnumItemInterface<T[FV], FV, FindValueByKey<T, FV>>
+      : EnumItemInterface<T[K], K, V, LP> | undefined
     : FK extends 'value'
       ? FV extends V
         ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of V
-          EnumItemClass<T[FindEnumKeyByValue<T, FV>], FindEnumKeyByValue<T, FV>, FV>
-        : EnumItemClass<T[K], K, V, LP> | undefined
+          EnumItemInterface<T[FindEnumKeyByValue<T, FV>], FindEnumKeyByValue<T, FV>, FV>
+        : EnumItemInterface<T[K], K, V, LP> | undefined
       : FK extends 'label'
-        ? EnumItemClass<T[K], K, V, LP> | undefined
+        ? EnumItemInterface<T[K], K, V, LP> | undefined
         : // @ts-expect-error: because the type infer is not clever enough, FK here should be one of keyof Raw
           FV extends T[keyof T][FK]
           ? // @ts-expect-error: because the type infer is not clever enough, FV here should be one of T[keyof T][FK]
-            EnumItemClass<T[FindKeyByMeta<T, FK, FV>], FindKeyByMeta<T, FK, FV>, FindValueByMeta<T, FK, FV>>
-          : EnumItemClass<T[K], K, V, LP> | undefined;
+            EnumItemInterface<T[FindKeyByMeta<T, FK, FV>], FindKeyByMeta<T, FK, FV>, FindValueByMeta<T, FK, FV>, LP>
+          : EnumItemInterface<T[K], K, V, LP> | undefined;
 
   /**
    * - **EN:** Generate an object array containing all enumeration items
@@ -638,15 +724,15 @@ export interface InheritableEnumItems<
    *   所有枚举项的对象数组，按照指定的值和标签字段格式
    */
   toList<
-    FOV extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
-    FOL extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
+    FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+    FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
     R extends Record<string, unknown> = never,
   >(
     config: ToListConfig<T, FOV, FOL, K, V, R, LP>,
   ): ListItem<
     V,
-    FOV extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOV,
-    FOL extends (item: EnumItemClass<T[K], K, V, LP>) => infer R ? R : FOL,
+    FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL,
     R
   >[];
 
@@ -688,9 +774,9 @@ export interface InheritableEnumItems<
    */
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOK extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+    FOK extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    FOV extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+    FOV extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
   >(
     config: ToMapConfig<T, FOK, FOV, K, V, LP>,
   ): MapResult<T, FOK, FOV, K, V, LP>;
@@ -751,8 +837,8 @@ export interface InheritableEnumItems<
 /** More options for the options method */
 export interface ToListConfig<
   T extends EnumInit<K, V>,
-  FOV extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
-  FOL extends string | ((item: EnumItemClass<T[K], K, V, LP>) => string),
+  FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+  FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   R extends Record<string, unknown> = never,
@@ -775,7 +861,7 @@ export interface ToListConfig<
    * - **EN:** A function to add extra fields to each item in the output object
    * - **CN:** 一个函数，用于为输出对象中的每个项添加额外的字段
    */
-  extra?: (item: EnumItemClass<T[K], K, V, LP>) => R;
+  extra?: (item: EnumItemInterface<T[K], K, V, LP>) => R;
 }
 
 export interface ToMapConfig<
@@ -783,9 +869,9 @@ export interface ToMapConfig<
   KS extends
     | EnumItemFields
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+    | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+  VS extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -807,29 +893,29 @@ export interface ToMapConfig<
 
 export type MapResult<
   T extends EnumInit<K, V>,
-  KS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => string | symbol),
+  KS extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => string | symbol),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  VS extends EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => any),
+  VS extends EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => any),
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
 > = {
-  [key in ExactEqual<KS, EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => string | symbol)> extends true
+  [key in ExactEqual<KS, EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => string | symbol)> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      EnumItemClass<T[K], K, V, LP>['value'] & keyof any
+      EnumItemInterface<T[K], K, V, LP>['value'] & keyof any
     : KS extends EnumItemFields
       ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        EnumItemClass<T[K], K, V, LP>[KS] & keyof any
+        EnumItemInterface<T[K], K, V, LP>[KS] & keyof any
       : // eslint-disable-next-line @typescript-eslint/no-explicit-any
         KS extends (item: any) => infer R
         ? R
-        : never]: ExactEqual<VS, EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => unknown)> extends true
-    ? ExactEqual<KS, EnumItemFields | ((item: EnumItemClass<T[K], K, V, LP>) => string | symbol)> extends true
+        : never]: ExactEqual<VS, EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => unknown)> extends true
+    ? ExactEqual<KS, EnumItemFields | ((item: EnumItemInterface<T[K], K, V, LP>) => string | symbol)> extends true
       ? FindLabelByValue<T, key>
-      : EnumItemClass<T[K], K, V, LP>['label']
+      : EnumItemInterface<T[K], K, V, LP>['label']
     : VS extends EnumItemFields
-      ? EnumItemClass<T[K], K, V, LP>[VS]
+      ? EnumItemInterface<T[K], K, V, LP>[VS]
       : // eslint-disable-next-line @typescript-eslint/no-explicit-any
         VS extends (item?: any) => infer R
         ? R
@@ -838,12 +924,12 @@ export type MapResult<
 
 export type EnumItemFields = Exclude<
   {
-    [key in keyof EnumItemClass<StandardEnumItemInit<string>>]: EnumItemClass<
+    [key in keyof EnumItemInterface<StandardEnumItemInit<string>>]: EnumItemInterface<
       StandardEnumItemInit<string>
     >[key] extends (...args: any[]) => unknown
       ? never
       : key;
-  }[keyof EnumItemClass<StandardEnumItemInit<string>>] &
+  }[keyof EnumItemInterface<StandardEnumItemInit<string>>] &
     string,
   'raw'
 >;

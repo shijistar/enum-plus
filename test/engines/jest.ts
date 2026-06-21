@@ -1,5 +1,6 @@
 import * as EnumPlus from '@enum-plus';
 import * as Jsoneo from 'jsoneo';
+import { describe, expect, test } from '@jest/globals';
 import * as WeekConfig from '../data/week-config';
 import * as WeekData from '../data/week-data';
 import TestEngineBase from './base';
@@ -18,7 +19,7 @@ export class JestEngine extends TestEngineBase<'jest'> {
     name: string,
     evaluate: (context: RuntimeContext) => Data | Promise<Data>,
     assert: (data: Data) => void,
-    evaluateContext?: Record<string, unknown>
+    evaluateContext?: Record<string, unknown>,
   ) {
     test(name, async () => {
       const runtimeContext = this.getRuntimeContext();

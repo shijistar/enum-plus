@@ -24,7 +24,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(weekEnum.Monday !== (2 as number)).toBeTruthy();
         engine.expect(weekEnum.Monday + 1).toBe(2);
         engine.expect(weekEnum.Friday - 1).toBe(4);
-      }
+      },
     );
 
     engine.test(
@@ -36,11 +36,11 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         return { weekEnum, sunday, localeEN };
       },
       ({ weekEnum, sunday, localeEN }) => {
-        engine.expect(sunday.toString()).toBe(localeEN.Sunday);
-        engine.expect(sunday.toLocaleString()).toBe(localeEN.Sunday);
-        engine.expect(weekEnum.items[6].toString()).toBe(localeEN.Saturday);
-        engine.expect(weekEnum.items[6].toLocaleString()).toBe(localeEN.Saturday);
-      }
+        engine.expect(sunday.toString()).toBe(localeEN['weekday.Sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(localeEN['weekday.Sunday']);
+        engine.expect(weekEnum.items[6].toString()).toBe(localeEN['weekday.Saturday']);
+        engine.expect(weekEnum.items[6].toLocaleString()).toBe(localeEN['weekday.Saturday']);
+      },
     );
 
     engine.test(
@@ -57,7 +57,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           // @ts-expect-error: because IS_ENUM_ITEM and Symbol.for('[IsEnumItem]') are equal
           engine.expect(item[Symbol.for('[IsEnumItem]')]).toBe(true);
         });
-      }
+      },
     );
 
     engine.test(
@@ -70,7 +70,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ weekEnum, sunday }) => {
         engine.expect(sunday.valueOf()).toBe(0);
         engine.expect(weekEnum.items[6].valueOf()).toBe(6);
-      }
+      },
     );
 
     engine.test(
@@ -87,7 +87,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ localeEN, sunday, monday, tuesday, friday, saturday }) => {
         engine.expect(Number(sunday)).toBe(0);
-        engine.expect(String(sunday)).toBe(localeEN.Sunday);
+        engine.expect(String(sunday)).toBe(localeEN['weekday.Sunday']);
         engine.expect(Boolean(sunday)).toBe(true);
         engine.expect(Boolean(monday)).toBe(true);
 
@@ -109,15 +109,15 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect('' + sunday).toBe('0');
         engine.expect('' + saturday).toEqual('6');
 
-        engine.expect(`${sunday}`).toBe(localeEN.Sunday);
-        engine.expect(`${saturday}`).toBe(localeEN.Saturday);
-        engine.expect(saturday.toString()).toBe(localeEN.Saturday);
-        engine.expect(monday.toLocaleString()).toBe(localeEN.Monday);
+        engine.expect(`${sunday}`).toBe(localeEN['weekday.Sunday']);
+        engine.expect(`${saturday}`).toBe(localeEN['weekday.Saturday']);
+        engine.expect(saturday.toString()).toBe(localeEN['weekday.Saturday']);
+        engine.expect(monday.toLocaleString()).toBe(localeEN['weekday.Monday']);
         engine.expect(typeof monday).toBe('object');
 
         engine.expect(+sunday).toBe(0);
         engine.expect(+saturday).toBe(6);
-      }
+      },
     );
 
     // should be readonly
@@ -260,7 +260,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       }) => {
         engine.expect(sundayModifiedKey).toBe('Sunday');
         engine.expect(sundayModifiedValue).toBe(0);
-        engine.expect(sundayModifiedLabel).toBe(localeEN.Sunday);
+        engine.expect(sundayModifiedLabel).toBe(localeEN['weekday.Sunday']);
         engine.expect(sundayModifiedRaw).toEqual(StandardWeekConfig.Sunday);
         engine.expect(sundayDeletedKey).toBe(false);
         engine.expect(sundayDeletedValue).toBe(false);
@@ -272,7 +272,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect(isSundaySealed).toBe(true);
         engine.expect(isSundayFrozen).toBe(true);
         engine.expect(isSundayExtensible).toBe(false);
-      }
+      },
     );
   });
 };
