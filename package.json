@@ -184,6 +184,9 @@
     "esbuild": "^0.27.3",
     "send": "^0.19.2"
   },
+  "dependencies": {
+    "@rollup/plugin-json": "^6.1.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.59.0",
     "@rollup/plugin-node-resolve": "^16.0.3",

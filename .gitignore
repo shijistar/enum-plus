@@ -20,5 +20,6 @@ run
 .copilot-tools.log
 .ai-auto-collection.state.json
 .eslintcache
+.vitest-attachments
 storybook-static
 debug-storybook.log

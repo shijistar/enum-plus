@@ -1,5 +1,5 @@
 import type { EnumInterface, IEnum } from '@enum-plus';
-import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '@enum-plus/test/data/week-config';
+import type { StandardWeekConfig } from '@enum-plus/test/data/week-config';
 import type TestEngineBase from '@enum-plus/test/engines/base';
 import '@testing-library/jest-dom';
 import { act, render, waitFor } from '@testing-library/react';
@@ -9,30 +9,33 @@ import Page from '../components/Page';
 import { getAltData } from '../data/altLocale';
 // import { i18n } from '../data/initServerInstance';
 import testIsMatch from './isMatch';
+import type enUS from '@enum-plus/test/i18n/en-US.json';
+import type neutral from '@enum-plus/test/i18n/neutral.json';
+import type zhCN from '@enum-plus/test/i18n/zh-CN.json';
 
 const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'Should raise error when not initialized',
-      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin);
         return {
           ...getAssertData({
             Enum,
             StandardWeekConfig,
-            locales: localeEN,
-            noLocale,
+            locales: enUS,
+            neutral,
           }),
         };
       },
       ({ weekEnum }) => {
         expect(() => weekEnum.name).toThrow();
         expect(() => weekEnum.items.filter((item) => weekEnum.isMatch('Mon', item))).toThrow();
-      }
+      },
     );
     engine.test(
       'Should show English by default without mode specified',
-      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: {
             mode: 'text',
@@ -45,16 +48,16 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
           ...getAssertData({
             Enum,
             StandardWeekConfig,
-            locales: localeEN,
-            noLocale,
+            locales: enUS,
+            neutral: neutral,
           }),
         };
       },
-      async (args) => assertEnum(args)
+      async (args) => assertEnum(args),
     );
     // engine.test(
     //   'Should show English by default in server side',
-    //   async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+    //   async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
     //     Enum.install(clientI18nPlugin, {
     //       localize: {
     //         getI18n: i18n.getI18n,
@@ -64,8 +67,8 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     //       ...getAssertData({
     //         Enum,
     //         StandardWeekConfig,
-    //         locales: localeEN,
-    //         noLocale,
+    //         locales: enUS,
+    //         neutral: neutral,
     //       }),
     //     };
     //   },
@@ -73,7 +76,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     // );
     engine.test(
       'Should show English by default with text mode',
-      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: {
             mode: 'text',
@@ -86,16 +89,16 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
           ...getAssertData({
             Enum,
             StandardWeekConfig,
-            locales: localeEN,
-            noLocale,
+            locales: enUS,
+            neutral: neutral,
           }),
         };
       },
-      async (args) => assertEnum(args)
+      async (args) => assertEnum(args),
     );
     engine.test(
       'Should show English by default with component mode',
-      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: {
             mode: 'component',
@@ -108,17 +111,17 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
           ...getAssertData({
             Enum,
             StandardWeekConfig,
-            locales: localeEN,
-            noLocale,
+            locales: enUS,
+            neutral: neutral,
           }),
         };
       },
-      async (args) => assertEnum({ ...args, getText: getComponentText })
+      async (args) => assertEnum({ ...args, getText: getComponentText }),
     );
 
     engine.test(
       'Should show Chinese after changing lang',
-      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeCN, noLocale } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: { mode: 'text' },
         });
@@ -129,17 +132,17 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
           ...getAssertData({
             Enum,
             StandardWeekConfig,
-            locales: localeCN,
-            noLocale,
+            locales: zhCN,
+            neutral: neutral,
           }),
         };
       },
-      async (args) => assertEnum(args)
+      async (args) => assertEnum(args),
     );
 
     engine.test(
       'Should show English after changing back',
-      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN, noLocale } }) => {
+      async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: { mode: 'text' },
         });
@@ -147,38 +150,38 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
           render(
             <Page locale="zh-CN">
               <AutoChangeLangPage locale="en" />
-            </Page>
+            </Page>,
           );
         });
         return {
           ...getAssertData({
             Enum,
             StandardWeekConfig,
-            locales: localeEN,
-            noLocale,
+            locales: enUS,
+            neutral: neutral,
           }),
         };
       },
-      async (args) => assertEnum(args)
+      async (args) => assertEnum(args),
     );
   });
 
   function getAssertData(options: {
     Enum: EnumInterface;
     StandardWeekConfig: typeof StandardWeekConfig;
-    locales: typeof localeEN | typeof localeCN | typeof noLocale;
-    noLocale: typeof noLocale;
+    locales: Readonly<typeof enUS> | Readonly<typeof neutral> | Readonly<typeof zhCN>;
+    neutral: Readonly<typeof neutral>;
   }) {
-    const { Enum, StandardWeekConfig, locales, noLocale } = options;
+    const { Enum, StandardWeekConfig, locales, neutral } = options;
     const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
     const altData = getAltData({ locales, StandardWeekConfig });
     const altWeekEnum = Enum(altData.AltStandardWeekConfig, { name: 'alternative.weekDay.name' });
-    const Locales = Object.keys(noLocale).reduce(
+    const Locales = Object.keys(neutral).reduce(
       (acc, key) => {
-        acc[noLocale[key as keyof typeof noLocale]] = (locales as Record<string, string>)[key] as never;
+        acc[key as keyof typeof neutral] = (locales as Record<string, string>)[key] as never;
         return acc;
       },
-      {} as { -readonly [key in (typeof noLocale)[keyof typeof noLocale]]: string }
+      {} as { -readonly [key in keyof typeof neutral]: string },
     );
     return {
       weekEnum,
@@ -197,11 +200,11 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
         keyof typeof StandardWeekConfig,
         WeekValue
       >;
-      Locales: { -readonly [key in (typeof noLocale)[keyof typeof noLocale]]: string };
+      Locales: { -readonly [key in (typeof neutral)[keyof typeof neutral]]: string };
       getText?:
         | ((value: string | undefined) => string | undefined)
         | ((value: string | undefined) => Promise<string | undefined>);
-    } & ReturnType<typeof getAltData>
+    } & ReturnType<typeof getAltData>,
   ) {
     try {
       const { weekEnum, altWeekEnum, Locales, AltLocales, getText = getRawText } = options;

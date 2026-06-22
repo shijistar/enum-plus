@@ -1,5 +1,8 @@
 import type { defaultLocalize as defaultLocalizeType, EnumItemInterface, Enum as EnumType } from '../../src';
 import type { EnumValue, StandardEnumItemInit } from '../../src/types';
+import enUS from '../i18n/en-US.json';
+import neutral from '../i18n/neutral.json';
+import zhCN from '../i18n/zh-CN.json';
 
 export const localeEN = {
   'weekDay.name': 'Week Days',
@@ -65,18 +68,18 @@ export const noLocale = {
   'date.LastDay': 'date.LastDay',
 } as const;
 
-export let locales: typeof localeEN | typeof localeCN | typeof noLocale = noLocale;
+export let locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral> = neutral;
 
 export let lang = undefined as LangType | undefined;
 export type LangType = 'en-US' | 'zh-CN' | undefined;
 
 export function getLocales(language: LangType) {
-  const { localeCN, localeEN, noLocale } = getLocales;
-  return language === 'zh-CN' ? localeCN : language ? localeEN : noLocale;
+  const { zhCN, enUS, neutral } = getLocales;
+  return language === 'zh-CN' ? zhCN : language ? enUS : neutral;
 }
-getLocales.localeCN = localeCN;
-getLocales.localeEN = localeEN;
-getLocales.noLocale = noLocale;
+getLocales.zhCN = zhCN;
+getLocales.enUS = enUS;
+getLocales.neutral = neutral;
 
 type getLocalesType = typeof getLocales;
 export function setLang(
@@ -97,7 +100,7 @@ setLang.genSillyLocalizer = genSillyLocalizer;
 
 export const clearLang = (Enum: typeof EnumType) => {
   lang = undefined;
-  locales = noLocale;
+  locales = neutral;
   Enum.localize = undefined!;
 };
 const labelTranslator = getTranslator('label');
@@ -142,10 +145,13 @@ export const DateStandardConfig = {
 } as const;
 
 export const WeekConfigWithKey = Object.keys(StandardWeekConfig).reduce((acc, key) => {
-  acc[key as TKey] = {
-    ...StandardWeekConfig[key as keyof typeof StandardWeekConfig],
+  // acc[key as TKey] = {
+  //   ...StandardWeekConfig[key as keyof typeof StandardWeekConfig],
+  //   key: key as keyof TConfig,
+  // } as never;
+  acc[key as TKey] = Object.assign({}, StandardWeekConfig[key as keyof typeof StandardWeekConfig], {
     key: key as keyof TConfig,
-  } as never;
+  }) as never;
   return acc;
 }, {} as TConfigWithKey);
 
@@ -154,12 +160,13 @@ type TConfig = typeof StandardWeekConfig;
 type TKey = keyof TConfig;
 type TConfigWithKey = { [key in TKey]: TConfig[key] & { key: key } };
 
-export const WeekStandardArray = Object.keys(StandardWeekConfig).map((key) => ({
-  ...StandardWeekConfig[key as keyof typeof StandardWeekConfig],
-  key,
-  value: StandardWeekConfig[key as keyof typeof StandardWeekConfig].value,
-  label: StandardWeekConfig[key as keyof typeof StandardWeekConfig].label,
-}));
+export const WeekStandardArray = Object.keys(StandardWeekConfig).map((key) => {
+  return Object.assign({}, StandardWeekConfig[key as keyof typeof StandardWeekConfig], {
+    key,
+    value: StandardWeekConfig[key as keyof typeof StandardWeekConfig].value,
+    label: StandardWeekConfig[key as keyof typeof StandardWeekConfig].label,
+  });
+});
 
 export const WeekNumberConfig = Object.keys(StandardWeekConfig).reduce(
   (acc, key) => {
@@ -212,8 +219,11 @@ export const WeekLabelOnlyConfig = Object.keys(StandardWeekConfig).reduce(
 
 export const WeekMetaOnlyConfig = Object.keys(StandardWeekConfig).reduce(
   (acc, key) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { value, label, ...meta } = StandardWeekConfig[key as TKey];
+    // const { value, label, ...meta } = StandardWeekConfig[key as TKey];
+    let meta: Record<string, unknown> = {};
+    meta = Object.assign({}, StandardWeekConfig[key as TKey]);
+    delete meta.value;
+    delete meta.label;
     acc[key as TKey] = meta as never;
     return acc;
   },
@@ -224,7 +234,7 @@ export function genSillyLocalizer(language: LangType, getLocales: getLocalesType
   // should use function here to avoid closure. this is important for the e2e test cases.
   function sillyLocalize(
     // eslint-disable-next-line @typescript-eslint/ban-types
-    content: (typeof noLocale)[keyof typeof noLocale] | (string & {}) | undefined,
+    content: (typeof neutral)[keyof typeof neutral] | (string & {}) | undefined,
   ): string | undefined {
     const { locales } = sillyLocalize;
     return locales[content as keyof typeof locales] ?? content;
@@ -255,19 +265,19 @@ getTranslator.getLocales = getLocales;
 getTranslator.standardWeekConfig = StandardWeekConfig;
 getTranslator.lang = lang;
 
-export function resourceLocalizer(content: (typeof noLocale)[keyof typeof noLocale] | undefined) {
+export function resourceLocalizer(content: (typeof neutral)[keyof typeof neutral] | undefined) {
   const { genSillyLocalizer, getLocales, lang } = resourceLocalizer;
   const localizer = genSillyLocalizer(lang, getLocales);
   return localizer(content);
 }
 resourceLocalizer.genSillyLocalizer = genSillyLocalizer;
 resourceLocalizer.getLocales = getLocales;
-resourceLocalizer.noLocale = noLocale;
+resourceLocalizer.neutral = neutral;
 resourceLocalizer.lang = lang;
 
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
-  locales: typeof localeEN | typeof localeCN | typeof noLocale,
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
 ): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
@@ -277,7 +287,7 @@ export function localizeConfigData(
 ): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
-  getLocales: getLocalesType | typeof localeEN | typeof localeCN | typeof noLocale,
+  getLocales: getLocalesType | Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
   defaultLocalize?: typeof defaultLocalizeType,
 ) {
   const { lang } = localizeConfigData;
@@ -302,7 +312,7 @@ export function localizeConfigData(
         // @ts-expect-error: because cannot assign to 'value' because it is a read-only property.
         acc[key as keyof typeof config] = {
           ...config[key as keyof typeof config],
-          label: locales[key as keyof typeof locales],
+          label: locales[config[key as keyof typeof config].label as keyof typeof locales],
         };
         return acc;
       },
