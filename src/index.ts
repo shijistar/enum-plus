@@ -1,5 +1,3 @@
-// import { Enum } from './enum';
-
 export type {
   EnumInit,
   EnumItemInit,
@@ -33,13 +31,3 @@ export {
 } from './utils';
 export type { PluginFunc } from './enum';
 export { Enum } from './enum';
-
-// Enum(
-//   {
-//     Monday: { value: 1, abbr: 'Mon', x: 1 },
-//     Tuesday: { value: 2, abbr: 'Tue', x: 2 },
-//   },
-//   {
-//     autoLocalizeMeta: ['abbr'],
-//   },
-// ).meta.abbr;
