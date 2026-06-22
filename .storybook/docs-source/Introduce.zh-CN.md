@@ -57,7 +57,7 @@
   </a>
 </p>
 <p align="center">
-  <sup><em>点击图片查看高清视频</em></sup>
+  <sup><em>↑ 点击图片查看高清视频 ↑</em></sup>
 </p>
 
 [为什么我的项目安装后没有 TypeScript 类型提示？](?path=/docs/faq--docs&globals=locale:zh-CN#为什么我的项目安装后没有-typescript-类型提示)

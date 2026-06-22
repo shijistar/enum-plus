@@ -57,7 +57,7 @@ What other exciting features are there? Please continue to explore! Or you can c
   </a>
 </p>
 <p align="center">
-  <sup><em>Click image for HD video</em></sup>
+  <sup><em>↑ Click image for HD video ↑</em></sup>
 </p>
 
 [Why my project has no TypeScript type hints after installation?](?path=/docs/faq--docs#-why-my-project-has-no-typescript-type-hints-after-installation)
