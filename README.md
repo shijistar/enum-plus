@@ -103,13 +103,36 @@ const StatusEnum = Enum({
 
 StatusEnum.Review; // 2
 StatusEnum.label(2); // 'In Review'
-StatusEnum.key(2); // 'Review'
-StatusEnum.items; // [{ key: 'Draft', value: 1, label: 'Draft' }, ...]
+StatusEnum.has(2); // true
+StatusEnum.keys; // ['Draft', 'Review', 'Published']
 StatusEnum.values; // [1, 2, 3]
 StatusEnum.labels; // ['Draft', 'In Review', 'Published']
+StatusEnum.items; // [{ key: 'Draft', value: 1, label: 'Draft', color: 'default' }, ...]
+StatusEnum.named.Draft; // { key: 'Draft', value: 1, label: 'Draft', color: 'default' }
+StatusEnum.item(1); // { key: 'Draft', value: 1, label: 'Draft', color: 'default' }
 StatusEnum.meta; // { color: [ 'default', 'processing', 'success' ] }
-StatusEnum.findBy('color', 'success')?.key; // 'Published'
-StatusEnum.toList({ valueField: 'value', labelField: 'label' }); // [{ value: 1, label: 'Draft' }, ...]
+StatusEnum.findBy('color', 'success'); // { key: 'Published', value: 3, label: 'Published', color: 'success' }
+StatusEnum.toList({ valueField: 'id', labelField: 'name' }); // [{ id: 1, name: 'Draft' }, ...]
+StatusEnum.toMap({ keySelector: 'key', valueSelector: 'value' }); // { Draft: 1, Review: 2, Published: 3 }
+```
+
+## i18n
+
+```ts
+import i18nPlugin from '@enum-plus/plugin-i18next';
+import { Enum } from 'enum-plus';
+
+Enum.install(i18nPlugin);
+
+const StatusEnum = Enum({
+  Draft: { value: 1, label: 'locales.enums.statusEnum.draft' },
+  Review: { value: 2, label: 'locales.enums.statusEnum.review' },
+  Published: { value: 3, label: 'locales.enums.statusEnum.published' },
+});
+
+StatusEnum.labels; // ['Draft', 'In Review', 'Published'] or ['草稿', '审核中', '已发布']
+StatusEnum.label(2); // 'In Review' or '审核中'
+StatusEnum.named.Review.label; // 'In Review' or '审核中'
 ```
 
 ## Ecosystem
