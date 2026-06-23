@@ -339,7 +339,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Should respect Enum options over global setting (undefined over English), support delayed assign',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, noLocale, getLocales },
+        WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
         i18n: { enUS },
       }) => {
@@ -605,13 +605,13 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'labelPrefix can be object',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { ShortLabelStandardWeekConfig, noLocale, setLang, getLocales },
+        WeekConfig: { ShortLabelStandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
-        i18n: { enUS },
+        i18n: { enUS, neutral },
       }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         Enum.config.autoLabel = ({ item, labelPrefix }) => labelPrefix['weekday.' + item.key];
-        const weekEnum = Enum(ShortLabelStandardWeekConfig, { labelPrefix: noLocale });
+        const weekEnum = Enum(ShortLabelStandardWeekConfig, { labelPrefix: neutral });
         const defaultListItems = weekEnum.toList();
         const idNameListItems = weekEnum.toList({ valueField: 'id', labelField: 'name' });
         const defaultMap = weekEnum.toMap();
@@ -768,7 +768,8 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       'Enum name should support global localization (No Locale)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales, resourceLocalizer },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales, resourceLocalizer },
+        i18n: { neutral },
       }) => {
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name', autoLocalizeMeta: ['abbr'] });
@@ -776,11 +777,11 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           name: () => resourceLocalizer('weekDay.name'),
           autoLocalizeMeta: ['abbr'],
         });
-        return { weekEnum, weekEnumFuncName, noLocale };
+        return { weekEnum, weekEnumFuncName, neutral };
       },
-      ({ weekEnum, weekEnumFuncName, noLocale }) => {
-        engine.expect(weekEnum.name).toBe(noLocale['weekDay.name']);
-        engine.expect(weekEnumFuncName.name).toBe(noLocale['weekDay.name']);
+      ({ weekEnum, weekEnumFuncName, neutral }) => {
+        engine.expect(weekEnum.name).toBe(neutral['weekDay.name']);
+        engine.expect(weekEnumFuncName.name).toBe(neutral['weekDay.name']);
       },
     );
     engine.test(
