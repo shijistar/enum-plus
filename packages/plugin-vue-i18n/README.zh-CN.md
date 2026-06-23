@@ -27,6 +27,10 @@ npm install @enum-plus/plugin-vue-i18n
 import i18nPlugin from '@enum-plus/plugin-vue-i18n';
 import { Enum } from 'enum-plus';
 
+const i18n = createI18n({
+  // ...
+});
+
 Enum.install(i18nPlugin, {
   localize: {
     instance: i18n,
@@ -99,7 +103,7 @@ const WeekEnum = Enum(
   },
   {
     name: 'weekDays.name', // 枚举类型名称，可选
-  }
+  },
 );
 
 WeekEnum.label(1); // Monday
