@@ -38,6 +38,15 @@ Enum.install(i18nPlugin, {
 });
 ```
 
+If you will never call the enum's internationalization features outside the component context, you can even further simplify it to:
+
+```js
+import i18nPlugin from '@enum-plus/plugin-vue-i18n';
+import { Enum } from 'enum-plus';
+
+Enum.install(i18nPlugin);
+```
+
 ## Plugin Options
 
 When installing the plugin, you can pass a configuration object to set global options for the plugin:

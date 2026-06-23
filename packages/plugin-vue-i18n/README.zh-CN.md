@@ -38,6 +38,15 @@ Enum.install(i18nPlugin, {
 });
 ```
 
+如果你永远不会在组件上下文之外调用枚举的国际化功能，甚至可以进一步简化为：
+
+```js
+import i18nPlugin from '@enum-plus/plugin-vue-i18n';
+import { Enum } from 'enum-plus';
+
+Enum.install(i18nPlugin);
+```
+
 ## 插件选项
 
 安装插件时，可以传入一个配置对象，用于设置插件的全局选项：
