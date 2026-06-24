@@ -1,0 +1,18 @@
+packages/plugin-vue-i18n/CHANGELOG.md
+  h_3a0b15d296f1fe 5-12,19
+packages/plugin-vue-i18n/src/localize.ts
+  h_3a0b15d296f1fe 8-9,29-35,39,46,49
+packages/plugin-vue-i18n/test/test-suites/localization.ts
+  h_3a0b15d296f1fe 182,187,213,253,273-275
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.12",
+  "base_commit_sha": "b3b4c80219fde2544bce4db4022e2bd925eaf44e",
+  "prompts": {},
+  "humans": {
+    "h_3a0b15d296f1fe": {
+      "author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
