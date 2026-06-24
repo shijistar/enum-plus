@@ -1,5 +1,5 @@
 import type { IEnum } from '@enum-plus';
-import type { localeCN, localeEN, noLocale, StandardWeekConfig } from '@enum-plus/test/data/week-config';
+import type { StandardWeekConfig } from '@enum-plus/test/data/week-config';
 import type { getStandardWeekData as getStandardWeekDataInterface } from '@enum-plus/test/data/week-data';
 import type TestEngineBase from '@enum-plus/test/engines/base';
 // eslint-disable-next-line import/no-unresolved
@@ -9,6 +9,9 @@ import type { ColumnFilterItem } from '../../src/toFilter';
 import type { MenuItemOption } from '../../src/toMenu';
 import type { SelectItem } from '../../src/toSelect';
 import type { ValueMap } from '../../src/toValueMap';
+import type enUS from '@enum-plus/test/i18n/en-US.json';
+import type neutral from '@enum-plus/test/i18n/neutral.json';
+import type zhCN from '@enum-plus/test/i18n/zh-CN.json';
 
 const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('Enum localization', () => {
@@ -16,14 +19,15 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should show English by default',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { enUS },
       }) => {
         Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return { ...getEnumTestData(weekEnum as any), locales: localeEN, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum as any), locales: enUS, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -32,13 +36,14 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should show Chinese after changing lang',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { zhCN },
       }) => {
         Enum.install(antdPlugins);
         setLang('zh-CN', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), locales: localeCN, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: zhCN, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -47,13 +52,14 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should show English after changing back',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { enUS },
       }) => {
         Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: enUS, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -62,13 +68,14 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should show original label if no localization found',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { neutral },
       }) => {
         Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), getStandardWeekData, locales: noLocale };
+        return { ...getEnumTestData(weekEnum), getStandardWeekData, locales: neutral };
       },
       (args) => assertEnum(args),
     );
@@ -77,14 +84,15 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should show original label if Enum.localize is explicitly set to undefined ',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { neutral },
       }) => {
         Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         Enum.localize = undefined!;
         const weekEnum = Enum(StandardWeekConfig);
-        return { ...getEnumTestData(weekEnum), getStandardWeekData, locales: noLocale };
+        return { ...getEnumTestData(weekEnum), getStandardWeekData, locales: neutral };
       },
       (args) => assertEnum(args),
     );
@@ -93,15 +101,16 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should respect Enum options over global setting (Chinese over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales, genSillyLocalizer },
         WeekData: { getStandardWeekData },
+        i18n: { zhCN },
       }) => {
         Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, {
           localize: genSillyLocalizer('zh-CN', getLocales),
         });
-        return { ...getEnumTestData(weekEnum), locales: localeCN, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: zhCN, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -109,13 +118,14 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should respect Enum options over global setting (undefined over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { enUS },
       }) => {
         Enum.install(antdPlugins);
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: enUS, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -123,14 +133,15 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should respect Enum options over global setting (undefined over English), support delayed assign',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeEN, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { enUS },
       }) => {
         Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
         setLang('en-US', Enum, getLocales, defaultLocalize);
-        return { ...getEnumTestData(weekEnum), locales: localeEN, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: enUS, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -138,15 +149,16 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should respect Enum options over global setting (Chinese over undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, localeCN, getLocales, genSillyLocalizer },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales, genSillyLocalizer },
         WeekData: { getStandardWeekData },
+        i18n: { zhCN },
       }) => {
         Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, {
           localize: genSillyLocalizer('zh-CN', getLocales),
         });
-        return { ...getEnumTestData(weekEnum), locales: localeCN, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: zhCN, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -154,13 +166,14 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should respect Enum options over global setting (both undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { neutral },
       }) => {
         Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        return { ...getEnumTestData(weekEnum), locales: noLocale, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: neutral, getStandardWeekData };
       },
       (args) => assertEnum(args),
     );
@@ -168,14 +181,15 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'Should respect Enum options over global setting (both explicit undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, noLocale, getLocales },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
         WeekData: { getStandardWeekData },
+        i18n: { neutral },
       }) => {
         Enum.install(antdPlugins);
         setLang(undefined, Enum, getLocales, defaultLocalize);
         Enum.localize = undefined!;
         const weekEnum = Enum(StandardWeekConfig, { localize: undefined });
-        return { ...getEnumTestData(weekEnum), locales: noLocale, getStandardWeekData };
+        return { ...getEnumTestData(weekEnum), locales: neutral, getStandardWeekData };
       },
       (args) => {
         assertEnum(args);
@@ -209,7 +223,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     menuItems: MenuItemOption<WeekValue>[];
     filterItems: ColumnFilterItem<WeekValue>[];
     valueMap: ValueMap;
-    locales: typeof localeEN | typeof localeCN | typeof noLocale;
+    locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
     getStandardWeekData: typeof getStandardWeekDataInterface;
   }) {
     const { selectItems, selectItemsWithFirst, menuItems, filterItems, valueMap, locales, getStandardWeekData } =

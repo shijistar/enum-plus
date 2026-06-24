@@ -1,3 +1,4 @@
+import jsonPlugin from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { rollup } from 'rollup';
 
@@ -35,10 +36,21 @@ async function build() {
     name: 'jsoneo',
   });
 
+  // i18n client hooks
+  const i18n = await rollup({
+    input: 'e2e/i18n.js',
+    plugins: [nodeResolve(), jsonPlugin()],
+  });
+  await i18n.write({
+    file: 'e2e/fixtures/scripts/i18n-bundle.js',
+    format: 'iife',
+    name: 'I18n',
+  });
+
   // Bundle week-config
   const weekConfig = await rollup({
     input: 'tses/test/data/week-config.js',
-    plugins: [nodeResolve()],
+    plugins: [nodeResolve(), jsonPlugin()],
   });
   await weekConfig.write({
     file: 'e2e/fixtures/scripts/week-config-bundle.js',

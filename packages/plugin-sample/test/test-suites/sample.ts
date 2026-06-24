@@ -8,7 +8,7 @@ const testEnumItems = (engine: TestEngineBase<'jest'>) => {
   engine.describe('The sample plugin', () => {
     engine.test(
       'should extend sample method',
-      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, localeEN } }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(samplePlugin);
         const weekEnum = Enum(StandardWeekConfig);
         let hasError = false;
@@ -22,7 +22,7 @@ const testEnumItems = (engine: TestEngineBase<'jest'>) => {
       },
       ({ hasError }) => {
         engine.expect(hasError).toBe(false);
-      }
+      },
     );
   });
 };

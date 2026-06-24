@@ -55,12 +55,12 @@
 这是一套完整的前端业务字典解决方案，更像是一个轻量级的数据源，通常被用作前端公共基础设施。
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.8/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.2.0/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
 <p align="center">
-  <sup><em>点击图片查看高清视频</em></sup>
+  <sup><em>↑ 点击图片查看高清视频 ↑</em></sup>
 </p>
 
 > 💡 想看看 enum-plus 能做什么，以及如何能提高前端开发效率？[查看完整 Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground&globals=locale:zh-CN)
@@ -95,20 +95,43 @@ npm install enum-plus
 import { Enum } from 'enum-plus';
 
 const StatusEnum = Enum({
-  Draft: { value: 'draft', label: '草稿', color: 'default' },
-  Review: { value: 'review', label: '审核中', color: 'processing' },
-  Published: { value: 'published', label: '已发布', color: 'success' },
+  Draft: { value: 1, label: '草稿', color: 'default' },
+  Review: { value: 2, label: '审核中', color: 'processing' },
+  Published: { value: 3, label: '已发布', color: 'success' },
 });
 
 StatusEnum.Review; // 2
 StatusEnum.label(2); // '审核中'
-StatusEnum.key(2); // 'Review'
-StatusEnum.items; // [{ key: 'Draft', value: 1, label: '草稿' }, ...]
+StatusEnum.has(2); // true
+StatusEnum.keys; // ['Draft', 'Review', 'Published']
 StatusEnum.values; // [1, 2, 3]
 StatusEnum.labels; // ['草稿', '审核中', '已发布']
+StatusEnum.items; // [{ key: 'Draft', value: 1, label: '草稿', color: 'default' }, ...]
+StatusEnum.named.Draft; // { key: 'Draft', value: 1, label: '草稿', color: 'default' }
+StatusEnum.item(1); // { key: 'Draft', value: 1, label: '草稿', color: 'default' }
 StatusEnum.meta; // { color: [ 'default', 'processing', 'success' ] }
-StatusEnum.findBy('color', 'success')?.key; // 'Published'
-StatusEnum.toList({ valueField: 'value', labelField: 'label' }); // [{ value: 1, label: '草稿' }, ...]
+StatusEnum.findBy('color', 'success'); // { key: 'Published', value: 3, label: '已发布', color: 'success' }
+StatusEnum.toList({ valueField: 'id', labelField: 'name' }); // [{ id: 1, name: '草稿' }, ...]
+StatusEnum.toMap({ keySelector: 'key', valueSelector: 'value' }); // { Draft: 1, Review: 2, Published: 3 }
+```
+
+## 国际化
+
+```ts
+import i18nPlugin from '@enum-plus/plugin-i18next';
+import { Enum } from 'enum-plus';
+
+Enum.install(i18nPlugin);
+
+const StatusEnum = Enum({
+  Draft: { value: 1, label: 'locales.enums.statusEnum.draft' },
+  Review: { value: 2, label: 'locales.enums.statusEnum.review' },
+  Published: { value: 3, label: 'locales.enums.statusEnum.published' },
+});
+
+StatusEnum.labels; // ['Draft', 'In Review', 'Published'] 或者 ['草稿', '审核中', '已发布']
+StatusEnum.label(2); // 'In Review' 或者 '审核中'
+StatusEnum.named.Review.label; // 'In Review' 或者 '审核中'
 ```
 
 ## 插件生态

@@ -1,9 +1,13 @@
-import type { localeCN, localeEN, StandardWeekConfig } from '@enum-plus/test/data/week-config';
+import type { StandardWeekConfig } from '@enum-plus/test/data/week-config';
 // eslint-disable-next-line import/no-unresolved
-import { noLocale } from '@enum-plus/test/data/week-config';
+import type enUS from '@enum-plus/test/i18n/en-US.json';
+// eslint-disable-next-line import/no-unresolved
+import neutral from '@enum-plus/test/i18n/neutral.json';
+// eslint-disable-next-line import/no-unresolved
+import type zhCN from '@enum-plus/test/i18n/zh-CN.json';
 
 export const getAltData = (options: {
-  locales: typeof localeEN | typeof localeCN | typeof noLocale;
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
   StandardWeekConfig: typeof StandardWeekConfig;
 }) => {
   const { locales, StandardWeekConfig } = options;
@@ -11,23 +15,23 @@ export const getAltData = (options: {
     (acc, key) => {
       acc[key as keyof typeof StandardWeekConfig] = {
         ...StandardWeekConfig[key as keyof typeof StandardWeekConfig],
-        label: `alternative:${noLocale[key as keyof typeof noLocale]}` as never,
+        label: `alternative:${neutral[StandardWeekConfig[key as keyof typeof StandardWeekConfig]['label']]}`,
       } as never;
       return acc;
     },
     {} as {
       -readonly [key in keyof typeof StandardWeekConfig]: Omit<(typeof StandardWeekConfig)[key], 'label'> & {
-        label: `alternative:${(typeof noLocale)[key]}`;
+        label: `alternative:${(typeof neutral)[keyof typeof neutral]}`;
       };
-    }
+    },
   );
-  const AltLocales = Object.keys(noLocale).reduce(
+  const AltLocales = Object.keys(neutral).reduce(
     (acc, key) => {
-      acc[`alternative:${noLocale[key as keyof typeof noLocale]}`] =
+      acc[`alternative:${neutral[key as keyof typeof neutral]}`] =
         `${(locales as Record<string, string>)[key]} 2` as never;
       return acc;
     },
-    {} as { -readonly [key in `alternative:${(typeof noLocale)[keyof typeof noLocale]}`]: string }
+    {} as { -readonly [key in `alternative:${(typeof neutral)[keyof typeof neutral]}`]: string },
   );
   return {
     AltStandardWeekConfig: altStandardWeekConfig,

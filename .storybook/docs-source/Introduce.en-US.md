@@ -52,12 +52,12 @@ It is a lightweight, zero-dependency library, and it works with any front-end fr
 What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.8/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.2.0/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
 <p align="center">
-  <sup><em>Click image for HD video</em></sup>
+  <sup><em>↑ Click image for HD video ↑</em></sup>
 </p>
 
 [Why my project has no TypeScript type hints after installation?](?path=/docs/faq--docs#-why-my-project-has-no-typescript-type-hints-after-installation)

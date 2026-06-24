@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": ".",
-    "baseUrl": ".",
     "paths": {
       "@enum-plus/test/*": ["../../tslib/test/*"],
       "@enum-plus/*": ["../../lib/*"],

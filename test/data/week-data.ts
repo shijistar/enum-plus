@@ -1,7 +1,11 @@
-import type { localeCN, localeEN, noLocale } from './week-config';
+import type enUS from '../i18n/en-US.json';
+import type neutral from '../i18n/neutral.json';
+import type zhCN from '../i18n/zh-CN.json';
 
 /** Standard week data, with key, value and label */
-export const getStandardWeekData = (locales: typeof localeEN | typeof localeCN | typeof noLocale) =>
+export const getStandardWeekData = (
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
+) =>
   [
     { key: 'Sunday', value: 0, label: locales['weekday.Sunday'] },
     { key: 'Monday', value: 1, label: locales['weekday.Monday'] },
@@ -52,7 +56,9 @@ export const getWeekDataHasKeyAutoIncrementedValue = () =>
   ] as const;
 
 /** Incomplete week data, with key and label, no value (fallback to key) */
-export const getWeekDataHasKeyNoValueHasLabel = (locales: typeof localeEN | typeof localeCN | typeof noLocale) =>
+export const getWeekDataHasKeyNoValueHasLabel = (
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
+) =>
   [
     { key: 'Sunday', value: 'Sunday', label: locales['weekday.Sunday'] },
     { key: 'Monday', value: 'Monday', label: locales['weekday.Monday'] },
@@ -64,7 +70,9 @@ export const getWeekDataHasKeyNoValueHasLabel = (locales: typeof localeEN | type
   ] as const;
 
 /** Incomplete week data, with value and label, no key (fallback to value) */
-export const getWeekDataHasValueHasLabelNoKey = (locales: typeof localeEN | typeof localeCN | typeof noLocale) =>
+export const getWeekDataHasValueHasLabelNoKey = (
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
+) =>
   [
     { key: '0', value: 0, label: locales['weekday.Sunday'] },
     { key: '1', value: 1, label: locales['weekday.Monday'] },
@@ -87,13 +95,17 @@ export const getWeekDataHasValueNoKeyNoLabel = () =>
     { key: '6', value: 6, label: '6' },
   ] as const;
 
-export const getStandardBooleanData = (locales: typeof localeEN | typeof localeCN | typeof noLocale) =>
+export const getStandardBooleanData = (
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
+) =>
   [
     { key: 'Yes', value: true, label: locales['boolean.Yes'] },
     { key: 'No', value: false, label: locales['boolean.No'] },
   ] as const;
 
-export const getStandardDateData = (locales: typeof localeEN | typeof localeCN | typeof noLocale) =>
+export const getStandardDateData = (
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
+) =>
   [
     { key: 'FirstDay', value: new Date(2001, 1, 1), label: locales['date.FirstDay'] },
     { key: 'LastDay', value: new Date(2001, 12, 31), label: locales['date.LastDay'] },

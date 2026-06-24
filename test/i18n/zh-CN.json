@@ -1,0 +1,21 @@
+{
+  "weekDay.name": "星期",
+  "weekday.Sunday": "星期日",
+  "weekday.Monday": "星期一",
+  "weekday.Tuesday": "星期二",
+  "weekday.Wednesday": "星期三",
+  "weekday.Thursday": "星期四",
+  "weekday.Friday": "星期五",
+  "weekday.Saturday": "星期六",
+  "weekday.SundayAbbr": "日",
+  "weekday.MondayAbbr": "一",
+  "weekday.TuesdayAbbr": "二",
+  "weekday.WednesdayAbbr": "三",
+  "weekday.ThursdayAbbr": "四",
+  "weekday.FridayAbbr": "五",
+  "weekday.SaturdayAbbr": "六",
+  "boolean.Yes": "是",
+  "boolean.No": "否",
+  "date.FirstDay": "第一天",
+  "date.LastDay": "最后一天"
+}

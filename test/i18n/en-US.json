@@ -1,0 +1,21 @@
+{
+  "weekDay.name": "Week Days",
+  "weekday.Sunday": "Sunday",
+  "weekday.Monday": "Monday",
+  "weekday.Tuesday": "Tuesday",
+  "weekday.Wednesday": "Wednesday",
+  "weekday.Thursday": "Thursday",
+  "weekday.Friday": "Friday",
+  "weekday.Saturday": "Saturday",
+  "weekday.SundayAbbr": "Sun",
+  "weekday.MondayAbbr": "Mon",
+  "weekday.TuesdayAbbr": "Tue",
+  "weekday.WednesdayAbbr": "Wed",
+  "weekday.ThursdayAbbr": "Thu",
+  "weekday.FridayAbbr": "Fri",
+  "weekday.SaturdayAbbr": "Sat",
+  "boolean.Yes": "Yes",
+  "boolean.No": "No",
+  "date.FirstDay": "First Day",
+  "date.LastDay": "Last Day"
+}

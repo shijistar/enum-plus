@@ -2,13 +2,21 @@
 
 # Changelog
 
+## 1.0.1
+
+2026-6-24
+
+### Features
+
+- ✨ Add `suppressWarnings` option to hide the warning message when used outside of Vue component context.
+
 ## 1.0.0
 
 2025-10-13
 
 Initial release of `@enum-plus/plugin-vue-i18n`.
 
-### ✨ Features
+### Features
 
 - Seamless integration between `enum-plus` and `vue-i18n`.
 - Enum item `label` fields can be i18n keys (e.g. `week.monday`).

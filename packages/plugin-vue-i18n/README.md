@@ -27,11 +27,24 @@ Import the `@enum-plus/plugin-vue-i18n` plugin and install it in the entry file 
 import i18nPlugin from '@enum-plus/plugin-vue-i18n';
 import { Enum } from 'enum-plus';
 
+const i18n = createI18n({
+  // ...
+});
+
 Enum.install(i18nPlugin, {
   localize: {
     instance: i18n,
   },
 });
+```
+
+If you will never call the enum's internationalization features outside the component context, you can even further simplify it to:
+
+```js
+import i18nPlugin from '@enum-plus/plugin-vue-i18n';
+import { Enum } from 'enum-plus';
+
+Enum.install(i18nPlugin);
 ```
 
 ## Plugin Options
@@ -99,7 +112,7 @@ const WeekEnum = Enum(
   },
   {
     name: 'weekDays.name', // Optional enum type name
-  }
+  },
 );
 WeekEnum.label(1); // Monday
 WeekEnum.name; // Week

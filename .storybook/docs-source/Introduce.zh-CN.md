@@ -52,12 +52,12 @@
 还有哪些令人兴奋的特性呢？请继续探索吧！或者不妨先看下这个使用视频。
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.1.8/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.2.0/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
 <p align="center">
-  <sup><em>点击图片查看高清视频</em></sup>
+  <sup><em>↑ 点击图片查看高清视频 ↑</em></sup>
 </p>
 
 [为什么我的项目安装后没有 TypeScript 类型提示？](?path=/docs/faq--docs&globals=locale:zh-CN#为什么我的项目安装后没有-typescript-类型提示)

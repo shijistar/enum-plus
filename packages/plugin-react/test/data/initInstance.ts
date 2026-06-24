@@ -1,6 +1,10 @@
-// eslint-disable-next-line import/no-unresolved
-import { localeCN, localeEN, noLocale } from '@enum-plus/test/data/week-config';
 import type { i18n } from 'i18next';
+// eslint-disable-next-line import/no-unresolved
+import enUS from '@enum-plus/test/i18n/en-US.json';
+// eslint-disable-next-line import/no-unresolved
+import neutral from '@enum-plus/test/i18n/neutral.json';
+// eslint-disable-next-line import/no-unresolved
+import zhCN from '@enum-plus/test/i18n/zh-CN.json';
 
 const initInstance = (instance: i18n) => {
   instance.init({
@@ -12,25 +16,22 @@ const initInstance = (instance: i18n) => {
       en: {
         translation: {
           greeting: 'Hello',
-          ...Object.keys(noLocale).reduce(
+          ...Object.keys(neutral).reduce(
             (acc, key) => {
-              acc[noLocale[key as keyof typeof noLocale] as keyof typeof localeEN] = (
-                localeEN as Record<string, string>
-              )[key] as never;
+              acc[key as keyof typeof neutral] = enUS[key as keyof typeof neutral] as never;
               return acc;
             },
-            {} as { -readonly [key in keyof typeof localeEN]: `${(typeof localeEN)[key]} 2` }
+            {} as { -readonly [key in keyof typeof neutral]: `${(typeof neutral)[key]} 2` },
           ),
         },
         alternative: {
           greeting: 'Hi',
-          ...Object.keys(noLocale).reduce(
+          ...Object.keys(neutral).reduce(
             (acc, key) => {
-              acc[noLocale[key as keyof typeof noLocale] as keyof typeof localeEN] =
-                `${(localeEN as Record<string, string>)[key]} 2` as never;
+              acc[key as keyof typeof neutral] = `${enUS[key as keyof typeof neutral]} 2` as never;
               return acc;
             },
-            {} as { -readonly [key in keyof typeof localeEN]: `${(typeof localeEN)[key]} 2` }
+            {} as { -readonly [key in keyof typeof neutral]: `${(typeof neutral)[key]} 2` },
           ),
         },
         override: {
@@ -40,25 +41,22 @@ const initInstance = (instance: i18n) => {
       'zh-CN': {
         translation: {
           greeting: '你好',
-          ...Object.keys(noLocale).reduce(
+          ...Object.keys(neutral).reduce(
             (acc, key) => {
-              acc[noLocale[key as keyof typeof noLocale] as keyof typeof localeCN] = (
-                localeCN as Record<string, string>
-              )[key] as never;
+              acc[key as keyof typeof neutral] = zhCN[key as keyof typeof zhCN] as never;
               return acc;
             },
-            {} as { -readonly [key in keyof typeof localeCN]: `${(typeof localeCN)[key]} 2` }
+            {} as { -readonly [key in keyof typeof neutral]: `${(typeof neutral)[key]} 2` },
           ),
         },
         alternative: {
           greeting: '嗨',
-          ...Object.keys(noLocale).reduce(
+          ...Object.keys(neutral).reduce(
             (acc, key) => {
-              acc[noLocale[key as keyof typeof noLocale] as keyof typeof localeCN] =
-                `${(localeCN as Record<string, string>)[key]} 2` as never;
+              acc[key as keyof typeof neutral] = `${zhCN[key as keyof typeof zhCN]} 2` as never;
               return acc;
             },
-            {} as { -readonly [key in keyof typeof localeCN]: `${(typeof localeCN)[key]} 2` }
+            {} as { -readonly [key in keyof typeof neutral]: `${(typeof neutral)[key]} 2` },
           ),
         },
         override: {

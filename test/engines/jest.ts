@@ -1,8 +1,11 @@
 import * as EnumPlus from '@enum-plus';
 import * as Jsoneo from 'jsoneo';
-import { describe, expect, test } from '@jest/globals';
+import type { describe as describeInterface, expect as expectInterface, test as testInterface } from '@jest/globals';
 import * as WeekConfig from '../data/week-config';
 import * as WeekData from '../data/week-data';
+import enUS from '../i18n/en-US.json';
+import neutral from '../i18n/neutral.json';
+import zhCN from '../i18n/zh-CN.json';
 import TestEngineBase from './base';
 import type { RuntimeContext } from './utils';
 
@@ -13,7 +16,7 @@ export class JestEngine extends TestEngineBase<'jest'> {
   }
 
   override describe(name: string, fn: () => void): void {
-    describe(name, fn);
+    (describe as typeof describeInterface)(name, fn);
   }
   override test<Data>(
     name: string,
@@ -21,14 +24,14 @@ export class JestEngine extends TestEngineBase<'jest'> {
     assert: (data: Data) => void,
     evaluateContext?: Record<string, unknown>,
   ) {
-    test(name, async () => {
+    (test as typeof testInterface)(name, async () => {
       const runtimeContext = this.getRuntimeContext();
       const result = await evaluate({ ...runtimeContext, ...evaluateContext });
       assert(result);
     });
   }
   override expect<ActualType>(actual: ActualType) {
-    return expect(actual);
+    return (expect as typeof expectInterface)(actual);
   }
 
   private getRuntimeContext(): RuntimeContext {
@@ -37,6 +40,11 @@ export class JestEngine extends TestEngineBase<'jest'> {
       WeekConfig,
       WeekData,
       Jsoneo,
+      i18n: {
+        enUS,
+        zhCN,
+        neutral,
+      },
     };
   }
 }

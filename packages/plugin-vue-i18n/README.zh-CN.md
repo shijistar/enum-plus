@@ -27,11 +27,24 @@ npm install @enum-plus/plugin-vue-i18n
 import i18nPlugin from '@enum-plus/plugin-vue-i18n';
 import { Enum } from 'enum-plus';
 
+const i18n = createI18n({
+  // ...
+});
+
 Enum.install(i18nPlugin, {
   localize: {
     instance: i18n,
   },
 });
+```
+
+如果你永远不会在组件上下文之外调用枚举的国际化功能，甚至可以进一步简化为：
+
+```js
+import i18nPlugin from '@enum-plus/plugin-vue-i18n';
+import { Enum } from 'enum-plus';
+
+Enum.install(i18nPlugin);
 ```
 
 ## 插件选项
@@ -99,7 +112,7 @@ const WeekEnum = Enum(
   },
   {
     name: 'weekDays.name', // 枚举类型名称，可选
-  }
+  },
 );
 
 WeekEnum.label(1); // Monday

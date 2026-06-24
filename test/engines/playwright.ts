@@ -24,7 +24,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
     name: string,
     evaluate: (context: RuntimeContext) => Data,
     assert: (data: Data) => void,
-    evaluateContext?: Record<string, unknown>
+    evaluateContext?: Record<string, unknown>,
   ): void {
     const serializedEvaluateParams = stringify({ ...evaluateContext, evaluateFn: evaluate });
 
@@ -57,6 +57,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
       const WeekData = window.WeekData;
       const Jsoneo = window.jsoneo;
       const ClientHooks = window.ClientHooks;
+      const i18n = window.I18n;
 
       // Deserialize request
       const runtimeContext = {
@@ -65,6 +66,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
         WeekData,
         Jsoneo,
         ClientHooks,
+        i18n,
       };
       // console.log('window', runtimeContext);
       const { stringify, parse } = Jsoneo;
@@ -88,7 +90,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
         },
         {
           // debug: true,
-        }
+        },
       );
       // console.log('serialize result');
       // console.log(serializeResult);

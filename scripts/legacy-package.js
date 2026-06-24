@@ -10,7 +10,7 @@ const libTsconfig = require('../tsconfig.lib.json');
 const legacyPkg = require(`../package-legacy-node.json`);
 
 // legacy package.json for node13 and previous
-Object.assign(pkg, legacyPkg);
+Object.assign(pkg, legacyPkg, { scripts: { ...pkg.scripts, ...legacyPkg.scripts } });
 writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n', { encoding: 'utf8' });
 
 // legacy tsconfig.json

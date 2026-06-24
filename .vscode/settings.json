@@ -4,7 +4,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "cSpell.words": ["jsoneo", "madhead", "shijistar", "softprops", "tses", "Vuetify"],
-  "i18n-ally.localesPaths": [".storybook/locales/langs"],
+  "i18n-ally.localesPaths": [".storybook/locales/langs", "test/i18n"],
   "i18n-ally.enabledFrameworks": ["react"],
   "i18n-ally.pathMatcher": "{locale}.json",
   "i18n-ally.extract.autoDetect": true,

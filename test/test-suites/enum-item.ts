@@ -29,17 +29,21 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
     engine.test(
       'item.toString should return enum label',
-      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { setLang, getLocales, StandardWeekConfig, localeEN } }) => {
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { setLang, getLocales, StandardWeekConfig },
+        i18n: { enUS },
+      }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         const sunday = weekEnum.items[0];
-        return { weekEnum, sunday, localeEN };
+        return { weekEnum, sunday, enUS };
       },
-      ({ weekEnum, sunday, localeEN }) => {
-        engine.expect(sunday.toString()).toBe(localeEN['weekday.Sunday']);
-        engine.expect(sunday.toLocaleString()).toBe(localeEN['weekday.Sunday']);
-        engine.expect(weekEnum.items[6].toString()).toBe(localeEN['weekday.Saturday']);
-        engine.expect(weekEnum.items[6].toLocaleString()).toBe(localeEN['weekday.Saturday']);
+      ({ weekEnum, sunday, enUS }) => {
+        engine.expect(sunday.toString()).toBe(enUS['weekday.Sunday']);
+        engine.expect(sunday.toLocaleString()).toBe(enUS['weekday.Sunday']);
+        engine.expect(weekEnum.items[6].toString()).toBe(enUS['weekday.Saturday']);
+        engine.expect(weekEnum.items[6].toLocaleString()).toBe(enUS['weekday.Saturday']);
       },
     );
 
@@ -75,7 +79,11 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
     engine.test(
       'item.toPrimitive should be auto converted to a correct primitive type',
-      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, localeEN, getLocales, setLang } }) => {
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, getLocales, setLang },
+        i18n: { enUS },
+      }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         const sunday = weekEnum.items[0];
@@ -83,11 +91,11 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         const tuesday = weekEnum.items[2];
         const friday = weekEnum.items[5];
         const saturday = weekEnum.items[6];
-        return { localeEN, sunday, monday, tuesday, friday, saturday };
+        return { enUS, sunday, monday, tuesday, friday, saturday };
       },
-      ({ localeEN, sunday, monday, tuesday, friday, saturday }) => {
+      ({ enUS, sunday, monday, tuesday, friday, saturday }) => {
         engine.expect(Number(sunday)).toBe(0);
-        engine.expect(String(sunday)).toBe(localeEN['weekday.Sunday']);
+        engine.expect(String(sunday)).toBe(enUS['weekday.Sunday']);
         engine.expect(Boolean(sunday)).toBe(true);
         engine.expect(Boolean(monday)).toBe(true);
 
@@ -109,10 +117,10 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         engine.expect('' + sunday).toBe('0');
         engine.expect('' + saturday).toEqual('6');
 
-        engine.expect(`${sunday}`).toBe(localeEN['weekday.Sunday']);
-        engine.expect(`${saturday}`).toBe(localeEN['weekday.Saturday']);
-        engine.expect(saturday.toString()).toBe(localeEN['weekday.Saturday']);
-        engine.expect(monday.toLocaleString()).toBe(localeEN['weekday.Monday']);
+        engine.expect(`${sunday}`).toBe(enUS['weekday.Sunday']);
+        engine.expect(`${saturday}`).toBe(enUS['weekday.Saturday']);
+        engine.expect(saturday.toString()).toBe(enUS['weekday.Saturday']);
+        engine.expect(monday.toLocaleString()).toBe(enUS['weekday.Monday']);
         engine.expect(typeof monday).toBe('object');
 
         engine.expect(+sunday).toBe(0);
@@ -123,7 +131,11 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     // should be readonly
     engine.test(
       'Should be readonly',
-      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, localeEN, setLang, getLocales } }) => {
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig);
         const modifyValue = 'SHOULD NOT BE MODIFIED';
@@ -223,7 +235,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         const isSundayExtensible = Object.isExtensible(sunday);
         return {
           StandardWeekConfig,
-          localeEN,
+          enUS,
           sundayModifiedKey,
           sundayModifiedValue,
           sundayModifiedLabel,
@@ -242,7 +254,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({
         StandardWeekConfig,
-        localeEN,
+        enUS,
         sundayModifiedKey,
         sundayModifiedValue,
         sundayModifiedLabel,
@@ -260,7 +272,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       }) => {
         engine.expect(sundayModifiedKey).toBe('Sunday');
         engine.expect(sundayModifiedValue).toBe(0);
-        engine.expect(sundayModifiedLabel).toBe(localeEN['weekday.Sunday']);
+        engine.expect(sundayModifiedLabel).toBe(enUS['weekday.Sunday']);
         engine.expect(sundayModifiedRaw).toEqual(StandardWeekConfig.Sunday);
         engine.expect(sundayDeletedKey).toBe(false);
         engine.expect(sundayDeletedValue).toBe(false);
