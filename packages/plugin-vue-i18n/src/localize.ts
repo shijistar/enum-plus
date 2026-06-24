@@ -5,9 +5,8 @@ import { useI18n } from 'vue-i18n';
 export interface LocalizePluginOptions {
   /**
    * - **EN:** Set the default i18n instance. If you want to support using the enum's
-   *   internationalization features in a non-component environment, you must pass in this
-   *   instance.
-   * - **CN:** 设置默认的i18n实例。如果要支持在非组件环境下使用枚举的国际化功能，必须传入该实例。
+   *   internationalization features out of a component context, you must pass in this instance.
+   * - **CN:** 设置默认的i18n实例。如果在组件上下文之外使用枚举的国际化功能，必须传入该实例。
    */
   instance?: I18n;
   /**
@@ -27,18 +26,27 @@ export interface LocalizePluginOptions {
    *   可以传递一个对象，也可以传递一个函数，函数的参数是当前的key，返回值是传递给`t`方法的选项，甚至可以直接返回一个字符串作为最终的翻译结果。
    */
   tOptions?: TranslateOptions | ((key: string | undefined | (string | undefined)[]) => TranslateOptions | string);
+  /**
+   * - **EN:** Suppress warnings when falling back to the instance's `t` method.
+   * - **CN:** 在回退到实例的`t`方法时，是否抑制警告。
+   *
+   * @default false
+   */
+  suppressWarnings?: boolean;
 }
 
 const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) => {
-  const { instance, useI18nOptions, tOptions } = pluginOptions || {};
+  const { instance, useI18nOptions, tOptions, suppressWarnings = false } = pluginOptions || {};
   Enum.localize = (key: string | undefined) => {
     let t: ComposerTranslation<Record<string, unknown>, string>;
     try {
       const { t: translate } = useI18n(useI18nOptions);
       t = translate;
     } catch (error) {
-      console.warn(`An error occurred in useI18n! Fallback to instance.t if instance is provided.`);
-      console.warn(`The error is:`, error);
+      if (!suppressWarnings) {
+        console.warn(`An error occurred in useI18n! Fallback to instance.t if instance is provided.`);
+        console.warn(`The error is:`, error);
+      }
       t = ((localeKey: string, named: Record<string, unknown>, options: TranslateOptions) => {
         if (instance) {
           return (instance.global as Composer).t(localeKey, named, options);

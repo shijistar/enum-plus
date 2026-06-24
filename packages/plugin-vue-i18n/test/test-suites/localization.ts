@@ -179,11 +179,12 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should allow to be used out of component environment',
+      'Should allow to be used out of component context',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
             instance: i18n,
+            suppressWarnings: true,
           },
         });
         changeLanguage(i18n, 'en');
@@ -209,7 +210,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should work with instance and tOptions out of component environment',
+      'Should work with instance and tOptions out of component context',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
@@ -249,7 +250,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should return the origin key without instance out of component environment',
+      'Should return the origin key without instance out of component context',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(rootPlugin);
         changeLanguage(i18n, 'zh-CN');
@@ -269,9 +270,9 @@ const testLocalization = <L extends boolean>(
         engine.expect(weekEnum.name).toBe('weekDay.name');
         engine.expect(weekEnum.labels).toEqual(Array.from(weekEnum.items.map((item) => item.raw.label)));
         const sunday = weekEnum.items[0];
-        engine.expect(sunday.label).toBe('weekday.sunday');
-        engine.expect(sunday.toString()).toBe('weekday.sunday');
-        engine.expect(sunday.toLocaleString()).toBe('weekday.sunday');
+        engine.expect(sunday.label).toBe('weekday.Sunday');
+        engine.expect(sunday.toString()).toBe('weekday.Sunday');
+        engine.expect(sunday.toLocaleString()).toBe('weekday.Sunday');
       },
     );
   });
