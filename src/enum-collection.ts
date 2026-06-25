@@ -120,14 +120,16 @@ export class EnumCollectionClass<
    */
   get name(): string | undefined {
     const opts = this.__options__;
-    if (typeof opts?.name === 'function') {
-      return opts.name(undefined!);
+    const enumName = opts?.name;
+    if (typeof enumName === 'function') {
+      return enumName(undefined!);
     }
+    // todo: 拼接 labelPrefix，和enumItem类似逻辑复用代码
     const localize = opts?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
-      return localize(opts?.name);
+      return localize(enumName);
     }
-    return opts?.name;
+    return enumName;
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {

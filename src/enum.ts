@@ -7,7 +7,6 @@ import type {
   ArrayToMap,
   EnumInit,
   EnumItemInit,
-  EnumItemLabel,
   EnumKey,
   EnumValue,
   IsAny,
@@ -485,19 +484,13 @@ export type NativeEnumMembers<
  * - **EN:** Enum initialization options
  * - **CN:** 枚举初始化选项
  */
-export interface EnumInitOptions<
+export type EnumInitOptions<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-> extends EnumItemOptions<T[K], K, V, LP> {
-  /**
-   * - **EN:** Set the display name of the enum collection, supports string or localized resource key
-   * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
-   */
-  name?: EnumItemLabel;
-}
+> = EnumItemOptions<T[K], K, V, LP>;
 
 export interface ArrayBasedEnumInitOptions<
   T extends EnumInit<K, V>,

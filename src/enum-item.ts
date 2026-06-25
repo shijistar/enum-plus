@@ -227,8 +227,9 @@ export class EnumItemClass<
     return content;
   }
   private _localizeResource(resource: EnumItemLabel | undefined) {
-    const labelPrefix = this._options?.labelPrefix;
-    const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
+    const options = this._options;
+    const labelPrefix = options?.labelPrefix;
+    const autoLabel = options?.autoLabel ?? internalConfig.autoLabel;
     let localeKey = resource;
     if (typeof localeKey === 'function') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -240,8 +241,13 @@ export class EnumItemClass<
           item: this,
           labelPrefix: labelPrefix as LP,
         });
-      } else {
-        localeKey = `${labelPrefix as string}${resource}`;
+      } else if (typeof labelPrefix === 'string') {
+        let prefix = labelPrefix;
+        const enumName = options?.name;
+        if (typeof enumName === 'string') {
+          prefix = prefix.replace(/\{name\}/g, enumName);
+        }
+        localeKey = `${prefix}${resource}`;
       }
     }
     return this._localize(localeKey) ?? localeKey;
@@ -261,7 +267,11 @@ export interface EnumItemOptions<
    *   text
    * - **CN:** 本地化函数，用于把枚举项文本转换为本地化文本
    */
-  localize?: LocalizeInterface;
+  localize?: LocalizeInterface; /**
+   * - **EN:** Set the display name of the enum collection, supports string or localized resource key
+   * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名
+   */
+  name?: EnumItemLabel;
   /**
    * - **EN:** The label prefix for each enum item, which can be a string or an object. This option
    *   can simplify or even omit the label definition of enum items, and is only effective when
