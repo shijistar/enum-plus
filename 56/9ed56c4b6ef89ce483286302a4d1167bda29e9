@@ -1,0 +1,18 @@
+src/enum.ts
+  h_3a0b15d296f1fe 487,493
+src/enum-collection.ts
+  h_3a0b15d296f1fe 123-125,127,130,132
+src/enum-item.ts
+  h_3a0b15d296f1fe 230-232,244-250,270-274
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "569ed56c4b6ef89ce483286302a4d1167bda29e9",
+  "prompts": {},
+  "humans": {
+    "h_3a0b15d296f1fe": {
+      "author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
