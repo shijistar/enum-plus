@@ -1,3 +1,5 @@
+import { Enum } from './enum';
+
 export type {
   EnumInit,
   EnumItemInit,
@@ -31,3 +33,21 @@ export {
 } from './utils';
 export type { PluginFunc } from './enum';
 export { Enum } from './enum';
+
+Enum(
+  {
+    Sunday: {
+      value: 0,
+      /** abbr1... */
+      abbr: 'Sun',
+    },
+    Monday: {
+      value: 1,
+      /** abbr2... */
+      abbr: 'Mon',
+    },
+  },
+  {
+    metas: ['description'],
+  },
+).items[0].description;

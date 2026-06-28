@@ -27,18 +27,19 @@ export const Enum = (<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LP = any,
-  OP extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
+  const M extends string[] = string[],
+  OP extends EnumInitOptions<T, K, V, LP, M> = EnumInitOptions<T, K, V, LP, M>,
 >(
   init: T | T[],
   options?: OP,
-): IEnum<T, K, V, LP, OP> & NativeEnumMembers<T, K, V> => {
+): IEnum<T, K, V, LP, M, OP> & NativeEnumMembers<T, K, V> => {
   if (Array.isArray(init)) {
     const initMap = getInitMapFromArray<T, K, V, LP>(init, options);
     return new EnumCollectionClass<T, K, V, LP>(initMap, options) as unknown as NativeEnumMembers<T, K, V> &
-      IEnum<T, K, V, LP, OP>;
+      IEnum<T, K, V, LP, M, OP>;
   } else {
     return new EnumCollectionClass<T, K, V, LP>(init, options) as unknown as NativeEnumMembers<T, K, V> &
-      IEnum<T, K, V, LP, OP>;
+      IEnum<T, K, V, LP, M, OP>;
   }
 }) as EnumInterface;
 
@@ -144,11 +145,12 @@ export interface EnumInterface {
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const LP = any,
-    OP extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
+    const M extends string[] = string[],
+    OP extends EnumInitOptions<T, K, V, LP, M> = EnumInitOptions<T, K, V, LP, M>,
   >(
     raw: T,
-    options?: EnumInitOptions<T, K, V, LP>,
-  ): IEnum<T, K, V, LP, OP> & NativeEnumMembers<T, K, V>;
+    options?: EnumInitOptions<T, K, V, LP, M>,
+  ): IEnum<T, K, V, LP, M, OP> & NativeEnumMembers<T, K, V>;
 
   /**
    * - **EN:** Generate an enum based on an array
@@ -308,7 +310,8 @@ export interface IEnum<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-  OP extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
+  M extends string[] = string[],
+  OP extends EnumInitOptions<T, K, V, LP, M> = EnumInitOptions<T, K, V, LP, M>,
 >
   extends InheritableEnumItems<T, K, V, LP>, EnumExtension<T, K, V> {
   /**
@@ -344,10 +347,10 @@ export interface IEnum<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly items: IsAny<T> extends true
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      EnumItemInterface<any, string, EnumValue, LP>[] & IEnumItems<any, string, EnumValue, LP>
+      EnumItemInterface<any, string, EnumValue, LP, M>[] & IEnumItems<any, string, EnumValue, LP>
     : T extends { items: unknown }
       ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>
-      : EnumItemInterface<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>;
+      : EnumItemInterface<T[K], K, V, LP, M>[] & IEnumItems<T, K, V, LP>;
   /**
    * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can access all
    *   enum keys through this alias
@@ -490,7 +493,8 @@ export type EnumInitOptions<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-> = EnumItemOptions<T[K], K, V, LP>;
+  M extends string[] = string[],
+> = EnumItemOptions<T[K], K, V, LP, M>;
 
 export interface ArrayBasedEnumInitOptions<
   T extends EnumInit<K, V>,

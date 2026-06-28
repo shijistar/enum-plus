@@ -16,12 +16,17 @@ export type EnumItemInterface<
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-> = EnumItemClass<T, K, V, LP> &
-  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-  {
-    [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
-  };
-
+  M extends string[] = string[],
+> = EnumItemClass<T, K, V, LP> & Omit<T, 'value' | 'label' | 'key'> & DynamicItem<M[number]>;
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+interface DynamicItem<K extends string = string> {
+  /**
+   * 动态枚举项。
+   *
+   * key 为枚举项的 value，value 为对应的枚举项实例。
+   */
+  [value in K]: string;
+}
 /**
  * - **EN:** Represents a single item in an enumeration collection.
  * - **CN:** 表示枚举集合中的单个枚举项
@@ -261,6 +266,7 @@ export interface EnumItemOptions<
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
+  M extends string[] = string[],
 > {
   /**
    * - **EN:** Localization function, used to convert the text of the enumeration item to localized
@@ -321,4 +327,5 @@ export interface EnumItemOptions<
    *   - `string[]` - 指定要自动本地化的元信息字段名。
    */
   autoLocalizeMeta?: boolean | Exclude<keyof T, 'key' | 'value' | 'label'>[];
+  metas?: M;
 }
