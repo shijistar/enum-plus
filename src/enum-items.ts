@@ -1,3 +1,4 @@
+import { getAutoLocalizeTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
 import { EnumItemClass, type EnumItemInterface, type EnumItemOptions } from './enum-item';
 import type {
   EnumInit,
@@ -103,28 +104,29 @@ export class EnumItemsArray<
       this.push(item);
       named[key] = item;
 
-      // Collect custom meta fields
+      // Collect custom meta fields, including fields declared by autoLocalize.itemTemplate.
       const itemRaw = raw[key];
-      if (itemRaw && typeof itemRaw === 'object') {
-        Object.keys(itemRaw).forEach((k) => {
-          const metaKey = k as Exclude<keyof T[keyof T], 'value' | 'label'>;
-          if (!['value', 'label'].includes(k)) {
-            if (meta[metaKey] == null) {
-              meta[metaKey] = [];
-            }
-            const metaValue = item[k as never];
-            if (metaValue != null) {
-              meta[metaKey].push(metaValue);
-            }
-          }
-        });
-      }
+      const rawMetaKeys =
+        itemRaw && typeof itemRaw === 'object' && Object.prototype.toString.call(itemRaw) === '[object Object]'
+          ? Object.keys(itemRaw).filter((k) => !['value', 'label'].includes(k))
+          : [];
+      const templateMetaKeys = getAutoLocalizeTemplateFields(options).filter((k) => k !== 'label');
+      Array.from(new Set([...rawMetaKeys, ...templateMetaKeys])).forEach((k) => {
+        const metaKey = k as Exclude<keyof T[keyof T], 'value' | 'label'>;
+        if (meta[metaKey] == null) {
+          meta[metaKey] = [];
+        }
+        const metaValue = item[k as never];
+        if (metaValue != null) {
+          meta[metaKey].push(metaValue);
+        }
+      });
     });
 
     const autoLocalizeMeta = options?.autoLocalizeMeta;
     // Freeze meta arrays
     Object.keys(meta).forEach((k) => {
-      const autoLocalize = autoLocalizeMeta && (autoLocalizeMeta === true || autoLocalizeMeta.includes(k as never));
+      const autoLocalize = isAutoLocalizeMetaField(k, options);
       if (autoLocalize) {
         const descriptor = {
           get: function get(): unknown[] {
@@ -146,7 +148,7 @@ export class EnumItemsArray<
         freeze(meta[k as keyof typeof meta]);
       }
     });
-    if (autoLocalizeMeta) {
+    if (autoLocalizeMeta || getAutoLocalizeTemplateFields(options).some((k) => k !== 'label')) {
       define(meta, '_items', { value: this });
     }
 

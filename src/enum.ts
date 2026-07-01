@@ -1,4 +1,5 @@
 import type { EnumExtension } from 'enum-plus/extension';
+import type { AutoLocalizeOption } from './auto-localize';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { IEnumItems, InheritableEnumItems } from './enum-items';
@@ -219,6 +220,8 @@ export interface EnumInterface {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           labelPrefix: any;
         }) => string);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    autoLocalize?: AutoLocalizeOption<any, any>;
   };
 
   /**

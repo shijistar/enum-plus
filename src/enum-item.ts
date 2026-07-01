@@ -1,3 +1,10 @@
+import {
+  type AutoLocalizeOption,
+  getAutoLocalizeTemplateFields,
+  isAutoLocalizeMetaField,
+  mergeAutoLocalizeConfig,
+  resolveAutoLocalizeTemplate,
+} from './auto-localize';
 import { internalConfig, localizer } from './global-config';
 import type {
   EnumItemInit,
@@ -67,35 +74,35 @@ export class EnumItemClass<
       _options: { value: options },
     });
 
-    // Determines whether a property should be auto localized based on the autoLocalizeMeta option
+    // Determines whether a property should be auto localized based on autoLocalizeMeta
+    // and autoLocalize.itemTemplate. Template-declared meta fields are generated even
+    // when the raw enum item does not explicitly declare the property.
     const autoLocalizePropMap: PropertyDescriptorMap = {};
-    if (typeof raw === 'object') {
-      const autoLocalizeMeta = options?.autoLocalizeMeta;
-      Object.keys(raw).forEach((metaKey) => {
-        if (!['value', 'label'].includes(metaKey)) {
-          if (
-            autoLocalizeMeta === true ||
-            (Array.isArray(autoLocalizeMeta) && autoLocalizeMeta.includes(metaKey as never))
-          ) {
-            const descriptor = {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              get: function get(this: EnumItemClass<T, K, V, LP>): any {
-                // @ts-expect-error: because _metaKey is dynamically added to the getter function
-                const { _metaKey } = get;
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                return this._localizeResource((this.raw as any)[_metaKey]);
-              },
-              enumerable: true,
-            };
-            autoLocalizePropMap[metaKey] = descriptor;
+    const rawMetaKeys =
+      raw && typeof raw === 'object' && Object.prototype.toString.call(raw) === '[object Object]'
+        ? Object.keys(raw).filter((metaKey) => !['value', 'label'].includes(metaKey))
+        : [];
+    const templateMetaKeys = getAutoLocalizeTemplateFields(options).filter((metaKey) => metaKey !== 'label');
+    const metaKeys = Array.from(new Set([...rawMetaKeys, ...templateMetaKeys]));
+    metaKeys.forEach((metaKey) => {
+      if (isAutoLocalizeMetaField(metaKey, options)) {
+        const descriptor = {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          get: function get(this: EnumItemClass<T, K, V, LP>): any {
             // @ts-expect-error: because _metaKey is dynamically added to the getter function
-            descriptor.get._metaKey = metaKey;
-          } else {
-            this[metaKey as keyof this] = (raw as object)[metaKey as never];
-          }
-        }
-      });
-    }
+            const { _metaKey } = get;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return this._localizeResource((this.raw as any)?.[_metaKey], _metaKey);
+          },
+          enumerable: true,
+        };
+        autoLocalizePropMap[metaKey] = descriptor;
+        // @ts-expect-error: because _metaKey is dynamically added to the getter function
+        descriptor.get._metaKey = metaKey;
+      } else if (raw && typeof raw === 'object') {
+        this[metaKey as keyof this] = (raw as object)[metaKey as never];
+      }
+    });
 
     // Define getters to localize i18n key into localized text
     defines(this, {
@@ -226,15 +233,24 @@ export class EnumItemClass<
     }
     return content;
   }
-  private _localizeResource(resource: EnumItemLabel | undefined) {
+  private _localizeResource(resource: EnumItemLabel | undefined, field = 'label') {
     const labelPrefix = this._options?.labelPrefix;
     const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
+    const autoLocalize = mergeAutoLocalizeConfig(this._options?.autoLocalize);
     let localeKey = resource;
     if (typeof localeKey === 'function') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return localeKey(this as any);
     }
-    if (autoLabel && labelPrefix != null) {
+    const template = autoLocalize?.itemTemplate?.[field];
+    if (template) {
+      localeKey = resolveAutoLocalizeTemplate(template, {
+        field,
+        item: this,
+        options: this._options,
+        resource,
+      }) as EnumItemLabel | undefined;
+    } else if (field === 'label' && autoLabel && labelPrefix != null) {
       if (typeof autoLabel === 'function') {
         localeKey = autoLabel({
           item: this,
@@ -244,7 +260,7 @@ export class EnumItemClass<
         localeKey = `${labelPrefix as string}${resource}`;
       }
     }
-    return this._localize(localeKey) ?? localeKey;
+    return this._localize(localeKey as string | undefined) ?? localeKey;
   }
 }
 
@@ -296,6 +312,14 @@ export interface EnumItemOptions<
    * > 此选项与 `Enum.config.autoLabel` 作用相同，但优先级高于全局配置，仅对当前枚举实例生效。
    */
   autoLabel?: boolean | ((options: { item: EnumItemClass<T, K, V, LP>; labelPrefix: LP }) => string);
+
+  /**
+   * - **EN:** Automatically generate locale keys for enum name, item label, and item meta fields.
+   *   This is the new unified localization configuration. `labelPrefix` and `autoLabel` are kept
+   *   for backward compatibility.
+   * - **CN:** 自动生成枚举名称、枚举项标签和枚举项元信息字段的本地化键名。这是新的统一本地化配置。`labelPrefix` 和 `autoLabel` 会继续保留以兼容旧 API。
+   */
+  autoLocalize?: AutoLocalizeOption<EnumItemClass<T, K, V, LP>, EnumItemOptions<T, K, V, LP>>;
 
   /**
    * - **EN:** Set the array of meta information fields to be automatically localized, similar to the
