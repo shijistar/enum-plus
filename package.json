@@ -134,7 +134,7 @@
     "build-storybook": "run-s task:update-docs-title task:build-storybook",
     "build:tses": "run-s gv ts2es task:add-tses-extensions",
     "clean": "shx rm -rf lib es es-legacy umd tses tslib types-legacy/pre-v5/*.d.ts",
-    "codegraph-init": "command -v codegraph && codegraph init && codegraph sync",
+    "codegraph-init": "command -v codegraph && codegraph init && codegraph sync || true",
     "e2e": "run-s e2e:build task:run-e2e",
     "e2e:build": "npm-run-all -s gv -p build:tses build:es build:es-legacy -s task:bundle-e2e",
     "e2e:debug": "run-s e2e:build task:run-e2e-debug",
