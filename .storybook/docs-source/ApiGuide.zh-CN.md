@@ -151,32 +151,6 @@ ColorEnum.findBy('key', 'Red'); // { key: 'Red', value: 1, label: '红色', hex:
 ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: '红色', hex: '#FF0000' }
 ```
 
-## Ⓜ️ raw
-
-`raw(): Record<K, T[K]>`
-<br/>
-`raw(keyOrValue: V | K): T[K]`
-
-`raw`方法有两种重载形式。第一种是返回整个枚举集合的原始初始化对象，即`Enum`方法的第一个参数。
-
-第二种是返回单个枚举项的原始初始化对象，即`Enum`方法的第一个参数中对应字段的子对象。
-
-这个方法主要作用是，用来获取枚举项的自定义字段。
-
-```js
-const WeekEnum = Enum({
-  Sunday: { value: 0, label: '星期日', happy: true },
-  Monday: { value: 1, label: '星期一', happy: false },
-});
-
-WeekEnum.raw(0).happy; // true
-WeekEnum.raw(0); // { value: 0, label: '星期日', happy: true }
-WeekEnum.raw('Monday'); // { value: 1, label: '星期一', happy: false }
-WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Monday: { value: 1, label: '星期一', happy: false } }
-```
-
-> 温馨提示：如果要获取某个已知枚举项的元数据字段，使用`enum.named.XXX.raw` 是一个不错的选择。
-
 ## Ⓜ️ toList
 
 `toList(): { value, label }[]`
@@ -226,6 +200,32 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 //   "Saturday": 6
 // }
 ```
+
+## Ⓜ️ raw
+
+`raw(): Record<K, T[K]>`
+<br/>
+`raw(keyOrValue: V | K): T[K]`
+
+`raw`方法有两种重载形式。第一种是返回整个枚举集合的原始初始化对象，即`Enum`方法的第一个参数。
+
+第二种是返回单个枚举项的原始初始化对象，即`Enum`方法的第一个参数中对应字段的子对象。
+
+这个方法主要作用是，用来获取枚举项的自定义字段。
+
+```js
+const WeekEnum = Enum({
+  Sunday: { value: 0, label: '星期日', happy: true },
+  Monday: { value: 1, label: '星期一', happy: false },
+});
+
+WeekEnum.raw(0).happy; // true
+WeekEnum.raw(0); // { value: 0, label: '星期日', happy: true }
+WeekEnum.raw('Monday'); // { value: 1, label: '星期一', happy: false }
+WeekEnum.raw(); // { Sunday: { value: 0, label: '星期日', happy: true }, Monday: { value: 1, label: '星期一', happy: false } }
+```
+
+> 温馨提示：如果要获取某个已知枚举项的元数据字段，使用`enum.named.XXX.raw` 是一个不错的选择。
 
 ## 🅿️ name
 

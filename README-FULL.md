@@ -434,34 +434,6 @@ ColorEnum.findBy('hex', '#FF0000'); // { key: 'Red', value: 1, label: 'Red', hex
 
 ---
 
-### 💎 &nbsp; raw
-
-<sup>**_\[F^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
-<br/>
-<sup>**_\[F^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
-
-The `raw` method has two overloads. The first one is to return the original initialization object of the whole enum collection, i.e. the first parameter of the `Enum` method.
-
-The second one is to return the original initialization object of a single enum item, i.e. the sub-object of the corresponding field in the first parameter of the `Enum` method.
-
-The main purpose of the `raw` method is to get the extended custom fields of the enum items.
-
-```js
-const WeekEnum = Enum({
-  Sunday: { value: 0, label: 'Sunday', happy: true },
-  Monday: { value: 1, label: 'Monday', happy: false },
-});
-
-WeekEnum.raw(0).happy; // true
-WeekEnum.raw(0); // { value: 0, label: 'Sunday', happy: true }
-WeekEnum.raw('Monday'); // { value: 1, label: 'Monday', happy: false }
-WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { value: 1, label: 'Monday', happy: false } }
-```
-
-> Tips: If you want to access the metadata fields of a known enum item, using `enum.named.XXX.raw` is a good option, for example: `WeekEnum.named.Sunday.raw.happy`.
-
----
-
 ### 💎 &nbsp; toList
 
 <sup>**_\[F^1]_**</sup> &nbsp; `toList(): { value, label }[]`
@@ -513,6 +485,34 @@ WeekEnum.toMap({ keySelector: 'key', valueSelector: 'value' });
 //   "Saturday": 6
 // }
 ```
+
+---
+
+### 💎 &nbsp; raw
+
+<sup>**_\[F^1]_**</sup> &nbsp; `raw(): Record<K, T[K]>`
+<br/>
+<sup>**_\[F^2]_**</sup> &nbsp; `raw(keyOrValue: V | K): T[K]`
+
+The `raw` method has two overloads. The first one is to return the original initialization object of the whole enum collection, i.e. the first parameter of the `Enum` method.
+
+The second one is to return the original initialization object of a single enum item, i.e. the sub-object of the corresponding field in the first parameter of the `Enum` method.
+
+The main purpose of the `raw` method is to get the extended custom fields of the enum items.
+
+```js
+const WeekEnum = Enum({
+  Sunday: { value: 0, label: 'Sunday', happy: true },
+  Monday: { value: 1, label: 'Monday', happy: false },
+});
+
+WeekEnum.raw(0).happy; // true
+WeekEnum.raw(0); // { value: 0, label: 'Sunday', happy: true }
+WeekEnum.raw('Monday'); // { value: 1, label: 'Monday', happy: false }
+WeekEnum.raw(); // { Sunday: { value: 0, label: 'Sunday', happy: true }, Monday: { value: 1, label: 'Monday', happy: false } }
+```
+
+> Tips: If you want to access the metadata fields of a known enum item, using `enum.named.XXX.raw` is a good option, for example: `WeekEnum.named.Sunday.raw.happy`.
 
 ---
 
