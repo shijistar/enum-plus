@@ -632,6 +632,49 @@ const WeekEnum = Enum(enumInit, {
 });
 ```
 
+### ⚙️ autoLocalize
+
+`{ nameTemplate?: string | Function, itemTemplate?: Record<string, string | Function> }`
+
+Automatically generates localization keys for the enum name, item labels, and item meta fields. It is the recommended unified replacement for new localization setups. `labelPrefix`, `autoLabel`, and `autoLocalizeMeta` are still supported for backward compatibility.
+
+Templates can be strings using `{name}`, `{item}`, and `{field}`, or functions that receive `{ field, item, options, resource }`. Instance-level `autoLocalize.itemTemplate` is merged with `Enum.config.autoLocalize.itemTemplate` field by field, and instance fields override global fields with the same name.
+
+```ts
+Enum.config.autoLocalize = {
+  nameTemplate: 'enum.{name}.name',
+  itemTemplate: {
+    label: 'enum.{name}.{item}.label',
+    description: 'enum.{name}.{item}.description',
+  },
+};
+
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0 },
+    Monday: { value: 1 },
+  },
+  {
+    name: 'week',
+    autoLocalize: {
+      itemTemplate: {
+        abbr: 'enum.{name}.{item}.abbr',
+      },
+    },
+  },
+);
+
+WeekEnum.name; // localize('enum.week.name')
+WeekEnum.named.Sunday.label; // localize('enum.week.Sunday.label')
+WeekEnum.named.Sunday.description; // localize('enum.week.Sunday.description')
+WeekEnum.named.Sunday.abbr; // localize('enum.week.Sunday.abbr')
+WeekEnum.items.meta.description; // string[]
+```
+
+Meta fields declared by `autoLocalize.itemTemplate`, such as `description` and `abbr`, are generated even when raw enum items do not declare those fields. For TypeScript inference, prefer declaring instance-level templates with literal keys. Global-only template fields are runtime-capable but cannot be inferred precisely by normal TypeScript generics.
+
+> `autoLocalizeMeta` is still the correct legacy option name. `autoLocalizedMeta` is not a supported API, and there is no `!abbr` exclusion syntax.
+
 ### ⚙️ autoLabel
 
 `boolean | ((params: { item: EnumItemClass; labelPrefix?: any }) => string)`

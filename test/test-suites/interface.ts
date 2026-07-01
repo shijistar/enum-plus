@@ -91,6 +91,33 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         validateEnum(engine, weekEnum.items, WeekConfig);
       },
     );
+    engine.test(
+      'autoLocalize item templates should infer instance-level meta fields',
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig } }) => {
+        const weekEnum = Enum(WeekValueOnlyConfig, {
+          name: 'week',
+          autoLocalize: {
+            itemTemplate: {
+              description: 'weekday.{item}.description',
+              abbr: 'weekday.{item}Abbr',
+            },
+          },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        weekEnum.named.Sunday.description satisfies string;
+        weekEnum.named.Monday.abbr satisfies string;
+        weekEnum.items.meta.description satisfies string[];
+        weekEnum.items.meta.abbr satisfies string[];
+        if (Date.now() < 0) {
+          // @ts-expect-error: because autoLocalize generated meta fields are readonly
+          weekEnum.named.Sunday.description = 'manual';
+        }
+        // @ts-expect-error: because undeclared autoLocalize fields should not be added to item types
+        weekEnum.named.Sunday.tooltip;
+      },
+    );
   });
 };
 

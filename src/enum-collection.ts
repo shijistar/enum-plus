@@ -1,4 +1,5 @@
 import type { EnumExtension } from 'enum-plus/extension';
+import { mergeAutoLocalizeConfig, resolveAutoLocalizeTemplate } from './auto-localize';
 import type { EnumInitOptions } from './enum';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
@@ -123,11 +124,19 @@ export class EnumCollectionClass<
     if (typeof opts?.name === 'function') {
       return opts.name(undefined!);
     }
+    const autoLocalize = mergeAutoLocalizeConfig(opts?.autoLocalize);
+    const localeKey = autoLocalize?.nameTemplate
+      ? resolveAutoLocalizeTemplate(autoLocalize.nameTemplate, {
+          field: 'name',
+          options: opts,
+          resource: opts?.name,
+        })
+      : opts?.name;
     const localize = opts?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
-      return localize(opts?.name);
+      return localize(localeKey);
     }
-    return opts?.name;
+    return localeKey;
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {
