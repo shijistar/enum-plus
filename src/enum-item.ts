@@ -1,4 +1,5 @@
 import {
+  type AutoLocalizeMetaRecord,
   type AutoLocalizeOption,
   getAutoLocalizeTemplateFields,
   isAutoLocalizeMetaField,
@@ -23,11 +24,12 @@ export type EnumItemInterface<
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
+  OP = unknown,
 > = EnumItemClass<T, K, V, LP> &
   // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   {
     [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
-  };
+  } & AutoLocalizeMetaRecord<OP>;
 
 /**
  * - **EN:** Represents a single item in an enumeration collection.

@@ -339,6 +339,40 @@ const WeekEnum = Enum(enumInit, {
 });
 ```
 
+## ⚙️ autoLocalize
+
+`{ nameTemplate?: string | Function, itemTemplate?: Record<string, string | Function> }`
+
+Automatically generates localization keys for the enum name, item labels, and item meta fields. It is the recommended unified replacement for new localization setups. Legacy `labelPrefix`, `autoLabel`, and `autoLocalizeMeta` continue to work.
+
+```ts
+Enum.config.autoLocalize = {
+  nameTemplate: 'enum.{name}.name',
+  itemTemplate: {
+    label: 'enum.{name}.{item}.label',
+    description: 'enum.{name}.{item}.description',
+  },
+};
+
+const WeekEnum = Enum(
+  { Sunday: { value: 0 }, Monday: { value: 1 } },
+  {
+    name: 'week',
+    autoLocalize: {
+      itemTemplate: { abbr: 'enum.{name}.{item}.abbr' },
+    },
+  },
+);
+
+WeekEnum.named.Sunday.description; // localize('enum.week.Sunday.description')
+WeekEnum.named.Sunday.abbr; // localize('enum.week.Sunday.abbr')
+WeekEnum.items.meta.description; // string[]
+```
+
+Templates support `{name}`, `{item}`, and `{field}`. Instance-level item templates merge with global templates field by field and override same-name fields. Template-declared meta fields are generated even when raw enum items do not declare them. For TypeScript inference, prefer literal instance-level template keys.
+
+> `autoLocalizeMeta` remains the correct legacy option name. `autoLocalizedMeta` and `!abbr` exclusion syntax are not supported.
+
 ## ⚙️ autoLabel
 
 `boolean | ((params: { item: EnumItemClass; labelPrefix?: any }) => string)`

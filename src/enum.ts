@@ -149,7 +149,7 @@ export interface EnumInterface {
     OP extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
   >(
     raw: T,
-    options?: EnumInitOptions<T, K, V, LP>,
+    options?: OP,
   ): IEnum<T, K, V, LP, OP> & NativeEnumMembers<T, K, V>;
 
   /**
@@ -333,7 +333,7 @@ export interface IEnum<
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       EnumItemInterface<any, string, EnumValue, LP>[]
     : T extends { items: unknown }
-      ? EnumItemInterface<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>
+      ? EnumItemInterface<T[K], K, V, LP, OP>[] & IEnumItems<T, K, V, LP, OP>
       : never;
   /**
    * - **EN:** All items in the enumeration as an array
@@ -351,7 +351,7 @@ export interface IEnum<
       EnumItemInterface<any, string, EnumValue, LP>[] & IEnumItems<any, string, EnumValue, LP>
     : T extends { items: unknown }
       ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>
-      : EnumItemInterface<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>;
+      : EnumItemInterface<T[K], K, V, LP, OP>[] & IEnumItems<T, K, V, LP, OP>;
   /**
    * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can access all
    *   enum keys through this alias
@@ -431,7 +431,7 @@ export interface IEnum<
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Record<string, EnumItemInterface<any, string, EnumValue, LP>>
     : T extends { named: unknown }
-      ? IEnumItems<T, K, V, LP>['named']
+      ? IEnumItems<T, K, V, LP, OP>['named']
       : never;
   /**
    * - **EN:** Get all names of the enumeration items as an array
@@ -445,7 +445,7 @@ export interface IEnum<
       Record<string, EnumItemInterface<any, string, EnumValue, LP>>
     : T extends { named: unknown }
       ? ValueTypeFromSingleInit<T['named'], 'named', T[K] extends number | undefined ? number : 'named'>
-      : IEnumItems<T, K, V, LP>['named'];
+      : IEnumItems<T, K, V, LP, OP>['named'];
   /**
    * - **EN:** Alias for the `meta` array, when any enum key conflicts with `meta`, you can access all
    *   enum meta information through this alias
@@ -455,7 +455,7 @@ export interface IEnum<
   readonly [META]: IsAny<T> extends true
     ? Record<string, unknown[]>
     : T extends { meta: unknown }
-      ? IEnumItems<T, K, V, LP>['meta']
+      ? IEnumItems<T, K, V, LP, OP>['meta']
       : never;
   /**
    * - **EN:** Get all meta information of the enumeration items as an array
@@ -472,7 +472,7 @@ export interface IEnum<
     ? Record<string, unknown[]>
     : T extends { meta: unknown }
       ? ValueTypeFromSingleInit<T['meta'], 'meta', T[K] extends number | undefined ? number : 'meta'>
-      : IEnumItems<T, K, V, LP>['meta'];
+      : IEnumItems<T, K, V, LP, OP>['meta'];
 }
 
 export type NativeEnumMembers<

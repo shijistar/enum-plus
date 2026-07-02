@@ -1,4 +1,8 @@
-import { getAutoLocalizeTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
+import {
+  type AutoLocalizeItemTemplateFields,
+  getAutoLocalizeTemplateFields,
+  isAutoLocalizeMetaField,
+} from './auto-localize';
 import { EnumItemClass, type EnumItemInterface, type EnumItemOptions } from './enum-item';
 import type {
   EnumInit,
@@ -440,7 +444,8 @@ export interface IEnumItems<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-> extends InheritableEnumItems<T, K, V, LP> {
+  OP = unknown,
+> extends InheritableEnumItems<T, K, V, LP, OP> {
   /**
    * - **EN:** A boolean value indicates that this is an enum items array.
    * - **CN:** 布尔值，表示这是一个枚举项数组
@@ -491,7 +496,8 @@ export interface IEnumItems<
       T[key],
       key,
       ValueTypeFromSingleInit<T[key], key, T[key] extends number | undefined ? number : key>,
-      LP
+      LP,
+      OP
     >;
   };
 
@@ -501,9 +507,10 @@ export interface IEnumItems<
    * - **CN:** 获取枚举项的全部自定义元字段，返回一个对象，其中key为字段名，value为每个字段的原始值数组
    */
   readonly meta: T extends object
-    ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] }
-    : // eslint-disable-next-line @typescript-eslint/ban-types
-      {};
+    ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] } & {
+        [K in AutoLocalizeItemTemplateFields<OP>]: string[];
+      }
+    : { [K in AutoLocalizeItemTemplateFields<OP>]: string[] };
 }
 
 // typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
@@ -513,6 +520,7 @@ export interface InheritableEnumItems<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
+  OP = unknown,
 > {
   /**
    * - **EN:** A method that determines if a constructor object recognizes an object as one of the
@@ -603,18 +611,20 @@ export interface InheritableEnumItems<
         ? undefined
         : NonNullable<KV> extends K
           ? // @ts-expect-error: because the type infer is not clever enough, KV here should be one of K
-            EnumItemInterface<T[NonNullable<KV>], NonNullable<KV>, FindValueByKey<T, NonNullable<KV>>>
+            EnumItemInterface<T[NonNullable<KV>], NonNullable<KV>, FindValueByKey<T, NonNullable<KV>>, LP, OP>
           : NonNullable<KV> extends V
             ? EnumItemInterface<
                 // @ts-expect-error: because the type infer is not clever enough, KV here should be one of V
                 T[FindEnumKeyByValue<T, NonNullable<KV>>],
                 FindEnumKeyByValue<T, NonNullable<KV>>,
-                NonNullable<KV>
+                NonNullable<KV>,
+                LP,
+                OP
               >
             : PrimitiveOf<K> extends KV
-              ? EnumItemInterface<T[K], K, V> | undefined
+              ? EnumItemInterface<T[K], K, V, LP, OP> | undefined
               : PrimitiveOf<V> extends KV
-                ? EnumItemInterface<T[K], K, V> | undefined
+                ? EnumItemInterface<T[K], K, V, LP, OP> | undefined
                 : undefined);
 
   /**

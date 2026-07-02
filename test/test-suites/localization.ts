@@ -789,6 +789,37 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
+      'autoLocalize function shorthand and templates support omitted raw fields and enum name',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { setLang, getLocales }, i18n: { enUS } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.autoLocalize = { nameTemplate: 'weekDay.name' };
+        const unnamedEnum = Enum({ Sunday: 0 });
+        const unnamedEnumName = unnamedEnum.name;
+        Enum.config.autoLocalize = ({ item }) => `weekday.${item?.key}`;
+        const labelEnum = Enum({ Sunday: undefined, Monday: undefined });
+        const metaEnum = Enum(
+          { Sunday: undefined, Monday: undefined },
+          {
+            autoLocalize: {
+              nameTemplate: 'weekDay.name',
+              itemTemplate: {
+                abbr: ({ item }) => `weekday.${item?.key}Abbr`,
+              },
+            },
+          },
+        );
+        return { Enum, unnamedEnumName, labelEnum, metaEnum, enUS };
+      },
+      ({ Enum, unnamedEnumName, labelEnum, metaEnum, enUS }) => {
+        engine.expect(unnamedEnumName).toBe(enUS['weekDay.name']);
+        engine.expect(labelEnum.named.Sunday.label).toBe(enUS['weekday.Sunday']);
+        engine.expect(metaEnum.name).toBe(enUS['weekDay.name']);
+        engine.expect((metaEnum.named.Sunday as unknown as { abbr: string }).abbr).toBe(enUS['weekday.SundayAbbr']);
+        Enum.config.autoLocalize = undefined;
+      },
+    );
+
+    engine.test(
       'Enum name should support global localization (English)',
       ({
         EnumPlus: { Enum, defaultLocalize },

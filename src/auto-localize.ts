@@ -20,6 +20,20 @@ export type AutoLocalizeOption<Item = unknown, Options = unknown> =
   | AutoLocalizeConfig<Item, Options>
   | ((context: AutoLocalizeTemplateContext<Item, Options>) => string | undefined);
 
+export type LiteralStringKeys<T> = string extends keyof T ? never : Extract<keyof T, string>;
+
+export type AutoLocalizeItemTemplateFields<Options> = Options extends { autoLocalize?: infer AutoLocalize }
+  ? AutoLocalize extends (...args: never[]) => unknown
+    ? never
+    : AutoLocalize extends { itemTemplate?: infer ItemTemplate }
+      ? Exclude<LiteralStringKeys<NonNullable<ItemTemplate>>, 'label'>
+      : never
+  : never;
+
+export type AutoLocalizeMetaRecord<Options> = {
+  readonly [Key in AutoLocalizeItemTemplateFields<Options>]: string;
+};
+
 export function mergeAutoLocalizeConfig<Item, Options>(
   local?: AutoLocalizeOption<Item, Options>,
 ): AutoLocalizeConfig<Item, Options> | undefined {
