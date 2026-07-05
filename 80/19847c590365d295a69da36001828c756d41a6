@@ -1,0 +1,28 @@
+src/enum-collection.ts
+  h_3a0b15d296f1fe 130
+src/auto-localize.ts
+  h_3a0b15d296f1fe 1-3,5,7-19,21,24-28,31-37,41-45,58-63,82-86,97-103,111-116,118,121-127,132-137,142,149
+src/enum-items.ts
+  h_3a0b15d296f1fe 1-2,617
+src/enum.ts
+  h_3a0b15d296f1fe 223,225
+test/auto-localize.test.ts
+  h_3a0b15d296f1fe 21,23-24,65
+src/extension.d.ts
+  h_3a0b15d296f1fe 3-4,13,15-17,19-25,27-28,33,35
+src/global-config.ts
+  h_3a0b15d296f1fe 25
+src/enum-item.ts
+  h_3a0b15d296f1fe 1,9,32,250,323
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "8019847c590365d295a69da36001828c756d41a6",
+  "prompts": {},
+  "humans": {
+    "h_3a0b15d296f1fe": {
+      "author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
