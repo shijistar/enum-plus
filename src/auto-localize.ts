@@ -1,24 +1,48 @@
+import type { EnumValue } from '../lib';
+import type { EnumInitOptions } from './enum';
+import type { EnumItemInterface } from './enum-item';
 import { internalConfig } from './global-config';
+import type { EnumInit, EnumKey, ValueTypeFromSingleInit } from './types';
 
-export interface AutoLocalizeTemplateContext<Item = unknown, Options = unknown> {
-  field: string;
-  item?: Item;
-  options?: Options;
-  resource?: unknown;
+export type AutoLocalizeContext<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+> =
+  | {
+      type: 'name';
+      options?: Options;
+    }
+  | {
+      type: 'item';
+      item: EnumItemInterface<T, K, V, Options>;
+      options?: Options;
+    };
+
+export type AutoLocalizeTemplate<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+> = string | ((context: AutoLocalizeContext<T, K, V, Options>) => string | undefined);
+
+export interface AutoLocalizeConfig<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+> {
+  nameTemplate?: AutoLocalizeTemplate<T, K, V, Options>;
+  itemTemplate?: Record<Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>, AutoLocalizeTemplate<T, K, V, Options>>;
 }
 
-export type AutoLocalizeTemplate<Item = unknown, Options = unknown> =
-  | string
-  | ((context: AutoLocalizeTemplateContext<Item, Options>) => string | undefined);
-
-export interface AutoLocalizeConfig<Item = unknown, Options = unknown> {
-  nameTemplate?: AutoLocalizeTemplate<Item, Options>;
-  itemTemplate?: Record<string, AutoLocalizeTemplate<Item, Options>>;
-}
-
-export type AutoLocalizeOption<Item = unknown, Options = unknown> =
-  | AutoLocalizeConfig<Item, Options>
-  | ((context: AutoLocalizeTemplateContext<Item, Options>) => string | undefined);
+export type AutoLocalizeOption<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+> = AutoLocalizeConfig<T, K, V, Options> | ((context: AutoLocalizeContext<T, K, V, Options>) => string | undefined);
 
 export type LiteralStringKeys<T> = string extends keyof T ? never : Extract<keyof T, string>;
 
@@ -30,14 +54,13 @@ export type AutoLocalizeItemTemplateFields<Options> = Options extends { autoLoca
       : never
   : never;
 
-export type AutoLocalizeMetaRecord<Options> = {
-  readonly [Key in AutoLocalizeItemTemplateFields<Options>]: string;
-};
-
-export function mergeAutoLocalizeConfig<Item, Options>(
-  local?: AutoLocalizeOption<Item, Options>,
-): AutoLocalizeConfig<Item, Options> | undefined {
-  const global = internalConfig.autoLocalize as AutoLocalizeOption<Item, Options> | undefined;
+export function mergeAutoLocalizeConfig<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+>(local?: AutoLocalizeOption<T, K, V, Options>): AutoLocalizeConfig<T, K, V, Options> | undefined {
+  const global = internalConfig.autoLocalize as AutoLocalizeOption<T, K, V, Options> | undefined;
   const normalizedGlobal = normalizeAutoLocalizeConfig(global);
   const normalizedLocal = normalizeAutoLocalizeConfig(local);
   if (!normalizedGlobal) {
@@ -55,9 +78,12 @@ export function mergeAutoLocalizeConfig<Item, Options>(
   };
 }
 
-export function normalizeAutoLocalizeConfig<Item, Options>(
-  config?: AutoLocalizeOption<Item, Options>,
-): AutoLocalizeConfig<Item, Options> | undefined {
+export function normalizeAutoLocalizeConfig<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+>(config?: AutoLocalizeOption<T, K, V, Options>): AutoLocalizeConfig<T, K, V, Options> | undefined {
   if (!config) {
     return undefined;
   }
@@ -67,9 +93,14 @@ export function normalizeAutoLocalizeConfig<Item, Options>(
   return config;
 }
 
-export function resolveAutoLocalizeTemplate<Item, Options>(
-  template: AutoLocalizeTemplate<Item, Options> | undefined,
-  context: AutoLocalizeTemplateContext<Item, Options>,
+export function resolveAutoLocalizeTemplate<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+>(
+  template: AutoLocalizeTemplate<T, K, V, Options> | undefined,
+  context: AutoLocalizeContext<T, K, V, Options>,
 ): string | undefined {
   if (!template) {
     return undefined;
@@ -77,36 +108,45 @@ export function resolveAutoLocalizeTemplate<Item, Options>(
   if (typeof template === 'function') {
     return template(context);
   }
-  return template
-    .split('{name}')
-    .join(String((context.options as { name?: unknown } | undefined)?.name ?? ''))
-    .split('{item}')
-    .join(String((context.item as { key?: unknown } | undefined)?.key ?? ''))
-    .split('{field}')
-    .join(context.field);
+  const name = context.options?.name;
+  if (typeof name === 'string') {
+    template = template.replace(/{name}/g, name);
+  }
+  if (context.type === 'item') {
+    template = template.replace(/{key}/g, context.item.key as string);
+  }
+  return template;
 }
 
-export function getAutoLocalizeTemplateFields(
-  options?: { autoLocalize?: AutoLocalizeOption<unknown, unknown> } | unknown,
-) {
-  const resolvedOptions = options as { autoLocalize?: AutoLocalizeOption<unknown, unknown> } | undefined;
+export function getAutoLocalizeTemplateFields<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+>(options?: { autoLocalize?: AutoLocalizeOption<T, K, V, Options> } | unknown) {
+  const resolvedOptions = options as { autoLocalize?: AutoLocalizeOption<T, K, V, Options> } | undefined;
   const config = mergeAutoLocalizeConfig(resolvedOptions?.autoLocalize);
   return Object.keys(config?.itemTemplate ?? {});
 }
 
-export function isAutoLocalizeMetaField(
+export function isAutoLocalizeMetaField<
+  T extends EnumInit<K, V>,
+  K extends EnumKey<T> = EnumKey<T>,
+  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  Options extends EnumInitOptions<T, K, V> = EnumInitOptions<T, K, V>,
+>(
   field: string,
   options?:
     | {
         autoLocalizeMeta?: boolean | readonly (string | number | symbol)[];
-        autoLocalize?: AutoLocalizeOption<unknown, unknown>;
+        autoLocalize?: AutoLocalizeOption<T, K, V, Options>;
       }
     | unknown,
 ) {
   const resolvedOptions = options as
     | {
         autoLocalizeMeta?: boolean | readonly (string | number | symbol)[];
-        autoLocalize?: AutoLocalizeOption<unknown, unknown>;
+        autoLocalize?: AutoLocalizeOption<T, K, V, Options>;
       }
     | undefined;
   if (field === 'label') {

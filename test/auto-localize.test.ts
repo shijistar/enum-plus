@@ -18,10 +18,10 @@ describe('autoLocalize helpers', () => {
   });
 
   test('resolves empty and function templates', () => {
-    expect(resolveAutoLocalizeTemplate(undefined, { field: 'label' })).toBe(undefined);
+    expect(resolveAutoLocalizeTemplate(undefined, { type: 'label' })).toBe(undefined);
     expect(
-      resolveAutoLocalizeTemplate(({ field, item }) => `${field}.${item?.key}`, {
-        field: 'abbr',
+      resolveAutoLocalizeTemplate(({ type: field, item }) => `${field}.${item?.key}`, {
+        type: 'abbr',
         item: { key: 'Sunday' },
       }),
     ).toBe('abbr.Sunday');
@@ -62,6 +62,6 @@ describe('autoLocalize helpers', () => {
   });
 
   test('resolves string templates without optional context values', () => {
-    expect(resolveAutoLocalizeTemplate('{name}.{item}.{field}', { field: 'label' })).toBe('..label');
+    expect(resolveAutoLocalizeTemplate('{name}.{item}.{field}', { type: 'label' })).toBe('..label');
   });
 });

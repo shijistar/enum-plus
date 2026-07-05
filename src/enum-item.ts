@@ -1,11 +1,12 @@
+import type { EnumItemExtension } from 'enum-plus/extension';
 import {
-  type AutoLocalizeMetaRecord,
   type AutoLocalizeOption,
   getAutoLocalizeTemplateFields,
   isAutoLocalizeMetaField,
   mergeAutoLocalizeConfig,
   resolveAutoLocalizeTemplate,
 } from './auto-localize';
+import type { EnumInitOptions } from './enum';
 import { internalConfig, localizer } from './global-config';
 import type {
   EnumItemInit,
@@ -24,12 +25,11 @@ export type EnumItemInterface<
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-  OP = unknown,
 > = EnumItemClass<T, K, V, LP> &
   // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   {
     [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
-  } & AutoLocalizeMetaRecord<OP>;
+  } & EnumItemExtension<T, K, V>;
 
 /**
  * - **EN:** Represents a single item in an enumeration collection.
@@ -247,10 +247,9 @@ export class EnumItemClass<
     const template = autoLocalize?.itemTemplate?.[field];
     if (template) {
       localeKey = resolveAutoLocalizeTemplate(template, {
-        field,
+        type: field,
         item: this,
         options: this._options,
-        resource,
       }) as EnumItemLabel | undefined;
     } else if (field === 'label' && autoLabel && labelPrefix != null) {
       if (typeof autoLabel === 'function') {
@@ -321,7 +320,7 @@ export interface EnumItemOptions<
    *   for backward compatibility.
    * - **CN:** 自动生成枚举名称、枚举项标签和枚举项元信息字段的本地化键名。这是新的统一本地化配置。`labelPrefix` 和 `autoLabel` 会继续保留以兼容旧 API。
    */
-  autoLocalize?: AutoLocalizeOption<EnumItemClass<T, K, V, LP>, EnumItemOptions<T, K, V, LP>>;
+  autoLocalize?: AutoLocalizeOption<T, K, V, EnumInitOptions<T, K, V>>;
 
   /**
    * - **EN:** Set the array of meta information fields to be automatically localized, similar to the

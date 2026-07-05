@@ -127,9 +127,8 @@ export class EnumCollectionClass<
     const autoLocalize = mergeAutoLocalizeConfig(opts?.autoLocalize);
     const localeKey = autoLocalize?.nameTemplate
       ? resolveAutoLocalizeTemplate(autoLocalize.nameTemplate, {
-          field: 'name',
+          type: 'name',
           options: opts,
-          resource: opts?.name,
         })
       : opts?.name;
     const localize = opts?.localize ?? localizer.localize;
