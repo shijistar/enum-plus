@@ -1,8 +1,5 @@
-import {
-  type AutoLocalizeItemTemplateFields,
-  getAutoLocalizeTemplateFields,
-  isAutoLocalizeMetaField,
-} from './auto-localize';
+import type { AutoLocalizeItemTemplateFields } from './auto-localize';
+import { getAutoLocalizeTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
 import { EnumItemClass, type EnumItemInterface, type EnumItemOptions } from './enum-item';
 import type {
   EnumInit,
@@ -496,8 +493,7 @@ export interface IEnumItems<
       T[key],
       key,
       ValueTypeFromSingleInit<T[key], key, T[key] extends number | undefined ? number : key>,
-      LP,
-      OP
+      LP
     >;
   };
 
@@ -618,8 +614,7 @@ export interface InheritableEnumItems<
                 T[FindEnumKeyByValue<T, NonNullable<KV>>],
                 FindEnumKeyByValue<T, NonNullable<KV>>,
                 NonNullable<KV>,
-                LP,
-                OP
+                LP
               >
             : PrimitiveOf<K> extends KV
               ? EnumItemInterface<T[K], K, V, LP, OP> | undefined

@@ -220,8 +220,9 @@ export interface EnumInterface {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           labelPrefix: any;
         }) => string);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    autoLocalize?: AutoLocalizeOption<any, any>;
+    autoLocalize?: AutoLocalizeOption<any>;
   };
 
   /**
