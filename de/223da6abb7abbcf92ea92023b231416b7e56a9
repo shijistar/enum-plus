@@ -1,0 +1,14 @@
+.github/workflows/npm-publish.yml
+  h_3a0b15d296f1fe 12,57,60,169,176,226,229,271,276,295,302
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "de223da6abb7abbcf92ea92023b231416b7e56a9",
+  "prompts": {},
+  "humans": {
+    "h_3a0b15d296f1fe": {
+      "author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
