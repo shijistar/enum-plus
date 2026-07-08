@@ -1,0 +1,16 @@
+CHANGELOG.md
+  h_3a0b15d296f1fe 5-12
+package.json
+  h_3a0b15d296f1fe 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a96541961474a55f7fb339aadaac725eecd219c8",
+  "prompts": {},
+  "humans": {
+    "h_3a0b15d296f1fe": {
+      "author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
