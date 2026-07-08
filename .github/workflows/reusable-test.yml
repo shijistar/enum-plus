@@ -164,6 +164,7 @@ jobs:
             23.x,
             24.x,
             25.x,
+            26.x,
           ]
     steps:
       - uses: actions/checkout@v4
@@ -241,7 +242,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x, 24.x, 25.x]
+          [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x, 24.x, 25.x, 26.x]
     steps:
       - uses: actions/checkout@v4
 
