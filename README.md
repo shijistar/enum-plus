@@ -56,7 +56,7 @@ Native enums are great for constants, but product code usually needs more at run
 It's a front-end business dictionary solution, that provides a lightweight data source. It's part of the front-end infrastructure.
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.2.0/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.2.1/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>

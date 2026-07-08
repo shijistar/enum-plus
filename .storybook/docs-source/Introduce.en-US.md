@@ -52,7 +52,7 @@ It is a lightweight, zero-dependency library, and it works with any front-end fr
 What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.2.0/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.2.1/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
