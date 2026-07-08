@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.2.1
+
+2026-7-8
+
+## Features
+
+- 🛠️ Remove accidental dependencies. This package should have no external dependencies.
+
 ## 3.2.0
 
 2026-6-21
