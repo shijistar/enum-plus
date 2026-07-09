@@ -1,0 +1,96 @@
+# CodeRabbit Configuration for enum-plus
+# A TypeScript enum enhancement library (zero-dep, monorepo with plugins)
+# Docs: https://docs.coderabbit.ai/quickstart/coderabbit-yaml-reference
+language: 'en-US'
+
+reviews:
+  # Library project: API contract & type safety matter more than noise reduction.
+  # assertive is preferred here — breaking changes in core/lib must be caught.
+  profile: 'assertive'
+  high_level_summary: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+
+  # --- Path-specific instructions (tailored to enum-plus architecture) ---
+  path_instructions:
+    # Core library: factory pattern + triple-layer immutability (Enum -> EnumCollectionClass -> EnumItemsArray)
+    - path: 'src/**/*.ts'
+      instructions: >
+        This is the core library. Pay special attention to:
+        - Immutability contract: Object.freeze() on collection, items array, and each EnumItemClass.
+        - The 12 initialization format parsers in parseEnumItem — don't break backward compat.
+        - Type inference in src/types.ts — AnyEnum / EnumCollection / EnumItem generic chains must stay sound.
+        - Module augmentation via src/extension.d.ts — EnumExtension interface changes affect ALL plugins.
+        - Enum.install() / Enum.extends() plugin registration — prototype mutation must be safe.
+
+    # Plugin packages: each extends EnumExtension via module augmentation
+    - path: 'packages/*/src/**/*.ts'
+      instructions: >
+        This is an official plugin (antd / i18next / i18next-vue / vue-i18n / react / react-i18next / next-international / sample).
+        Check:
+        - Peer dependency contracts in package.json (enum-plus@^3.0.0 minimum, react>=16.8 for react plugins).
+        - EnumExtension interface augmentation must not conflict across plugins.
+        - Return types of toSelect / toMenu / toFilter / toValueMap (antd) or localize overrides (i18next).
+        - Don't import internals from ../../src — plugins should only consume the public Enum API.
+
+    # Test files: Jest CJS + ESM dual config, plus Playwright e2e
+    - path: 'test/**'
+      instructions: >
+        Test suite — verify Jest coverage for both CJS (jest-cjs.config.js) and ESM (jest-esm.config.js), and also consider Vitest (vitest-node / vitest-browser engines) where applicable.
+        Check for: edge cases on all 12 init formats, freeze immutability assertions,
+        TypeScript version graceful degradation (types-legacy/).
+
+    - path: 'e2e/**'
+      instructions: >
+        Playwright e2e — check test stability (no flaky selectors), and that e2e covers plugin <-> framework integration.
+
+    # TypeScript legacy compatibility
+    # - path: 'types-legacy/**'
+    #   instructions: >
+    #     Legacy type declarations for TypeScript <5.0. Be extra careful —
+    #     changes here must NOT break TS 5.0+ path (types/ export condition in package.json).
+
+    # Docs / i18n
+    - path: 'docs/**'
+      instructions: 'Check that API references match src behavior. README.zh-CN.md should stay in sync with README.md.'
+
+  # --- Exclude build artifacts & generated outputs ---
+  path_filters:
+    - '!dist/**'
+    - '!es/**'
+    - '!es-legacy/**'
+    - '!lib/**'
+    - '!umd/**'
+    - '!node_modules/**'
+    - '!**/*.min.js'
+    - '!**/*.lock'
+    - '!**/generated/**'
+    - '!types-legacy/**' # reviewed separately above; exclude from general sweep
+
+chat:
+  auto_reply: true
+
+tools:
+  gitleaks:
+    enabled: true # still relevant — CI tokens, npm publish secrets
+  semgrep:
+    enabled: true # catches common JS/TS footguns + TS-specific patterns
+  # hadolint / checkov / yamllint not relevant for this project — disabled
+  hadolint: { enabled: false }
+  checkov: { enabled: false }
+  yamllint: { enabled: false }
+  actionlint:
+    enabled: true # .github/workflows exist — CI yaml matters
+  # trivy filesystem scan — optional, npm lib so supply chain matters
+  trivy:
+    enabled: false # set true if you want dep vuln scan on CI
+
+learnings:
+  scope: 'auto'
+
+experimental:
+  code_graph:
+    enabled: true # critical for this project — cross-file TS generic chains (AnyEnum, EnumExtension)
