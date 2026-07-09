@@ -1,0 +1,14 @@
+.coderabbit.yaml
+  h_3a0b15d296f1fe 51-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e10364ebef84667b09a0bdf97ac4a0c228a173da",
+  "prompts": {},
+  "humans": {
+    "h_3a0b15d296f1fe": {
+      "author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
