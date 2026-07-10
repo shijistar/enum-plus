@@ -721,6 +721,105 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
+      'autoLocalize can generate label and undeclared meta fields from global templates',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { WeekValueOnlyConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.autoLabel = true;
+        Enum.config.autoLocalize = {
+          nameTemplate: 'weekDay.name',
+          itemTemplate: {
+            label: 'weekday.{item}',
+            abbr: 'weekday.{item}Abbr',
+          },
+        };
+        const weekEnum = Enum(WeekValueOnlyConfig, { name: 'week' });
+        return { Enum, weekEnum, enUS };
+      },
+      ({ Enum, weekEnum, enUS }) => {
+        engine.expect(weekEnum.name).toBe(enUS['weekDay.name']);
+        engine.expect(weekEnum.named.Sunday.label).toBe(enUS['weekday.Sunday']);
+        engine.expect((weekEnum.named.Sunday as unknown as { abbr: string }).abbr).toBe(enUS['weekday.SundayAbbr']);
+        engine
+          .expect((weekEnum.items.meta as { abbr: string[] }).abbr)
+          .toEqual([
+            enUS['weekday.SundayAbbr'],
+            enUS['weekday.MondayAbbr'],
+            enUS['weekday.TuesdayAbbr'],
+            enUS['weekday.WednesdayAbbr'],
+            enUS['weekday.ThursdayAbbr'],
+            enUS['weekday.FridayAbbr'],
+            enUS['weekday.SaturdayAbbr'],
+          ]);
+        Enum.config.autoLocalize = undefined;
+      },
+    );
+
+    engine.test(
+      'autoLocalize instance templates override global item templates',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { WeekValueOnlyConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.autoLocalize = {
+          itemTemplate: {
+            abbr: 'NOT_EXISTED_KEY',
+          },
+        };
+        const weekEnum = Enum(WeekValueOnlyConfig, {
+          name: 'week',
+          autoLocalize: {
+            itemTemplate: {
+              abbr: 'weekday.{item}Abbr',
+            },
+          },
+        });
+        return { Enum, weekEnum, enUS };
+      },
+      ({ Enum, weekEnum, enUS }) => {
+        engine.expect((weekEnum.named.Sunday as unknown as { abbr: string }).abbr).toBe(enUS['weekday.SundayAbbr']);
+        engine.expect((weekEnum.items.meta as { abbr: string[] }).abbr[1]).toBe(enUS['weekday.MondayAbbr']);
+        Enum.config.autoLocalize = undefined;
+      },
+    );
+
+    engine.test(
+      'autoLocalize function shorthand and templates support omitted raw fields and enum name',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { setLang, getLocales }, i18n: { enUS } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.autoLocalize = { nameTemplate: 'weekDay.name' };
+        const unnamedEnum = Enum({ Sunday: 0 });
+        const unnamedEnumName = unnamedEnum.name;
+        Enum.config.autoLocalize = ({ item }) => `weekday.${item?.key}`;
+        const labelEnum = Enum({ Sunday: undefined, Monday: undefined });
+        const metaEnum = Enum(
+          { Sunday: undefined, Monday: undefined },
+          {
+            autoLocalize: {
+              nameTemplate: 'weekDay.name',
+              itemTemplate: {
+                abbr: ({ item }) => `weekday.${item?.key}Abbr`,
+              },
+            },
+          },
+        );
+        return { Enum, unnamedEnumName, labelEnum, metaEnum, enUS };
+      },
+      ({ Enum, unnamedEnumName, labelEnum, metaEnum, enUS }) => {
+        engine.expect(unnamedEnumName).toBe(enUS['weekDay.name']);
+        engine.expect(labelEnum.named.Sunday.label).toBe(enUS['weekday.Sunday']);
+        engine.expect(metaEnum.name).toBe(enUS['weekDay.name']);
+        engine.expect((metaEnum.named.Sunday as unknown as { abbr: string }).abbr).toBe(enUS['weekday.SundayAbbr']);
+        Enum.config.autoLocalize = undefined;
+      },
+    );
+
+    engine.test(
       'Enum name should support global localization (English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
