@@ -4,7 +4,7 @@ import type TestEngineBase from '../engines/base';
 const testVersion = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum version', () => {
     engine.test(
-      'Should be equal to package.json version',
+      'should match the package.json version',
       ({ EnumPlus: { version } }) => {
         return { version };
       },

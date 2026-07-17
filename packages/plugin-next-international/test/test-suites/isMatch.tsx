@@ -11,9 +11,9 @@ import Page from '../components/Page';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, options: { plugin: P }) => {
-  engine.describe('The isMatch plugin', () => {
+  engine.describe('isMatch plugin', () => {
     engine.test(
-      'should filter out enum items by label',
+      'should match enum items and supported values against a query',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS } }) => {
         Enum.install(options.plugin);
         await act(async () => {
@@ -204,7 +204,7 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
     );
 
     engine.test(
-      'should filter out plain objects by label',
+      'should match plain objects by label',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(options.plugin);
         await act(async () => {
@@ -234,7 +234,7 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
     );
 
     engine.test(
-      'should filter out items by label in Chinese',
+      'should match items by localized Chinese labels',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN } }) => {
         Enum.install(options.plugin);
         // changeLanguage('zh-CN');
@@ -268,7 +268,7 @@ const testIsMatch = <P extends PluginFunc<any>>(engine: TestEngineBase<'jest'>, 
     );
 
     engine.test(
-      'should be able to modify the search field by plugin options',
+      'should allow plugin options to configure the search field',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS } }) => {
         Enum.install(options.plugin, {
           isMatch: {

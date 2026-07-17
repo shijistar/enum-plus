@@ -4,9 +4,9 @@ import type TestEngineBase from '../engines/base';
 // import './extension-type';
 
 const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
-  engine.describe('Enum extends', () => {
+  engine.describe('Enum extensions', () => {
     engine.test(
-      'Should allow extend new methods',
+      'should add extension methods to Enum instances',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const extend = {
           isWeekend(value: number) {
@@ -35,7 +35,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should allow extend getters',
+      'should add extension getters to Enum instances',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const extend = {
           get all() {
@@ -59,7 +59,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should allow clearing global extension',
+      'should remove global extensions when set to undefined',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.extends({
           isWeekend(value: number) {
@@ -75,7 +75,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should allow extends for objects only',
+      'should reject non-object extension definitions',
       ({ EnumPlus: { Enum } }) => {
         return { Enum };
       },
@@ -108,7 +108,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should allow extending multiple times',
+      'should support multiple extension registrations',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const firstExtends = {
           isWeekend(value: number) {

@@ -5,9 +5,9 @@ import { defaultLocalize } from 'enum-plus';
 import toMenuPlugin from '../../src/toMenu';
 
 const testEnumItems = (engine: TestEngineBase<'jest'>) => {
-  engine.describe('The toMenu plugin', () => {
+  engine.describe('toMenu plugin', () => {
     engine.test(
-      'should generate an object array for AntDesign Menu',
+      'should generate Ant Design Menu items',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(toMenuPlugin);
         const weekEnum = Enum(StandardWeekConfig);

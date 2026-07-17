@@ -9,9 +9,9 @@ import initInstance from '../data/initInstance';
 import testIsMatch from './isMatch';
 
 const testLocalization = (engine: TestEngineBase<'jest'>) => {
-  engine.describe('The i18next plugin', () => {
+  engine.describe('i18next plugin', () => {
     engine.test(
-      'Should return an instance of Locale component',
+      'should return Locale component elements',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(i18nextPlugin);
         const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
@@ -29,7 +29,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       }
     );
     engine.test(
-      'Should continue working when plugin option is provided',
+      'should return Locale component elements when plugin options are provided',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(i18nextPlugin, { tOptions: { ns: 'alternative' } });
         const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
@@ -50,7 +50,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
 
   engine.describe('Locale component', () => {
     engine.test(
-      'Should render correct localized text with default i18n instance',
+      'should render the correct localized text with the default i18n instance',
       async ({ EnumPlus: { Enum } }) => {
         Enum.install(i18nextPlugin);
 
@@ -78,7 +78,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       }
     );
     engine.test(
-      'Should render correct localized text with custom i18n instance',
+      'should render the correct localized text with a custom i18n instance',
       async ({ EnumPlus: { Enum } }) => {
         Enum.install(i18nextPlugin);
         const customI18nInstance = createInstance();
@@ -103,7 +103,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       }
     );
     engine.test(
-      'Should render correct localized text with tOptions',
+      'should render the correct localized text with tOptions',
       async ({ EnumPlus: { Enum } }) => {
         Enum.install(i18nextPlugin);
 
@@ -126,7 +126,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       }
     );
     engine.test(
-      'Should render correct localized text with tOptions function',
+      'should render the correct localized text with a tOptions function',
       async ({ EnumPlus: { Enum } }) => {
         Enum.install(i18nextPlugin);
 
@@ -149,7 +149,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       }
     );
     engine.test(
-      'Should render correct localized text with tFunction',
+      'should render text returned by a tOptions function',
       async ({ EnumPlus: { Enum } }) => {
         Enum.install(i18nextPlugin);
 

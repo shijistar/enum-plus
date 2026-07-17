@@ -12,7 +12,7 @@ import type zhCN from '@enum-plus/test/i18n/zh-CN.json';
 const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
-      'Should show English by default',
+      'should show English by default',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin);
         return {
@@ -28,7 +28,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show Chinese after changing lang',
+      'should show Chinese after changing the language',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(rootPlugin);
         changeLanguage('zh-CN');
@@ -45,7 +45,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show English after changing back',
+      'should show English after switching back',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin);
         changeLanguage('en');
@@ -62,7 +62,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should accept plugin options',
+      'should accept plugin options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: { tOptions: { ns: 'alternative' } },
@@ -91,7 +91,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       },
     );
     engine.test(
-      'Should accept i18n instance by plugin option',
+      'should accept an i18n instance through plugin options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         const instance = createInstance();
         initInstance(instance);
@@ -111,7 +111,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'Should be able to set plugin option by root plugin',
+      'should apply plugin options configured on the root plugin',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: { tOptions: { ns: 'alternative' } },
@@ -141,7 +141,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should accept plugin options with tOptions function',
+      'should accept a tOptions function in plugin options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
@@ -176,7 +176,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should allow plugin option overriding the t function',
+      'should allow plugin options to override the t function',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {

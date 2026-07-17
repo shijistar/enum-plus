@@ -5,9 +5,9 @@ import { defaultLocalize } from 'enum-plus';
 import toFilterPlugin from '../../src/toFilter';
 
 const testEnumItems = (engine: TestEngineBase<'jest'>) => {
-  engine.describe('The toFilter plugin', () => {
+  engine.describe('toFilter plugin', () => {
     engine.test(
-      'should generate an object array for AntDesign Table',
+      'should generate Ant Design Table filter options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(toFilterPlugin);
         const weekEnum = Enum(StandardWeekConfig);

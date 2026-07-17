@@ -6,7 +6,7 @@ import type TestEngineBase from '../engines/base';
 const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum typings', () => {
     engine.test(
-      'the enum.X should have primitive values',
+      'should expose primitive values on Enum members',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const WeekConfig = StandardWeekConfig;
         const weekEnum = Enum(StandardWeekConfig);
@@ -19,7 +19,7 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'the Enum.isEnum should behave as type guard, and no TypeScript error should be raised',
+      'should narrow Enum instances with Enum.isEnum without TypeScript errors',
       ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const WeekConfig = StandardWeekConfig;
@@ -46,7 +46,7 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'the instanceof operator on Enum should behave as type guard, and no TypeScript error should be raised',
+      'should narrow Enum instances with instanceof Enum without TypeScript errors',
       ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const WeekConfig = StandardWeekConfig;

@@ -13,11 +13,11 @@ import { toPlainEnums } from '../utils/index';
 import { addEnumItemsTestSuite } from './enum-items';
 
 const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
-  engine.describe('The EnumCollectionClass api', () => {
+  engine.describe('EnumCollection API', () => {
     addEnumItemsTestSuite(engine);
 
     engine.test(
-      'enums.items should return an array of enum items',
+      'should expose enum items through enums.items',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales }, WeekData: { getStandardWeekData } }) => {
         const week = Enum(StandardWeekConfig);
         return { week, getStandardWeekData, locales };
@@ -29,7 +29,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'the methods should be same as EnumItemsArray',
+      'should expose EnumItems methods on Enum collections',
       ({ EnumPlus: { Enum, KEYS, VALUES }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
         const defaultListItems = week.toList();
@@ -97,7 +97,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'utils.Symbols should be equal to node Symbols',
+      'should share symbol constants between browser and Node builds',
       ({ EnumPlus: { KEYS, ITEMS, VALUES, LABELS, NAMED, META, ENUM_OPTIONS } }) => {
         return { KEYS, ITEMS, VALUES, LABELS, NAMED, META, ENUM_OPTIONS };
       },
@@ -113,7 +113,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'should be able to get the initialization options by ENUM_OPTIONS symbol',
+      'should expose initialization options through ENUM_OPTIONS',
       ({ EnumPlus: { Enum, ENUM_OPTIONS }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
         return { weekEnum, ENUM_OPTIONS };
@@ -125,7 +125,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'the system fields should be protected and auto renamed to fallback names in case of conflicting with enum members',
+      'should protect system fields under symbol keys when enum members conflict',
       ({ EnumPlus: { Enum, KEYS, VALUES, LABELS, ITEMS, NAMED, META } }) => {
         const strangeEnumConfig = {
           keys: { value: 101, label: 'foo', type: 1101 },
@@ -248,7 +248,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'should have [ENUM_COLLECTION] property to indicate that this is an enum collection',
+      'should expose the [IS_ENUM] marker on Enum collections',
       ({ EnumPlus: { Enum, IS_ENUM }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
         return { week, IS_ENUM };
@@ -263,7 +263,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Enum should be applicable to "instanceof" operator',
+      'should support membership checks with instanceof on Enum collections',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const week = Enum(StandardWeekConfig);
         return { week };
@@ -279,7 +279,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'enums.valueType should throw error when called at runtime',
+      'should throw an error when enums.valueType is accessed at runtime',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         let error: Error | undefined;
@@ -296,7 +296,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'enums.keyType should throw error when called at runtime',
+      'should throw an error when enums.keyType is accessed at runtime',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         let error: Error | undefined;
@@ -313,7 +313,7 @@ const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'enums.rawType should throw error when called at runtime',
+      'should throw an error when enums.rawType is accessed at runtime',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         let error: Error | undefined;

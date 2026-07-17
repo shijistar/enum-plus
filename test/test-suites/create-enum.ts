@@ -13,9 +13,9 @@ import type TestEngineBase from '../engines/base';
 import { toPlainEnums } from '../utils/index';
 
 const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
-  engine.describe('Create Enum using static init data', () => {
+  engine.describe('Enum creation from static data', () => {
     engine.test(
-      'Should be created with standard init config',
+      'should create an Enum from standard initialization config',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum, locales };
@@ -28,7 +28,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should be created with functional label init config',
+      'should create an Enum from config with functional labels',
       ({ EnumPlus: { Enum }, WeekConfig: { FuncLabelStandardWeekConfig, lang, locales } }) => {
         const weekEnum = Enum(FuncLabelStandardWeekConfig);
         return {
@@ -46,7 +46,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with number values',
+      'should create an Enum with numeric values',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekNumberConfig } }) => {
         const weekEnum = Enum(WeekNumberConfig);
         return { weekEnum };
@@ -57,7 +57,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with string values',
+      'should create an Enum with string values',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekStringConfig } }) => {
         const weekEnum = Enum(WeekStringConfig);
         return { weekEnum };
@@ -68,7 +68,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with value-only config',
+      'should create an Enum from value-only config',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig } }) => {
         const weekEnum = Enum(WeekValueOnlyConfig);
         return { weekEnum };
@@ -79,7 +79,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with label-only config',
+      'should create an Enum from label-only config',
       ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekLabelOnlyConfig } }) => {
         const weekEnum = Enum(WeekLabelOnlyConfig);
         const weekWithEmptyLabel = Enum(
@@ -105,7 +105,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with meta-only config',
+      'should create an Enum from metadata-only config',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekMetaOnlyConfig, StandardWeekConfig } }) => {
         const weekEnum = Enum(WeekMetaOnlyConfig);
         return {
@@ -127,7 +127,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with compact config',
+      'should create an Enum from compact config',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekCompactConfig, WeekEmptyConfig } }) => {
         const weekEnum = Enum(WeekCompactConfig);
         const weekEnum2 = Enum(WeekEmptyConfig);
@@ -140,7 +140,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with boolean values',
+      'should create an Enum with boolean values',
       ({ EnumPlus: { Enum }, WeekConfig: { locales, BooleanStandardConfig } }) => {
         const weekEnum = Enum(BooleanStandardConfig);
         return { weekEnum, locales };
@@ -151,7 +151,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with date values',
+      'should create an Enum with Date values',
       ({ EnumPlus: { Enum }, WeekConfig: { locales, DateStandardConfig } }) => {
         const weekEnum = Enum(DateStandardConfig);
         return { weekEnum, locales };
@@ -162,7 +162,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with empty config',
+      'should create an empty Enum from empty config',
       ({ EnumPlus: { Enum } }) => {
         const weekEnum = Enum({});
         return { weekEnum };
@@ -173,7 +173,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with undefined',
+      'should create an empty Enum from undefined input',
       ({ EnumPlus: { Enum } }) => {
         const weekEnum = Enum(undefined as unknown as EnumInit);
         return { weekEnum };
@@ -184,7 +184,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with supported but invalid values',
+      'should preserve supported nonstandard values',
       ({ EnumPlus: { Enum } }) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const regexpEnum = Enum({ foo: /\sregexp\s/ } as Record<string, any>);
@@ -203,7 +203,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should throw error if init data is invalid',
+      'should throw an error for invalid initialization data',
       ({ EnumPlus: { Enum } }) => {
         let error: Error | undefined;
         try {
@@ -220,9 +220,9 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
   });
 
-  engine.describe('Create Enum with dynamic array', () => {
+  engine.describe('Array-based Enum creation and raw data access', () => {
     engine.test(
-      'Should have a return',
+      'should return a populated Enum for a standard array',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekStandardArray } }) => {
         const weekEnum = Enum(WeekStandardArray);
         return { weekEnum };
@@ -235,7 +235,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with standard array',
+      'should create an Enum from a standard array',
       ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekStandardArray } }) => {
         const weekWithDefaultFields = Enum(WeekStandardArray);
         const weekEnum = Enum(WeekStandardArray, {
@@ -258,7 +258,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with standard items array, but without providing getKey',
+      'should handle a standard item array without getKey',
       ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekStandardArray } }) => {
         const weekEnum = Enum(WeekStandardArray, {
           getValue: 'value',
@@ -279,7 +279,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with standard items array, but without providing getLabel',
+      'should handle a standard item array without getLabel',
       ({ EnumPlus: { Enum }, WeekConfig: { locales, WeekStandardArray } }) => {
         const weekEnum = Enum(WeekStandardArray, {
           getValue: 'value',
@@ -303,7 +303,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should be created with standard items array, but without providing getKey and getLabel',
+      'should handle a standard item array without getKey or getLabel',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekStandardArray } }) => {
         const weekEnum = Enum(WeekStandardArray, {
           getValue: 'value',
@@ -331,7 +331,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'enums.raw should return the raw array used to initialize the enums',
+      'should return the original initialization data from enums.raw',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const WeekConfig = StandardWeekConfig;
         const weekEnum = Enum(WeekConfig);
@@ -351,9 +351,9 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
   });
 
-  engine.describe('Create Enum with native enum', () => {
+  engine.describe('Enum creation from native enums', () => {
     engine.test(
-      'Should be created with native enums, and the key and value should be consistent with the native enum',
+      'should preserve native enum keys and values',
       ({ EnumPlus: { Enum } }) => {
         enum firstSeedInit {
           A = 1,
@@ -426,7 +426,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should stop auto-increment starting from "non-number" enum item',
+      'should stop numeric auto-increment after a non-numeric enum member',
       ({ EnumPlus: { Enum } }) => {
         enum stringIncrementInit {
           A = 'AAA',
@@ -486,7 +486,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Enum.isEnum method should be able to check for enum instances',
+      'should identify Enum instances with Enum.isEnum',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const WeekConfig = StandardWeekConfig;
         const weekEnum = Enum(WeekConfig);
@@ -506,7 +506,7 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'instanceof operator should be able to check for enum instances',
+      'should identify Enum instances with instanceof Enum',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const WeekConfig = StandardWeekConfig;
         const weekEnum = Enum(WeekConfig);

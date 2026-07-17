@@ -20,7 +20,7 @@ const testLocalization = <L extends boolean>(
 ) => {
   engine.describe(`Enum localization ${i18n.mode === 'composition' ? '(composition mode)' : '(legacy mode)'}`, () => {
     engine.test(
-      'Should show English by default',
+      'should show English by default',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin);
         return {
@@ -36,7 +36,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should show Chinese after changing lang',
+      'should show Chinese after changing the language',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(rootPlugin);
         changeLanguage(i18n, 'zh-CN');
@@ -53,7 +53,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should show English after changing back',
+      'should show English after switching back',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin);
         changeLanguage(i18n, 'en');
@@ -68,7 +68,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should accept plugin options',
+      'should accept plugin options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
@@ -107,7 +107,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should accept plugin options with tOptions function',
+      'should accept a tOptions function in plugin options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
@@ -148,7 +148,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should allow plugin option overriding the t function',
+      'should allow plugin options to override the t function',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
@@ -179,7 +179,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should allow to be used out of component context',
+      'should work outside a component context',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
@@ -210,7 +210,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should work with instance and tOptions out of component context',
+      'should work with an instance and tOptions outside a component context',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(rootPlugin, {
           localize: {
@@ -250,7 +250,7 @@ const testLocalization = <L extends boolean>(
     );
 
     engine.test(
-      'Should return the origin key without instance out of component context',
+      'should return the original key without an instance outside a component context',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(rootPlugin);
         changeLanguage(i18n, 'zh-CN');
