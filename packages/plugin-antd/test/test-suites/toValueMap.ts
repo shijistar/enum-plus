@@ -5,9 +5,9 @@ import { defaultLocalize } from 'enum-plus';
 import toValueMapPlugin from '../../src/toValueMap';
 
 const testEnumItems = (engine: TestEngineBase<'jest'>) => {
-  engine.describe('The toValueMap plugin', () => {
+  engine.describe('toValueMap plugin', () => {
     engine.test(
-      'should generate an object array for AntDesignPro',
+      'should generate an Ant Design Pro value map',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.install(toValueMapPlugin);
         const weekEnum = Enum(StandardWeekConfig);

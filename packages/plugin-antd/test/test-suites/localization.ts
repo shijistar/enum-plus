@@ -16,7 +16,7 @@ import type zhCN from '@enum-plus/test/i18n/zh-CN.json';
 const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
-      'Should show English by default',
+      'should show English after setting the language to en-US',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -33,7 +33,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show Chinese after changing lang',
+      'should show Chinese after changing the language',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -49,7 +49,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show English after changing back',
+      'should show English after switching back',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -65,7 +65,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show original label if no localization found',
+      'should fall back to the original label when no localization is found',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -81,7 +81,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show original label if Enum.localize is explicitly set to undefined ',
+      'should fall back to the original label when Enum.localize is explicitly undefined',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -98,7 +98,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should respect Enum options over global setting (Chinese over English)',
+      'should prefer Enum options over the global setting (Chinese over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales, genSillyLocalizer },
@@ -115,7 +115,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'Should respect Enum options over global setting (undefined over English)',
+      'should prefer Enum options over the global setting (undefined over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -130,7 +130,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'Should respect Enum options over global setting (undefined over English), support delayed assign',
+      'should prefer delayed Enum option assignment over the global setting (undefined over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -146,7 +146,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'Should respect Enum options over global setting (Chinese over undefined)',
+      'should prefer Enum options over the global setting (Chinese over undefined)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales, genSillyLocalizer },
@@ -163,7 +163,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'Should respect Enum options over global setting (both undefined)',
+      'should handle undefined Enum and global localization options',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -178,7 +178,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'Should respect Enum options over global setting (both explicit undefined)',
+      'should handle explicitly undefined Enum and global localization options',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },

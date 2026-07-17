@@ -2,9 +2,9 @@ import { IS_ENUM_ITEM as IS_ENUM_ITEM_IN_NODE } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 
 const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
-  engine.describe('The EnumItemClass api', () => {
+  engine.describe('EnumItem API', () => {
     engine.test(
-      'Should be able to pick Enum values',
+      'should expose Enum members as primitive values',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum };
@@ -28,7 +28,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'item.toString should return enum label',
+      'should return localized labels from item.toString and item.toLocaleString',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { setLang, getLocales, StandardWeekConfig },
@@ -48,7 +48,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'should have [ENUM_ITEM] property to indicate that this is an enum item',
+      'should expose the [IS_ENUM_ITEM] marker on enum items',
       ({ EnumPlus: { Enum, IS_ENUM_ITEM }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         return { weekEnum, IS_ENUM_ITEM };
@@ -65,7 +65,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'item.valueOf should return the enum value',
+      'should return the enum value from item.valueOf',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         const weekEnum = Enum(StandardWeekConfig);
         const sunday = weekEnum.items[0];
@@ -78,7 +78,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'item.toPrimitive should be auto converted to a correct primitive type',
+      'should convert enum items to the correct primitive representation',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, getLocales, setLang },
@@ -130,7 +130,7 @@ const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
     // should be readonly
     engine.test(
-      'Should be readonly',
+      'should keep enum item properties readonly',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },

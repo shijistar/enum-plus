@@ -5,14 +5,14 @@ import type TestEngineBase from '../engines/base';
 import { pickArray } from '../utils/index';
 
 const testEnumItems = (engine: TestEngineBase<'jest' | 'playwright'>) => {
-  engine.describe('The EnumItemsArray api', () => {
+  engine.describe('EnumItems API', () => {
     addEnumItemsTestSuite(engine);
   });
 };
 
 export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwright'>) {
   engine.test(
-    'should have [IS_ENUM_ITEMS] property to indicate that this is an enum items array',
+    'should expose the [IS_ENUM_ITEMS] marker on enum item arrays',
     ({ EnumPlus: { Enum, IS_ENUM_ITEMS }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum, IS_ENUM_ITEMS };
@@ -27,7 +27,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items should be applicable to "instanceof" operator',
+    'should support membership checks with instanceof on enum.items',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const week = Enum(StandardWeekConfig);
       return { week };
@@ -43,7 +43,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items[KEYS] should return all enum keys',
+    'should return all enum keys from enum.items[KEYS]',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const week = Enum(StandardWeekConfig);
       return { week, StandardWeekConfig };
@@ -53,7 +53,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
     },
   );
   engine.test(
-    'enum.items[VALUES] should return an array of enum values',
+    'should return all enum values from enum.items[VALUES]',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekNumberConfig } }) => {
       const week = Enum(StandardWeekConfig);
       return { week, StandardWeekConfig, WeekNumberConfig };
@@ -64,7 +64,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.labels should return a strings array',
+    'should return the labels array from enum.items.labels',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const week = Enum(StandardWeekConfig);
       return { week, StandardWeekConfig };
@@ -76,7 +76,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.named should return a mapping object of enum items by keys',
+    'should map enum keys to items in enum.items.named',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const week = Enum(StandardWeekConfig);
       const conflictNameEnum = Enum({
@@ -98,7 +98,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.meta should return a values of custom meta fields',
+    'should collect custom metadata values in enum.items.meta',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const week = Enum(StandardWeekConfig);
       const nullMetaEnum = Enum({
@@ -135,7 +135,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.label should be able to get enum label by key or value',
+    'should resolve enum labels by key or value with enum.items.label',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum, locales };
@@ -150,7 +150,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.key should be able to get enum key by value',
+    'should resolve enum keys by value with enum.items.key',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum };
@@ -163,7 +163,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.has should be able to check enum item exist or not',
+    'should report whether an enum item exists with enum.items.has',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum };
@@ -178,7 +178,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.find should be able to find enum item by key, value or custom meta fields',
+    'should find enum items by key, value, label, or custom metadata with enum.items.findBy',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekCompactConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       const compactWeekEnum = Enum(WeekCompactConfig);
@@ -210,7 +210,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.toList should generate the default objects array with value and label',
+    'should generate default value-label objects with enum.items.toList',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       const defaultListItems = weekEnum.items.toList();
@@ -239,7 +239,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.toList should generate an object array with custom field names',
+    'should support custom field names in enum.items.toList',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       const idNameListItems = weekEnum.items.toList({
@@ -296,7 +296,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.toList should generate an object array with custom field names in function style',
+    'should support function-based field selectors in enum.items.toList',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       const staticFieldListItems = weekEnum.items.toList({
@@ -364,7 +364,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.toMap should generate a default mapping object with value and label',
+    'should generate a default value-to-label map with enum.items.toMap',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum, StandardWeekConfig };
@@ -383,7 +383,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.toMap should generate a mapping object with custom field of keys and values',
+    'should support custom key and value fields in enum.items.toMap',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum, StandardWeekConfig };
@@ -409,7 +409,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.toMap should generate a mapping object with custom functions',
+    'should support selector functions in enum.items.toMap',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
       return { weekEnum, StandardWeekConfig };
@@ -486,7 +486,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
   );
 
   engine.test(
-    'enum.items.raw should return the raw object used to initialize the Enum',
+    'should return the original initialization data from enum.items.raw',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
       const WeekConfig = StandardWeekConfig;
       const weekEnum = Enum(StandardWeekConfig);

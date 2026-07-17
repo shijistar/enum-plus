@@ -17,7 +17,7 @@ import { copyList, pickArray } from '../utils/index';
 const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
-      'Should have default localize method',
+      'should provide a default localize method',
       ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { getLocales, genSillyLocalizer } }) => {
         return { Enum, getLocales, defaultLocalize, genSillyLocalizer };
       },
@@ -27,7 +27,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should show English by default',
+      'should show English after setting the language to en-US',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -70,7 +70,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should show Chinese after changing lang',
+      'should show Chinese after changing the language',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -113,7 +113,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should show English after changing back',
+      'should show English after switching back',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -156,7 +156,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should show original label if no localization found',
+      'should fall back to the original label when no localization is found',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -200,7 +200,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should show original label if Enum.localize is explicitly set to undefined ',
+      'should fall back to the original label when Enum.localize is explicitly undefined',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -244,7 +244,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should respect Enum options over global setting (Chinese over English)',
+      'should use Enum localization for static labels while function labels use the global localizer',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales, genSillyLocalizer },
@@ -294,7 +294,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should respect Enum options over global setting (undefined over English)',
+      'should prefer Enum options over the global setting (undefined over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -336,7 +336,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should respect Enum options over global setting (undefined over English), support delayed assign',
+      'should prefer delayed Enum option assignment over the global setting (undefined over English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -380,7 +380,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should respect Enum options over global setting (Chinese over undefined)',
+      'should use Enum localization for static labels while function labels keep their own localization',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales, genSillyLocalizer },
@@ -431,7 +431,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Should respect Enum options over global setting (both undefined)',
+      'should handle undefined Enum and global localization options',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -462,7 +462,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Should respect Enum options over global setting (both explicit undefined)',
+      'should handle explicitly undefined Enum and global localization options',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -493,7 +493,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'should be able to set prefix of enum item labels',
+      'should support prefixes for enum item labels',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { ShortLabelStandardWeekConfig, setLang, getLocales },
@@ -525,7 +525,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'enum item label can be ignored with prefix',
+      'should derive labels from enum keys when a prefix is configured',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { WeekValueOnlyConfig, setLang, getLocales },
@@ -556,7 +556,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'autoLabel can be false',
+      'should use enum keys as labels when autoLabel is false',
       ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { ShortLabelStandardWeekConfig, setLang, getLocales } }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         Enum.config.autoLabel = false;
@@ -570,7 +570,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'autoLabel can be function',
+      'should support a function for autoLabel',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { ShortLabelStandardWeekConfig, setLang, getLocales },
@@ -602,7 +602,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'labelPrefix can be object',
+      'should support an object for labelPrefix',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { ShortLabelStandardWeekConfig, setLang, getLocales },
@@ -633,7 +633,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'labelPrefix and autoLabel of Enum instances should override global configs in Enum.config',
+      'should prefer instance labelPrefix and autoLabel options over Enum.config',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { ShortLabelStandardWeekConfig, setLang, getLocales },
@@ -721,7 +721,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'Enum name should support global localization (English)',
+      'should localize Enum names globally in English',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales, resourceLocalizer },
@@ -743,7 +743,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Enum name should support global localization (Chinese)',
+      'should localize Enum names globally in Chinese',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales, resourceLocalizer },
@@ -765,7 +765,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Enum name should support global localization (No Locale)',
+      'should localize Enum names globally without a locale',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales, resourceLocalizer },
@@ -785,7 +785,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Enum name should support custom localization (English)',
+      'should use a custom English localizer for string names while function names keep their own localization',
       ({
         EnumPlus: { Enum },
         WeekConfig: { StandardWeekConfig, getLocales, genSillyLocalizer, resourceLocalizer },
@@ -809,7 +809,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Enum name should support custom localization (Chinese)',
+      'should use a custom Chinese localizer for string names while function names keep their own localization',
       ({
         EnumPlus: { Enum },
         WeekConfig: { StandardWeekConfig, getLocales, genSillyLocalizer, resourceLocalizer },
@@ -833,7 +833,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Enum name should support custom localization (No Locale)',
+      'should localize Enum names with a custom localizer and no locale',
       ({
         EnumPlus: { Enum },
         WeekConfig: { StandardWeekConfig, getLocales, genSillyLocalizer, resourceLocalizer },
@@ -857,7 +857,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Enum name should respect Enum options over global setting (Chinese over English)',
+      'should use Enum localization for string names while function names use the global localizer',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales, genSillyLocalizer, resourceLocalizer },
@@ -882,7 +882,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'Enum name should allow normal text',
+      'should accept plain text Enum names',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
         Enum.localize = undefined!;
         const weekEnumWithoutName = Enum(StandardWeekConfig);

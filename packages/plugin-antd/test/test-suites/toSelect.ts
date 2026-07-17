@@ -7,9 +7,9 @@ import antdPlugin from '../../src/index';
 import toSelectPlugin from '../../src/toSelect';
 
 const testEnumItems = (engine: TestEngineBase<'jest'>) => {
-  engine.describe('The toSelect plugin', () => {
+  engine.describe('toSelect plugin', () => {
     engine.test(
-      'should generate an object array',
+      'should generate select options',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
         Enum.install(toSelectPlugin);
         const weekEnum = Enum(StandardWeekConfig);
@@ -106,7 +106,7 @@ const testEnumItems = (engine: TestEngineBase<'jest'>) => {
     }
   );
   engine.test(
-    'should be able to set plugin options by root plugin',
+    'should apply plugin options configured on the root plugin',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       Enum.install(antdPlugin, {
         toSelect: { valueField: 'id', labelField: 'name' },

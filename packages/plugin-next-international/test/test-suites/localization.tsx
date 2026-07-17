@@ -16,7 +16,7 @@ import type zhCN from '@enum-plus/test/i18n/zh-CN.json';
 const testLocalization = (engine: TestEngineBase<'jest'>) => {
   engine.describe('Enum localization', () => {
     engine.test(
-      'Should raise error when not initialized',
+      'should throw an error when not initialized',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin);
         return {
@@ -34,7 +34,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       },
     );
     engine.test(
-      'Should show English by default without mode specified',
+      'should show English by default without an explicit mode',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: {
@@ -75,7 +75,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     //   async (args) => assertEnum(args)
     // );
     engine.test(
-      'Should show English by default with text mode',
+      'should show English by default with text mode',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: {
@@ -97,7 +97,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       async (args) => assertEnum(args),
     );
     engine.test(
-      'Should show English by default with component mode',
+      'should show English by default with component mode',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: {
@@ -120,7 +120,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show Chinese after changing lang',
+      'should show Chinese after changing the language',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { zhCN, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: { mode: 'text' },
@@ -141,7 +141,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
     );
 
     engine.test(
-      'Should show English after changing back',
+      'should show English after switching back',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
           localize: { mode: 'text' },

@@ -4,7 +4,7 @@ import type TestEngineBase from '../engines/base';
 const testPlugin = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum plugin', () => {
     engine.test(
-      'Should be able to install custom plugin',
+      'should install custom plugins',
       ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, myPlugin }) => {
         const options: PluginOptions = { name: 'enum-plus' };
         Enum.install(myPlugin as PluginFunc, options);
