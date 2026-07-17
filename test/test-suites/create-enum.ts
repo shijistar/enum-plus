@@ -428,12 +428,12 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     engine.test(
       'should preserve mixed string and numeric native enum keys and values',
       ({ EnumPlus: { Enum } }) => {
-        enum stringIncrementInit {
+        enum mixedStringNumericInit {
           A = 1,
           B = 'AAA',
           C = 2,
         }
-        const stringIncrement = Enum(stringIncrementInit);
+        const mixedStringNumeric = Enum(mixedStringNumericInit);
 
         enum mixedInit {
           A,
@@ -455,13 +455,13 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         }
         const mixed2 = Enum(mixedInit2);
         return {
-          stringIncrement,
+          mixedStringNumeric,
           mixed,
           mixed2,
         };
       },
-      ({ stringIncrement, mixed, mixed2 }) => {
-        engine.expect(toPlainEnums(stringIncrement.items)).toEqual([
+      ({ mixedStringNumeric, mixed, mixed2 }) => {
+        engine.expect(toPlainEnums(mixedStringNumeric.items)).toEqual([
           { value: 1, label: 'A', key: 'A' },
           { value: 'AAA', label: 'B', key: 'B' },
           { value: 2, label: 'C', key: 'C' },

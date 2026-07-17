@@ -115,7 +115,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'should fall back to the global localizer when Enum localize is undefined',
+      'should fall back to the global localizer when the Enum instance localize option is undefined',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
@@ -130,7 +130,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       (args) => assertEnum(args),
     );
     engine.test(
-      'should use a global localizer assigned after Enum creation',
+      'should use a global localizer assigned after creating the Enum instance',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales },
