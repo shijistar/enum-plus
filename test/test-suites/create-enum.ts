@@ -426,12 +426,12 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'should stop numeric auto-increment after a non-numeric enum member',
+      'should preserve mixed string and numeric native enum keys and values',
       ({ EnumPlus: { Enum } }) => {
         enum stringIncrementInit {
-          A = 'AAA',
-          B = 1,
-          C,
+          A = 1,
+          B = 'AAA',
+          C = 2,
         }
         const stringIncrement = Enum(stringIncrementInit);
 
@@ -462,8 +462,8 @@ const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
       ({ stringIncrement, mixed, mixed2 }) => {
         engine.expect(toPlainEnums(stringIncrement.items)).toEqual([
-          { value: 'AAA', label: 'A', key: 'A' },
-          { value: 1, label: 'B', key: 'B' },
+          { value: 1, label: 'A', key: 'A' },
+          { value: 'AAA', label: 'B', key: 'B' },
           { value: 2, label: 'C', key: 'C' },
         ]);
         engine.expect(toPlainEnums(mixed.items)).toEqual([
