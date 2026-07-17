@@ -294,7 +294,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'should prefer Enum options over the global setting (undefined over English)',
+      'should fall back to the global localizer when the Enum instance localize option is undefined',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },
@@ -336,7 +336,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'should prefer delayed Enum option assignment over the global setting (undefined over English)',
+      'should use a global localizer assigned after creating the Enum instance',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, FuncLabelStandardWeekConfig, setLang, getLocales },

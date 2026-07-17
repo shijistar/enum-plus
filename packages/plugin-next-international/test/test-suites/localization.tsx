@@ -37,9 +37,7 @@ const testLocalization = (engine: TestEngineBase<'jest'>) => {
       'should show English by default without an explicit mode',
       async ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig }, i18n: { enUS, neutral } }) => {
         Enum.install(clientI18nPlugin, {
-          localize: {
-            mode: 'text',
-          },
+          localize: {},
         });
         await act(async () => {
           render(<Page />);
