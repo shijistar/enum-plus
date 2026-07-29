@@ -1,0 +1,14 @@
+scripts/prepare-codegraph.js
+  h_3a0b15d296f1fe 28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "8639f761ce50cda68200d478b57e66a53e8cb4f7",
+  "prompts": {},
+  "humans": {
+    "h_3a0b15d296f1fe": {
+      "author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
