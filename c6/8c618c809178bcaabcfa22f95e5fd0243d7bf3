@@ -1,0 +1,21 @@
+package.json
+  s_a455d2f8e42404::t_7fefe45c721fa9 190
+package-lock.json
+  s_a455d2f8e42404::t_b5d14fa723c506 3,9,17,5201,5247,5273,5287,5301,5315,5329,5343,5357,5371,5385,5399,5413,5427,5441,5455,5469,5483,5497,5511,5525,5539,5553,5567,5581,5595,5609,6729,14504,15495,22876,25841
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "c68c618c809178bcaabcfa22f95e5fd0243d7bf3",
+  "prompts": {},
+  "sessions": {
+    "s_a455d2f8e42404": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "898b4c66-0e25-46f6-a5ea-e0f0e971e56d",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Sage Starr (李凤宝) <shijistar@gmail.com>"
+    }
+  }
+}
