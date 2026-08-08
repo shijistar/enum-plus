@@ -1,5 +1,6 @@
 import { themes, type ThemeVars } from 'storybook/theming';
 
+const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 export const light: ThemeVars = {
   ...themes.light,
   base: 'light',
@@ -64,3 +65,7 @@ export const dark: ThemeVars = {
   textMutedColor: '#8ea0ab',
   textInverseColor: '#0b1117',
 };
+
+export function getThemeKey(theme: unknown) {
+  return (!theme && isPreferDark) || theme === 'dark' ? 'dark' : 'light';
+}
