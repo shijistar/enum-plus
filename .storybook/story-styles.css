@@ -63,6 +63,11 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   text-align: right;
 }
 
+.sbdocs-wrapper > .sbdocs-content > div > table:last-child td {
+  font-weight: 500;
+  font-size: 20px;
+}
+
 /* ------------- override css end --------------- */
 
 .enum-story-shell {
