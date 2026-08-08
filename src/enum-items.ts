@@ -1,3 +1,5 @@
+import type { AutoLocalizeItemTemplateFields } from './auto-localize';
+import { getAutoLocalizeTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
 import { EnumItemClass, type EnumItemInterface, type EnumItemOptions } from './enum-item';
 import type {
   EnumInit,
@@ -103,28 +105,29 @@ export class EnumItemsArray<
       this.push(item);
       named[key] = item;
 
-      // Collect custom meta fields
+      // Collect custom meta fields, including fields declared by autoLocalize.itemTemplate.
       const itemRaw = raw[key];
-      if (itemRaw && typeof itemRaw === 'object') {
-        Object.keys(itemRaw).forEach((k) => {
-          const metaKey = k as Exclude<keyof T[keyof T], 'value' | 'label'>;
-          if (!['value', 'label'].includes(k)) {
-            if (meta[metaKey] == null) {
-              meta[metaKey] = [];
-            }
-            const metaValue = item[k as never];
-            if (metaValue != null) {
-              meta[metaKey].push(metaValue);
-            }
-          }
-        });
-      }
+      const rawMetaKeys =
+        itemRaw && typeof itemRaw === 'object' && Object.prototype.toString.call(itemRaw) === '[object Object]'
+          ? Object.keys(itemRaw).filter((k) => !['value', 'label'].includes(k))
+          : [];
+      const templateMetaKeys = getAutoLocalizeTemplateFields(options).filter((k) => k !== 'label');
+      Array.from(new Set([...rawMetaKeys, ...templateMetaKeys])).forEach((k) => {
+        const metaKey = k as Exclude<keyof T[keyof T], 'value' | 'label'>;
+        if (meta[metaKey] == null) {
+          meta[metaKey] = [];
+        }
+        const metaValue = item[k as never];
+        if (metaValue != null) {
+          meta[metaKey].push(metaValue);
+        }
+      });
     });
 
     const autoLocalizeMeta = options?.autoLocalizeMeta;
     // Freeze meta arrays
     Object.keys(meta).forEach((k) => {
-      const autoLocalize = autoLocalizeMeta && (autoLocalizeMeta === true || autoLocalizeMeta.includes(k as never));
+      const autoLocalize = isAutoLocalizeMetaField(k, options);
       if (autoLocalize) {
         const descriptor = {
           get: function get(): unknown[] {
@@ -146,7 +149,7 @@ export class EnumItemsArray<
         freeze(meta[k as keyof typeof meta]);
       }
     });
-    if (autoLocalizeMeta) {
+    if (autoLocalizeMeta || getAutoLocalizeTemplateFields(options).some((k) => k !== 'label')) {
       define(meta, '_items', { value: this });
     }
 
@@ -438,7 +441,8 @@ export interface IEnumItems<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-> extends InheritableEnumItems<T, K, V, LP> {
+  OP = unknown,
+> extends InheritableEnumItems<T, K, V, LP, OP> {
   /**
    * - **EN:** A boolean value indicates that this is an enum items array.
    * - **CN:** 布尔值，表示这是一个枚举项数组
@@ -499,9 +503,10 @@ export interface IEnumItems<
    * - **CN:** 获取枚举项的全部自定义元字段，返回一个对象，其中key为字段名，value为每个字段的原始值数组
    */
   readonly meta: T extends object
-    ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] }
-    : // eslint-disable-next-line @typescript-eslint/ban-types
-      {};
+    ? { [K in Exclude<keyof T[keyof T], 'key' | 'value' | 'label'>]: T[keyof T][K][] } & {
+        [K in AutoLocalizeItemTemplateFields<OP>]: string[];
+      }
+    : { [K in AutoLocalizeItemTemplateFields<OP>]: string[] };
 }
 
 // typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
@@ -511,6 +516,7 @@ export interface InheritableEnumItems<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
+  OP = unknown,
 > {
   /**
    * - **EN:** A method that determines if a constructor object recognizes an object as one of the
@@ -601,18 +607,19 @@ export interface InheritableEnumItems<
         ? undefined
         : NonNullable<KV> extends K
           ? // @ts-expect-error: because the type infer is not clever enough, KV here should be one of K
-            EnumItemInterface<T[NonNullable<KV>], NonNullable<KV>, FindValueByKey<T, NonNullable<KV>>>
+            EnumItemInterface<T[NonNullable<KV>], NonNullable<KV>, FindValueByKey<T, NonNullable<KV>>, LP, OP>
           : NonNullable<KV> extends V
             ? EnumItemInterface<
                 // @ts-expect-error: because the type infer is not clever enough, KV here should be one of V
                 T[FindEnumKeyByValue<T, NonNullable<KV>>],
                 FindEnumKeyByValue<T, NonNullable<KV>>,
-                NonNullable<KV>
+                NonNullable<KV>,
+                LP
               >
             : PrimitiveOf<K> extends KV
-              ? EnumItemInterface<T[K], K, V> | undefined
+              ? EnumItemInterface<T[K], K, V, LP, OP> | undefined
               : PrimitiveOf<V> extends KV
-                ? EnumItemInterface<T[K], K, V> | undefined
+                ? EnumItemInterface<T[K], K, V, LP, OP> | undefined
                 : undefined);
 
   /**

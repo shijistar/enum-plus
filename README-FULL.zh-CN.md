@@ -627,6 +627,49 @@ const WeekEnum = Enum(enumInit, {
 });
 ```
 
+### ⚙️ autoLocalize
+
+`{ nameTemplate?: string | Function, itemTemplate?: Record<string, string | Function> }`
+
+自动为枚举名称、枚举项标签和枚举项元数据字段生成本地化 key。这是新的统一配置方式，推荐新项目优先使用。`labelPrefix`、`autoLabel`、`autoLocalizeMeta` 仍会保留，用于兼容旧 API。
+
+模板可以是包含 `{name}`、`{item}`、`{field}` 的字符串，也可以是接收 `{ field, item, options, resource }` 的函数。实例级 `autoLocalize.itemTemplate` 会和 `Enum.config.autoLocalize.itemTemplate` 按字段合并；同名字段以实例级配置为准。
+
+```ts
+Enum.config.autoLocalize = {
+  nameTemplate: 'enum.{name}.name',
+  itemTemplate: {
+    label: 'enum.{name}.{item}.label',
+    description: 'enum.{name}.{item}.description',
+  },
+};
+
+const WeekEnum = Enum(
+  {
+    Sunday: { value: 0 },
+    Monday: { value: 1 },
+  },
+  {
+    name: 'week',
+    autoLocalize: {
+      itemTemplate: {
+        abbr: 'enum.{name}.{item}.abbr',
+      },
+    },
+  },
+);
+
+WeekEnum.name; // localize('enum.week.name')
+WeekEnum.named.Sunday.label; // localize('enum.week.Sunday.label')
+WeekEnum.named.Sunday.description; // localize('enum.week.Sunday.description')
+WeekEnum.named.Sunday.abbr; // localize('enum.week.Sunday.abbr')
+WeekEnum.items.meta.description; // string[]
+```
+
+由 `autoLocalize.itemTemplate` 声明的元数据字段（例如 `description`、`abbr`），即使没有出现在原始枚举项中，也会自动生成。TypeScript 类型推导方面，建议在实例级模板中使用字面量字段名；仅通过全局配置声明的字段运行时可用，但普通 TypeScript 泛型无法精确推导。
+
+> `autoLocalizeMeta` 仍然是正确的旧 API 名称。`autoLocalizedMeta` 不是受支持的 API，也不支持 `!abbr` 这类排除语法。
+
 ### ⚙️ autoLabel
 
 `boolean | ((params: { item: EnumItemClass; labelPrefix?: any }) => string)`
