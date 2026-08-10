@@ -1,4 +1,4 @@
-import type { AutoLocalizeOption } from './auto-localize';
+import type { LocalizeTemplatesConfig } from './auto-localize';
 import type { LocalizeInterface } from './localize-interface';
 import { defaultLocalize } from './utils';
 
@@ -22,7 +22,7 @@ export const internalConfig: {
         labelPrefix: any;
       }) => string);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  autoLocalize?: AutoLocalizeOption<any>;
+  autoLocalize?: LocalizeTemplatesConfig<any>;
 } = {
   autoLabel: true,
 };

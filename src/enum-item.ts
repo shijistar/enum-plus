@@ -1,14 +1,14 @@
 import type { EnumItemExtension } from 'enum-plus/extension';
+import type { LocalizeTemplatesConfig } from './auto-localize';
 import {
-  type AutoLocalizeOption,
   getAutoLocalizeTemplateFields,
   isAutoLocalizeMetaField,
-  mergeAutoLocalizeConfig,
-  resolveAutoLocalizeTemplate,
+  mergeLocalizeTemplatesConfig,
+  resolveLocalizeTemplate,
 } from './auto-localize';
-import type { EnumInitOptions } from './enum';
 import { internalConfig, localizer } from './global-config';
 import type {
+  EnumInit,
   EnumItemInit,
   EnumItemLabel,
   EnumKey,
@@ -19,17 +19,22 @@ import type {
 import { IS_ENUM_ITEM } from './utils';
 
 export type EnumItemInterface<
+  ET extends EnumInit<K, V>,
   T extends EnumItemInit<V>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  K extends EnumKey<any> = string,
-  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
+  K extends EnumKey<ET> /* = EnumKey<ET> */,
+  V extends EnumValue /* = ValueTypeFromSingleInit<T, K> */,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  LP = any,
-> = EnumItemClass<T, K, V, LP> &
+  LP /* = any */,
+  OPTIONS extends EnumItemOptions<ET, T, K, V, LP> /* = EnumInitOptions<ET, K, V, LP> */,
+> = EnumItemClass<ET, T, K, V, LP> &
   // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   {
     [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
-  } & EnumItemExtension<T, K, V>;
+  } & (OPTIONS extends { templates: { items: infer ItemTemplates } }
+    ? { [key in keyof ItemTemplates]: string }
+    : unknown) &
+  EnumItemExtension<T, K, V>;
 
 /**
  * - **EN:** Represents a single item in an enumeration collection.
@@ -42,15 +47,15 @@ export type EnumItemInterface<
  * @template LP Represents the type of the enum item's label prefix | 表示枚举项标签的前缀值
  */
 export class EnumItemClass<
+  const ET extends EnumInit<K, V>,
   const T extends EnumItemInit<V>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  K extends EnumKey<any> = string,
+  K extends EnumKey<ET> = EnumKey<ET>,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LP = any,
 > {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _options?: EnumItemOptions<any, any, any, any>;
+  private _options?: EnumItemOptions<ET, T, K, V, LP>;
   private _label: EnumItemLabel | undefined;
 
   /**
@@ -63,7 +68,7 @@ export class EnumItemClass<
    * @param raw The original initialization object | 原始初始化对象
    * @param options Optional settings for the enum item | 枚举项的可选设置
    */
-  constructor(key: K, value: V, label: EnumItemLabel, raw: T, options?: EnumItemOptions<T, K, V, LP>) {
+  constructor(key: K, value: V, label: EnumItemLabel, raw: T, options?: EnumItemOptions<ET, T, K, V, LP>) {
     this.key = key;
     this.value = value;
     this.label = label as string;
@@ -90,7 +95,7 @@ export class EnumItemClass<
       if (isAutoLocalizeMetaField(metaKey, options)) {
         const descriptor = {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          get: function get(this: EnumItemClass<T, K, V, LP>): any {
+          get: function get(this: EnumItemClass<ET, T, K, V, LP>): any {
             // @ts-expect-error: because _metaKey is dynamically added to the getter function
             const { _metaKey } = get;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,7 +115,7 @@ export class EnumItemClass<
     defines(this, {
       ...autoLocalizePropMap,
       label: {
-        get: function (this: EnumItemClass<T, K, V, LP>) {
+        get: function (this: EnumItemClass<ET, T, K, V, LP>) {
           return this._localizeResource(this._label);
         },
         enumerable: true,
@@ -172,7 +177,10 @@ export class EnumItemClass<
    *   枚举项的原始值，根据提示返回其值或标签
    */
   // @ts-expect-error: because don't want show `Symbol` in vscode's intellisense, it should work in background
-  private [Symbol.toPrimitive](this: EnumItemClass<T, K, V>, hint: 'number' | 'string' | 'default'): V | string {
+  private [Symbol.toPrimitive](
+    this: EnumItemClass<ET, T, K, V, LP>,
+    hint: 'number' | 'string' | 'default',
+  ): V | string {
     if (hint === 'number') {
       // for the cases like Number(value) or +value
       return this.valueOf();
@@ -235,21 +243,21 @@ export class EnumItemClass<
     }
     return content;
   }
-  private _localizeResource(resource: EnumItemLabel | undefined, field = 'label') {
+  private _localizeResource(resource: EnumItemLabel | undefined, field: K = 'label' as K) {
     const labelPrefix = this._options?.labelPrefix;
     const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
-    const autoLocalize = mergeAutoLocalizeConfig(this._options?.autoLocalize);
+    const templates = mergeLocalizeTemplatesConfig(this._options?.templates);
     let localeKey = resource;
     if (typeof localeKey === 'function') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return localeKey(this as any);
     }
-    const template = autoLocalize?.itemTemplate?.[field];
+    const template = templates?.items?.[field as never];
     if (template) {
-      localeKey = resolveAutoLocalizeTemplate(template, {
-        type: field,
-        item: this,
-        options: this._options,
+      localeKey = resolveLocalizeTemplate(template, {
+        type: 'item',
+        item: this as never,
+        options: this._options as never,
       }) as EnumItemLabel | undefined;
     } else if (field === 'label' && autoLabel && labelPrefix != null) {
       if (typeof autoLabel === 'function') {
@@ -266,9 +274,9 @@ export class EnumItemClass<
 }
 
 export interface EnumItemOptions<
+  ET extends EnumInit<K, V>,
   T extends EnumItemInit<V>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  K extends EnumKey<any> = string,
+  K extends EnumKey<ET> = EnumKey<ET>,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
@@ -286,7 +294,7 @@ export interface EnumItemOptions<
    * - **CN:** 每个枚举项的label前缀，可以是字符串，也可以是一个对象。此选项可以简化甚至省略枚举项的label定义，只有当开启国际化时才需要此选项。
    */
   labelPrefix?: LP;
-
+  templates?: LocalizeTemplatesConfig<ET, K, V>;
   /**
    * - **EN:** Allow setting a label prefix for enum items, simplifying or even omitting the label
    *   definition of enum items. This option is only needed when internationalization is enabled.
@@ -312,15 +320,7 @@ export interface EnumItemOptions<
    *
    * > 此选项与 `Enum.config.autoLabel` 作用相同，但优先级高于全局配置，仅对当前枚举实例生效。
    */
-  autoLabel?: boolean | ((options: { item: EnumItemClass<T, K, V, LP>; labelPrefix: LP }) => string);
-
-  /**
-   * - **EN:** Automatically generate locale keys for enum name, item label, and item meta fields.
-   *   This is the new unified localization configuration. `labelPrefix` and `autoLabel` are kept
-   *   for backward compatibility.
-   * - **CN:** 自动生成枚举名称、枚举项标签和枚举项元信息字段的本地化键名。这是新的统一本地化配置。`labelPrefix` 和 `autoLabel` 会继续保留以兼容旧 API。
-   */
-  autoLocalize?: AutoLocalizeOption<T, K, V, EnumInitOptions<T, K, V>>;
+  autoLabel?: boolean | ((options: { item: EnumItemClass<ET, T, K, V, LP>; labelPrefix: LP }) => string);
 
   /**
    * - **EN:** Set the array of meta information fields to be automatically localized, similar to the

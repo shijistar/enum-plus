@@ -1,5 +1,5 @@
 import type { EnumExtension } from 'enum-plus/extension';
-import { mergeAutoLocalizeConfig, resolveAutoLocalizeTemplate } from './auto-localize';
+import { mergeLocalizeTemplatesConfig, resolveLocalizeTemplate } from './auto-localize';
 import type { EnumInitOptions } from './enum';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
@@ -38,9 +38,10 @@ export class EnumCollectionClass<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LP = any,
+  OPTIONS extends EnumItemOptions<T, T[K], K, V, LP> = EnumItemOptions<T, T[K], K, V, LP>,
 >
   extends EnumExtensionClass<T, K, V>
-  implements InheritableEnumItems<T, K, V, LP>
+  implements InheritableEnumItems<T, K, V, LP, OPTIONS>
 {
   private readonly __options__: EnumInitOptions<T, K, V, LP> | undefined;
   // used for e2e serialization
@@ -56,7 +57,7 @@ export class EnumCollectionClass<
 
     const keys = Object.keys(init) as K[];
     // Generate enum items array
-    const items = new EnumItemsArray<T, K, V, LP>(init, options);
+    const items = new EnumItemsArray<T, K, V, LP>(init, options as unknown as EnumItemOptions<T, T[K], K, V, LP>);
     freeze(items);
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[keys.includes('items') ? ITEMS : 'items'] = items;
@@ -103,7 +104,7 @@ export class EnumCollectionClass<
    * - **EN:** Get the options to initialize the enum.
    * - **CN:** 获取初始化枚举时的选项
    */
-  get [ENUM_OPTIONS](): EnumItemOptions<T[K], K, V, LP> | undefined {
+  get [ENUM_OPTIONS](): EnumInitOptions<T, K, V, LP> | undefined {
     return this.__options__;
   }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
@@ -120,18 +121,18 @@ export class EnumCollectionClass<
    *   set.
    */
   get name(): string | undefined {
-    const opts = this.__options__;
-    if (typeof opts?.name === 'function') {
-      return opts.name(undefined!);
+    const options = this.__options__;
+    if (typeof options?.name === 'function') {
+      return options.name(undefined!);
     }
-    const autoLocalize = mergeAutoLocalizeConfig(opts?.autoLocalize);
-    const localeKey = autoLocalize?.nameTemplate
-      ? resolveAutoLocalizeTemplate(autoLocalize.nameTemplate, {
+    const templates = mergeLocalizeTemplatesConfig(options?.templates);
+    const localeKey = templates?.name
+      ? resolveLocalizeTemplate(templates.name, {
           type: 'name',
-          options: opts,
+          options,
         })
-      : opts?.name;
-    const localize = opts?.localize ?? localizer.localize;
+      : options?.name;
+    const localize = options?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
       return localize(localeKey);
     }
@@ -173,40 +174,40 @@ export class EnumCollectionClass<
 
   toList(): ListItem<V, 'value', 'label'>[];
   toList<
-    FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
-    FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+    FOV extends string | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => string),
+    FOL extends string | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => string),
   >(
-    config: ToListConfig<T, FOV, FOL, K, V, never, LP>,
+    config: ToListConfig<T, FOV, FOL, K, V, never, LP, OPTIONS>,
   ): ListItem<
     V,
-    FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
-    FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL
+    FOV extends (item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => infer R ? R : FOV,
+    FOL extends (item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => infer R ? R : FOL
   >[];
   toList<
-    FOV extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
-    FOL extends string | ((item: EnumItemInterface<T[K], K, V, LP>) => string),
+    FOV extends string | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => string),
+    FOL extends string | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => string),
   >(
-    config?: ToListConfig<T, FOV, FOL, K, V, never, LP>,
+    config?: ToListConfig<T, FOV, FOL, K, V, never, LP, OPTIONS>,
   ):
     | ListItem<V, 'value', 'label'>[]
     | ListItem<
         V,
-        FOV extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOV,
-        FOL extends (item: EnumItemInterface<T[K], K, V, LP>) => infer R ? R : FOL
+        FOV extends (item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => infer R ? R : FOV,
+        FOL extends (item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => infer R ? R : FOL
       >[] {
-    return this._ds.toList(config as ToListConfig<T, FOV, FOL, K, V, never, LP>);
+    return this._ds.toList(config as ToListConfig<T, FOV, FOL, K, V, never, LP, OPTIONS>);
   }
 
   toMap(): MapResult<T, 'value', 'label', K, V, LP>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T[K], K, V, LP>) => R),
-    VS extends EnumItemFields | (<R>(item: EnumItemInterface<T[K], K, V, LP>) => R),
-  >(config: ToMapConfig<T, KS, VS, K, V, LP>): MapResult<T, KS, VS, K, V, LP>;
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
+  >(config: ToMapConfig<T, KS, VS, K, V, LP, OPTIONS>): MapResult<T, KS, VS, K, V, LP, OPTIONS>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T[K], K, V, LP>) => R),
-    VS extends EnumItemFields | (<R>(item: EnumItemInterface<T[K], K, V, LP>) => R),
-  >(config?: ToMapConfig<T, KS, VS, K, V, LP>): MapResult<T, KS, VS, K, V, LP> {
-    return this._ds.toMap(config as ToMapConfig<T, KS, VS, K, V, LP>);
+    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
+    VS extends EnumItemFields | (<R>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
+  >(config?: ToMapConfig<T, KS, VS, K, V, LP, OPTIONS>): MapResult<T, KS, VS, K, V, LP, OPTIONS> {
+    return this._ds.toMap(config as ToMapConfig<T, KS, VS, K, V, LP, OPTIONS>);
   }
 
   get valueType() {

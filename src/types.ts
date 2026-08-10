@@ -237,6 +237,14 @@ export type ArrayToMap<A extends Record<string, any>[] | readonly Record<string,
   [K in A[number]['key']]: Extract<A[number], { key?: K }>;
 };
 
+// export type MergeEnumInit<
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   K extends keyof any,
+//   V extends EnumValue,
+//   A extends EnumInit<K, V>,
+//   B extends EnumInit<K, V>,
+// > = A extends Record<K, object> ? A & B : A;
+
 export type ExactEqual<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
 
 export type IsNever<T> = [T] extends [never] ? true : false;

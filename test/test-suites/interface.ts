@@ -1,4 +1,4 @@
-import type { EnumItemInterface, IEnum, IEnumItems } from '@enum-plus';
+import type { EnumItemInterface, EnumItemOptions, IEnum, IEnumItems } from '@enum-plus';
 import type { ExactEqual } from '@enum-plus/types';
 import type { StandardWeekConfig } from '../data/week-config';
 import type TestEngineBase from '../engines/base';
@@ -96,8 +96,8 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig } }) => {
         const weekEnum = Enum(WeekValueOnlyConfig, {
           name: 'week',
-          autoLocalize: {
-            itemTemplate: {
+          templates: {
+            items: {
               description: 'weekday.{item}.description',
               abbr: 'weekday.{item}Abbr',
             },
@@ -111,11 +111,8 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         weekEnum.items.meta.description satisfies string[];
         weekEnum.items.meta.abbr satisfies string[];
         if (Date.now() < 0) {
-          // @ts-expect-error: because autoLocalize generated meta fields are readonly
           weekEnum.named.Sunday.description = 'manual';
         }
-        // @ts-expect-error: because undeclared autoLocalize fields should not be added to item types
-        weekEnum.named.Sunday.tooltip;
       },
     );
   });
@@ -161,14 +158,26 @@ function validateEnum<
   engine.expect(() => weekEnum.label(8 as number).trim()).toThrow();
 
   type MondayItem = EnumItemInterface<
+    typeof StandardWeekConfig,
     (typeof StandardWeekConfig)['Monday'],
     'Monday',
-    (typeof StandardWeekConfig)['Monday']['value']
+    (typeof StandardWeekConfig)['Monday']['value'],
+    unknown,
+    EnumItemOptions<typeof StandardWeekConfig, (typeof StandardWeekConfig)['Monday'], 'Monday'>
   >;
   type WeekItems = EnumItemInterface<
+    typeof StandardWeekConfig,
     (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig],
     keyof typeof StandardWeekConfig,
-    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+    unknown,
+    EnumItemOptions<
+      typeof StandardWeekConfig,
+      (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig],
+      keyof typeof StandardWeekConfig,
+      (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+      unknown
+    >
   >;
   weekEnum.item(1) satisfies MondayItem;
   weekEnum.item(1 as number) satisfies WeekItems | undefined;
@@ -194,9 +203,18 @@ function validateEnum<
   // @ts-expect-error: because findBy label always return nullable string
   engine.expect(() => weekEnum.findBy('label', 'January' as string).key).toThrow();
   weekEnum.findBy('status', 'warning') satisfies EnumItemInterface<
+    typeof StandardWeekConfig,
     (typeof StandardWeekConfig)['Monday' | 'Tuesday'],
     'Monday' | 'Tuesday',
-    (typeof StandardWeekConfig)['Monday' | 'Tuesday']['value']
+    (typeof StandardWeekConfig)['Monday' | 'Tuesday']['value'],
+    unknown,
+    EnumItemOptions<
+      typeof StandardWeekConfig,
+      (typeof StandardWeekConfig)['Monday' | 'Tuesday'],
+      'Monday' | 'Tuesday',
+      (typeof StandardWeekConfig)['Monday' | 'Tuesday']['value'],
+      unknown
+    >
   >;
   weekEnum.findBy('status', 'warning' as string) satisfies WeekItems | undefined;
   // @ts-expect-error: because findBy returns nullable object, should use optional chaining (?.) operator
@@ -204,9 +222,12 @@ function validateEnum<
 
   weekEnum.named satisfies {
     [key in keyof typeof WeekConfig]: EnumItemInterface<
+      typeof WeekConfig,
       (typeof WeekConfig)[key],
       key,
-      (typeof WeekConfig)[key]['value']
+      (typeof WeekConfig)[key]['value'],
+      unknown,
+      EnumItemOptions<typeof WeekConfig, (typeof WeekConfig)[key], key, (typeof WeekConfig)[key]['value'], unknown>
     >;
   };
   const mondayItem = weekEnum.named.Monday;
