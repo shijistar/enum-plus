@@ -18,11 +18,11 @@ export type EnumItemInterface<
   ET extends EnumInit<K, V>,
   T extends EnumItemInit<V>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  K extends EnumKey<ET> /* = EnumKey<ET> */,
-  V extends EnumValue /* = ValueTypeFromSingleInit<T, K> */,
+  K extends EnumKey<ET> = EnumKey<ET>,
+  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  LP /* = any */,
-  OPTIONS extends EnumItemOptions<ET, T, K, V, LP> /* = EnumInitOptions<ET, K, V, LP> */,
+  LP = any,
+  OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
 > = EnumItemClass<ET, T, K, V, LP> &
   // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   {

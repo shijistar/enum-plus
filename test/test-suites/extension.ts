@@ -1,4 +1,4 @@
-import type { EnumItemInterface, IEnum } from '@enum-plus';
+import type { AnyEnum, EnumItemInterface, IEnum } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
 
 // import './extension-type';
@@ -12,7 +12,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           isWeekend(value: number) {
             return value === 6 || value === 0;
           },
-          toMySelect(this: ReturnType<typeof Enum>) {
+          toMySelect(this: AnyEnum) {
             return this.items.map((item) => ({ value: item.value, title: item.label }));
           },
         };
@@ -116,7 +116,7 @@ const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           },
         };
         const secondExtends = {
-          toMySelect(this: ReturnType<typeof Enum>) {
+          toMySelect(this: AnyEnum) {
             return this.items.map((item) => ({ value: item.value, title: item.label }));
           },
         };

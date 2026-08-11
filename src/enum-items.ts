@@ -33,7 +33,8 @@ export class EnumItemsArray<
   const T extends EnumInit<K, V>,
   const K extends EnumKey<T> = EnumKey<T>,
   const V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-  const LP = unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const LP = any,
   const OPTIONS extends EnumItemOptions<T, T[K], K, V, LP> = EnumItemOptions<T, T[K], K, V, LP>,
 >
   extends Array<EnumItemInterface<T, T[K], K, V, LP, OPTIONS>>
@@ -162,7 +163,7 @@ export class EnumItemsArray<
 
     // Generate labels array
     define(this, 'labels', {
-      get: function (this: EnumItemsArray<T, K, V, LP>) {
+      get: function (this: EnumItemsArray<T, K, V, LP, OPTIONS>) {
         // Cannot save to static array because labels may be localized contents
         // Should not use `items` in the closure because the getter function cannot be fully serialized
         return Array.from(this).map((item) => item.label);
@@ -174,7 +175,7 @@ export class EnumItemsArray<
     define(this, '__raw__', { value: raw });
     this._runtimeError = undefined!;
     define(this, '_runtimeError', {
-      value: function (this: EnumItemsArray<T, K, V, LP>, name: string) {
+      value: function (this: EnumItemsArray<T, K, V, LP, OPTIONS>, name: string) {
         return `The ${name} property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the typeof operator in the ts type, for example: typeof Week.${name}`;
       },
       enumerable: false,
@@ -309,7 +310,7 @@ export class EnumItemsArray<
     });
   }
 
-  toMap(): MapResult<T, 'value', 'label', K, V, LP>;
+  toMap(): MapResult<T, 'value', 'label', K, V, LP, OPTIONS>;
   toMap<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     KS extends EnumItemFields | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => any),
@@ -732,7 +733,7 @@ export interface InheritableEnumItems<
    *
    * @returns A mapping object of all enum items | 所有枚举项的映射对象
    */
-  toMap(): MapResult<T, 'value', 'label', K, V, LP>;
+  toMap(): MapResult<T, 'value', 'label', K, V, LP, OPTIONS>;
   /**
    * - **EN:** Generate a mapping object of all enum items, with customizable key and value fields
    * - **CN:** 生成一个映射对象，包含所有的枚举项，可自定义键和值字段

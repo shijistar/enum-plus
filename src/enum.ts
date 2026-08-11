@@ -36,10 +36,10 @@ export const Enum = (<
 ): IEnum<T, K, V, LP, OPTIONS> & NativeEnumMembers<T, K, V> => {
   if (Array.isArray(init)) {
     const initMap = getInitMapFromArray<T, K, V, LP>(init, options);
-    return new EnumCollectionClass<T, K, V, LP>(initMap, options) as unknown as NativeEnumMembers<T, K, V> &
+    return new EnumCollectionClass<T, K, V, LP, OPTIONS>(initMap, options) as unknown as NativeEnumMembers<T, K, V> &
       IEnum<T, K, V, LP, OPTIONS>;
   } else {
-    return new EnumCollectionClass<T, K, V, LP>(init, options) as unknown as NativeEnumMembers<T, K, V> &
+    return new EnumCollectionClass<T, K, V, LP, OPTIONS>(init, options) as unknown as NativeEnumMembers<T, K, V> &
       IEnum<T, K, V, LP, OPTIONS>;
   }
 }) as EnumInterface;
@@ -180,8 +180,14 @@ export interface EnumInterface {
     V extends EnumValue = ValueTypeFromSingleInit<ArrayToMap<A>[K], K>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const LP = any,
-    // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-    OPTIONS extends ArrayBasedEnumInitOptions<A[number], K, V, LP> = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
+    OPTIONS extends ArrayBasedEnumInitOptions<
+      // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
+      A[number],
+      K,
+      V,
+      LP
+      // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
+    > = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
   >(
     init: A,
     options?: OPTIONS,

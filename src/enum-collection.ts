@@ -57,7 +57,10 @@ export class EnumCollectionClass<
 
     const keys = Object.keys(init) as K[];
     // Generate enum items array
-    const items = new EnumItemsArray<T, K, V, LP>(init, options as unknown as EnumItemOptions<T, T[K], K, V, LP>);
+    const items = new EnumItemsArray<T, K, V, LP, OPTIONS>(
+      init,
+      options as unknown as EnumItemOptions<T, T[K], K, V, LP>,
+    );
     freeze(items);
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[keys.includes('items') ? ITEMS : 'items'] = items;
@@ -83,7 +86,7 @@ export class EnumCollectionClass<
 
     // @ts-expect-error: because use LABELS to avoid naming conflicts in case of 'labels' field name is taken
     define(this, keys.includes('labels') ? LABELS : 'labels', {
-      get: function (this: EnumCollectionClass<T, K, V, LP>) {
+      get: function (this: EnumCollectionClass<T, K, V, LP, OPTIONS>) {
         return this._ds.labels;
       },
       enumerable: true,
@@ -172,7 +175,7 @@ export class EnumCollectionClass<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  findBy(...rest: Parameters<EnumItemsArray<T, K, V, LP>['findBy']>): any {
+  findBy(...rest: Parameters<EnumItemsArray<T, K, V, LP, OPTIONS>['findBy']>): any {
     return this._ds.findBy(...rest);
   }
 
