@@ -1,0 +1,16 @@
+src/enum.ts
+  h_99cad05bea77d1 81,169,184,187,189,254,260,271,298,304-305
+test/test-suites/interface.ts
+  h_99cad05bea77d1 71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "315cf5e495a8e074fd9f94d6cc8cb774939c44d6",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
