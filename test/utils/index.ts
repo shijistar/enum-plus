@@ -6,8 +6,11 @@ export function toPlainEnums<
   T extends EnumInit<K, V>,
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  LP = any,
+  OPTIONS extends EnumItemOptions<T, T[K], K, V, LP> = EnumItemOptions<T, T[K], K, V, LP>,
 >(
-  enums: EnumItemInterface<T, T[K], K, V, unknown, EnumItemOptions<T, T[K], K, V>>[] & IEnumItems<T, K, V>,
+  enums: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[] & IEnumItems<T, K, V, LP, OPTIONS>,
   fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label'],
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
   return Array.from(enums).map((item) => {

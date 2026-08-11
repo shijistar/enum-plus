@@ -1,4 +1,4 @@
-import type { EnumItemInterface, IEnum, ListItem } from '@enum-plus';
+import type { EnumInitOptions, EnumItemInterface, IEnum, ListItem } from '@enum-plus';
 import { ENUM_OPTIONS } from '@enum-plus';
 import type { MapResult } from '@enum-plus/enum-items';
 import type {
@@ -1002,7 +1002,14 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       | IEnum<
           typeof StandardWeekConfig,
           keyof typeof StandardWeekConfig,
-          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+          unknown,
+          EnumInitOptions<
+            typeof StandardWeekConfig,
+            keyof typeof StandardWeekConfig,
+            (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+            unknown
+          >
         >
       | IEnum<
           typeof FuncLabelStandardWeekConfig,
@@ -1033,19 +1040,12 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     engine.expect(sunday.label).toBe(locales['weekday.Sunday']);
     engine.expect(sunday.toString()).toBe(locales['weekday.Sunday']);
     engine.expect(sunday.toLocaleString()).toBe(locales['weekday.Sunday']);
-    engine
-      .expect(
-        copyList(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          weekEnum.items as any[],
-        ),
-      )
-      .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
+    engine.expect(copyList(weekEnum.items)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
     engine.expect(copyList(weekEnum.toList())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
 
     const autoLocalizeMeta = weekEnum[ENUM_OPTIONS]?.autoLocalizeMeta;
     const meta: Record<string, unknown[]> = {};
-    weekEnum.items.forEach((item) => {
+    Array.from(weekEnum.items).forEach((item) => {
       Object.keys(item.raw).forEach((metaKey) => {
         if (!['value', 'label'].includes(metaKey)) {
           if (!meta[metaKey]) {

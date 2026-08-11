@@ -55,7 +55,7 @@ export class EnumItemClass<
   const LP = any,
 > {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _options?: EnumItemOptions<ET, T, K, V, LP>;
+  private _options?: EnumItemOptions<any, any, any, any, any>;
   private _label: EnumItemLabel | undefined;
 
   /**
