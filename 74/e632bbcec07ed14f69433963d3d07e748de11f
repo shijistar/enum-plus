@@ -1,0 +1,25 @@
+test/test-suites/interface.ts
+  s_16429afbf73222::t_abcffb222e542c 74-75
+  h_99cad05bea77d1 65-72,76,79-82,85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "74e632bbcec07ed14f69433963d3d07e748de11f",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_16429afbf73222": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "15d30427-2c3b-4af3-a537-b0676d0ec5bd",
+        "model": "deepseek/deepseek-v4-flash-0731"
+      },
+      "human_author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
