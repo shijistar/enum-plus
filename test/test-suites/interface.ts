@@ -68,7 +68,7 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           engine.expect(value2.toFixed(1)).toBe('1.0');
         } else {
           // FIXME: instanceof operator cannot narrow types in else branch
-          // value2 satisfies { foo: number };
+          value2 satisfies { foo: number };
         }
 
         const value3 = 'Monday' as 'Monday' | { foo: number };

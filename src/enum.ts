@@ -78,7 +78,7 @@ Enum.install = <T extends PluginFunc<any>>(plugin: T, options?: Parameters<T>[0]
   plugin(options, Enum);
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Enum.isEnum = (value: unknown): value is IEnum<any, any, any, any> & NativeEnumMembers<any, any, any> => {
+Enum.isEnum = (value: unknown): value is LooseAnyEnum => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return Boolean(value && typeof value === 'object' && (value as any)[IS_ENUM] === true);
 };
@@ -166,7 +166,7 @@ export interface EnumInterface {
    * @template K The type of enum keys | 枚举键的类型
    * @template V The type of enum values | 枚举值的类型
    * @template LP The type of enum item's label prefix | 枚举项标签的前缀值
-   * @template OP The type of array-based enum initialization options | 基于数组的枚举初始化选项的类型
+   * @template OPTIONS The type of array-based enum initialization options | 基于数组的枚举初始化选项的类型
    *
    * @param raw The initialization object array for the enum collection | 初始化对象数组
    * @param options The options for generating the enum collection | 生成枚举集合的选项
@@ -181,12 +181,12 @@ export interface EnumInterface {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const LP = any,
     // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-    OP extends ArrayBasedEnumInitOptions<A[number], K, V, LP> = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
+    OPTIONS extends ArrayBasedEnumInitOptions<A[number], K, V, LP> = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
   >(
     init: A,
-    options?: OP,
+    options?: OPTIONS,
     // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-  ): IEnum<ArrayToMap<A>, K, V, LP, OP> & NativeEnumMembers<A, K, V>;
+  ): IEnum<ArrayToMap<A>, K, V, LP, OPTIONS> & NativeEnumMembers<A, K, V>;
 
   /**
    * - **EN:** Global configuration for Enum
@@ -251,16 +251,13 @@ export interface EnumInterface {
    * - **EN:** Check if the value is an Enum collection
    * - **CN:** 检查值是否是枚举集合的实例
    *
-   * @param value -
-   *
-   *   - **EN:** Check if the value is an instance of the Enum collection
-   *   - **CN:** 检查值是否是枚举集合的实例
+   * @param value The value to check | 要检查的值
    *
    * @returns `true` if the value is an Enum collection, otherwise `false` |
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isEnum(value: unknown): value is IEnum<any, any, any, any, any> & NativeEnumMembers<any, any, any>;
+  isEnum(value: unknown): value is LooseAnyEnum;
   /**
    * - **EN:** Determines if a value is an instance of the Enum collection
    * - **CN:** 确定一个值是否是枚举集合的实例
@@ -271,7 +268,7 @@ export interface EnumInterface {
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [Symbol.hasInstance](value: unknown): value is IEnum<any, any, any>;
+  [Symbol.hasInstance](value: unknown): value is LooseAnyEnum;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
    *   extension methods
@@ -298,12 +295,14 @@ export interface EnumInterface {
  * - **CN:** 一个通用枚举类型，可以用来表示任何枚举集合
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyEnum = IEnum<any>;
+export type AnyEnum = IEnum<any, any, any, any, any>;
 // @ts-expect-error: because T does not satisfy EnumInit<K, V>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericAnyEnum<T extends EnumInit<keyof any, EnumValue>> = IEnum<T> &
   // @ts-expect-error: because T does not satisfy EnumInit<K, V>
   NativeEnumMembers<T>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type LooseAnyEnum = InheritableEnumItems<any, any, any, any, any>;
 
 /**
  * - **EN:** Represents an enumeration collection, which includes all the items in the enumeration and
