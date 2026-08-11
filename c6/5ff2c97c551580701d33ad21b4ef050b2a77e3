@@ -1,0 +1,25 @@
+src/enum-collection.ts
+  h_99cad05bea77d1 60,62,89,178
+  h_99cad05bea77d1 61,63
+src/enum.ts
+  h_99cad05bea77d1 39,42,184,189-190
+  h_99cad05bea77d1 183,185-188
+src/enum-items.ts
+  h_99cad05bea77d1 36-37,166,178,313,736
+test/test-suites/extension.ts
+  h_99cad05bea77d1 1,15,119
+src/enum-item.ts
+  h_99cad05bea77d1 25
+  h_99cad05bea77d1 21-22,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c65ff2c97c551580701d33ad21b4ef050b2a77e3",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
