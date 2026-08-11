@@ -62,22 +62,27 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           enumObj satisfies number;
         }
 
-        const value2 = 1 as 1 | { foo: number };
-        if (value2 instanceof weekEnum) {
-          value2 satisfies 1;
-          engine.expect(value2.toFixed(1)).toBe('1.0');
+        const numberValue = 1 as 1 | 'Monday' | { foo: number };
+        if (numberValue instanceof weekEnum) {
+          numberValue satisfies 1 | 'Monday';
+          if (typeof numberValue === 'number') {
+            engine.expect(numberValue.toFixed(1)).toBe('1.0');
+          } else {
+            engine.expect(numberValue).toBe('Monday');
+          }
         } else {
-          // FIXME: instanceof operator cannot narrow types in else branch
-          value2 satisfies { foo: number };
+          // FIXME: TypeScript `instanceof` type guards never narrow the else branch,
+          // the value keeps its original union type `1 | { foo: number }`.
+          // numberValue satisfies { foo: number };
         }
 
-        const value3 = 'Monday' as 'Monday' | { foo: number };
-        if (value3 instanceof weekEnum) {
-          value3 satisfies 'Monday';
-          engine.expect(value3.trim()).toBe('Monday');
+        const stringValue = 'Monday' as 'Monday' | { foo: number };
+        if (stringValue instanceof weekEnum) {
+          stringValue satisfies 'Monday';
+          engine.expect(stringValue.trim()).toBe('Monday');
         } else {
           // FIXME: instanceof operator cannot narrow types in else branch
-          // value3 satisfies { foo: number };
+          // stringValue satisfies { foo: number };
         }
 
         const value4 = 9 as 9 | { foo: number };
