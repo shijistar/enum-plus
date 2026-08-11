@@ -1,0 +1,36 @@
+src/enum.ts
+  h_99cad05bea77d1 377-378
+  h_99cad05bea77d1 373-376,379
+src/enum-items.ts
+  h_99cad05bea77d1 65,74,93,264-267,389,465,638,642-645,650,661,663,665-667,709-712,831,855,890,892-893,909-910,931,939,950
+  h_99cad05bea77d1 194,200,246,637,639-641,854
+src/global-config.ts
+  h_99cad05bea77d1 25
+test/utils/index.ts
+  h_99cad05bea77d1 2,10
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1048,1116
+test/data/week-config.ts
+  h_99cad05bea77d1 4-5,7,190-196
+  h_99cad05bea77d1 1-3,6,188-189,197
+src/enum-collection.ts
+  h_99cad05bea77d1 48,201,203,207,210-211
+  h_99cad05bea77d1 209
+src/auto-localize.ts
+  h_99cad05bea77d1 2,17,49
+src/enum-item.ts
+  h_99cad05bea77d1 35
+test/test-suites/interface.ts
+  h_99cad05bea77d1 1,114,136-143,148-155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "63b714870d00bc63f15ee660725c728db208f100",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
