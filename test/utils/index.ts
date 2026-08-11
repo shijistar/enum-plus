@@ -1,5 +1,5 @@
 import type { EnumInit, EnumKey, EnumValue, IEnumItems, ValueTypeFromSingleInit } from '@enum-plus';
-import type { EnumItemInterface } from '@enum-plus/enum-item';
+import type { EnumItemInterface, EnumItemOptions } from '@enum-plus/enum-item';
 import type { StandardEnumItemInit } from '@enum-plus/types';
 
 export function toPlainEnums<
@@ -7,7 +7,7 @@ export function toPlainEnums<
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(
-  enums: EnumItemInterface<T[K], K, V>[] & IEnumItems<T, K, V>,
+  enums: EnumItemInterface<T, T[K], K, V, unknown, EnumItemOptions<T, T[K], K, V>>[] & IEnumItems<T, K, V>,
   fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label'],
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
   return Array.from(enums).map((item) => {

@@ -370,7 +370,13 @@ export interface IEnum<
         LP,
         EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, LP>
       >[] &
-        IEnumItems<EnumInit<string, EnumValue>, string, EnumValue, LP>
+        IEnumItems<
+          EnumInit<string, EnumValue>,
+          string,
+          EnumValue,
+          LP,
+          EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, LP>
+        >
     : T extends { items: unknown }
       ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>
       : EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[] & IEnumItems<T, K, V, LP, OPTIONS>;

@@ -22,7 +22,7 @@ export const internalConfig: {
         labelPrefix: any;
       }) => string);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  autoLocalize?: LocalizeTemplatesConfig<any>;
+  templates?: LocalizeTemplatesConfig<any>;
 } = {
   autoLabel: true,
 };

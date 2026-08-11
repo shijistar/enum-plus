@@ -45,7 +45,7 @@ export class EnumCollectionClass<
 {
   private readonly __options__: EnumInitOptions<T, K, V, LP> | undefined;
   // used for e2e serialization
-  private readonly _ds!: EnumItemsArray<T, K, V, LP>;
+  private readonly _ds!: EnumItemsArray<T, K, V, LP, OPTIONS>;
 
   constructor(init: T = {} as T, options?: EnumInitOptions<T, K, V, LP>) {
     super();
@@ -198,15 +198,17 @@ export class EnumCollectionClass<
     return this._ds.toList(config as ToListConfig<T, FOV, FOL, K, V, never, LP, OPTIONS>);
   }
 
-  toMap(): MapResult<T, 'value', 'label', K, V, LP>;
+  toMap(): MapResult<T, 'value', 'label', K, V, LP, OPTIONS>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
+    KS extends EnumItemFields | (<R>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
     VS extends EnumItemFields | (<R>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
   >(config: ToMapConfig<T, KS, VS, K, V, LP, OPTIONS>): MapResult<T, KS, VS, K, V, LP, OPTIONS>;
   toMap<
-    KS extends EnumItemFields | (<R extends string | symbol>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
+    KS extends EnumItemFields | (<R>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
     VS extends EnumItemFields | (<R>(item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => R),
-  >(config?: ToMapConfig<T, KS, VS, K, V, LP, OPTIONS>): MapResult<T, KS, VS, K, V, LP, OPTIONS> {
+  >(
+    config?: ToMapConfig<T, KS, VS, K, V, LP, OPTIONS>,
+  ): MapResult<T, 'value', 'label', K, V, LP, OPTIONS> | MapResult<T, KS, VS, K, V, LP, OPTIONS> {
     return this._ds.toMap(config as ToMapConfig<T, KS, VS, K, V, LP, OPTIONS>);
   }
 

@@ -1,5 +1,5 @@
 import type { EnumInitOptions } from './enum';
-import type { EnumItemInterface } from './enum-item';
+import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import { internalConfig } from './global-config';
 import type { EnumInit, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
 
@@ -14,7 +14,7 @@ export type LocalizeContext<
     }
   | {
       type: 'item';
-      item: EnumItemInterface<T, T[K], K, V>;
+      item: EnumItemInterface<T, T[K], K, V, unknown, EnumItemOptions<T, T[K], K, V>>;
       options?: EnumInitOptions<T, K, V>;
     };
 
@@ -46,7 +46,7 @@ export function mergeLocalizeTemplatesConfig<
   K extends EnumKey<T> = EnumKey<T>,
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
 >(local?: LocalizeTemplatesConfig<T, K, V>) {
-  const globalConfig = internalConfig.autoLocalize;
+  const globalConfig = internalConfig.templates;
   const localConfig = local;
   if (!globalConfig) {
     return localConfig;

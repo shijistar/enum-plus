@@ -1045,7 +1045,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
     const autoLocalizeMeta = weekEnum[ENUM_OPTIONS]?.autoLocalizeMeta;
     const meta: Record<string, unknown[]> = {};
-    Array.from(weekEnum.items).forEach((item) => {
+    weekEnum.items.forEach((item) => {
       Object.keys(item.raw).forEach((metaKey) => {
         if (!['value', 'label'].includes(metaKey)) {
           if (!meta[metaKey]) {
@@ -1113,7 +1113,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       typeof StandardWeekConfig,
       'key',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (item: EnumItemInterface<any, any, any, any>) => { label: string }
+      (item: EnumItemInterface<any, any, any, any, any, any>) => { label: string }
     >;
     locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
     getStandardWeekData: typeof getStandardWeekDataInterface;

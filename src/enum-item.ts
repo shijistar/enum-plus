@@ -32,7 +32,7 @@ export type EnumItemInterface<
   {
     [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
   } & (OPTIONS extends { templates: { items: infer ItemTemplates } }
-    ? { [key in keyof ItemTemplates]: string }
+    ? { readonly [key in keyof ItemTemplates]: string }
     : unknown) &
   EnumItemExtension<T, K, V>;
 

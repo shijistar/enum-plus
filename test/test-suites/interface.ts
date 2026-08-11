@@ -1,4 +1,4 @@
-import type { EnumItemInterface, EnumItemOptions, IEnum, IEnumItems } from '@enum-plus';
+import type { EnumInitOptions, EnumItemInterface, EnumItemOptions, IEnum, IEnumItems } from '@enum-plus';
 import type { ExactEqual } from '@enum-plus/types';
 import type { StandardWeekConfig } from '../data/week-config';
 import type TestEngineBase from '../engines/base';
@@ -111,6 +111,7 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         weekEnum.items.meta.description satisfies string[];
         weekEnum.items.meta.abbr satisfies string[];
         if (Date.now() < 0) {
+          // @ts-expect-error: because autoLocalize generated meta fields are readonly
           weekEnum.named.Sunday.description = 'manual';
         }
       },
@@ -132,12 +133,26 @@ function validateEnum<
     | IEnum<
         typeof StandardWeekConfig,
         keyof typeof StandardWeekConfig,
-        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+        unknown,
+        EnumInitOptions<
+          typeof StandardWeekConfig,
+          keyof typeof StandardWeekConfig,
+          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+          unknown
+        >
       >
     | IEnumItems<
         typeof StandardWeekConfig,
         keyof typeof StandardWeekConfig,
-        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+        unknown,
+        EnumInitOptions<
+          typeof StandardWeekConfig,
+          keyof typeof StandardWeekConfig,
+          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+          unknown
+        >
       >,
 >(engine: TestEngineBase<'jest' | 'playwright'>, weekEnum: T, WeekConfig: typeof StandardWeekConfig) {
   engine.expect(() => weekEnum.valueType satisfies (typeof WeekConfig)[keyof typeof WeekConfig]['value']).toThrow();
@@ -217,7 +232,6 @@ function validateEnum<
     >
   >;
   weekEnum.findBy('status', 'warning' as string) satisfies WeekItems | undefined;
-  // @ts-expect-error: because findBy returns nullable object, should use optional chaining (?.) operator
   engine.expect(() => weekEnum.findBy('status', 'foo' as string).key).toThrow();
 
   weekEnum.named satisfies {
