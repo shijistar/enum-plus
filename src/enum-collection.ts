@@ -1,10 +1,10 @@
 import type { EnumExtension } from 'enum-plus/extension';
-import { mergeLocalizeTemplatesConfig, resolveLocalizeTemplate } from './auto-localize';
+import { type LocalizeTemplate, resolveLocalizeTemplate } from './auto-localize';
 import type { EnumInitOptions } from './enum';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
 import { EnumItemsArray } from './enum-items';
-import { localizer } from './global-config';
+import { internalConfig, localizer } from './global-config';
 import type {
   EnumInit,
   EnumKey,
@@ -125,13 +125,17 @@ export class EnumCollectionClass<
     if (typeof options?.name === 'function') {
       return options.name(undefined!);
     }
-    const templates = mergeLocalizeTemplatesConfig(options?.templates);
-    const localeKey = templates?.name
-      ? resolveLocalizeTemplate(templates.name, {
-          type: 'name',
-          options,
-        })
-      : options?.name;
+    const nameTemplate = (options?.templates?.name ?? internalConfig.templates?.name) as
+      | LocalizeTemplate<'name', T, K, V>
+      | undefined;
+    const localeKey =
+      options?.name ??
+      (nameTemplate
+        ? resolveLocalizeTemplate(nameTemplate, {
+            type: 'name',
+            options,
+          })
+        : undefined);
     const localize = options?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
       return localize(localeKey);

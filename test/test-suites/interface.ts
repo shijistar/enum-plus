@@ -97,14 +97,14 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       },
     );
     engine.test(
-      'autoLocalize item templates should infer instance-level meta fields',
+      'options.templates.items should infer instance-level meta fields',
       ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig } }) => {
         const weekEnum = Enum(WeekValueOnlyConfig, {
           name: 'week',
           templates: {
             items: {
-              description: 'weekday.{item}.description',
-              abbr: 'weekday.{item}Abbr',
+              description: 'weekday.{key}.description',
+              abbr: 'weekday.{key}Abbr',
             },
           },
         });
@@ -116,7 +116,7 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         weekEnum.items.meta.description satisfies string[];
         weekEnum.items.meta.abbr satisfies string[];
         if (Date.now() < 0) {
-          // @ts-expect-error: because autoLocalize generated meta fields are readonly
+          // @ts-expect-error: because meta fields are readonly
           weekEnum.named.Sunday.description = 'manual';
         }
       },

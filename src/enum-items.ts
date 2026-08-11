@@ -1,6 +1,7 @@
 import type { AutoLocalizeItemTemplateFields } from './auto-localize';
-import { getAutoLocalizeTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
-import { EnumItemClass, type EnumItemInterface, type EnumItemOptions } from './enum-item';
+import { getTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
+import type { EnumItemInterface, EnumItemOptions } from './enum-item';
+import { EnumItemClass, metaKeys, protectedKeys } from './enum-item';
 import type {
   EnumInit,
   EnumItemInit,
@@ -89,8 +90,10 @@ export class EnumItemsArray<
     const items: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[] = [];
     const named = {} as Record<K, EnumItemInterface<T, T[K], K, V, LP, OPTIONS>>;
     this.named = named as unknown as typeof this.named;
-    const meta = {} as { [K in Exclude<keyof T[keyof T], 'value' | 'label'>]: T[keyof T][K][] };
+    const meta = {} as { [K in Exclude<keyof T[keyof T], EnumItemFields>]: T[keyof T][K][] };
     this.meta = meta as IEnumItems<T, K, V, LP, OPTIONS>['meta'];
+    const protectedNames = protectedKeys();
+    const templateMetaKeys = getTemplateFields(options).filter((k) => !protectedNames.includes(k));
     keys.forEach((key, index) => {
       const { value, label } = parsed[index];
       const item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS> = new EnumItemClass<T, T[K], K, V, LP>(
@@ -104,30 +107,28 @@ export class EnumItemsArray<
       this.push(item);
       named[key] = item;
 
-      // Collect custom meta fields, including fields declared by autoLocalize.itemTemplate.
+      // Collect custom meta fields, including fields declared by templates.items.
       const itemRaw = raw[key];
-      const rawMetaKeys =
-        itemRaw && typeof itemRaw === 'object' && Object.prototype.toString.call(itemRaw) === '[object Object]'
-          ? Object.keys(itemRaw).filter((k) => !['value', 'label'].includes(k))
-          : [];
-      const templateMetaKeys = getAutoLocalizeTemplateFields(options).filter((k) => k !== 'label');
-      Array.from(new Set([...rawMetaKeys, ...templateMetaKeys])).forEach((k) => {
-        const metaKey = k as Exclude<keyof T[keyof T], 'value' | 'label'>;
-        if (meta[metaKey] == null) {
-          meta[metaKey] = [];
-        }
-        const metaValue = item[k as never];
-        if (metaValue != null) {
-          meta[metaKey].push(metaValue);
-        }
-      });
+      const rawMetaKeys = metaKeys(itemRaw);
+      Array.from(new Set([...rawMetaKeys, ...templateMetaKeys]))
+        .filter((k) => !protectedNames.includes(k))
+        .forEach((k) => {
+          const metaKey = k as Exclude<keyof T[keyof T], EnumItemFields>;
+          if (meta[metaKey] == null) {
+            meta[metaKey] = [];
+          }
+          const metaValue = item[k as never];
+          if (metaValue != null) {
+            meta[metaKey].push(metaValue);
+          }
+        });
     });
 
     const autoLocalizeMeta = options?.autoLocalizeMeta;
     // Freeze meta arrays
     Object.keys(meta).forEach((k) => {
-      const autoLocalize = isAutoLocalizeMetaField(k, options);
-      if (autoLocalize) {
+      const needAutoLocalize = isAutoLocalizeMetaField(k, options);
+      if (needAutoLocalize) {
         const descriptor = {
           get: function get(): unknown[] {
             return (
@@ -148,7 +149,8 @@ export class EnumItemsArray<
         freeze(meta[k as keyof typeof meta]);
       }
     });
-    if (autoLocalizeMeta || getAutoLocalizeTemplateFields(options).some((k) => k !== 'label')) {
+    // hacky for unit testing
+    if (autoLocalizeMeta || templateMetaKeys.length) {
       define(meta, '_items', { value: this });
     }
 

@@ -10,10 +10,11 @@ export type {
   FindLabelByValue,
   ArrayToMap,
 } from './types';
-export type { LocalizeInterface } from './localize-interface';
+export type { IEnum, NativeEnumMembers, AnyEnum, GenericAnyEnum, EnumInterface, EnumInitOptions } from './enum';
 export type { ToListConfig, IEnumItems } from './enum-items';
 export type { EnumItemInterface, EnumItemOptions } from './enum-item';
-export type { IEnum, NativeEnumMembers, AnyEnum, GenericAnyEnum, EnumInterface, EnumInitOptions } from './enum';
+export type { LocalizeInterface } from './localize-interface';
+export type { LocalizeTemplateContext, LocalizeTemplate, LocalizeTemplatesConfig } from './auto-localize';
 
 export { version } from './version';
 export {
@@ -31,3 +32,5 @@ export {
 } from './utils';
 export type { PluginFunc } from './enum';
 export { Enum } from './enum';
+
+// todo: 修改文档 {item} 替换为 {key}

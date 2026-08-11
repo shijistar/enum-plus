@@ -1,11 +1,7 @@
 import type { EnumItemExtension } from 'enum-plus/extension';
 import type { LocalizeTemplatesConfig } from './auto-localize';
-import {
-  getAutoLocalizeTemplateFields,
-  isAutoLocalizeMetaField,
-  mergeLocalizeTemplatesConfig,
-  resolveLocalizeTemplate,
-} from './auto-localize';
+import { getTemplateFields, isAutoLocalizeMetaField, resolveLocalizeTemplate } from './auto-localize';
+import type { EnumItemFields } from './enum-items';
 import { internalConfig, localizer } from './global-config';
 import type {
   EnumInit,
@@ -82,16 +78,15 @@ export class EnumItemClass<
     });
 
     // Determines whether a property should be auto localized based on autoLocalizeMeta
-    // and autoLocalize.itemTemplate. Template-declared meta fields are generated even
+    // and templates.items. Template-declared meta fields are generated even
     // when the raw enum item does not explicitly declare the property.
     const autoLocalizePropMap: PropertyDescriptorMap = {};
-    const rawMetaKeys =
-      raw && typeof raw === 'object' && Object.prototype.toString.call(raw) === '[object Object]'
-        ? Object.keys(raw).filter((metaKey) => !['value', 'label'].includes(metaKey))
-        : [];
-    const templateMetaKeys = getAutoLocalizeTemplateFields(options).filter((metaKey) => metaKey !== 'label');
-    const metaKeys = Array.from(new Set([...rawMetaKeys, ...templateMetaKeys]));
-    metaKeys.forEach((metaKey) => {
+    const rawMetaKeys = metaKeys(raw);
+    const templateMetaKeys = getTemplateFields(options);
+    const metaKeyList = Array.from(new Set([...rawMetaKeys, ...templateMetaKeys])).filter(
+      (metaKey) => !(metaKey in this),
+    );
+    metaKeyList.forEach((metaKey) => {
       if (isAutoLocalizeMetaField(metaKey, options)) {
         const descriptor = {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -116,7 +111,7 @@ export class EnumItemClass<
       ...autoLocalizePropMap,
       label: {
         get: function (this: EnumItemClass<ET, T, K, V, LP>) {
-          return this._localizeResource(this._label);
+          return this._localizeResource(this._label, 'label');
         },
         enumerable: true,
       },
@@ -243,21 +238,25 @@ export class EnumItemClass<
     }
     return content;
   }
-  private _localizeResource(resource: EnumItemLabel | undefined, field: K = 'label' as K) {
+  private _localizeResource(resource: EnumItemLabel | undefined, field: string) {
     const labelPrefix = this._options?.labelPrefix;
     const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
-    const templates = mergeLocalizeTemplatesConfig(this._options?.templates);
+    const template =
+      this._options?.templates?.items?.[field as never] ?? internalConfig.templates?.items?.[field as never];
+    const raw = this.raw;
+    const rawValue = raw && typeof raw === 'object' ? raw[field as never] : undefined;
     let localeKey = resource;
+
     if (typeof localeKey === 'function') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return localeKey(this as any);
     }
-    const template = templates?.items?.[field as never];
-    if (template) {
+
+    if (!rawValue && template) {
       localeKey = resolveLocalizeTemplate(template, {
         type: 'item',
         item: this as never,
-        options: this._options as never,
+        options: this._options,
       }) as EnumItemLabel | undefined;
     } else if (field === 'label' && autoLabel && labelPrefix != null) {
       if (typeof autoLabel === 'function') {
@@ -335,5 +334,13 @@ export interface EnumItemOptions<
    *   - `false` - 默认值，不自动本地化元信息字段。
    *   - `string[]` - 指定要自动本地化的元信息字段名。
    */
-  autoLocalizeMeta?: boolean | Exclude<keyof T, 'key' | 'value' | 'label'>[];
+  autoLocalizeMeta?: boolean | Exclude<keyof T, EnumItemFields>[];
+}
+
+export function metaKeys(itemRaw: unknown) {
+  return itemRaw && typeof itemRaw === 'object' ? Object.keys(itemRaw) : [];
+}
+
+export function protectedKeys() {
+  return ['value', 'label', 'key', 'raw'];
 }

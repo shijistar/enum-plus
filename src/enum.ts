@@ -231,7 +231,7 @@ export interface EnumInterface {
         }) => string);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    templates?: LocalizeTemplatesConfig<any>;
+    templates?: LocalizeTemplatesConfig<EnumInit<string, EnumValue>>;
   };
 
   /**
