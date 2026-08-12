@@ -824,6 +824,26 @@ Enum.install(i18nextPlugin);
 
 `Enum.config` 提供了一些全局配置参数，用来影响枚举的行为和特性。
 
+### templates
+
+`{ name?: string | Function, items?: Record<string, string | Function> }`
+
+`Enum.config.templates` 是一个全局配置选项，用于为枚举的 `name` 和枚举项字段定义本地化模板。它对每个枚举实例生效，是推荐的统一本地化配置方式（取代下方已废弃的 `Enum.config.autoLabel`）。
+
+模板可以是字符串，使用 `{name}` 和 `{key}` 占位符；也可以是函数，接收上下文 `{ type: 'name' | 'item', options, item? }` 并返回本地化 key（返回 `undefined` 时跳过该模板）。
+
+```ts
+Enum.config.templates = {
+  name: 'enum.{name}.name',
+  items: {
+    label: 'enum.{name}.{key}.label',
+    description: 'enum.{name}.{key}.description',
+  },
+};
+```
+
+实例级 `templates`（见[templates](#-templates)）与全局配置按字段逐项合并，且实例配置优先级更高，覆盖同名字段的全局模板。
+
 ### autoLabel
 
 > 🚫 **已废弃（Deprecated）**：将在下一大版本中移除。请改用 `Enum.config.templates`。
