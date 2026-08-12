@@ -382,17 +382,13 @@ const globalConfigCode = {
   items: {
     label: 'storybook.enums.{name}.{key}',
   },
-};
-
-Enum.localize = (key) => i18n.t(key); // connect to your i18n instance`,
+};`,
   nested: `Enum.config.templates = {
   name: 'storybook.enums.{name}.title',
   items: {
     label: 'storybook.enums.{name}.{key}.title',
   },
-};
-
-Enum.localize = (key) => i18n.t(key); // connect to your i18n instance`,
+};`,
 };
 
 const minimalInitCode = `const OrderStatus = Enum(
@@ -491,29 +487,17 @@ function TemplatesDemo() {
             ]}
             onChange={(value) => setMode(value as TemplateMode)}
           />
-          <TwoColumn
-            left={
-              <CodePreview
-                title={t('storybook.stories.CorePatterns.templates.card.globalConfig')}
-                code={globalConfigCode[mode]}
-              />
-            }
-            right={
-              <CodePreview
-                title={t('storybook.stories.CorePatterns.templates.card.minimalInit')}
-                code={minimalInitCode}
-              />
-            }
+          <CodePreview
+            title={t('storybook.stories.CorePatterns.templates.card.globalConfig')}
+            code={globalConfigCode[mode]}
           />
+          <CodePreview title={t('storybook.stories.CorePatterns.templates.card.minimalInit')} code={minimalInitCode} />
         </Space>
       </StorySection>
 
-      <StorySection
-        title={t('storybook.stories.CorePatterns.templates.section.resources.title')}
-        description={t('storybook.stories.CorePatterns.templates.section.resources.description')}
-      >
+      <StorySection title={t('storybook.stories.CorePatterns.templates.section.resources.title')}>
         <CodePreview
-          title={t('storybook.stories.CorePatterns.templates.card.resources')}
+          title={t('storybook.stories.CorePatterns.templates.card.resources.enUS')}
           code={JSON.stringify(mode === 'flat' ? flatResources : nestedResources, null, 2)}
         />
       </StorySection>
