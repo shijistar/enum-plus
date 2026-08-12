@@ -1,9 +1,10 @@
 import type { AnyEnum, EnumItemInterface, IEnum } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
+import type { TestEngineTypes } from '../types';
 
 // import './extension-type';
 
-const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('Enum extensions', () => {
     engine.test(
       'should add extension methods to Enum instances',

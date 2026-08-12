@@ -73,9 +73,9 @@ export class EnumItemsArray<
    * @memberof EnumItemsArray
    *
    * @param {T} raw Original initialization data object
-   * @param {EnumItemOptions<T, T[K], K, V, LP> | undefined} options Enum item options
+   * @param {OPTIONS | undefined} options Enum item options
    */
-  constructor(raw: T, options: EnumItemOptions<T, T[K], K, V, LP> | undefined) {
+  constructor(raw: T, options: OPTIONS | undefined) {
     super();
 
     const define = Object.defineProperty;
@@ -84,7 +84,7 @@ export class EnumItemsArray<
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
     const keys = parseKeys<T, K, V>(raw);
     const parsed = keys.map((key) => parseEnumItem<EnumItemInit<V>, K, V>(raw[key], key));
-    // this[KEYS] = keys;
+    // Do not use instance field here, because don't want print this field in Node.js
     define(this, KEYS, { value: keys });
     freeze(keys);
 
@@ -97,7 +97,7 @@ export class EnumItemsArray<
     const templateMetaKeys = getTemplateFields(options).filter((k) => !protectedNames.includes(k));
     keys.forEach((key, index) => {
       const { value, label } = parsed[index];
-      const item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS> = new EnumItemClass<T, T[K], K, V, LP>(
+      const item = new EnumItemClass<T, T[K], K, V, LP, OPTIONS>(
         key,
         value,
         label,
@@ -125,48 +125,32 @@ export class EnumItemsArray<
         });
     });
 
-    const autoLocalizeMeta = options?.autoLocalizeMeta;
     // Freeze meta arrays
-    Object.keys(meta).forEach((k) => {
-      const needAutoLocalize = isAutoLocalizeMetaField(k, options);
+    Object.keys(meta).forEach((key) => {
+      const needAutoLocalize = isAutoLocalizeMetaField(key, options);
       if (needAutoLocalize) {
         const descriptor = {
-          get: function get(): unknown[] {
-            return (
-              // @ts-expect-error: because we attach items array to the getter function
-              Array.from(this._items)
-                // @ts-expect-error: because we attach items array to the getter function
-                .map((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => item[get._key as never])
-                .filter((v: unknown) => v != null)
-            );
-          },
+          get: () => items.map((item) => item[key as keyof typeof item]).filter((v) => v != null),
           enumerable: true,
           configurable: false,
         };
-        // @ts-expect-error: because we attach items array to the getter function
-        descriptor.get._key = k;
-        define(meta, k, descriptor);
+        define(meta, key, descriptor);
       } else {
-        freeze(meta[k as keyof typeof meta]);
+        freeze(meta[key as keyof typeof meta]);
       }
     });
-    // hacky for unit testing
-    if (autoLocalizeMeta || templateMetaKeys.length) {
-      define(meta, '_items', { value: this });
-    }
 
     // Generate values array
     const values = parsed.map((item) => item.value);
-    // Do not use class field here, because don't want print this field in Node.js
+    // Do not use instance field here, because don't want print this field in Node.js
     define(this, VALUES, { value: values });
     Object.freeze(values);
 
     // Generate labels array
+    // Should not use static array here because labels may be localized contents
     define(this, 'labels', {
-      get: function (this: EnumItemsArray<T, K, V, LP, OPTIONS>) {
-        // Cannot save to static array because labels may be localized contents
-        // Should not use `items` in the closure because the getter function cannot be fully serialized
-        return Array.from(this).map((item) => item.label);
+      get(this: EnumItemsArray<T, K, V, LP, OPTIONS>) {
+        return items.map((item) => item.label);
       },
       enumerable: true,
     });
@@ -175,7 +159,7 @@ export class EnumItemsArray<
     define(this, '__raw__', { value: raw });
     this._runtimeError = undefined!;
     define(this, '_runtimeError', {
-      value: function (this: EnumItemsArray<T, K, V, LP, OPTIONS>, name: string) {
+      value(this: EnumItemsArray<T, K, V, LP, OPTIONS>, name: string) {
         return `The ${name} property of the enumeration is only allowed to be used to declare the ts type, and cannot be accessed at runtime! Please use the typeof operator in the ts type, for example: typeof Week.${name}`;
       },
       enumerable: false,

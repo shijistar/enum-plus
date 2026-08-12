@@ -1,5 +1,6 @@
 import type { EnumExtension } from 'enum-plus/extension';
-import { type LocalizeTemplate, resolveLocalizeTemplate } from './auto-localize';
+import type { LocalizeTemplate } from './auto-localize';
+import { resolveLocalizeTemplate } from './auto-localize';
 import type { EnumInitOptions } from './enum';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { EnumItemFields, InheritableEnumItems, MapResult, ToListConfig, ToMapConfig } from './enum-items';
@@ -43,7 +44,7 @@ export class EnumCollectionClass<
   extends EnumExtensionClass<T, K, V>
   implements InheritableEnumItems<T, K, V, LP, OPTIONS>
 {
-  private readonly __options__: EnumInitOptions<T, K, V, LP> | undefined;
+  private readonly _options: EnumInitOptions<T, K, V, LP> | undefined;
   // used for e2e serialization
   private readonly _ds!: EnumItemsArray<T, K, V, LP, OPTIONS>;
 
@@ -53,14 +54,11 @@ export class EnumCollectionClass<
     const define = Object.defineProperty;
     const freeze = Object.freeze;
     // Do not use class field here, because don't want print this field in Node.js
-    define(this, '__options__', { value: options });
+    define(this, '_options', { value: options });
 
     const keys = Object.keys(init) as K[];
     // Generate enum items array
-    const items = new EnumItemsArray<T, K, V, LP, OPTIONS>(
-      init,
-      options as unknown as EnumItemOptions<T, T[K], K, V, LP>,
-    );
+    const items = new EnumItemsArray<T, K, V, LP, EnumItemOptions<T, T[K], K, V, LP>>(init, options);
     freeze(items);
     // @ts-expect-error: because use ITEMS to avoid naming conflicts in case of 'items' field name is taken
     this[keys.includes('items') ? ITEMS : 'items'] = items;
@@ -84,11 +82,9 @@ export class EnumCollectionClass<
       this[item.key] = item.value;
     });
 
-    // @ts-expect-error: because use LABELS to avoid naming conflicts in case of 'labels' field name is taken
+    // @ts-expect-error: because use LABELS to avoid naming conflicts in case of 'labels' is taken
     define(this, keys.includes('labels') ? LABELS : 'labels', {
-      get: function (this: EnumCollectionClass<T, K, V, LP, OPTIONS>) {
-        return this._ds.labels;
-      },
+      get: () => items.labels,
       enumerable: true,
     });
 
@@ -108,7 +104,7 @@ export class EnumCollectionClass<
    * - **CN:** 获取初始化枚举时的选项
    */
   get [ENUM_OPTIONS](): EnumInitOptions<T, K, V, LP> | undefined {
-    return this.__options__;
+    return this._options;
   }
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
     return instance instanceof this._ds;
@@ -124,12 +120,12 @@ export class EnumCollectionClass<
    *   set.
    */
   get name(): string | undefined {
-    const options = this.__options__;
+    const options = this._options;
     if (typeof options?.name === 'function') {
       return options.name(undefined!);
     }
     const nameTemplate = (options?.templates?.name ?? internalConfig.templates?.name) as
-      | LocalizeTemplate<'name', T, K, V>
+      | LocalizeTemplate<'name', T, T[K], K, V, LP, OPTIONS>
       | undefined;
     const localeKey =
       options?.name ??

@@ -227,8 +227,10 @@ export interface EnumInterface {
               EnumItemInit<EnumValue>,
               string,
               EnumValue,
-              unknown,
-              EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, unknown>
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              any,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, any>
             >,
             'label'
           >;
@@ -237,7 +239,16 @@ export interface EnumInterface {
         }) => string);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    templates?: LocalizeTemplatesConfig<EnumInit<string, EnumValue>>;
+    templates?: LocalizeTemplatesConfig<
+      EnumInit<string, EnumValue>,
+      EnumItemInit<EnumValue>,
+      string,
+      EnumValue,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, any>
+    >;
   };
 
   /**
@@ -380,7 +391,7 @@ export interface IEnum<
           string,
           EnumValue,
           LP,
-          EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, LP>
+          EnumItemOptions<EnumInit<string, EnumValue>, EnumInit<string, EnumValue>[string], string, EnumValue, LP>
         >
     : T extends { items: unknown }
       ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>

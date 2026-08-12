@@ -2,8 +2,9 @@ import type { EnumInitOptions, EnumItemInterface, EnumItemOptions, IEnum, IEnumI
 import type { ExactEqual } from '@enum-plus/types';
 import type { StandardWeekConfig } from '../data/week-config';
 import type TestEngineBase from '../engines/base';
+import type { TestEngineTypes } from '../types';
 
-const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testTyping = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('Enum typings', () => {
     engine.test(
       'should expose primitive values on Enum members',
@@ -159,7 +160,7 @@ function validateEnum<
           unknown
         >
       >,
->(engine: TestEngineBase<'jest' | 'playwright'>, weekEnum: T, WeekConfig: typeof StandardWeekConfig) {
+>(engine: TestEngineBase<TestEngineTypes>, weekEnum: T, WeekConfig: typeof StandardWeekConfig) {
   engine.expect(() => weekEnum.valueType satisfies (typeof WeekConfig)[keyof typeof WeekConfig]['value']).toThrow();
   engine.expect(() => weekEnum.keyType satisfies keyof typeof WeekConfig).toThrow();
   engine.expect(() => weekEnum.rawType satisfies (typeof WeekConfig)[keyof typeof WeekConfig]).toThrow();

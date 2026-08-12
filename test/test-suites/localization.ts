@@ -14,9 +14,10 @@ import type TestEngineBase from '../engines/base';
 import type enUS from '../i18n/en-US.json';
 import neutral from '../i18n/neutral.json';
 import type zhCN from '../i18n/zh-CN.json';
+import type { TestEngineTypes } from '../types';
 import { copyList, pickArray } from '../utils/index';
 
-const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'should provide a default localize method',
@@ -1624,7 +1625,7 @@ function assertWeekEnumTemplates(params: {
   weekEnum2: IEnum<typeof WeekValueOnlyConfig>;
   weekEnum3: IEnum<typeof WeekNumberConfig>;
   weekEnum4: IEnum<typeof WeekCompactConfig>;
-  engine: TestEngineBase<'jest' | 'playwright'>;
+  engine: TestEngineBase<TestEngineTypes>;
   locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
 }) {
   const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales } = params;
@@ -1653,7 +1654,7 @@ function assertUnresolvedTemplates(params: {
   weekEnum2: IEnum<typeof WeekValueOnlyConfig>;
   weekEnum3: IEnum<typeof WeekNumberConfig>;
   weekEnum4: IEnum<typeof WeekCompactConfig>;
-  engine: TestEngineBase<'jest' | 'playwright'>;
+  engine: TestEngineBase<TestEngineTypes>;
   locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
 }) {
   const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales } = params;

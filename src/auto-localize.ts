@@ -1,33 +1,45 @@
 import type { EnumInitOptions } from './enum';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import { internalConfig } from './global-config';
-import type { EnumInit, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
+import type { EnumInit, EnumItemInit, EnumKey, EnumValue, ValueTypeFromSingleInit } from './types';
 
 export type LocalizeTemplateContext<
   TYPE extends 'name' | 'item',
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-> = { type: TYPE; options?: EnumInitOptions<T, K, V> } & (TYPE extends 'name'
+  ET extends EnumInit<K, V>,
+  T extends EnumItemInit<V>,
+  K extends EnumKey<ET> = EnumKey<ET>,
+  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  LP = any,
+  OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
+> = { type: TYPE; options?: EnumInitOptions<ET, K, V, LP> } & (TYPE extends 'name'
   ? unknown
   : {
-      item: EnumItemInterface<T, T[K], K, V, unknown, EnumItemOptions<T, T[K], K, V>>;
+      item: EnumItemInterface<ET, T, K, V, LP, OPTIONS>;
     });
 
 export type LocalizeTemplate<
   TYPE extends 'name' | 'item',
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
-> = string | ((context: LocalizeTemplateContext<TYPE, T, K, V>) => string | undefined);
+  ET extends EnumInit<K, V>,
+  T extends EnumItemInit<V>,
+  K extends EnumKey<ET> = EnumKey<ET>,
+  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  LP = any,
+  OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
+> = string | ((context: LocalizeTemplateContext<TYPE, ET, T, K, V, LP, OPTIONS>) => string | undefined);
 
 export interface LocalizeTemplatesConfig<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
+  ET extends EnumInit<K, V>,
+  T extends EnumItemInit<V>,
+  K extends EnumKey<ET> = EnumKey<ET>,
+  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  LP = any,
+  OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
 > {
-  name?: LocalizeTemplate<'name', T, K, V>;
-  items?: Record<string, LocalizeTemplate<'item', T, K, V>>;
+  name?: LocalizeTemplate<'name', ET, T, K, V, LP, OPTIONS>;
+  items?: Record<string, LocalizeTemplate<'item', ET, T, K, V, LP, OPTIONS>>;
 }
 
 export type LiteralStringKeys<T> = string extends keyof T ? never : Extract<keyof T, string>;
@@ -40,10 +52,17 @@ export type AutoLocalizeItemTemplateFields<Options> = Options extends {
 
 export function resolveLocalizeTemplate<
   TYPE extends 'name' | 'item',
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
->(template: LocalizeTemplate<TYPE, T, K, V>, context: LocalizeTemplateContext<TYPE, T, K, V>): string | undefined {
+  ET extends EnumInit<K, V>,
+  T extends EnumItemInit<V>,
+  K extends EnumKey<ET> = EnumKey<ET>,
+  V extends EnumValue = ValueTypeFromSingleInit<T, K>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  LP = any,
+  OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
+>(
+  template: LocalizeTemplate<TYPE, ET, T, K, V, LP, OPTIONS>,
+  context: LocalizeTemplateContext<TYPE, ET, T, K, V, LP, OPTIONS>,
+): string | undefined {
   if (typeof template === 'function') {
     return template(context);
   }
@@ -54,7 +73,7 @@ export function resolveLocalizeTemplate<
   if (context.type === 'item') {
     template = template.replace(
       /{key}/g,
-      (context as unknown as LocalizeTemplateContext<'item', T, K, V>).item.key as string,
+      (context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>).item.key as string,
     );
   }
   return template;

@@ -2,15 +2,16 @@ import { defaultLocalize, IS_ENUM_ITEMS as ENUM_ITEMS_IN_NODE, KEYS, VALUES } fr
 import { getLocales, localizeConfigData } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
+import type { TestEngineTypes } from '../types';
 import { pickArray } from '../utils/index';
 
-const testEnumItems = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testEnumItems = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('EnumItems API', () => {
     addEnumItemsTestSuite(engine);
   });
 };
 
-export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwright'>) {
+export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
   engine.test(
     'should expose the [IS_ENUM_ITEMS] marker on enum item arrays',
     ({ EnumPlus: { Enum, IS_ENUM_ITEMS }, WeekConfig: { StandardWeekConfig } }) => {

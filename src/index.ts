@@ -32,5 +32,3 @@ export {
 } from './utils';
 export type { PluginFunc } from './enum';
 export { Enum } from './enum';
-
-// todo: 修改文档 {item} 替换为 {key}

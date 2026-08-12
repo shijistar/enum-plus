@@ -1,5 +1,5 @@
 import { defaultLocalize, Enum } from '@enum-plus';
-import { getLocales, setLang } from './data/week-config';
+import { getLocales, setLang } from '../../data/week-config';
 
 /*
  * This file is used to set up the testing environment for Jest.

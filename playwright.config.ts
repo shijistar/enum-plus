@@ -4,7 +4,7 @@ import { devices } from '@playwright/test';
 const port = 7080;
 
 const config: PlaywrightTestConfig = {
-  testDir: './e2e/specs',
+  testDir: './test/specs/playwright',
   testMatch: '**/*.spec.ts',
   outputDir: './e2e/test-results',
   globalSetup: require.resolve('./e2e/global.setup.ts'),
@@ -48,7 +48,7 @@ const config: PlaywrightTestConfig = {
   ],
   webServer: {
     command: `npx serve ./e2e/fixtures -p ${port}`,
-    port: 7080,
+    port,
     reuseExistingServer: false,
   },
 };
