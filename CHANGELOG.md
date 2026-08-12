@@ -6,9 +6,36 @@
 
 2026-8-11
 
-## Features
+### Features
 
-- ✨
+- ✨ Add `autoLocalize` runtime configuration to automatically localize enum `name` and `item` labels via user-defined templates.
+- ✨ Improve localize template type definitions (`templates.name` / `templates.items`) for better type inference.
+- ✨ Enhance enum type checks and type annotations.
+
+### Bug Fixes
+
+- 🐞 Fix TypeScript errors in enum type definitions.
+
+### Tests & Quality
+
+- ✅ Migrate core unit tests to Vitest with node + browser projects and raise code coverage to 100% across statements, branches, functions, and lines.
+- ✅ Add tests for localize templates.
+- ✅ Refine reviewed enum test cases.
+- ✅ Standardize test titles.
+
+### Documentation
+
+- 📝 Update README and improve table typography in Storybook styles.
+- 📝 Keep issue and feature request templates English-only.
+- 📝 Update download URLs for the v3.2.1 release.
+- 🛠️ Optimize Storybook docs preview chunk size and clear global variable default value.
+
+### Chores / CI
+
+- 🔧 Add CodeRabbit configuration.
+- 🔧 Make codegraph prepare cross-platform.
+- 🔧 Update Node.js version matrix to include 26.x.
+- 🔧 Install missing plugin and rollback package-lock.json.
 
 ## 3.2.1
 
