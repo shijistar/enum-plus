@@ -1,0 +1,39 @@
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 845,1331
+test/test-suites/localization.ts
+  h_99cad05bea77d1 741,744-746,749-752,754-757,784-786,820-822,924,926,929-931,967-969,1002,1004,1007-1009,1120-1121,1129-1131,1167-1168,1176-1178,1213-1215,1226-1228,1663-1681,1686-1696,1705-1706,1719-1735,1737
+  h_99cad05bea77d1 753,1697-1704,1718,1745
+src/enum-collection.ts
+  h_99cad05bea77d1 131,136
+test/i18n/neutral.json
+  h_99cad05bea77d1 17-30
+src/auto-localize.ts
+  h_99cad05bea77d1 6-9,20-23,25-29,33-41,65-81,83-109,137,142,144-149,168,171,174,177
+  h_99cad05bea77d1 19,24,30
+package.json
+  h_99cad05bea77d1 3
+src/global-config.ts
+  h_99cad05bea77d1 16,25-29
+test/i18n/zh-CN.json
+  h_99cad05bea77d1 17-30
+test/i18n/en-US.json
+  h_99cad05bea77d1 17-30
+src/enum.ts
+  h_99cad05bea77d1 220-221,243-247
+src/enum-item.ts
+  h_99cad05bea77d1 248,281-283,310-311,319,324-325,340-341
+  h_99cad05bea77d1 245,320-323,326-327
+README-FULL.md
+  h_99cad05bea77d1 855,1340
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "3983a87626d525269a1d961cdb035d6a319db3e8",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
