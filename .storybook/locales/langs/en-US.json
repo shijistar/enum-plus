@@ -168,6 +168,7 @@
   "storybook.stories.CorePatterns.templates.card.minimalInit": "Minimal enum initialization",
   "storybook.stories.CorePatterns.templates.section.resources.title": "Locale resources",
   "storybook.stories.CorePatterns.templates.card.resources.enUS": "en-US",
+  "storybook.stories.CorePatterns.templates.card.resources.zhCN": "zh-CN",
   "storybook.stories.CorePatterns.templates.section.effect.title": "Runtime effect",
   "storybook.stories.CorePatterns.templates.section.effect.description": "Three enums initialized with the minimal form. Their names and labels are resolved through the global templates automatically.",
   "storybook.stories.CorePatterns.templates.field.enumName": "enum.name",

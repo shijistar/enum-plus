@@ -164,6 +164,7 @@
   "storybook.stories.CorePatterns.templates.card.minimalInit": "极简枚举初始化",
   "storybook.stories.CorePatterns.templates.section.resources.title": "国际化资源",
   "storybook.stories.CorePatterns.templates.card.resources.enUS": "en-US",
+  "storybook.stories.CorePatterns.templates.card.resources.zhCN": "zh-CN",
   "storybook.stories.CorePatterns.templates.section.effect.title": "运行效果",
   "storybook.stories.CorePatterns.templates.section.effect.description": "三个以极简形式初始化的枚举，它们的名称和标签都通过全局模板自动解析。",
   "storybook.stories.CorePatterns.templates.field.enumName": "enum.name",

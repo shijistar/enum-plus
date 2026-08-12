@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { createInstance } from 'i18next';
+import { createInstance, type i18n } from 'i18next';
 import { Card, Col, Descriptions, Row, Segmented, Select, Space, Tag, Typography } from 'antd';
 import { type AnyEnum, Enum } from '../../src';
 import { storyT, useStoryLocale, useStoryT } from '../locales';
@@ -316,8 +316,9 @@ function CompositionDemo() {
 }
 
 type TemplateMode = 'flat' | 'nested';
+type DemoLang = 'en-US' | 'zh-CN';
 
-const flatResources: Record<string, string> = {
+const flatResourcesEn: Record<string, string> = {
   'storybook.enums.OrderStatus': 'Order Status',
   'storybook.enums.OrderStatus.Draft': 'Draft',
   'storybook.enums.OrderStatus.Review': 'In Review',
@@ -334,7 +335,43 @@ const flatResources: Record<string, string> = {
   'storybook.enums.Channel.Api': 'API',
 };
 
-const nestedResources = {
+const flatResourcesZh: Record<string, string> = {
+  'storybook.enums.OrderStatus': '订单状态',
+  'storybook.enums.OrderStatus.Draft': '草稿',
+  'storybook.enums.OrderStatus.Review': '审核中',
+  'storybook.enums.OrderStatus.Published': '已发布',
+  'storybook.enums.OrderStatus.Archived': '已归档',
+  'storybook.enums.Priority': '优先级',
+  'storybook.enums.Priority.Low': '低',
+  'storybook.enums.Priority.Medium': '中',
+  'storybook.enums.Priority.High': '高',
+  'storybook.enums.Priority.Critical': '严重',
+  'storybook.enums.Channel': '渠道',
+  'storybook.enums.Channel.Web': '网页',
+  'storybook.enums.Channel.Mobile': '移动端',
+  'storybook.enums.Channel.Api': 'API',
+};
+
+const fieldTitleEn: Record<string, string> = {
+  'storybook.stories.CorePatterns.templates.field.enumName': 'enum.name',
+  'storybook.stories.CorePatterns.templates.field.labels': 'labels',
+  'storybook.stories.CorePatterns.templates.field.itemKey': 'key(value)',
+  'storybook.stories.CorePatterns.templates.field.itemValue': 'value',
+  'storybook.stories.CorePatterns.templates.field.itemLabel': 'label(value)',
+};
+
+const fieldTitleZh: Record<string, string> = {
+  'storybook.stories.CorePatterns.templates.field.enumName': '枚举名',
+  'storybook.stories.CorePatterns.templates.field.labels': '标签',
+  'storybook.stories.CorePatterns.templates.field.itemKey': '键(值)',
+  'storybook.stories.CorePatterns.templates.field.itemValue': '值',
+  'storybook.stories.CorePatterns.templates.field.itemLabel': '标签(值)',
+};
+
+const flatResourcesEnFull: Record<string, string> = { ...flatResourcesEn, ...fieldTitleEn };
+const flatResourcesZhFull: Record<string, string> = { ...flatResourcesZh, ...fieldTitleZh };
+
+const nestedResourcesEn = {
   storybook: {
     enums: {
       OrderStatus: {
@@ -356,6 +393,71 @@ const nestedResources = {
         Web: { title: 'Web' },
         Mobile: { title: 'Mobile' },
         Api: { title: 'API' },
+      },
+    },
+  },
+};
+
+const nestedResourcesZh = {
+  storybook: {
+    enums: {
+      OrderStatus: {
+        title: '订单状态',
+        Draft: { title: '草稿' },
+        Review: { title: '审核中' },
+        Published: { title: '已发布' },
+        Archived: { title: '已归档' },
+      },
+      Priority: {
+        title: '优先级',
+        Low: { title: '低' },
+        Medium: { title: '中' },
+        High: { title: '高' },
+        Critical: { title: '严重' },
+      },
+      Channel: {
+        title: '渠道',
+        Web: { title: '网页' },
+        Mobile: { title: '移动端' },
+        Api: { title: 'API' },
+      },
+    },
+  },
+};
+
+const nestedResourcesEnFull = {
+  storybook: {
+    ...nestedResourcesEn.storybook,
+    stories: {
+      CorePatterns: {
+        templates: {
+          field: {
+            enumName: 'enum.name',
+            labels: 'labels',
+            itemKey: 'key(value)',
+            itemValue: 'value',
+            itemLabel: 'label(value)',
+          },
+        },
+      },
+    },
+  },
+};
+
+const nestedResourcesZhFull = {
+  storybook: {
+    ...nestedResourcesZh.storybook,
+    stories: {
+      CorePatterns: {
+        templates: {
+          field: {
+            enumName: '枚举名',
+            labels: '标签',
+            itemKey: '键(值)',
+            itemValue: '值',
+            itemLabel: '标签(值)',
+          },
+        },
       },
     },
   },
@@ -424,26 +526,41 @@ const OrderStatus = Enum(
 function TemplatesDemo() {
   const t = useStoryT();
   const [mode, setMode] = useState<TemplateMode>('flat');
+  const [demoLang, setDemoLang] = useState<DemoLang>('en-US');
   const [readyVersion, setReadyVersion] = useState(0);
+
+  const demoI18n = useMemo(() => {
+    const instance = createInstance();
+    instance.init({
+      lng: demoLang,
+      fallbackLng: 'en-US',
+      initImmediate: false,
+      keySeparator: mode === 'flat' ? false : '.',
+      resources:
+        mode === 'flat'
+          ? {
+              'en-US': { translation: flatResourcesEnFull },
+              'zh-CN': { translation: flatResourcesZhFull },
+            }
+          : {
+              'en-US': { translation: nestedResourcesEnFull },
+              'zh-CN': { translation: nestedResourcesZhFull },
+            },
+      interpolation: {
+        escapeValue: false,
+      },
+    });
+    return instance;
+  }, [mode, demoLang]);
+
+  const demoT = demoI18n.t;
 
   useEffect(() => {
     const prevTemplates = Enum.config.templates;
     const prevLocalize = Enum.localize;
 
-    const demoI18n = createInstance();
-    demoI18n.init({
-      lng: 'en',
-      fallbackLng: 'en',
-      initImmediate: false,
-      keySeparator: mode === 'flat' ? false : '.',
-      resources: { en: { translation: mode === 'flat' ? flatResources : nestedResources } },
-      interpolation: {
-        escapeValue: false,
-      },
-    });
-
     Enum.config.templates = templatesByMode[mode];
-    Enum.localize = (key) => (key == null ? key : demoI18n.t(key as string));
+    Enum.localize = (key) => (key == null ? key : demoT(key as string));
 
     setReadyVersion((version) => version + 1);
 
@@ -451,7 +568,7 @@ function TemplatesDemo() {
       Enum.config.templates = prevTemplates;
       Enum.localize = prevLocalize;
     };
-  }, [mode]);
+  }, [mode, demoLang, demoT]);
 
   const orderStatus = useMemo(
     () => Enum({ Draft: 1, Review: 2, Published: 3, Archived: 4 }, { name: 'OrderStatus' }),
@@ -496,46 +613,46 @@ function TemplatesDemo() {
       </StorySection>
 
       <StorySection title={t('storybook.stories.CorePatterns.templates.section.resources.title')}>
-        <CodePreview
-          title={t('storybook.stories.CorePatterns.templates.card.resources.enUS')}
-          code={JSON.stringify(mode === 'flat' ? flatResources : nestedResources, null, 2)}
+        <TwoColumn
+          left={
+            <CodePreview
+              title={t('storybook.stories.CorePatterns.templates.card.resources.enUS')}
+              code={JSON.stringify(mode === 'flat' ? flatResourcesEnFull : nestedResourcesEnFull, null, 2)}
+            />
+          }
+          right={
+            <CodePreview
+              title={t('storybook.stories.CorePatterns.templates.card.resources.zhCN')}
+              code={JSON.stringify(mode === 'flat' ? flatResourcesZhFull : nestedResourcesZhFull, null, 2)}
+            />
+          }
         />
       </StorySection>
 
       <StorySection
         title={t('storybook.stories.CorePatterns.templates.section.effect.title')}
         description={t('storybook.stories.CorePatterns.templates.section.effect.description')}
+        extra={
+          <Select
+            value={demoLang}
+            style={{ width: 120 }}
+            options={[
+              { value: 'en-US', label: 'English' },
+              { value: 'zh-CN', label: '中文' },
+            ]}
+            onChange={(value) => setDemoLang(value as DemoLang)}
+          />
+        }
       >
         <Row gutter={[16, 16]}>
           <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard
-              enumInstance={orderStatus}
-              enumNameLabel={t('storybook.stories.CorePatterns.templates.field.enumName')}
-              labelsLabel={t('storybook.stories.CorePatterns.templates.field.labels')}
-              keyLabel={t('storybook.stories.CorePatterns.templates.field.itemKey')}
-              valueLabel={t('storybook.stories.CorePatterns.templates.field.itemValue')}
-              labelLabel={t('storybook.stories.CorePatterns.templates.field.itemLabel')}
-            />
+            <EnumDemoCard enumInstance={orderStatus} demoT={demoT} />
           </Col>
           <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard
-              enumInstance={priority}
-              enumNameLabel={t('storybook.stories.CorePatterns.templates.field.enumName')}
-              labelsLabel={t('storybook.stories.CorePatterns.templates.field.labels')}
-              keyLabel={t('storybook.stories.CorePatterns.templates.field.itemKey')}
-              valueLabel={t('storybook.stories.CorePatterns.templates.field.itemValue')}
-              labelLabel={t('storybook.stories.CorePatterns.templates.field.itemLabel')}
-            />
+            <EnumDemoCard enumInstance={priority} demoT={demoT} />
           </Col>
           <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard
-              enumInstance={channel}
-              enumNameLabel={t('storybook.stories.CorePatterns.templates.field.enumName')}
-              labelsLabel={t('storybook.stories.CorePatterns.templates.field.labels')}
-              keyLabel={t('storybook.stories.CorePatterns.templates.field.itemKey')}
-              valueLabel={t('storybook.stories.CorePatterns.templates.field.itemValue')}
-              labelLabel={t('storybook.stories.CorePatterns.templates.field.itemLabel')}
-            />
+            <EnumDemoCard enumInstance={channel} demoT={demoT} />
           </Col>
         </Row>
         <div style={{ marginTop: 16 }}>
@@ -558,15 +675,8 @@ function TemplatesDemo() {
   );
 }
 
-function EnumDemoCard(props: {
-  enumInstance: AnyEnum;
-  enumNameLabel: string;
-  labelsLabel: string;
-  keyLabel: string;
-  valueLabel: string;
-  labelLabel: string;
-}) {
-  const { enumInstance, enumNameLabel, labelsLabel, keyLabel, valueLabel, labelLabel } = props;
+function EnumDemoCard(props: { enumInstance: AnyEnum; demoT: i18n['t'] }) {
+  const { enumInstance, demoT } = props;
   const [selectedValue, setSelectedValue] = useState<unknown>(enumInstance.values[0]);
 
   useEffect(() => {
@@ -582,12 +692,12 @@ function EnumDemoCard(props: {
           items={[
             {
               key: 'name',
-              label: enumNameLabel,
+              label: demoT('storybook.stories.CorePatterns.templates.field.enumName'),
               children: enumInstance.name || '-',
             },
             {
               key: 'labels',
-              label: labelsLabel,
+              label: demoT('storybook.stories.CorePatterns.templates.field.labels'),
               children: (
                 <Space wrap>
                   {enumInstance.toList().map((item) => (
@@ -610,17 +720,17 @@ function EnumDemoCard(props: {
           items={[
             {
               key: 'key',
-              label: keyLabel,
+              label: demoT('storybook.stories.CorePatterns.templates.field.itemKey'),
               children: String(enumInstance.key(selectedValue)),
             },
             {
               key: 'value',
-              label: valueLabel,
+              label: demoT('storybook.stories.CorePatterns.templates.field.itemValue'),
               children: String(selectedValue),
             },
             {
               key: 'label',
-              label: labelLabel,
+              label: demoT('storybook.stories.CorePatterns.templates.field.itemLabel'),
               children: enumInstance.label(selectedValue) as string,
             },
           ]}
