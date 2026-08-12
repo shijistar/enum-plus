@@ -525,8 +525,9 @@ const OrderStatus = Enum(
 
 function TemplatesDemo() {
   const t = useStoryT();
+  const storyLocale = useStoryLocale();
   const [mode, setMode] = useState<TemplateMode>('flat');
-  const [demoLang, setDemoLang] = useState<DemoLang>('en-US');
+  const [demoLang, setDemoLang] = useState<DemoLang>(storyLocale);
   const [readyVersion, setReadyVersion] = useState(0);
 
   const demoI18n = useMemo(() => {
@@ -617,13 +618,13 @@ function TemplatesDemo() {
           left={
             <CodePreview
               title={t('storybook.stories.CorePatterns.templates.card.resources.enUS')}
-              code={JSON.stringify(mode === 'flat' ? flatResourcesEnFull : nestedResourcesEnFull, null, 2)}
+              code={JSON.stringify(mode === 'flat' ? flatResourcesEn : nestedResourcesEn, null, 2)}
             />
           }
           right={
             <CodePreview
               title={t('storybook.stories.CorePatterns.templates.card.resources.zhCN')}
-              code={JSON.stringify(mode === 'flat' ? flatResourcesZhFull : nestedResourcesZhFull, null, 2)}
+              code={JSON.stringify(mode === 'flat' ? flatResourcesZh : nestedResourcesZh, null, 2)}
             />
           }
         />
