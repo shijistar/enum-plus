@@ -638,7 +638,9 @@ const WeekEnum = Enum(enumInit, {
 
 Generates localization keys for the enum name, item labels, and item meta fields. This is the recommended unified way to set up localization, and it replaces the legacy `autoLabel`, `labelPrefix`, and `autoLocalizeMeta` options, which are deprecated and will be removed in the next major version.
 
-Templates can be strings using the `{name}` and `{key}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item? }` and return a localization key; returning `undefined` skips the template for that field. Global and instance templates can coexist: `Enum.config.templates` applies to all enums, while instance-level `templates` are merged field by field and take precedence over global templates with the same name.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key; returning `undefined` skips the template for that field.
+
+Template results take precedence over declared values: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly. Global and instance templates can coexist: `Enum.config.templates` applies to all enums, while instance-level `templates` are merged field by field and take precedence over global templates with the same name.
 
 ```ts
 // Global templates: shared by every enum.
@@ -840,7 +842,9 @@ Enum.install(i18nextPlugin);
 
 `Enum.config.templates` is a global configuration option that defines localization templates for the enum `name` and item fields. It applies to every enum instance, and it is the recommended unified way to set up localization (replacing the legacy `Enum.config.autoLabel`, see below).
 
-Templates can be strings using the `{name}` and `{key}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item? }` and return a localization key; returning `undefined` skips the template for that field.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key; returning `undefined` skips the template for that field.
+
+Template results take precedence over declared values: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly.
 
 ```ts
 Enum.config.templates = {

@@ -8,7 +8,7 @@
 
 ### Features
 
-- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates, with improved type inference for localize template definitions. Templates can be strings using the `{name}` and `{key}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item? }` and return a localization key (`undefined` skips the field).
+- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates, with improved type inference for localize template definitions. Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key (`undefined` skips the field). Template results take precedence over declared values: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value.
   - `templates.name` — defines the template that generates the localization key for the enum `name` field.
   - `templates.items` — defines the templates that generate localization keys for enum item fields, such as `label` and custom meta fields.
 - ✨ Fields declared in instance-level `templates.items` are automatically added to the enum items, so the generated meta fields are typed and accessible even when raw enum items do not declare them.
