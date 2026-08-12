@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Card, Descriptions, Segmented, Select, Space, Tag, Typography } from 'antd';
-import { Enum } from '../../src';
+import { createInstance } from 'i18next';
+import { Card, Col, Descriptions, Row, Segmented, Select, Space, Tag, Typography } from 'antd';
+import { type AnyEnum, Enum } from '../../src';
 import { storyT, useStoryLocale, useStoryT } from '../locales';
 import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
@@ -23,6 +24,15 @@ const meta: Meta = {
 
 export default meta;
 type Story = StoryObj;
+export const GlobalTemplates: Story = {
+  name: 'Global Templates',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '全局模板',
+  render: function Render() {
+    return <TemplatesDemo />;
+  },
+};
+
 export const LocalizationAndAutoLabel: Story = {
   name: 'Localization and Auto Label',
   // @ts-expect-error: because nameCN is an extension field
@@ -302,5 +312,336 @@ function CompositionDemo() {
         />
       </StorySection>
     </StoryPage>
+  );
+}
+
+type TemplateMode = 'flat' | 'nested';
+
+const flatResources: Record<string, string> = {
+  'storybook.enums.OrderStatus': 'Order Status',
+  'storybook.enums.OrderStatus.Draft': 'Draft',
+  'storybook.enums.OrderStatus.Review': 'In Review',
+  'storybook.enums.OrderStatus.Published': 'Published',
+  'storybook.enums.OrderStatus.Archived': 'Archived',
+  'storybook.enums.Priority': 'Priority',
+  'storybook.enums.Priority.Low': 'Low',
+  'storybook.enums.Priority.Medium': 'Medium',
+  'storybook.enums.Priority.High': 'High',
+  'storybook.enums.Priority.Critical': 'Critical',
+  'storybook.enums.Channel': 'Channel',
+  'storybook.enums.Channel.Web': 'Web',
+  'storybook.enums.Channel.Mobile': 'Mobile',
+  'storybook.enums.Channel.Api': 'API',
+};
+
+const nestedResources = {
+  storybook: {
+    enums: {
+      OrderStatus: {
+        title: 'Order Status',
+        Draft: { title: 'Draft' },
+        Review: { title: 'In Review' },
+        Published: { title: 'Published' },
+        Archived: { title: 'Archived' },
+      },
+      Priority: {
+        title: 'Priority',
+        Low: { title: 'Low' },
+        Medium: { title: 'Medium' },
+        High: { title: 'High' },
+        Critical: { title: 'Critical' },
+      },
+      Channel: {
+        title: 'Channel',
+        Web: { title: 'Web' },
+        Mobile: { title: 'Mobile' },
+        Api: { title: 'API' },
+      },
+    },
+  },
+};
+
+const templatesByMode = {
+  flat: {
+    name: 'storybook.enums.{name}',
+    items: {
+      label: 'storybook.enums.{name}.{key}',
+    },
+  },
+  nested: {
+    name: 'storybook.enums.{name}.title',
+    items: {
+      label: 'storybook.enums.{name}.{key}.title',
+    },
+  },
+} as const;
+
+const globalConfigCode = {
+  flat: `Enum.config.templates = {
+  name: 'storybook.enums.{name}',
+  items: {
+    label: 'storybook.enums.{name}.{key}',
+  },
+};
+
+Enum.localize = (key) => i18n.t(key); // connect to your i18n instance`,
+  nested: `Enum.config.templates = {
+  name: 'storybook.enums.{name}.title',
+  items: {
+    label: 'storybook.enums.{name}.{key}.title',
+  },
+};
+
+Enum.localize = (key) => i18n.t(key); // connect to your i18n instance`,
+};
+
+const minimalInitCode = `const OrderStatus = Enum(
+  { Draft: 1, Review: 2, Published: 3, Archived: 4 },
+  { name: 'OrderStatus' },
+);
+const Priority = Enum(
+  { Low: 1, Medium: 2, High: 3, Critical: 4 },
+  { name: 'Priority' },
+);
+const Channel = Enum(
+  { Web: 1, Mobile: 2, Api: 3 },
+  { name: 'Channel' },
+);`;
+
+const legacyCode = `// Without global templates: every enum repeats labels and prefixes
+const OrderStatus = Enum(
+  {
+    Draft: { value: 1, label: t('storybook.enums.OrderStatus.Draft') },
+    Review: { value: 2, label: t('storybook.enums.OrderStatus.Review') },
+    Published: { value: 3, label: t('storybook.enums.OrderStatus.Published') },
+    Archived: { value: 4, label: t('storybook.enums.OrderStatus.Archived') },
+  },
+  { name: t('storybook.enums.OrderStatus') },
+);`;
+
+const modernCode = `// With global templates: minimal init
+const OrderStatus = Enum(
+  { Draft: 1, Review: 2, Published: 3, Archived: 4 },
+  { name: 'OrderStatus' },
+);`;
+
+function TemplatesDemo() {
+  const t = useStoryT();
+  const [mode, setMode] = useState<TemplateMode>('flat');
+  const [readyVersion, setReadyVersion] = useState(0);
+
+  useEffect(() => {
+    const prevTemplates = Enum.config.templates;
+    const prevLocalize = Enum.localize;
+
+    const demoI18n = createInstance();
+    demoI18n.init({
+      lng: 'en',
+      fallbackLng: 'en',
+      initImmediate: false,
+      keySeparator: mode === 'flat' ? false : '.',
+      resources: { en: { translation: mode === 'flat' ? flatResources : nestedResources } },
+      interpolation: {
+        escapeValue: false,
+      },
+    });
+
+    Enum.config.templates = templatesByMode[mode];
+    Enum.localize = (key) => (key == null ? key : demoI18n.t(key as string));
+
+    setReadyVersion((version) => version + 1);
+
+    return () => {
+      Enum.config.templates = prevTemplates;
+      Enum.localize = prevLocalize;
+    };
+  }, [mode]);
+
+  const orderStatus = useMemo(
+    () => Enum({ Draft: 1, Review: 2, Published: 3, Archived: 4 }, { name: 'OrderStatus' }),
+    [mode, readyVersion],
+  );
+  const priority = useMemo(
+    () => Enum({ Low: 1, Medium: 2, High: 3, Critical: 4 }, { name: 'Priority' }),
+    [mode, readyVersion],
+  );
+  const channel = useMemo(() => Enum({ Web: 1, Mobile: 2, Api: 3 }, { name: 'Channel' }), [mode, readyVersion]);
+
+  return (
+    <StoryPage
+      title={t('storybook.stories.CorePatterns.templates.page.title')}
+      description={t('storybook.stories.CorePatterns.templates.page.description')}
+      highlights={[
+        t('storybook.stories.CorePatterns.templates.highlights.globalConfig'),
+        t('storybook.stories.CorePatterns.templates.highlights.minimalInit'),
+        t('storybook.stories.CorePatterns.templates.highlights.flatNested'),
+        t('storybook.stories.CorePatterns.templates.highlights.saveCode'),
+      ]}
+    >
+      <StorySection
+        title={t('storybook.stories.CorePatterns.templates.section.config.title')}
+        description={t('storybook.stories.CorePatterns.templates.section.config.description')}
+      >
+        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+          <Segmented
+            value={mode}
+            options={[
+              { label: t('storybook.stories.CorePatterns.templates.mode.flat'), value: 'flat' },
+              { label: t('storybook.stories.CorePatterns.templates.mode.nested'), value: 'nested' },
+            ]}
+            onChange={(value) => setMode(value as TemplateMode)}
+          />
+          <TwoColumn
+            left={
+              <CodePreview
+                title={t('storybook.stories.CorePatterns.templates.card.globalConfig')}
+                code={globalConfigCode[mode]}
+              />
+            }
+            right={
+              <CodePreview
+                title={t('storybook.stories.CorePatterns.templates.card.minimalInit')}
+                code={minimalInitCode}
+              />
+            }
+          />
+        </Space>
+      </StorySection>
+
+      <StorySection
+        title={t('storybook.stories.CorePatterns.templates.section.resources.title')}
+        description={t('storybook.stories.CorePatterns.templates.section.resources.description')}
+      >
+        <CodePreview
+          title={t('storybook.stories.CorePatterns.templates.card.resources')}
+          code={JSON.stringify(mode === 'flat' ? flatResources : nestedResources, null, 2)}
+        />
+      </StorySection>
+
+      <StorySection
+        title={t('storybook.stories.CorePatterns.templates.section.effect.title')}
+        description={t('storybook.stories.CorePatterns.templates.section.effect.description')}
+      >
+        <Row gutter={[16, 16]}>
+          <Col xs={24} md={12} lg={8}>
+            <EnumDemoCard
+              enumInstance={orderStatus}
+              enumNameLabel={t('storybook.stories.CorePatterns.templates.field.enumName')}
+              labelsLabel={t('storybook.stories.CorePatterns.templates.field.labels')}
+              keyLabel={t('storybook.stories.CorePatterns.templates.field.itemKey')}
+              valueLabel={t('storybook.stories.CorePatterns.templates.field.itemValue')}
+              labelLabel={t('storybook.stories.CorePatterns.templates.field.itemLabel')}
+            />
+          </Col>
+          <Col xs={24} md={12} lg={8}>
+            <EnumDemoCard
+              enumInstance={priority}
+              enumNameLabel={t('storybook.stories.CorePatterns.templates.field.enumName')}
+              labelsLabel={t('storybook.stories.CorePatterns.templates.field.labels')}
+              keyLabel={t('storybook.stories.CorePatterns.templates.field.itemKey')}
+              valueLabel={t('storybook.stories.CorePatterns.templates.field.itemValue')}
+              labelLabel={t('storybook.stories.CorePatterns.templates.field.itemLabel')}
+            />
+          </Col>
+          <Col xs={24} md={12} lg={8}>
+            <EnumDemoCard
+              enumInstance={channel}
+              enumNameLabel={t('storybook.stories.CorePatterns.templates.field.enumName')}
+              labelsLabel={t('storybook.stories.CorePatterns.templates.field.labels')}
+              keyLabel={t('storybook.stories.CorePatterns.templates.field.itemKey')}
+              valueLabel={t('storybook.stories.CorePatterns.templates.field.itemValue')}
+              labelLabel={t('storybook.stories.CorePatterns.templates.field.itemLabel')}
+            />
+          </Col>
+        </Row>
+        <div style={{ marginTop: 16 }}>
+          <JsonPreview title="OrderStatus.toMap()" value={orderStatus.toMap()} />
+        </div>
+      </StorySection>
+
+      <StorySection
+        title={t('storybook.stories.CorePatterns.templates.section.compare.title')}
+        description={t('storybook.stories.CorePatterns.templates.section.compare.description')}
+      >
+        <TwoColumn
+          left={<CodePreview title={t('storybook.stories.CorePatterns.templates.compare.legacy')} code={legacyCode} />}
+          right={
+            <CodePreview title={t('storybook.stories.CorePatterns.templates.compare.templates')} code={modernCode} />
+          }
+        />
+      </StorySection>
+    </StoryPage>
+  );
+}
+
+function EnumDemoCard(props: {
+  enumInstance: AnyEnum;
+  enumNameLabel: string;
+  labelsLabel: string;
+  keyLabel: string;
+  valueLabel: string;
+  labelLabel: string;
+}) {
+  const { enumInstance, enumNameLabel, labelsLabel, keyLabel, valueLabel, labelLabel } = props;
+  const [selectedValue, setSelectedValue] = useState<unknown>(enumInstance.values[0]);
+
+  useEffect(() => {
+    setSelectedValue(enumInstance.values[0]);
+  }, [enumInstance]);
+
+  return (
+    <Card size="small" title={enumInstance.name || '-'}>
+      <Space direction="vertical" size={12} style={{ width: '100%' }}>
+        <Descriptions
+          size="small"
+          column={1}
+          items={[
+            {
+              key: 'name',
+              label: enumNameLabel,
+              children: enumInstance.name || '-',
+            },
+            {
+              key: 'labels',
+              label: labelsLabel,
+              children: (
+                <Space wrap>
+                  {enumInstance.toList().map((item) => (
+                    <Tag key={String(item.value)}>{item.label as string}</Tag>
+                  ))}
+                </Space>
+              ),
+            },
+          ]}
+        />
+        <Select
+          value={selectedValue as never}
+          style={{ width: '100%' }}
+          options={enumInstance.toList().map((item) => ({ value: item.value, label: item.label }))}
+          onChange={(value) => setSelectedValue(value)}
+        />
+        <Descriptions
+          size="small"
+          column={1}
+          items={[
+            {
+              key: 'key',
+              label: keyLabel,
+              children: String(enumInstance.key(selectedValue)),
+            },
+            {
+              key: 'value',
+              label: valueLabel,
+              children: String(selectedValue),
+            },
+            {
+              key: 'label',
+              label: labelLabel,
+              children: enumInstance.label(selectedValue) as string,
+            },
+          ]}
+        />
+      </Space>
+    </Card>
   );
 }
