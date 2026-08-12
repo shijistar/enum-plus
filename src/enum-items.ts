@@ -129,12 +129,11 @@ export class EnumItemsArray<
     Object.keys(meta).forEach((key) => {
       const needAutoLocalize = isAutoLocalizeMetaField(key, options);
       if (needAutoLocalize) {
-        const descriptor = {
+        define(meta, key, {
           get: () => items.map((item) => item[key as keyof typeof item]).filter((v) => v != null),
           enumerable: true,
           configurable: false,
-        };
-        define(meta, key, descriptor);
+        });
       } else {
         freeze(meta[key as keyof typeof meta]);
       }

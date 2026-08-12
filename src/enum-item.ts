@@ -82,13 +82,12 @@ export class EnumItemClass<
     const metaKeyList = Array.from(new Set([...rawMetaKeys, ...templateKeys])).filter((metaKey) => !(metaKey in this));
     metaKeyList.forEach((metaKey) => {
       if (isAutoLocalizeMetaField(metaKey, options)) {
-        const descriptor = {
+        autoLocalizeGetters[metaKey] = {
           get(this: EnumItemClass<ET, T, K, V, LP, OPTIONS>) {
             return this._localizeResource(this.raw?.[metaKey as never], metaKey);
           },
           enumerable: true,
         };
-        autoLocalizeGetters[metaKey] = descriptor;
       } else {
         this[metaKey as keyof this] = raw![metaKey as never] as this[keyof this];
       }
