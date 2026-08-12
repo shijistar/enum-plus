@@ -1,0 +1,17 @@
+.storybook/story-styles.css
+  h_99cad05bea77d1 347
+  h_99cad05bea77d1 346,348-350
+.storybook/stories/32-CorePatterns.stories.tsx
+  h_99cad05bea77d1 528,530,621,627
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "930a0f1d65a8994aa65801cacf4f5dec2f8fd5c1",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
