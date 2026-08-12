@@ -1,0 +1,123 @@
+test/test-suites/plugin.ts
+  h_99cad05bea77d1 3,5,23
+tsconfig.json
+  h_99cad05bea77d1 8
+test/specs/vitest/enum-collection.vitest.ts
+  h_99cad05bea77d1 1-6
+test/specs/vitest/enum-items.vitest.ts
+  h_99cad05bea77d1 1-6
+test/test-suites/extension.ts
+  h_99cad05bea77d1 3,7
+test/specs/vitest/extension.vitest.ts
+  h_99cad05bea77d1 1-6
+src/enum-item.ts
+  h_99cad05bea77d1 2,26,52,67,72-74,76-79,81-82,86-87,91-93,98-99,101-102,108-109,111-113,168,236-237,251,288,315,317-318,337-338
+  h_99cad05bea77d1 314,316,319
+test/specs/jest/version.test.ts
+  h_99cad05bea77d1 1-4
+test/specs/jest/enum-item.test.ts
+  h_99cad05bea77d1 1-4
+src/auto-localize.ts
+  h_99cad05bea77d1 4,8-15,18,23-30,33-39,41-42,55-61,63-64,76
+  h_99cad05bea77d1 62,65
+src/enum-items.ts
+  h_99cad05bea77d1 76,78,87,100,129-130,133,137,139,145,150,153
+  h_99cad05bea77d1 152,162
+test/specs/jest/enum-items.test.ts
+  h_99cad05bea77d1 1-4
+test/test-suites/enum-items.ts
+  h_99cad05bea77d1 5,8,14
+test/test-suites/enum-collection.ts
+  h_99cad05bea77d1 12,16
+test/types.ts
+  h_99cad05bea77d1 1
+test/specs/vitest/localization.vitest.ts
+  h_99cad05bea77d1 1-6
+test/specs/vitest/plugin.vitest.ts
+  h_99cad05bea77d1 1-2,6
+jest.config.js
+  h_99cad05bea77d1 5-6
+  h_99cad05bea77d1 10
+test/specs/jest/enum-collection.test.ts
+  h_99cad05bea77d1 1-4
+test/specs/jest/extension.test.ts
+  h_99cad05bea77d1 1-4
+test/specs/vitest/vitest.setup.ts
+  h_99cad05bea77d1 1-23
+test/specs/jest/jest.setup.ts
+  h_99cad05bea77d1 1-21
+test/specs/jest/localization.test.ts
+  h_99cad05bea77d1 1-4
+test/specs/jest/create-enum.test.ts
+  h_99cad05bea77d1 1-4
+playwright.config.ts
+  h_99cad05bea77d1 7,51
+src/enum.ts
+  h_99cad05bea77d1 230-233,243-251,394
+  h_99cad05bea77d1 242
+src/enum-collection.ts
+  h_99cad05bea77d1 2-3,47,57,61,87,107,123,128
+  h_99cad05bea77d1 85
+test/test-suites/version.ts
+  h_99cad05bea77d1 3,5,14
+jest-esm.config.js
+  h_99cad05bea77d1 5,14
+test/specs/vitest/interface.vitest.ts
+  h_99cad05bea77d1 1-2,6
+test/specs/jest/interface.test.ts
+  h_99cad05bea77d1 1-4
+test/test-suites/enum-item.ts
+  h_99cad05bea77d1 3,5
+test/specs/vitest/create-enum.vitest.ts
+  h_99cad05bea77d1 1-6
+test/test-suites/create-enum.ts
+  h_99cad05bea77d1 13,16
+test/test-suites/interface.ts
+  h_99cad05bea77d1 5,7,163
+test/specs/vitest/version.vitest.ts
+  h_99cad05bea77d1 1-2,6
+test/specs/vitest/enum-item.vitest.ts
+  h_99cad05bea77d1 1-2,6
+test/specs/jest/plugin.test.ts
+  h_99cad05bea77d1 1-4
+vitest.config.ts
+  h_99cad05bea77d1 5,7,9-10,15,19,24,27,35,40,47,53,59-61
+  h_99cad05bea77d1 62-64
+package.json
+  h_99cad05bea77d1 170-172,175-177,179,181,210
+src/global-config.ts
+  h_99cad05bea77d1 25
+jest-cjs.config.js
+  h_99cad05bea77d1 6,30,32
+test/test-suites/localization.ts
+  h_99cad05bea77d1 17,20,1628,1657
+package-lock.json
+  h_99cad05bea77d1 33,8163-8203,9310-9338
+test/specs/playwright/create-enum.spec.ts
+  h_99cad05bea77d1 1-2
+test/specs/playwright/enum-collection.spec.ts
+  h_99cad05bea77d1 1-2
+test/specs/playwright/enum-item.spec.ts
+  h_99cad05bea77d1 1-2
+test/specs/playwright/enum-items.spec.ts
+  h_99cad05bea77d1 1-2
+test/specs/playwright/extension.spec.ts
+  h_99cad05bea77d1 1-2
+test/specs/playwright/localization.spec.ts
+  h_99cad05bea77d1 1-2
+test/specs/playwright/plugin.spec.ts
+  h_99cad05bea77d1 1-2
+test/specs/playwright/version.spec.ts
+  h_99cad05bea77d1 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "4a56464a361266f5cd140f8fd085ddea765ef52c",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
