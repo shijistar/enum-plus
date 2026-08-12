@@ -12,6 +12,13 @@
 
 Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key; returning `undefined` skips the template for that field.
 
+The available placeholders are:
+
+- `{name}` — the enum name (from `options.name`).
+- `{key}` — the key of the enum item.
+- `{value}` — the value of the enum item.
+- `{raw}` — the original value of the meta field being templated (only meaningful in `items` templates).
+
 Template results take precedence over declared values: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly.
 
 ```ts

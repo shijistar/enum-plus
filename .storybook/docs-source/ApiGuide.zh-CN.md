@@ -344,6 +344,13 @@ const WeekEnum = Enum(enumInit, {
 
 模板可以是字符串，使用 `{name}`、`{key}`、`{value}` 和 `{raw}` 占位符；也可以是函数，接收上下文 `{ type: 'name' | 'item', options, item?, metaField? }` 并返回本地化 key（返回 `undefined` 时跳过该模板）。
 
+可用占位符如下：
+
+- `{name}` — 枚举名称（来自 `options.name`）。
+- `{key}` — 枚举项的 key。
+- `{value}` — 枚举项的值。
+- `{raw}` — 被模板化的元数据字段的原始值（仅在 `items` 模板中有意义）。
+
 模板结果优先于声明的值：`name` 模板会覆盖 `options.name`，`items` 模板会覆盖枚举项元数据字段的原始值。如需引用原始值，请显式使用 `{name}` 和 `{raw}` 占位符。全局设置与实例配置可以并存：`Enum.config.templates` 对所有枚举生效，实例级 `templates` 按字段逐项合并，且实例配置优先级更高，覆盖同名字段的全局模板。
 
 ```ts
