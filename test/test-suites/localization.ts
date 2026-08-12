@@ -738,16 +738,23 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
       }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         Enum.config.templates = {
-          name: 'weekDay.name',
+          name: '{name}',
           items: {
             label: 'weekday.{key}',
-            abbr: 'weekday.{key}Abbr',
+            abbr: '{raw}',
+            abbr2: 'weekday.{key}Abbr',
+            abbr3: 'weekday.Abbr{value}',
           },
         };
-        const weekEnum1 = Enum(StandardWeekConfig);
-        const weekEnum2 = Enum(WeekValueOnlyConfig);
-        const weekEnum3 = Enum(WeekNumberConfig);
-        const weekEnum4 = Enum(WeekCompactConfig);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          name: 'weekDay.name',
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
         return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, enUS };
       },
       ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, enUS }) => {
@@ -774,7 +781,9 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           name: () => 'weekDay.name',
           items: {
             label: ({ item }) => `weekday.${item.key}`,
-            abbr: ({ item }) => `weekday.${item.key}Abbr`,
+            abbr: ({ item }) => (item.raw as { abbr: string } | undefined)?.abbr ?? '',
+            abbr2: ({ item }) => `weekday.${item.key}Abbr`,
+            abbr3: ({ item }) => `weekday.Abbr${item.value.toString()}`,
           },
         };
         const weekEnum1 = Enum(StandardWeekConfig);
@@ -808,7 +817,9 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           name: 'weekDay.name',
           items: {
             label: `weekday.{key}`,
-            abbr: `weekday.{key}Abbr`,
+            abbr: '{raw}',
+            abbr2: 'weekday.{key}Abbr',
+            abbr3: 'weekday.Abbr{value}',
           },
         };
         const weekEnum1 = Enum(StandardWeekConfig);
@@ -910,11 +921,14 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const options: EnumInitOptions<any> = {
+          name: 'weekDay.name',
           templates: {
-            name: 'weekDay.name',
+            name: '{name}',
             items: {
               label: 'weekday.{key}',
-              abbr: 'weekday.{key}Abbr',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
             },
           },
         };
@@ -950,7 +964,9 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
             name: () => 'weekDay.name',
             items: {
               label: ({ item }) => `weekday.${item.key}`,
-              abbr: ({ item }) => `weekday.${item.key}Abbr`,
+              abbr: ({ item }) => item.raw?.abbr ?? '',
+              abbr2: ({ item }) => `weekday.${item.key}Abbr`,
+              abbr3: ({ item }) => `weekday.Abbr${item.value.toString()}`,
             },
           },
         };
@@ -983,11 +999,14 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
         setLang('zh-CN', Enum, getLocales, defaultLocalize);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const options: EnumInitOptions<any> = {
+          name: 'weekDay.name',
           templates: {
-            name: 'weekDay.name',
+            name: '{name}',
             items: {
               label: 'weekday.{key}',
-              abbr: 'weekday.{key}Abbr',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
             },
           },
         };
@@ -1098,6 +1117,8 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           items: {
             label: '<NOT_EXISTED_KEY>',
             abbr: '<NOT_EXISTED_KEY>',
+            abbr2: '<NOT_EXISTED_KEY>',
+            abbr3: '<NOT_EXISTED_KEY>',
           },
         }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const options: EnumInitOptions<any> = {
@@ -1105,7 +1126,9 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
             name: 'weekDay.name',
             items: {
               label: 'weekday.{key}',
-              abbr: 'weekday.{key}Abbr',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
             },
           },
         };
@@ -1141,6 +1164,8 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           items: {
             label: () => '<NOT_EXISTED_KEY>',
             abbr: () => '<NOT_EXISTED_KEY>',
+            abbr2: () => '<NOT_EXISTED_KEY>',
+            abbr3: () => '<NOT_EXISTED_KEY>',
           },
         }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const options: EnumInitOptions<any> = {
@@ -1148,7 +1173,9 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
             name: 'weekDay.name',
             items: {
               label: 'weekday.{key}',
-              abbr: 'weekday.{key}Abbr',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
             },
           },
         };
@@ -1183,7 +1210,9 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           name: 'weekDay.name',
           items: {
             label: `weekday.{key}`,
-            abbr: `weekday.{key}Abbr`,
+            abbr: '{raw}',
+            abbr2: 'weekday.{key}Abbr',
+            abbr3: 'weekday.Abbr{value}',
           },
         };
 
@@ -1194,7 +1223,9 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
             name: 'weekDay.name',
             items: {
               label: 'weekday.{key}',
-              abbr: 'weekday.{key}Abbr',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
             },
           },
         };
@@ -1629,23 +1660,50 @@ function assertWeekEnumTemplates(params: {
   locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
 }) {
   const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales } = params;
+  engine.expect(weekEnum1.items[0].abbr).toBe(locales['weekday.SundayAbbr']);
+  engine.expect(weekEnum1.named.Sunday.abbr).toBe(locales['weekday.SundayAbbr']);
+  engine
+    .expect(weekEnum1.meta.abbr)
+    .toEqual([
+      locales['weekday.SundayAbbr'],
+      locales['weekday.MondayAbbr'],
+      locales['weekday.TuesdayAbbr'],
+      locales['weekday.WednesdayAbbr'],
+      locales['weekday.ThursdayAbbr'],
+      locales['weekday.FridayAbbr'],
+      locales['weekday.SaturdayAbbr'],
+    ]);
+
+  ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+    engine.expect(weekEnum.items[0].abbr).toBe('');
+    engine.expect(weekEnum.named.Sunday.abbr).toBe('');
+    engine.expect(weekEnum.meta.abbr).toEqual(['', '', '', '', '', '', '']);
+  });
   ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
     engine.expect(weekEnum.label('Sunday')).toBe(locales['weekday.Sunday']);
     engine.expect(weekEnum.items[0].label).toBe(locales['weekday.Sunday']);
     engine.expect(weekEnum.named.Sunday.label).toBe(locales['weekday.Sunday']);
-    engine.expect((weekEnum.items[0] as { abbr: string }).abbr).toBe(locales['weekday.SundayAbbr']);
-    engine.expect((weekEnum.named.Sunday as { abbr: string }).abbr).toBe(locales['weekday.SundayAbbr']);
-    engine
-      .expect((weekEnum.items.meta as { abbr: string[] }).abbr)
-      .toEqual([
-        locales['weekday.SundayAbbr'],
-        locales['weekday.MondayAbbr'],
-        locales['weekday.TuesdayAbbr'],
-        locales['weekday.WednesdayAbbr'],
-        locales['weekday.ThursdayAbbr'],
-        locales['weekday.FridayAbbr'],
-        locales['weekday.SaturdayAbbr'],
-      ]);
+    engine.expect((weekEnum.items[0] as unknown as { abbr2: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.named.Sunday as unknown as { abbr2: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.items[0] as unknown as { abbr3: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.named.Sunday as unknown as { abbr3: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
+    const abbrArrays: string[][] = [
+      (weekEnum.meta as unknown as { abbr2: string[] }).abbr2,
+      (weekEnum.meta as unknown as { abbr3: string[] }).abbr3,
+    ];
+    abbrArrays.forEach((abbrs) => {
+      engine
+        .expect(abbrs)
+        .toEqual([
+          locales['weekday.SundayAbbr'],
+          locales['weekday.MondayAbbr'],
+          locales['weekday.TuesdayAbbr'],
+          locales['weekday.WednesdayAbbr'],
+          locales['weekday.ThursdayAbbr'],
+          locales['weekday.FridayAbbr'],
+          locales['weekday.SaturdayAbbr'],
+        ]);
+    });
   });
 }
 
@@ -1657,26 +1715,26 @@ function assertUnresolvedTemplates(params: {
   engine: TestEngineBase<TestEngineTypes>;
   locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
 }) {
-  const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales } = params;
-  engine.expect(weekEnum1.name).toBe('<NOT_EXISTED_KEY>');
-  engine.expect(weekEnum1.label('Sunday')).toBe(locales['weekday.Sunday']);
-  engine.expect(weekEnum1.items[0].label).toBe(locales['weekday.Sunday']);
-  engine.expect(weekEnum1.named.Sunday.label).toBe(locales['weekday.Sunday']);
-  engine.expect(weekEnum1.items[0].abbr).toBe(locales['weekday.SundayAbbr']);
-  engine.expect(weekEnum1.named.Sunday.abbr).toBe(locales['weekday.SundayAbbr']);
-  engine
-    .expect(weekEnum1.items.meta.abbr)
-    .toEqual([
-      locales['weekday.SundayAbbr'],
-      locales['weekday.MondayAbbr'],
-      locales['weekday.TuesdayAbbr'],
-      locales['weekday.WednesdayAbbr'],
-      locales['weekday.ThursdayAbbr'],
-      locales['weekday.FridayAbbr'],
-      locales['weekday.SaturdayAbbr'],
-    ]);
+  const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine } = params;
+  // engine.expect(weekEnum1.name).toBe('<NOT_EXISTED_KEY>');
+  // engine.expect(weekEnum1.label('Sunday')).toBe(locales['weekday.Sunday']);
+  // engine.expect(weekEnum1.items[0].label).toBe(locales['weekday.Sunday']);
+  // engine.expect(weekEnum1.named.Sunday.label).toBe(locales['weekday.Sunday']);
+  // engine.expect(weekEnum1.items[0].abbr).toBe(locales['weekday.SundayAbbr']);
+  // engine.expect(weekEnum1.named.Sunday.abbr).toBe(locales['weekday.SundayAbbr']);
+  // engine
+  //   .expect(weekEnum1.meta.abbr)
+  //   .toEqual([
+  //     locales['weekday.SundayAbbr'],
+  //     locales['weekday.MondayAbbr'],
+  //     locales['weekday.TuesdayAbbr'],
+  //     locales['weekday.WednesdayAbbr'],
+  //     locales['weekday.ThursdayAbbr'],
+  //     locales['weekday.FridayAbbr'],
+  //     locales['weekday.SaturdayAbbr'],
+  //   ]);
 
-  ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum2)[]).forEach((weekEnum) => {
+  ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
     engine.expect(weekEnum.name).toBe('<NOT_EXISTED_KEY>');
     engine.expect(weekEnum.label('Sunday')).toBe('<NOT_EXISTED_KEY>');
     engine.expect(weekEnum.items[0].label).toBe('<NOT_EXISTED_KEY>');
@@ -1684,7 +1742,7 @@ function assertUnresolvedTemplates(params: {
     engine.expect((weekEnum.items[0] as { abbr?: string }).abbr).toBe('<NOT_EXISTED_KEY>');
     engine.expect((weekEnum.named.Sunday as { abbr?: string }).abbr).toBe('<NOT_EXISTED_KEY>');
     engine
-      .expect((weekEnum.items.meta as { abbr: string[] }).abbr)
+      .expect((weekEnum.meta as { abbr: string[] }).abbr)
       .toEqual([
         '<NOT_EXISTED_KEY>',
         '<NOT_EXISTED_KEY>',

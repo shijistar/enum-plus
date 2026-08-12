@@ -128,13 +128,12 @@ export class EnumCollectionClass<
       | LocalizeTemplate<'name', T, T[K], K, V, LP, OPTIONS>
       | undefined;
     const localeKey =
-      options?.name ??
-      (nameTemplate
+      nameTemplate != null
         ? resolveLocalizeTemplate(nameTemplate, {
             type: 'name',
             options,
           })
-        : undefined);
+        : options?.name;
     const localize = options?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
       return localize(localeKey);

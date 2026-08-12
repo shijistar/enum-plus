@@ -217,6 +217,8 @@ export interface EnumInterface {
      *   - `true` - 启用自动拼接，`options.labelPrefix` + `label` 自动拼接生成标签，这种情况下 `labelPrefix` 只支持字符串形式
      *   - `Function` - 动态生成枚举项localeKey，这种情况下 `labelPrefix` 支持任意类型
      *   - `false` - 禁用自动生成标签，完全依赖枚举项中定义的 `label` 字段
+     *
+     * @deprecated Use `templates` instead.
      */
     autoLabel?:
       | boolean
@@ -238,6 +240,11 @@ export interface EnumInterface {
           labelPrefix: any;
         }) => string);
 
+    /**
+     * - **EN:** Globally set internationalization templates for enum names and items, used to
+     *   simplify the internationalization configuration of enums.
+     * - **CN:** 全局设置枚举名称和枚举项的国际化模板，用于简化枚举的国际化配置
+     */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     templates?: LocalizeTemplatesConfig<
       EnumInit<string, EnumValue>,

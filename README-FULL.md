@@ -852,7 +852,7 @@ Enum.config.templates = {
 };
 ```
 
-Instance-level `templates` (see [templates](#-templates)) are merged with the global configuration field by field and take precedence over global templates with the same name.
+Instance-level `templates` (see [templates](#️-templates)) are merged with the global configuration field by field and take precedence over global templates with the same name.
 
 ### autoLabel
 
@@ -1337,7 +1337,7 @@ WeekEnum.name; // Week or 周, depending on the current locale
 
 Custom metadata can be localized as well. Use `autoLocalizeMeta` when fields such as abbreviations, descriptions, or hints are also localization keys.
 
-> 🚫 **Deprecated**: `autoLocalizeMeta` will be removed in the next major version. Declaring the field in `templates.items` (see [templates](#-templates)) achieves the same behavior.
+> 🚫 **Deprecated**: `autoLocalizeMeta` will be removed in the next major version. Declaring the field in `templates.items` (see [templates](#️-templates)) achieves the same behavior.
 
 ```js
 const WeekEnum = Enum(

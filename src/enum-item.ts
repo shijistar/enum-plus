@@ -235,8 +235,6 @@ export class EnumItemClass<
     const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
     const template = (this._options?.templates?.items?.[field as never] ??
       internalConfig.templates?.items?.[field as never]) as LocalizeTemplate<'item', ET, T, K, V, LP, OPTIONS>;
-    const raw = this.raw;
-    const rawValue = raw && typeof raw === 'object' ? raw[field as never] : undefined;
     let localeKey = resource;
 
     if (typeof localeKey === 'function') {
@@ -244,9 +242,10 @@ export class EnumItemClass<
       return localeKey(this as any);
     }
 
-    if (!rawValue && template) {
+    if (template) {
       localeKey = resolveLocalizeTemplate(template, {
         type: 'item',
+        metaField: field,
         item: this as never,
         options: this._options as never,
       }) as EnumItemLabel | undefined;
@@ -279,12 +278,10 @@ export interface EnumItemOptions<
    */
   localize?: LocalizeInterface;
   /**
-   * - **EN:** The label prefix for each enum item, which can be a string or an object. This option
-   *   can simplify or even omit the label definition of enum items, and is only effective when
-   *   internationalization is enabled.
-   * - **CN:** 每个枚举项的label前缀，可以是字符串，也可以是一个对象。此选项可以简化甚至省略枚举项的label定义，只有当开启国际化时才需要此选项。
+   * - **EN:** Internationalization templates for enum name and items, used to simplify the
+   *   internationalization configuration of enums.
+   * - **CN:** 枚举名称和枚举项的国际化模板，用于简化枚举的国际化配置
    */
-  labelPrefix?: LP;
   templates?: LocalizeTemplatesConfig<ET, T, K, V, LP, EnumItemOptions<ET, T, K, V, LP>>;
   /**
    * - **EN:** Allow setting a label prefix for enum items, simplifying or even omitting the label
@@ -310,6 +307,8 @@ export interface EnumItemOptions<
    *   - `false` - 禁用自动生成标签，完全依赖枚举项中定义的 `label` 字段
    *
    * > 此选项与 `Enum.config.autoLabel` 作用相同，但优先级高于全局配置，仅对当前枚举实例生效。
+   *
+   * @deprecated Use `templates.items` instead.
    */
   autoLabel?:
     | boolean
@@ -317,7 +316,15 @@ export interface EnumItemOptions<
         item: EnumItemClass<ET, T, K, V, LP, EnumItemOptions<ET, T, K, V, LP>>;
         labelPrefix: LP;
       }) => string);
-
+  /**
+   * - **EN:** The label prefix for each enum item, which can be a string or an object. This option
+   *   can simplify or even omit the label definition of enum items, and is only effective when
+   *   internationalization is enabled.
+   * - **CN:** 每个枚举项的label前缀，可以是字符串，也可以是一个对象。此选项可以简化甚至省略枚举项的label定义，只有当开启国际化时才需要此选项。
+   *
+   * @deprecated Use `templates.items` instead.
+   */
+  labelPrefix?: LP;
   /**
    * - **EN:** Set the array of meta information fields to be automatically localized, similar to the
    *   handling of `label`.
@@ -330,6 +337,8 @@ export interface EnumItemOptions<
    *   - `true` - 自动本地化所有元信息字段。
    *   - `false` - 默认值，不自动本地化元信息字段。
    *   - `string[]` - 指定要自动本地化的元信息字段名。
+   *
+   * @deprecated Use `templates.items` instead.
    */
   autoLocalizeMeta?: boolean | Exclude<keyof T, EnumItemFields>[];
 }

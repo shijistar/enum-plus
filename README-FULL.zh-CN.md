@@ -842,7 +842,7 @@ Enum.config.templates = {
 };
 ```
 
-实例级 `templates`（见[templates](#-templates)）与全局配置按字段逐项合并，且实例配置优先级更高，覆盖同名字段的全局模板。
+实例级 `templates`（见[templates](#️-templates)）与全局配置按字段逐项合并，且实例配置优先级更高，覆盖同名字段的全局模板。
 
 ### autoLabel
 
@@ -1328,7 +1328,7 @@ WeekEnum.name; // Week 或 周，取决于当前语言环境
 
 自定义元数据字段也可以本地化。当缩写、描述、提示文案等字段也是本地化键值时，可以使用 `autoLocalizeMeta`。
 
-> 🚫 **已废弃（Deprecated）**：`autoLocalizeMeta` 将在下一大版本中移除。在 `templates.items` 中声明该字段（见 [templates](#-templates)）可获得相同行为。
+> 🚫 **已废弃（Deprecated）**：`autoLocalizeMeta` 将在下一大版本中移除。在 `templates.items` 中声明该字段（见 [templates](#️-templates)）可获得相同行为。
 
 ```js
 const WeekEnum = Enum(

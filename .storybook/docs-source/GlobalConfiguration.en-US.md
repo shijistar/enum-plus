@@ -1,7 +1,5 @@
 # Global Configuration
 
-&nbsp;
-
 `Enum.config` provides some global configuration options that affect the behavior and features of enums.
 
 &nbsp;
