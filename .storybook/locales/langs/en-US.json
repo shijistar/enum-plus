@@ -147,6 +147,7 @@
   "storybook.stories.CorePatterns.composition.field.enumName": "Enum name",
   "storybook.stories.CorePatterns.composition.section.extension.title": "Custom extension method",
   "storybook.stories.CorePatterns.composition.section.extension.description": "This demo adds toBadgeMap() through Enum.extends and turns a single enum into status badge ready data.",
+  "storybook.stories.CorePatterns.composition.section.extension.codeTitle": "toBadgeMap() registration code",
   "storybook.stories.CorePatterns.composition.sample.draft": "Draft",
   "storybook.stories.CorePatterns.composition.sample.review": "In Review",
   "storybook.stories.CorePatterns.composition.sample.published": "Published",

@@ -143,6 +143,7 @@
   "storybook.stories.CorePatterns.composition.field.enumName": "枚举名",
   "storybook.stories.CorePatterns.composition.section.extension.title": "自定义扩展方法",
   "storybook.stories.CorePatterns.composition.section.extension.description": "这里通过 Enum.extends 增加了 toBadgeMap()，把一份枚举统一转成适合状态徽标展示的数据结构。",
+  "storybook.stories.CorePatterns.composition.section.extension.codeTitle": "toBadgeMap() 注册代码",
   "storybook.stories.CorePatterns.composition.sample.draft": "草稿",
   "storybook.stories.CorePatterns.composition.sample.review": "审核中",
   "storybook.stories.CorePatterns.composition.sample.published": "已发布",

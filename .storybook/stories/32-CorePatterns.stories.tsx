@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, Descriptions, Segmented, Select, Space, Tag, Typography } from 'antd';
 import { Enum } from '../../src';
 import { storyT, useStoryLocale, useStoryT } from '../locales';
-import { JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
+import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
 
@@ -65,6 +65,18 @@ function ensureCustomExtension() {
 
   extensionInstalled = true;
 }
+
+const extensionRegistrationCode = `Enum.extends({
+  toBadgeMap() {
+    return this.toMap({
+      key: 'value',
+      value: (item) => ({
+        label: item.label,
+        color: item.raw.color,
+      }),
+    });
+  },
+});`;
 
 function LocalizationDemo() {
   const t = useStoryT();
@@ -279,7 +291,15 @@ function CompositionDemo() {
         title={t('storybook.stories.CorePatterns.composition.section.extension.title')}
         description={t('storybook.stories.CorePatterns.composition.section.extension.description')}
       >
-        <JsonPreview title="mergedEnum.toBadgeMap()" value={mergedEnum.toBadgeMap()} />
+        <TwoColumn
+          left={
+            <CodePreview
+              title={t('storybook.stories.CorePatterns.composition.section.extension.codeTitle')}
+              code={extensionRegistrationCode}
+            />
+          }
+          right={<JsonPreview title="mergedEnum.toBadgeMap()" value={mergedEnum.toBadgeMap()} />}
+        />
       </StorySection>
     </StoryPage>
   );
