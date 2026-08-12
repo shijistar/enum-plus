@@ -8,13 +8,17 @@
 
 ### Features
 
-- ✨ Add `autoLocalize` runtime configuration to automatically localize enum `name` and `item` labels via user-defined templates.
+- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates.
 - ✨ Improve localize template type definitions (`templates.name` / `templates.items`) for better type inference.
 - ✨ Enhance enum type checks and type annotations.
 
 ### Bug Fixes
 
 - 🐞 Fix TypeScript errors in enum type definitions.
+
+### Deprecations
+
+- 🚫 `autoLabel`, `labelPrefix`, and `autoLocalizeMeta` are deprecated and will be removed in the next major version. Use `templates` instead.
 
 ### Tests & Quality
 
