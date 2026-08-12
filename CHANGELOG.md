@@ -4,17 +4,14 @@
 
 ## 3.3.0
 
-2026-8-11
+2026-8-12
 
 ### Features
 
-- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates.
-- ✨ Improve localize template type definitions (`templates.name` / `templates.items`) for better type inference.
-- ✨ Enhance enum type checks and type annotations.
-
-### Bug Fixes
-
-- 🐞 Fix TypeScript errors in enum type definitions.
+- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates, with improved type inference for localize template definitions. Templates can be strings using the `{name}` and `{key}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item? }` and return a localization key (`undefined` skips the field).
+  - `templates.name` — defines the template that generates the localization key for the enum `name` field.
+  - `templates.items` — defines the templates that generate localization keys for enum item fields, such as `label` and custom meta fields.
+- ✨ Fields declared in instance-level `templates.items` are automatically added to the enum items, so the generated meta fields are typed and accessible even when raw enum items do not declare them.
 
 ### Deprecations
 
@@ -25,21 +22,12 @@
 - ✅ Migrate core unit tests to Vitest with node + browser projects and raise code coverage to 100% across statements, branches, functions, and lines.
 - ✅ Add tests for localize templates.
 - ✅ Refine reviewed enum test cases.
-- ✅ Standardize test titles.
-
-### Documentation
-
-- 📝 Update README and improve table typography in Storybook styles.
-- 📝 Keep issue and feature request templates English-only.
-- 📝 Update download URLs for the v3.2.1 release.
-- 🛠️ Optimize Storybook docs preview chunk size and clear global variable default value.
 
 ### Chores / CI
 
 - 🔧 Add CodeRabbit configuration.
 - 🔧 Make codegraph prepare cross-platform.
 - 🔧 Update Node.js version matrix to include 26.x.
-- 🔧 Install missing plugin and rollback package-lock.json.
 
 ## 3.2.1
 
