@@ -52,7 +52,7 @@ export function StorySection(props: PropsWithChildren<{ title: string; descripti
           {description ? <Paragraph>{description}</Paragraph> : null}
         </div>
       }
-      styles={{ title: { whiteSpace: 'wrap' } }}
+      styles={{ title: { whiteSpace: 'normal' } }}
       extra={extra}
     >
       {children}
