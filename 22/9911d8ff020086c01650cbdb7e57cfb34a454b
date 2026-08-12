@@ -1,0 +1,21 @@
+.storybook/stories/32-CorePatterns.stories.tsx
+  h_99cad05bea77d1 490,492,494,500
+  h_99cad05bea77d1 385,391,491,498
+.storybook/locales/langs/en-US.json
+  h_99cad05bea77d1 159-160,166,169-170
+.storybook/locales/langs/zh-CN.json
+  h_99cad05bea77d1 155-156,162,165-166
+.storybook/stories/shared/demo.tsx
+  h_99cad05bea77d1 55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "229911d8ff020086c01650cbdb7e57cfb34a454b",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
