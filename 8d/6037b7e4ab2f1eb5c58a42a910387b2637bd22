@@ -1,0 +1,29 @@
+.storybook/stories/shared/demo.tsx
+  h_99cad05bea77d1 52,74-75,81-82,84
+  h_99cad05bea77d1 78-80,83,85-86
+.storybook/locales/langs/en-US.json
+  h_99cad05bea77d1 160,162
+.storybook/stories/32-CorePatterns.stories.tsx
+  h_99cad05bea77d1 4,170-171,174,354-358,364,366,431-435,452,454,508-510,600-604,608-612,659,662,665,677,684,695-696,704
+  h_99cad05bea77d1 493,512,517,570,598-599,605-607,613,675-676,678-681,683,685-687
+.storybook/locales/langs/zh-CN.json
+  h_99cad05bea77d1 156,158
+.github/workflows/reusable-test.yml
+  h_99cad05bea77d1 28,31,39,66,75,87,101,104,110,124,129,132,137,143,147,170,173,178,185,196-197,200,208,211,216,223,234-235,238,247,250,255,262,273-274,276,280-320,322-323,326,329,339,354,367,371,374,380,389
+  h_99cad05bea77d1 321,324-325
+.github/workflows/npm-publish.yml
+  h_99cad05bea77d1 69
+.github/workflows/storybook-pages.yml
+  h_99cad05bea77d1 24,27,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "8d6037b7e4ab2f1eb5c58a42a910387b2637bd22",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
