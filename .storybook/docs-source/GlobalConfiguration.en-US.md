@@ -19,7 +19,7 @@ The available placeholders are:
 - `{value}` — the value of the enum item.
 - `{raw}` — the original value of the meta field being templated (only meaningful in `items` templates).
 
-Template results take precedence over declared values: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly.
+Template results take precedence over declared strings: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Template functions, however, return the final localization result directly, so they have the highest priority and are not overridden by templates. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly.
 
 ```ts
 Enum.config.templates = {
