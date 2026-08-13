@@ -1,0 +1,16 @@
+package.json
+  h_99cad05bea77d1 138-143
+.github/workflows/reusable-test.yml
+  h_99cad05bea77d1 147,200,288-289,303-304
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "3d0a3264c00dbf236ac59d3e825e31b7441bcc24",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
