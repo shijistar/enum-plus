@@ -1,8 +1,8 @@
 import jestEngine from './jest';
 import playwrightEngine from './playwright';
 import type { TestEngine } from './types';
-import viTestBrowserEngine from './vitest/vitest-browser';
-import viTestNodeEngine from './vitest/vitest-node';
+import viTestBrowserEngine from './vitest-browser';
+import viTestNodeEngine from './vitest-node';
 
 export const createEngine = (type: TestEngine) => {
   if (type === 'jest') {

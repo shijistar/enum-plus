@@ -1,8 +1,7 @@
 import { version as packageVersion } from '../../package.json';
 import type TestEngineBase from '../engines/base';
-import type { TestEngineTypes } from '../types';
 
-const testVersion = (engine: TestEngineBase<TestEngineTypes>) => {
+const testVersion = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum version', () => {
     engine.test(
       'should match the package.json version',
@@ -11,7 +10,7 @@ const testVersion = (engine: TestEngineBase<TestEngineTypes>) => {
       },
       ({ version }) => {
         engine.expect(version).toBe(packageVersion);
-      },
+      }
     );
   });
 };

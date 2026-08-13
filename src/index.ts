@@ -10,11 +10,10 @@ export type {
   FindLabelByValue,
   ArrayToMap,
 } from './types';
-export type { IEnum, NativeEnumMembers, AnyEnum, GenericAnyEnum, EnumInterface, EnumInitOptions } from './enum';
+export type { LocalizeInterface } from './localize-interface';
 export type { ToListConfig, IEnumItems } from './enum-items';
 export type { EnumItemInterface, EnumItemOptions } from './enum-item';
-export type { LocalizeInterface } from './localize-interface';
-export type { LocalizeTemplateContext, LocalizeTemplate, LocalizeTemplatesConfig } from './auto-localize';
+export type { IEnum, NativeEnumMembers, AnyEnum, GenericAnyEnum, EnumInterface, EnumInitOptions } from './enum';
 
 export { version } from './version';
 export {

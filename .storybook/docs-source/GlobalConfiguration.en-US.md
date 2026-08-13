@@ -1,41 +1,12 @@
 # Global Configuration
 
+&nbsp;
+
 `Enum.config` provides some global configuration options that affect the behavior and features of enums.
 
 &nbsp;
 
-## ⚙️ templates
-
-`{ name?: string | Function, items?: Record<string, string | Function> }`
-
-`Enum.config.templates` is a global configuration option that defines localization templates for the enum `name` and item fields. It applies to every enum instance, and it is the recommended unified way to set up localization (replacing the legacy `Enum.config.autoLabel`, see below).
-
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
-
-The available tokens are:
-
-- `{name}` — the enum name (from `options.name`).
-- `{key}` — the key of the enum item.
-- `{value}` — the value of the enum item.
-- `{raw}` — the original value of the meta field being templated (only meaningful in `items` templates).
-
-Template results take precedence over raw declared strings, but not functions: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. The order of precedence is: raw functions > instance templates > global templates > raw strings.
-
-```ts
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-```
-
-Instance-level `templates` are merged with the global configuration field by field and take precedence over global templates with the same name.
-
 ## ⚙️ autoLabel
-
-> 🚫 **Deprecated**: will be removed in the next major version. Use `Enum.config.templates` instead.
 
 `Enum.config.autoLabel` is a global configuration option used to automatically generate labels for enum items. It allows you to set the `options.labelPrefix` option when defining an enum, which sets a `label` prefix for all enum items. Enum items only need to set the base value and can even omit the `label` field (when same as the `key` field). This reduces repetitive code and improves the conciseness of enum definitions.
 

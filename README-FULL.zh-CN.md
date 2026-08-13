@@ -627,56 +627,7 @@ const WeekEnum = Enum(enumInit, {
 });
 ```
 
-### ⚙️ templates
-
-`{ name?: string | Function, items?: Record<string, string | Function> }`
-
-为枚举名称、枚举项标签和枚举项元数据字段生成本地化 key。这是推荐的统一配置方式，取代已废弃的 `autoLabel`、`labelPrefix`、`autoLocalizeMeta` 三个旧属性（它们将在下一大版本中移除）。
-
-模板可以是字符串，使用 `{name}`、`{key}`、`{value}` 和 `{raw}` 占位符；也可以是函数，接收上下文 `{ type: 'name' | 'item', options, item?, metaField? }` 并返回本地化 key。
-
-可用占位符如下：
-
-- `{name}` — 枚举名称（来自 `options.name`）。
-- `{key}` — 枚举项的 key。
-- `{value}` — 枚举项的值。
-- `{raw}` — 被模板化的元数据字段的原始值（仅在 `items` 模板中有意义）。
-
-模板结果优先于原始声明的字符串，但不优先于函数：`name` 模板会覆盖 `options.name`，`items` 模板会覆盖枚举项元数据字段的原始值。原始声明的函数会直接返回最终的本地化结果，优先级最高，不会被模板覆盖。优先级顺序为：原始函数 > 实例模板 > 全局模板 > 原始字符串。全局设置与实例配置可以并存：`Enum.config.templates` 对所有枚举生效，实例级 `templates` 按字段逐项合并，且实例配置优先级更高，覆盖同名字段的全局模板。
-
-```ts
-// 全局模板：所有枚举共享。
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-
-const WeekEnum = Enum(
-  { Sunday: { value: 0 }, Monday: { value: 1 } },
-  {
-    name: 'week',
-    // 实例模板：与全局设置可以并存，实例配置优先级更高。
-    templates: {
-      items: { abbr: 'enum.{name}.{key}.abbr' },
-    },
-  },
-);
-
-WeekEnum.name; // localize('enum.week.name')
-WeekEnum.named.Sunday.label; // localize('enum.week.Sunday.label')
-WeekEnum.named.Sunday.description; // localize('enum.week.Sunday.description')
-WeekEnum.named.Sunday.abbr; // localize('enum.week.Sunday.abbr')
-WeekEnum.items.meta.description; // string[]
-```
-
-`templates.items` 声明的元数据字段（如 `description`、`abbr`）即使没有出现在原始枚举项中，也会自动生成。TypeScript 类型推导建议使用实例级字面量模板字段。全局模板字段在运行时可用，但普通 TypeScript 泛型无法精确推导其类型。
-
 ### ⚙️ autoLabel
-
-> 🚫 **已废弃（Deprecated）**：将在下一大版本中移除。请改用 `templates.items.label`。
 
 `boolean | ((params: { item: EnumItemClass; labelPrefix?: any }) => string)`
 
@@ -701,15 +652,11 @@ const WeekEnum = Enum(
 
 ### ⚙️ labelPrefix
 
-> 🚫 **已废弃（Deprecated）**：将在下一大版本中移除。请改用 `templates.items`。
-
 `string | any`
 
 设置 `autoLabel` 生成枚举项标签时使用的前缀。在默认的 `autoLabel: true` 模式下，`labelPrefix` 会与每个枚举项的 label 或 key 组合。
 
 ### ⚙️ autoLocalizeMeta
-
-> 🚫 **已废弃（Deprecated）**：将在下一大版本中移除。请改用 `templates.items`。
 
 `boolean | string[]`
 
@@ -833,38 +780,7 @@ Enum.install(i18nextPlugin);
 
 `Enum.config` 提供了一些全局配置参数，用来影响枚举的行为和特性。
 
-### templates
-
-`{ name?: string | Function, items?: Record<string, string | Function> }`
-
-`Enum.config.templates` 是一个全局配置选项，用于为枚举的 `name` 和枚举项字段定义本地化模板。它对每个枚举实例生效，是推荐的统一本地化配置方式（取代下方已废弃的 `Enum.config.autoLabel`）。
-
-模板可以是字符串，使用 `{name}`、`{key}`、`{value}` 和 `{raw}` 占位符；也可以是函数，接收上下文 `{ type: 'name' | 'item', options, item?, metaField? }` 并返回本地化 key（返回 `undefined` 时跳过该模板）。
-
-可用占位符如下：
-
-- `{name}` — 枚举名称（来自 `options.name`）。
-- `{key}` — 枚举项的 key。
-- `{value}` — 枚举项的值。
-- `{raw}` — 被模板化的元数据字段的原始值（仅在 `items` 模板中有意义）。
-
-模板结果优先于原始声明的字符串，但不优先于函数：`name` 模板会覆盖 `options.name`，`items` 模板会覆盖枚举项元数据字段的原始值。原始声明的函数会直接返回最终的本地化结果，优先级最高，不会被模板覆盖。优先级顺序为：原始函数 > 实例模板 > 全局模板 > 原始字符串。
-
-```ts
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-```
-
-实例级 `templates`（见[templates](#️-templates)）与全局配置按字段逐项合并，且实例配置优先级更高，覆盖同名字段的全局模板。
-
 ### autoLabel
-
-> 🚫 **已废弃（Deprecated）**：将在下一大版本中移除。请改用 `Enum.config.templates`。
 
 `Enum.config.autoLabel` 是一个全局配置选项，用于自动生成枚举项的标签。它允许在定义枚举时，设置 `options.labelPrefix` 选项，为所有枚举项设置一个 `label` 前缀，枚举项只需要设置基础值即可，甚至可以省略 `label` 字段（与 `key` 字段相同）。这样可以减少重复代码，提高枚举定义的简洁性。
 
@@ -1345,8 +1261,6 @@ WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
 自定义元数据字段也可以本地化。当缩写、描述、提示文案等字段也是本地化键值时，可以使用 `autoLocalizeMeta`。
-
-> 🚫 **已废弃（Deprecated）**：`autoLocalizeMeta` 将在下一大版本中移除。在 `templates.items` 中声明该字段（见 [templates](#️-templates)）可获得相同行为。
 
 ```js
 const WeekEnum = Enum(

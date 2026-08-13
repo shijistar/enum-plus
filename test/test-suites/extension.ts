@@ -1,10 +1,9 @@
-import type { AnyEnum, EnumItemInterface, IEnum } from '@enum-plus';
+import type { EnumItemInterface, IEnum } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
-import type { TestEngineTypes } from '../types';
 
 // import './extension-type';
 
-const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
+const testExtension = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum extensions', () => {
     engine.test(
       'should add extension methods to Enum instances',
@@ -13,7 +12,7 @@ const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
           isWeekend(value: number) {
             return value === 6 || value === 0;
           },
-          toMySelect(this: AnyEnum) {
+          toMySelect(this: ReturnType<typeof Enum>) {
             return this.items.map((item) => ({ value: item.value, title: item.label }));
           },
         };
@@ -117,7 +116,7 @@ const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
           },
         };
         const secondExtends = {
-          toMySelect(this: AnyEnum) {
+          toMySelect(this: ReturnType<typeof Enum>) {
             return this.items.map((item) => ({ value: item.value, title: item.label }));
           },
         };

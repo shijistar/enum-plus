@@ -1,5 +1,5 @@
 import type { ExpectConfig, TestEngine } from './types';
-import type { RuntimeContext } from './vitest/utils';
+import type { RuntimeContext } from './utils';
 
 abstract class TestEngineBase<Engine extends TestEngine = 'jest'> {
   protected _type?: Engine;
@@ -14,16 +14,16 @@ abstract class TestEngineBase<Engine extends TestEngine = 'jest'> {
     name: string,
     evaluate: (context: RuntimeContext) => Data | Promise<Data>,
     assert: (data: Data) => void,
-    evaluateContext?: Record<string, unknown>,
+    evaluateContext?: Record<string, unknown>
   ): void;
 
   abstract expect<T extends ExpectConfig<unknown>[Engine][0][0]>(
     actual: T,
-    options?: ExpectConfig<T>[Engine][0][1],
+    options?: ExpectConfig<T>[Engine][0][1]
   ): ExpectConfig<T>[Engine][0][2];
   abstract expect<T extends ExpectConfig<unknown>[Engine][1][0]>(
     actual: T,
-    options?: ExpectConfig<T>[Engine][1][1],
+    options?: ExpectConfig<T>[Engine][1][1]
   ): ExpectConfig<T>[Engine][1][2];
 }
 

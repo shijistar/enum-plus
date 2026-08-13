@@ -2,7 +2,7 @@
 const config = {
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
-  testMatch: ['<rootDir>/tses/test/specs/jest/**/*.{spec,test}.js'],
+  testMatch: ['<rootDir>/tses/test/**/*.{spec,test}.js'],
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/es/**/*.js'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
@@ -11,7 +11,7 @@ const config = {
     '<rootDir>/es/localize-interface.js',
     '<rootDir>/es/extension.js',
   ],
-  setupFilesAfterEnv: ['<rootDir>/tses/test/specs/jest/jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/tses/test/jest.setup.js'],
   moduleNameMapper: {
     '^@enum-plus/(.*)$': '<rootDir>/es/$1',
     '^@enum-plus': '<rootDir>/es/index.js',

@@ -1,8 +1,7 @@
 import { IS_ENUM_ITEM as IS_ENUM_ITEM_IN_NODE } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
-import type { TestEngineTypes } from '../types';
 
-const testEnumItem = (engine: TestEngineBase<TestEngineTypes>) => {
+const testEnumItem = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('EnumItem API', () => {
     engine.test(
       'should expose Enum members as primitive values',

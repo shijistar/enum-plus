@@ -632,61 +632,7 @@ const WeekEnum = Enum(enumInit, {
 });
 ```
 
-### ⚙️ templates
-
-`{ name?: string | Function, items?: Record<string, string | Function> }`
-
-Generates localization keys for the enum name, item labels, and item meta fields. This is the recommended unified way to set up localization, and it replaces the legacy `autoLabel`, `labelPrefix`, and `autoLocalizeMeta` options, which are deprecated and will be removed in the next major version.
-
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
-
-The available tokens are:
-
-- `{name}` — the enum name (from `options.name`).
-- `{key}` — the key of the enum item.
-- `{value}` — the value of the enum item.
-- `{raw}` — the original value of the meta field being templated (only meaningful in `items` templates).
-
-Template results take precedence over raw declared strings, but not functions: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. The order of precedence is: raw functions > instance templates > global templates > raw strings. Global and instance templates can coexist: `Enum.config.templates` applies to all enums, while instance-level `templates` are merged field by field and take precedence over global templates with the same name.
-
-```ts
-// Global templates: shared by every enum.
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-
-const WeekEnum = Enum(
-  {
-    Sunday: { value: 0 },
-    Monday: { value: 1 },
-  },
-  {
-    name: 'week',
-    // Instance templates: coexist with the global ones and take precedence.
-    templates: {
-      items: {
-        abbr: 'enum.{name}.{key}.abbr',
-      },
-    },
-  },
-);
-
-WeekEnum.name; // localize('enum.week.name')
-WeekEnum.named.Sunday.label; // localize('enum.week.Sunday.label')
-WeekEnum.named.Sunday.description; // localize('enum.week.Sunday.description')
-WeekEnum.named.Sunday.abbr; // localize('enum.week.Sunday.abbr')
-WeekEnum.items.meta.description; // string[]
-```
-
-Meta fields declared by `templates.items`, such as `description` and `abbr`, are generated even when raw enum items do not declare those fields. For TypeScript inference, prefer declaring instance-level templates with literal keys. Global-only template fields are runtime-capable but cannot be inferred precisely by normal TypeScript generics.
-
 ### ⚙️ autoLabel
-
-> 🚫 **Deprecated**: will be removed in the next major version. Use `templates.items.label` instead.
 
 `boolean | ((params: { item: EnumItemClass; labelPrefix?: any }) => string)`
 
@@ -711,15 +657,11 @@ const WeekEnum = Enum(
 
 ### ⚙️ labelPrefix
 
-> 🚫 **Deprecated**: will be removed in the next major version. Use `templates.items` instead.
-
 `string | any`
 
 Sets a prefix used by `autoLabel` when generating enum item labels. In the default `autoLabel: true` mode, `labelPrefix` is combined with each item label or key.
 
 ### ⚙️ autoLocalizeMeta
-
-> 🚫 **Deprecated**: will be removed in the next major version. Use `templates.items` instead.
 
 `boolean | string[]`
 
@@ -843,38 +785,7 @@ Enum.install(i18nextPlugin);
 
 `Enum.config` provides some global configuration options that affect the behavior and features of enums.
 
-### templates
-
-`{ name?: string | Function, items?: Record<string, string | Function> }`
-
-`Enum.config.templates` is a global configuration option that defines localization templates for the enum `name` and item fields. It applies to every enum instance, and it is the recommended unified way to set up localization (replacing the legacy `Enum.config.autoLabel`, see below).
-
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
-
-The available tokens are:
-
-- `{name}` — the enum name (from `options.name`).
-- `{key}` — the key of the enum item.
-- `{value}` — the value of the enum item.
-- `{raw}` — the original value of the meta field being templated (only meaningful in `items` templates).
-
-Template results take precedence over raw declared strings, but not functions: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. The order of precedence is: raw functions > instance templates > global templates > raw strings.
-
-```ts
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-```
-
-Instance-level `templates` (see [templates](#️-templates)) are merged with the global configuration field by field and take precedence over global templates with the same name.
-
 ### autoLabel
-
-> 🚫 **Deprecated**: will be removed in the next major version. Use `Enum.config.templates` instead.
 
 `Enum.config.autoLabel` is a global configuration option used to automatically generate labels for enum items. It allows you to set the `options.labelPrefix` option when defining an enum, which sets a `label` prefix for all enum items. Enum items only need to set the base value and can even omit the `label` field (when same as the `key` field). This reduces repetitive code and improves the conciseness of enum definitions.
 
@@ -1354,8 +1265,6 @@ WeekEnum.name; // Week or 周, depending on the current locale
 ```
 
 Custom metadata can be localized as well. Use `autoLocalizeMeta` when fields such as abbreviations, descriptions, or hints are also localization keys.
-
-> 🚫 **Deprecated**: `autoLocalizeMeta` will be removed in the next major version. Declaring the field in `templates.items` (see [templates](#️-templates)) achieves the same behavior.
 
 ```js
 const WeekEnum = Enum(

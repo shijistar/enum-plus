@@ -9,11 +9,10 @@ import {
   VALUES as NODE_VALUES,
 } from '@enum-plus';
 import type TestEngineBase from '../engines/base';
-import type { TestEngineTypes } from '../types';
 import { toPlainEnums } from '../utils/index';
 import { addEnumItemsTestSuite } from './enum-items';
 
-const testEnumCollection = (engine: TestEngineBase<TestEngineTypes>) => {
+const testEnumCollection = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('EnumCollection API', () => {
     addEnumItemsTestSuite(engine);
 

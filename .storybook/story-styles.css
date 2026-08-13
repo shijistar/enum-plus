@@ -342,12 +342,10 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 
 .enum-story-shell .ant-descriptions-view {
   overflow: hidden;
-
-  /* 
   background: var(--ep-surface-raised);
-  border: 1px solid var(--ep-page-border);
-  border-radius: 16px; 
-  */
+
+  /* border: 1px solid var(--ep-page-border);
+  border-radius: 16px; */
 }
 
 .enum-story-shell .ant-descriptions-bordered .ant-descriptions-item-label,

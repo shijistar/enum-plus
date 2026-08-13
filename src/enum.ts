@@ -1,5 +1,4 @@
 import type { EnumExtension } from 'enum-plus/extension';
-import type { LocalizeTemplatesConfig } from './auto-localize';
 import { EnumCollectionClass, EnumExtensionClass } from './enum-collection';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import type { IEnumItems, InheritableEnumItems } from './enum-items';
@@ -29,18 +28,18 @@ export const Enum = (<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LP = any,
-  OPTIONS extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
+  OP extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
 >(
   init: T | T[],
-  options?: OPTIONS,
-): IEnum<T, K, V, LP, OPTIONS> & NativeEnumMembers<T, K, V> => {
+  options?: OP,
+): IEnum<T, K, V, LP, OP> & NativeEnumMembers<T, K, V> => {
   if (Array.isArray(init)) {
     const initMap = getInitMapFromArray<T, K, V, LP>(init, options);
-    return new EnumCollectionClass<T, K, V, LP, OPTIONS>(initMap, options) as unknown as NativeEnumMembers<T, K, V> &
-      IEnum<T, K, V, LP, OPTIONS>;
+    return new EnumCollectionClass<T, K, V, LP>(initMap, options) as unknown as NativeEnumMembers<T, K, V> &
+      IEnum<T, K, V, LP, OP>;
   } else {
-    return new EnumCollectionClass<T, K, V, LP, OPTIONS>(init, options) as unknown as NativeEnumMembers<T, K, V> &
-      IEnum<T, K, V, LP, OPTIONS>;
+    return new EnumCollectionClass<T, K, V, LP>(init, options) as unknown as NativeEnumMembers<T, K, V> &
+      IEnum<T, K, V, LP, OP>;
   }
 }) as EnumInterface;
 
@@ -78,7 +77,7 @@ Enum.install = <T extends PluginFunc<any>>(plugin: T, options?: Parameters<T>[0]
   plugin(options, Enum);
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-Enum.isEnum = (value: unknown): value is LooseAnyEnum => {
+Enum.isEnum = (value: unknown): value is IEnum<any, any, any, any> & NativeEnumMembers<any, any, any> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return Boolean(value && typeof value === 'object' && (value as any)[IS_ENUM] === true);
 };
@@ -132,7 +131,7 @@ export interface EnumInterface {
    * @template K The type of enum keys | 枚举键的类型
    * @template V The type of enum values | 枚举值的类型
    * @template LP The type of enum item's label prefix | 枚举项标签的前缀值
-   * @template OPTIONS The type of enum initialization options | 枚举初始化选项的类型
+   * @template OP The type of enum initialization options | 枚举初始化选项的类型
    *
    * @param raw the raw initialization object for the enum collection | 枚举集合的原始初始化对象
    * @param options the options for generating the enum collection | 生成枚举集合的选项
@@ -146,11 +145,11 @@ export interface EnumInterface {
     V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const LP = any,
-    OPTIONS extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
+    OP extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
   >(
     raw: T,
-    options?: OPTIONS,
-  ): IEnum<T, K, V, LP, OPTIONS> & NativeEnumMembers<T, K, V>;
+    options?: EnumInitOptions<T, K, V, LP>,
+  ): IEnum<T, K, V, LP, OP> & NativeEnumMembers<T, K, V>;
 
   /**
    * - **EN:** Generate an enum based on an array
@@ -166,7 +165,7 @@ export interface EnumInterface {
    * @template K The type of enum keys | 枚举键的类型
    * @template V The type of enum values | 枚举值的类型
    * @template LP The type of enum item's label prefix | 枚举项标签的前缀值
-   * @template OPTIONS The type of array-based enum initialization options | 基于数组的枚举初始化选项的类型
+   * @template OP The type of array-based enum initialization options | 基于数组的枚举初始化选项的类型
    *
    * @param raw The initialization object array for the enum collection | 初始化对象数组
    * @param options The options for generating the enum collection | 生成枚举集合的选项
@@ -180,19 +179,13 @@ export interface EnumInterface {
     V extends EnumValue = ValueTypeFromSingleInit<ArrayToMap<A>[K], K>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const LP = any,
-    OPTIONS extends ArrayBasedEnumInitOptions<
-      // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-      A[number],
-      K,
-      V,
-      LP
-      // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-    > = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
+    // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
+    OP extends ArrayBasedEnumInitOptions<A[number], K, V, LP> = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
   >(
     init: A,
-    options?: OPTIONS,
+    options?: OP,
     // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-  ): IEnum<ArrayToMap<A>, K, V, LP, OPTIONS> & NativeEnumMembers<A, K, V>;
+  ): IEnum<ArrayToMap<A>, K, V, LP, OP> & NativeEnumMembers<A, K, V>;
 
   /**
    * - **EN:** Global configuration for Enum
@@ -217,45 +210,15 @@ export interface EnumInterface {
      *   - `true` - 启用自动拼接，`options.labelPrefix` + `label` 自动拼接生成标签，这种情况下 `labelPrefix` 只支持字符串形式
      *   - `Function` - 动态生成枚举项localeKey，这种情况下 `labelPrefix` 支持任意类型
      *   - `false` - 禁用自动生成标签，完全依赖枚举项中定义的 `label` 字段
-     *
-     * @deprecated Use `templates` instead.
      */
     autoLabel?:
       | boolean
       | ((options: {
-          item: Omit<
-            EnumItemInterface<
-              EnumInit<string, EnumValue>,
-              EnumItemInit<EnumValue>,
-              string,
-              EnumValue,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              any,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, any>
-            >,
-            'label'
-          >;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          item: Omit<EnumItemInterface<EnumItemInit, string, EnumValue, any>, 'label'>;
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           labelPrefix: any;
         }) => string);
-
-    /**
-     * - **EN:** Globally set internationalization templates for enum names and items, used to
-     *   simplify the internationalization configuration of enums.
-     * - **CN:** 全局设置枚举名称和枚举项的国际化模板，用于简化枚举的国际化配置
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    templates?: LocalizeTemplatesConfig<
-      EnumInit<string, EnumValue>,
-      EnumItemInit<EnumValue>,
-      string,
-      EnumValue,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, any>
-    >;
   };
 
   /**
@@ -275,13 +238,16 @@ export interface EnumInterface {
    * - **EN:** Check if the value is an Enum collection
    * - **CN:** 检查值是否是枚举集合的实例
    *
-   * @param value The value to check | 要检查的值
+   * @param value -
+   *
+   *   - **EN:** Check if the value is an instance of the Enum collection
+   *   - **CN:** 检查值是否是枚举集合的实例
    *
    * @returns `true` if the value is an Enum collection, otherwise `false` |
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isEnum(value: unknown): value is LooseAnyEnum;
+  isEnum(value: unknown): value is IEnum<any, any, any, any, any> & NativeEnumMembers<any, any, any>;
   /**
    * - **EN:** Determines if a value is an instance of the Enum collection
    * - **CN:** 确定一个值是否是枚举集合的实例
@@ -292,7 +258,7 @@ export interface EnumInterface {
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [Symbol.hasInstance](value: unknown): value is LooseAnyEnum;
+  [Symbol.hasInstance](value: unknown): value is IEnum<any, any, any>;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
    *   extension methods
@@ -319,14 +285,12 @@ export interface EnumInterface {
  * - **CN:** 一个通用枚举类型，可以用来表示任何枚举集合
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyEnum = IEnum<any, any, any, any, any>;
+export type AnyEnum = IEnum<any>;
 // @ts-expect-error: because T does not satisfy EnumInit<K, V>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GenericAnyEnum<T extends EnumInit<keyof any, EnumValue>> = IEnum<T> &
   // @ts-expect-error: because T does not satisfy EnumInit<K, V>
   NativeEnumMembers<T>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type LooseAnyEnum = InheritableEnumItems<any, any, any, any, any>;
 
 /**
  * - **EN:** Represents an enumeration collection, which includes all the items in the enumeration and
@@ -337,7 +301,7 @@ type LooseAnyEnum = InheritableEnumItems<any, any, any, any, any>;
  * @template K The type of enum keys | 枚举键的类型
  * @template V The type of enum values | 枚举值的类型
  * @template LP The type of enum item's label prefix | 枚举项标签的前缀值
- * @template OPTIONS The type of enum initialization options | 枚举初始化选项的类型
+ * @template OP The type of enum initialization options | 枚举初始化选项的类型
  */
 export interface IEnum<
   T extends EnumInit<K, V>,
@@ -345,9 +309,9 @@ export interface IEnum<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-  OPTIONS extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
+  OP extends EnumInitOptions<T, K, V, LP> = EnumInitOptions<T, K, V, LP>,
 >
-  extends InheritableEnumItems<T, K, V, LP, OPTIONS>, EnumExtension<T, K, V> {
+  extends InheritableEnumItems<T, K, V, LP>, EnumExtension<T, K, V> {
   /**
    * - **EN:** A boolean value indicates that this is an Enum.
    * - **CN:** 布尔值，表示这是一个枚举类
@@ -355,7 +319,7 @@ export interface IEnum<
   // this flag exists but is removed from interface, as it's replaced with isEnum method
   // [IS_ENUM]: true;
   /** - */
-  [ENUM_OPTIONS]?: OPTIONS;
+  [ENUM_OPTIONS]?: OP;
   /**
    * - **EN:** Alias for the `items` array, when any enum key conflicts with `items`, you can access
    *   all enum items through this alias
@@ -363,16 +327,10 @@ export interface IEnum<
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [ITEMS]: IsAny<T> extends true
-    ? EnumItemInterface<
-        EnumInit<string, EnumValue>,
-        EnumItemInit<EnumValue>,
-        string,
-        EnumValue,
-        LP,
-        EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, LP>
-      >[]
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      EnumItemInterface<any, string, EnumValue, LP>[]
     : T extends { items: unknown }
-      ? EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[] & IEnumItems<T, K, V, LP, OPTIONS>
+      ? EnumItemInterface<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>
       : never;
   /**
    * - **EN:** All items in the enumeration as an array
@@ -384,25 +342,13 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly items: IsAny<T> extends true
-    ? EnumItemInterface<
-        EnumInit<string, EnumValue>,
-        EnumItemInit<EnumValue>,
-        string,
-        EnumValue,
-        LP,
-        EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, LP>
-      >[] &
-        IEnumItems<
-          EnumInit<string, EnumValue>,
-          string,
-          EnumValue,
-          LP,
-          EnumItemOptions<EnumInit<string, EnumValue>, EnumInit<string, EnumValue>[string], string, EnumValue, LP>
-        >
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      EnumItemInterface<any, string, EnumValue, LP>[] & IEnumItems<any, string, EnumValue, LP>
     : T extends { items: unknown }
       ? ValueTypeFromSingleInit<T['items'], 'items', T[K] extends number | undefined ? number : 'items'>
-      : EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[] & IEnumItems<T, K, V, LP, OPTIONS>;
+      : EnumItemInterface<T[K], K, V, LP>[] & IEnumItems<T, K, V, LP>;
   /**
    * - **EN:** Alias for the `keys` array, when any enum key conflicts with `keys`, you can access all
    *   enum keys through this alias
@@ -477,20 +423,12 @@ export interface IEnum<
    *   all enum names through this alias
    * - **CN:** `named`数组的别名，当任何枚举的key与`named`冲突时，可以通过此别名访问所有枚举项的names
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [NAMED]: IsAny<T> extends true
-    ? Record<
-        string,
-        EnumItemInterface<
-          EnumInit<string, EnumValue>,
-          EnumItemInit<EnumValue>,
-          string,
-          EnumValue,
-          LP,
-          EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, LP>
-        >
-      >
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Record<string, EnumItemInterface<any, string, EnumValue, LP>>
     : T extends { named: unknown }
-      ? IEnumItems<T, K, V, LP, OPTIONS>['named']
+      ? IEnumItems<T, K, V, LP>['named']
       : never;
   /**
    * - **EN:** Get all names of the enumeration items as an array
@@ -498,21 +436,13 @@ export interface IEnum<
    * > Only supports read-only methods in `ReadonlyArray<T>`, does not support push, pop, and any
    * > modification methods
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly named: IsAny<T> extends true
-    ? Record<
-        string,
-        EnumItemInterface<
-          EnumInit<string, EnumValue>,
-          EnumItemInit<EnumValue>,
-          string,
-          EnumValue,
-          LP,
-          EnumItemOptions<EnumInit<string, EnumValue>, EnumItemInit<EnumValue>, string, EnumValue, LP>
-        >
-      >
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Record<string, EnumItemInterface<any, string, EnumValue, LP>>
     : T extends { named: unknown }
       ? ValueTypeFromSingleInit<T['named'], 'named', T[K] extends number | undefined ? number : 'named'>
-      : IEnumItems<T, K, V, LP, OPTIONS>['named'];
+      : IEnumItems<T, K, V, LP>['named'];
   /**
    * - **EN:** Alias for the `meta` array, when any enum key conflicts with `meta`, you can access all
    *   enum meta information through this alias
@@ -522,7 +452,7 @@ export interface IEnum<
   readonly [META]: IsAny<T> extends true
     ? Record<string, unknown[]>
     : T extends { meta: unknown }
-      ? IEnumItems<T, K, V, LP, OPTIONS>['meta']
+      ? IEnumItems<T, K, V, LP>['meta']
       : never;
   /**
    * - **EN:** Get all meta information of the enumeration items as an array
@@ -539,7 +469,7 @@ export interface IEnum<
     ? Record<string, unknown[]>
     : T extends { meta: unknown }
       ? ValueTypeFromSingleInit<T['meta'], 'meta', T[K] extends number | undefined ? number : 'meta'>
-      : IEnumItems<T, K, V, LP, OPTIONS>['meta'];
+      : IEnumItems<T, K, V, LP>['meta'];
 }
 
 export type NativeEnumMembers<
@@ -561,7 +491,7 @@ export interface EnumInitOptions<
   V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
-> extends EnumItemOptions<T, T[K], K, V, LP> {
+> extends EnumItemOptions<T[K], K, V, LP> {
   /**
    * - **EN:** Set the display name of the enum collection, supports string or localized resource key
    * - **CN:** 设置枚举集合的显示名称，支持字符串或本地化资源的键名

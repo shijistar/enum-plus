@@ -10,10 +10,9 @@ import {
   getWeekDataHasValueNoKeyNoLabel,
 } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
-import type { TestEngineTypes } from '../types';
 import { toPlainEnums } from '../utils/index';
 
-const testCreatingEnum = (engine: TestEngineBase<TestEngineTypes>) => {
+const testCreatingEnum = (engine: TestEngineBase<'jest' | 'playwright'>) => {
   engine.describe('Enum creation from static data', () => {
     engine.test(
       'should create an Enum from standard initialization config',
