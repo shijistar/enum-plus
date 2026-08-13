@@ -1,4 +1,4 @@
-import { createEngine } from '../../engines/vitest-index';
+import { createEngine } from '../../engines/vitest';
 import testExtension from '../../test-suites/extension';
 
 declare const VITEST_ENGINE: 'vitest-node' | 'vitest-browser';

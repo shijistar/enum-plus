@@ -69,15 +69,18 @@ export interface LocalizeTemplatesConfig<
    *   - `string` - can use the `{name}` placeholder which represents the enum's `options.name` value
    *   - `function` - receives the context `{ options }` and returns the localization key
    *
-   * > ⚠️ Note: The `name` template takes precedence over the `options.name` option. To reference the
-   * > value of `options.name` in the template, you need to explicitly use the `{name}` placeholder.
+   * > ⚠️ Note: The `name` template takes precedence over the `options.name` string but is lower than
+   * > the `options.name` function. The final priority order is: name function > instance template >
+   * > global template > name string. To reference the value of `options.name` in the template, you
+   * > need to explicitly use the `{name}` placeholder.
    *
    * - **CN:** 枚举名称的国际化模板配置，支持 `string` 和 `function` 两种配置形式。
    *
    *   - `string` - 可以使用 `{name}` 占位符，表示枚举的 `options.name` 值
    *   - `function` - 接收上下文 `{ options }` 并返回本地化 key
    *
-   * > ⚠️ 注意：`name` 模板的优先级高于 `options.name` 选项，如果要在模板中引用 `options.name` 的值，需要显式地使用 `{name}` 占位符。
+   * > ⚠️ 注意：`name` 模板的优先级高于 `options.name` 字符串，低于 `options.name` 函数。最终的优先级顺序为：name函数 > 实例模板 > 全局模板 >
+   * > name字符串。如果要在模板中引用 `options.name` 的值，需要显式地使用 `{name}` 占位符。
    */
   name?: LocalizeTemplate<'name', ET, T, K, V, LP, OPTIONS>;
   /**
@@ -92,8 +95,10 @@ export interface LocalizeTemplatesConfig<
    *       - `{raw}` - represents the raw value of the meta field
    *   - `function` - receives the context `{ item, options }` and returns the localization key
    *
-   * > ⚠️ Note: The `items` template takes precedence over the raw meta field value. To reference the
-   * > raw meta field value in the template, you need to explicitly use the `{raw}` placeholder.
+   * > ⚠️ Note: The `items` template has a higher priority than the raw metadata string but a lower
+   * > priority than the raw metadata function. The final priority order is: raw function > instance
+   * > template > global template > raw string. To reference the original value of the metadata in the
+   * > template, use the `{raw}` placeholder.
    *
    * - **CN:** 枚举项的国际化模板配置，支持 `string` 和 `function` 两种配置形式。
    *
@@ -105,7 +110,8 @@ export interface LocalizeTemplatesConfig<
    *       - `{raw}` - 表示该meta字段的原始值
    *   - `function` - 接收上下文 `{ item, options }` 并返回本地化 key
    *
-   * > ⚠️ 注意：`items` 模板的优先级高于元数据字段值，如果要在模板中引用元数据字段的值，需要显式地使用 `{raw}` 占位符。
+   * > ⚠️ 注意：`items` 模板的优先级高于元数据字符串，低于元数据函数。最终的优先级顺序为：原始函数 > 实例模板 > 全局模板 > 原始字符串。如果要在模板中引用元数据原始值，需要使用
+   * > `{raw}` 占位符。
    */
   items?: Record<string, LocalizeTemplate<'item', ET, T, K, V, LP, OPTIONS>>;
 }
@@ -134,25 +140,23 @@ export function resolveLocalizeTemplate<
   if (typeof template === 'function') {
     return template(context);
   }
-  // always replace {name} placeholder
   const name = context.options?.name;
+  const values: Record<string, string> = {};
   if (typeof name === 'string') {
-    template = template.replace(/{name}/g, name);
+    values.name = name;
   }
-  // replace item placeholders
   if (context.type === 'item') {
     const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
-    template = template
-      .replace(/{key}/g, String(itemContext.item.key))
-      .replace(/{value}/g, String(itemContext.item.value))
-      .replace(/{raw}/g, String((itemContext.item.raw as Record<string, unknown>)?.[itemContext.metaField] ?? ''));
+    values.key = String(itemContext.item.key);
+    values.value = String(itemContext.item.value);
+    values.raw = String((itemContext.item.raw as Record<string, unknown>)?.[itemContext.metaField] ?? '');
   }
-  return template;
+  return template.replace(/{(name|key|value|raw)}/g, (_match, token: string) => values[token]);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getTemplateFields(options?: EnumItemOptions<any, any, any, any, any>) {
-  return Object.keys({ ...internalConfig.templates?.items, ...options?.templates?.items });
+  return [...Object.keys(internalConfig.templates?.items ?? {}), ...Object.keys(options?.templates?.items ?? {})];
 }
 
 export function isAutoLocalizeMetaField<
@@ -164,10 +168,10 @@ export function isAutoLocalizeMetaField<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: EnumItemOptions<any, any, any, any, any>,
 ) {
-  if (options?.templates?.items && Object.keys(options.templates.items).includes(field)) {
+  if (options?.templates?.items && options.templates.items[field] != null) {
     return true;
   }
-  if (internalConfig.templates?.items && Object.keys(internalConfig.templates.items).includes(field)) {
+  if (internalConfig.templates?.items && internalConfig.templates.items[field] != null) {
     return true;
   }
   if (options?.autoLocalizeMeta === true) {

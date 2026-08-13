@@ -30,7 +30,7 @@ export type EnumItemInterface<
   } & (OPTIONS extends { templates: { items: infer ItemTemplates } }
     ? { readonly [key in keyof ItemTemplates]: string }
     : unknown) &
-  EnumItemExtension<T, K, V>;
+  EnumItemExtension<ET, K, V>;
 
 /**
  * - **EN:** Represents a single item in an enumeration collection.

@@ -5,10 +5,10 @@ import { internalConfig, localizer } from '@enum-plus/global-config';
 import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 import { parse, stringify } from 'jsoneo';
-import { getLocales, setLang } from '../data/week-config';
-import TestEngineBase from './base';
+import { getLocales, setLang } from '../../data/week-config';
+import TestEngineBase from '../base';
+import type { RuntimeContext } from '../vitest/utils';
 import type { MakeMatchers } from './playwright-types';
-import type { RuntimeContext } from './utils';
 
 export class PlaywrightEngine extends TestEngineBase<'playwright'> {
   constructor() {

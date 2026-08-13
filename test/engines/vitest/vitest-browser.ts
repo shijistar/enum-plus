@@ -1,7 +1,7 @@
 import type { Locator } from '@vitest/browser/context' with { 'resolution-mode': 'import' };
 import type { ExpectPollOptions } from 'vitest';
 import { describe, expect, test } from 'vitest';
-import TestEngineBase from './base';
+import TestEngineBase from '../base';
 import type { RuntimeContext } from './utils';
 import { getNodeRuntimeContext } from './utils';
 
@@ -18,7 +18,7 @@ export class ViTestBrowserEngine extends TestEngineBase<'vitest-browser'> {
     name: string,
     evaluate: (context: RuntimeContext) => Data | Promise<Data>,
     assert: (data: Data) => void,
-    evaluateContext?: Record<string, unknown>
+    evaluateContext?: Record<string, unknown>,
   ): void {
     test(name, async () => {
       const runtimeContext = getNodeRuntimeContext();

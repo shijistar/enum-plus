@@ -1280,6 +1280,65 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
     );
 
     engine.test(
+      'templates should allow other placeholder alike strings',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: 'weekday.{foo}',
+          items: {
+            label: 'weekday.{bar}',
+          },
+        }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            items: {
+              abbr: 'weekday.{baz}',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+          engine.expect(weekEnum.name).toBe('weekday.{foo}');
+          engine.expect(weekEnum.label('Sunday')).toBe('weekday.{bar}');
+          engine.expect(weekEnum.items[0].label).toBe('weekday.{bar}');
+          engine.expect(weekEnum.named.Sunday.label).toBe('weekday.{bar}');
+          engine.expect(weekEnum.items[0].abbr).toBe('weekday.{baz}');
+          engine.expect(weekEnum.named.Sunday.abbr).toBe('weekday.{baz}');
+          engine
+            .expect(weekEnum.meta.abbr)
+            .toEqual([
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+            ]);
+        });
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
       'Enum.config.templates should take precedence over autoLabel',
       ({
         EnumPlus: { Enum, defaultLocalize },
@@ -1722,8 +1781,8 @@ function assertUnresolvedTemplates(params: {
     engine.expect(weekEnum.label('Sunday')).toBe('<NOT_EXISTED_KEY>');
     engine.expect(weekEnum.items[0].label).toBe('<NOT_EXISTED_KEY>');
     engine.expect(weekEnum.named.Sunday.label).toBe('<NOT_EXISTED_KEY>');
-    engine.expect((weekEnum.items[0] as { abbr?: string }).abbr).toBe('<NOT_EXISTED_KEY>');
-    engine.expect((weekEnum.named.Sunday as { abbr?: string }).abbr).toBe('<NOT_EXISTED_KEY>');
+    engine.expect(weekEnum.items[0].abbr).toBe('<NOT_EXISTED_KEY>');
+    engine.expect(weekEnum.named.Sunday.abbr).toBe('<NOT_EXISTED_KEY>');
     engine
       .expect((weekEnum.meta as { abbr: string[] }).abbr)
       .toEqual([

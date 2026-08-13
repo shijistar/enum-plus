@@ -206,7 +206,7 @@
     "@types/node": "^22.19.15",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
-    "@vitest/browser": "^4.1.2",
+    "@vitest/browser": "^4.1.8",
     "@vitest/browser-playwright": "^4.1.8",
     "@vitest/coverage-istanbul": "^4.1.8",
     "@vitest/coverage-v8": "^4.1.8",

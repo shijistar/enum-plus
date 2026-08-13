@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import TestEngineBase from './base';
+import TestEngineBase from '../base';
 import type { RuntimeContext } from './utils';
 import { getNodeRuntimeContext } from './utils';
 
@@ -16,7 +16,7 @@ export class ViTestNodeEngine extends TestEngineBase<'vitest-node'> {
     name: string,
     evaluate: (context: RuntimeContext) => Data | Promise<Data>,
     assert: (data: Data) => void,
-    evaluateContext?: Record<string, unknown>
+    evaluateContext?: Record<string, unknown>,
   ): void {
     test(name, async () => {
       const runtimeContext = getNodeRuntimeContext();

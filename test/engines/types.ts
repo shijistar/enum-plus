@@ -3,7 +3,7 @@ import type { expect as playwrightExpect } from '@playwright/test';
 import type { Locator } from '@vitest/browser/context' with { 'resolution-mode': 'import' };
 import '@vitest/browser/matchers';
 import type { Assertion, ExpectPollOptions, PromisifyDomAssertion, expect as vitestExpect } from 'vitest';
-import type { MakeMatchers } from './playwright-types';
+import type { MakeMatchers } from './playwright/playwright-types';
 
 export type TestEngine = 'jest' | 'playwright' | 'vitest-node' | 'vitest-browser';
 

@@ -1,13 +1,13 @@
 import * as EnumPlus from '@enum-plus';
 import * as Jsoneo from 'jsoneo';
 import type { describe as describeInterface, expect as expectInterface, test as testInterface } from '@jest/globals';
-import * as WeekConfig from '../data/week-config';
-import * as WeekData from '../data/week-data';
-import enUS from '../i18n/en-US.json';
-import neutral from '../i18n/neutral.json';
-import zhCN from '../i18n/zh-CN.json';
-import TestEngineBase from './base';
-import type { RuntimeContext } from './utils';
+import * as WeekConfig from '../../data/week-config';
+import * as WeekData from '../../data/week-data';
+import enUS from '../../i18n/en-US.json';
+import neutral from '../../i18n/neutral.json';
+import zhCN from '../../i18n/zh-CN.json';
+import TestEngineBase from '../base';
+import type { RuntimeContext } from '../vitest/utils';
 
 export class JestEngine extends TestEngineBase<'jest'> {
   constructor() {

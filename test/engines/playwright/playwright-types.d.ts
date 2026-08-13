@@ -2279,7 +2279,7 @@ export interface TestInfo {
        * [`body`](https://playwright.dev/docs/api/class-testinfo#test-info-attach-option-body).
        */
       path?: string;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -2706,7 +2706,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *   async ({ page }) => {
    *     await page.goto('https://playwright.dev/');
    *     // ...
-   *   }
+   *   },
    * );
    *
    * test('another test @smoke', async ({ page }) => {
@@ -2745,7 +2745,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *   async ({ page }) => {
    *     await page.goto('https://playwright.dev/');
    *     // ...
-   *   }
+   *   },
    * );
    * ```
    *
@@ -2796,7 +2796,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *   async ({ page }) => {
    *     await page.goto('https://playwright.dev/');
    *     // ...
-   *   }
+   *   },
    * );
    *
    * test('another test @smoke', async ({ page }) => {
@@ -2835,7 +2835,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *   async ({ page }) => {
    *     await page.goto('https://playwright.dev/');
    *     // ...
-   *   }
+   *   },
    * );
    * ```
    *
@@ -2963,7 +2963,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *     test('two', async ({ page }) => {
    *       // ...
    *     });
-   *   }
+   *   },
    * );
    * ```
    *
@@ -2992,7 +2992,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *     test('two', async ({ page }) => {
    *       // ...
    *     });
-   *   }
+   *   },
    * );
    * ```
    *
@@ -3070,7 +3070,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     test('two', async ({ page }) => {
      *       // ...
      *     });
-     *   }
+     *   },
      * );
      * ```
      *
@@ -3099,7 +3099,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     test('two', async ({ page }) => {
      *       // ...
      *     });
-     *   }
+     *   },
      * );
      * ```
      *
@@ -3177,7 +3177,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     test('two', async ({ page }) => {
      *       // ...
      *     });
-     *   }
+     *   },
      * );
      * ```
      *
@@ -3206,7 +3206,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     test('two', async ({ page }) => {
      *       // ...
      *     });
-     *   }
+     *   },
      * );
      * ```
      *
@@ -3284,7 +3284,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     test('two', async ({ page }) => {
      *       // ...
      *     });
-     *   }
+     *   },
      * );
      * ```
      *
@@ -3313,7 +3313,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     test('two', async ({ page }) => {
      *       // ...
      *     });
-     *   }
+     *   },
      * );
      * ```
      *
@@ -6506,7 +6506,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *     await page.getByLabel('Password').fill(account.password);
    *     await page.getByRole('button', { name: 'Sign in' }).click();
    *     await expect(
-   *       page.getByRole('button', { name: 'View profile and more' })
+   *       page.getByRole('button', { name: 'View profile and more' }),
    *     ).toBeVisible();
    *   });
    * }
@@ -6538,7 +6538,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *     async () => {
    *       // ...
    *     },
-   *     { box: true }
+   *     { box: true },
    *   ); // Note the "box" option here.
    * }
    * ```
@@ -6672,7 +6672,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     await page.getByLabel('Password').fill(account.password);
      *     await page.getByRole('button', { name: 'Sign in' }).click();
      *     await expect(
-     *       page.getByRole('button', { name: 'View profile and more' })
+     *       page.getByRole('button', { name: 'View profile and more' }),
      *     ).toBeVisible();
      *   });
      * }
@@ -6704,7 +6704,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
      *     async () => {
      *       // ...
      *     },
-     *     { box: true }
+     *     { box: true },
      *   ); // Note the "box" option here.
      * }
      * ```
@@ -6754,7 +6754,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
     <T>(
       title: string,
       body: (step: TestStepInfo) => T | Promise<T>,
-      options?: { box?: boolean; location?: Location; timeout?: number }
+      options?: { box?: boolean; location?: Location; timeout?: number },
     ): Promise<T>;
     /**
      * Mark a test step as "skip" to temporarily disable its execution, useful for steps that are
@@ -6788,7 +6788,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
     skip(
       title: string,
       body: (step: TestStepInfo) => any | Promise<any>,
-      options?: { box?: boolean; location?: Location; timeout?: number }
+      options?: { box?: boolean; location?: Location; timeout?: number },
     ): Promise<void>;
   };
   /**
@@ -6875,7 +6875,7 @@ export interface TestType<TestArgs extends {}, WorkerArgs extends {}> {
    *   format](https://playwright.dev/docs/test-fixtures).
    */
   extend<T extends {}, W extends {} = {}>(
-    fixtures: Fixtures<T, W, TestArgs, WorkerArgs>
+    fixtures: Fixtures<T, W, TestArgs, WorkerArgs>,
   ): TestType<TestArgs & T, WorkerArgs & W>;
   /**
    * Returns information about the currently running test. This method can only be called during the
@@ -6900,7 +6900,7 @@ export type TestFixture<R, Args extends {}> = (args: Args, use: (r: R) => Promis
 export type WorkerFixture<R, Args extends {}> = (
   args: Args,
   use: (r: R) => Promise<void>,
-  workerInfo: WorkerInfo
+  workerInfo: WorkerInfo,
 ) => any;
 type TestFixtureValue<R, Args extends {}> = Exclude<R, Function> | TestFixture<R, Args>;
 type WorkerFixtureValue<R, Args extends {}> = Exclude<R, Function> | WorkerFixture<R, Args>;
@@ -8132,7 +8132,7 @@ interface AsymmetricMatchers {
    *   expect.objectContaining({
    *     list: expect.arrayContaining([2, 3]),
    *     obj: expect.objectContaining({ prop: expect.stringContaining('Hello') }),
-   *   })
+   *   }),
    * );
    * ```
    *
@@ -8482,7 +8482,7 @@ interface GenericAssertions<R> {
    *   expect.objectContaining({
    *     list: expect.arrayContaining([2, 3]),
    *     obj: expect.objectContaining({ prop: expect.stringContaining('Hello') }),
-   *   })
+   *   }),
    * );
    * ```
    *
@@ -8717,7 +8717,7 @@ export interface ExpectMatcherUtils {
     received: unknown,
     expectedLabel: string,
     receivedLabel: string,
-    expand: boolean
+    expand: boolean,
   ): string;
   printExpected(value: unknown): string;
   printReceived(object: unknown): string;
@@ -8775,11 +8775,11 @@ export type Expect<ExtendedMatchers = {}> = {
   <T = unknown>(actual: T, messageOrOptions?: string | { message?: string }): MakeMatchers<void, T, ExtendedMatchers>;
   soft: <T = unknown>(
     actual: T,
-    messageOrOptions?: string | { message?: string }
+    messageOrOptions?: string | { message?: string },
   ) => MakeMatchers<void, T, ExtendedMatchers>;
   poll: <T = unknown>(
     actual: () => T | Promise<T>,
-    messageOrOptions?: string | { message?: string; timeout?: number; intervals?: number[] }
+    messageOrOptions?: string | { message?: string; timeout?: number; intervals?: number[] },
   ) => PollMatchers<Promise<void>, T, ExtendedMatchers>;
   extend<
     MoreMatchers extends Record<
@@ -8787,7 +8787,7 @@ export type Expect<ExtendedMatchers = {}> = {
       (this: ExpectMatcherState, receiver: any, ...args: any[]) => MatcherReturnType | Promise<MatcherReturnType>
     >,
   >(
-    matchers: MoreMatchers
+    matchers: MoreMatchers,
   ): Expect<ExtendedMatchers & MoreMatchers>;
   configure: (configuration: { message?: string; timeout?: number; soft?: boolean }) => Expect<ExtendedMatchers>;
   getState(): unknown;
@@ -9144,7 +9144,7 @@ interface LocatorAssertions {
    *   page
    *     .getByRole('button', { name: 'Sign in' })
    *     .or(page.getByRole('button', { name: 'Sign up' }))
-   *     .first()
+   *     .first(),
    * ).toBeVisible();
    * ```
    *
@@ -9208,7 +9208,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9287,7 +9287,7 @@ interface LocatorAssertions {
        * node text.
        */
       useInnerText?: boolean;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9319,7 +9319,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9351,7 +9351,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9383,7 +9383,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9417,7 +9417,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9442,7 +9442,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9483,7 +9483,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9508,7 +9508,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9535,7 +9535,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9560,7 +9560,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9588,7 +9588,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9699,7 +9699,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9806,7 +9806,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -9986,7 +9986,7 @@ interface LocatorAssertions {
        * node text.
        */
       useInnerText?: boolean;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -10011,7 +10011,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -10048,7 +10048,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -10076,7 +10076,7 @@ interface LocatorAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -10154,7 +10154,7 @@ interface PageAssertions {
    */
   toHaveScreenshot(
     name: string | ReadonlyArray<string>,
-    options?: PageAssertionsToHaveScreenshotOptions
+    options?: PageAssertionsToHaveScreenshotOptions,
   ): Promise<void>;
 
   /**
@@ -10193,7 +10193,7 @@ interface PageAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -10239,7 +10239,7 @@ interface PageAssertions {
        * `TestConfig.expect`.
        */
       timeout?: number;
-    }
+    },
   ): Promise<void>;
 
   /**
@@ -10318,7 +10318,7 @@ interface SnapshotAssertions {
        * Defaults to `0.2`.
        */
       threshold?: number;
-    }
+    },
   ): void;
 
   /**
@@ -10501,7 +10501,7 @@ export interface TestStepInfo {
        * [`body`](https://playwright.dev/docs/api/class-teststepinfo#test-step-info-attach-option-body).
        */
       path?: string;
-    }
+    },
   ): Promise<void>;
 
   /**
