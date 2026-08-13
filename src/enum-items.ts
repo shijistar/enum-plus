@@ -1,4 +1,4 @@
-import type { AutoLocalizeItemTemplateFields } from './auto-localize';
+import type { LocalizeTemplateFields } from './auto-localize';
 import { getTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import { EnumItemClass, metaKeys, protectedKeys } from './enum-item';
@@ -436,9 +436,9 @@ export interface IEnumItems<
    */
   readonly meta: T extends object
     ? { [K in Exclude<keyof T[keyof T], EnumItemFields>]: T[keyof T][K][] } & {
-        [K in AutoLocalizeItemTemplateFields<OPTIONS>]: string[];
+        [K in LocalizeTemplateFields<OPTIONS>]: string[];
       }
-    : { [K in AutoLocalizeItemTemplateFields<OPTIONS>]: string[] };
+    : { [K in LocalizeTemplateFields<OPTIONS>]: string[] };
 }
 
 // typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'

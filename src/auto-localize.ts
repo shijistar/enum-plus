@@ -116,9 +116,9 @@ export interface LocalizeTemplatesConfig<
   items?: Record<string, LocalizeTemplate<'item', ET, T, K, V, LP, OPTIONS>>;
 }
 
-export type LiteralStringKeys<T> = string extends keyof T ? never : Extract<keyof T, string>;
+type LiteralStringKeys<T> = string extends keyof T ? never : Extract<keyof T, string>;
 
-export type AutoLocalizeItemTemplateFields<Options> = Options extends {
+export type LocalizeTemplateFields<Options> = Options extends {
   templates?: { items?: infer ItemTemplates };
 }
   ? Exclude<LiteralStringKeys<NonNullable<ItemTemplates>>, 'label'>
