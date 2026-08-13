@@ -285,8 +285,8 @@ jobs:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
           cache: "npm"
 
-      # - name: Install Playwright dependencies
-      #   run: npx playwright install-deps webkit
+      - name: Install Playwright dependencies
+        run: npx playwright install-deps webkit
 
       - name: Restore modern node_modules cache
         id: node_modules_cache
@@ -300,8 +300,8 @@ jobs:
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      # - name: Install playwright browsers
-      #   run: npx playwright install
+      - name: Install playwright browsers
+        run: npx playwright install
 
       - name: Download build output from artifacts
         id: download_build_output
