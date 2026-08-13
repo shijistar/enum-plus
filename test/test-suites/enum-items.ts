@@ -2,15 +2,16 @@ import { defaultLocalize, IS_ENUM_ITEMS as ENUM_ITEMS_IN_NODE, KEYS, VALUES } fr
 import { getLocales, localizeConfigData } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
+import type { TestEngineTypes } from '../types';
 import { pickArray } from '../utils/index';
 
-const testEnumItems = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testEnumItems = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('EnumItems API', () => {
     addEnumItemsTestSuite(engine);
   });
 };
 
-export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwright'>) {
+export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
   engine.test(
     'should expose the [IS_ENUM_ITEMS] marker on enum item arrays',
     ({ EnumPlus: { Enum, IS_ENUM_ITEMS }, WeekConfig: { StandardWeekConfig } }) => {
@@ -181,7 +182,11 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
     'should find enum items by key, value, label, or custom metadata with enum.items.findBy',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekCompactConfig } }) => {
       const weekEnum = Enum(StandardWeekConfig);
-      const compactWeekEnum = Enum(WeekCompactConfig);
+      const compactWeekEnum = Enum(WeekCompactConfig, {
+        templates: {
+          items: {},
+        },
+      });
       return { weekEnum, compactWeekEnum };
     },
     ({ weekEnum, compactWeekEnum }) => {
@@ -199,7 +204,6 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(compactWeekEnum.items.findBy('value', 1)).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('value', 99)).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('label', 'weekday.Monday')).toBe(undefined);
-
       // Custom meta field
       engine.expect(weekEnum.items.findBy('status', 'error')).toEqual(weekEnum.items[0]);
       engine.expect(weekEnum.items.findBy('status', 'warning')).toEqual(weekEnum.items[1]);

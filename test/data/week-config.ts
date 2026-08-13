@@ -1,5 +1,10 @@
-import type { defaultLocalize as defaultLocalizeType, EnumItemInterface, Enum as EnumType } from '../../src';
-import type { EnumValue, StandardEnumItemInit } from '../../src/types';
+import type {
+  defaultLocalize as defaultLocalizeType,
+  EnumItemInterface,
+  EnumItemOptions,
+  Enum as EnumType,
+} from '../../src';
+import type { EnumValue, StandardEnumInit, StandardEnumItemInit } from '../../src/types';
 import enUS from '../i18n/en-US.json';
 import neutral from '../i18n/neutral.json';
 import zhCN from '../i18n/zh-CN.json';
@@ -179,10 +184,17 @@ export function genSillyLocalizer(language: LangType, getLocales: getLocalesType
   return sillyLocalize;
 }
 
-// export function labelLocalizer
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function getTranslator(field: string) {
-  function translator(item: EnumItemInterface<StandardEnumItemInit<EnumValue>>) {
+  function translator(
+    item: EnumItemInterface<
+      StandardEnumInit<string, EnumValue>,
+      StandardEnumItemInit<EnumValue>,
+      string,
+      EnumValue,
+      unknown,
+      EnumItemOptions<StandardEnumInit<string, EnumValue>, StandardEnumItemInit<EnumValue>, string, EnumValue, unknown>
+    >,
+  ) {
     const { parent, parentField } = translator;
     const { genSillyLocalizer, standardWeekConfig, getLocales, lang } = parent;
     const localizer = genSillyLocalizer(lang, getLocales);

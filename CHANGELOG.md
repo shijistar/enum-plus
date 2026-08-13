@@ -2,6 +2,35 @@
 
 # enum-plus Changelog
 
+## 3.3.0
+
+2026-8-13
+
+### Features
+
+- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates, with improved type inference for localize template definitions. Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key. Template results take precedence over declared strings _<sup>1</sup>_ : the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value.
+  - `templates.name` — defines the localization template for the enum name.
+  - `templates.items` — defines the localization templates for enum item fields, such as `label` and custom meta fields.
+- ✨ Fields declared in instance-level `templates.items` are automatically added to the enum items, so the generated meta fields are typed and accessible even when raw enum items do not declare them.
+
+> **1.** Templates take precedence over raw declared strings, but not functions. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. So the order of precedence is: raw functions > instance templates > global templates > raw strings.
+
+### Deprecations
+
+- 🚫 `autoLabel`, `labelPrefix`, and `autoLocalizeMeta` are deprecated and will be removed in the next major version. Use `templates` instead.
+
+### Tests & Quality
+
+- ✅ Migrate core unit tests to Vitest with node + browser projects and raise code coverage to 100% across statements, branches, functions, and lines.
+- ✅ Add tests for localize templates.
+- ✅ Refine reviewed enum test cases.
+
+### Chores / CI
+
+- 🔧 Add CodeRabbit configuration.
+- 🔧 Make codegraph prepare cross-platform.
+- 🔧 Update Node.js version matrix to include 26.x.
+
 ## 3.2.1
 
 2026-7-8

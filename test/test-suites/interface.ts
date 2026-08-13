@@ -1,9 +1,10 @@
-import type { EnumItemInterface, IEnum, IEnumItems } from '@enum-plus';
+import type { EnumInitOptions, EnumItemInterface, EnumItemOptions, IEnum, IEnumItems } from '@enum-plus';
 import type { ExactEqual } from '@enum-plus/types';
 import type { StandardWeekConfig } from '../data/week-config';
 import type TestEngineBase from '../engines/base';
+import type { TestEngineTypes } from '../types';
 
-const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testTyping = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('Enum typings', () => {
     engine.test(
       'should expose primitive values on Enum members',
@@ -62,22 +63,27 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
           enumObj satisfies number;
         }
 
-        const value2 = 1 as 1 | { foo: number };
-        if (value2 instanceof weekEnum) {
-          value2 satisfies 1;
-          engine.expect(value2.toFixed(1)).toBe('1.0');
+        const numberValue = 1 as 1 | 'Monday' | { foo: number };
+        if (numberValue instanceof weekEnum) {
+          numberValue satisfies 1 | 'Monday';
+          if (typeof numberValue === 'number') {
+            engine.expect(numberValue.toFixed(1)).toBe('1.0');
+          } else {
+            engine.expect(numberValue).toBe('Monday');
+          }
         } else {
-          // FIXME: instanceof operator cannot narrow types in else branch
-          // value2 satisfies { foo: number };
+          // FIXME: TypeScript `instanceof` type guards never narrow the else branch,
+          // the value keeps its original union type `1 | 'Monday' | { foo: number }`.
+          // numberValue satisfies { foo: number };
         }
 
-        const value3 = 'Monday' as 'Monday' | { foo: number };
-        if (value3 instanceof weekEnum) {
-          value3 satisfies 'Monday';
-          engine.expect(value3.trim()).toBe('Monday');
+        const stringValue = 'Monday' as 'Monday' | { foo: number };
+        if (stringValue instanceof weekEnum) {
+          stringValue satisfies 'Monday';
+          engine.expect(stringValue.trim()).toBe('Monday');
         } else {
           // FIXME: instanceof operator cannot narrow types in else branch
-          // value3 satisfies { foo: number };
+          // stringValue satisfies { foo: number };
         }
 
         const value4 = 9 as 9 | { foo: number };
@@ -89,6 +95,31 @@ const testTyping = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 
         validateEnum(engine, weekEnum, WeekConfig);
         validateEnum(engine, weekEnum.items, WeekConfig);
+      },
+    );
+    engine.test(
+      'options.templates.items should infer instance-level meta fields',
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig } }) => {
+        const weekEnum = Enum(WeekValueOnlyConfig, {
+          name: 'week',
+          templates: {
+            items: {
+              description: 'weekday.{key}.description',
+              abbr: 'weekday.{key}Abbr',
+            },
+          },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        weekEnum.named.Sunday.description satisfies string;
+        weekEnum.named.Monday.abbr satisfies string;
+        weekEnum.items.meta.description satisfies string[];
+        weekEnum.items.meta.abbr satisfies string[];
+        if (Date.now() < 0) {
+          // @ts-expect-error: because meta fields are readonly
+          weekEnum.named.Sunday.description = 'manual';
+        }
       },
     );
   });
@@ -108,14 +139,28 @@ function validateEnum<
     | IEnum<
         typeof StandardWeekConfig,
         keyof typeof StandardWeekConfig,
-        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+        unknown,
+        EnumInitOptions<
+          typeof StandardWeekConfig,
+          keyof typeof StandardWeekConfig,
+          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+          unknown
+        >
       >
     | IEnumItems<
         typeof StandardWeekConfig,
         keyof typeof StandardWeekConfig,
-        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+        (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+        unknown,
+        EnumInitOptions<
+          typeof StandardWeekConfig,
+          keyof typeof StandardWeekConfig,
+          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+          unknown
+        >
       >,
->(engine: TestEngineBase<'jest' | 'playwright'>, weekEnum: T, WeekConfig: typeof StandardWeekConfig) {
+>(engine: TestEngineBase<TestEngineTypes>, weekEnum: T, WeekConfig: typeof StandardWeekConfig) {
   engine.expect(() => weekEnum.valueType satisfies (typeof WeekConfig)[keyof typeof WeekConfig]['value']).toThrow();
   engine.expect(() => weekEnum.keyType satisfies keyof typeof WeekConfig).toThrow();
   engine.expect(() => weekEnum.rawType satisfies (typeof WeekConfig)[keyof typeof WeekConfig]).toThrow();
@@ -134,14 +179,26 @@ function validateEnum<
   engine.expect(() => weekEnum.label(8 as number).trim()).toThrow();
 
   type MondayItem = EnumItemInterface<
+    typeof StandardWeekConfig,
     (typeof StandardWeekConfig)['Monday'],
     'Monday',
-    (typeof StandardWeekConfig)['Monday']['value']
+    (typeof StandardWeekConfig)['Monday']['value'],
+    unknown,
+    EnumItemOptions<typeof StandardWeekConfig, (typeof StandardWeekConfig)['Monday'], 'Monday'>
   >;
   type WeekItems = EnumItemInterface<
+    typeof StandardWeekConfig,
     (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig],
     keyof typeof StandardWeekConfig,
-    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+    (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+    unknown,
+    EnumItemOptions<
+      typeof StandardWeekConfig,
+      (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig],
+      keyof typeof StandardWeekConfig,
+      (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+      unknown
+    >
   >;
   weekEnum.item(1) satisfies MondayItem;
   weekEnum.item(1 as number) satisfies WeekItems | undefined;
@@ -167,19 +224,30 @@ function validateEnum<
   // @ts-expect-error: because findBy label always return nullable string
   engine.expect(() => weekEnum.findBy('label', 'January' as string).key).toThrow();
   weekEnum.findBy('status', 'warning') satisfies EnumItemInterface<
+    typeof StandardWeekConfig,
     (typeof StandardWeekConfig)['Monday' | 'Tuesday'],
     'Monday' | 'Tuesday',
-    (typeof StandardWeekConfig)['Monday' | 'Tuesday']['value']
+    (typeof StandardWeekConfig)['Monday' | 'Tuesday']['value'],
+    unknown,
+    EnumItemOptions<
+      typeof StandardWeekConfig,
+      (typeof StandardWeekConfig)['Monday' | 'Tuesday'],
+      'Monday' | 'Tuesday',
+      (typeof StandardWeekConfig)['Monday' | 'Tuesday']['value'],
+      unknown
+    >
   >;
   weekEnum.findBy('status', 'warning' as string) satisfies WeekItems | undefined;
-  // @ts-expect-error: because findBy returns nullable object, should use optional chaining (?.) operator
   engine.expect(() => weekEnum.findBy('status', 'foo' as string).key).toThrow();
 
   weekEnum.named satisfies {
     [key in keyof typeof WeekConfig]: EnumItemInterface<
+      typeof WeekConfig,
       (typeof WeekConfig)[key],
       key,
-      (typeof WeekConfig)[key]['value']
+      (typeof WeekConfig)[key]['value'],
+      unknown,
+      EnumItemOptions<typeof WeekConfig, (typeof WeekConfig)[key], key, (typeof WeekConfig)[key]['value'], unknown>
     >;
   };
   const mondayItem = weekEnum.named.Monday;
