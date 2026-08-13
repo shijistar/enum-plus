@@ -1,0 +1,25 @@
+.storybook/docs-source/GlobalConfiguration.en-US.md
+  h_99cad05bea77d1 13,15
+test/test-suites/localization.ts
+  h_99cad05bea77d1 784,967,1283,1340-1430,1828-1830
+.storybook/docs-source/ApiGuide.en-US.md
+  h_99cad05bea77d1 348,350
+CHANGELOG.md
+  h_99cad05bea77d1 11
+README-FULL.md
+  h_99cad05bea77d1 641,643,852,854
+src/auto-localize.ts
+  h_99cad05bea77d1 69,75,90,101,144,154-155
+  h_99cad05bea77d1 150-152,156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c677926c8a814cacf05152cca7c7a12c8187bc74",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
