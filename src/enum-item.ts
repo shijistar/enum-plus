@@ -52,7 +52,7 @@ export class EnumItemClass<
   OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
 > {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _options?: EnumItemOptions<any, any, any, any, any>;
+  private _$options?: EnumItemOptions<any, any, any, any, any>;
 
   /**
    * - **EN:** Creates an instance of EnumItemClass.
@@ -71,7 +71,7 @@ export class EnumItemClass<
     this.raw = raw;
     const define = Object.defineProperty;
     // Do not use instance field here, because don't want print this field in Node.js
-    define(this, '_options', { value: options });
+    define(this, '_$options', { value: options });
 
     // Add meta fields.
     // Additionally, if auto localize meta or templates.items declare extended fields,
@@ -84,7 +84,7 @@ export class EnumItemClass<
       if (isAutoLocalizeMetaField(metaKey, options)) {
         autoLocalizeGetters[metaKey] = {
           get(this: EnumItemClass<ET, T, K, V, LP, OPTIONS>) {
-            return this._localizeResource(this.raw?.[metaKey as never], metaKey);
+            return this._$localizeResource(this.raw?.[metaKey as never], metaKey);
           },
           enumerable: true,
         };
@@ -98,7 +98,7 @@ export class EnumItemClass<
       ...autoLocalizeGetters,
       label: {
         get(this: EnumItemClass<ET, T, K, V, LP, OPTIONS>) {
-          return this._localizeResource(label, 'label');
+          return this._$localizeResource(label, 'label');
         },
         enumerable: true,
       },
@@ -222,17 +222,17 @@ export class EnumItemClass<
     return this.value;
   }
 
-  private _localize(content: string | undefined) {
-    const localize = this._options?.localize ?? localizer.localize;
+  private _$localize(content: string | undefined) {
+    const localize = this._$options?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
       return localize(content);
     }
     return content;
   }
-  private _localizeResource(resource: EnumItemLabel | undefined, field: string) {
-    const labelPrefix = this._options?.labelPrefix;
-    const autoLabel = this._options?.autoLabel ?? internalConfig.autoLabel;
-    const template = (this._options?.templates?.items?.[field as never] ??
+  private _$localizeResource(resource: EnumItemLabel | undefined, field: string) {
+    const labelPrefix = this._$options?.labelPrefix;
+    const autoLabel = this._$options?.autoLabel ?? internalConfig.autoLabel;
+    const template = (this._$options?.templates?.items?.[field as never] ??
       internalConfig.templates?.items?.[field as never]) as LocalizeTemplate<'item', ET, T, K, V, LP, OPTIONS>;
     let localeKey = resource;
 
@@ -246,7 +246,7 @@ export class EnumItemClass<
         type: 'item',
         metaField: field,
         item: this as never,
-        options: this._options as never,
+        options: this._$options as never,
       }) as EnumItemLabel | undefined;
     } else if (field === 'label' && autoLabel && labelPrefix != null) {
       if (typeof autoLabel === 'function') {
@@ -258,7 +258,7 @@ export class EnumItemClass<
         localeKey = `${labelPrefix as string}${resource}`;
       }
     }
-    return this._localize(localeKey as string | undefined) ?? localeKey;
+    return this._$localize(localeKey as string | undefined) ?? localeKey;
   }
 }
 
