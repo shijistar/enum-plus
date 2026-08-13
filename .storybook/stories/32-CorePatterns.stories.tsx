@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createInstance, type i18n } from 'i18next';
-import { Card, Col, Descriptions, Row, Segmented, Select, Space, Tag, Typography } from 'antd';
+import { Card, Col, Descriptions, Row, Segmented, Select, Space, Tag, Tooltip, Typography } from 'antd';
 import { type AnyEnum, Enum } from '../../src';
 import { storyT, useStoryLocale, useStoryT } from '../locales';
 import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
@@ -167,11 +167,11 @@ function LocalizationDemo() {
                     size="small"
                     column={1}
                     items={[
-                      { key: 'name', label: 'enum.name', children: statusEnum.name || '-' },
-                      { key: 'label', label: 'label(value)', children: statusEnum.label(selectedValue) },
+                      { key: 'name', label: 'Enum name', children: statusEnum.name || '-' },
+                      { key: 'label', label: 'label', children: statusEnum.label(selectedValue) },
                       {
                         key: 'raw',
-                        label: 'raw(value)',
+                        label: 'raw',
                         children: <Text code>{JSON.stringify(statusEnum.raw(selectedValue))}</Text>,
                       },
                     ]}
@@ -323,7 +323,6 @@ const flatResourcesEn: Record<string, string> = {
   'storybook.enums.OrderStatus.Draft': 'Draft',
   'storybook.enums.OrderStatus.Review': 'In Review',
   'storybook.enums.OrderStatus.Published': 'Published',
-  'storybook.enums.OrderStatus.Archived': 'Archived',
   'storybook.enums.Priority': 'Priority',
   'storybook.enums.Priority.Low': 'Low',
   'storybook.enums.Priority.Medium': 'Medium',
@@ -340,7 +339,6 @@ const flatResourcesZh: Record<string, string> = {
   'storybook.enums.OrderStatus.Draft': '草稿',
   'storybook.enums.OrderStatus.Review': '审核中',
   'storybook.enums.OrderStatus.Published': '已发布',
-  'storybook.enums.OrderStatus.Archived': '已归档',
   'storybook.enums.Priority': '优先级',
   'storybook.enums.Priority.Low': '低',
   'storybook.enums.Priority.Medium': '中',
@@ -353,19 +351,19 @@ const flatResourcesZh: Record<string, string> = {
 };
 
 const fieldTitleEn: Record<string, string> = {
-  'storybook.stories.CorePatterns.templates.field.enumName': 'enum.name',
-  'storybook.stories.CorePatterns.templates.field.labels': 'labels',
-  'storybook.stories.CorePatterns.templates.field.itemKey': 'key(value)',
-  'storybook.stories.CorePatterns.templates.field.itemValue': 'value',
-  'storybook.stories.CorePatterns.templates.field.itemLabel': 'label(value)',
+  'storybook.stories.CorePatterns.templates.field.enumName': 'Enum name',
+  'storybook.stories.CorePatterns.templates.field.labels': 'Labels',
+  'storybook.stories.CorePatterns.templates.field.itemKey': 'Key',
+  'storybook.stories.CorePatterns.templates.field.itemValue': 'Value',
+  'storybook.stories.CorePatterns.templates.field.itemLabel': 'Label',
 };
 
 const fieldTitleZh: Record<string, string> = {
   'storybook.stories.CorePatterns.templates.field.enumName': '枚举名',
   'storybook.stories.CorePatterns.templates.field.labels': '标签',
-  'storybook.stories.CorePatterns.templates.field.itemKey': '键(值)',
+  'storybook.stories.CorePatterns.templates.field.itemKey': '键',
   'storybook.stories.CorePatterns.templates.field.itemValue': '值',
-  'storybook.stories.CorePatterns.templates.field.itemLabel': '标签(值)',
+  'storybook.stories.CorePatterns.templates.field.itemLabel': '标签',
 };
 
 const flatResourcesEnFull: Record<string, string> = { ...flatResourcesEn, ...fieldTitleEn };
@@ -379,7 +377,6 @@ const nestedResourcesEn = {
         Draft: { title: 'Draft' },
         Review: { title: 'In Review' },
         Published: { title: 'Published' },
-        Archived: { title: 'Archived' },
       },
       Priority: {
         title: 'Priority',
@@ -406,7 +403,6 @@ const nestedResourcesZh = {
         Draft: { title: '草稿' },
         Review: { title: '审核中' },
         Published: { title: '已发布' },
-        Archived: { title: '已归档' },
       },
       Priority: {
         title: '优先级',
@@ -432,11 +428,11 @@ const nestedResourcesEnFull = {
       CorePatterns: {
         templates: {
           field: {
-            enumName: 'enum.name',
-            labels: 'labels',
-            itemKey: 'key(value)',
-            itemValue: 'value',
-            itemLabel: 'label(value)',
+            enumName: 'Enum name',
+            labels: 'Labels',
+            itemKey: 'Key',
+            itemValue: 'Value',
+            itemLabel: 'Label',
           },
         },
       },
@@ -453,9 +449,9 @@ const nestedResourcesZhFull = {
           field: {
             enumName: '枚举名',
             labels: '标签',
-            itemKey: '键(值)',
+            itemKey: '键',
             itemValue: '值',
-            itemLabel: '标签(值)',
+            itemLabel: '标签',
           },
         },
       },
@@ -494,7 +490,7 @@ const globalConfigCode = {
 };
 
 const minimalInitCode = `const OrderStatus = Enum(
-  { Draft: 1, Review: 2, Published: 3, Archived: 4 },
+  { Draft: 1, Review: 2, Published: 3 },
   { name: 'OrderStatus' },
 );
 const Priority = Enum(
@@ -509,17 +505,16 @@ const Channel = Enum(
 const legacyCode = `// Without global templates: every enum repeats labels and prefixes
 const OrderStatus = Enum(
   {
-    Draft: { value: 1, label: t('storybook.enums.OrderStatus.Draft') },
-    Review: { value: 2, label: t('storybook.enums.OrderStatus.Review') },
-    Published: { value: 3, label: t('storybook.enums.OrderStatus.Published') },
-    Archived: { value: 4, label: t('storybook.enums.OrderStatus.Archived') },
+    Draft: { value: 1, label: 'storybook.enums.OrderStatus.Draft' },
+    Review: { value: 2, label: 'storybook.enums.OrderStatus.Review' },
+    Published: { value: 3, label: 'storybook.enums.OrderStatus.Published' },
   },
-  { name: t('storybook.enums.OrderStatus') },
+  { name: 'storybook.enums.OrderStatus' },
 );`;
 
 const modernCode = `// With global templates: minimal init
 const OrderStatus = Enum(
-  { Draft: 1, Review: 2, Published: 3, Archived: 4 },
+  { Draft: 1, Review: 2, Published: 3 },
   { name: 'OrderStatus' },
 );`;
 
@@ -572,7 +567,7 @@ function TemplatesDemo() {
   }, [mode, demoLang, demoT]);
 
   const orderStatus = useMemo(
-    () => Enum({ Draft: 1, Review: 2, Published: 3, Archived: 4 }, { name: 'OrderStatus' }),
+    () => Enum({ Draft: 1, Review: 2, Published: 3 }, { name: 'OrderStatus' }),
     [mode, readyVersion],
   );
   const priority = useMemo(
@@ -600,8 +595,22 @@ function TemplatesDemo() {
           <Segmented
             value={mode}
             options={[
-              { label: t('storybook.stories.CorePatterns.templates.mode.flat'), value: 'flat' },
-              { label: t('storybook.stories.CorePatterns.templates.mode.nested'), value: 'nested' },
+              {
+                label: (
+                  <Tooltip title={t('storybook.stories.CorePatterns.templates.mode.flat.tooltip')}>
+                    <span>{t('storybook.stories.CorePatterns.templates.mode.flat')}</span>
+                  </Tooltip>
+                ),
+                value: 'flat',
+              },
+              {
+                label: (
+                  <Tooltip title={t('storybook.stories.CorePatterns.templates.mode.nested.tooltip')}>
+                    <span>{t('storybook.stories.CorePatterns.templates.mode.nested')}</span>
+                  </Tooltip>
+                ),
+                value: 'nested',
+              },
             ]}
             onChange={(value) => setMode(value as TemplateMode)}
           />
@@ -647,18 +656,15 @@ function TemplatesDemo() {
       >
         <Row gutter={[16, 16]}>
           <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard enumInstance={orderStatus} demoT={demoT} />
+            <EnumDemoCard fullHeight enumInstance={orderStatus} demoT={demoT} />
           </Col>
           <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard enumInstance={priority} demoT={demoT} />
+            <EnumDemoCard fullHeight enumInstance={priority} demoT={demoT} />
           </Col>
           <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard enumInstance={channel} demoT={demoT} />
+            <EnumDemoCard fullHeight enumInstance={channel} demoT={demoT} />
           </Col>
         </Row>
-        <div style={{ marginTop: 16 }}>
-          <JsonPreview title="OrderStatus.toMap()" value={orderStatus.toMap()} />
-        </div>
       </StorySection>
 
       <StorySection
@@ -666,9 +672,19 @@ function TemplatesDemo() {
         description={t('storybook.stories.CorePatterns.templates.section.compare.description')}
       >
         <TwoColumn
-          left={<CodePreview title={t('storybook.stories.CorePatterns.templates.compare.legacy')} code={legacyCode} />}
+          left={
+            <CodePreview
+              fullHeight
+              title={t('storybook.stories.CorePatterns.templates.compare.legacy')}
+              code={legacyCode}
+            />
+          }
           right={
-            <CodePreview title={t('storybook.stories.CorePatterns.templates.compare.templates')} code={modernCode} />
+            <CodePreview
+              fullHeight
+              title={t('storybook.stories.CorePatterns.templates.compare.templates')}
+              code={modernCode}
+            />
           }
         />
       </StorySection>
@@ -676,8 +692,8 @@ function TemplatesDemo() {
   );
 }
 
-function EnumDemoCard(props: { enumInstance: AnyEnum; demoT: i18n['t'] }) {
-  const { enumInstance, demoT } = props;
+function EnumDemoCard(props: { enumInstance: AnyEnum; demoT: i18n['t']; fullHeight?: boolean }) {
+  const { enumInstance, demoT, fullHeight } = props;
   const [selectedValue, setSelectedValue] = useState<unknown>(enumInstance.values[0]);
 
   useEffect(() => {
@@ -685,7 +701,7 @@ function EnumDemoCard(props: { enumInstance: AnyEnum; demoT: i18n['t'] }) {
   }, [enumInstance]);
 
   return (
-    <Card size="small" title={enumInstance.name || '-'}>
+    <Card size="small" title={enumInstance.name || '-'} style={{ height: fullHeight ? '100%' : 'auto' }}>
       <Space direction="vertical" size={12} style={{ width: '100%' }}>
         <Descriptions
           size="small"

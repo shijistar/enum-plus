@@ -49,7 +49,7 @@ export function StorySection(props: PropsWithChildren<{ title: string; descripti
       title={
         <div className="ep-section-title">
           <Text strong>{title}</Text>
-          {description ? <Paragraph>{description}</Paragraph> : null}
+          {description ? <Paragraph style={{ fontWeight: 400 }}>{description}</Paragraph> : null}
         </div>
       }
       styles={{ title: { whiteSpace: 'normal' } }}
@@ -71,12 +71,19 @@ export function JsonPreview(props: { title: string; value: unknown; note?: React
   );
 }
 
-export function CodePreview(props: { title: string; code: string }) {
-  const { title, code } = props;
+export function CodePreview(props: { title: string; code: string; fullHeight?: boolean }) {
+  const { title, code, fullHeight = false } = props;
 
   return (
-    <Card size="small" title={title}>
-      <pre className="ep-pre">{code.trim()}</pre>
+    <Card
+      size="small"
+      title={title}
+      style={fullHeight ? { height: '100%', display: 'flex', flexDirection: 'column' } : undefined}
+      styles={{ body: fullHeight ? { flex: 1, minHeight: 0, overflow: 'auto' } : undefined }}
+    >
+      <pre className="ep-pre" style={fullHeight ? { height: '100%' } : undefined}>
+        {code.trim()}
+      </pre>
     </Card>
   );
 }

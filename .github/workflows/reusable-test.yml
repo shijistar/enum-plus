@@ -25,10 +25,10 @@ jobs:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
           cache: "npm"
@@ -36,7 +36,7 @@ jobs:
 
       - name: Try to restore modern node_modules cache
         id: node_modules_cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -63,7 +63,7 @@ jobs:
 
       - name: Upload node_modules to artifacts
         if: steps.check_node_modules_artifact.outputs.artifact_exists == 'false'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: modern-node-modules-${{ hashFiles('**/package-lock.json') }}
           path: node_modules
@@ -72,7 +72,7 @@ jobs:
         run: npm run build
 
       - name: Cache modern package build output
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             tslib
@@ -84,7 +84,7 @@ jobs:
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
       - name: Upload build output to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ runner.os }}-modern-build-output-${{ github.sha }}
           path: |
@@ -98,16 +98,16 @@ jobs:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
 
       - name: Try to restore legacy node_modules cache
         id: node_modules_cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-legacy-node-modules-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package-legacy-node.json') }}
@@ -121,30 +121,30 @@ jobs:
         run: npm install --legacy-peer-deps --ignore-scripts --no-package-lock
 
   # Run ts-tests on default Node.js version
-  run-jest-ts:
+  run-node-test:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     needs: install-and-build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
 
       - name: Restore modern node_modules cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Run jest tests from source codes
+      - name: Run unit tests from source codes
         run: npm test
 
   # Run Node.js CJS unit tests on multiple modern node versions
-  run-jest-cjs:
+  run-cjs-tests:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     needs: install-and-build
@@ -167,22 +167,22 @@ jobs:
             26.x,
           ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Restore modern node_modules cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Restore modern build output cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             tslib
@@ -193,11 +193,11 @@ jobs:
             umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
-      - name: Run jest tests from tslib directory
-        run: npm run task:jest-cjs
+      - name: Run unit tests for CJS modules
+        run: npm run test:jest-cjs
 
   # Run CJS unit tests on multiple legacy node versions
-  run-jest-cjs-legacy:
+  run-cjs-legacy-tests:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     needs: [install-and-build, node-modules-legacy-cache]
@@ -205,22 +205,22 @@ jobs:
       matrix:
         node-version: [7.x, 8.x, 9.x, 10.x, 11.x, 12.x, 13.x]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Restore legacy node_modules cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
           key: ${{ runner.os }}-legacy-node-modules-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package-legacy-node.json') }}
 
       - name: Restore modern build output cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             tslib
@@ -231,11 +231,11 @@ jobs:
             umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
-      - name: Run jest tests from tslib directory
-        run: npm run task:jest-cjs
+      - name: Run unit tests for legacy CJS modules
+        run: npm run test:jest-cjs
 
   # Run ESM unit tests on node versions that support Node.js ESM
-  run-jest-esm:
+  run-esm-tests:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     needs: install-and-build
@@ -244,22 +244,22 @@ jobs:
         node-version:
           [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x, 24.x, 25.x, 26.x]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Restore modern node_modules cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Restore modern build output cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             tslib
@@ -270,18 +270,17 @@ jobs:
             umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
-      - name: Run jest tests from tses directory
-        run: npm run task:jest-esm
+      - name: Run unit tests for ESM modules
+        run: npm run test:jest-esm
 
-  # Run e2e tests
-  run-e2e:
+  run-browser-tests:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ vars.DEFAULT_NODE_VERSION }}
           cache: "npm"
@@ -291,7 +290,7 @@ jobs:
 
       - name: Restore modern node_modules cache
         id: node_modules_cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -306,7 +305,53 @@ jobs:
 
       - name: Download build output from artifacts
         id: download_build_output
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: ${{ runner.os }}-modern-build-output-${{ github.sha }}
+
+      - name: Build package
+        if: steps.download_build_output.outcome != 'success'
+        run: npm run build
+
+      - name: Run browser tests
+        run: npm run test:vitest:browser
+
+  # [Deprecated] run e2e tests
+  run-e2e:
+    # if: ${{ inputs.use-matrix == true }}
+    if: ${{false}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install Playwright dependencies
+        run: npx playwright install-deps webkit
+
+      - name: Restore modern node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Install playwright browsers
+        run: npx playwright install
+
+      - name: Download build output from artifacts
+        id: download_build_output
+        uses: actions/download-artifact@v6
         continue-on-error: true
         with:
           name: ${{ runner.os }}-modern-build-output-${{ github.sha }}
@@ -319,20 +364,20 @@ jobs:
         run: npm run e2e
 
   # Run tests on single specified Node.js version
-  run-jest-single:
+  run-test-single:
     if: ${{ inputs.use-matrix == false }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Use Node.js ${{ inputs.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ inputs.node-version || vars.DEFAULT_NODE_VERSION }}
 
       - name: Try to restore modern node_modules cache
         id: node_modules_cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -341,5 +386,5 @@ jobs:
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Run modern jest tests
+      - name: Run unit tests from source codes
         run: npm test
