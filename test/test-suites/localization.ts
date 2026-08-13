@@ -1397,7 +1397,7 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           engine.expect(weekEnum.name).toBe('{name}');
           engine.expect(weekEnum.label('Sunday')).toBe('{raw}');
           engine.expect(weekEnum.items[0].label).toBe('{raw}');
-          engine.expect(weekEnum.items[0].label).toBe('{raw}');
+          engine.expect(weekEnum.named.Sunday.label).toBe('{raw}');
           engine.expect(weekEnum.items[0].abbr).toBe('weekday.{raw}');
           engine.expect(weekEnum.named.Sunday.abbr).toBe('weekday.{raw}');
           engine

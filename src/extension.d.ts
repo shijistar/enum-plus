@@ -14,7 +14,7 @@ declare module 'enum-plus/extension' {
   /**
    * - **EN:** Add global extension field definitions for enumeration items. It can be used to add
    *   type definitions for fields globally added to `Enum.config.templates.items`.
-   * - **CN:** 为枚举项添加全局扩展字段定义。可以用来为`Enum.config.templates.items`全局添加的字段，添加类型生命扩展。
+   * - **CN:** 为枚举项添加全局扩展字段定义。可以用来为`Enum.config.templates.items`全局添加的字段，添加类型定义
    *
    * @template {extends EnumInit<K, V>} T - The type of the enumeration
    * @template {extends EnumKey<T> = EnumKey<T>} K - The key type of the enumeration
