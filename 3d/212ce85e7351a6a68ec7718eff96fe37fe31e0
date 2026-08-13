@@ -1,0 +1,92 @@
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1283-1340
+  h_99cad05bea77d1 1282,1784-1785
+src/enum-item.ts
+  h_99cad05bea77d1 33
+test/specs/vitest/localization.vitest.ts
+  h_99cad05bea77d1 1
+test/specs/jest/enum-items.test.ts
+  h_99cad05bea77d1 1
+test/specs/vitest/interface.vitest.ts
+  h_99cad05bea77d1 1
+src/auto-localize.ts
+  h_99cad05bea77d1 72-75,82-83,98-101,113-114,144,146,150-152,154,159,171,174
+test/engines/vitest/vitest-node.ts
+  h_99cad05bea77d1 1-32
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 851
+  h_99cad05bea77d1 645
+test/specs/jest/version.test.ts
+  h_99cad05bea77d1 1
+test/specs/vitest/enum-collection.vitest.ts
+  h_99cad05bea77d1 1
+README-FULL.md
+  h_99cad05bea77d1 650,861
+test/specs/vitest/extension.vitest.ts
+  h_99cad05bea77d1 1
+test/specs/jest/interface.test.ts
+  h_99cad05bea77d1 1
+test/specs/jest/extension.test.ts
+  h_99cad05bea77d1 1
+test/specs/jest/enum-collection.test.ts
+  h_99cad05bea77d1 1
+test/specs/vitest/plugin.vitest.ts
+  h_99cad05bea77d1 1
+test/engines/types.ts
+  h_99cad05bea77d1 6
+test/engines/jest/index.ts
+  h_99cad05bea77d1 1-52
+test/engines/base.ts
+  h_99cad05bea77d1 2,17,22,26
+.storybook/docs-source/GlobalConfiguration.en-US.md
+  h_99cad05bea77d1 22
+.storybook/docs-source/ApiGuide.zh-CN.md
+  h_99cad05bea77d1 354
+package.json
+  h_99cad05bea77d1 209
+test/specs/jest/plugin.test.ts
+  h_99cad05bea77d1 1
+test/engines/vitest/vitest-browser.ts
+  h_99cad05bea77d1 1-44
+test/engines/vitest/utils.ts
+  h_99cad05bea77d1 1-34
+test/specs/vitest/create-enum.vitest.ts
+  h_99cad05bea77d1 1
+test/specs/vitest/enum-item.vitest.ts
+  h_99cad05bea77d1 1
+test/engines/index.ts
+  h_99cad05bea77d1 4-5
+test/engines/playwright/index.ts
+  h_99cad05bea77d1 1-125
+test/specs/jest/create-enum.test.ts
+  h_99cad05bea77d1 1
+.storybook/docs-source/GlobalConfiguration.zh-CN.md
+  h_99cad05bea77d1 22
+test/specs/vitest/enum-items.vitest.ts
+  h_99cad05bea77d1 1
+test/specs/vitest/version.vitest.ts
+  h_99cad05bea77d1 1
+test/specs/jest/enum-item.test.ts
+  h_99cad05bea77d1 1
+test/specs/jest/localization.test.ts
+  h_99cad05bea77d1 1
+.storybook/docs-source/ApiGuide.en-US.md
+  h_99cad05bea77d1 357
+package-lock.json
+  h_99cad05bea77d1 3,9,30
+test/engines/playwright/playwright-types.d.ts
+  h_99cad05bea77d1 2282,2709,2748,2799,2838,2966,2995,3073,3102,3180,3209,3287,3316,6509,6541,6675,6707,6757,6791,6878,6903,8135,8485,8720,8778,8782,8790,9147,9211,9290,9322,9354,9386,9420,9445,9486,9511,9538,9563,9591,9702,9809,9989,10014,10051,10079,10157,10196,10242,10321,10504
+test/engines/vitest/index.ts
+  h_99cad05bea77d1 1,5-6,8-11,13-15,17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "3d212ce85e7351a6a68ec7718eff96fe37fe31e0",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
