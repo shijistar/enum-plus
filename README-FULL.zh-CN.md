@@ -633,7 +633,7 @@ const WeekEnum = Enum(enumInit, {
 
 为枚举名称、枚举项标签和枚举项元数据字段生成本地化 key。这是推荐的统一配置方式，取代已废弃的 `autoLabel`、`labelPrefix`、`autoLocalizeMeta` 三个旧属性（它们将在下一大版本中移除）。
 
-模板可以是字符串，使用 `{name}`、`{key}`、`{value}` 和 `{raw}` 占位符；也可以是函数，接收上下文 `{ type: 'name' | 'item', options, item?, metaField? }` 并返回本地化 key（返回 `undefined` 时跳过该模板）。
+模板可以是字符串，使用 `{name}`、`{key}`、`{value}` 和 `{raw}` 占位符；也可以是函数，接收上下文 `{ type: 'name' | 'item', options, item?, metaField? }` 并返回本地化 key。
 
 可用占位符如下：
 

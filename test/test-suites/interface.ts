@@ -73,7 +73,7 @@ const testTyping = (engine: TestEngineBase<TestEngineTypes>) => {
           }
         } else {
           // FIXME: TypeScript `instanceof` type guards never narrow the else branch,
-          // the value keeps its original union type `1 | { foo: number }`.
+          // the value keeps its original union type `1 | 'Monday' | { foo: number }`.
           // numberValue satisfies { foo: number };
         }
 

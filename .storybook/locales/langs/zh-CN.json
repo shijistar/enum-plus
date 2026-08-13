@@ -152,9 +152,9 @@
 
   "storybook.stories.CorePatterns.templates.page.title": "全局模板：一次配置，惠及所有枚举",
   "storybook.stories.CorePatterns.templates.page.description": "只需设置一次 Enum.config.templates，之后每个枚举都只需要极简的初始化对象加上 options.name。key 会自动推导，并通过 Enum.localize 完成国际化。",
-  "storybook.stories.CorePatterns.templates.mode.flat": "Flag模式",
+  "storybook.stories.CorePatterns.templates.mode.flat": "扁平模式 (Flat)",
   "storybook.stories.CorePatterns.templates.mode.flat.tooltip": "国际化资源采用扁平模式，所有 key 都在同一层级",
-  "storybook.stories.CorePatterns.templates.mode.nested": "Nested模式",
+  "storybook.stories.CorePatterns.templates.mode.nested": "嵌套模式 (Nested)",
   "storybook.stories.CorePatterns.templates.mode.nested.tooltip": "国际化资源采用嵌套模式，key 按层级组织",
   "storybook.stories.CorePatterns.templates.highlights.globalConfig": "Enum.config.templates",
   "storybook.stories.CorePatterns.templates.highlights.minimalInit": "极简初始化",

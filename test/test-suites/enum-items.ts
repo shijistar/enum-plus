@@ -184,9 +184,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
       const weekEnum = Enum(StandardWeekConfig);
       const compactWeekEnum = Enum(WeekCompactConfig, {
         templates: {
-          items: {
-            ss: 'sss',
-          },
+          items: {},
         },
       });
       return { weekEnum, compactWeekEnum };
@@ -206,7 +204,6 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
       engine.expect(compactWeekEnum.items.findBy('value', 1)).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('value', 99)).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('label', 'weekday.Monday')).toBe(undefined);
-      // compactWeekEnum.named.Friday.
       // Custom meta field
       engine.expect(weekEnum.items.findBy('status', 'error')).toEqual(weekEnum.items[0]);
       engine.expect(weekEnum.items.findBy('status', 'warning')).toEqual(weekEnum.items[1]);

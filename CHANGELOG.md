@@ -8,10 +8,12 @@
 
 ### Features
 
-- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates, with improved type inference for localize template definitions. Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key (`undefined` skips the field). Template results take precedence over declared values: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value.
-  - `templates.name` — defines the template that generates the localization key for the enum `name` field.
-  - `templates.items` — defines the templates that generate localization keys for enum item fields, such as `label` and custom meta fields.
+- ✨ Add `templates` option to generate localization keys for the enum `name` and item fields via user-defined templates, with improved type inference for localize template definitions. Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key. Template results take precedence over declared strings _<sup>1</sup>_ : the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value.
+  - `templates.name` — defines the localization template for the enum name.
+  - `templates.items` — defines the localization templates for enum item fields, such as `label` and custom meta fields.
 - ✨ Fields declared in instance-level `templates.items` are automatically added to the enum items, so the generated meta fields are typed and accessible even when raw enum items do not declare them.
+
+> **1.** Templates take precedence over declared strings, not functions. Functions return the final localization result directly, so they have the highest priority and are not overridden by templates.
 
 ### Deprecations
 

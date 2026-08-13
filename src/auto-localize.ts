@@ -143,10 +143,9 @@ export function resolveLocalizeTemplate<
   if (context.type === 'item') {
     const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
     template = template
-      .replace(/{key}/g, itemContext.item.key as string)
-      .replace(/{value}/g, itemContext.item.value as string)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .replace(/{raw}/g, (itemContext.item.raw as any)?.[itemContext.metaField] ?? '');
+      .replace(/{key}/g, String(itemContext.item.key))
+      .replace(/{value}/g, String(itemContext.item.value))
+      .replace(/{raw}/g, String((itemContext.item.raw as Record<string, unknown>)?.[itemContext.metaField] ?? ''));
   }
   return template;
 }

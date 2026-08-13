@@ -10,7 +10,7 @@
 
 `Enum.config.templates` is a global configuration option that defines localization templates for the enum `name` and item fields. It applies to every enum instance, and it is the recommended unified way to set up localization (replacing the legacy `Enum.config.autoLabel`, see below).
 
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key; returning `undefined` skips the template for that field.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
 
 The available placeholders are:
 

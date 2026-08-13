@@ -1680,6 +1680,7 @@ function assertWeekEnumTemplates(params: {
     engine.expect(weekEnum.meta.abbr).toEqual(['', '', '', '', '', '', '']);
   });
   ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+    engine.expect(weekEnum.name).toBe(locales['weekDay.name']);
     engine.expect(weekEnum.label('Sunday')).toBe(locales['weekday.Sunday']);
     engine.expect(weekEnum.items[0].label).toBe(locales['weekday.Sunday']);
     engine.expect(weekEnum.named.Sunday.label).toBe(locales['weekday.Sunday']);
@@ -1716,24 +1717,6 @@ function assertUnresolvedTemplates(params: {
   locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
 }) {
   const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine } = params;
-  // engine.expect(weekEnum1.name).toBe('<NOT_EXISTED_KEY>');
-  // engine.expect(weekEnum1.label('Sunday')).toBe(locales['weekday.Sunday']);
-  // engine.expect(weekEnum1.items[0].label).toBe(locales['weekday.Sunday']);
-  // engine.expect(weekEnum1.named.Sunday.label).toBe(locales['weekday.Sunday']);
-  // engine.expect(weekEnum1.items[0].abbr).toBe(locales['weekday.SundayAbbr']);
-  // engine.expect(weekEnum1.named.Sunday.abbr).toBe(locales['weekday.SundayAbbr']);
-  // engine
-  //   .expect(weekEnum1.meta.abbr)
-  //   .toEqual([
-  //     locales['weekday.SundayAbbr'],
-  //     locales['weekday.MondayAbbr'],
-  //     locales['weekday.TuesdayAbbr'],
-  //     locales['weekday.WednesdayAbbr'],
-  //     locales['weekday.ThursdayAbbr'],
-  //     locales['weekday.FridayAbbr'],
-  //     locales['weekday.SaturdayAbbr'],
-  //   ]);
-
   ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
     engine.expect(weekEnum.name).toBe('<NOT_EXISTED_KEY>');
     engine.expect(weekEnum.label('Sunday')).toBe('<NOT_EXISTED_KEY>');
