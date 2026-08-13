@@ -1,0 +1,36 @@
+src/auto-localize.ts
+  h_99cad05bea77d1 146-148
+README-FULL.md
+  h_99cad05bea77d1 641,852
+CHANGELOG.md
+  h_99cad05bea77d1 11-13,16-17
+.storybook/docs-source/GlobalConfiguration.en-US.md
+  h_99cad05bea77d1 13
+test/test-suites/interface.ts
+  h_99cad05bea77d1 76
+.storybook/docs-source/ApiGuide.zh-CN.md
+  h_99cad05bea77d1 345
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1683
+.storybook/docs-source/ApiGuide.en-US.md
+  h_99cad05bea77d1 348
+.storybook/docs-source/GlobalConfiguration.zh-CN.md
+  h_99cad05bea77d1 13
+test/test-suites/enum-items.ts
+  h_99cad05bea77d1 187
+.storybook/locales/langs/zh-CN.json
+  h_99cad05bea77d1 155,157
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 636
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c9eaaf76d4aebef94da0f8f6f0a7e4ced52cedb2",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
