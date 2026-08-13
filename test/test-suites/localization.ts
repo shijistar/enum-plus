@@ -1720,7 +1720,7 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
                 if (typeof metaValue === 'function') {
                   metaValue = metaValue(item);
                 }
-                meta[metaKey].push(locales[metaValue as unknown as keyof typeof locales] ?? metaValue);
+                meta[metaKey].push(locales[metaValue as keyof typeof locales] ?? metaValue);
               } else {
                 meta[metaKey].push(metaValue);
               }
@@ -1835,13 +1835,13 @@ function assertWeekEnumTemplates(params: {
     engine.expect(weekEnum.label('Sunday')).toBe(locales['weekday.Sunday']);
     engine.expect(weekEnum.items[0].label).toBe(locales['weekday.Sunday']);
     engine.expect(weekEnum.named.Sunday.label).toBe(locales['weekday.Sunday']);
-    engine.expect((weekEnum.items[0] as unknown as { abbr2: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
-    engine.expect((weekEnum.named.Sunday as unknown as { abbr2: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
-    engine.expect((weekEnum.items[0] as unknown as { abbr3: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
-    engine.expect((weekEnum.named.Sunday as unknown as { abbr3: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
-    const abbrArrays: string[][] = [
-      (weekEnum.meta as unknown as { abbr2: string[] }).abbr2,
-      (weekEnum.meta as unknown as { abbr3: string[] }).abbr3,
+    engine.expect((weekEnum.items[0] as { abbr2?: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.named.Sunday as { abbr2?: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.items[0] as { abbr3?: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.named.Sunday as { abbr3?: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
+    const abbrArrays: (string[] | undefined)[] = [
+      (weekEnum.meta as { abbr2?: string[] })?.abbr2,
+      (weekEnum.meta as { abbr3?: string[] })?.abbr3,
     ];
     abbrArrays.forEach((abbrs) => {
       engine
