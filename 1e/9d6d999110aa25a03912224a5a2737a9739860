@@ -1,0 +1,16 @@
+src/extension.d.ts
+  h_99cad05bea77d1 17
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1400
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1e9d6d999110aa25a03912224a5a2737a9739860",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
