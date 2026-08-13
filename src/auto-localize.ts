@@ -161,11 +161,7 @@ export function getTemplateFields(options?: EnumItemOptions<any, any, any, any, 
   return [...Object.keys(internalConfig.templates?.items ?? {}), ...Object.keys(options?.templates?.items ?? {})];
 }
 
-export function isAutoLocalizeMetaField<
-  T extends EnumInit<K, V>,
-  K extends EnumKey<T> = EnumKey<T>,
-  V extends EnumValue = ValueTypeFromSingleInit<T[K], K>,
->(
+export function isAutoLocalizeMetaField(
   field: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: EnumItemOptions<any, any, any, any, any>,

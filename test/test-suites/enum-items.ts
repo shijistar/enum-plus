@@ -180,16 +180,30 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
 
   engine.test(
     'should find enum items by key, value, label, or custom metadata with enum.items.findBy',
-    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekCompactConfig } }) => {
-      const weekEnum = Enum(StandardWeekConfig);
-      const compactWeekEnum = Enum(WeekCompactConfig, {
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekCompactConfig }, i18n: { neutral } }) => {
+      Enum.config.templates = {
+        items: {
+          abbr: 'weekday.{key}Abbr',
+        },
+      };
+      const weekEnum = Enum(StandardWeekConfig, {
         templates: {
-          items: {},
+          items: {
+            abbr2: 'weekday.Abbr{value}',
+          },
         },
       });
-      return { weekEnum, compactWeekEnum };
+      const compactWeekEnum = Enum(WeekCompactConfig, {
+        templates: {
+          items: {
+            abbr: 'weekday.{key}Abbr',
+            abbr3: 'weekday.{key}Abbr',
+          },
+        },
+      });
+      return { Enum, weekEnum, compactWeekEnum, locales: neutral };
     },
-    ({ weekEnum, compactWeekEnum }) => {
+    ({ Enum, weekEnum, compactWeekEnum, locales }) => {
       engine.expect(weekEnum.items.findBy('key', 'Monday')).toBe(weekEnum.items[1]);
       engine.expect(weekEnum.items.findBy('key', 'Saturday')).toBe(weekEnum.items[6]);
       engine.expect(weekEnum.items.findBy('key', 'Invalid Key')).toBe(undefined);
@@ -210,6 +224,17 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
       engine.expect(weekEnum.items.findBy('status', 'success')).toEqual(weekEnum.items[3]);
       engine.expect(weekEnum.items.findBy('status', 'invalid')).toEqual(undefined);
       engine.expect(compactWeekEnum.items.findBy('status' as 'key', 'success')).toEqual(undefined);
+      engine.expect(weekEnum.items.findBy('abbr', locales['weekday.MondayAbbr'])).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.items.findBy('abbr', '<NOT_EXISTED>')).toBe(undefined);
+      engine.expect(weekEnum.items.findBy('abbr2', locales['weekday.Abbr1'])).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.items.findBy('abbr2', '<NOT_EXISTED>')).toBe(undefined);
+      engine.expect(compactWeekEnum.items.findBy('abbr', locales['weekday.MondayAbbr'])).toBe(compactWeekEnum.items[1]);
+      engine.expect(compactWeekEnum.items.findBy('abbr', '<NOT_EXISTED>')).toBe(undefined);
+      engine
+        .expect(compactWeekEnum.items.findBy('abbr3', locales['weekday.MondayAbbr']))
+        .toBe(compactWeekEnum.items[1]);
+      engine.expect(compactWeekEnum.items.findBy('abbr3', '<NOT_EXISTED>')).toBe(undefined);
+      Enum.config.templates = undefined;
     },
   );
 

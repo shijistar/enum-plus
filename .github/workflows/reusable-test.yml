@@ -26,6 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -99,6 +101,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -127,6 +131,8 @@ jobs:
     needs: install-and-build
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -168,6 +174,8 @@ jobs:
           ]
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
@@ -206,6 +214,8 @@ jobs:
         node-version: [7.x, 8.x, 9.x, 10.x, 11.x, 12.x, 13.x]
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
@@ -245,6 +255,8 @@ jobs:
           [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x, 24.x, 25.x, 26.x]
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
@@ -278,6 +290,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -323,6 +337,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Use Node.js ${{ inputs.node-version }}
         uses: actions/setup-node@v6

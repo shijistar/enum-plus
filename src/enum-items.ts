@@ -20,7 +20,7 @@ import type {
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
 } from './types';
-import { IS_ENUM_ITEMS, KEYS, VALUES } from './utils';
+import { ENUM_OPTIONS, IS_ENUM_ITEMS, KEYS, VALUES } from './utils';
 
 /**
  * Enum items array, mostly are simple wrappers for EnumCollectionClass
@@ -52,6 +52,7 @@ export class EnumItemsArray<
   }
   readonly [KEYS]!: K[];
   readonly [VALUES]!: V[];
+  readonly [ENUM_OPTIONS]!: OPTIONS;
   readonly labels!: string[];
   readonly named!: {
     [key in keyof T]: EnumItemInterface<
@@ -80,6 +81,8 @@ export class EnumItemsArray<
 
     const define = Object.defineProperty;
     const freeze = Object.freeze;
+    // Do not use instance field here, because don't want print this field in Node.js
+    define(this, ENUM_OPTIONS, { value: options });
     // Generate keys array
     // exclude number keys with a "reverse mapping" value, it means those "reverse mapping" keys of number enums
     const keys = parseKeys<T, K, V>(raw);
@@ -229,17 +232,17 @@ export class EnumItemsArray<
     return this.some((i) => i.value === (keyOrValue as unknown as V) || i.key === (keyOrValue as unknown as K));
   }
 
-  findBy<FK extends EnumItemFields | keyof T[keyof T], FV>(field: FK, value: FV) {
+  findBy<FK extends EnumItemFields | keyof T[keyof T] | LocalizeTemplateFields<OPTIONS>, FV>(field: FK, value: FV) {
     return this.find((item) => {
       if (field === 'key' || field === 'value') {
         return item[field as keyof typeof item] === value;
       } else if (field === 'label') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (item.raw as any)?.label === value || item.label === value;
+        return item.label === value || (item.raw as { label?: string })?.label === value;
+      } else if (isAutoLocalizeMetaField(field as string, this[ENUM_OPTIONS])) {
+        return item[field as keyof typeof item] === value;
       } else {
         // For other fields, use the raw object to find
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (item.raw as any)?.[field] === value;
+        return (item.raw as Record<FK, unknown> | undefined)?.[field] === value;
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }) as any;
@@ -615,7 +618,7 @@ export interface InheritableEnumItems<
    *
    * @returns The found enumeration item or `undefined` if not found | 找到的枚举项，如果未找到则返回 `undefined`
    */
-  findBy<FK extends EnumItemFields | keyof T[keyof T], const FV>(
+  findBy<FK extends EnumItemFields | keyof T[keyof T] | LocalizeTemplateFields<OPTIONS>, const FV>(
     field: FK,
     value: FV,
   ): FK extends 'key'

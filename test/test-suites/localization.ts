@@ -1120,7 +1120,8 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
             abbr2: '<NOT_EXISTED_KEY>',
             abbr3: '<NOT_EXISTED_KEY>',
           },
-        }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const options: EnumInitOptions<any> = {
           templates: {
             name: 'weekDay.name',
