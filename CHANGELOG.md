@@ -13,7 +13,7 @@
   - `templates.items` — defines the localization templates for enum item fields, such as `label` and custom meta fields.
 - ✨ Fields declared in instance-level `templates.items` are automatically added to the enum items, so the generated meta fields are typed and accessible even when raw enum items do not declare them.
 
-> **1.** Templates take precedence over declared strings, not functions. Functions return the final localization result directly, so they have the highest priority and are not overridden by templates.
+> **1.** Templates take precedence over raw declared strings, but not functions. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. So the order of precedence is: raw functions > instance templates > global templates > raw strings.
 
 ### Deprecations
 
