@@ -66,13 +66,13 @@ export interface LocalizeTemplatesConfig<
    * - **EN:** Internationalization templates configuration for enum names. it supports both `string`
    *   and `function` forms.
    *
-   *   - `string` - can use the `{name}` placeholder which represents the enum's `options.name` value
+   *   - `string` - can use the `{name}` token which represents the enum's `options.name` value
    *   - `function` - receives the context `{ options }` and returns the localization key
    *
    * > ⚠️ Note: The `name` template takes precedence over the `options.name` string but is lower than
    * > the `options.name` function. The final priority order is: name function > instance template >
    * > global template > name string. To reference the value of `options.name` in the template, you
-   * > need to explicitly use the `{name}` placeholder.
+   * > need to explicitly use the `{name}` token.
    *
    * - **CN:** 枚举名称的国际化模板配置，支持 `string` 和 `function` 两种配置形式。
    *
@@ -87,7 +87,7 @@ export interface LocalizeTemplatesConfig<
    * - **EN:** Internationalization templates configuration for enum items. it supports both `string`
    *   and `function` forms.
    *
-   *   - `string` - the localization template string, supporting multiple placeholders:
+   *   - `string` - the localization template string, supporting multiple tokens:
    *
    *       - `{name}` - represents the enum's `options.name` value
    *       - `{key}` - represents the enum item's `key` value
@@ -98,7 +98,7 @@ export interface LocalizeTemplatesConfig<
    * > ⚠️ Note: The `items` template has a higher priority than the raw metadata string but a lower
    * > priority than the raw metadata function. The final priority order is: raw function > instance
    * > template > global template > raw string. To reference the original value of the metadata in the
-   * > template, use the `{raw}` placeholder.
+   * > template, use the `{raw}` token.
    *
    * - **CN:** 枚举项的国际化模板配置，支持 `string` 和 `function` 两种配置形式。
    *
@@ -141,17 +141,19 @@ export function resolveLocalizeTemplate<
     return template(context);
   }
   const name = context.options?.name;
-  const values: Record<string, string> = {};
+  const values: Record<string, unknown> = {};
   if (typeof name === 'string') {
     values.name = name;
   }
   if (context.type === 'item') {
     const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
-    values.key = String(itemContext.item.key);
-    values.value = String(itemContext.item.value);
-    values.raw = String((itemContext.item.raw as Record<string, unknown>)?.[itemContext.metaField] ?? '');
+    values.key = itemContext.item.key;
+    values.value = itemContext.item.value;
+    values.raw = (itemContext.item.raw as Record<string, unknown>)?.[itemContext.metaField];
   }
-  return template.replace(/{(name|key|value|raw)}/g, (_match, token: string) => values[token]);
+  return template.replace(/{(name|key|value|raw)}/g, (match, token: string) =>
+    values[token] != null ? String(values[token]) : match,
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

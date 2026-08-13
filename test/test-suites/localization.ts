@@ -781,7 +781,7 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           name: () => 'weekDay.name',
           items: {
             label: ({ item }) => `weekday.${item.key}`,
-            abbr: ({ item }) => (item.raw as { abbr: string } | undefined)?.abbr ?? '',
+            abbr: ({ item }) => (item.raw as { abbr: string } | undefined)?.abbr ?? '{raw}',
             abbr2: ({ item }) => `weekday.${item.key}Abbr`,
             abbr3: ({ item }) => `weekday.Abbr${item.value.toString()}`,
           },
@@ -964,7 +964,7 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
             name: () => 'weekDay.name',
             items: {
               label: ({ item }) => `weekday.${item.key}`,
-              abbr: ({ item }) => item.raw?.abbr ?? '',
+              abbr: ({ item }) => item.raw?.abbr ?? '{raw}',
               abbr2: ({ item }) => `weekday.${item.key}Abbr`,
               abbr3: ({ item }) => `weekday.Abbr${item.value.toString()}`,
             },
@@ -1280,7 +1280,7 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
     );
 
     engine.test(
-      'templates should allow other placeholder alike strings',
+      'templates should allow other token-alike strings',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: {
@@ -1334,6 +1334,97 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
               'weekday.{baz}',
             ]);
         });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'template tokens should be preserved when replacing value is empty',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: '{name}',
+          items: {
+            label: '{raw}',
+          },
+        }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            items: {
+              abbr: 'weekday.{raw}',
+              noRawValue: '{raw}',
+              empty: () => undefined,
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        engine.expect(weekEnum1.name).toBe('{name}');
+        engine.expect(weekEnum1.label('Sunday')).toBe(locales['weekday.Sunday']);
+        engine.expect(weekEnum1.items[0].label).toBe(locales['weekday.Sunday']);
+        engine.expect(weekEnum1.named.Sunday.label).toBe(locales['weekday.Sunday']);
+        engine.expect(weekEnum1.items[0].abbr).toBe('weekday.weekday.SundayAbbr');
+        engine.expect(weekEnum1.named.Sunday.abbr).toBe('weekday.weekday.SundayAbbr');
+        engine
+          .expect(weekEnum1.meta.abbr)
+          .toEqual([
+            'weekday.weekday.SundayAbbr',
+            'weekday.weekday.MondayAbbr',
+            'weekday.weekday.TuesdayAbbr',
+            'weekday.weekday.WednesdayAbbr',
+            'weekday.weekday.ThursdayAbbr',
+            'weekday.weekday.FridayAbbr',
+            'weekday.weekday.SaturdayAbbr',
+          ]);
+
+        ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+          engine.expect(weekEnum.name).toBe('{name}');
+          engine.expect(weekEnum.label('Sunday')).toBe('{raw}');
+          engine.expect(weekEnum.items[0].label).toBe('{raw}');
+          engine.expect(weekEnum.items[0].label).toBe('{raw}');
+          engine.expect(weekEnum.items[0].abbr).toBe('weekday.{raw}');
+          engine.expect(weekEnum.named.Sunday.abbr).toBe('weekday.{raw}');
+          engine
+            .expect(weekEnum.meta.abbr)
+            .toEqual([
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+            ]);
+        });
+
+        ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+          engine.expect((weekEnum.items[0] as { noRawValue?: string }).noRawValue).toBe('{raw}');
+          engine.expect((weekEnum.named.Sunday as { noRawValue?: string }).noRawValue).toBe('{raw}');
+          engine.expect((weekEnum.items[0] as { empty?: string }).empty).toBe(undefined);
+          engine.expect((weekEnum.named.Sunday as { empty?: string }).empty).toBe(undefined);
+          engine
+            .expect((weekEnum.meta as { noRawValue?: string[] }).noRawValue)
+            .toEqual(['{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}']);
+          // because nullish values are removed from meta arrays
+          engine.expect((weekEnum.meta as { empty?: string[] }).empty).toEqual([]);
+        });
+
         Enum.config.templates = undefined;
       },
     );
@@ -1734,9 +1825,9 @@ function assertWeekEnumTemplates(params: {
     ]);
 
   ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
-    engine.expect(weekEnum.items[0].abbr).toBe('');
-    engine.expect(weekEnum.named.Sunday.abbr).toBe('');
-    engine.expect(weekEnum.meta.abbr).toEqual(['', '', '', '', '', '', '']);
+    engine.expect(weekEnum.items[0].abbr).toBe('{raw}');
+    engine.expect(weekEnum.named.Sunday.abbr).toBe('{raw}');
+    engine.expect(weekEnum.meta.abbr).toEqual(['{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}']);
   });
   ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
     engine.expect(weekEnum.name).toBe(locales['weekDay.name']);

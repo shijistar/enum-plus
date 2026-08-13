@@ -638,9 +638,9 @@ const WeekEnum = Enum(enumInit, {
 
 Generates localization keys for the enum name, item labels, and item meta fields. This is the recommended unified way to set up localization, and it replaces the legacy `autoLabel`, `labelPrefix`, and `autoLocalizeMeta` options, which are deprecated and will be removed in the next major version.
 
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
 
-The available placeholders are:
+The available tokens are:
 
 - `{name}` — the enum name (from `options.name`).
 - `{key}` — the key of the enum item.
@@ -849,9 +849,9 @@ Enum.install(i18nextPlugin);
 
 `Enum.config.templates` is a global configuration option that defines localization templates for the enum `name` and item fields. It applies to every enum instance, and it is the recommended unified way to set up localization (replacing the legacy `Enum.config.autoLabel`, see below).
 
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` placeholders, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
 
-The available placeholders are:
+The available tokens are:
 
 - `{name}` — the enum name (from `options.name`).
 - `{key}` — the key of the enum item.
