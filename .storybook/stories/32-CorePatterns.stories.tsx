@@ -489,21 +489,21 @@ const globalConfigCode = {
 };`,
 };
 
-const minimalInitCode = `const OrderStatus = Enum(
+const minimalInitCode = `const OrderStatusEnum = Enum(
   { Draft: 1, Review: 2, Published: 3 },
   { name: 'OrderStatus' },
 );
-const Priority = Enum(
+const PriorityEnum = Enum(
   { Low: 1, Medium: 2, High: 3, Critical: 4 },
   { name: 'Priority' },
 );
-const Channel = Enum(
+const ChannelEnum = Enum(
   { Web: 1, Mobile: 2, Api: 3 },
   { name: 'Channel' },
 );`;
 
 const legacyCode = `// Without global templates: every enum repeats labels and prefixes
-const OrderStatus = Enum(
+const OrderStatusEnum = Enum(
   {
     Draft: { value: 1, label: 'storybook.enums.OrderStatus.Draft' },
     Review: { value: 2, label: 'storybook.enums.OrderStatus.Review' },
@@ -513,7 +513,7 @@ const OrderStatus = Enum(
 );`;
 
 const modernCode = `// With global templates: minimal init
-const OrderStatus = Enum(
+const OrderStatusEnum = Enum(
   { Draft: 1, Review: 2, Published: 3 },
   { name: 'OrderStatus' },
 );`;
