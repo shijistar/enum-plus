@@ -1,0 +1,35 @@
+.github/workflows/reusable-test.yml
+  s_0f052584b46475::t_9bfd9bf19ec7cf 29-30,104-105,134-135,177-178,217-218,258-259,293-294,340-341
+src/auto-localize.ts
+  h_99cad05bea77d1 164
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 842
+src/enum-items.ts
+  h_99cad05bea77d1 23,55,84-85,235,240-242,245,621
+test/test-suites/enum-items.ts
+  h_99cad05bea77d1 183-195,199-200,204,206,227-237
+  h_99cad05bea77d1 198,201
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1123-1124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "57b044c6e6b6de438f010ffc2c74229709af9853",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0f052584b46475": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "7326427e-9d52-4101-ad43-be6ecdd92f29",
+        "model": "copilot/gpt-5.4"
+      },
+      "human_author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
