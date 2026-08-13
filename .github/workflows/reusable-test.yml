@@ -273,7 +273,7 @@ jobs:
       - name: Run unit tests for ESM modules
         run: npm run test:jest-esm
 
-  run-browser-tests:
+  run-e2e-tests:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     steps:
@@ -315,52 +315,6 @@ jobs:
         run: npm run build
 
       - name: Run browser tests
-        run: npm run test:vitest:browser
-
-  # [Deprecated] run e2e tests
-  run-e2e:
-    # if: ${{ inputs.use-matrix == true }}
-    if: ${{false}}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ vars.DEFAULT_NODE_VERSION }}
-          cache: "npm"
-
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps webkit
-
-      - name: Restore modern node_modules cache
-        id: node_modules_cache
-        uses: actions/cache@v6
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install dependencies
-        if: steps.node_modules_cache.outputs.cache-hit != 'true'
-        run: npm ci
-
-      - name: Install playwright browsers
-        run: npx playwright install
-
-      - name: Download build output from artifacts
-        id: download_build_output
-        uses: actions/download-artifact@v6
-        continue-on-error: true
-        with:
-          name: ${{ runner.os }}-modern-build-output-${{ github.sha }}
-
-      - name: Build package
-        if: steps.download_build_output.outcome != 'success'
-        run: npm run build
-
-      - name: Run e2e tests
         run: npm run e2e
 
   # Run tests on single specified Node.js version
