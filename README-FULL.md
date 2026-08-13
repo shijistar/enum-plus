@@ -647,7 +647,7 @@ The available placeholders are:
 - `{value}` — the value of the enum item.
 - `{raw}` — the original value of the meta field being templated (only meaningful in `items` templates).
 
-Template results take precedence over declared strings: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Template functions, however, return the final localization result directly, so they have the highest priority and are not overridden by templates. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly. Global and instance templates can coexist: `Enum.config.templates` applies to all enums, while instance-level `templates` are merged field by field and take precedence over global templates with the same name.
+Template results take precedence over raw declared strings, but not functions: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. The order of precedence is: raw functions > instance templates > global templates > raw strings. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly. Global and instance templates can coexist: `Enum.config.templates` applies to all enums, while instance-level `templates` are merged field by field and take precedence over global templates with the same name.
 
 ```ts
 // Global templates: shared by every enum.
@@ -858,7 +858,7 @@ The available placeholders are:
 - `{value}` — the value of the enum item.
 - `{raw}` — the original value of the meta field being templated (only meaningful in `items` templates).
 
-Template results take precedence over declared strings: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Template functions, however, return the final localization result directly, so they have the highest priority and are not overridden by templates. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly.
+Template results take precedence over raw declared strings, but not functions: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. The order of precedence is: raw functions > instance templates > global templates > raw strings. Use the `{name}` and `{raw}` placeholders to reference the original values explicitly.
 
 ```ts
 Enum.config.templates = {
