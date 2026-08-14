@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, Descriptions, Select, Space, Table, Tag, Typography } from 'antd';
 import { Enum } from '../../src';
-import { storyT, useStoryLocale } from '../locales';
+import { storyT, useStoryT } from '../locales';
 import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
@@ -21,99 +21,46 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-function useCopy() {
-  const locale = useStoryLocale();
-
-  return locale === 'zh-CN'
-    ? {
-        pageTitle: '把同一份 enum 变成多个 UI 输出',
-        pageDescription:
-          '如果核心问题是“重复 UI enum plumbing”，那最应该单独展示的就是派生输出层：Select 需要 options，卡片需要 badge，表格需要 label + meta，静态配置又需要 map。这个页面专门演示一份 enum 如何同时喂给这些界面。',
-        highlights: ['toList()', 'items', 'toMap()', 'meta/raw'],
-        uiTitle: '一个运营面板，多处 UI，共用同一份 enum',
-        uiDescription: '筛选器、状态徽标、表格列和统计卡片全部来自同一份 status enum。',
-        selectLabel: '筛选状态',
-        allStatuses: '全部状态',
-        currentValue: '当前值',
-        currentLabel: '当前 label',
-        currentTone: '当前 tone',
-        currentPhase: '当前 phase',
-        cardTitle: '状态概览卡片',
-        cardDescription: 'items 天然适合驱动自定义卡片或 badge 列表。',
-        tableTitle: '表格渲染',
-        tableDescription: 'label 和 raw/meta 可以直接进入表格列渲染逻辑。',
-        derivedTitle: '派生结构校验',
-        derivedDescription: '对 UI 层来说，最常见的出口就是 toList / items / toMap。',
-        toListCard: 'toList()',
-        itemsCard: 'items',
-        toMapCard: 'toMap({ keySelector, valueSelector })',
-        codeTitle: '同一份 enum 派生多个 UI 结构',
-        article: '文章',
-        visits: '访问量',
-        status: '状态',
-        draft: '草稿',
-        review: '审核中',
-        published: '已发布',
-        archived: '已归档',
-        phaseEditing: '编辑中',
-        phaseOnline: '线上',
-        phaseArchive: '归档',
-        statusName: '发布状态',
-      }
-    : {
-        pageTitle: 'Turn one enum into multiple UI outputs',
-        pageDescription:
-          'If the core frontend pain is duplicated enum plumbing, the derived-output layer deserves its own story. Select needs options, cards need badges, tables need labels plus meta, and config panels need maps. This page shows how one enum can feed all of them at once.',
-        highlights: ['toList()', 'items', 'toMap()', 'meta/raw'],
-        uiTitle: 'One operations panel, many UI surfaces, one enum source',
-        uiDescription:
-          'The filter, status badges, table columns, and summary cards all come from the same status enum.',
-        selectLabel: 'Filter by status',
-        allStatuses: 'All statuses',
-        currentValue: 'Current value',
-        currentLabel: 'Current label',
-        currentTone: 'Current tone',
-        currentPhase: 'Current phase',
-        cardTitle: 'Status overview cards',
-        cardDescription: 'items are a natural data source for custom cards or badge groups.',
-        tableTitle: 'Table rendering',
-        tableDescription: 'label and raw/meta fields can go straight into table render logic.',
-        derivedTitle: 'Derived structure check',
-        derivedDescription: 'For UI work, the most common exits are toList, items, and toMap.',
-        toListCard: 'toList()',
-        itemsCard: 'items',
-        toMapCard: 'toMap({ keySelector, valueSelector })',
-        codeTitle: 'Derive multiple UI structures from one enum',
-        article: 'Article',
-        visits: 'Visits',
-        status: 'Status',
-        draft: 'Draft',
-        review: 'In Review',
-        published: 'Published',
-        archived: 'Archived',
-        phaseEditing: 'Editing',
-        phaseOnline: 'Online',
-        phaseArchive: 'Archive',
-        statusName: 'Publish Status',
-      };
-}
-
 function UiOutputsDemo() {
-  const copy = useCopy();
+  const t = useStoryT();
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
   const statusEnum = useMemo(
     () =>
       Enum(
         {
-          Draft: { value: 'draft', label: copy.draft, phase: copy.phaseEditing, tone: 'default', count: 3 },
-          Review: { value: 'review', label: copy.review, phase: copy.phaseEditing, tone: 'processing', count: 5 },
-          Published: { value: 'published', label: copy.published, phase: copy.phaseOnline, tone: 'success', count: 8 },
-          Archived: { value: 'archived', label: copy.archived, phase: copy.phaseArchive, tone: 'default', count: 2 },
+          Draft: {
+            value: 'draft',
+            label: t('storybook.stories.CoreUiOutputs.draft'),
+            phase: t('storybook.stories.CoreUiOutputs.phaseEditing'),
+            tone: 'default',
+            count: 3,
+          },
+          Review: {
+            value: 'review',
+            label: t('storybook.stories.CoreUiOutputs.review'),
+            phase: t('storybook.stories.CoreUiOutputs.phaseEditing'),
+            tone: 'processing',
+            count: 5,
+          },
+          Published: {
+            value: 'published',
+            label: t('storybook.stories.CoreUiOutputs.published'),
+            phase: t('storybook.stories.CoreUiOutputs.phaseOnline'),
+            tone: 'success',
+            count: 8,
+          },
+          Archived: {
+            value: 'archived',
+            label: t('storybook.stories.CoreUiOutputs.archived'),
+            phase: t('storybook.stories.CoreUiOutputs.phaseArchive'),
+            tone: 'default',
+            count: 2,
+          },
         },
-        { name: copy.statusName },
+        { name: t('storybook.stories.CoreUiOutputs.statusName') },
       ),
-    [copy],
+    [t],
   );
 
   const dataSource = useMemo(
@@ -131,8 +78,20 @@ function UiOutputsDemo() {
   const currentRaw = selectedStatus === 'all' ? undefined : statusEnum.raw(selectedStatus);
 
   return (
-    <StoryPage title={copy.pageTitle} description={copy.pageDescription} highlights={copy.highlights}>
-      <StorySection title={copy.uiTitle} description={copy.uiDescription}>
+    <StoryPage
+      title={t('storybook.stories.CoreUiOutputs.pageTitle')}
+      description={t('storybook.stories.CoreUiOutputs.pageDescription')}
+      highlights={[
+        t('storybook.stories.CoreUiOutputs.highlights.toList'),
+        t('storybook.stories.CoreUiOutputs.highlights.items'),
+        t('storybook.stories.CoreUiOutputs.highlights.toMap'),
+        t('storybook.stories.CoreUiOutputs.highlights.metaRaw'),
+      ]}
+    >
+      <StorySection
+        title={t('storybook.stories.CoreUiOutputs.uiTitle')}
+        description={t('storybook.stories.CoreUiOutputs.uiDescription')}
+      >
         <TwoColumn
           left={
             <Card size="small">
@@ -141,7 +100,7 @@ function UiOutputsDemo() {
                   value={selectedStatus}
                   style={{ width: '100%' }}
                   options={[
-                    { value: 'all', label: copy.allStatuses },
+                    { value: 'all', label: t('storybook.stories.CoreUiOutputs.allStatuses') },
                     ...(statusEnum.toList() as { value: string; label: string }[]),
                   ]}
                   onChange={(value) => setSelectedStatus(value)}
@@ -150,14 +109,28 @@ function UiOutputsDemo() {
                   size="small"
                   column={1}
                   items={[
-                    { key: 'value', label: copy.currentValue, children: selectedStatus },
+                    {
+                      key: 'value',
+                      label: t('storybook.stories.CoreUiOutputs.currentValue'),
+                      children: selectedStatus,
+                    },
                     {
                       key: 'label',
-                      label: copy.currentLabel,
-                      children: currentRaw ? statusEnum.label(selectedStatus) : copy.allStatuses,
+                      label: t('storybook.stories.CoreUiOutputs.currentLabel'),
+                      children: currentRaw
+                        ? statusEnum.label(selectedStatus)
+                        : t('storybook.stories.CoreUiOutputs.allStatuses'),
                     },
-                    { key: 'tone', label: copy.currentTone, children: currentRaw?.tone || '-' },
-                    { key: 'phase', label: copy.currentPhase, children: currentRaw?.phase || '-' },
+                    {
+                      key: 'tone',
+                      label: t('storybook.stories.CoreUiOutputs.currentTone'),
+                      children: currentRaw?.tone || '-',
+                    },
+                    {
+                      key: 'phase',
+                      label: t('storybook.stories.CoreUiOutputs.currentPhase'),
+                      children: currentRaw?.phase || '-',
+                    },
                   ]}
                 />
               </Space>
@@ -165,12 +138,12 @@ function UiOutputsDemo() {
           }
           right={
             <CodePreview
-              title={copy.codeTitle}
+              title={t('storybook.stories.CoreUiOutputs.codeTitle')}
               code={`const statusEnum = Enum({
-  Draft: { value: 'draft', label: '${copy.draft}', phase: '${copy.phaseEditing}', tone: 'default' },
-  Review: { value: 'review', label: '${copy.review}', phase: '${copy.phaseEditing}', tone: 'processing' },
-  Published: { value: 'published', label: '${copy.published}', phase: '${copy.phaseOnline}', tone: 'success' },
-  Archived: { value: 'archived', label: '${copy.archived}', phase: '${copy.phaseArchive}', tone: 'default' },
+  Draft: { value: 'draft', label: '${t('storybook.stories.CoreUiOutputs.draft')}', phase: '${t('storybook.stories.CoreUiOutputs.phaseEditing')}', tone: 'default' },
+  Review: { value: 'review', label: '${t('storybook.stories.CoreUiOutputs.review')}', phase: '${t('storybook.stories.CoreUiOutputs.phaseEditing')}', tone: 'processing' },
+  Published: { value: 'published', label: '${t('storybook.stories.CoreUiOutputs.published')}', phase: '${t('storybook.stories.CoreUiOutputs.phaseOnline')}', tone: 'success' },
+  Archived: { value: 'archived', label: '${t('storybook.stories.CoreUiOutputs.archived')}', phase: '${t('storybook.stories.CoreUiOutputs.phaseArchive')}', tone: 'default' },
 });
 
 const selectOptions = statusEnum.toList();
@@ -181,7 +154,10 @@ const badgeMap = statusEnum.toMap({ keySelector: 'value', valueSelector: 'label'
         />
       </StorySection>
 
-      <StorySection title={copy.cardTitle} description={copy.cardDescription}>
+      <StorySection
+        title={t('storybook.stories.CoreUiOutputs.cardTitle')}
+        description={t('storybook.stories.CoreUiOutputs.cardDescription')}
+      >
         <Space wrap>
           {statusEnum.items.map((item) => {
             const raw = item.raw as { count?: number; tone?: string; phase?: string };
@@ -198,16 +174,19 @@ const badgeMap = statusEnum.toMap({ keySelector: 'value', valueSelector: 'label'
         </Space>
       </StorySection>
 
-      <StorySection title={copy.tableTitle} description={copy.tableDescription}>
+      <StorySection
+        title={t('storybook.stories.CoreUiOutputs.tableTitle')}
+        description={t('storybook.stories.CoreUiOutputs.tableDescription')}
+      >
         <Table
           className="ep-table"
           rowKey="id"
           pagination={false}
           columns={[
-            { title: copy.article, dataIndex: 'title' },
-            { title: copy.visits, dataIndex: 'visits' },
+            { title: t('storybook.stories.CoreUiOutputs.article'), dataIndex: 'title' },
+            { title: t('storybook.stories.CoreUiOutputs.visits'), dataIndex: 'visits' },
             {
-              title: copy.status,
+              title: t('storybook.stories.CoreUiOutputs.status'),
               dataIndex: 'status',
               render: (value: string) => {
                 const raw = statusEnum.raw(value);
@@ -219,17 +198,20 @@ const badgeMap = statusEnum.toMap({ keySelector: 'value', valueSelector: 'label'
         />
       </StorySection>
 
-      <StorySection title={copy.derivedTitle} description={copy.derivedDescription}>
+      <StorySection
+        title={t('storybook.stories.CoreUiOutputs.derivedTitle')}
+        description={t('storybook.stories.CoreUiOutputs.derivedDescription')}
+      >
         <TwoColumn
           left={
             <Space direction="vertical" size={16} style={{ width: '100%' }}>
-              <JsonPreview title={copy.toListCard} value={statusEnum.toList()} />
-              <JsonPreview title={copy.itemsCard} value={statusEnum.items} />
+              <JsonPreview title={t('storybook.stories.CoreUiOutputs.toListCard')} value={statusEnum.toList()} />
+              <JsonPreview title={t('storybook.stories.CoreUiOutputs.itemsCard')} value={statusEnum.items} />
             </Space>
           }
           right={
             <JsonPreview
-              title={copy.toMapCard}
+              title={t('storybook.stories.CoreUiOutputs.toMapCard')}
               value={statusEnum.toMap({ keySelector: 'value', valueSelector: 'label' })}
             />
           }
