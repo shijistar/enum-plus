@@ -6,11 +6,13 @@
   </a>
 </p>
 
+&nbsp;
+
 <p align="center">
-  <strong>用法像原生 enum 一样，但更强大！</strong>
+  <h3>一个业务字典管理解决方案，前端基础设施必备。</h3>
 </p>
 <p align="center">
-  <strong>一个业务字典管理解决方案，前端基础设施的一部分。</strong>
+  <h3>用法像原生 enum 一样，但更强大！</h3>
 </p>
 <br/>
 
@@ -53,7 +55,7 @@
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-high-v3.mp4" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
 <p align="center">

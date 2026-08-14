@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <strong>Like native enum, but much better!</strong>
+  <h3>A solution for business dictionary management.</h3>
 </p>
 <p align="center">
-  <strong>A solution for business dictionary management.</strong>
+  <h3>Like native enum, but much better!</h3>
 </p>
 <br/>
 
@@ -53,7 +53,7 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-high-v3.mp4" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
 <p align="center">
