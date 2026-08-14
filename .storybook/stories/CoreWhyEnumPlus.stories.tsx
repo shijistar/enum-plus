@@ -191,13 +191,19 @@ const badgeColorMap = { draft: 'default', review: 'processing', published: 'succ
   Review: { value: 'review', label: '${copy.review}', phase: '${copy.phaseEditing}', tone: 'processing' },
   Published: { value: 'published', label: '${copy.published}', phase: '${copy.phaseOnline}', tone: 'success' },
   Archived: { value: 'archived', label: '${copy.archived}', phase: '${copy.phaseArchive}', tone: 'default' },
-}, { name: '${copy.statusEnumName}' });`}
+}, { name: 'ContentStatus' });`}
               />
               <JsonPreview
                 title={copy.enumData}
                 value={{
                   label: statusEnum.label(selectedValue),
-                  items: statusEnum.items,
+                  items: statusEnum.items.map((item) => ({
+                    value: item.value,
+                    label: item.label,
+                    key: item.key,
+                    phase: item.phase,
+                    tone: item.tone,
+                  })),
                   toList: statusEnum.toList(),
                   toMap: statusEnum.toMap(),
                 }}

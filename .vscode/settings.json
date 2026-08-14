@@ -32,6 +32,5 @@
     "**/Thumbs.db": true,
     "**/node_modules": true
   },
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "commentTranslate.source": "Bing"
 }
