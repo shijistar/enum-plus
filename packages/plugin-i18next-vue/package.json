@@ -52,11 +52,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
-    "@vitest/browser-playwright": "^4.0.0-beta.17",
-    "@vitest/coverage-istanbul": "^4.0.0-beta.17",
     "@vue/test-utils": "^2.4.6",
     "i18next-vue": "^5.3.0",
-    "vitest": "^4.0.0-beta.17",
     "vue": "^3.5.22"
   },
   "peerDependencies": {

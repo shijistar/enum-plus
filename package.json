@@ -206,10 +206,9 @@
     "@types/node": "^22.19.15",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
-    "@vitest/browser": "^4.1.8",
-    "@vitest/browser-playwright": "^4.1.8",
-    "@vitest/coverage-istanbul": "^4.1.8",
-    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/browser": "^4.1.10",
+    "@vitest/browser-playwright": "^4.1.10",
+    "@vitest/coverage-istanbul": "^4.1.10",
     "antd": "^5.27.5",
     "baseline-browser-mapping": "^2.10.13",
     "chromium-bidi": "^14.0.0",
@@ -236,7 +235,7 @@
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.10"
   },
   "packageManager": "npm@11.12.1",
   "engines": {
