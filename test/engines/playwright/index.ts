@@ -1,0 +1,125 @@
+import * as utils from '@enum-plus/utils';
+import { defaultLocalize, Enum } from '@enum-plus';
+import { EnumExtensionClass } from '@enum-plus/enum-collection';
+import { internalConfig, localizer } from '@enum-plus/global-config';
+import type { Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { parse, stringify } from 'jsoneo';
+import { getLocales, setLang } from '../../data/week-config';
+import TestEngineBase from '../base';
+import type { RuntimeContext } from '../vitest/utils';
+import type { MakeMatchers } from './playwright-types';
+
+export class PlaywrightEngine extends TestEngineBase<'playwright'> {
+  constructor() {
+    super();
+    this._type = 'playwright';
+  }
+
+  override describe(name: string, fn: () => void): void {
+    test.describe(name, fn);
+  }
+
+  override test<Data = unknown>(
+    name: string,
+    evaluate: (context: RuntimeContext) => Data,
+    assert: (data: Data) => void,
+    evaluateContext?: Record<string, unknown>,
+  ): void {
+    const serializedEvaluateParams = stringify({ ...evaluateContext, evaluateFn: evaluate });
+
+    test(`(es) ${name}`, async ({ page }) => {
+      await page.goto('/modern.html', { waitUntil: 'load' });
+      await this.executeEvaluation({ page, assert, serializedEvaluateParams });
+    });
+
+    // test(`(es-legacy) ${name}`, async ({ page }) => {
+    //   await page.goto('/legacy.html', { waitUntil: 'load' });
+    //   await this.executeEvaluation({ page, assert, serializedEvaluateParams });
+    // });
+  }
+
+  override expect<T>(actual: T, options?: Parameters<typeof expect>[1]) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    return expect(actual, options) as MakeMatchers<void, T, {}>;
+  }
+
+  // Execute the test evaluation
+  protected async executeEvaluation<Data = unknown>(options: {
+    page: Page;
+    assert: (data: Data) => void;
+    serializedEvaluateParams: string;
+  }) {
+    const { page, assert, serializedEvaluateParams } = options;
+    const resultStr = await page.evaluate(async (contextStr) => {
+      const EnumPlus = window.EnumPlus;
+      const WeekConfig = window.WeekConfig;
+      const WeekData = window.WeekData;
+      const Jsoneo = window.jsoneo;
+      const ClientHooks = window.ClientHooks;
+      const i18n = window.I18n;
+
+      // Deserialize request
+      const runtimeContext = {
+        EnumPlus,
+        WeekConfig,
+        WeekData,
+        Jsoneo,
+        ClientHooks,
+        i18n,
+      };
+      // console.log('window', runtimeContext);
+      const { stringify, parse } = Jsoneo;
+      const args = parse(contextStr) as { evaluateFn: (context: RuntimeContext) => Data };
+      const { evaluateFn, ...rest } = args;
+
+      await ClientHooks.beforeEach?.();
+
+      // Execute the evaluation
+      const evaluateResult = evaluateFn({ ...runtimeContext, ...rest });
+      // console.log('evaluateResult');
+      // console.log(evaluateResult);
+
+      // Serialize the evaluation result and pass it to assertion method
+      const serializedStr = stringify(
+        {
+          _enumLocalize: EnumPlus.Enum.localize,
+          _lang: WeekConfig.lang,
+          _config: EnumPlus.Enum.config,
+          ...evaluateResult,
+        },
+        {
+          // debug: true,
+        },
+      );
+      // console.log('serialize result');
+      // console.log(serializeResult);
+      return serializedStr;
+    }, serializedEvaluateParams);
+
+    const globalClosure = { Enum, EnumExtensionClass, internalConfig, localizer, ...utils, exports: {} };
+    const initialState = parse(resultStr, {
+      closure: globalClosure,
+      // debug: true,
+      prettyPrint: true,
+    });
+    // Restore the lang to the Enum.localize
+    setLang(initialState._lang, Enum, getLocales, defaultLocalize);
+    if (!initialState._enumLocalize) {
+      Enum.localize = undefined!;
+    }
+    Object.assign(Enum.config, initialState._config);
+
+    // the Enum object is used to "help" to access the Enum global function,
+    // because the code is like `const localize = this._options?.localize ?? Enum.localize;`,
+    // it seems that Enum is a global variable, but actually it is not, we simulate it as a closure context.
+    const testResult = parse(resultStr, {
+      closure: { ...globalClosure, ...initialState },
+    });
+    // console.log('deserialize result');
+    // console.log(testResult);
+    assert(testResult as Data);
+  }
+}
+
+export default new PlaywrightEngine();

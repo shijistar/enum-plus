@@ -25,6 +25,7 @@ function runCodegraph(args) {
   const result = spawnSync(codegraphCommand, args, {
     cwd: repoRoot,
     stdio: 'inherit',
+    shell: true,
   });
 
   if (result.error) {

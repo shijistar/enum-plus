@@ -2,15 +2,16 @@ import { defaultLocalize, IS_ENUM_ITEMS as ENUM_ITEMS_IN_NODE, KEYS, VALUES } fr
 import { getLocales, localizeConfigData } from '../data/week-config';
 import { getStandardWeekData } from '../data/week-data';
 import type TestEngineBase from '../engines/base';
+import type { TestEngineTypes } from '../types';
 import { pickArray } from '../utils/index';
 
-const testEnumItems = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testEnumItems = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('EnumItems API', () => {
     addEnumItemsTestSuite(engine);
   });
 };
 
-export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwright'>) {
+export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
   engine.test(
     'should expose the [IS_ENUM_ITEMS] marker on enum item arrays',
     ({ EnumPlus: { Enum, IS_ENUM_ITEMS }, WeekConfig: { StandardWeekConfig } }) => {
@@ -179,12 +180,30 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
 
   engine.test(
     'should find enum items by key, value, label, or custom metadata with enum.items.findBy',
-    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekCompactConfig } }) => {
-      const weekEnum = Enum(StandardWeekConfig);
-      const compactWeekEnum = Enum(WeekCompactConfig);
-      return { weekEnum, compactWeekEnum };
+    ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, WeekCompactConfig }, i18n: { neutral } }) => {
+      Enum.config.templates = {
+        items: {
+          abbr: 'weekday.{key}Abbr',
+        },
+      };
+      const weekEnum = Enum(StandardWeekConfig, {
+        templates: {
+          items: {
+            abbr2: 'weekday.Abbr{value}',
+          },
+        },
+      });
+      const compactWeekEnum = Enum(WeekCompactConfig, {
+        templates: {
+          items: {
+            abbr: 'weekday.{key}Abbr',
+            abbr3: 'weekday.{key}Abbr',
+          },
+        },
+      });
+      return { Enum, weekEnum, compactWeekEnum, locales: neutral };
     },
-    ({ weekEnum, compactWeekEnum }) => {
+    ({ Enum, weekEnum, compactWeekEnum, locales }) => {
       engine.expect(weekEnum.items.findBy('key', 'Monday')).toBe(weekEnum.items[1]);
       engine.expect(weekEnum.items.findBy('key', 'Saturday')).toBe(weekEnum.items[6]);
       engine.expect(weekEnum.items.findBy('key', 'Invalid Key')).toBe(undefined);
@@ -199,13 +218,23 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<'jest' | 'playwrigh
       engine.expect(compactWeekEnum.items.findBy('value', 1)).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('value', 99)).toBe(undefined);
       engine.expect(compactWeekEnum.items.findBy('label', 'weekday.Monday')).toBe(undefined);
-
       // Custom meta field
       engine.expect(weekEnum.items.findBy('status', 'error')).toEqual(weekEnum.items[0]);
       engine.expect(weekEnum.items.findBy('status', 'warning')).toEqual(weekEnum.items[1]);
       engine.expect(weekEnum.items.findBy('status', 'success')).toEqual(weekEnum.items[3]);
       engine.expect(weekEnum.items.findBy('status', 'invalid')).toEqual(undefined);
       engine.expect(compactWeekEnum.items.findBy('status' as 'key', 'success')).toEqual(undefined);
+      engine.expect(weekEnum.items.findBy('abbr', locales['weekday.MondayAbbr'])).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.items.findBy('abbr', '<NOT_EXISTED>')).toBe(undefined);
+      engine.expect(weekEnum.items.findBy('abbr2', locales['weekday.Abbr1'])).toBe(weekEnum.items[1]);
+      engine.expect(weekEnum.items.findBy('abbr2', '<NOT_EXISTED>')).toBe(undefined);
+      engine.expect(compactWeekEnum.items.findBy('abbr', locales['weekday.MondayAbbr'])).toBe(compactWeekEnum.items[1]);
+      engine.expect(compactWeekEnum.items.findBy('abbr', '<NOT_EXISTED>')).toBe(undefined);
+      engine
+        .expect(compactWeekEnum.items.findBy('abbr3', locales['weekday.MondayAbbr']))
+        .toBe(compactWeekEnum.items[1]);
+      engine.expect(compactWeekEnum.items.findBy('abbr3', '<NOT_EXISTED>')).toBe(undefined);
+      Enum.config.templates = undefined;
     },
   );
 

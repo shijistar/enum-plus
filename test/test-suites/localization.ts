@@ -1,10 +1,12 @@
-import type { EnumItemInterface, IEnum, ListItem } from '@enum-plus';
+import type { EnumInitOptions, EnumItemInterface, IEnum, ListItem } from '@enum-plus';
 import { ENUM_OPTIONS } from '@enum-plus';
 import type { MapResult } from '@enum-plus/enum-items';
 import type {
   FuncLabelStandardWeekConfig,
   ShortLabelStandardWeekConfig,
   StandardWeekConfig,
+  WeekCompactConfig,
+  WeekNumberConfig,
   WeekValueOnlyConfig,
 } from '../data/week-config';
 import type { getStandardWeekData as getStandardWeekDataInterface } from '../data/week-data';
@@ -12,9 +14,10 @@ import type TestEngineBase from '../engines/base';
 import type enUS from '../i18n/en-US.json';
 import neutral from '../i18n/neutral.json';
 import type zhCN from '../i18n/zh-CN.json';
+import type { TestEngineTypes } from '../types';
 import { copyList, pickArray } from '../utils/index';
 
-const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
+const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
   engine.describe('Enum localization', () => {
     engine.test(
       'should provide a default localize method',
@@ -508,7 +511,6 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
         const defaultMap = weekEnum.toMap();
         const customMap = weekEnum.toMap({ keySelector: 'key', valueSelector: (item) => ({ label: item.label }) });
         return {
-          Enum,
           weekEnum,
           locales: enUS,
           getStandardWeekData,
@@ -721,7 +723,765 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     );
 
     engine.test(
-      'should localize Enum names globally in English',
+      'Enum.config.templates can set global label and undeclared meta fields, in string format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: '{name}',
+          items: {
+            label: 'weekday.{key}',
+            abbr: '{raw}',
+            abbr2: 'weekday.{key}Abbr',
+            abbr3: 'weekday.Abbr{value}',
+          },
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          name: 'weekDay.name',
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, enUS }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales: enUS });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'Enum.config.templates can set global label and undeclared meta fields, in function format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: () => 'weekDay.name',
+          items: {
+            label: ({ item }) => `weekday.${item.key}`,
+            abbr: ({ item }) => (item.raw as { abbr: string } | undefined)?.abbr ?? '{raw}',
+            abbr2: ({ item }) => `weekday.${item.key}Abbr`,
+            abbr3: ({ item }) => `weekday.Abbr${item.value.toString()}`,
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig);
+        const weekEnum2 = Enum(WeekValueOnlyConfig);
+        const weekEnum3 = Enum(WeekNumberConfig);
+        const weekEnum4 = Enum(WeekCompactConfig);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, enUS }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales: enUS });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'Enum.config.templates should support language change',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { zhCN },
+      }) => {
+        setLang('zh-CN', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: 'weekDay.name',
+          items: {
+            label: `weekday.{key}`,
+            abbr: '{raw}',
+            abbr2: 'weekday.{key}Abbr',
+            abbr3: 'weekday.Abbr{value}',
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig);
+        const weekEnum2 = Enum(WeekValueOnlyConfig);
+        const weekEnum3 = Enum(WeekNumberConfig);
+        const weekEnum4 = Enum(WeekCompactConfig);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: zhCN };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'Enum.config.templates can set global unresolved label and undeclared meta fields, in string format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: '<NOT_EXISTED_KEY>',
+          items: {
+            label: '<NOT_EXISTED_KEY>',
+            abbr: '<NOT_EXISTED_KEY>',
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig);
+        const weekEnum2 = Enum(WeekValueOnlyConfig);
+        const weekEnum3 = Enum(WeekNumberConfig);
+        const weekEnum4 = Enum(WeekCompactConfig);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertUnresolvedTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'Enum.config.templates can set global unresolved label and undeclared meta fields, in function format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: () => '<NOT_EXISTED_KEY>',
+          items: {
+            label: () => '<NOT_EXISTED_KEY>',
+            abbr: () => '<NOT_EXISTED_KEY>',
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig);
+        const weekEnum2 = Enum(WeekValueOnlyConfig);
+        const weekEnum3 = Enum(WeekNumberConfig);
+        const weekEnum4 = Enum(WeekCompactConfig);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertUnresolvedTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'options.templates can set instance level label and undeclared meta fields, in string format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          name: 'weekDay.name',
+          templates: {
+            name: '{name}',
+            items: {
+              label: 'weekday.{key}',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'options.templates can set instance level label and undeclared meta fields, in function format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            name: () => 'weekDay.name',
+            items: {
+              label: ({ item }) => `weekday.${item.key}`,
+              abbr: ({ item }) => item.raw?.abbr ?? '{raw}',
+              abbr2: ({ item }) => `weekday.${item.key}Abbr`,
+              abbr3: ({ item }) => `weekday.Abbr${item.value.toString()}`,
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'options.templates should support language change',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { zhCN },
+      }) => {
+        setLang('zh-CN', Enum, getLocales, defaultLocalize);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          name: 'weekDay.name',
+          templates: {
+            name: '{name}',
+            items: {
+              label: 'weekday.{key}',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: zhCN };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'options.templates can set instance level unresolved label and undeclared meta fields, in string format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            name: '<NOT_EXISTED_KEY>',
+            items: {
+              label: '<NOT_EXISTED_KEY>',
+              abbr: '<NOT_EXISTED_KEY>',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertUnresolvedTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'options.templates can set instance level unresolved label and undeclared meta fields, in function format',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            name: () => '<NOT_EXISTED_KEY>',
+            items: {
+              label: () => '<NOT_EXISTED_KEY>',
+              abbr: () => '<NOT_EXISTED_KEY>',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertUnresolvedTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'options.templates should override global templates (in string format)',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: '<NOT_EXISTED_KEY>',
+          items: {
+            label: '<NOT_EXISTED_KEY>',
+            abbr: '<NOT_EXISTED_KEY>',
+            abbr2: '<NOT_EXISTED_KEY>',
+            abbr3: '<NOT_EXISTED_KEY>',
+          },
+        };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            name: 'weekDay.name',
+            items: {
+              label: 'weekday.{key}',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'options.templates should override global templates (in function format)',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: () => '<NOT_EXISTED_KEY>',
+          items: {
+            label: () => '<NOT_EXISTED_KEY>',
+            abbr: () => '<NOT_EXISTED_KEY>',
+            abbr2: () => '<NOT_EXISTED_KEY>',
+            abbr3: () => '<NOT_EXISTED_KEY>',
+          },
+        }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            name: 'weekDay.name',
+            items: {
+              label: 'weekday.{key}',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'options.templates should override global templates and support language change',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { zhCN },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: 'weekDay.name',
+          items: {
+            label: `weekday.{key}`,
+            abbr: '{raw}',
+            abbr2: 'weekday.{key}Abbr',
+            abbr3: 'weekday.Abbr{value}',
+          },
+        };
+
+        setLang('zh-CN', Enum, getLocales, defaultLocalize);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            name: 'weekDay.name',
+            items: {
+              label: 'weekday.{key}',
+              abbr: '{raw}',
+              abbr2: 'weekday.{key}Abbr',
+              abbr3: 'weekday.Abbr{value}',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: zhCN };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertWeekEnumTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'options.templates should not override global templates when empty',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: '<NOT_EXISTED_KEY>',
+          items: {
+            label: '<NOT_EXISTED_KEY>',
+            abbr: '<NOT_EXISTED_KEY>',
+          },
+        }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {},
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        assertUnresolvedTemplates({ weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales });
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'templates should allow other token-alike strings',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: 'weekday.{foo}',
+          items: {
+            label: 'weekday.{bar}',
+          },
+        }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            items: {
+              abbr: 'weekday.{baz}',
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+          engine.expect(weekEnum.name).toBe('weekday.{foo}');
+          engine.expect(weekEnum.label('Sunday')).toBe('weekday.{bar}');
+          engine.expect(weekEnum.items[0].label).toBe('weekday.{bar}');
+          engine.expect(weekEnum.named.Sunday.label).toBe('weekday.{bar}');
+          engine.expect(weekEnum.items[0].abbr).toBe('weekday.{baz}');
+          engine.expect(weekEnum.named.Sunday.abbr).toBe('weekday.{baz}');
+          engine
+            .expect(weekEnum.meta.abbr)
+            .toEqual([
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+              'weekday.{baz}',
+            ]);
+        });
+        Enum.config.templates = undefined;
+      },
+    );
+    engine.test(
+      'template tokens should be preserved when replacing value is empty',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: {
+          StandardWeekConfig,
+          WeekValueOnlyConfig,
+          WeekNumberConfig,
+          WeekCompactConfig,
+          setLang,
+          getLocales,
+        },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          name: '{name}',
+          items: {
+            label: '{raw}',
+          },
+        }; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options: EnumInitOptions<any> = {
+          templates: {
+            items: {
+              abbr: 'weekday.{raw}',
+              noRawValue: '{raw}',
+              empty: () => undefined,
+            },
+          },
+        };
+        const weekEnum1 = Enum(StandardWeekConfig, options);
+        const weekEnum2 = Enum(WeekValueOnlyConfig, options);
+        const weekEnum3 = Enum(WeekNumberConfig, options);
+        const weekEnum4 = Enum(WeekCompactConfig, options);
+
+        return { Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales: enUS };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, weekEnum4, locales }) => {
+        engine.expect(weekEnum1.name).toBe('{name}');
+        engine.expect(weekEnum1.label('Sunday')).toBe(locales['weekday.Sunday']);
+        engine.expect(weekEnum1.items[0].label).toBe(locales['weekday.Sunday']);
+        engine.expect(weekEnum1.named.Sunday.label).toBe(locales['weekday.Sunday']);
+        engine.expect(weekEnum1.items[0].abbr).toBe('weekday.weekday.SundayAbbr');
+        engine.expect(weekEnum1.named.Sunday.abbr).toBe('weekday.weekday.SundayAbbr');
+        engine
+          .expect(weekEnum1.meta.abbr)
+          .toEqual([
+            'weekday.weekday.SundayAbbr',
+            'weekday.weekday.MondayAbbr',
+            'weekday.weekday.TuesdayAbbr',
+            'weekday.weekday.WednesdayAbbr',
+            'weekday.weekday.ThursdayAbbr',
+            'weekday.weekday.FridayAbbr',
+            'weekday.weekday.SaturdayAbbr',
+          ]);
+
+        ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+          engine.expect(weekEnum.name).toBe('{name}');
+          engine.expect(weekEnum.label('Sunday')).toBe('{raw}');
+          engine.expect(weekEnum.items[0].label).toBe('{raw}');
+          engine.expect(weekEnum.named.Sunday.label).toBe('{raw}');
+          engine.expect(weekEnum.items[0].abbr).toBe('weekday.{raw}');
+          engine.expect(weekEnum.named.Sunday.abbr).toBe('weekday.{raw}');
+          engine
+            .expect(weekEnum.meta.abbr)
+            .toEqual([
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+              'weekday.{raw}',
+            ]);
+        });
+
+        ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+          engine.expect((weekEnum.items[0] as { noRawValue?: string }).noRawValue).toBe('{raw}');
+          engine.expect((weekEnum.named.Sunday as { noRawValue?: string }).noRawValue).toBe('{raw}');
+          engine.expect((weekEnum.items[0] as { empty?: string }).empty).toBe(undefined);
+          engine.expect((weekEnum.named.Sunday as { empty?: string }).empty).toBe(undefined);
+          engine
+            .expect((weekEnum.meta as { noRawValue?: string[] }).noRawValue)
+            .toEqual(['{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}']);
+          // because nullish values are removed from meta arrays
+          engine.expect((weekEnum.meta as { empty?: string[] }).empty).toEqual([]);
+        });
+
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'Enum.config.templates should take precedence over autoLabel',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { WeekValueOnlyConfig, WeekNumberConfig, WeekCompactConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = {
+          items: {
+            label: `weekday.{key}Abbr`,
+          },
+        };
+        const weekEnum1 = Enum(WeekValueOnlyConfig, {
+          autoLabel: true,
+          labelPrefix: 'weekday.',
+        });
+        const weekEnum2 = Enum(WeekNumberConfig, {
+          autoLabel: ({ item }) => `weekday.${item.key}`,
+          labelPrefix: 'weekday.',
+        });
+        const weekEnum3 = Enum(WeekCompactConfig, {
+          autoLabel: ({ item }) => `weekday.${item.key}`,
+          labelPrefix: 'weekday.',
+        });
+        const defaultListItems = weekEnum1.toList();
+        const defaultMap = weekEnum1.toMap();
+
+        return {
+          Enum,
+          weekEnum1,
+          weekEnum2,
+          weekEnum3,
+          locales: enUS,
+          defaultListItems,
+          defaultMap,
+        };
+      },
+      ({ Enum, weekEnum1, weekEnum2, weekEnum3, defaultListItems, defaultMap, locales }) => {
+        ([weekEnum1, weekEnum2, weekEnum3] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+          engine.expect(weekEnum.label('Sunday')).toBe(locales['weekday.SundayAbbr']);
+          engine.expect(weekEnum.items[0].label).toBe(locales['weekday.SundayAbbr']);
+          engine.expect(weekEnum.named.Sunday.label).toBe(locales['weekday.SundayAbbr']);
+        });
+        engine.expect(defaultListItems[0].label).toBe(locales['weekday.SundayAbbr']);
+        engine.expect(defaultMap['0']).toBe(locales['weekday.SundayAbbr']);
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'Enum name should support global localization (English)',
       ({
         EnumPlus: { Enum, defaultLocalize },
         WeekConfig: { StandardWeekConfig, setLang, getLocales, resourceLocalizer },
@@ -903,7 +1663,14 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       | IEnum<
           typeof StandardWeekConfig,
           keyof typeof StandardWeekConfig,
-          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value']
+          (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+          unknown,
+          EnumInitOptions<
+            typeof StandardWeekConfig,
+            keyof typeof StandardWeekConfig,
+            (typeof StandardWeekConfig)[keyof typeof StandardWeekConfig]['value'],
+            unknown
+          >
         >
       | IEnum<
           typeof FuncLabelStandardWeekConfig,
@@ -934,14 +1701,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
     engine.expect(sunday.label).toBe(locales['weekday.Sunday']);
     engine.expect(sunday.toString()).toBe(locales['weekday.Sunday']);
     engine.expect(sunday.toLocaleString()).toBe(locales['weekday.Sunday']);
-    engine
-      .expect(
-        copyList(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          weekEnum.items as any[],
-        ),
-      )
-      .toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
+    engine.expect(copyList(weekEnum.items)).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
     engine.expect(copyList(weekEnum.toList())).toEqual(pickArray(getStandardWeekData(locales), ['label', 'value']));
 
     const autoLocalizeMeta = weekEnum[ENUM_OPTIONS]?.autoLocalizeMeta;
@@ -960,7 +1720,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
                 if (typeof metaValue === 'function') {
                   metaValue = metaValue(item);
                 }
-                meta[metaKey].push(locales[metaValue as unknown as keyof typeof locales] ?? metaValue);
+                meta[metaKey].push(locales[metaValue as keyof typeof locales] ?? metaValue);
               } else {
                 meta[metaKey].push(metaValue);
               }
@@ -1014,7 +1774,7 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
       typeof StandardWeekConfig,
       'key',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (item: EnumItemInterface<any, any, any, any>) => { label: string }
+      (item: EnumItemInterface<any, any, any, any, any, any>) => { label: string }
     >;
     locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
     getStandardWeekData: typeof getStandardWeekDataInterface;
@@ -1042,3 +1802,89 @@ const testLocalization = (engine: TestEngineBase<'jest' | 'playwright'>) => {
 };
 
 export default testLocalization;
+function assertWeekEnumTemplates(params: {
+  weekEnum1: IEnum<typeof StandardWeekConfig>;
+  weekEnum2: IEnum<typeof WeekValueOnlyConfig>;
+  weekEnum3: IEnum<typeof WeekNumberConfig>;
+  weekEnum4: IEnum<typeof WeekCompactConfig>;
+  engine: TestEngineBase<TestEngineTypes>;
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
+}) {
+  const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine, locales } = params;
+  engine.expect(weekEnum1.items[0].abbr).toBe(locales['weekday.SundayAbbr']);
+  engine.expect(weekEnum1.named.Sunday.abbr).toBe(locales['weekday.SundayAbbr']);
+  engine
+    .expect(weekEnum1.meta.abbr)
+    .toEqual([
+      locales['weekday.SundayAbbr'],
+      locales['weekday.MondayAbbr'],
+      locales['weekday.TuesdayAbbr'],
+      locales['weekday.WednesdayAbbr'],
+      locales['weekday.ThursdayAbbr'],
+      locales['weekday.FridayAbbr'],
+      locales['weekday.SaturdayAbbr'],
+    ]);
+
+  ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+    engine.expect(weekEnum.items[0].abbr).toBe('{raw}');
+    engine.expect(weekEnum.named.Sunday.abbr).toBe('{raw}');
+    engine.expect(weekEnum.meta.abbr).toEqual(['{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}', '{raw}']);
+  });
+  ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+    engine.expect(weekEnum.name).toBe(locales['weekDay.name']);
+    engine.expect(weekEnum.label('Sunday')).toBe(locales['weekday.Sunday']);
+    engine.expect(weekEnum.items[0].label).toBe(locales['weekday.Sunday']);
+    engine.expect(weekEnum.named.Sunday.label).toBe(locales['weekday.Sunday']);
+    engine.expect((weekEnum.items[0] as { abbr2?: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.named.Sunday as { abbr2?: string }).abbr2).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.items[0] as { abbr3?: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
+    engine.expect((weekEnum.named.Sunday as { abbr3?: string }).abbr3).toBe(locales['weekday.SundayAbbr']);
+    const abbrArrays: (string[] | undefined)[] = [
+      (weekEnum.meta as { abbr2?: string[] })?.abbr2,
+      (weekEnum.meta as { abbr3?: string[] })?.abbr3,
+    ];
+    abbrArrays.forEach((abbrs) => {
+      engine
+        .expect(abbrs)
+        .toEqual([
+          locales['weekday.SundayAbbr'],
+          locales['weekday.MondayAbbr'],
+          locales['weekday.TuesdayAbbr'],
+          locales['weekday.WednesdayAbbr'],
+          locales['weekday.ThursdayAbbr'],
+          locales['weekday.FridayAbbr'],
+          locales['weekday.SaturdayAbbr'],
+        ]);
+    });
+  });
+}
+
+function assertUnresolvedTemplates(params: {
+  weekEnum1: IEnum<typeof StandardWeekConfig>;
+  weekEnum2: IEnum<typeof WeekValueOnlyConfig>;
+  weekEnum3: IEnum<typeof WeekNumberConfig>;
+  weekEnum4: IEnum<typeof WeekCompactConfig>;
+  engine: TestEngineBase<TestEngineTypes>;
+  locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>;
+}) {
+  const { weekEnum1, weekEnum2, weekEnum3, weekEnum4, engine } = params;
+  ([weekEnum1, weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
+    engine.expect(weekEnum.name).toBe('<NOT_EXISTED_KEY>');
+    engine.expect(weekEnum.label('Sunday')).toBe('<NOT_EXISTED_KEY>');
+    engine.expect(weekEnum.items[0].label).toBe('<NOT_EXISTED_KEY>');
+    engine.expect(weekEnum.named.Sunday.label).toBe('<NOT_EXISTED_KEY>');
+    engine.expect(weekEnum.items[0].abbr).toBe('<NOT_EXISTED_KEY>');
+    engine.expect(weekEnum.named.Sunday.abbr).toBe('<NOT_EXISTED_KEY>');
+    engine
+      .expect((weekEnum.meta as { abbr: string[] }).abbr)
+      .toEqual([
+        '<NOT_EXISTED_KEY>',
+        '<NOT_EXISTED_KEY>',
+        '<NOT_EXISTED_KEY>',
+        '<NOT_EXISTED_KEY>',
+        '<NOT_EXISTED_KEY>',
+        '<NOT_EXISTED_KEY>',
+        '<NOT_EXISTED_KEY>',
+      ]);
+  });
+}

@@ -1,115 +1,27 @@
 import type { PropsWithChildren } from 'react';
-import { useEffect, useState } from 'react';
-import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/blocks';
+import { lazy, Suspense } from 'react';
+import { type DocsContainerProps } from '@storybook/addon-docs/blocks';
 import type { Preview, ReactRenderer } from '@storybook/react-vite';
-import type { StoryContext } from 'storybook/internal/csf';
 import antdPlugin from '../packages/plugin-antd/src';
-import { App as AntdApp, ConfigProvider as AntdConfigProvider, theme as antTheme } from 'antd';
 import 'antd/dist/reset.css';
-import enUS from 'antd/locale/en_US';
-import zhCN from 'antd/locale/zh_CN';
 import { reactI18nextPlugin } from '../packages/plugin-react/src';
 import { Enum } from '../src';
-import storyI18n, { storyT } from './locales';
+import useStorybookDecorator from './components/useStorybookDecorator';
+import { storyT } from './locales';
 import { ensureStoryI18n } from './stories/shared/i18n';
-import { getGlobalValueFromUrl } from './utils/global';
-import { dark, light } from './utils/themes';
 import './story-styles.css';
 
 Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0]);
 Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
 ensureStoryI18n();
 
-const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-let currentTheme: string | undefined = undefined;
-
-function getThemeKey(theme: unknown) {
-  return (!theme && isPreferDark) || theme === 'dark' ? 'dark' : 'light';
-}
-
-function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<ReactRenderer>>) {
-  const globalTheme = getGlobalValueFromUrl('theme');
-  const themeKey = getThemeKey(globalTheme);
-  // @ts-expect-error: because store is an internal api
-  const localeKey = props.context.store?.userGlobals.globals.locale;
-  // @ts-expect-error: because store is an internal api
-  const themeName = props.context.store?.userGlobals.globals.theme;
-
-  // Reload the page if the theme changes.
-  useEffect(() => {
-    if (!currentTheme) {
-      currentTheme = themeName;
-    }
-    if (themeName !== currentTheme) {
-      currentTheme = themeName;
-      (window.top ?? window.parent ?? window).location.reload();
-    }
-  }, [themeName]);
-
-  useEffect(() => {
-    if (storyI18n.language !== localeKey) {
-      void storyI18n.changeLanguage(localeKey).then(() => {
-        (window.top ?? window.parent ?? window).location.reload();
-      });
-    }
-  }, [localeKey]);
-
-  return (
-    <div className={`enum-story-shell enum-story-shell-${themeKey} enum-story-docs`} data-theme={themeKey}>
-      <DocsContainer {...props} theme={themeKey === 'dark' ? dark : light} />
-    </div>
-  );
-}
-
-function StorybookDecorator({ Story, context }: { Story: React.ComponentType; context: StoryContext<ReactRenderer> }) {
-  const localeKey = context.globals.locale === 'zh-CN' ? 'zh-CN' : 'en-US';
-  const locale = localeKey === 'zh-CN' ? zhCN : enUS;
-  const themeKey = getThemeKey(context.globals.theme);
-  const isDark = themeKey === 'dark';
-  const themeName = isDark ? 'dark' : 'light';
-  const [prevTheme, setPrevTheme] = useState(themeName);
-
-  // Reload the page if the theme changes.
-  useEffect(() => {
-    if (themeName !== prevTheme) {
-      setPrevTheme(themeName);
-      (window.top ?? window.parent ?? window).location.reload();
-    }
-  }, [themeName, prevTheme]);
-
-  useEffect(() => {
-    if (storyI18n.language !== localeKey) {
-      void storyI18n.changeLanguage(localeKey).then(() => {
-        (window.top ?? window.parent ?? window).location.reload();
-      });
-    }
-  }, [localeKey]);
-
-  return (
-    <AntdConfigProvider
-      locale={locale}
-      theme={{
-        algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
-        token: {
-          colorPrimary: isDark ? dark.colorPrimary : light.colorPrimary,
-          fontSize: 16,
-          fontFamily: 'SF Pro Display, Segoe UI, PingFang SC, Helvetica Neue, Arial, sans-serif',
-        },
-      }}
-    >
-      <AntdApp>
-        <div className={`enum-story-shell enum-story-shell-${themeName}`} data-theme={themeName}>
-          <Story />
-        </div>
-      </AntdApp>
-    </AntdConfigProvider>
-  );
-}
+// @ts-expect-error
+const ThemedDocsContainer = lazy(() => import('./components/StorybookDocsContainer.js'));
 
 const preview: Preview = {
   initialGlobals: {
-    locale: 'en-US',
-    theme: isPreferDark ? 'dark' : 'light',
+    locale: '',
+    theme: '',
   },
   globalTypes: {
     locale: {
@@ -161,13 +73,17 @@ const preview: Preview = {
     backgrounds: { disable: true },
     docs: {
       container: (props: PropsWithChildren<DocsContainerProps<ReactRenderer>>) => {
-        return <StorybookDocsContainer {...props} />;
+        return (
+          <Suspense fallback={null}>
+            <ThemedDocsContainer {...props} />
+          </Suspense>
+        );
       },
     },
   },
   decorators: [
     (Story, context) => {
-      return <StorybookDecorator Story={Story} context={context} />;
+      return useStorybookDecorator(Story, context);
     },
   ],
 };

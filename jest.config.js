@@ -2,12 +2,12 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/test/**/*.{spec,test}.{ts,tsx}'],
-  setupFilesAfterEnv: ['<rootDir>/test/jest.setup.ts'],
+  testMatch: ['<rootDir>/test/specs/jest/**/*.{spec,test}.{ts,tsx}'],
+  setupFilesAfterEnv: ['<rootDir>/test/specs/jest/jest.setup.ts'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
-  coveragePathIgnorePatterns: ['src/types.ts', 'src/localize-interface.ts', 'src/extension.d.ts'],
+  coveragePathIgnorePatterns: ['src/extension.d.ts'],
   moduleNameMapper: {
     '^@enum-plus/(.*)$': '<rootDir>/src/$1',
     '^@enum-plus': '<rootDir>/src',
