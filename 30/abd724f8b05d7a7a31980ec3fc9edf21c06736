@@ -1,0 +1,14 @@
+.storybook/stories/20-CoreWhyEnumPlus.stories.tsx
+  h_99cad05bea77d1 11,13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "30abd724f8b05d7a7a31980ec3fc9edf21c06736",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
