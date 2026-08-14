@@ -1,0 +1,30 @@
+README.md
+  h_99cad05bea77d1 12,15
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 12,68,74
+README-FULL.md
+  h_99cad05bea77d1 12-13,68,74
+.storybook/docs-source/Introduce.en-US.md
+  h_99cad05bea77d1 67,73
+.storybook/docs-source/ApiGuide.zh-CN.md
+  h_99cad05bea77d1 301
+README.zh-CN.md
+  h_99cad05bea77d1 12,15
+.storybook/docs-source/ApiGuide.en-US.md
+  h_99cad05bea77d1 304
+.storybook/locales/langs/zh-CN.ts
+  h_99cad05bea77d1 1-250
+.storybook/docs-source/Introduce.zh-CN.md
+  h_99cad05bea77d1 67,73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "d293c07c0224d9f0242e77de021751093167bff0",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
