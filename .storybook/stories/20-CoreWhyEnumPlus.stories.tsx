@@ -23,6 +23,28 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
+const nativeEnumPainCode = `// Native TypeScript enum — only stores "values"
+enum Status {
+  Draft = 'draft',
+  Review = 'review',
+  Published = 'published',
+  Archived = 'archived',
+}
+
+// Need a display label? Hand-write a map.
+const labelMap = { draft: 'Draft', review: 'Review', published: 'Published', archived: 'Archived' };
+
+// Need Select options? Write another one.
+const options = [
+  { value: 'draft', label: labelMap.draft },
+  { value: 'review', label: labelMap.review },
+  { value: 'published', label: labelMap.published },
+  { value: 'archived', label: labelMap.archived },
+];
+
+// Need filters / badge colors / i18n? Four more copies to keep in sync.
+const colorMap = { draft: 'default', review: 'processing', published: 'success', archived: 'default' };`;
+
 function DuplicateMapsStory() {
   const t = useStoryT();
   const [selectedValue, setSelectedValue] = useState('review');
@@ -119,6 +141,33 @@ function DuplicateMapsStory() {
         t('storybook.stories.CoreWhyEnumPlus.highlights.businessLookup'),
       ]}
     >
+      <StorySection
+        title={t('storybook.stories.CoreWhyEnumPlus.rootTitle')}
+        description={t('storybook.stories.CoreWhyEnumPlus.rootDescription')}
+      >
+        <TwoColumn
+          left={
+            <CodePreview
+              title={t('storybook.stories.CoreWhyEnumPlus.rootLegacyCodeTitle')}
+              code={nativeEnumPainCode}
+              fullHeight
+            />
+          }
+          right={
+            <Space direction="vertical" size={16} style={{ width: '100%' }}>
+              <KpiRow
+                items={[
+                  { label: t('storybook.stories.CoreWhyEnumPlus.rootKpiMaps'), value: '5' },
+                  { label: t('storybook.stories.CoreWhyEnumPlus.rootKpiTyped'), value: '0' },
+                  { label: t('storybook.stories.CoreWhyEnumPlus.rootKpiSites'), value: '5' },
+                ]}
+              />
+              <Text type="secondary">{t('storybook.stories.CoreWhyEnumPlus.rootNote')}</Text>
+            </Space>
+          }
+        />
+      </StorySection>
+
       <StorySection
         title={t('storybook.stories.CoreWhyEnumPlus.compareTitle')}
         description={t('storybook.stories.CoreWhyEnumPlus.compareDescription')}
