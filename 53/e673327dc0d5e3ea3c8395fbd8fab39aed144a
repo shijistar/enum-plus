@@ -1,0 +1,28 @@
+.storybook/docs-source/ApiGuide.zh-CN.md
+  h_99cad05bea77d1 282
+.storybook/docs-source/ApiGuide.en-US.md
+  h_99cad05bea77d1 285
+.storybook/locales/langs/zh-CN.ts
+  h_99cad05bea77d1 1-250
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "53e673327dc0d5e3ea3c8395fbd8fab39aed144a",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_715bc7d0dd3d89": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "e1ba37c7-48ff-4df3-abe0-5a197c92a18b",
+        "model": "copilot/gpt-5.4"
+      },
+      "human_author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
