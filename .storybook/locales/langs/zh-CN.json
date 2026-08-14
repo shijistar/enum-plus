@@ -324,7 +324,7 @@
   "storybook.stories.PluginI18next.switchEn": "只切到英文（不触发重渲染）",
   "storybook.stories.PluginI18next.switchZh": "只切到中文（不触发重渲染）",
   "storybook.stories.PluginReactI18next.metaDescription": "展示轻量版 react-i18next 接入：它会读取共享的 React i18n 实例，但真正的自动界面刷新仍应交给 plugin-react。",
-  "storybook.stories.PluginReactI18next.codeTitle": "轻量安装方式",
+  "storybook.stories.PluginReactI18next.codeTitle": "安装方式",
   "storybook.stories.PluginReactI18next.comparisonDescription": "下面的 demo 和 i18next 版很像：语言已经变了，但界面要等 React 重新渲染后才会更新。",
   "storybook.stories.PluginReactI18next.comparisonTitle": "它解决的是“取翻译”，不是“推刷新”",
   "storybook.stories.PluginReactI18next.currentLabel": "enum.label(value)",

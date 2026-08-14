@@ -10,7 +10,9 @@ import { ensureStoryI18n } from './shared/i18n';
 const { Paragraph } = Typography;
 
 const meta: Meta = {
-  title: 'Plugins/04 react-i18next',
+  title: 'Plugins/react-i18next',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '插件/react-i18next',
   parameters: {
     docs: {
       description: {
@@ -74,55 +76,53 @@ function ReactI18nextStory() {
         title={t('storybook.stories.PluginReactI18next.comparisonTitle')}
         description={t('storybook.stories.PluginReactI18next.comparisonDescription')}
       >
-        <TwoColumn
-          left={
-            <Card size="small">
-              <Space direction="vertical" size={16} style={{ width: '100%' }}>
-                <Space wrap>
-                  <Button onClick={() => void instance.changeLanguage('zh-CN')}>
-                    {t('storybook.stories.PluginReactI18next.switchZh')}
-                  </Button>
-                  <Button onClick={() => void instance.changeLanguage('en-US')}>
-                    {t('storybook.stories.PluginReactI18next.switchEn')}
-                  </Button>
-                  <Button type="primary" onClick={() => setRenderTick((value) => value + 1)}>
-                    {t('storybook.stories.PluginReactI18next.rerender')}
-                  </Button>
-                </Space>
-                <Descriptions
-                  size="small"
-                  column={1}
-                  items={[
-                    {
-                      key: 'lang',
-                      label: t('storybook.stories.PluginReactI18next.currentLanguage'),
-                      children: instance.language,
-                    },
-                    {
-                      key: 'name',
-                      label: t('storybook.stories.PluginReactI18next.enumName'),
-                      children: statusEnum.name,
-                    },
-                    {
-                      key: 'label',
-                      label: t('storybook.stories.PluginReactI18next.currentLabel'),
-                      children: statusEnum.label('review'),
-                    },
-                    {
-                      key: 'tick',
-                      label: t('storybook.stories.PluginReactI18next.rerenderTick'),
-                      children: renderTick,
-                    },
-                  ]}
-                />
-                <Paragraph type="secondary" style={{ marginBottom: 0 }}>
-                  {t('storybook.stories.PluginReactI18next.note')}
-                </Paragraph>
+        <Space direction="vertical" size={16}>
+          <CodePreview title={t('storybook.stories.PluginReactI18next.codeTitle')} code={INSTALL_CODE} />
+          <Card size="small">
+            <Space direction="vertical" size={16} style={{ width: '100%' }}>
+              <Space wrap>
+                <Button onClick={() => void instance.changeLanguage('zh-CN')}>
+                  {t('storybook.stories.PluginReactI18next.switchZh')}
+                </Button>
+                <Button onClick={() => void instance.changeLanguage('en-US')}>
+                  {t('storybook.stories.PluginReactI18next.switchEn')}
+                </Button>
+                <Button type="primary" onClick={() => setRenderTick((value) => value + 1)}>
+                  {t('storybook.stories.PluginReactI18next.rerender')}
+                </Button>
               </Space>
-            </Card>
-          }
-          right={<CodePreview title={t('storybook.stories.PluginReactI18next.codeTitle')} code={INSTALL_CODE} />}
-        />
+              <Descriptions
+                size="small"
+                column={1}
+                items={[
+                  {
+                    key: 'lang',
+                    label: t('storybook.stories.PluginReactI18next.currentLanguage'),
+                    children: instance.language,
+                  },
+                  {
+                    key: 'name',
+                    label: t('storybook.stories.PluginReactI18next.enumName'),
+                    children: statusEnum.name,
+                  },
+                  {
+                    key: 'label',
+                    label: t('storybook.stories.PluginReactI18next.currentLabel'),
+                    children: statusEnum.label('review'),
+                  },
+                  {
+                    key: 'tick',
+                    label: t('storybook.stories.PluginReactI18next.rerenderTick'),
+                    children: renderTick,
+                  },
+                ]}
+              />
+              <Paragraph type="secondary" style={{ marginBottom: 0 }}>
+                {t('storybook.stories.PluginReactI18next.note')}
+              </Paragraph>
+            </Space>
+          </Card>
+        </Space>
       </StorySection>
 
       <StorySection

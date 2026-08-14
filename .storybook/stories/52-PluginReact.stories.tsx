@@ -11,9 +11,9 @@ const { Text } = Typography;
 const activeI18n = i18next;
 
 const meta: Meta = {
-  title: 'Plugins/React I18n',
+  title: 'Plugins/react-i18next with reactive',
   // @ts-expect-error: because titleCN is an extension field
-  titleCN: '插件/React I18n',
+  titleCN: '插件/react-i18next + 响应式',
   parameters: {
     docs: {
       description: {

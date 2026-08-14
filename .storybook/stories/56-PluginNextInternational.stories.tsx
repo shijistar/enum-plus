@@ -1,3 +1,5 @@
+'use client';
+
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { PathnameContext, PathParamsContext } from 'next/dist/shared/lib/hooks-client-context.shared-runtime';
@@ -12,7 +14,9 @@ import { CodePreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 const { Paragraph, Text } = Typography;
 
 const meta: Meta = {
-  title: 'Plugins/05 Next International',
+  title: 'Plugins/next-international',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '插件/next-international',
   parameters: {
     docs: {
       description: {
@@ -65,6 +69,7 @@ function NextIntlProviderShell(props: {
   return (
     <AppRouterContext
       value={{
+        bfcacheId: '',
         push: async () => undefined,
         replace: async () => undefined,
         prefetch: async () => undefined,

@@ -29,7 +29,9 @@ const STORY_RESOURCES = {
 } as const;
 
 const meta: Meta = {
-  title: 'Plugins/07 i18next Vue',
+  title: 'Plugins/i18next-vue',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '插件/i18next-vue',
   parameters: {
     docs: {
       description: {

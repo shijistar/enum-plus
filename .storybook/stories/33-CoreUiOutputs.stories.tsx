@@ -8,7 +8,9 @@ import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './
 const { Text } = Typography;
 
 const meta: Meta = {
-  title: 'Core/04 UI Outputs and Derived Data',
+  title: 'Core/UI Outputs and Derived Data',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '核心/UI 输出与派生数据',
   parameters: {
     docs: {
       description: {

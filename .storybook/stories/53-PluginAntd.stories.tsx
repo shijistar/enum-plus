@@ -8,9 +8,9 @@ import { JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 const { Text } = Typography;
 
 const meta: Meta = {
-  title: 'Plugins/Ant Design Integration',
+  title: 'Plugins/antd',
   // @ts-expect-error: because titleCN is an extension field
-  titleCN: '插件/Ant Design 集成',
+  titleCN: '插件/antd',
   parameters: {
     docs: {
       description: {

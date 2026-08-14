@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+// @ts-expect-error
 import { createI18n } from 'vue-i18n';
 import { Button, Card, Descriptions, Space, Tag, Typography } from 'antd';
 import vueI18nPlugin from '../../packages/plugin-vue-i18n/src';
@@ -10,7 +11,9 @@ import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './
 const { Paragraph } = Typography;
 
 const meta: Meta = {
-  title: 'Plugins/06 Vue I18n',
+  title: 'Plugins/vue-i18n',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '插件/vue-i18n',
   parameters: {
     docs: {
       description: {

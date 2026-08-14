@@ -324,7 +324,7 @@
   "storybook.stories.PluginI18next.switchEn": "Switch to English only (no rerender)",
   "storybook.stories.PluginI18next.switchZh": "Switch to Chinese only (no rerender)",
   "storybook.stories.PluginReactI18next.metaDescription": "Shows the lightweight react-i18next integration package: it reads translations from the shared React i18n instance, but automatic UI refresh still belongs to plugin-react.",
-  "storybook.stories.PluginReactI18next.codeTitle": "Lightweight installation",
+  "storybook.stories.PluginReactI18next.codeTitle": "Installation",
   "storybook.stories.PluginReactI18next.comparisonDescription": "This behaves similarly to the plain i18next story: the language changes immediately, but visible labels wait for the next React rerender.",
   "storybook.stories.PluginReactI18next.comparisonTitle": "It solves translation lookup, not refresh propagation",
   "storybook.stories.PluginReactI18next.currentLabel": "enum.label(value)",

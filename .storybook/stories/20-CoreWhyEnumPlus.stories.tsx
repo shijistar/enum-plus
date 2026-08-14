@@ -8,7 +8,9 @@ import { CodePreview, JsonPreview, KpiRow, StoryPage, StorySection, TwoColumn } 
 const { Text } = Typography;
 
 const meta: Meta = {
-  title: 'Core/01 From Duplicate Maps to One Enum Source',
+  title: 'Core/From Duplicate Maps to One Enum Source',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '核心/从重复映射到枚举源',
   parameters: {
     docs: {
       description: {

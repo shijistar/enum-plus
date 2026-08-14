@@ -13,6 +13,7 @@ e2e/fixtures/scripts
 e2e/test-results
 .codegraph/
 .storybook/docs/titles.json
+.storybook/stories/titles.json
 __screenshots__
 coverage/
 run

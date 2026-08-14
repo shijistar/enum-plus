@@ -1,46 +1,36 @@
 import type { API_ComponentEntry } from 'storybook/internal/types';
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
-import WorkbenchDemoStory, * as WorkbenchDemoSubStories from './stories/10-WorkbenchDemo.stories';
-import CoreApiStory, * as CoreApiSubStories from './stories/32-CoreApi.stories';
-import CoreInitializationStory, * as CoreInitializationSubStories from './stories/30-CoreInitialization.stories';
-import CorePatternsStory, * as CorePatternsSubStories from './stories/33-CorePatterns.stories';
-import PluginReactI18nStory, * as PluginReactI18nSubStories from './stories/52-PluginReactI18n.stories';
-import PluginAntdStory, * as PluginAntdSubStories from './stories/53-PluginAntd.stories';
 import docTitles from './docs/titles.json';
+import storyTitles from './stories/titles.json';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
 import './global-styles.css';
+
+/**
+ * - todo: react-i18next的demo说返回了组件，而且也不应该自动刷新？
+ * - todo: why use enum-plus的demo说的太简单了
+ * - todo: Localization 和 composition 应该分开
+ * - todo: antd的组件类型不够
+ * - todo: vue-i18n不能自动切换刷新
+ * - todo: 两种vue的组件 output里都写着[ReactElement]？
+ * - todo: 能否通过mock模块让next-international跑起来，或者仅在示例代码或文案中使用此插件，但底层还是基于react插件
+ * - todo: FullDemo继续优化，重点说明页面都是由枚举驱动，底部展示一下几个枚举的代码；切换语言改成下拉框，挪到下面的卡片中去；
+ * - todo: enum-plus添加到awesome仓库中
+ */
 
 const globalTheme = getGlobalValueFromUrl('theme');
 const globalLocale = getGlobalValueFromUrl('locale');
 const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const theme = (!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' : 'light';
-const stories: { fileName: string; story: typeof CoreApiStory }[] = [
-  { fileName: '.storybook/stories/CoreApi.stories.tsx', story: CoreApiStory },
-  { fileName: '.storybook/stories/CoreInitialization.stories.tsx', story: CoreInitializationStory },
-  { fileName: '.storybook/stories/CorePatterns.stories.tsx', story: CorePatternsStory },
-  { fileName: '.storybook/stories/PluginAntd.stories.tsx', story: PluginAntdStory },
-  { fileName: '.storybook/stories/PluginReactI18n.stories.tsx', story: PluginReactI18nStory },
-  { fileName: '.storybook/stories/WorkbenchDemo.stories.tsx', story: WorkbenchDemoStory },
-];
-const subStories = [
-  ...getSubStories(CoreApiSubStories, '.storybook/stories/CoreApi.stories.tsx'),
-  ...getSubStories(CoreInitializationSubStories, '.storybook/stories/CoreInitialization.stories.tsx'),
-  ...getSubStories(CorePatternsSubStories, '.storybook/stories/CorePatterns.stories.tsx'),
-  ...getSubStories(PluginAntdSubStories, '.storybook/stories/PluginAntd.stories.tsx'),
-  ...getSubStories(PluginReactI18nSubStories, '.storybook/stories/PluginReactI18n.stories.tsx'),
-  ...getSubStories(WorkbenchDemoSubStories, '.storybook/stories/WorkbenchDemo.stories.tsx'),
-];
 
 const sidebarTitles: Partial<(typeof docTitles)[number]>[] = [
   ...docTitles,
-  ...stories.map(({ fileName, story }) => ({
-    fileName,
+  ...(storyTitles as Array<{ fileName: string; title?: string; titleCN?: string }>).map((story) => ({
+    fileName: story.fileName,
     title: story.title?.replace(/^[^/]*\//, ''),
-    titleCN: (story as any).titleCN?.replace(/^[^/]*\//, ''),
+    titleCN: story.titleCN?.replace(/^[^/]*\//, ''),
   })),
-  ...subStories,
 ];
 
 document.documentElement.dataset.theme = theme;
@@ -88,14 +78,4 @@ function applyCustomTitleSuffix() {
   if (document.title.endsWith('⋅ Storybook')) {
     document.title = document.title.replace(/⋅\s*Storybook$/, `⋅ ${light.brandTitle}`);
   }
-}
-
-function getSubStories(exports: Record<string, any>, fileName: string): Partial<(typeof docTitles)[number]>[] {
-  return Object.values(exports)
-    .filter((story) => story && story.name)
-    .map((story) => ({
-      fileName,
-      title: story.name,
-      titleCN: (story as any).nameCN,
-    }));
 }

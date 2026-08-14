@@ -10,7 +10,9 @@ import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './
 const { Paragraph, Text } = Typography;
 
 const meta: Meta = {
-  title: 'Plugins/02 i18next',
+  title: 'Plugins/i18next',
+  // @ts-expect-error: because titleCN is an extension field
+  titleCN: '插件/i18next',
   parameters: {
     docs: {
       description: {
