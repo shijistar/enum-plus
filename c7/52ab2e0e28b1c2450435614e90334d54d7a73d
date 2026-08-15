@@ -1,0 +1,18 @@
+.storybook/locales/langs/zh-CN.json
+  h_99cad05bea77d1 216
+.storybook/locales/langs/en-US.json
+  h_99cad05bea77d1 216
+.storybook/stories/52-PluginReact.stories.tsx
+  h_99cad05bea77d1 14,16,29,31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c752ab2e0e28b1c2450435614e90334d54d7a73d",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
