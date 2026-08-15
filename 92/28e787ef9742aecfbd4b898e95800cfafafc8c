@@ -1,0 +1,14 @@
+.storybook/stories/33-CoreUiOutputs.stories.tsx
+  h_99cad05bea77d1 106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "9228e787ef9742aecfbd4b898e95800cfafafc8c",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
