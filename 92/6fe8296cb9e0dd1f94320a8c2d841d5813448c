@@ -1,0 +1,16 @@
+packages/plugin-react-i18next/src/localize.ts
+  h_99cad05bea77d1 37-38
+packages/plugin-i18next-vue/src/localize.ts
+  h_99cad05bea77d1 57-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "926fe8296cb9e0dd1f94320a8c2d841d5813448c",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
