@@ -1,0 +1,16 @@
+.storybook/locales/langs/zh-CN.json
+  h_99cad05bea77d1 299
+.storybook/locales/langs/en-US.json
+  h_99cad05bea77d1 299
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "6ef4be85e55cf218da01699e59fea437fb41d298",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
