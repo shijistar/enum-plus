@@ -163,10 +163,20 @@ function I18nextStory() {
           </Space>
           <TwoColumn
             left={
-              <JsonPreview title={t('storybook.stories.PluginI18next.listTitle')} value={publishingStatus.toList()} />
+              <JsonPreview
+                forceEnumText
+                i18n={instance}
+                title={t('storybook.stories.PluginI18next.listTitle')}
+                value={publishingStatus.toList()}
+              />
             }
             right={
-              <JsonPreview title={t('storybook.stories.PluginI18next.mapTitle')} value={publishingStatus.toMap()} />
+              <JsonPreview
+                forceEnumText
+                i18n={instance}
+                title={t('storybook.stories.PluginI18next.mapTitle')}
+                value={publishingStatus.toMap()}
+              />
             }
           />
           <Card size="small">

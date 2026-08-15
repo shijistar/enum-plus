@@ -97,6 +97,7 @@ function I18nextVueStory() {
       },
       Enum as never,
     );
+    setRenderTick((value) => value + 1);
     return () => {
       Enum.localize = previousLocalize;
     };
@@ -140,9 +141,6 @@ function I18nextVueStory() {
                   </Button>
                   <Button onClick={() => setActiveLocale('en-US')}>
                     {t('storybook.stories.PluginI18nextVue.switchEn')}
-                  </Button>
-                  <Button type="primary" onClick={() => setRenderTick((value) => value + 1)}>
-                    {t('storybook.stories.PluginI18nextVue.rerender')}
                   </Button>
                 </Space>
                 <Descriptions

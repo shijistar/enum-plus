@@ -34,7 +34,7 @@ const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) 
     if (typeof options === 'string') {
       return options;
     }
-    return instance.t(key as string, options);
+    return instance.t(key as string, options as unknown);
   };
 };
 export default localizePlugin;

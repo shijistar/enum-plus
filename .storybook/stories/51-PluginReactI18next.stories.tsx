@@ -142,10 +142,20 @@ function ReactI18nextStory() {
           </Space>
           <TwoColumn
             left={
-              <JsonPreview title={t('storybook.stories.PluginReactI18next.listTitle')} value={statusEnum.toList()} />
+              <JsonPreview
+                forceEnumText
+                i18n={instance}
+                title={t('storybook.stories.PluginReactI18next.listTitle')}
+                value={statusEnum.toList()}
+              />
             }
             right={
-              <JsonPreview title={t('storybook.stories.PluginReactI18next.mapTitle')} value={statusEnum.toMap()} />
+              <JsonPreview
+                forceEnumText
+                i18n={instance}
+                title={t('storybook.stories.PluginReactI18next.mapTitle')}
+                value={statusEnum.toMap()}
+              />
             }
           />
         </Space>

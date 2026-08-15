@@ -39,7 +39,7 @@ const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) 
             ? useTranslationOptions.lng[0]
             : useTranslationOptions.lng;
         }
-        return defaultT(localeKey, options);
+        return defaultT(localeKey, '', options);
       }) as typeof defaultT;
     }
     let options: TOptions | string | undefined;
@@ -54,7 +54,7 @@ const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) 
     if (typeof options === 'string') {
       return options;
     }
-    return t(key as string, options);
+    return t(key as string, options as unknown);
   };
 };
 export default localizePlugin;

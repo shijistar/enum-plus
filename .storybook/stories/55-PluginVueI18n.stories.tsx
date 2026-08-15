@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-// @ts-expect-error
 import { createI18n } from 'vue-i18n';
 import { Button, Card, Descriptions, Space, Tag, Typography } from 'antd';
 import vueI18nPlugin from '../../packages/plugin-vue-i18n/src';
@@ -64,6 +63,7 @@ function VueI18nStory() {
   useEffect(() => {
     const previousLocalize = Enum.localize;
     vueI18nPlugin({ localize: { instance } }, Enum as never);
+    setRenderTick((value) => value + 1);
     return () => {
       Enum.localize = previousLocalize;
     };
@@ -102,14 +102,21 @@ function VueI18nStory() {
             <Card size="small">
               <Space direction="vertical" size={16} style={{ width: '100%' }}>
                 <Space wrap>
-                  <Button onClick={() => void (instance.global.locale.value = 'zh-CN')}>
+                  <Button
+                    onClick={() => {
+                      instance.global.locale.value = 'zh-CN';
+                      setRenderTick((value) => value + 1);
+                    }}
+                  >
                     {t('storybook.stories.PluginVueI18n.switchZh')}
                   </Button>
-                  <Button onClick={() => void (instance.global.locale.value = 'en-US')}>
+                  <Button
+                    onClick={() => {
+                      instance.global.locale.value = 'en-US';
+                      setRenderTick((value) => value + 1);
+                    }}
+                  >
                     {t('storybook.stories.PluginVueI18n.switchEn')}
-                  </Button>
-                  <Button type="primary" onClick={() => setRenderTick((value) => value + 1)}>
-                    {t('storybook.stories.PluginVueI18n.rerender')}
                   </Button>
                 </Space>
                 <Descriptions

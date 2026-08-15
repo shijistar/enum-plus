@@ -1,5 +1,7 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { PropsWithChildren, ReactElement, ReactNode } from 'react';
 import { Card, Col, Row, Space, Tag, Typography } from 'antd';
+import storyI18n from '../../locales/index';
+import type { i18n } from 'i18next';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -60,12 +62,18 @@ export function StorySection(props: PropsWithChildren<{ title: string; descripti
   );
 }
 
-export function JsonPreview(props: { title: string; value: unknown; note?: ReactNode }) {
-  const { title, value, note } = props;
+export function JsonPreview(props: {
+  title: string;
+  value: unknown;
+  note?: ReactNode;
+  forceEnumText?: boolean;
+  i18n?: i18n;
+}) {
+  const { title, value, note, forceEnumText = false, i18n = storyI18n } = props;
 
   return (
     <Card size="small" title={title}>
-      <pre className="ep-pre">{stringifyPreview(value)}</pre>
+      <pre className="ep-pre">{stringifyPreview(value, { forceText: forceEnumText, i18n })}</pre>
       {note ? <div className="ep-note">{note}</div> : null}
     </Card>
   );
@@ -114,7 +122,14 @@ export function TwoColumn(props: PropsWithChildren<{ left: ReactNode; right: Rea
   );
 }
 
-export function stringifyPreview(value: unknown) {
+export function stringifyPreview(
+  value: unknown,
+  options?: {
+    forceText?: boolean;
+    i18n?: i18n;
+  },
+) {
+  const { forceText = false, i18n = storyI18n } = options ?? {};
   return JSON.stringify(
     value,
     (_key, currentValue) => {
@@ -131,6 +146,10 @@ export function stringifyPreview(value: unknown) {
         return Array.from(currentValue.values());
       }
       if (currentValue && typeof currentValue === 'object' && '$$typeof' in currentValue) {
+        const localeKey = (currentValue as any).props?.i18nKey;
+        if (forceText && localeKey) {
+          return i18n.t(localeKey);
+        }
         return '[ReactElement]';
       }
       return currentValue;

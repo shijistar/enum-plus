@@ -238,7 +238,7 @@
   "storybook.stories.CoreWhyEnumPlus.draft": "草稿",
   "storybook.stories.CoreWhyEnumPlus.duplicatedStructures": "重复结构数",
   "storybook.stories.CoreWhyEnumPlus.enumCode": "enum-plus（单一数据源）",
-  "storybook.stories.CoreWhyEnumPlus.enumData": "enum-plus 自动生成结果",
+  "storybook.stories.CoreWhyEnumPlus.enumData": "enum-plus 枚举结果，无需手动编写代码",
   "storybook.stories.CoreWhyEnumPlus.enumKey": "enum.key(value)",
   "storybook.stories.CoreWhyEnumPlus.enumLabel": "enum.label(value)",
   "storybook.stories.CoreWhyEnumPlus.enumPhase": "enum.raw(value).phase",
