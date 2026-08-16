@@ -1,5 +1,8 @@
 import type { PropsWithChildren, ReactNode } from 'react';
-import { Card, Col, Row, Space, Tag, Typography } from 'antd';
+import { Card, Col, ConfigProvider, Row, Space, Tag, theme, Typography } from 'antd';
+import storyI18n from '../../locales/index';
+import type { i18n } from 'i18next';
+import type { EllipsisConfig } from 'antd/es/typography/Base';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -40,7 +43,9 @@ export function StoryPage(props: {
   );
 }
 
-export function StorySection(props: PropsWithChildren<{ title: string; description?: ReactNode; extra?: ReactNode }>) {
+export function StorySection(
+  props: PropsWithChildren<{ title: ReactNode; description?: ReactNode; extra?: ReactNode }>,
+) {
   const { title, description, extra, children } = props;
 
   return (
@@ -49,7 +54,11 @@ export function StorySection(props: PropsWithChildren<{ title: string; descripti
       title={
         <div className="ep-section-title">
           <Text strong>{title}</Text>
-          {description ? <Paragraph style={{ fontWeight: 400 }}>{description}</Paragraph> : null}
+          {description ? (
+            <Paragraph type="secondary" style={{ fontWeight: 400 }}>
+              {description}
+            </Paragraph>
+          ) : null}
         </div>
       }
       styles={{ title: { whiteSpace: 'normal' } }}
@@ -60,18 +69,47 @@ export function StorySection(props: PropsWithChildren<{ title: string; descripti
   );
 }
 
-export function JsonPreview(props: { title: string; value: unknown; note?: ReactNode }) {
-  const { title, value, note } = props;
+export function JsonPreview(props: {
+  title?: ReactNode;
+  description?: ReactNode;
+  value: unknown;
+  note?: ReactNode;
+  forceEnumText?: boolean;
+  i18n?: i18n;
+  indent?: number;
+  ellipsis?: EllipsisConfig;
+}) {
+  const { title, description, value, note, forceEnumText = false, i18n = storyI18n, indent, ellipsis } = props;
 
   return (
-    <Card size="small" title={title}>
-      <pre className="ep-pre">{stringifyPreview(value)}</pre>
+    <Card
+      size="small"
+      title={
+        description ? (
+          <Space orientation="vertical" style={{ width: '100%' }}>
+            {title}
+            <Paragraph type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
+              {description}
+            </Paragraph>
+          </Space>
+        ) : (
+          title
+        )
+      }
+    >
+      <pre className="ep-pre">
+        <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
+          <Typography.Paragraph ellipsis={ellipsis}>
+            {stringifyPreview(value, { forceText: forceEnumText, i18n, indent })}
+          </Typography.Paragraph>
+        </ConfigProvider>
+      </pre>
       {note ? <div className="ep-note">{note}</div> : null}
     </Card>
   );
 }
 
-export function CodePreview(props: { title: string; code: string; fullHeight?: boolean }) {
+export function CodePreview(props: { title?: string; code: string; fullHeight?: boolean }) {
   const { title, code, fullHeight = false } = props;
 
   return (
@@ -114,7 +152,15 @@ export function TwoColumn(props: PropsWithChildren<{ left: ReactNode; right: Rea
   );
 }
 
-export function stringifyPreview(value: unknown) {
+export function stringifyPreview(
+  value: unknown,
+  options?: {
+    forceText?: boolean;
+    i18n?: i18n;
+    indent?: number;
+  },
+) {
+  const { forceText = false, i18n = storyI18n, indent = 2 } = options ?? {};
   return JSON.stringify(
     value,
     (_key, currentValue) => {
@@ -131,11 +177,15 @@ export function stringifyPreview(value: unknown) {
         return Array.from(currentValue.values());
       }
       if (currentValue && typeof currentValue === 'object' && '$$typeof' in currentValue) {
+        const localeKey = (currentValue as any).props?.i18nKey;
+        if (forceText && localeKey) {
+          return i18n.t(localeKey);
+        }
         return '[ReactElement]';
       }
       return currentValue;
     },
-    2,
+    indent,
   );
 }
 

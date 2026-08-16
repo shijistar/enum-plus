@@ -7,6 +7,7 @@
   "i18n-ally.localesPaths": [".storybook/locales/langs", "test/i18n"],
   "i18n-ally.enabledFrameworks": ["react"],
   "i18n-ally.pathMatcher": "{locale}.json",
+  "i18n-ally.ignoredLocales": ["neutral"],
   "i18n-ally.extract.autoDetect": true,
   "i18n-ally.displayLanguage": "zh-CN",
   "i18n-ally.enabledParsers": ["json"],
@@ -32,6 +33,5 @@
     "**/Thumbs.db": true,
     "**/node_modules": true
   },
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "commentTranslate.source": "Bing"
 }

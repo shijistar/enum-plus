@@ -31,20 +31,11 @@ const meta: Meta = {
 export default meta;
 
 export const Playground: Story = {
-  name: 'Demo',
+  name: 'Enum Initialization',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: 'Demo',
+  nameCN: '枚举初始化',
   render: function Render() {
     return <InitializationPlayground />;
-  },
-};
-
-export const ArrayFieldMapping: Story = {
-  name: 'Array Field Mapping',
-  // @ts-expect-error: because nameCN is an extension field
-  nameCN: '数组字段映射',
-  render: function Render() {
-    return <ArrayFieldMappingDemo />;
   },
 };
 
@@ -77,9 +68,9 @@ function getInitPresets(t: ReturnType<typeof useStoryT>): Record<
     standard: {
       label: t('storybook.stories.CoreInitialization.preset.standard'),
       code: `const StatusEnum = Enum({
-  Draft: { value: 'draft', label: '${t('storybook.stories.CoreInitialization.sample.status.draft')}', tone: 'default' },
-  Review: { value: 'review', label: '${t('storybook.stories.CoreInitialization.sample.status.review')}', tone: 'processing' },
-  Published: { value: 'published', label: '${t('storybook.stories.CoreInitialization.sample.status.published')}', tone: 'success' },
+  Draft: { value: 'draft', label: '${t('storybook.stories.CoreInitialization.sample.status.draft')}' },
+  Review: { value: 'review', label: '${t('storybook.stories.CoreInitialization.sample.status.review')}' },
+  Published: { value: 'published', label: '${t('storybook.stories.CoreInitialization.sample.status.published')}' },
 });`,
       create: () =>
         Enum(
@@ -120,6 +111,18 @@ function getInitPresets(t: ReturnType<typeof useStoryT>): Record<
           { name: t('storybook.stories.CoreInitialization.sample.localeName') },
         ),
     },
+    native: {
+      label: t('storybook.stories.CoreInitialization.preset.native'),
+      code: `enum ReleaseChannelNative {
+  Stable = 1,
+  Beta,
+  Canary,
+}
+
+const ChannelEnum = Enum(ReleaseChannelNative);`,
+      create: () =>
+        Enum(ReleaseChannelNative, { name: t('storybook.stories.CoreInitialization.sample.channelName') }) as AnyEnum,
+    },
     array: {
       label: t('storybook.stories.CoreInitialization.preset.array'),
       code: `const PipelineEnum = Enum([
@@ -136,18 +139,6 @@ function getInitPresets(t: ReturnType<typeof useStoryT>): Record<
           ],
           { name: t('storybook.stories.CoreInitialization.sample.pipelineName') },
         ) as AnyEnum,
-    },
-    native: {
-      label: t('storybook.stories.CoreInitialization.preset.native'),
-      code: `enum ReleaseChannelNative {
-  Stable = 1,
-  Beta,
-  Canary,
-}
-
-const ChannelEnum = Enum(ReleaseChannelNative);`,
-      create: () =>
-        Enum(ReleaseChannelNative, { name: t('storybook.stories.CoreInitialization.sample.channelName') }) as AnyEnum,
     },
   };
 }
@@ -176,7 +167,7 @@ function InitializationPlayground() {
     key: item.key,
     value: item.value,
     label: item.label,
-    raw: JSON.stringify(item.raw),
+    raw: <Typography.Text code>{JSON.stringify(item.raw)}</Typography.Text>,
   }));
 
   return (
@@ -195,12 +186,27 @@ function InitializationPlayground() {
         title={t('storybook.stories.CoreInitialization.section.switch.title')}
         description={t('storybook.stories.CoreInitialization.section.switch.description')}
       >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           <Segmented block options={presetOptions} value={preset} onChange={(value) => setPreset(value as PresetKey)} />
           <CodePreview
             title={t('storybook.stories.CoreInitialization.card.currentCode')}
             code={initPresets[preset].code}
           />
+          {preset === 'array' && (
+            <CodePreview
+              title={t('storybook.stories.CoreInitialization.array.card.mappingCode')}
+              code={`const dataRows = [
+  { id: 11, code: 'Backlog', title: '${t('storybook.stories.CoreInitialization.sample.pipeline.backlog')}' },
+  { id: 12, code: 'Doing', title: '${t('storybook.stories.CoreInitialization.sample.pipeline.doing')}' },
+  { id: 13, code: 'Done', title: '${t('storybook.stories.CoreInitialization.sample.pipeline.done')}' },
+];
+const FlowEnum = Enum(dataRows, {
+  getValue: 'id',
+  getKey: 'code',
+  getLabel: 'title',
+});`}
+            />
+          )}
         </Space>
       </StorySection>
 
@@ -211,7 +217,7 @@ function InitializationPlayground() {
         <TwoColumn
           left={
             <Card size="small" title={t('storybook.stories.CoreInitialization.card.currentState')}>
-              <Space direction="vertical" size={16} style={{ width: '100%' }}>
+              <Space orientation="vertical" size={16} style={{ width: '100%' }}>
                 <Select
                   value={selectedValue}
                   style={{ width: '100%' }}
@@ -243,10 +249,14 @@ function InitializationPlayground() {
                       label: t('storybook.stories.CoreInitialization.field.enumKey'),
                       children: enumInstance.key(selectedValue) || '-',
                     },
-                    { key: 'has', label: 'has(value)', children: String(enumInstance.has(selectedValue)) },
+                    {
+                      key: 'has',
+                      label: `has("${String(selectedValue)}")`,
+                      children: <Text code>{String(enumInstance.has(selectedValue))}</Text>,
+                    },
                     {
                       key: 'raw',
-                      label: t('storybook.stories.CoreInitialization.field.rawValue'),
+                      label: `raw("${String(selectedValue)}")`,
                       children: <Text code>{JSON.stringify(enumInstance.raw(selectedValue))}</Text>,
                     },
                   ]}
@@ -255,7 +265,7 @@ function InitializationPlayground() {
             </Card>
           }
           right={
-            <Space direction="vertical" size={16} style={{ width: '100%' }}>
+            <Space orientation="vertical" size={16} style={{ width: '100%' }}>
               <KpiRow
                 items={[
                   { label: t('storybook.stories.CoreInitialization.kpi.items'), value: enumInstance.items.length },
@@ -264,8 +274,42 @@ function InitializationPlayground() {
                 ]}
               />
               <JsonPreview
+                forceEnumText
+                title={t('storybook.stories.CoreInitialization.kpi.items')}
+                value={enumInstance.items.map((item) => ({
+                  key: item.key,
+                  value: item.value,
+                  label: item.label,
+                }))}
+              />
+            </Space>
+          }
+        />
+      </StorySection>
+
+      <StorySection
+        title={t('storybook.stories.CoreInitialization.section.derived.title')}
+        description={t('storybook.stories.CoreInitialization.section.derived.description')}
+      >
+        <TwoColumn
+          left={
+            <Space orientation="vertical" size={16} style={{ width: '100%' }}>
+              <JsonPreview forceEnumText title="values" value={enumInstance.values} />
+              <JsonPreview forceEnumText title="labels" value={enumInstance.labels} />
+              <JsonPreview forceEnumText title="keys" value={enumInstance.keys} />
+            </Space>
+          }
+          right={
+            <Space orientation="vertical" size={16} style={{ width: '100%' }}>
+              <JsonPreview
+                forceEnumText
                 title={t('storybook.stories.CoreInitialization.card.listResult')}
                 value={enumInstance.toList()}
+              />
+              <JsonPreview
+                forceEnumText
+                title={t('storybook.stories.CoreInitialization.card.map')}
+                value={enumInstance.toMap()}
               />
             </Space>
           }
@@ -288,123 +332,6 @@ function InitializationPlayground() {
           ]}
           dataSource={rows}
         />
-      </StorySection>
-
-      <StorySection
-        title={t('storybook.stories.CoreInitialization.section.derived.title')}
-        description={t('storybook.stories.CoreInitialization.section.derived.description')}
-      >
-        <TwoColumn
-          left={
-            <JsonPreview
-              title={t('storybook.stories.CoreInitialization.card.derived')}
-              value={{ keys: enumInstance.keys, values: enumInstance.values, labels: enumInstance.labels }}
-            />
-          }
-          right={
-            <JsonPreview title={t('storybook.stories.CoreInitialization.card.map')} value={enumInstance.toMap()} />
-          }
-        />
-      </StorySection>
-    </StoryPage>
-  );
-}
-
-function ArrayFieldMappingDemo() {
-  const t = useStoryT();
-  const sourceRows = [
-    {
-      id: 101,
-      code: 'draft',
-      title: t('storybook.stories.CoreInitialization.array.sample.title.draft'),
-      group: t('storybook.stories.CoreInitialization.array.sample.group.editing'),
-    },
-    // {
-    //   id: 102,
-    //   code: 'review',
-    //   title: t('storybook.stories.CoreInitialization.array.sample.title.review'),
-    //   group: t('storybook.stories.CoreInitialization.array.sample.group.editing'),
-    // },
-    // {
-    //   id: 103,
-    //   code: 'published',
-    //   title: t('storybook.stories.CoreInitialization.array.sample.title.published'),
-    //   group: t('storybook.stories.CoreInitialization.array.sample.group.online'),
-    // },
-  ] as const;
-
-  const mappedEnum = useMemo(() => {
-    const s = Enum(sourceRows, {
-      getValue: 'id',
-      getKey: 'code',
-      getLabel: 'title',
-      name: t('storybook.stories.CoreInitialization.array.sample.enumName'),
-    });
-    return s;
-  }, [sourceRows, t]);
-  const [selectedValue, setSelectedValue] = useState<number>(101);
-
-  return (
-    <StoryPage
-      title={t('storybook.stories.CoreInitialization.array.title')}
-      description={t('storybook.stories.CoreInitialization.array.description')}
-      highlights={[
-        t('storybook.stories.CoreInitialization.array.highlights.dynamicData'),
-        t('storybook.stories.CoreInitialization.array.highlights.fieldMapping'),
-        t('storybook.stories.CoreInitialization.array.highlights.selectBinding'),
-      ]}
-    >
-      <StorySection
-        title={t('storybook.stories.CoreInitialization.array.section.source.title')}
-        description={t('storybook.stories.CoreInitialization.array.section.source.description')}
-      >
-        <TwoColumn
-          left={
-            <CodePreview
-              title={t('storybook.stories.CoreInitialization.array.card.mappingCode')}
-              code={`const FlowEnum = Enum(sourceRows, {
-  getValue: 'id',
-  getKey: 'code',
-  getLabel: 'title',
-});`}
-            />
-          }
-          right={<JsonPreview title={t('storybook.stories.CoreInitialization.array.card.apiRaw')} value={sourceRows} />}
-        />
-      </StorySection>
-
-      <StorySection
-        title={t('storybook.stories.CoreInitialization.array.section.result.title')}
-        description={t('storybook.stories.CoreInitialization.array.section.result.description')}
-      >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
-          <Select
-            value={selectedValue}
-            style={{ width: 320 }}
-            fieldNames={{ value: 'id', label: 'name' }}
-            options={mappedEnum.toList({
-              valueField: 'id',
-              labelField: 'name',
-              extra: (item) => ({ group: (item.raw as any)?.group }),
-            })}
-            onChange={(value) => setSelectedValue(value)}
-          />
-
-          <Descriptions
-            bordered
-            size="small"
-            column={1}
-            items={[
-              { key: 'label', label: 'label(value)', children: mappedEnum.label(selectedValue) },
-              { key: 'key', label: 'key(value)', children: mappedEnum.key(selectedValue as any) as string },
-              {
-                key: 'raw',
-                label: 'raw(value)',
-                children: <Text code>{JSON.stringify(mappedEnum.raw(selectedValue))}</Text>,
-              },
-            ]}
-          />
-        </Space>
       </StorySection>
     </StoryPage>
   );

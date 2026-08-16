@@ -1,6 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { RollupLog } from 'rollup';
 import { mergeConfig } from 'vite';
 
 //@ts-expect-error
@@ -22,8 +23,27 @@ const config: StorybookConfig = {
     defaultName: 'Docs',
   },
   async viteFinal(baseConfig) {
-    return mergeConfig(baseConfig, {});
+    return mergeConfig(baseConfig, {
+      build: {
+        rollupOptions: {
+          onwarn(warning: RollupLog, defaultHandler: (warning: string | RollupLog) => void) {
+            if (shouldIgnoreUseClientWarning(warning)) {
+              return;
+            }
+            defaultHandler(warning);
+          },
+        },
+      },
+    });
   },
 };
+
+function shouldIgnoreUseClientWarning(warning: RollupLog) {
+  return (
+    warning.code === 'MODULE_LEVEL_DIRECTIVE' &&
+    typeof warning.message === 'string' &&
+    warning.message.includes('"use client"')
+  );
+}
 
 export default config;
