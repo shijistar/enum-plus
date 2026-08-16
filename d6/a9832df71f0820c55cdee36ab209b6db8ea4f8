@@ -1,0 +1,18 @@
+.storybook/stories/33-CoreUiOutputs.stories.tsx
+  h_99cad05bea77d1 26,30,57,59,64,71,78,85,97,99-100,105-108,113-114,116-117,130-142,147,149-152,154-155,159-161,163-165,169,174,178-180,182,187,197,199,209,224-225,228,230,243-246,257,286-287,293,320-321,335,339-340,345-346,351-352,357,361-362,367,372-373,378-379
+  h_99cad05bea77d1 181,226-227,229,231-242,247-256,258-274,276-277
+.storybook/stories/shared/demo.tsx
+  h_99cad05bea77d1 73-74,82,88-97
+  h_99cad05bea77d1 85-87,98-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "d6a9832df71f0820c55cdee36ab209b6db8ea4f8",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
