@@ -1594,7 +1594,7 @@ const WeekEnum = Enum(
 
 ### Minimal Configuration
 
-By leveraging [global configuration templates](?path=/docs/global-configuration--docs#-templates), you can set up internationalization templates for enums globally, which can further simplify enum definitions.
+By leveraging [global configuration templates](#templates), you can set up internationalization templates for enums globally, which can further simplify enum definitions.
 
 - _Global configuration_
 

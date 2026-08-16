@@ -1583,7 +1583,7 @@ const WeekEnum = Enum(
 
 ### 极简化配置
 
-配合 [全局配置 templates](?path=/docs/global-configuration--docs#-templates)，全局设置枚举的国际化模板，还可以最大化简化枚举定义的代码。
+配合 [全局配置 templates](#templates)，全局设置枚举的国际化模板，还可以最大化简化枚举定义的代码。
 
 - _全局配置_
 
