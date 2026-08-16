@@ -9,9 +9,11 @@
 &nbsp;
 
 <p align="center">
-  <h3>一个业务字典管理解决方案，前端基础设施必备。</h3>
+  <strong>一个业务字典管理解决方案，前端基础设施必备。</strong>
 </p>
-<h3 align="center">用法像原生 enum 一样，但更强大！</h3>
+<p align="center">
+  <strong>用法像原生 enum 一样，但更强大！</strong>
+</p>
 <br/>
 
 [![npm latest version](https://img.shields.io/npm/v/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)

@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <h3>A solution for business dictionary management.</h3>
+  <strong>A solution for business dictionary management.</strong>
 </p>
 <p align="center">
-  <h3>Like native enum, but much better!</h3>
+  <strong>Like native enum, but much better!</strong>
 </p>
 <br/>
 
