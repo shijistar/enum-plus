@@ -1,0 +1,22 @@
+README-FULL.md
+  h_99cad05bea77d1 1583-1589,1591-1615
+.storybook/docs-source/BestPractices.en-US.md
+  h_99cad05bea77d1 19-25,27,31-51
+  h_99cad05bea77d1 28-30
+.storybook/docs-source/BestPractices.zh-CN.md
+  h_99cad05bea77d1 19-25,27,31-51
+  h_99cad05bea77d1 28-30
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 1572-1578,1580-1604
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ebc4277f6beb40a06e61cd1183f187fc2c3a0ccc",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
