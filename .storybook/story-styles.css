@@ -239,7 +239,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 
 .ep-section .ant-card-body,
 .ep-section .ant-card-extra,
-.ep-section .ant-typography,
+/* .ep-section .ant-typography, */
 .ep-section .ant-descriptions,
 .ep-section .ant-descriptions-item-label,
 .ep-section .ant-descriptions-item-content,
@@ -397,11 +397,11 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   background: rgb(61 214 194 / 16%) !important;
 }
 
-.enum-story-shell[data-theme='dark'] .ant-tag:not(.ant-tag-has-color) {
+/* .enum-story-shell[data-theme='dark'] .ant-tag:not(.ant-tag-has-color) {
   color: var(--ep-page-text);
   background: rgb(255 255 255 / 6%);
   border-color: var(--ep-page-border);
-}
+} */
 
 .enum-story-shell[data-theme='dark'] .ant-btn-default,
 .enum-story-shell[data-theme='dark'] .ant-input,

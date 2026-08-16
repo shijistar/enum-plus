@@ -11,9 +11,9 @@ const { Text } = Typography;
 const activeI18n = i18next;
 
 const meta: Meta = {
-  title: 'Plugins/React I18n',
+  title: 'Plugins/React with reactive',
   // @ts-expect-error: because titleCN is an extension field
-  titleCN: '插件/React I18n',
+  titleCN: '插件/React + 自动响应式',
   parameters: {
     docs: {
       description: {
@@ -26,9 +26,9 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 export const Playground: Story = {
-  name: 'Demo',
+  name: 'React with reactive',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: 'Demo',
+  nameCN: 'React + 自动响应式',
   render: function Render() {
     return <ReactI18nDemo />;
   },
@@ -110,7 +110,6 @@ function ReactI18nDemo() {
       title={t('storybook.stories.PluginReactI18n.page.title')}
       description={t('storybook.stories.PluginReactI18n.page.description')}
       highlights={[
-        t('storybook.stories.PluginReactI18n.highlights.reactI18next'),
         t('storybook.stories.PluginReactI18n.highlights.refresh'),
         t('storybook.stories.PluginReactI18n.highlights.isMatch'),
         t('storybook.stories.PluginReactI18n.highlights.selectSearch'),
@@ -120,77 +119,89 @@ function ReactI18nDemo() {
         title={t('storybook.stories.PluginReactI18n.section.language.title')}
         description={t('storybook.stories.PluginReactI18n.section.language.description')}
       >
-        <TwoColumn
-          left={
-            <Card size="small" title={t('storybook.stories.PluginReactI18n.card.interaction')}>
-              <Space direction="vertical" size={16} style={{ width: '100%' }}>
-                <Space wrap>
-                  <Button
-                    type={language === 'zh-CN' ? 'primary' : 'default'}
-                    onClick={() => void activeI18n.changeLanguage('zh-CN')}
-                  >
-                    {storyT('storybook.preview.locale.zhCN')}
-                  </Button>
-                  <Button
-                    type={language === 'en-US' ? 'primary' : 'default'}
-                    onClick={() => void activeI18n.changeLanguage('en-US')}
-                  >
-                    {storyT('storybook.preview.locale.enUS')}
-                  </Button>
-                </Space>
-
-                <Select
-                  value={selectedValue}
-                  showSearch
-                  style={{ width: '100%' }}
-                  options={localizedItems}
-                  filterOption={(input, option) => localizedStatusEnum.isMatch(input, option)}
-                  onChange={(value) => setSelectedValue(value)}
-                />
-
-                <Descriptions
-                  size="small"
-                  column={1}
-                  items={[
-                    {
-                      key: 'lang',
-                      label: t('storybook.stories.PluginReactI18n.field.currentLanguage'),
-                      children: language,
-                    },
-                    {
-                      key: 'name',
-                      label: t('storybook.stories.PluginReactI18n.field.enumName'),
-                      children: localizedStatusEnum.name || '-',
-                    },
-                    {
-                      key: 'label',
-                      label: t('storybook.stories.PluginReactI18n.field.labelValue'),
-                      children: localizedStatusEnum.label(selectedValue),
-                    },
-                  ]}
-                />
-              </Space>
-            </Card>
-          }
-          right={
-            <Card size="small" title={t('storybook.stories.PluginReactI18n.card.options')}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
+          <Card size="small" title={t('storybook.stories.PluginReactI18n.card.interaction')}>
+            <Space orientation="vertical" size={16} style={{ width: '100%' }}>
               <Space wrap>
-                {localizedItems.map((item) => (
-                  <Tag key={item.key} color="blue">
-                    {item.label}
-                  </Tag>
-                ))}
+                <Button
+                  type={language === 'zh-CN' ? 'primary' : 'default'}
+                  onClick={() => void activeI18n.changeLanguage('zh-CN')}
+                >
+                  {storyT('storybook.preview.locale.zhCN')}
+                </Button>
+                <Button
+                  type={language === 'en-US' ? 'primary' : 'default'}
+                  onClick={() => void activeI18n.changeLanguage('en-US')}
+                >
+                  {storyT('storybook.preview.locale.enUS')}
+                </Button>
               </Space>
-            </Card>
-          }
-        />
+
+              <Select
+                value={selectedValue}
+                style={{ width: 300 }}
+                options={localizedItems}
+                showSearch={{
+                  filterOption: (input, option) => localizedStatusEnum.isMatch(input, option),
+                }}
+                onChange={(value) => setSelectedValue(value)}
+              />
+
+              <Descriptions
+                size="small"
+                column={1}
+                items={[
+                  {
+                    key: 'lang',
+                    label: t('storybook.stories.PluginReactI18n.field.currentLanguage'),
+                    children: language,
+                  },
+                  {
+                    key: 'name',
+                    label: t('storybook.stories.PluginReactI18n.field.enumName'),
+                    children: localizedStatusEnum.name || '-',
+                  },
+                  {
+                    key: 'label',
+                    label: t('storybook.stories.PluginReactI18n.field.labelValue'),
+                    children: localizedStatusEnum.label(selectedValue),
+                  },
+                ]}
+              />
+            </Space>
+          </Card>
+
+          <Table
+            size="small"
+            bordered
+            columns={[
+              {
+                dataIndex: 'key',
+                title: 'key',
+                width: '33%',
+              },
+              {
+                dataIndex: 'label',
+                title: 'label',
+                width: '34%',
+              },
+              {
+                dataIndex: 'value',
+                title: 'value',
+                width: '33%',
+              },
+            ]}
+            dataSource={localizedStatusEnum.items}
+            pagination={false}
+          />
+        </Space>
       </StorySection>
 
       <StorySection
         title={t('storybook.stories.PluginReactI18n.section.search.title')}
         description={t('storybook.stories.PluginReactI18n.section.search.description')}
       >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           <Input
             value={searchText}
             style={{ maxWidth: 320 }}

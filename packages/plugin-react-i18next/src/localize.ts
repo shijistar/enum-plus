@@ -34,7 +34,8 @@ const localizePlugin: PluginFunc<LocalizePluginOptions> = (pluginOptions, Enum) 
     if (typeof options === 'string') {
       return options;
     }
-    return instance.t(key as string, options);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return instance.t(key as string, options as any);
   };
 };
 export default localizePlugin;

@@ -301,7 +301,7 @@ type WeekRaw = typeof WeekEnum.rawType;
 
 > Note: This is a TypeScript type and cannot be called at runtime. Calling it at runtime will throw an error.
 
----
+# Static Methods
 
 # Constructor Options
 

@@ -9,6 +9,9 @@
 </p>
 
 <p align="center">
+  <strong>A solution for business dictionary management.</strong>
+</p>
+<p align="center">
   <strong>Like native enum, but much better!</strong>
 </p>
 <br/>
@@ -62,13 +65,13 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 <details>
   <summary>Here are some hot questions, feel free to check them out</summary>
-  
-  - [Why do I need this library? TypeScript already has the built-in enums](#why-do-i-need-this-library-typescript-already-has-the-built-in-enums)
-  - [Do I have to install TypeScript? What if my project is in JavaScript?](#do-i-have-to-install-typescript-what-if-my-project-is-in-javascript)
-  - [How about the performance of this library?](#how-about-the-performance-of-this-library)
-  - [It seems that TypeScript is going to deprecate enum?](#it-seems-that-typescript-is-going-to-deprecate-enum)
-  - [I have a great idea and would like to contribute to this project. What should I do?](#i-have-a-great-idea-and-would-like-to-contribute-to-this-project-what-should-i-do)
-  
+
+- [Why do I need this library? TypeScript already has the built-in enums](#why-do-i-need-this-library-typescript-already-has-the-built-in-enums)
+- [Do I have to install TypeScript? What if my project is in JavaScript?](#do-i-have-to-install-typescript-what-if-my-project-is-in-javascript)
+- [How about the performance of this library?](#how-about-the-performance-of-this-library)
+- [It seems that TypeScript is going to deprecate enum?](#it-seems-that-typescript-is-going-to-deprecate-enum)
+- [I have a great idea and would like to contribute to this project. What should I do?](#i-have-a-great-idea-and-would-like-to-contribute-to-this-project-what-should-i-do)
+
 </details>
 
 ## Features

@@ -6,12 +6,12 @@
   </a>
 </p>
 
+&nbsp;
+
 <p align="center">
-  <strong>用法像原生 enum 一样，但更强大！</strong>
+  <h3>一个业务字典管理解决方案，前端基础设施必备。</h3>
 </p>
-<p align="center">
-  <strong>一个业务字典管理解决方案，前端基础设施的一部分。</strong>
-</p>
+<h3 align="center">用法像原生 enum 一样，但更强大！</h3>
 <br/>
 
 [![npm latest version](https://img.shields.io/npm/v/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
@@ -53,7 +53,7 @@
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-high-v3.mp4" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
 <p align="center">
@@ -64,13 +64,13 @@
 
 <details>
   <summary>这里有几个常见问题，有兴趣也可以阅读一下</summary>
-  
-  - [为什么需要这个库？TypeScript 已经有内置的枚举了](?path=/docs/faq--docs&globals=locale:zh-CN#为什么需要这个库typescript-已经有内置的枚举了)
-  - [我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？](?path=/docs/faq--docs&globals=locale:zh-CN#我必须使用-typescript-吗我的是-javascript-项目要怎么办)
-  - [枚举库的性能怎么样？](?path=/docs/faq--docs&globals=locale:zh-CN#枚举库的性能怎么样)
-  - [好像 TypeScript 要废弃 enum 了？](?path=/docs/faq--docs&globals=locale:zh-CN#好像-typescript-要废弃-enum-了)
-  - [我有一个很好的点子，希望为这个项目做贡献，我要怎么做？](?path=/docs/faq--docs&globals=locale:zh-CN#我有一个很好的点子希望为这个项目做贡献我要怎么做)
-  
+
+- [为什么需要这个库？TypeScript 已经有内置的枚举了](?path=/docs/faq--docs&globals=locale:zh-CN#为什么需要这个库typescript-已经有内置的枚举了)
+- [我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？](?path=/docs/faq--docs&globals=locale:zh-CN#我必须使用-typescript-吗我的是-javascript-项目要怎么办)
+- [枚举库的性能怎么样？](?path=/docs/faq--docs&globals=locale:zh-CN#枚举库的性能怎么样)
+- [好像 TypeScript 要废弃 enum 了？](?path=/docs/faq--docs&globals=locale:zh-CN#好像-typescript-要废弃-enum-了)
+- [我有一个很好的点子，希望为这个项目做贡献，我要怎么做？](?path=/docs/faq--docs&globals=locale:zh-CN#我有一个很好的点子希望为这个项目做贡献我要怎么做)
+
 </details>
 
 # 特性

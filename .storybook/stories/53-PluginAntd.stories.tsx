@@ -8,9 +8,9 @@ import { JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 const { Text } = Typography;
 
 const meta: Meta = {
-  title: 'Plugins/Ant Design Integration',
+  title: 'Plugins/antd',
   // @ts-expect-error: because titleCN is an extension field
-  titleCN: '插件/Ant Design 集成',
+  titleCN: '插件/antd',
   parameters: {
     docs: {
       description: {
@@ -23,9 +23,9 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 export const Playground: Story = {
-  name: 'Demo',
+  name: 'antd',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: 'Demo',
+  nameCN: 'antd',
   render: function Render() {
     return <AntdBindingDemo />;
   },
@@ -72,7 +72,7 @@ function AntdBindingDemo() {
         <TwoColumn
           left={
             <Card size="small" title={t('storybook.stories.PluginAntd.card.select')}>
-              <Space direction="vertical" size={16} style={{ width: '100%' }}>
+              <Space orientation="vertical" size={16} style={{ width: '100%' }}>
                 <Select
                   value={selectedShift}
                   style={{ width: '100%' }}
@@ -123,7 +123,7 @@ function AntdBindingDemo() {
         title={t('storybook.stories.PluginAntd.section.table.title')}
         description={t('storybook.stories.PluginAntd.section.table.description')}
       >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           <Table
             className="ep-table"
             rowKey="id"

@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <strong>Like native enum, but much better!</strong>
+  <h3>A solution for business dictionary management.</h3>
 </p>
 <p align="center">
-  <strong>A solution for business dictionary management.</strong>
+  <h3>Like native enum, but much better!</h3>
 </p>
 <br/>
 
@@ -53,7 +53,7 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-high-v3.mp4" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-v3.gif" width="800" alt="usage video" />
   </a>
 </p>
 <p align="center">
@@ -64,13 +64,13 @@ What other exciting features are there? Please continue to explore! Or you can c
 
 <details>
   <summary>Here are some hot questions, feel free to check them out</summary>
-  
-  - [Why do I need this library? TypeScript already has the built-in enums](?path=/docs/faq--docs#-why-do-i-need-this-library-typescript-already-has-the-built-in-enums)
-  - [Do I have to install TypeScript? What if my project is in JavaScript?](?path=/docs/faq--docs#-do-i-have-to-install-typescript-what-if-my-project-is-in-javascript)
-  - [How about the performance of this library?](?path=/docs/faq--docs#-how-about-the-performance-of-this-library)
-  - [It seems that TypeScript is going to deprecate enum?](?path=/docs/faq--docs#-it-seems-that-typescript-is-going-to-deprecate-enum)
-  - [I have a great idea and would like to contribute to this project. What should I do?](?path=/docs/faq--docs#-i-have-a-great-idea-and-would-like-to-contribute-to-this-project-what-should-i-do)
-  
+
+- [Why do I need this library? TypeScript already has the built-in enums](?path=/docs/faq--docs#-why-do-i-need-this-library-typescript-already-has-the-built-in-enums)
+- [Do I have to install TypeScript? What if my project is in JavaScript?](?path=/docs/faq--docs#-do-i-have-to-install-typescript-what-if-my-project-is-in-javascript)
+- [How about the performance of this library?](?path=/docs/faq--docs#-how-about-the-performance-of-this-library)
+- [It seems that TypeScript is going to deprecate enum?](?path=/docs/faq--docs#-it-seems-that-typescript-is-going-to-deprecate-enum)
+- [I have a great idea and would like to contribute to this project. What should I do?](?path=/docs/faq--docs#-i-have-a-great-idea-and-would-like-to-contribute-to-this-project-what-should-i-do)
+
 </details>
 
 # Features

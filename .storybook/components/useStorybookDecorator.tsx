@@ -7,6 +7,7 @@ import enUS from 'antd/locale/en_US';
 import zhCN from 'antd/locale/zh_CN';
 import storyI18n from '../locales';
 import { dark, getThemeKey, light } from '../utils/themes';
+import RefreshEnumContext from '../stories/shared/RefreshEnumContext';
 
 // @ts-expect-error
 const AppLazy = lazy(() => import('antd/es/app'));
@@ -20,6 +21,7 @@ function useStorybookDecorator(Story: React.ComponentType, context: StoryContext
   const isDark = themeKey === 'dark';
   const themeName = isDark ? 'dark' : 'light';
   const [prevTheme, setPrevTheme] = useState(themeName);
+  const [enumLocale, setEnumLocale] = useState<string>();
 
   // Reload the page if the theme changes.
   useEffect(() => {
@@ -50,13 +52,20 @@ function useStorybookDecorator(Story: React.ComponentType, context: StoryContext
           },
         }}
       >
-        <Suspense fallback={null}>
-          <AppLazy>
-            <div className={`enum-story-shell enum-story-shell-${themeName}`} data-theme={themeName}>
-              <Story />
-            </div>
-          </AppLazy>
-        </Suspense>
+        <RefreshEnumContext.Provider
+          value={{
+            locale: enumLocale,
+            changeLang: setEnumLocale,
+          }}
+        >
+          <Suspense fallback={null}>
+            <AppLazy>
+              <div className={`enum-story-shell enum-story-shell-${themeName}`} data-theme={themeName}>
+                <Story />
+              </div>
+            </AppLazy>
+          </Suspense>
+        </RefreshEnumContext.Provider>
       </ConfigProviderLazy>
     </Suspense>
   );

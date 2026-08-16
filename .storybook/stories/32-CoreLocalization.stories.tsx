@@ -8,11 +8,10 @@ import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './
 
 const { Text } = Typography;
 
-let extensionInstalled = false;
 const meta: Meta = {
-  title: 'Core/Localization, Composition and Extension',
+  title: 'Core/Localization',
   // @ts-expect-error: because titleCN is an extension field
-  titleCN: '核心/本地化、组合与扩展',
+  titleCN: '核心/本地化',
   parameters: {
     docs: {
       description: {
@@ -24,6 +23,16 @@ const meta: Meta = {
 
 export default meta;
 type Story = StoryObj;
+
+export const Localization: Story = {
+  name: 'Localization',
+  // @ts-expect-error: because nameCN is an extension field
+  nameCN: '本地化',
+  render: function Render() {
+    return <LocalizationDemo />;
+  },
+};
+
 export const GlobalTemplates: Story = {
   name: 'Global Templates',
   // @ts-expect-error: because nameCN is an extension field
@@ -32,61 +41,6 @@ export const GlobalTemplates: Story = {
     return <TemplatesDemo />;
   },
 };
-
-export const LocalizationAndAutoLabel: Story = {
-  name: 'Localization and Auto Label',
-  // @ts-expect-error: because nameCN is an extension field
-  nameCN: '本地化与自动标签',
-  render: function Render() {
-    return <LocalizationDemo />;
-  },
-};
-
-export const CompositionAndExtension: Story = {
-  name: 'Composition and Extension',
-  // @ts-expect-error: because nameCN is an extension field
-  nameCN: '组合与扩展',
-  render: function Render() {
-    return <CompositionDemo />;
-  },
-};
-
-function ensureCustomExtension() {
-  if (extensionInstalled) {
-    return;
-  }
-
-  Enum.extends({
-    toBadgeMap(this: {
-      toMap: (config: {
-        key: 'value';
-        value: (item: { label: string; raw: { color?: string } }) => { label: string; color?: string };
-      }) => Record<string, { label: string; color?: string }>;
-    }) {
-      return this.toMap({
-        key: 'value',
-        value: (item) => ({
-          label: item.label,
-          color: item.raw.color,
-        }),
-      });
-    },
-  });
-
-  extensionInstalled = true;
-}
-
-const extensionRegistrationCode = `Enum.extends({
-  toBadgeMap() {
-    return this.toMap({
-      key: 'value',
-      value: (item) => ({
-        label: item.label,
-        color: item.raw.color,
-      }),
-    });
-  },
-});`;
 
 function LocalizationDemo() {
   const t = useStoryT();
@@ -99,16 +53,16 @@ function LocalizationDemo() {
 
   const dictionary: Record<'zh-CN' | 'en-US', Record<string, string>> = {
     'zh-CN': {
-      'status.enumName': '发布状态',
-      'status.draft': '草稿',
-      'status.review': '审核中',
-      'status.published': '已发布',
+      'enums.status.enumName': '发布状态',
+      'enums.status.draft': '草稿',
+      'enums.status.review': '审核中',
+      'enums.status.published': '已发布',
     },
     'en-US': {
-      'status.enumName': 'Release Status',
-      'status.draft': 'Draft',
-      'status.review': 'In Review',
-      'status.published': 'Published',
+      'enums.status.enumName': 'Release Status',
+      'enums.status.draft': 'Draft',
+      'enums.status.review': 'In Review',
+      'enums.status.published': 'Published',
     },
   };
 
@@ -116,20 +70,18 @@ function LocalizationDemo() {
     () =>
       Enum(
         {
-          Draft: { value: 'draft', label: 'draft', color: 'default' },
-          Review: { value: 'review', label: 'review', color: 'processing' },
-          Published: { value: 'published', label: 'published', color: 'success' },
+          Draft: { value: 1, label: 'enums.status.draft' },
+          Review: { value: 2, label: 'enums.status.review' },
+          Published: { value: 3, label: 'enums.status.published' },
         },
         {
-          name: 'status.enumName',
-          labelPrefix: 'status.',
-          autoLabel: true,
+          name: 'enums.status.enumName',
           localize: (key) => dictionary[locale][key || ''] ?? key,
         },
       ),
     [locale],
   );
-  const [selectedValue, setSelectedValue] = useState<string>('draft');
+  const [selectedValue, setSelectedValue] = useState<number>(1);
 
   return (
     <StoryPage
@@ -137,16 +89,50 @@ function LocalizationDemo() {
       description={t('storybook.stories.CorePatterns.localization.description')}
       highlights={[
         t('storybook.stories.CorePatterns.localization.highlights.localize'),
-        t('storybook.stories.CorePatterns.localization.highlights.labelPrefix'),
-        t('storybook.stories.CorePatterns.localization.highlights.autoLabel'),
         t('storybook.stories.CorePatterns.localization.highlights.crossFramework'),
       ]}
     >
+      <StorySection title={t('storybook.stories.enumInitialization')}>
+        <CodePreview
+          title=""
+          code={`
+const StatusEnum = Enum({
+  Draft: { value: 1, label: 'enums.status.draft' },
+  Review: { value: 2, label: 'enums.status.review' },
+  Published: { value: 3, label: 'enums.status.published' },
+});`}
+        />
+      </StorySection>
+      <StorySection
+        title={t('storybook.stories.CorePatterns.localization.registration')}
+        description={t('storybook.stories.CorePatterns.localization.registration.description')}
+      >
+        <CodePreview
+          title=""
+          code={`
+const dictionary = {
+  'zh-CN': {
+    'enums.status.enumName': '发布状态',
+    'enums.status.draft': '草稿',
+    'enums.status.review': '审核中',
+    'enums.status.published': '已发布',
+  },
+  'en-US': {
+    'enums.status.enumName': 'Release Status',
+    'enums.status.draft': 'Draft',
+    'enums.status.review': 'In Review',
+    'enums.status.published': 'Published',
+  },
+};
+
+Enum.localize = (key: string) => dictionary[locale][key] ?? key;`}
+        />
+      </StorySection>
       <StorySection
         title={t('storybook.stories.CorePatterns.localization.section.title')}
         description={t('storybook.stories.CorePatterns.localization.section.description')}
       >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           <Segmented
             value={locale}
             options={['zh-CN', 'en-US']}
@@ -156,7 +142,7 @@ function LocalizationDemo() {
           <TwoColumn
             left={
               <Card size="small" title={t('storybook.stories.CorePatterns.localization.card.current')}>
-                <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                <Space orientation="vertical" size={16} style={{ width: '100%' }}>
                   <Select
                     value={selectedValue}
                     style={{ width: '100%' }}
@@ -168,11 +154,33 @@ function LocalizationDemo() {
                     column={1}
                     items={[
                       { key: 'name', label: 'Enum name', children: statusEnum.name || '-' },
-                      { key: 'label', label: 'label', children: statusEnum.label(selectedValue) },
+                      {
+                        key: 'value',
+                        label: 'value',
+                        children: <Typography.Text code>{selectedValue}</Typography.Text>,
+                      },
+                      {
+                        key: 'label',
+                        label: 'label',
+                        children: <Typography.Text code>{statusEnum.label(selectedValue)}</Typography.Text>,
+                      },
                       {
                         key: 'raw',
                         label: 'raw',
-                        children: <Text code>{JSON.stringify(statusEnum.raw(selectedValue))}</Text>,
+                        children: (
+                          <Typography.Text code>{JSON.stringify(statusEnum.raw(selectedValue))}</Typography.Text>
+                        ),
+                      },
+                      {
+                        key: 'labels',
+                        label: 'labels',
+                        children: (
+                          <Space wrap>
+                            {statusEnum.labels.map((v) => (
+                              <Tag key={v}>{v}</Tag>
+                            ))}
+                          </Space>
+                        ),
                       },
                     ]}
                   />
@@ -181,135 +189,17 @@ function LocalizationDemo() {
             }
             right={
               <JsonPreview
+                forceEnumText
                 title={t('storybook.stories.CorePatterns.localization.card.derived')}
-                value={{ labels: statusEnum.labels, map: statusEnum.toMap() }}
+                value={{
+                  labels: statusEnum.labels,
+                  toList: statusEnum.toList(),
+                  toMap: statusEnum.toMap(),
+                }}
               />
             }
           />
         </Space>
-      </StorySection>
-    </StoryPage>
-  );
-}
-
-function CompositionDemo() {
-  ensureCustomExtension();
-  const t = useStoryT();
-
-  const baseEnum = useMemo(
-    () =>
-      Enum({
-        Draft: {
-          value: 'draft',
-          label: t('storybook.stories.CorePatterns.composition.sample.draft'),
-          color: 'default',
-        },
-        Review: {
-          value: 'review',
-          label: t('storybook.stories.CorePatterns.composition.sample.review'),
-          color: 'processing',
-        },
-      }),
-    [t],
-  );
-  const terminalEnum = useMemo(
-    () =>
-      Enum({
-        Published: {
-          value: 'published',
-          label: t('storybook.stories.CorePatterns.composition.sample.published'),
-          color: 'success',
-        },
-        Archived: {
-          value: 'archived',
-          label: t('storybook.stories.CorePatterns.composition.sample.archived'),
-          color: 'warning',
-        },
-      }),
-    [t],
-  );
-  const mergedEnum = useMemo(
-    () =>
-      Enum(
-        {
-          ...baseEnum.raw(),
-          ...terminalEnum.raw(),
-        },
-        { name: t('storybook.stories.CorePatterns.composition.sample.fullFlow') },
-      ) as unknown as typeof baseEnum & {
-        toBadgeMap(): Record<string, { label: string; color?: string }>;
-      },
-    [baseEnum, t, terminalEnum],
-  );
-
-  return (
-    <StoryPage
-      title={t('storybook.stories.CorePatterns.composition.title')}
-      description={t('storybook.stories.CorePatterns.composition.description')}
-      highlights={[
-        t('storybook.stories.CorePatterns.composition.highlights.extends'),
-        t('storybook.stories.CorePatterns.composition.highlights.raw'),
-        t('storybook.stories.CorePatterns.composition.highlights.merge'),
-        t('storybook.stories.CorePatterns.composition.highlights.readonly'),
-      ]}
-    >
-      <StorySection
-        title={t('storybook.stories.CorePatterns.composition.section.result.title')}
-        description={t('storybook.stories.CorePatterns.composition.section.result.description')}
-      >
-        <TwoColumn
-          left={
-            <Descriptions
-              bordered
-              size="small"
-              column={1}
-              items={[
-                {
-                  key: 'name',
-                  label: t('storybook.stories.CorePatterns.composition.field.enumName'),
-                  children: mergedEnum.name || '-',
-                },
-                {
-                  key: 'frozenEnum',
-                  label: t('storybook.stories.CorePatterns.composition.field.frozenEnum'),
-                  children: String(Object.isFrozen(mergedEnum)),
-                },
-                {
-                  key: 'frozenItems',
-                  label: t('storybook.stories.CorePatterns.composition.field.frozenItems'),
-                  children: String(Object.isFrozen(mergedEnum.items)),
-                },
-                {
-                  key: 'labels',
-                  label: t('storybook.stories.CorePatterns.composition.field.allLabels'),
-                  children: (
-                    <Space wrap>
-                      {mergedEnum.labels.map((item) => (
-                        <Tag key={item}>{item}</Tag>
-                      ))}
-                    </Space>
-                  ),
-                },
-              ]}
-            />
-          }
-          right={<JsonPreview title="mergedEnum.raw()" value={mergedEnum.raw()} />}
-        />
-      </StorySection>
-
-      <StorySection
-        title={t('storybook.stories.CorePatterns.composition.section.extension.title')}
-        description={t('storybook.stories.CorePatterns.composition.section.extension.description')}
-      >
-        <TwoColumn
-          left={
-            <CodePreview
-              title={t('storybook.stories.CorePatterns.composition.section.extension.codeTitle')}
-              code={extensionRegistrationCode}
-            />
-          }
-          right={<JsonPreview title="mergedEnum.toBadgeMap()" value={mergedEnum.toBadgeMap()} />}
-        />
       </StorySection>
     </StoryPage>
   );
@@ -591,7 +481,7 @@ function TemplatesDemo() {
         title={t('storybook.stories.CorePatterns.templates.section.config.title')}
         description={t('storybook.stories.CorePatterns.templates.section.config.description')}
       >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           <Segmented
             value={mode}
             options={[
@@ -702,7 +592,7 @@ function EnumDemoCard(props: { enumInstance: AnyEnum; demoT: i18n['t']; fullHeig
 
   return (
     <Card size="small" title={enumInstance.name || '-'} style={{ height: fullHeight ? '100%' : 'auto' }}>
-      <Space direction="vertical" size={12} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={12} style={{ width: '100%' }}>
         <Descriptions
           size="small"
           column={1}

@@ -278,7 +278,7 @@ function WorkbenchDemoBody() {
       dataIndex: 'title',
       width: 320,
       render: (_value, record) => (
-        <Space direction="vertical" size={0}>
+        <Space orientation="vertical" size={0}>
           <Text strong>{record.title}</Text>
           <Text type="secondary">{record.tenant}</Text>
         </Space>
@@ -405,7 +405,7 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
         title={t('storybook.stories.workbenchDemo.section.overview.title')}
         description={t('storybook.stories.workbenchDemo.section.overview.description')}
       >
-        <Space direction="vertical" size={16}>
+        <Space orientation="vertical" size={16}>
           <KpiRow items={kpis} />
           <Paragraph>{t('storybook.stories.workbenchDemo.overview.note')}</Paragraph>
         </Space>{' '}
@@ -415,7 +415,7 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
         title={t('storybook.stories.workbenchDemo.section.workspace.title')}
         description={t('storybook.stories.workbenchDemo.section.workspace.description')}
       >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           <Tabs
             defaultActiveKey={tableMode}
             items={TableModeEnum.items.map((item) => ({
@@ -436,27 +436,28 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
           <Flex gap={12} wrap>
             <Select
               allowClear
-              showSearch
               style={{ minWidth: 220 }}
               placeholder={t('storybook.stories.workbenchDemo.filter.statusPlaceholder')}
               options={TicketStatusEnum.items}
               value={statusFilter}
-              filterOption={(input, option) => TicketStatusEnum.isMatch(input, option)}
+              showSearch={{
+                filterOption: (input, option) => TicketStatusEnum.isMatch(input, option),
+              }}
               onChange={(value) => setStatusFilter(value as typeof TicketStatusEnum.valueType | undefined)}
             />
             <Select
               allowClear
-              showSearch
               style={{ minWidth: 240 }}
               placeholder={t('storybook.stories.workbenchDemo.filter.channelPlaceholder')}
               options={channelOptions as { value: string; label: ReactNode; searchText: string }[]}
               value={channelFilter}
-              filterOption={(input, option) =>
-                TicketChannelEnum.isMatch(input, option) ||
-                String(option?.searchText ?? '')
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
+              showSearch={{
+                filterOption: (input, option) =>
+                  TicketChannelEnum.isMatch(input, option) ||
+                  String(option?.searchText ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase()),
+              }}
               onChange={(value) => setChannelFilter(value as typeof TicketChannelEnum.valueType | undefined)}
             />
             <Input.Search
@@ -492,7 +493,7 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
           left={
             <Card size="small" title={t('storybook.stories.workbenchDemo.card.recordSummary')}>
               {selectedRecord ? (
-                <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                <Space orientation="vertical" size={16} style={{ width: '100%' }}>
                   <Descriptions
                     size="small"
                     column={1}
@@ -628,7 +629,7 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
 
           <TwoColumn
             left={
-              <Space direction="vertical" size={12} style={{ width: '100%' }}>
+              <Space orientation="vertical" size={12} style={{ width: '100%' }}>
                 <Form.Item
                   name="status"
                   label={t('storybook.stories.workbenchDemo.form.status')}
@@ -649,14 +650,14 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
                   rules={[{ required: true }]}
                 >
                   <Select
-                    showSearch
                     options={channelOptions as { value: string; label: ReactNode; searchText: string }[]}
-                    filterOption={(input, option) =>
-                      TicketChannelEnum.isMatch(input, option) ||
-                      String(option?.searchText ?? '')
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
+                    showSearch={{
+                      filterOption: (input, option) =>
+                        TicketChannelEnum.isMatch(input, option) ||
+                        String(option?.searchText ?? '')
+                          .toLowerCase()
+                          .includes(input.toLowerCase()),
+                    }}
                   />
                 </Form.Item>
                 <Form.Item
@@ -665,15 +666,16 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
                   rules={[{ required: true }]}
                 >
                   <Select
-                    showSearch
                     options={ownerOptions as { value: string; label: ReactNode }[]}
-                    filterOption={(input, option) => TicketOwnerEnum.isMatch(input, option)}
+                    showSearch={{
+                      filterOption: (input, option) => TicketOwnerEnum.isMatch(input, option),
+                    }}
                   />
                 </Form.Item>
               </Space>
             }
             right={
-              <Space direction="vertical" size={12} style={{ width: '100%' }}>
+              <Space orientation="vertical" size={12} style={{ width: '100%' }}>
                 <Form.Item
                   name="region"
                   label={t('storybook.stories.workbenchDemo.form.region')}
@@ -712,9 +714,9 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
 }
 
 export const Playground: Story = {
-  name: 'Demo',
+  name: 'Full Demo',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: 'Demo',
+  nameCN: '完整演示',
   render: function Render() {
     return <WorkbenchDemoBody />;
   },

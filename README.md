@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <strong>Like native enum, but much better!</strong>
+  <strong>A solution for business dictionary management.</strong>
 </p>
 <p align="center">
-  <strong>A solution for business dictionary management.</strong>
+  <strong>Like native enum, but much better!</strong>
 </p>
 <br/>
 

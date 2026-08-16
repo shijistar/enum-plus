@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, Descriptions, Input, Select, Space, Table, Tag, Typography } from 'antd';
-import { Enum, ITEMS, KEYS, LABELS, META, NAMED, VALUES } from '../../src';
+import { Enum } from '../../src';
 import { storyT, useStoryT } from '../locales';
-import { JsonPreview, StoryPage, StorySection, TagGroup, TwoColumn } from './shared/demo';
+import { JsonPreview, StoryPage, StorySection, stringifyPreview, TagGroup, TwoColumn } from './shared/demo';
 
 const { Text } = Typography;
 type Story = StoryObj;
@@ -24,20 +24,11 @@ const meta: Meta = {
 export default meta;
 
 export const Explorer: Story = {
-  name: 'Explorer',
+  name: 'Query and Transform API',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: '探索',
+  nameCN: '查询与转换 API',
   render: function Render() {
     return <ApiExplorer />;
-  },
-};
-
-export const NamingConflicts: Story = {
-  name: 'Naming Conflicts',
-  // @ts-expect-error: because nameCN is an extension field
-  nameCN: '命名冲突',
-  render: function Render() {
-    return <NamingConflictDemo />;
   },
 };
 
@@ -77,23 +68,11 @@ function createWorkflowStatusEnum(t: ReturnType<typeof useStoryT>) {
   );
 }
 
-function createConflictEnum(t: ReturnType<typeof useStoryT>) {
-  return Enum({
-    items: { value: 'items', label: t('storybook.stories.CoreApi.sample.conflict.items') },
-    values: { value: 'values', label: t('storybook.stories.CoreApi.sample.conflict.values') },
-    meta: { value: 'meta', label: t('storybook.stories.CoreApi.sample.conflict.meta') },
-  });
-}
-
 function ApiExplorer() {
   const t = useStoryT();
   const workflowStatusEnum = useMemo(() => createWorkflowStatusEnum(t), [t]);
   const [selectedValue, setSelectedValue] = useState<string>('review');
   const [searchSlug, setSearchSlug] = useState<string>('published');
-  const currentItem = useMemo(
-    () => workflowStatusEnum.findBy('value', selectedValue),
-    [selectedValue, workflowStatusEnum],
-  );
   const foundBySlug = useMemo(() => workflowStatusEnum.findBy('slug', searchSlug), [searchSlug, workflowStatusEnum]);
 
   return (
@@ -131,19 +110,19 @@ function ApiExplorer() {
           }
           right={
             <Card size="small" title={t('storybook.stories.CoreApi.card.arrays')}>
-              <Space direction="vertical" size={12} style={{ width: '100%' }}>
-                <div>
+              <Space orientation="vertical" size={12} style={{ width: '100%' }}>
+                <Space>
                   <Text type="secondary">keys</Text>
                   <TagGroup items={workflowStatusEnum.keys} />
-                </div>
-                <div>
+                </Space>
+                <Space>
                   <Text type="secondary">values</Text>
                   <TagGroup items={workflowStatusEnum.values} />
-                </div>
-                <div>
+                </Space>
+                <Space>
                   <Text type="secondary">labels</Text>
                   <TagGroup items={workflowStatusEnum.labels} />
-                </div>
+                </Space>
               </Space>
             </Card>
           }
@@ -154,13 +133,17 @@ function ApiExplorer() {
         title={t('storybook.stories.CoreApi.section.query.title')}
         description={t('storybook.stories.CoreApi.section.query.description')}
       >
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={16} style={{ width: '100%' }}>
           <Select
             value={selectedValue}
             style={{ width: 320 }}
             options={workflowStatusEnum.items.map((item) => ({
               value: item.value,
-              label: `${item.label} (${item.key})`,
+              label: (
+                <>
+                  {item.label} ({item.key})
+                </>
+              ),
             }))}
             onChange={(value) => setSelectedValue(value)}
           />
@@ -174,27 +157,33 @@ function ApiExplorer() {
               { key: 'key', label: 'key(value)', children: workflowStatusEnum.key(selectedValue) },
               { key: 'has', label: 'has(value)', children: String(workflowStatusEnum.has(selectedValue)) },
               {
+                key: 'item',
+                label: 'item(value)',
+                children: (
+                  <Text code>{stringifyPreview(workflowStatusEnum.item(selectedValue), { forceText: true })}</Text>
+                ),
+              },
+              {
                 key: 'raw',
                 label: 'raw(value)',
                 children: <Text code>{JSON.stringify(workflowStatusEnum.raw(selectedValue))}</Text>,
               },
-              {
-                key: 'current',
-                label: t('storybook.stories.CoreApi.field.currentItem'),
-                children: <Text code>{JSON.stringify(currentItem?.raw)}</Text>,
-              },
             ]}
           />
-
-          <Input
-            addonBefore={t('storybook.stories.CoreApi.input.findBySlug')}
-            value={searchSlug}
-            style={{ maxWidth: 420 }}
-            onChange={(event) => setSearchSlug(event.target.value)}
-          />
-
+        </Space>
+      </StorySection>
+      <StorySection title="findBy">
+        <Space orientation="vertical" style={{ width: '100%' }}>
+          <Space>
+            {t('storybook.stories.CoreApi.input.findBySlug') + ':'}
+            <Input
+              value={searchSlug}
+              style={{ maxWidth: 420 }}
+              onChange={(event) => setSearchSlug(event.target.value)}
+            />
+          </Space>
           <Card size="small" title={t('storybook.stories.CoreApi.card.findByResult')}>
-            <Text code>{JSON.stringify(foundBySlug?.raw ?? null)}</Text>
+            {foundBySlug ? <JsonPreview forceEnumText value={{ ...foundBySlug, raw: undefined }} /> : 'undefined'}
           </Card>
         </Space>
       </StorySection>
@@ -251,93 +240,6 @@ function ApiExplorer() {
             { title: 'raw', render: (_, row) => <Text code>{JSON.stringify(row.raw)}</Text> },
           ]}
           dataSource={workflowStatusEnum.items}
-        />
-      </StorySection>
-    </StoryPage>
-  );
-}
-
-function NamingConflictDemo() {
-  const t = useStoryT();
-  const conflictEnum = useMemo(() => createConflictEnum(t), [t]);
-  const enumWithSymbols = conflictEnum as typeof conflictEnum & Record<symbol, unknown>;
-
-  return (
-    <StoryPage
-      title={t('storybook.stories.CoreApi.conflict.page.title')}
-      description={t('storybook.stories.CoreApi.conflict.page.description')}
-      highlights={['ITEMS', 'KEYS', 'VALUES', 'LABELS', 'META', 'NAMED']}
-    >
-      <StorySection
-        title={t('storybook.stories.CoreApi.conflict.section.title')}
-        description={t('storybook.stories.CoreApi.conflict.section.description')}
-      >
-        <TwoColumn
-          left={
-            <Descriptions
-              bordered
-              size="small"
-              column={1}
-              items={[
-                {
-                  key: 'items',
-                  label: 'ConflictEnum.items',
-                  children: String(conflictEnum.items),
-                },
-                {
-                  key: 'values',
-                  label: 'ConflictEnum.values',
-                  children: String(conflictEnum.values),
-                },
-                {
-                  key: 'meta',
-                  label: 'ConflictEnum.meta',
-                  children: String(conflictEnum.meta),
-                },
-              ]}
-            />
-          }
-          right={
-            <Descriptions
-              bordered
-              size="small"
-              column={1}
-              items={[
-                {
-                  key: 'itemsSymbol',
-                  label: 'ConflictEnum[ITEMS].length',
-                  children: String((enumWithSymbols[ITEMS] as { length: number } | undefined)?.length ?? 0),
-                },
-                {
-                  key: 'keysSymbol',
-                  label: 'ConflictEnum[KEYS]',
-                  children: <Text code>{JSON.stringify(enumWithSymbols[KEYS])}</Text>,
-                },
-                {
-                  key: 'valuesSymbol',
-                  label: 'ConflictEnum[VALUES]',
-                  children: <Text code>{JSON.stringify(enumWithSymbols[VALUES])}</Text>,
-                },
-                {
-                  key: 'labelsSymbol',
-                  label: 'ConflictEnum[LABELS]',
-                  children: <Text code>{JSON.stringify(enumWithSymbols[LABELS])}</Text>,
-                },
-                {
-                  key: 'metaSymbol',
-                  label: 'ConflictEnum[META]',
-                  children: <Text code>{JSON.stringify(enumWithSymbols[META])}</Text>,
-                },
-                {
-                  key: 'namedSymbol',
-                  label: 'ConflictEnum[NAMED].items.label',
-                  children: String(
-                    (enumWithSymbols[NAMED] as { items?: { label?: string } } | undefined)?.items?.label ?? '-',
-                  ),
-                },
-              ]}
-            />
-          }
         />
       </StorySection>
     </StoryPage>

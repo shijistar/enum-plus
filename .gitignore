@@ -13,13 +13,13 @@ e2e/fixtures/scripts
 e2e/test-results
 .codegraph/
 .storybook/docs/titles.json
+.storybook/stories/titles.json
 __screenshots__
 coverage/
 run
 .DS_Store
 .cache
 .copilot-tools.log
-.ai-auto-collection.state.json
 .eslintcache
 .vitest-attachments
 storybook-static
