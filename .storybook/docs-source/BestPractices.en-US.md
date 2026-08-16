@@ -14,20 +14,41 @@ When using `enum-plus`, following these best practices can help ensure consisten
 Here is an example that combines the above best practices to define an enum:
 
 ```js
-/** Represents the days of the week */
 const WeekEnum = Enum(
   {
-    /** Sunday */
-    Sunday: { value: 0, label: 'enums.week.sunday' },
-    /** Monday */
-    Monday: { value: 1, label: 'enums.week.monday' },
-    // ...
-    /** Friday */
-    Friday: { value: 5, label: 'enums.week.friday' },
-    /** Saturday */
-    Saturday: { value: 6, label: 'enums.week.saturday' },
+    Sunday: { value: 0, label: 'enums.Week.Sunday' },
+    Monday: { value: 1, label: 'enums.Week.Monday' },
+    Tuesday: { value: 2, label: 'enums.Week.Tuesday' },
+    Wednesday: { value: 3, label: 'enums.Week.Wednesday' },
+    Thursday: { value: 4, label: 'enums.Week.Thursday' },
+    Friday: { value: 5, label: 'enums.Week.Friday' },
+    Saturday: { value: 6, label: 'enums.Week.Saturday' },
   },
-  { name: 'enums.week.name' },
+  { name: 'enums.Week.name' },
+);
+```
+
+## Minimal Configuration
+
+By leveraging [global configuration templates](?path=/docs/global-configuration--docs#-templates), you can set up internationalization templates for enums globally, which can further simplify enum definitions.
+
+- _Global configuration_
+
+```js
+Enum.config.templates = {
+  name: 'enums.{name}',
+  items: {
+    label: 'enums.{name}.{key}',
+  },
+};
+```
+
+- _Minimal enum definition_
+
+```js
+const WeekEnum = Enum(
+  { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6 },
+  { name: 'Week' },
 );
 ```
 

@@ -14,20 +14,41 @@
 下面是一个示例，展示了如何结合上述最佳实践来定义一个枚举：
 
 ```js
-/** 表示一周的枚举 */
 const WeekEnum = Enum(
   {
-    /** 星期日 */
-    Sunday: { value: 0, label: 'enums.week.sunday' },
-    /** 星期一 */
-    Monday: { value: 1, label: 'enums.week.monday' },
-    // ...
-    /** 星期五 */
-    Friday: { value: 5, label: 'enums.week.friday' },
-    /** 星期六 */
-    Saturday: { value: 6, label: 'enums.week.saturday' },
+    Sunday: { value: 0, label: 'enums.Week.Sunday' },
+    Monday: { value: 1, label: 'enums.Week.Monday' },
+    Tuesday: { value: 2, label: 'enums.Week.Tuesday' },
+    Wednesday: { value: 3, label: 'enums.Week.Wednesday' },
+    Thursday: { value: 4, label: 'enums.Week.Thursday' },
+    Friday: { value: 5, label: 'enums.Week.Friday' },
+    Saturday: { value: 6, label: 'enums.Week.Saturday' },
   },
-  { name: 'enums.week.name' },
+  { name: 'enums.Week.name' },
+);
+```
+
+## 极简化配置
+
+配合 [全局配置 templates](?path=/docs/global-configuration--docs#-templates)，全局设置枚举的国际化模板，还可以最大化简化枚举定义的代码。
+
+- _全局配置_
+
+```js
+Enum.config.templates = {
+  name: 'enums.{name}',
+  items: {
+    label: 'enums.{name}.{key}',
+  },
+};
+```
+
+- _极简枚举定义_
+
+```js
+const WeekEnum = Enum(
+  { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6 },
+  { name: 'Week' },
 );
 ```
 
