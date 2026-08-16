@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <strong>用法像原生 enum 一样，但更强大！</strong>
+  <strong>一个业务字典管理解决方案，前端基础设施必备。</strong>
 </p>
 <p align="center">
-  <strong>一个业务字典管理解决方案，不可或缺的前端基础设施。</strong>
+  <strong>用法像原生 enum 一样，但更强大！</strong>
 </p>
 <br/>
 

@@ -9,6 +9,9 @@
 </p>
 
 <p align="center">
+  <strong>一个业务字典管理解决方案，前端基础设施必备。</strong>
+</p>
+<p align="center">
   <strong>像原生 enum 一样，但更强大！</strong>
 </p>
 <br/>
@@ -62,13 +65,13 @@
 
 <details>
   <summary>这里有几个常见问题，有兴趣也可以阅读一下</summary>
-  
-  - [为什么需要这个库？TypeScript 已经有内置的枚举了](#为什么需要这个库typescript-已经有内置的枚举了)
-  - [我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？](#我必须使用-typescript-吗我的是-javascript-项目要怎么办)
-  - [枚举库的性能怎么样？](#枚举库的性能怎么样)
-  - [好像 TypeScript 要废弃 enum 了？](#好像-typescript-要废弃-enum-了)
-  - [我有一个很好的点子，希望为这个项目做贡献，我要怎么做？](#我有一个很好的点子希望为这个项目做贡献我要怎么做)
-  
+
+- [为什么需要这个库？TypeScript 已经有内置的枚举了](#为什么需要这个库typescript-已经有内置的枚举了)
+- [我必须使用 TypeScript 吗？我的是 JavaScript 项目要怎么办？](#我必须使用-typescript-吗我的是-javascript-项目要怎么办)
+- [枚举库的性能怎么样？](#枚举库的性能怎么样)
+- [好像 TypeScript 要废弃 enum 了？](#好像-typescript-要废弃-enum-了)
+- [我有一个很好的点子，希望为这个项目做贡献，我要怎么做？](#我有一个很好的点子希望为这个项目做贡献我要怎么做)
+
 </details>
 
 ## 特性

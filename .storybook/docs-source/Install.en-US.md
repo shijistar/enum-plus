@@ -32,9 +32,9 @@ yarn add enum-plus
 
 ```html
 <!-- Modern version, ES2020 compatible -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.8/umd/enum-plus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.3.0/umd/enum-plus.min.js"></script>
 <!-- Legacy version, ES2015 compatible -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.1.8/umd/enum-plus-legacy.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.3.0/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - The latest version:
@@ -48,12 +48,12 @@ yarn add enum-plus
 
 ⬇️ **Download**:
 
-- [enum-plus.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus.umd.min.js)
-- [enum-plus.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus.umd.zip) (Full package with sourcemap)
-- [enum-plus-legacy.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.min.js)
-- [enum-plus-legacy.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.1.8/enum-plus-legacy.umd.zip) (Full package with sourcemap)
+- [enum-plus.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus.umd.min.js)
+- [enum-plus.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus.umd.zip) (Full package with sourcemap)
+- [enum-plus-legacy.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus-legacy.umd.min.js)
+- [enum-plus-legacy.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus-legacy.umd.zip) (Full package with sourcemap)
 
-> You can also download these files from the [GitHub Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.1.8).
+> You can also download these files from the [GitHub Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.3.0).
 
 ---
 
