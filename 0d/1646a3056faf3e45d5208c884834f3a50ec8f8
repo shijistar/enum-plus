@@ -1,0 +1,68 @@
+.storybook/docs-source/Localization.zh-CN.md
+  h_99cad05bea77d1 37,39,54
+.storybook/docs-source/FAQ.zh-CN.md
+  h_99cad05bea77d1 42,71,84,94,106-107
+.storybook/docs-source/Security.zh-CN.md
+  h_99cad05bea77d1 3
+.storybook/docs-source/Introduce.en-US.md
+  h_99cad05bea77d1 5,38
+.storybook/docs-source/Introduce.zh-CN.md
+  h_99cad05bea77d1 5,40
+.github/workflows/test-on-commit.yml
+  h_99cad05bea77d1 5,7
+.storybook/docs-source/FAQ.en-US.md
+  h_99cad05bea77d1 42,71,84,94,106-107
+.storybook/docs-source/UserStories.zh-CN.md
+  h_99cad05bea77d1 85,240,253
+docs/release-v3.zh-CN.md
+  h_99cad05bea77d1 25,134-136,138-139
+.github/PULL_REQUEST_TEMPLATE.md
+  h_99cad05bea77d1 5
+CONTRIBUTING.md
+  h_99cad05bea77d1 35,40-41,43,68-69,71
+.github/workflows/npm-publish.yml
+  h_99cad05bea77d1 195,200,202-203,218
+.storybook/docs-source/UserStories.en-US.md
+  h_99cad05bea77d1 85,240,253
+.storybook/docs-source/Security.en-US.md
+  h_99cad05bea77d1 3
+docs/release-v3.md
+  h_99cad05bea77d1 25,134-136,138-139
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 971,1258,1278,1282,1286,1290,1294,1296,1298,1302,1308,1367,1369,1384,1682,1734
+README-FULL.md
+  h_99cad05bea77d1 981,1287,1291,1295,1299,1303,1305,1307,1311,1317,1376,1378,1393,1693,1745
+.storybook/docs-source/PluginSystem.en-US.md
+  h_99cad05bea77d1 34,38,42,46,50,52,54,58,64,66
+.storybook/docs-source/PluginSystem.zh-CN.md
+  h_99cad05bea77d1 14,34,38,42,46,50,52,54,58,64,66
+.storybook/docs-source/Localization.en-US.md
+  h_99cad05bea77d1 37,39,54
+packages/plugin-antd/package.json
+  h_99cad05bea77d1 16
+packages/plugin-i18next-vue/package.json
+  h_99cad05bea77d1 22
+packages/plugin-i18next/package.json
+  h_99cad05bea77d1 20
+packages/plugin-next-international/package.json
+  h_99cad05bea77d1 20
+packages/plugin-react-i18next/package.json
+  h_99cad05bea77d1 21
+packages/plugin-react/package.json
+  h_99cad05bea77d1 19
+packages/plugin-sample/package.json
+  h_99cad05bea77d1 14
+packages/plugin-vue-i18n/package.json
+  h_99cad05bea77d1 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "0d1646a3056faf3e45d5208c884834f3a50ec8f8",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
