@@ -39,7 +39,7 @@ TypeScript 的内置枚举类型（`enum`）只是实现了[枚举](https://en.w
 
 ## 为什么启用国际化后，Ant Design下拉框的搜索功能失效了？
 
-这是因为 `Enum.localize` 返回了一个组件对象，而不是常规字符串，导致 antd 无法正确进行字符串匹配。请使用 `enum.isMatch` 方法来实现自定义搜索功能。请参考 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react#dropdown-search)，了解更多详情。
+这是因为 `Enum.localize` 返回了一个组件对象，而不是常规字符串，导致 antd 无法正确进行字符串匹配。请使用 `enum.isMatch` 方法来实现自定义搜索功能。请参考 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react#dropdown-search)，了解更多详情。
 
 ```bash
 npm install @enum-plus/plugin-react
@@ -68,7 +68,7 @@ const WeekEnum = Enum({
 } as const);
 ```
 
-可以看到，在较低版本的TypeScript中，你可能需要使用 `as const` 类型断言。`as const` 可以让枚举值保持原始的字面量值，而不会变成 `number`、`string` 类型，同时 `enum.valueType` 类型也会保持 `0 | 1`，而不会变成 `number` 类型。这让 TypeScript 的类型校验变得更准确，也可以提升代码的安全性。关于如何升级TypeScript以及如何修改项目配置，请仔细阅读 [迁移指南](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md#升级-typescript)。
+可以看到，在较低版本的TypeScript中，你可能需要使用 `as const` 类型断言。`as const` 可以让枚举值保持原始的字面量值，而不会变成 `number`、`string` 类型，同时 `enum.valueType` 类型也会保持 `0 | 1`，而不会变成 `number` 类型。这让 TypeScript 的类型校验变得更准确，也可以提升代码的安全性。关于如何升级TypeScript以及如何修改项目配置，请仔细阅读 [迁移指南](https://github.com/shijistar/enum-plus/blob/main/docs/migration-guide-v2-to-v3.zh-CN.md#升级-typescript)。
 
 如果你使用的是 JavaScript，那么你可以借助 `JSDoc` 来让编辑器精确识别类型。
 
@@ -81,7 +81,7 @@ const WeekEnum = Enum(weekInit);
 
 ## 为什么我的项目安装后没有 TypeScript 类型提示？
 
-这是因为 tsconfig.json 中的配置不正确，请参考[这篇文档](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md#修改-tsconfigjson)，了解更多详情。
+这是因为 tsconfig.json 中的配置不正确，请参考[这篇文档](https://github.com/shijistar/enum-plus/blob/main/docs/migration-guide-v2-to-v3.zh-CN.md#修改-tsconfigjson)，了解更多详情。
 
 ## 我想定义一个通用的枚举类型，可以表示任意枚举，目前的枚举类型定义太复杂了，有没有简单的办法？
 
@@ -91,7 +91,7 @@ const WeekEnum = Enum(weekInit);
 
 是的，这并不轻松。Jest 和 Playwright 的工作原理并不相同，Jest 运行在 Node.js 环境中，而 Playwright 运行在浏览器环境中。为了让它们共享一套测试代码，我们做了以下工作：
 
-1. **环境适配**：我们为不同的测试框架编写了一个[适配层](https://github.com/shijistar/enum-plus/tree/master/test/engines/index.ts)，处理它们之间的差异。
+1. **环境适配**：我们为不同的测试框架编写了一个[适配层](https://github.com/shijistar/enum-plus/tree/main/test/engines/index.ts)，处理它们之间的差异。
 2. **抽象测试逻辑**：我们将测试逻辑抽象出来，放在一些独立的模块中，这样就可以在不同的测试框架中复用这些测试套件。
 3. **增强的序列化机制**：e2e测试要求在浏览器环境中运行，然后把运行结果传递到 Node.js 环境中，再执行断言。为此，我们开发了一个[增强的序列化库](https://github.com/shijistar/jsoneo)。由于在 `enum-plus` 枚举的内部用到了 `类`、`function`、`Symbol`、`Date`、`RegExp` 类型，重写了 `Symbol.toStringTag`、`Symbol.hasInstance` 内置函数，甚至包括 `Getter/Setter` 这些特性，这些都是 JSON.stringify 无法序列化的，我们通过 [jsoneo](https://github.com/shijistar/jsoneo) 实现了对这些复杂特性的支持，从而可以让复杂对象经过 `序列化/反序列化` 跨越不同的环境，并且保留了所有的动态行为。传递后的对象仍然是`活`的，就像原始的对象没有经过序列化过一样。
 
@@ -103,8 +103,8 @@ const WeekEnum = Enum(weekInit);
 
 得益于 enum-plus 的 [插件系统](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件系统)，我们要为 enum-plus 扩展新功能变得非常容易。你可以根据功能的通用性和依赖关系，选择以下三种方式之一来贡献：
 
-1. **核心库** - 新功能对所有人都适用，且不引入外部依赖。你可以直接贡献到核心库，请参考 [CONTRIBUTING](https://github.com/shijistar/enum-plus/blob/master/CONTRIBUTING.md) 指南。
-2. **官方插件库** - 新功能需要依赖某个 `开放的` 框架或类库，并且在这个框架或类库已经有很多人在使用了。你可以贡献到官方插件库，请参考 [插件开发指南](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.zh-CN.md)。
+1. **核心库** - 新功能对所有人都适用，且不引入外部依赖。你可以直接贡献到核心库，请参考 [CONTRIBUTING](https://github.com/shijistar/enum-plus/blob/main/CONTRIBUTING.md) 指南。
+2. **官方插件库** - 新功能需要依赖某个 `开放的` 框架或类库，并且在这个框架或类库已经有很多人在使用了。你可以贡献到官方插件库，请参考 [插件开发指南](https://github.com/shijistar/enum-plus/blob/main/docs/plugin-development.zh-CN.md)。
 3. **自定义插件** - 新功能需要引入某个闭源的外部依赖，或者这个领域比较小众，建议你自己发布一个 npm 包，并把你的插件链接分享在 [插件生态](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件生态) 章节中，同样可以共享给所有人。
 
 ---

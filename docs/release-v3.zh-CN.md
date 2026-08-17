@@ -22,7 +22,7 @@
 
   ```js
   // 以前
-  const monday = WeekEnum.items.find(item => item.value === 1);
+  const monday = WeekEnum.items.find((item) => item.value === 1);
   // 现在
   const monday = WeekEnum.named.Monday;
   ```
@@ -131,12 +131,12 @@ WeekEnum.labels; // ['星期一', '星期二', '星期三', '星期四', '星期
 ## 插件系统
 
 - 🔥 引入新的插件系统，以独立的 npm 包形式扩展功能。以下是可用的包：
-  - [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd): Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
-  - [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next): i18next 本地化支持。
-  - [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react): React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
+  - [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd): Ant Design 相关功能，包括 `enum.toSelect`、`enum.toMenu`、`enum.toFilter` 和 `enum.toValueMap`。通过这些方法，可以直接将枚举绑定到对应的 Ant Design 组件上，极大地简化了代码。
+  - [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next): i18next 本地化支持。
+  - [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react): React 集成，包括支持 `Enum.localize` 返回 React 组件，以及监听语言变化以自动重新渲染组件。
   - 我们正在开发以下插件：
-    - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
-    - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要您的帮助来开发这个插件！_
+    - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue): Vue 集成，包括支持 `Enum.localize` 返回 Vue 组件，以及监听语言变化以自动重新渲染组件。
+    - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular 集成，包括支持 `Enum.localize` 返回 Angular 组件，以及监听语言变化以自动重新渲染组件。_我们需要您的帮助来开发这个插件！_
 
 > 如果您搜索的插件不可用，或者您想开发自己的插件，请参阅 [插件开发指南](./plugin-development.zh-CN.md)。 我们真诚地需要您的帮助，来丰富插件生态系统！
 

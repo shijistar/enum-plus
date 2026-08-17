@@ -34,9 +34,9 @@ WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环�
 WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
-此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，请参考[插件文档](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next/README.zh-CN.md#插件选项)，了解更多详情。
+此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next/README.zh-CN.md#插件选项)，了解更多详情。
 
-如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react) 或 [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue) 等插件。
+如果你需要切换语言后自动更新UI，这需要借助 React、Vue 或 Angular 等框架的能力，请考虑使用 [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) 或 [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) 等插件。
 
 如果你使用的是其它国际化库，例如 `react-intl`、`vue-i18next` 或 `ngx-translate`，你可以通过 `Enum.localize` 方法来集成这些库。
 
@@ -51,7 +51,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> 一旦你完成了这项功能，建议你考虑把它发布成一个 npm 包，并分享在[插件生态](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.zh-CN.md)。
+> 一旦你完成了这项功能，建议你考虑把它发布成一个 npm 包，并分享在[插件生态](?path=/docs/plugin-system--docs&globals=locale:zh-CN#插件生态)章节中，这样其他人也可以受益于你的工作。如果你觉得这个项目非常通用，也可以考虑把它提交到 [enum-plus](https://github.com/shijistar/enum-plus/tree/main/packages) 官方插件库中，具体开发规则请参阅 [插件开发指南](https://github.com/shijistar/enum-plus/blob/main/docs/plugin-development.zh-CN.md)。
 
 ## 自定义 label 逻辑
 

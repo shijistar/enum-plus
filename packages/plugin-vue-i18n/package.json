@@ -18,7 +18,7 @@
     "node.js",
     "ssr"
   ],
-  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue-i18n",
+  "homepage": "https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue-i18n",
   "bugs": {
     "url": "https://github.com/shijistar/enum-plus/issues"
   },

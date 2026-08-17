@@ -192,15 +192,15 @@ jobs:
           VERSION=$(npm view enum-plus version)
           echo "LATEST_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Prepare local master branch
+      - name: Prepare local main branch
         if: github.event.release.prerelease == false
         run: |
           git add .
           git reset --hard
-          git checkout -b master
+          git checkout -b main
           git fetch
-          git branch -u origin/master
-          git pull origin master
+          git branch -u origin/main
+          git pull origin main
 
       - name: Replace download url to the releasing version
         if: github.event.release.prerelease == false
@@ -215,7 +215,7 @@ jobs:
             git config --local user.name "${{ vars.COMMIT_USER }}"
             git config --local user.email "${{ vars.COMMIT_EMAIL }}"
             git commit -am "docs: update download url for release ${{ github.event.release.tag_name }}"
-            git push origin master
+            git push origin main
           fi
 
   publish-npm-plugin:

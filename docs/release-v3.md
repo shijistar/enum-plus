@@ -22,7 +22,7 @@
 
   ```js
   // Before
-  const monday = WeekEnum.items.find(item => item.value === 1);
+  const monday = WeekEnum.items.find((item) => item.value === 1);
   // After
   const monday = WeekEnum.named.Monday;
   ```
@@ -131,12 +131,12 @@
 ## Plugin System
 
 - 🔥 Introduce a new plugin system for extending features as separate npm packages. The following packages are available:
-  - [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd): Ant Design oriented features, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. With these methods, you can directly bind enums to the corresponding Ant Design components, greatly simplifying your code.
-  - [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next): i18next localization support.
-  - [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react): React integration, including support for `Enum.localize` to return React components, and listening for language changes to auto re-render components.
+  - [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd): Ant Design oriented features, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. With these methods, you can directly bind enums to the corresponding Ant Design components, greatly simplifying your code.
+  - [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next): i18next localization support.
+  - [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react): React integration, including support for `Enum.localize` to return React components, and listening for language changes to auto re-render components.
   - We are working on the following plugins:
-    - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue): Vue integration, including support for `Enum.localize` to return Vue components, and listening for language changes to auto re-render components.
-    - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto re-render components. _We need your help to develop this plugin!_
+    - [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue): Vue integration, including support for `Enum.localize` to return Vue components, and listening for language changes to auto re-render components.
+    - [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto re-render components. _We need your help to develop this plugin!_
 
 > If the plugin you are searching for is not available, or you want to develop your own plugin, please refer to the [plugin development guide](./plugin-development.md). We sincerely need your help to enrich the plugin ecosystem!
 

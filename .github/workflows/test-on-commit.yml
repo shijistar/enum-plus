@@ -2,9 +2,9 @@ name: Unit Tests on Commit
 
 on:
   push:
-    branches: [master, next, 'v*']
+    branches: [main, next, "v*"]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 # Cancel prev CI if new commit come
 concurrency:

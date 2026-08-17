@@ -32,15 +32,15 @@ We welcome code contributions through [pull requests](https://github.com/shijist
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/your-username/enum-plus.git`
 3. Install dependencies: `npm install` (or equivalent)
-4. Create a branch for your changes: `git checkout -b feature/your-feature-name`, based on `master` branch.
+4. Create a branch for your changes: `git checkout -b feature/your-feature-name`, based on `main` branch.
 5. Make your changes
 6. Test your changes: `npm test` (or equivalent)
 7. Commit your changes: `git commit -m "feat: ..."`
 8. Push to your fork: `git push origin feature/your-feature-name`
-9. Create a pull request against the `master` branch of the original repository. Before submitting, ensure:
-   - Your branch is up to date with the `master` branch
+9. Create a pull request against the `main` branch of the original repository. Before submitting, ensure:
+   - Your branch is up to date with the `main` branch
    - You have resolved any merge conflicts
-   - Your pull request is based on the latest `master` branch
+   - Your pull request is based on the latest `main` branch
 10. Fill out the pull request template with details about your changes
 
 ## Coding Guidelines
@@ -65,10 +65,10 @@ We welcome code contributions through [pull requests](https://github.com/shijist
 1. Update the README.md or documentation with details of changes if needed
 2. Update the tests to reflect your changes
 3. Ensure all tests pass: `npm test`
-4. Create a pull request against the `master` branch of the original repository. Before submitting, ensure:
-   - Your branch is up to date with the `master` branch
+4. Create a pull request against the `main` branch of the original repository. Before submitting, ensure:
+   - Your branch is up to date with the `main` branch
    - You have resolved any merge conflicts
-   - Your pull request is based on the latest `master` branch
+   - Your pull request is based on the latest `main` branch
 5. Fill out the pull request template with details about your changes
 6. Link any relevant issues using keywords like "Fixes #123"
 

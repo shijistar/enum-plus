@@ -82,7 +82,7 @@ const App = () => {
 };
 ```
 
-> 需要安装 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) 插件
+> 需要安装 [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) 插件
 
 ---
 
@@ -237,7 +237,7 @@ declare module 'enum-plus/extension' {
 
 ## 💡 枚举项支持 JSDoc 注释，启用代码智能提示
 
-在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 JSDoc 注释，而不必再转到枚举定义处查看。关于如何编写良好的代码，请参考 [最佳实践](https://github.com/shijistar/enum-plus/blob/master/docs/best-practices.md) 章节。
+在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 JSDoc 注释，而不必再转到枚举定义处查看。关于如何编写良好的代码，请参考 [最佳实践](https://github.com/shijistar/enum-plus/blob/main/docs/best-practices.md) 章节。
 
 ```js
 const WeekEnum = Enum({
@@ -250,7 +250,7 @@ const WeekEnum = Enum({
 WeekEnum.Monday; // 将光标悬浮在 Monday 上
 ```
 
-![JSDoc](https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/jsdoc-chs.png)
+![JSDoc](https://cdn.jsdelivr.net/gh/shijistar/enum-plus@main/public/jsdoc-chs.png)
 
 可以看到，当光标悬浮在枚举项上时，可以同时显示枚举值和枚举项的介绍。无需跳转离开当前光标位置，去查看枚举的定义，这在阅读代码时非常方便。
 

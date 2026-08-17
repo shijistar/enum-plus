@@ -2,7 +2,7 @@
 First of all, thanks for submitting a pull request to make this project better! Please fill out the following information to help reviewers understand your changes.
 
 Before submitting, please make sure:
-- Your branch is pulled based on `master`, and it's up to date before submitting
+- Your branch is pulled based on `main`, and it's up to date before submitting
 - Your code follows the project's coding style
 - All tests passed
 - You've added tests for new functionality

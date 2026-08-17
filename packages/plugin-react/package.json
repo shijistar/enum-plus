@@ -16,7 +16,7 @@
     "node.js",
     "ssr"
   ],
-  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react",
+  "homepage": "https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react",
   "bugs": {
     "url": "https://github.com/shijistar/enum-plus/issues"
   },

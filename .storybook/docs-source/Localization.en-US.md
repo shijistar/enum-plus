@@ -34,9 +34,9 @@ WeekEnum.named.Monday.label; // Monday or 星期一, depending on the current lo
 WeekEnum.name; // Week or 周, depending on the current locale
 ```
 
-This plugin also supports custom i18next options, and even allows complete control over the `localize` method. Please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next#plugin-options) for more details.
+This plugin also supports custom i18next options, and even allows complete control over the `localize` method. Please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options) for more details.
 
-If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react) or [@enum-plus/plugin-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue).
+If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue).
 
 If you are using other internationalization libraries, such as `react-intl`, `vue-i18next`, or `ngx-translate`, you can integrate these libraries by overwriting the `Enum.localize` method.
 
@@ -51,7 +51,7 @@ Enum.localize = (key) => {
 };
 ```
 
-> Once you have completed this feature, it is recommended that you consider publishing it as an npm package and share it in the [Awesome Plugins](?path=/docs/plugin-system--docs#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/master/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md).
+> Once you have completed this feature, it is recommended that you consider publishing it as an npm package and share it in the [Awesome Plugins](?path=/docs/plugin-system--docs#awesome-plugins) section, so that others can benefit from your work. If you believe that this project is very general, you can also consider submitting it to the official [enum-plus](https://github.com/shijistar/enum-plus/tree/main/packages) plugin repository. For specific development rules, please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/main/docs/plugin-development.md).
 
 ## Custom Label Logic
 

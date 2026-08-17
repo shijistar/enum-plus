@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@main/public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -37,7 +37,7 @@
 
 > **🎉 v3.0 发布了！**
 >
-> 新版本是一个重大的里程碑版本，带来了很多令人兴奋的功能和改进，详情请参考 [发布说明](https://github.com/shijistar/enum-plus/blob/master/docs/release-v3.zh-CN.md) 和 [迁移指南](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.zh-CN.md)。
+> 新版本是一个重大的里程碑版本，带来了很多令人兴奋的功能和改进，详情请参考 [发布说明](https://github.com/shijistar/enum-plus/blob/main/docs/release-v3.zh-CN.md) 和 [迁移指南](https://github.com/shijistar/enum-plus/blob/main/docs/migration-guide-v2-to-v3.zh-CN.md)。
 >
 > 如果升级后，你遇到枚举类型都变成 `any` 的问题，请看[这里](?path=/docs/faq--docs&globals=locale:zh-CN#为什么我的项目安装后没有-typescript-类型提示)。
 

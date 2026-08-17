@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/shijistar/enum-plus" target="blank">
-    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/enum-plus.svg" width="240" alt="enum-plus" />
+    <img src="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@main/public/enum-plus.svg" width="240" alt="enum-plus" />
   </a>
 </p>
 
@@ -35,7 +35,7 @@
 
 > **🎉 v3.0 is Released!**
 >
-> The new version is a major milestone that brings many exciting features and improvements. Please refer to the [Release Notes](https://github.com/shijistar/enum-plus/blob/master/docs/release-v3.md) and [Migration Guide](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.md) for details.
+> The new version is a major milestone that brings many exciting features and improvements. Please refer to the [Release Notes](https://github.com/shijistar/enum-plus/blob/main/docs/release-v3.md) and [Migration Guide](https://github.com/shijistar/enum-plus/blob/main/docs/migration-guide-v2-to-v3.md) for details.
 >
 > If the enum types become `any` after upgrading to v3.0, please see [here](?path=/docs/faq--docs#-why-my-project-has-no-typescript-type-hints-after-installation).
 

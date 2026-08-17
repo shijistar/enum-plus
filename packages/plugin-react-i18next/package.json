@@ -18,7 +18,7 @@
     "node.js",
     "ssr"
   ],
-  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react-i18next",
+  "homepage": "https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next",
   "bugs": {
     "url": "https://github.com/shijistar/enum-plus/issues"
   },

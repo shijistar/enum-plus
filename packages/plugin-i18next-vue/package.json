@@ -19,7 +19,7 @@
     "node.js",
     "ssr"
   ],
-  "homepage": "https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next-vue",
+  "homepage": "https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue",
   "bugs": {
     "url": "https://github.com/shijistar/enum-plus/issues"
   },

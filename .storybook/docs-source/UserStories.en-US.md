@@ -82,7 +82,7 @@ const App = () => {
 };
 ```
 
-> Need to install [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd) plugin
+> Need to install [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd) plugin
 
 ---
 
@@ -237,7 +237,7 @@ declare module 'enum-plus/extension' {
 
 ## 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
 
-Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](https://github.com/shijistar/enum-plus/blob/master/docs/best-practices.md) section for how to write good code.
+Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](https://github.com/shijistar/enum-plus/blob/main/docs/best-practices.md) section for how to write good code.
 
 ```js
 const WeekEnum = Enum({
@@ -250,7 +250,7 @@ const WeekEnum = Enum({
 WeekEnum.Monday; // Hover over Monday
 ```
 
-![JSDoc](https://cdn.jsdelivr.net/gh/shijistar/enum-plus@master/public/jsdoc-en.png)
+![JSDoc](https://cdn.jsdelivr.net/gh/shijistar/enum-plus@main/public/jsdoc-en.png)
 
 We can see that both the enumeration value and the description of the enumeration item can be displayed at the same time, when the cursor hovers over an enumeration item. There is no need to jump away from the current position in the code to check the definitions.
 

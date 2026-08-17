@@ -31,39 +31,39 @@ Enum.install(antdPlugin, {
 
 The following plugins are available. You can choose to install them based on your needs:
 
-- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-antd)
+- [@enum-plus/plugin-antd](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-antd)
 
   [Ant Design](https://ant.design) oriented features, including `enum.toSelect`, `enum.toMenu`, `enum.toFilter`, and `enum.toValueMap`. With these methods, you can directly bind enums to the corresponding Ant Design components, greatly simplifying your code.
 
-- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next)
+- [@enum-plus/plugin-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next)
 
   Integrates [i18next](https://www.i18next.com) to enable internationalization of enum labels.
 
-- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react-i18next)
+- [@enum-plus/plugin-react-i18next](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react-i18next)
 
   Integrates [react-i18next](https://react.i18next.com) to enable internationalization of enum labels.
 
-- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react)
+- [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react)
 
   React integration, including support for `Enum.localize` to return React components, and listening for language changes to auto update components.
 
-- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next-vue)
+- [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue)
 
-  Integrates [i18next-vue](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-i18next-vue) to enable internationalization of enum labels and listen for language changes to auto update components.
+  Integrates [i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue) to enable internationalization of enum labels and listen for language changes to auto update components.
 
-- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-vue-i18n)
+- [@enum-plus/plugin-vue-i18n](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-vue-i18n)
 
   Integrates [vue-i18n](https://vue-i18n.intlify.dev) to enable internationalization of enum labels and listen for language changes to auto update components.
 
-- [@enum-plus/plugin-next-international](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-next-international)
+- [@enum-plus/plugin-next-international](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-next-international)
 
   Integrates [next-international](https://next-international.vercel.app/) in Next.js projects to enable internationalization of enum labels and listen for language changes to auto update components.
 
 We are working on the following plugins:
 
-- [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto update components. _We need your help to develop this plugin!_
+- [@enum-plus/plugin-angular](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-angular): Angular integration, including support for `Enum.localize` to return Angular components, and listening for language changes to auto update components. _We need your help to develop this plugin!_
 
-> If the plugin you are searching for is not available, or if you want to develop your own plugin, please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md). You can develop new plugins in the official enum-plus repository or publish your developed plugins to npm and share your plugin links here. We sincerely need your help to enrich the plugin ecosystem!
+> If the plugin you are searching for is not available, or if you want to develop your own plugin, please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/main/docs/plugin-development.md). You can develop new plugins in the official enum-plus repository or publish your developed plugins to npm and share your plugin links here. We sincerely need your help to enrich the plugin ecosystem!
 
 ---
 

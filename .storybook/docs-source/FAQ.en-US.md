@@ -39,7 +39,7 @@ Please use the `enum.key(value)` method to get the key name according to its val
 
 ## • Why does the search function of the Ant Design Select stop working after enabling internationalization?
 
-This is because `Enum.localize` returns a component instance instead of a regular string, causing Ant Design to fail in performing string matching correctly. Please use the `enum.isMatch` method to enable the search functionality. Please refer to [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/master/packages/plugin-react#dropdown-search) for more details.
+This is because `Enum.localize` returns a component instance instead of a regular string, causing Ant Design to fail in performing string matching correctly. Please use the `enum.isMatch` method to enable the search functionality. Please refer to [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react#dropdown-search) for more details.
 
 ```bash
 npm install @enum-plus/plugin-react
@@ -68,7 +68,7 @@ const WeekEnum = Enum({
 } as const);
 ```
 
-As you can see, in earlier versions of TypeScript, you may need to use the `as const` type assertion. `as const` allows the enum values to remain their original literal values instead of being converted to `number` or `string` types. Meanwhile, the `enum.valueType` will remain as `0 | 1` instead of becoming `number`. This makes TypeScript's type checking more accurate and enhances code safety. About how to upgrade TypeScript and modify project configurations, please read the [Migration Guide](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.md#migrating-to-typescript-5) carefully.
+As you can see, in earlier versions of TypeScript, you may need to use the `as const` type assertion. `as const` allows the enum values to remain their original literal values instead of being converted to `number` or `string` types. Meanwhile, the `enum.valueType` will remain as `0 | 1` instead of becoming `number`. This makes TypeScript's type checking more accurate and enhances code safety. About how to upgrade TypeScript and modify project configurations, please read the [Migration Guide](https://github.com/shijistar/enum-plus/blob/main/docs/migration-guide-v2-to-v3.md#migrating-to-typescript-5) carefully.
 
 If you are using JavaScript, you can leverage `JSDoc` to help the editor accurately recognize types.
 
@@ -81,7 +81,7 @@ const WeekEnum = Enum(weekInit);
 
 ## • Why my project has no TypeScript type hints after installation?
 
-This is due to incorrect configuration in `tsconfig.json`. Please refer to [this document](https://github.com/shijistar/enum-plus/blob/master/docs/migration-guide-v2-to-v3.md#modify-tsconfigjson) for more details.
+This is due to incorrect configuration in `tsconfig.json`. Please refer to [this document](https://github.com/shijistar/enum-plus/blob/main/docs/migration-guide-v2-to-v3.md#modify-tsconfigjson) for more details.
 
 ## • I want to define a generic enum type that can represent any enum. The current enum type definition is too complex. Is there a simple way?
 
@@ -91,7 +91,7 @@ Please use the `AnyEnum` type, which is a generic enum type that can represent a
 
 Yes, actually it wasn't easy from the beginning. The working principles of Jest and Playwright are quite different. Jest runs in a Node.js environment, while Playwright runs in a browser environment and then returns to the Node.js environment to execute assertions. To make them share a set of test code, we did the following:
 
-1. **Environment Adaptation**: We wrote an [adaptation layer](https://github.com/shijistar/enum-plus/tree/master/test/engines/index.ts) to handle the differences between the two testing frameworks.
+1. **Environment Adaptation**: We wrote an [adaptation layer](https://github.com/shijistar/enum-plus/tree/main/test/engines/index.ts) to handle the differences between the two testing frameworks.
 2. **Abstract Testing Logic**: We abstracted the testing logic into some independent modules, so that these test suites can be reused in different testing frameworks.
 3. **Enhanced Serialization Mechanism**: E2E tests require running in a browser environment and then passing the running results to the Node.js environment for assertions. To achieve this, we developed an [enhanced serialization library](https://github.com/shijistar/jsoneo). Since the `enum-plus` enums internally use types like `class`, `function`, `Symbol`, `Date`, and `RegExp`, built-in functions rewritten like `Symbol.toStringTag` and `Symbol.hasInstance`, and even including `Getter/Setter`, which are not serializable by `JSON.stringify`. We implemented support for these complex features through [jsoneo](https://github.com/shijistar/jsoneo). So complex objects can cross different environments through `serialization/deserialization` while retaining all dynamic behaviors. The transferred object remains "alive", just like the original object has not been serialized.
 
@@ -103,8 +103,8 @@ We are very glad to hear that! We sincerely welcome contributions from the commu
 
 Thanks to the high flexibility of [Plugin System](?path=/docs/plugin-system--docs#plugin-system), it is quite easy to extend new features for enum-plus. Depending on the `generality` and `dependencies` of the feature, you can choose one of the following three ways to contribute:
 
-1. **Core Library** - The new feature is applicable to everyone and does not introduce external dependencies. You can contribute directly to the core library. Please refer to the [CONTRIBUTING](https://github.com/shijistar/enum-plus/blob/master/CONTRIBUTING.md) guide.
-2. **Official Plugin Library** - The new feature needs to depend on an `open` framework or library, and many people are already using this framework or library. You can contribute to the official plugin library. Please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/master/docs/plugin-development.md).
+1. **Core Library** - The new feature is applicable to everyone and does not introduce external dependencies. You can contribute directly to the core library. Please refer to the [CONTRIBUTING](https://github.com/shijistar/enum-plus/blob/main/CONTRIBUTING.md) guide.
+2. **Official Plugin Library** - The new feature needs to depend on an `open` framework or library, and many people are already using this framework or library. You can contribute to the official plugin library. Please refer to the [Plugin Development Guide](https://github.com/shijistar/enum-plus/blob/main/docs/plugin-development.md).
 3. **Custom Plugin** - The new feature needs to depend on a `private` external dependency, or the field is relatively niche. It is recommended that you publish an npm package yourself and share your plugin link in the [Awesome Plugins](?path=/docs/plugin-system--docs#awesome-plugins) section, which can still be shared with everyone.
 
 ---
