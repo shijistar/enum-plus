@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD001 MD009 MD033 MD041 -->
+
 [English](./README.md) | [中文](./README.zh-CN.md) | [CHANGELOG](./CHANGELOG.md)
 
 <div align="center">
@@ -8,16 +10,12 @@
 <br/>
 
 <p align="center">
-  <!--lint ignore no-emphasis-as-heading -->
   <strong>一个业务字典管理解决方案，前端基础设施必备</strong>
 </p>
 <p align="center">
-  <!--lint ignore no-emphasis-as-heading -->
   <strong>用法像原生 enum 一样，但更强大！</strong>
 </p>
 <br/>
-
-<!--lint disable double-link-->
 
 [![npm latest version](https://img.shields.io/npm/v/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 [![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/enum-plus?logo=javascript&label=Minzipped&color=44cc11&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus?activeTab=code)
@@ -37,8 +35,6 @@
 [![MiniProgram](https://img.shields.io/badge/MiniProgram-2185D0?logo=wechat)](https://developers.weixin.qq.com/miniprogram/dev/framework)
 &nbsp;
 [![Taro](https://img.shields.io/badge/Taro-18BCF2?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAcCAMAAADLCWbaAAABSlBMVEUAAAAAL7MAJ7QAKrcAJ7NxyP90zP8Pev8Tfv8Tff8Uff8Rff9zyv8Tgv8AT9hzy/8Uf/9zyv8Uff8TfP8AJ7Ryyv8AJ7UVff8AJ7IUfv8Tfv8AJrVzyf8Sff8Te/8Vfv8DKbsTev8Mef8Maextv/8AM60AKLZ1zP8Vfv8AKbQAJ7Rvxv8AKLRuxP8AJ7R0y/8MXuIFQ8tzy/8AKLR0y/8BLbkUfv8AJ7Ryyf90yf9Hpv9zyf8Vff8AJrQPbPFyyv9zyv9zy/8AJ7RGo/8Sfv8AKbFivv8Se/9wzP8AI65t2/8Ufv8AKLR0yv8AKbgWg/93zv92zf91y/8WhP8Xgf9ivP8ojv8UgP8AJrMWhf8FP8hMrP8UffwJUtoDNsEBLrx30P9txP9kvv9atf9Tr/89nv8qjv8kiv8Whv8Sd/gRbvEOZegMXOIIStE2vhD3AAAAS3RSTlMACeQkszTNDH24nYFbFgTv7uTb1dXMmF9UTUVDPTcvKSkiHhMODPr59vXx7uzd3djSysPBwL28t66rpqCTk4SCfHZwZlU+Jx0ZFgduc4qrAAABVElEQVQ4y42QV1PCQBCAo4ihF+m923vvvQu5BIIxIGDv/v9Xb+9B9jJzjt/j3jf37awkxhOs1/osstmAhYoPpstqDbEPo5PwIM90nE7Tc5xphx+XlCqHMpGi4wM/jgclysVo1WKGbXS8oSGzvgVmXLGYvZWSLJ9GcFzzUNEX5U2l1Zl3uN2bUxoyx85hzVlOvGm9E9IgRruG4xGI5y3xb3IFPGo4vgfmIf9l70sH8aWJTTUN5hpvdj+Y+XyP4/4yFSuTljVvWfxJ1QCVcbd+Sc2U5ZYdtqbefmgCM8MMD8R3FI7up87M12vGkZ1RBjM6xLFA478YoaLUx8aR320gk2yXJBFeF0GmeSwJyY4YyAxkxWaCizvPhKLsxqbpkIVmYRWvqSfF8cw4FkM5oeiLmXhNl/efN3qLieM5fCMjkBGbSf5GBfGNHNhs/HGjopPgPxP86w8TLLu5GsqeugAAAABJRU5ErkJggg==)](https://taro.zone/)
-
-<!--lint enable double-link-->
 
 [介绍](http://localhost:6006/?path=/docs/introduce--docs&globals=locale:zh-CN) • [快速上手](http://localhost:6006/?path=/docs/get-started--docs&globals=locale:zh-CN) • [API文档](http://localhost:6006/?path=/docs/api-reference--docs&globals=locale:zh-CN) • [全局配置](https://shijistar.github.io/enum-plus/?path=/docs/global-configuration--docs&globals=locale:zh-CN) • [典型用法](https://shijistar.github.io/enum-plus/?path=/docs/user-stories--docs&globals=locale:zh-CN) • [插件系统](https://shijistar.github.io/enum-plus/?path=/docs/plugin-system--docs&globals=locale:zh-CN) • [本地化](https://shijistar.github.io/enum-plus/?path=/docs/localization--docs&globals=locale:zh-CN) • [全局扩展](https://shijistar.github.io/enum-plus/?path=/docs/extensibility--docs&globals=locale:zh-CN) • [最佳实践](https://shijistar.github.io/enum-plus/?path=/docs/best-practices--docs&globals=locale:zh-CN) • [兼容性](https://shijistar.github.io/enum-plus/?path=/docs/compatibility--docs&globals=locale:zh-CN) • [常见问题](https://shijistar.github.io/enum-plus/?path=/docs/faq--docs&globals=locale:zh-CN) • [查看完整API文档](./README-FULL.zh-CN.md)
 
@@ -142,8 +138,6 @@ StatusEnum.named.Review.label; // 'In Review' 或者 '审核中'
 
 ## 插件生态
 
-<!--lint disable awesome-list-item-->
-
 - [@enum-plus/plugin-react](./packages/plugin-react/README.zh-CN.md)
 - [@enum-plus/plugin-react-i18next](./packages/plugin-react-i18next/README.zh-CN.md)
 - [@enum-plus/plugin-i18next](./packages/plugin-i18next/README.zh-CN.md)
@@ -152,10 +146,6 @@ StatusEnum.named.Review.label; // 'In Review' 或者 '审核中'
 - [@enum-plus/plugin-next-international](./packages/plugin-next-international/README.zh-CN.md)
 - [@enum-plus/plugin-antd](./packages/plugin-antd/README.zh-CN.md)
 
-<!--lint enable awesome-list-item-->
-
 ## 支持
-
-<!--lint ignore double-link-->
 
 如果这个项目对你有帮助，请给它一个 GitHub [星标 ⭐️](https://github.com/shijistar/enum-plus)，这将鼓励我们继续开发和维护这个项目。
