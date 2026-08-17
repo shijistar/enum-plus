@@ -1,0 +1,18 @@
+README.md
+  h_99cad05bea77d1 1,5,9-10,12-13,15-18,20,23-24,32,44,148-149,158,162-163
+  h_99cad05bea77d1 14,45,159
+README.zh-CN.md
+  h_99cad05bea77d1 3,7-8,10-11,13-16,18,21,30,42-43,145-146,155,159-160
+  h_99cad05bea77d1 12,22,156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "d213df5930d29db52f30933c344be04606264acc",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
