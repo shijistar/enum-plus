@@ -9,15 +9,14 @@
 </div>
 <br />
 
-<div align="center">
+<p align="center">
   <!--lint disable no-emphasis-as-heading -->
   <strong>A solution for business dictionary management</strong>
-</div>
-<br/>
-<div align="center">
+</p>
+<p align="center">
   <!--lint disable no-emphasis-as-heading -->
   <strong>Like native enum, but much better!</strong>
-</div>
+</p>
 <br/>
 
 <!--lint disable double-link-->
@@ -63,14 +62,15 @@ Native enums are great for constants, but product code usually needs more at run
 
 It's a front-end business dictionary solution, that provides a lightweight data source. It's part of the front-end infrastructure.
 
-<p align="center">
+<div align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
-</p>
-<p align="center">
-  <sup><em>↑ Click image for HD video ↑</em></sup>
-</p>
+</div>
+<div align="center">
+  <sup>↑ Click image for HD video ↑</sup>
+</div>
+<br/>
 
 > 💡 Want to see what enum-plus can do and how it improves productivity? [Open the Full Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground)
 

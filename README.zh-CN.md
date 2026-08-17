@@ -7,15 +7,14 @@
 </div>
 <br/>
 
-<div align="center">
+<p align="center">
   <!--lint ignore no-emphasis-as-heading -->
   <strong>一个业务字典管理解决方案，前端基础设施必备</strong>
-</div>
-<br/>
-<div align="center">
+</p>
+<p align="center">
   <!--lint ignore no-emphasis-as-heading -->
   <strong>用法像原生 enum 一样，但更强大！</strong>
-</div>
+</p>
 <br/>
 
 <!--lint disable double-link-->
@@ -60,14 +59,15 @@
 
 这是一套完整的前端业务字典解决方案，更像是一个轻量级的数据源，通常被用作前端公共基础设施。
 
-<p align="center">
+<div align="center">
   <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
-</p>
-<p align="center">
-  <sup><em>↑ 点击图片查看高清视频 ↑</em></sup>
-</p>
+</div>
+<div align="center">
+  <sup>↑ 点击图片查看高清视频 ↑</sup>
+</div>
+<br/>
 
 > 💡 想看看 enum-plus 能做什么，以及如何能提高前端开发效率？[查看完整 Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground&globals=locale:zh-CN)
 
