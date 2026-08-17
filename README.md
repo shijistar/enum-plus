@@ -72,7 +72,7 @@ It's a front-end business dictionary solution, that provides a lightweight data 
 </div>
 <br/>
 
-> 💡 Want to see what enum-plus can do and how it improves productivity? [Open the Full Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground)
+> 💡 Want to see what enum-plus can do and how it improves productivity? [See Full Demo](https://shijistar.github.io/enum-plus/?path=/story/demo-full-demo--playground)
 
 ## Features
 
