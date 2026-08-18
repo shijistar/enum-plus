@@ -63,7 +63,7 @@ if (Enum.isEnum(data)) {
 
 ## 💡 Generate UI Controls
 
-Take React and Ant Design as examples. Please refer to the [Supports Various Frontend Frameworks](?path=/docs/user-stories--docs#-supports-various-frontend-frameworks) section for more examples.
+Take React and Ant Design as examples. Please refer to the [Supports Various Frontend Frameworks](#-supports-various-frontend-frameworks) section for more examples.
 
 ```jsx
 import { Menu, Select, Table } from 'antd';
@@ -237,7 +237,7 @@ declare module 'enum-plus/extension' {
 
 ## 💡 Supports JSDoc Comments on Enum Items, Enabling Code Intelligence
 
-Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](https://github.com/shijistar/enum-plus/blob/main/docs/best-practices.md) section for how to write good code.
+Supports inline documentation through JSDoc, allowing engineers to view detailed comments by simply hovering over enum values in the editor. Please refer to the [Best Practices](?path=/docs/best-practices--docs) section for how to write good code.
 
 ```js
 const WeekEnum = Enum({

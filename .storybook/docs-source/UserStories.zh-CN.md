@@ -63,7 +63,7 @@ if (Enum.isEnum(data)) {
 
 ## 💡 生成 UI 组件
 
-以 React + Ant Design 为例，更多 UI 组件的案例请参考 [支持多种前端框架](?path=/docs/user-stories--docs&globals=locale:zh-CN#-支持多种前端框架) 章节
+以 React + Ant Design 为例，更多 UI 组件的案例请参考 [支持多种前端框架](#-支持多种前端框架) 章节
 
 ```jsx
 import { Menu, Select, Table } from 'antd';
@@ -237,7 +237,7 @@ declare module 'enum-plus/extension' {
 
 ## 💡 枚举项支持 JSDoc 注释，启用代码智能提示
 
-在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 JSDoc 注释，而不必再转到枚举定义处查看。关于如何编写良好的代码，请参考 [最佳实践](https://github.com/shijistar/enum-plus/blob/main/docs/best-practices.md) 章节。
+在代码编辑器中，将光标悬停在枚举项上，即可显示关于该枚举项的详细 JSDoc 注释，而不必再转到枚举定义处查看。关于如何编写良好的代码，请参考 [最佳实践](?path=/docs/best-practices--docs) 章节。
 
 ```js
 const WeekEnum = Enum({
