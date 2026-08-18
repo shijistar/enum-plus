@@ -28,7 +28,7 @@ const WeekEnum2 = Enum({
 WeekEnum2.Monday; // 'Mon'
 ```
 
-> If your project uses TypeScript and the version is below 5.0, it is recommended to add the `as const` type assertion to the parameter of the `Enum` method. In this way, the enum values will remain their original literal values instead of being converted to `number` or `string`. For more details, please refer to [here](?path=/docs/faq--docs#do-i-have-to-upgrade-typescript-to-version-50).
+> If your project uses TypeScript and the version is below 5.0, it is recommended to add the `as const` type assertion to the parameter of the `Enum` method. In this way, the enum values will remain their original literal values instead of being converted to `number` or `string`. For more details, please refer to [here](?path=/docs/faq--docs#-do-i-have-to-upgrade-typescript-to-version-50).
 
 ## 2. Standard Format (Recommended)
 
@@ -113,7 +113,7 @@ WeekEnum.Saturday; // 6
 
 > Please note that when creating enums, all enum items must maintain a consistent data structure. For example, you cannot use both Key-Value format and Standard format in the same enum.
 >
-> You can pass in some optional configuration options to better control the behavior of the enum. Please refer to the [Enum Configuration Options](?path=/docs/user-stories--docs#-enum-configuration-options) section for details.
+> You can pass in some optional configuration options to better control the behavior of the enum. Please refer to the [Enum Configuration Options](?path=/docs/user-stories--docs#-custom-field-mapping-in-array-format-initialization) section for details.
 
 ---
 
