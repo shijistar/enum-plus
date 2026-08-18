@@ -285,6 +285,47 @@ jobs:
       - name: Run unit tests for ESM modules
         run: npm run test:jest-esm
 
+  # Run esm-legacy unit tests on node versions that support Node.js ESM
+  run-esm-legacy-tests:
+    if: ${{ inputs.use-matrix == true }}
+    runs-on: ubuntu-latest
+    needs: install-and-build
+    strategy:
+      matrix:
+        node-version:
+          [16.x, 17.x, 18.x, 19.x, 20.x, 21.x, 22.x, 23.x, 24.x, 25.x, 26.x]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Restore modern node_modules cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-modern-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Restore modern build output cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            tslib
+            tses
+            lib
+            es
+            es-legacy
+            umd
+          key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
+
+      - name: Run unit tests for esm-legacy modules
+        run: npm run test:jest-legacy
+
   run-e2e-tests:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
