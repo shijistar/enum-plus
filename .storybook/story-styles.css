@@ -41,6 +41,12 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   border-radius: 16px;
 }
 
+.docblock-source > div:last-child {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
 /* Bottom pre-next navbar */
 .sbdocs-wrapper > .sbdocs-content > div > table:last-child {
   width: 100%;
