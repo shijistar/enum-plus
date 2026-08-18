@@ -1,0 +1,16 @@
+.storybook/docs-source/UserStories.en-US.md
+  h_99cad05bea77d1 66,240
+.storybook/docs-source/UserStories.zh-CN.md
+  h_99cad05bea77d1 66,240
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "707e82d66ef7907cd7d0efb668bd3d132855e506",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
