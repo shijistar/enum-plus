@@ -1,0 +1,21 @@
+vitest.config.ts
+  h_99cad05bea77d1 10-13,31,44,61-68,77-82
+  h_99cad05bea77d1 69-76,83-84
+package.json
+  h_99cad05bea77d1 139,177,180
+.github/workflows/reusable-test.yml
+  h_99cad05bea77d1 289
+test/test-suites/extension.ts
+  h_99cad05bea77d1 17,35,121,142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "3e101023ed8b18656ee227e1e89047a5a675029b",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
