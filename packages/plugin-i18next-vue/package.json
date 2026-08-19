@@ -57,7 +57,7 @@
     "vue": "^3.5.22"
   },
   "peerDependencies": {
-    "enum-plus": "^3.0.0",
+    "enum-plus": "^3.3.0",
     "i18next": ">=23",
     "i18next-vue": ">=3.0.0"
   },
