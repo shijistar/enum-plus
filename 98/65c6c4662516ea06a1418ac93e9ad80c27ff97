@@ -1,0 +1,14 @@
+package.json
+  h_99cad05bea77d1 199-201
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "9865c6c4662516ea06a1418ac93e9ad80c27ff97",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
