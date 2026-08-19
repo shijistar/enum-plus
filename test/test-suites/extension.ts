@@ -14,7 +14,7 @@ const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
             return value === 6 || value === 0;
           },
           toMySelect(this: AnyEnum) {
-            return this.items.map((item) => ({ value: item.value, title: item.label }));
+            return Array.from(this.items).map((item) => ({ value: item.value, title: item.label }));
           },
         };
         Enum.extends(extend);
@@ -32,7 +32,7 @@ const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
         engine.expect(weekEnum.toMySelect?.toString()).toBe(extend.toMySelect?.toString());
         engine
           .expect(weekEnum.toMySelect?.())
-          .toEqual(weekEnum.items.map((item) => ({ value: item.value, title: item.label })));
+          .toEqual(Array.from(weekEnum.items).map((item) => ({ value: item.value, title: item.label })));
       },
     );
     engine.test(
@@ -118,7 +118,7 @@ const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
         };
         const secondExtends = {
           toMySelect(this: AnyEnum) {
-            return this.items.map((item) => ({ value: item.value, title: item.label }));
+            return Array.from(this.items).map((item) => ({ value: item.value, title: item.label }));
           },
         };
         Enum.extends(firstExtends);
@@ -139,7 +139,7 @@ const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
         engine.expect(weekEnumSecond.toMySelect?.toString()).toBe(secondExtends.toMySelect?.toString());
         engine
           .expect(weekEnumSecond.toMySelect?.())
-          .toEqual(weekEnumSecond.items.map((item) => ({ value: item.value, title: item.label })));
+          .toEqual(Array.from(weekEnumSecond.items).map((item) => ({ value: item.value, title: item.label })));
       },
     );
   });

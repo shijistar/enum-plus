@@ -286,7 +286,7 @@ jobs:
         run: npm run test:jest-esm
 
   # Run esm-legacy unit tests on node versions that support Node.js ESM
-  run-esm-legacy-tests:
+  run-esm-legacy-node-tests:
     if: ${{ inputs.use-matrix == true }}
     runs-on: ubuntu-latest
     needs: install-and-build
