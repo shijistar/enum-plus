@@ -189,6 +189,9 @@
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "overrides": {
+    "@microsoft/api-extractor": {
+      "minimatch": "~3.1.5"
+    },
     "@umijs/babel-preset-umi": {
       "@babel/runtime": "^7.28.3"
     },
