@@ -8,7 +8,7 @@ declare module 'enum-plus/extension' {
    * @template {extends EnumValue = ValueTypeFromSingleInit<T[K], K>} V - The value type of the
    *   enumeration
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-object-type
   interface EnumExtension<T, K, V> {}
 
   /**
@@ -21,20 +21,20 @@ declare module 'enum-plus/extension' {
    * @template {extends EnumValue = ValueTypeFromSingleInit<T[K], K>} V - The value type of the
    *   enumeration
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-object-type
   interface EnumItemExtension<T, K, V> {}
   /**
    * - **EN:** Enum global localization extension
    * - **CN:** 枚举本地化的全局扩展
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+
   interface EnumLocaleExtends {
     /**
      * - **EN:** Key values of the localized text of the enumeration, which can be used to enhance the
      *   intelligent prompt of the editor
      * - **CN:** 枚举本地化文本的Key值，可以用来增强编辑器的智能提示
      */
-    LocaleKeys: // eslint-disable-next-line @typescript-eslint/ban-types
+    LocaleKeys:
       | (string & {})
       | ((
           // eslint-disable-next-line @typescript-eslint/consistent-type-imports

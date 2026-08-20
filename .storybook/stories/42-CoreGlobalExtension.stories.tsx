@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Enum, EnumInit, GenericAnyEnum, type AnyEnum } from '../../src';
+import type { AnyEnum } from '../../src';
+import { Enum } from '../../src';
 import { storyT, useStoryT } from '../locales';
-import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
+import { CodePreview, JsonPreview, StoryPage, StorySection } from './shared/demo';
 import { useMemo } from 'react';
-import type { EnumValue } from '../../lib';
 
 let extensionInstalled = false;
 const meta: Meta = {

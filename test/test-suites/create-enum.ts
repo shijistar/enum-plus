@@ -195,10 +195,7 @@ const testCreatingEnum = (engine: TestEngineBase<TestEngineTypes>) => {
         return { regexpEnum, dateEnum, date };
       },
       ({ regexpEnum, dateEnum, date }) => {
-        engine
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .expect(toPlainEnums(regexpEnum.items))
-          .toEqual([{ key: 'foo', value: /\sregexp\s/, label: 'foo' }]);
+        engine.expect(toPlainEnums(regexpEnum.items)).toEqual([{ key: 'foo', value: /\sregexp\s/, label: 'foo' }]);
         engine.expect(toPlainEnums(dateEnum.items)).toEqual([{ key: 'foo', value: date, label: 'foo' }]);
       },
     );

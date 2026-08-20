@@ -17,5 +17,17 @@
     ".storybook/**/*",
     "*.ts",
     ".*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "packages",
+    "es",
+    "es-legacy",
+    "lib",
+    "tslib",
+    "tses",
+    "types-legacy",
+    "e2e/fixtures/scripts",
+    "e2e/test-results"
   ]
 }

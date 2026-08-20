@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { Button, Card, Descriptions, Input, Select, Space, Table, Tag, Typography } from 'antd';
 import { Enum } from '../../src';
 import { storyT, useStoryLocale, useStoryT } from '../locales';
-import { StoryPage, StorySection, TwoColumn } from './shared/demo';
+import { StoryPage, StorySection } from './shared/demo';
 import { ensureStoryI18n } from './shared/i18n';
 
 const { Text } = Typography;

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import i18next from 'i18next';
+import i18next, { init } from 'i18next';
 import { Button, Card, Descriptions, Space, Tag, Typography } from 'antd';
 import i18nextVuePlugin from '../../packages/plugin-i18next-vue/src';
 import { Enum } from '../../src';
@@ -55,7 +55,7 @@ function I18nextVueStory() {
   useEffect(() => {
     void (async () => {
       if (!i18next.isInitialized) {
-        await i18next.init({
+        await init({
           lng: 'en-US',
           fallbackLng: 'en-US',
           initImmediate: false,
@@ -63,7 +63,7 @@ function I18nextVueStory() {
         });
       }
 
-      (Object.entries(STORY_RESOURCES) as Array<['en-US' | 'zh-CN', (typeof STORY_RESOURCES)['en-US']]>).forEach(
+      (Object.entries(STORY_RESOURCES) as ['en-US' | 'zh-CN', (typeof STORY_RESOURCES)['en-US']][]).forEach(
         ([locale, resource]) => {
           if (i18next.hasResourceBundle(locale, STORY_NAMESPACE)) {
             i18next.removeResourceBundle(locale, STORY_NAMESPACE);
@@ -74,7 +74,7 @@ function I18nextVueStory() {
     })();
 
     return () => {
-      (Object.keys(STORY_RESOURCES) as Array<'en-US' | 'zh-CN'>).forEach((locale) => {
+      (Object.keys(STORY_RESOURCES) as ('en-US' | 'zh-CN')[]).forEach((locale) => {
         if (i18next.hasResourceBundle(locale, STORY_NAMESPACE)) {
           i18next.removeResourceBundle(locale, STORY_NAMESPACE);
         }

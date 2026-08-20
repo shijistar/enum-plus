@@ -15,7 +15,7 @@ Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0]
 Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
 ensureStoryI18n();
 
-// @ts-expect-error
+// @ts-expect-error: because ThemedDocsContainer is loaded lazily
 const ThemedDocsContainer = lazy(() => import('./components/StorybookDocsContainer.js'));
 
 const preview: Preview = {

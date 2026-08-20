@@ -130,7 +130,7 @@ export const WeekCompactConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = undefined;
     return acc;
   },
-  {} as { [key in TKey]: undefined },
+  {} as Record<TKey, undefined>,
 );
 
 export const WeekEmptyConfig = Object.keys(StandardWeekConfig).reduce(
@@ -138,8 +138,8 @@ export const WeekEmptyConfig = Object.keys(StandardWeekConfig).reduce(
     acc[key as TKey] = {};
     return acc;
   },
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  {} as { [key in TKey]: {} },
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  {} as Record<TKey, {}>,
 );
 
 export const WeekValueOnlyConfig = Object.keys(StandardWeekConfig).reduce(
@@ -174,7 +174,6 @@ export const WeekMetaOnlyConfig = Object.keys(StandardWeekConfig).reduce(
 export function genSillyLocalizer(language: LangType, getLocales: getLocalesType) {
   // should use function here to avoid closure. this is important for the e2e test cases.
   function sillyLocalize(
-    // eslint-disable-next-line @typescript-eslint/ban-types
     content: (typeof neutral)[keyof typeof neutral] | (string & {}) | undefined,
   ): string | undefined {
     const { locales } = sillyLocalize;
@@ -227,12 +226,14 @@ export function localizeConfigData(
   config: typeof StandardWeekConfig,
   locales: Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,
 ): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
+// eslint-disable-next-line no-redeclare
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
-  // eslint-disable-next-line @typescript-eslint/unified-signatures
+
   getLocales: getLocalesType,
   defaultLocalize: typeof defaultLocalizeType,
 ): { [key in keyof typeof config]: Omit<(typeof config)[key], 'label'> & { label: string } };
+// eslint-disable-next-line no-redeclare
 export function localizeConfigData(
   config: typeof StandardWeekConfig,
   getLocales: getLocalesType | Readonly<typeof enUS> | Readonly<typeof zhCN> | Readonly<typeof neutral>,

@@ -17,17 +17,14 @@ import { IS_ENUM_ITEM } from './utils';
 export type EnumItemInterface<
   ET extends EnumInit<K, V>,
   T extends EnumItemInit<V>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   K extends EnumKey<ET> = EnumKey<ET>,
   V extends EnumValue = ValueTypeFromSingleInit<T, K>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
   OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
-> = EnumItemClass<ET, T, K, V, LP, OPTIONS> &
-  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-  {
-    [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
-  } & (OPTIONS extends { templates: { items: infer ItemTemplates } }
+> = EnumItemClass<ET, T, K, V, LP, OPTIONS> & {
+  [key in Exclude<keyof T, 'value' | 'label' | 'key'>]: T[key];
+} & (OPTIONS extends { templates: { items: infer ItemTemplates } }
     ? { readonly [key in keyof ItemTemplates]: string }
     : unknown) &
   EnumItemExtension<ET, K, V>;

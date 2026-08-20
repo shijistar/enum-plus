@@ -177,6 +177,7 @@ export function stringifyPreview(
         return Array.from(currentValue.values());
       }
       if (currentValue && typeof currentValue === 'object' && '$$typeof' in currentValue) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const localeKey = (currentValue as any).props?.i18nKey;
         if (forceText && localeKey) {
           return i18n.t(localeKey);

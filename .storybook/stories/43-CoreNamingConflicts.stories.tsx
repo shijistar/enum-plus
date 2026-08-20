@@ -151,6 +151,7 @@ const ConflictEnum = Enum({
                   forceEnumText
                   value={Object.keys(conflictEnum[NAMED]).reduce(
                     (acc, key) => {
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       const item = conflictEnum[NAMED][key as never] as EnumItemInterface<any, any>;
                       acc[key] = {
                         key: item.key,

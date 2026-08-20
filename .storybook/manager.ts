@@ -16,7 +16,7 @@ const theme = (!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' 
 
 const sidebarTitles: Partial<(typeof docTitles)[number]>[] = [
   ...docTitles,
-  ...(storyTitles as Array<{ fileName: string; title?: string; titleCN?: string }>).map((story) => ({
+  ...(storyTitles as { fileName: string; title?: string; titleCN?: string }[]).map((story) => ({
     fileName: story.fileName,
     title: story.title?.replace(/^[^/]*\//, ''),
     titleCN: story.titleCN?.replace(/^[^/]*\//, ''),

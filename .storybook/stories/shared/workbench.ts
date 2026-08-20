@@ -263,7 +263,7 @@ export const channelOptions = TicketChannelEnum.items.map((option) => {
   };
 });
 
-export type TicketFormValues = {
+export interface TicketFormValues {
   title: string;
   status: typeof TicketStatusEnum.valueType;
   priority: typeof TicketPriorityEnum.valueType;
@@ -273,7 +273,7 @@ export type TicketFormValues = {
   severity: typeof TicketSeverityEnum.valueType;
   preferredView: typeof TableModeEnum.valueType;
   flags: (typeof TicketFlagEnum.valueType)[];
-};
+}
 
 export type TicketRecord = TicketFormValues & {
   id: string;

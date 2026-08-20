@@ -103,12 +103,12 @@ const testEnumItem = (engine: TestEngineBase<TestEngineTypes>) => {
         engine.expect(saturday > friday).toBeTruthy();
         engine.expect(monday < tuesday).toBeTruthy();
         // @ts-expect-error: because should be compatible with number
-        // eslint-disable-next-line eqeqeq
+
         engine.expect(monday == 1).toBeTruthy();
         // @ts-expect-error: because should be compatible with number
         engine.expect(monday !== 2).toBeTruthy();
         // @ts-expect-error: because should be compatible with number
-        // eslint-disable-next-line eqeqeq
+
         engine.expect(monday != 2).toBeTruthy();
         // @ts-expect-error: because should be compatible with number
         engine.expect(monday + 1).toBe(2);
@@ -146,28 +146,28 @@ const testEnumItem = (engine: TestEngineBase<TestEngineTypes>) => {
         try {
           // @ts-expect-error: because try to modify the property forcefully
           sunday.key = modifyValue;
-        } catch (error) {
+        } catch {
           // Ignore the error
         }
         const sundayModifiedKey = sunday.key;
         try {
           // @ts-expect-error: because try to modify the property forcefully
           sunday.value = modifyValue;
-        } catch (error) {
+        } catch {
           // Ignore the error
         }
         const sundayModifiedValue = sunday.value;
         try {
           // @ts-expect-error: because try to modify the property forcefully
           sunday.label = modifyValue;
-        } catch (error) {
+        } catch {
           // Ignore the error
         }
         const sundayModifiedLabel = sunday.label;
         try {
           // @ts-expect-error: because try to modify the property forcefully
           sunday.raw = modifyValue;
-        } catch (error) {
+        } catch {
           // Ignore the error
         }
         const sundayModifiedRaw = sunday.raw;
@@ -177,28 +177,28 @@ const testEnumItem = (engine: TestEngineBase<TestEngineTypes>) => {
         try {
           // @ts-expect-error: because try to delete the property forcefully
           sundayDeletedKey = delete sunday.key;
-        } catch (error) {
+        } catch {
           sundayDeletedKey = false;
         }
         let sundayDeletedValue: boolean;
         try {
           // @ts-expect-error: because try to delete the property forcefully
           sundayDeletedValue = delete sunday.value;
-        } catch (error) {
+        } catch {
           sundayDeletedValue = false;
         }
         let sundayDeletedLabel: boolean;
         try {
           // @ts-expect-error: because try to delete the property forcefully
           sundayDeletedLabel = delete sunday.label;
-        } catch (error) {
+        } catch {
           sundayDeletedLabel = false;
         }
         let sundayDeletedRaw: boolean;
         try {
           // @ts-expect-error: because try to delete the property forcefully
           sundayDeletedRaw = delete sunday.raw;
-        } catch (error) {
+        } catch {
           sundayDeletedRaw = false;
         }
 
@@ -207,7 +207,7 @@ const testEnumItem = (engine: TestEngineBase<TestEngineTypes>) => {
         try {
           Object.defineProperty(sunday, 'sayHello', { value: () => modifyValue });
           sundaySayHello = (sunday as unknown as { readonly sayHello: string }).sayHello;
-        } catch (error) {
+        } catch {
           sundaySayHello = undefined;
         }
         /* ----------------- defineProperties ----------------- */
@@ -218,7 +218,7 @@ const testEnumItem = (engine: TestEngineBase<TestEngineTypes>) => {
             sayHi: { value: () => modifyValue },
           });
           sundaySayHello2 = (sunday as unknown as { readonly sayHello: string }).sayHello;
-        } catch (error) {
+        } catch {
           sundaySayHello2 = undefined;
         }
 
@@ -227,7 +227,7 @@ const testEnumItem = (engine: TestEngineBase<TestEngineTypes>) => {
         try {
           Object.setPrototypeOf(sunday, { sayHello: () => modifyValue });
           sundaySayHello3 = (sunday as unknown as { readonly sayHello: string }).sayHello;
-        } catch (error) {
+        } catch {
           sundaySayHello3 = undefined;
         }
 

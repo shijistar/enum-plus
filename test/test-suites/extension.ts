@@ -146,7 +146,6 @@ const testExtension = (engine: TestEngineBase<TestEngineTypes>) => {
 };
 
 declare module 'enum-plus/extension' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface EnumExtension<T, K, V> {
     isWeekend(value: number): boolean;
     toMySelect: () => { value: V; title: string }[];

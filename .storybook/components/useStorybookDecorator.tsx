@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, type ComponentType } from 'react';
 import type { ReactRenderer } from '@storybook/react-vite';
 import type { StoryContext } from 'storybook/internal/csf';
 import darkAlgorithm from 'antd/es/theme/themes/dark';
@@ -9,12 +9,12 @@ import storyI18n from '../locales';
 import { dark, getThemeKey, light } from '../utils/themes';
 import RefreshEnumContext from '../stories/shared/RefreshEnumContext';
 
-// @ts-expect-error
+// @ts-expect-error: because of lazy load App component
 const AppLazy = lazy(() => import('antd/es/app'));
-// @ts-expect-error
+// @ts-expect-error: because of lazy load ConfigProvider component
 const ConfigProviderLazy = lazy(() => import('antd/es/config-provider'));
 
-function useStorybookDecorator(Story: React.ComponentType, context: StoryContext<ReactRenderer>) {
+function useStorybookDecorator(Story: ComponentType, context: StoryContext<ReactRenderer>) {
   const localeKey = context.globals.locale === 'zh-CN' ? 'zh-CN' : 'en-US';
   const locale = localeKey === 'zh-CN' ? zhCN : enUS;
   const themeKey = getThemeKey(context.globals.theme);

@@ -46,7 +46,6 @@ export function pickArray<T extends Record<string, any>>(
   return array.map((item) => pickObject(item, fieldNames));
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function copyList<T>(
   data: T[],
   valueField: keyof T = 'value' as keyof T,

@@ -5,7 +5,7 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2016", "DOM"],
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "sourceMap": true,
     "sourceRoot": "../",
     "mapRoot": "",

@@ -6,8 +6,6 @@ import { type AnyEnum, Enum } from '../../src';
 import { storyT, useStoryLocale, useStoryT } from '../locales';
 import { CodePreview, JsonPreview, StoryPage, StorySection, TwoColumn } from './shared/demo';
 
-const { Text } = Typography;
-
 const meta: Meta = {
   title: 'Core/Localization',
   // @ts-expect-error: because titleCN is an extension field

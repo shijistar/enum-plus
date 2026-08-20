@@ -285,7 +285,7 @@ const testEnumCollection = (engine: TestEngineBase<TestEngineTypes>) => {
         const weekEnum = Enum(StandardWeekConfig);
         let error: Error | undefined;
         try {
-          weekEnum.valueType;
+          void weekEnum.valueType;
         } catch (e) {
           error = e as Error;
         }
@@ -302,7 +302,7 @@ const testEnumCollection = (engine: TestEngineBase<TestEngineTypes>) => {
         const weekEnum = Enum(StandardWeekConfig);
         let error: Error | undefined;
         try {
-          weekEnum.keyType;
+          void weekEnum.keyType;
         } catch (e) {
           error = e as Error;
         }
@@ -319,7 +319,7 @@ const testEnumCollection = (engine: TestEngineBase<TestEngineTypes>) => {
         const weekEnum = Enum(StandardWeekConfig);
         let error: Error | undefined;
         try {
-          weekEnum.rawType;
+          void weekEnum.rawType;
         } catch (e) {
           error = e as Error;
         }

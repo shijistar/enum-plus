@@ -114,6 +114,7 @@ function UiOutputsDemo() {
         return {
           color: toneColorMap[raw.tone as string],
           children: (
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             <Button type="text" onClick={() => onFilterChange(item.value as StatusKey)}>
               {item.label} · {raw.phase}
             </Button>
@@ -229,7 +230,7 @@ const StatusEnum = Enum({
                   value={checkboxValue}
                   options={StatusEnum.items.map((item) => ({ label: item.label, value: item.value }))}
                   onChange={(values) => {
-                    const nextValue = values.at(-1) as StatusKey | undefined;
+                    const nextValue = values[values.length - 1] as StatusKey | undefined;
                     onFilterChange(nextValue ?? 0);
                   }}
                 />

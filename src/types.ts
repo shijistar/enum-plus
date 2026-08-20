@@ -87,7 +87,7 @@ export type ListItem<
   FOV extends string = 'value',
   FOL extends string = 'label',
   R extends Record<string, unknown> = never,
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 > = Record<FOV, V> & Record<FOL, string> & (IsNever<R> extends true ? {} : R);
 
 /** Enum value type, support number, string, symbol */

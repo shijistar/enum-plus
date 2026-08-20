@@ -11,7 +11,7 @@ type JestMatchers<T> = ReturnType<typeof jestExpect<T>>;
 
 export interface Matchers<T> {
   jest: JestMatchers<T>;
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   playwright: MakeMatchers<void, T, {}>;
   'vitest-node': Assertion<T>;
   'vitest-browser': PromisifyDomAssertion<Awaited<Element | null>>;
@@ -20,9 +20,9 @@ export interface Matchers<T> {
 export interface ExpectConfig<T> {
   jest: [[unknown, never, JestMatchers<T>], [unknown, never, JestMatchers<T>]];
   playwright: [
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     [unknown, NonNullable<Parameters<typeof playwrightExpect>[1]>, MakeMatchers<void, T, {}>],
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     [unknown, NonNullable<Parameters<typeof playwrightExpect>[1]>, MakeMatchers<void, T, {}>],
   ];
   'vitest-node': [

@@ -77,7 +77,6 @@ Enum.extends = function (obj: Record<string, unknown> | undefined) {
 Enum.install = <T extends PluginFunc<any>>(plugin: T, options?: Parameters<T>[0]) => {
   plugin(options, Enum);
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 Enum.isEnum = (value: unknown): value is LooseAnyEnum => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return Boolean(value && typeof value === 'object' && (value as any)[IS_ENUM] === true);
@@ -139,7 +138,6 @@ export interface EnumInterface {
    *
    * @returns Enum collection | 枚举集合
    */
-  // eslint-disable-next-line @typescript-eslint/prefer-function-type
   <
     const T extends EnumInit<K, V>,
     K extends EnumKey<T> = EnumKey<T>,
@@ -245,7 +243,6 @@ export interface EnumInterface {
      *   simplify the internationalization configuration of enums.
      * - **CN:** 全局设置枚举名称和枚举项的国际化模板，用于简化枚举的国际化配置
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     templates?: LocalizeTemplatesConfig<
       EnumInit<string, EnumValue>,
       EnumItemInit<EnumValue>,
@@ -280,7 +277,6 @@ export interface EnumInterface {
    * @returns `true` if the value is an Enum collection, otherwise `false` |
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isEnum(value: unknown): value is LooseAnyEnum;
   /**
    * - **EN:** Determines if a value is an instance of the Enum collection
@@ -291,7 +287,6 @@ export interface EnumInterface {
    * @returns `true` if the value is an Enum collection, otherwise `false` |
    *   如果值是枚举集合，则返回`true`，否则返回`false`
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [Symbol.hasInstance](value: unknown): value is LooseAnyEnum;
   /**
    * - **EN:** Add global extension methods to the enum, and all enum instances will have these new
@@ -361,7 +356,6 @@ export interface IEnum<
    *   all enum items through this alias
    * - **CN:** `items`数组的别名，当任何枚举的key与`items`冲突时，可以通过此别名访问所有枚举项
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [ITEMS]: IsAny<T> extends true
     ? EnumItemInterface<
         EnumInit<string, EnumValue>,
@@ -408,7 +402,6 @@ export interface IEnum<
    *   enum keys through this alias
    * - **CN:** `keys`数组的别名，当任何枚举的key与`keys`冲突时，可以通过此别名访问所有枚举项的keys
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [KEYS]: IsAny<T> extends true ? string[] : T extends { keys: unknown } ? K[] : never;
   /**
    * - **EN:** Get all keys of the enumeration items as an array
@@ -420,7 +413,6 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly keys: IsAny<T> extends true
     ? string[]
     : T extends { keys: unknown }
@@ -431,7 +423,6 @@ export interface IEnum<
    *   all enum values through this alias
    * - **CN:** `values`数组的别名，当任何枚举的key与`values`冲突时，可以通过此别名访问所有枚举项的values
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [VALUES]: IsAny<T> extends true ? EnumValue[] : T extends { values: unknown } ? V[] : never;
   /**
    * - **EN:** Get all values of the enumeration items as an array
@@ -443,7 +434,6 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly values: IsAny<T> extends true
     ? EnumValue[]
     : T extends { values: unknown }
@@ -454,7 +444,6 @@ export interface IEnum<
    *   all enum labels through this alias
    * - **CN:** `labels`数组的别名，当任何枚举的key与`labels`冲突时，可以通过此别名访问所有枚举项的labels
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [LABELS]: IsAny<T> extends true ? string[] : T extends { labels: unknown } ? string[] : never;
   /**
    * - **EN:** Get all labels of the enumeration items as an array
@@ -466,7 +455,6 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly labels: IsAny<T> extends true
     ? string[]
     : T extends { labels: unknown }
@@ -518,7 +506,6 @@ export interface IEnum<
    *   enum meta information through this alias
    * - **CN:** `meta`数组的别名，当任何枚举的key与`meta`冲突时，可以通过此别名访问所有枚举项的meta信息
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly [META]: IsAny<T> extends true
     ? Record<string, unknown[]>
     : T extends { meta: unknown }
@@ -534,7 +521,6 @@ export interface IEnum<
    *
    * > 仅支持 `ReadonlyArray<T>` 中的只读方法，不支持push、pop等任何修改的方法
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly meta: IsAny<T> extends true
     ? Record<string, unknown[]>
     : T extends { meta: unknown }

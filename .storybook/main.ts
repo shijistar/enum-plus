@@ -1,11 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { RollupLog } from 'rollup';
 import { mergeConfig } from 'vite';
-
-//@ts-expect-error
-const currentDir = dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
   stories: ['./docs/**/*.mdx', './stories/**/*.stories.@(ts|tsx)'],

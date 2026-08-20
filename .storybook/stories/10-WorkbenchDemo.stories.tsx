@@ -1,6 +1,6 @@
-import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import i18n from 'i18next';
+import { changeLanguage } from 'i18next';
 import {
   Badge,
   Button,
@@ -26,6 +26,7 @@ import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { storyT, useStoryLocale } from '../locales';
 import { CodePreview, JsonPreview, KpiRow, StoryPage, StorySection, TwoColumn } from './shared/demo';
 import { ensureStoryI18n } from './shared/i18n';
+import type { TicketFormValues, TicketRecord } from './shared/workbench';
 import {
   channelOptions,
   createInitialRecords,
@@ -34,10 +35,8 @@ import {
   TableModeEnum,
   TicketChannelEnum,
   TicketFlagEnum,
-  TicketFormValues,
   TicketOwnerEnum,
   TicketPriorityEnum,
-  TicketRecord,
   TicketRegionEnum,
   TicketSeverityEnum,
   TicketStatusEnum,
@@ -383,16 +382,10 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
         <Flex justify="space-between">
           {t('storybook.stories.workbenchDemo.eyebrow')}{' '}
           <Space wrap>
-            <Button
-              type={language === 'zh-CN' ? 'primary' : 'default'}
-              onClick={() => void i18n.changeLanguage('zh-CN')}
-            >
+            <Button type={language === 'zh-CN' ? 'primary' : 'default'} onClick={() => void changeLanguage('zh-CN')}>
               {storyT('storybook.preview.locale.zhCN')}
             </Button>
-            <Button
-              type={language === 'en-US' ? 'primary' : 'default'}
-              onClick={() => void i18n.changeLanguage('en-US')}
-            >
+            <Button type={language === 'en-US' ? 'primary' : 'default'} onClick={() => void changeLanguage('en-US')}>
               {storyT('storybook.preview.locale.enUS')}
             </Button>
           </Space>

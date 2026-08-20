@@ -174,10 +174,7 @@ export class EnumItemsArray<
 
   [Symbol.hasInstance]<T>(instance: T): instance is Extract<T, K | V> {
     // intentionally use == to support both number and string format value
-    return this.some(
-      // eslint-disable-next-line eqeqeq
-      (i) => (instance as unknown as V) == i.value || (instance as unknown as K) === i.key,
-    );
+    return this.some((i) => (instance as unknown as V) == i.value || (instance as unknown as K) === i.key);
   }
 
   label<KV extends V | K | NonNullable<PrimitiveOf<V>> | NonNullable<PrimitiveOf<K>> | undefined>(keyOrValue: KV) {
@@ -438,10 +435,11 @@ export interface IEnumItems<
    * - **CN:** 获取枚举项的全部自定义元字段，返回一个对象，其中key为字段名，value为每个字段的原始值数组
    */
   readonly meta: T extends object
-    ? { [K in Exclude<keyof T[keyof T], EnumItemFields>]: T[keyof T][K][] } & {
-        [K in LocalizeTemplateFields<OPTIONS>]: string[];
-      }
-    : { [K in LocalizeTemplateFields<OPTIONS>]: string[] };
+    ? { [K in Exclude<keyof T[keyof T], EnumItemFields>]: T[keyof T][K][] } & Record<
+        LocalizeTemplateFields<OPTIONS>,
+        string[]
+      >
+    : Record<LocalizeTemplateFields<OPTIONS>, string[]>;
 }
 
 // typeof IS_ENUM_ITEMS | typeof ITEMS | typeof KEYS | typeof VALUES | 'labels' | 'meta' | 'named'
@@ -876,23 +874,22 @@ export type MapResult<
   LP = any,
   OPTIONS extends EnumItemOptions<T, T[K], K, V, LP> = EnumItemOptions<T, T[K], K, V, LP>,
 > = {
-  [key in ExactEqual<
-    KS,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    EnumItemFields | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => any)
-  > extends true
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      EnumItemInterface<T, T[K], K, V, LP, OPTIONS>['value'] & keyof any
-    : KS extends EnumItemFields
+  [
+    key in ExactEqual<
+      KS,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      EnumItemFields | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => any)
+    > extends true
       ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[KS] & keyof any
-      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        KS extends (item: any) => infer R
-        ? R
-        : never]: ExactEqual<
-    VS,
-    EnumItemFields | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => unknown)
-  > extends true
+        EnumItemInterface<T, T[K], K, V, LP, OPTIONS>['value'] & keyof any
+      : KS extends EnumItemFields
+        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[KS] & keyof any
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          KS extends (item: any) => infer R
+          ? R
+          : never
+  ]: ExactEqual<VS, EnumItemFields | ((item: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>) => unknown)> extends true
     ? ExactEqual<
         KS,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -910,15 +907,17 @@ export type MapResult<
 
 export type EnumItemFields = Exclude<
   {
-    [key in keyof EnumItemInterface<
-      StandardEnumInit<string, string>,
-      StandardEnumItemInit<string>,
-      string,
-      string,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any,
-      EnumItemOptions<StandardEnumInit<string, string>, StandardEnumItemInit<string>, string, string, string>
-    >]: EnumItemInterface<
+    [
+      key in keyof EnumItemInterface<
+        StandardEnumInit<string, string>,
+        StandardEnumItemInit<string>,
+        string,
+        string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        any,
+        EnumItemOptions<StandardEnumInit<string, string>, StandardEnumItemInit<string>, string, string, string>
+      >
+    ]: EnumItemInterface<
       StandardEnumInit<string, string>,
       StandardEnumItemInit<string>,
       string,

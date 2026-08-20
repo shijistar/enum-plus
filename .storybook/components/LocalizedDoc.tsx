@@ -1,8 +1,9 @@
+import type { ComponentType } from 'react';
 import { useStoryLocale } from '../locales';
 
 export interface LocalizedDocProps {
-  docEn: React.ComponentType;
-  docCn: React.ComponentType;
+  docEn: ComponentType;
+  docCn: ComponentType;
 }
 
 function LocalizedDoc(props: LocalizedDocProps) {

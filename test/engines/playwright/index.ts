@@ -40,7 +40,7 @@ export class PlaywrightEngine extends TestEngineBase<'playwright'> {
   }
 
   override expect<T>(actual: T, options?: Parameters<typeof expect>[1]) {
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     return expect(actual, options) as MakeMatchers<void, T, {}>;
   }
 
