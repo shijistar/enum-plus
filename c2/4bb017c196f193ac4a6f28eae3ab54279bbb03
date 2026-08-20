@@ -1,0 +1,16 @@
+package.json
+  h_99cad05bea77d1 219,224,229,237-238,240,243-244,247
+package-lock.json
+  h_99cad05bea77d1 28,33,38,46-47,49,52-53,56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c24bb017c196f193ac4a6f28eae3ab54279bbb03",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
