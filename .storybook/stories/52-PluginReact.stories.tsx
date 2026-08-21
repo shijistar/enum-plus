@@ -89,13 +89,13 @@ function ReactI18nDemo() {
     () =>
       Enum(
         {
-          Draft: { value: 'draft', label: 'story.status.draft' },
-          Review: { value: 'review', label: 'story.status.review' },
-          Published: { value: 'published', label: 'story.status.published' },
-          Archived: { value: 'archived', label: 'story.status.archived' },
+          Draft: { value: 'draft', label: 'storybook.enums.status.draft' },
+          Review: { value: 'review', label: 'storybook.enums.status.review' },
+          Published: { value: 'published', label: 'storybook.enums.status.published' },
+          Archived: { value: 'archived', label: 'storybook.enums.status.archived' },
         },
         {
-          name: 'story.status.enumName',
+          name: 'storybook.enums.status.enumName',
         },
       ) as ReactLocalizedEnum,
     [readyVersion],

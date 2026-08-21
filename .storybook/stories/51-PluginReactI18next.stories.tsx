@@ -71,12 +71,12 @@ function ReactI18nextStory() {
     () =>
       Enum(
         {
-          Draft: { value: 'draft', label: 'story.status.draft', tone: 'default' },
-          Review: { value: 'review', label: 'story.status.review', tone: 'processing' },
-          Published: { value: 'published', label: 'story.status.published', tone: 'success' },
+          Draft: { value: 'draft', label: 'storybook.enums.status.draft', tone: 'default' },
+          Review: { value: 'review', label: 'storybook.enums.status.review', tone: 'processing' },
+          Published: { value: 'published', label: 'storybook.enums.status.published', tone: 'success' },
         },
         {
-          name: 'story.status.enumName',
+          name: 'storybook.enums.status.enumName',
         },
       ),
     [renderTick],

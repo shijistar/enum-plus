@@ -94,8 +94,8 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   --ep-panel-shadow: 0 18px 44px rgb(36 94 86 / 8%);
   --ep-accent: #0f766e;
   --ep-accent-strong: #155e75;
-  --ep-code-bg: #1e293b;
-  --ep-code-text: #f8fafc;
+  --ep-code-bg: #ceecda;
+  --ep-code-text: #1f2937;
   --ep-kpi-bg: linear-gradient(180deg, rgb(250 254 253 / 96%), rgb(236 247 243 / 94%));
   --ep-kpi-border: rgb(72 150 137 / 18%);
   --ep-surface-raised: rgb(255 255 255 / 70%);
@@ -279,7 +279,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   padding: 16px 18px;
   overflow: auto;
   color: var(--ep-code-text);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.65;
   background: var(--ep-code-bg);
   border-radius: 18px;
@@ -299,7 +299,7 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
 .ep-inline-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
 }
 
 .ep-kpi {

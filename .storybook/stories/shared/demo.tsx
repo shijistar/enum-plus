@@ -1,8 +1,9 @@
 import type { PropsWithChildren, ReactNode } from 'react';
-import { Card, Col, ConfigProvider, Row, Space, Tag, theme, Typography } from 'antd';
+import { Card, Col, Row, Space, Tag, theme, Typography } from 'antd';
 import storyI18n from '../../locales/index';
 import type { i18n } from 'i18next';
 import type { EllipsisConfig } from 'antd/es/typography/Base';
+import type { CardProps } from 'antd/lib/card';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -69,17 +70,30 @@ export function StorySection(
   );
 }
 
-export function JsonPreview(props: {
-  title?: ReactNode;
-  description?: ReactNode;
-  value: unknown;
-  note?: ReactNode;
-  forceEnumText?: boolean;
-  i18n?: i18n;
-  indent?: number;
-  ellipsis?: EllipsisConfig;
-}) {
-  const { title, description, value, note, forceEnumText = false, i18n = storyI18n, indent, ellipsis } = props;
+export function JsonPreview(
+  props: {
+    title?: ReactNode;
+    description?: ReactNode;
+    value: unknown;
+    note?: ReactNode;
+    forceEnumText?: boolean;
+    i18n?: i18n;
+    indent?: number;
+    ellipsis?: EllipsisConfig;
+  } & CardProps,
+) {
+  const {
+    title,
+    description,
+    value,
+    note,
+    forceEnumText = false,
+    i18n = storyI18n,
+    indent,
+    ellipsis,
+    ...cardProps
+  } = props;
+  const { token } = theme.useToken();
 
   return (
     <Card
@@ -96,13 +110,12 @@ export function JsonPreview(props: {
           title
         )
       }
+      {...cardProps}
     >
       <pre className="ep-pre">
-        <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
-          <Typography.Paragraph ellipsis={ellipsis}>
-            {stringifyPreview(value, { forceText: forceEnumText, i18n, indent })}
-          </Typography.Paragraph>
-        </ConfigProvider>
+        <Typography.Paragraph ellipsis={ellipsis} style={{ fontFamily: token.fontFamilyCode, fontSize: 14 }}>
+          {stringifyPreview(value, { forceText: forceEnumText, i18n, indent })}
+        </Typography.Paragraph>
       </pre>
       {note ? <div className="ep-note">{note}</div> : null}
     </Card>

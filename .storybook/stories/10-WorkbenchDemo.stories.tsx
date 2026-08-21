@@ -1,6 +1,7 @@
-import { type ReactNode, useEffect, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { changeLanguage } from 'i18next';
+import { orderBy } from 'lodash-es';
 import {
   Badge,
   Button,
@@ -12,10 +13,12 @@ import {
   Form,
   Input,
   Modal,
+  Popconfirm,
   Radio,
   Segmented,
   Select,
   Space,
+  Switch,
   Table,
   Tabs,
   Tag,
@@ -23,9 +26,8 @@ import {
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { storyT, useStoryLocale } from '../locales';
+import { changeLanguage, storyT, useStoryLocale, useStoryT } from '../locales';
 import { CodePreview, JsonPreview, KpiRow, StoryPage, StorySection, TwoColumn } from './shared/demo';
-import { ensureStoryI18n } from './shared/i18n';
 import type { TicketFormValues, TicketRecord } from './shared/workbench';
 import {
   channelOptions,
@@ -41,8 +43,9 @@ import {
   TicketSeverityEnum,
   TicketStatusEnum,
 } from './shared/workbench';
+import { ENUM_OPTIONS } from '../../src';
 
-const { Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 const meta: Meta = {
   title: 'Demo/Full Demo',
@@ -62,8 +65,8 @@ type Story = StoryObj;
 
 function WorkbenchDemoBody() {
   const storyLocale = useStoryLocale();
-  const instance = ensureStoryI18n();
-  const [language, setLanguage] = useState(instance.language);
+  const t = useStoryT();
+  const [language, setLanguage] = useState(storyLocale);
   const [records, setRecords] = useState<TicketRecord[]>(() => createInitialRecords());
   const [nextRequestNumber, setNextRequestNumber] = useState(() => getNextRequestNumber(createInitialRecords()));
   const [selectedRowKey, setSelectedRowKey] = useState<string>('REQ-1042');
@@ -73,61 +76,57 @@ function WorkbenchDemoBody() {
   const [searchText, setSearchText] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [parseI18n, setParseI18n] = useState(true);
+  const codeMap = useMemo(
+    () => ({
+      TableModeEnum,
+      TicketChannelEnum,
+      TicketFlagEnum,
+      TicketOwnerEnum,
+      TicketPriorityEnum,
+      TicketRegionEnum,
+      TicketSeverityEnum,
+      TicketStatusEnum,
+    }),
+    [],
+  );
   const [form] = Form.useForm<TicketFormValues>();
-
-  useEffect(() => {
-    if (instance.language !== storyLocale) {
-      void instance.changeLanguage(storyLocale);
-    }
-  }, [instance, storyLocale]);
-
-  useEffect(() => {
-    const handleLanguage = (nextLanguage: string) => {
-      setLanguage(nextLanguage);
-    };
-
-    instance.on('languageChanged', handleLanguage);
-
-    return () => {
-      instance.off('languageChanged', handleLanguage);
-    };
-  }, [instance]);
-
-  const t = useMemo(() => ((key: string) => instance.t(key)) as typeof instance.t, [instance, language]);
   const watchedRegion = Form.useWatch('region', form) || 'cnNorth';
-
   const ownerOptions = useMemo(() => TicketOwnerEnum.items, [TicketOwnerEnum]);
-
   const selectedRecord = records.find((item) => item.id === selectedRowKey) ?? records[0];
 
   const filteredRecords = useMemo(() => {
     const lowerSearch = searchText.trim().toLowerCase();
-    return records.filter((record) => {
-      if (tableMode === 'myOpen' && !['amy', 'ben'].includes(record.owner)) {
-        return false;
-      }
-      if (tableMode === 'risk' && !(record.flags.includes('slaRisk') || record.severity === 'sev1')) {
-        return false;
-      }
-      if (statusFilter && record.status !== statusFilter) {
-        return false;
-      }
-      if (channelFilter && record.channel !== channelFilter) {
-        return false;
-      }
-      if (!lowerSearch) {
-        return true;
-      }
-      const statusText = String(TicketStatusEnum.findBy('value', record.status)?.label ?? '').toLowerCase();
-      const priorityText = String(TicketPriorityEnum.findBy('value', record.priority)?.label ?? '').toLowerCase();
-      const channelText = String(TicketChannelEnum.findBy('value', record.channel)?.label ?? '').toLowerCase();
-      const ownerText = String(TicketOwnerEnum.findBy('value', record.owner)?.label ?? '').toLowerCase();
-      const tenantText = record.tenant.toLowerCase();
-      const titleText = record.title.toLowerCase();
-      return [titleText, tenantText, statusText, priorityText, channelText, ownerText, record.id.toLowerCase()].some(
-        (text) => text.includes(lowerSearch),
-      );
-    });
+    return orderBy(
+      records.filter((record) => {
+        if (tableMode === 'myOpen' && !['amy', 'ben'].includes(record.owner)) {
+          return false;
+        }
+        if (tableMode === 'risk' && !(record.flags.includes('slaRisk') || record.severity === 'sev1')) {
+          return false;
+        }
+        if (statusFilter && record.status !== statusFilter) {
+          return false;
+        }
+        if (channelFilter && record.channel !== channelFilter) {
+          return false;
+        }
+        if (!lowerSearch) {
+          return true;
+        }
+        const statusText = String(TicketStatusEnum.findBy('value', record.status)?.label ?? '').toLowerCase();
+        const priorityText = String(TicketPriorityEnum.findBy('value', record.priority)?.label ?? '').toLowerCase();
+        const channelText = String(TicketChannelEnum.findBy('value', record.channel)?.label ?? '').toLowerCase();
+        const ownerText = String(TicketOwnerEnum.findBy('value', record.owner)?.label ?? '').toLowerCase();
+        const tenantText = record.tenant.toLowerCase();
+        const titleText = record.title.toLowerCase();
+        return [titleText, tenantText, statusText, priorityText, channelText, ownerText, record.id.toLowerCase()].some(
+          (text) => text.includes(lowerSearch),
+        );
+      }),
+      ['createdAt'],
+      ['desc'],
+    );
   }, [
     channelFilter,
     TicketChannelEnum,
@@ -297,10 +296,13 @@ function WorkbenchDemoBody() {
     {
       title: t('storybook.stories.workbenchDemo.table.channel'),
       dataIndex: 'channel',
-      width: 160,
+      width: 170,
       filters: TicketChannelEnum.toFilter(),
       onFilter: (value, record) => record.channel === value,
-      render: (value: typeof TicketChannelEnum.valueType) => TicketChannelEnum.label(value),
+      render: (value: typeof TicketChannelEnum.valueType) => {
+        const raw = TicketChannelEnum.raw(value);
+        return <Tag color={raw?.color || 'default'}>{TicketChannelEnum.label(value)}</Tag>;
+      },
     },
     {
       title: t('storybook.stories.workbenchDemo.table.priority'),
@@ -309,17 +311,6 @@ function WorkbenchDemoBody() {
       render: (value: typeof TicketPriorityEnum.valueType) => {
         const raw = TicketPriorityEnum.raw(value);
         return <Tag color={raw?.color || 'default'}>{TicketPriorityEnum.label(value)}</Tag>;
-      },
-    },
-    {
-      title: t('storybook.stories.workbenchDemo.table.channel'),
-      dataIndex: 'channel',
-      width: 170,
-      filters: TicketChannelEnum.toFilter(),
-      onFilter: (value, record) => record.channel === value,
-      render: (value: typeof TicketChannelEnum.valueType) => {
-        const raw = TicketChannelEnum.raw(value);
-        return <Tag color={raw?.color || 'default'}>{TicketChannelEnum.label(value)}</Tag>;
       },
     },
     {
@@ -337,7 +328,12 @@ function WorkbenchDemoBody() {
     {
       title: t('storybook.stories.workbenchDemo.table.updatedAt'),
       dataIndex: 'updatedAt',
-      width: 150,
+      width: 190,
+    },
+    {
+      title: t('storybook.stories.workbenchDemo.table.createdAt'),
+      dataIndex: 'createdAt',
+      width: 190,
     },
     {
       title: t('storybook.stories.workbenchDemo.table.actions'),
@@ -347,68 +343,57 @@ function WorkbenchDemoBody() {
       render: (_value, record) => (
         <Space>
           <Button size="small" type="text" icon={<EditOutlined />} onClick={() => openEditModal(record)} />
-          <Button size="small" danger type="text" icon={<DeleteOutlined />} onClick={() => removeRecord(record.id)} />
+          <Popconfirm
+            title={t('storybook.stories.workbenchDemo.action.confirmDelete')}
+            onConfirm={() => removeRecord(record.id)}
+          >
+            <Button size="small" danger type="text" icon={<DeleteOutlined />} />
+          </Popconfirm>
         </Space>
       ),
     },
   ];
 
-  const sourcePreview = useMemo(
-    () => ({
-      statusSelect: TicketStatusEnum.toSelect(),
-      statusFilter: TicketStatusEnum.toFilter(),
-      statusValueMap: TicketStatusEnum.toValueMap(),
-      channelTabs: TicketChannelEnum.toMenu(),
-      flagRaw: TicketFlagEnum.raw('slaRisk'),
-    }),
-    [TicketChannelEnum, TicketFlagEnum, TicketStatusEnum],
-  );
-
-  const codeSample = `const statusEnum = Enum({
-  Draft: { value: 'draft', label: 'ticket.status.draft', badgeStatus: 'default', color: 'default' },
-  Triage: { value: 'triage', label: 'ticket.status.triage', badgeStatus: 'processing', color: 'blue' },
-  Blocked: { value: 'blocked', label: 'ticket.status.blocked', badgeStatus: 'error', color: 'red' },
-}, { name: 'ticket.status.enumName' });
-
-<Select options={statusEnum.toSelect()} />
-<Table columns={[{ dataIndex: 'status', filters: statusEnum.toFilter() }]} />
-const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
-`;
-
   return (
     <StoryPage
       size="large"
-      eyebrow={
-        <Flex justify="space-between">
-          {t('storybook.stories.workbenchDemo.eyebrow')}{' '}
-          <Space wrap>
-            <Button type={language === 'zh-CN' ? 'primary' : 'default'} onClick={() => void changeLanguage('zh-CN')}>
-              {storyT('storybook.preview.locale.zhCN')}
-            </Button>
-            <Button type={language === 'en-US' ? 'primary' : 'default'} onClick={() => void changeLanguage('en-US')}>
-              {storyT('storybook.preview.locale.enUS')}
-            </Button>
-          </Space>
-        </Flex>
-      }
+      eyebrow={<Flex justify="space-between">{t('storybook.stories.workbenchDemo.eyebrow')} </Flex>}
       title={t('storybook.stories.workbenchDemo.page.title')}
-      description={t('storybook.stories.workbenchDemo.page.description')}
+      description={
+        <>
+          <div>
+            {t('storybook.stories.workbenchDemo.metaDescription')}
+            {t('storybook.stories.workbenchDemo.section.workspace.description')}
+          </div>
+          <div>
+            {t('storybook.stories.workbenchDemo.page.description')}
+            {t('storybook.stories.workbenchDemo.page.showCode')}
+          </div>
+        </>
+      }
     >
       <StorySection
-        title={t('storybook.stories.workbenchDemo.section.overview.title')}
-        description={t('storybook.stories.workbenchDemo.section.overview.description')}
-      >
-        <Space orientation="vertical" size={16}>
-          <KpiRow items={kpis} />
-          <Paragraph>{t('storybook.stories.workbenchDemo.overview.note')}</Paragraph>
-        </Space>{' '}
-      </StorySection>
-
-      <StorySection
         title={t('storybook.stories.workbenchDemo.section.workspace.title')}
-        description={t('storybook.stories.workbenchDemo.section.workspace.description')}
+        extra={
+          <Space>
+            {t('storybook.stories.workbenchDemo.language') + ':'}
+            <Select
+              options={[
+                { value: 'zh-CN', label: t('storybook.preview.locale.zhCN') },
+                { value: 'en-US', label: t('storybook.preview.locale.enUS') },
+              ]}
+              value={language}
+              style={{ minWidth: 120 }}
+              onChange={(value) => {
+                setLanguage(value);
+                changeLanguage(value);
+              }}
+            />
+          </Space>
+        }
       >
         <Space orientation="vertical" size={16} style={{ width: '100%' }}>
+          <KpiRow items={kpis} />
           <Tabs
             defaultActiveKey={tableMode}
             items={TableModeEnum.items.map((item) => ({
@@ -417,11 +402,10 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
               children: null,
             }))}
             onChange={(value) => {
-              console.log(value);
               setTableMode(value as typeof TableModeEnum.valueType);
             }}
             tabBarExtraContent={
-              <Button type="text" icon={<PlusOutlined />} onClick={openCreateModal}>
+              <Button icon={<PlusOutlined />} onClick={openCreateModal}>
                 {t('storybook.stories.workbenchDemo.action.newRecord')}
               </Button>
             }
@@ -466,7 +450,7 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
             className="ep-table"
             rowKey="id"
             scroll={{ x: 1600 }}
-            pagination={false}
+            pagination={filteredRecords.length > 10 ? { pageSize: 10 } : false}
             columns={columns}
             dataSource={filteredRecords}
             rowSelection={{
@@ -478,15 +462,19 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
         </Space>
       </StorySection>
 
-      <StorySection
-        title={t('storybook.stories.workbenchDemo.section.detail.title')}
-        description={t('storybook.stories.workbenchDemo.section.detail.description')}
-      >
+      <StorySection title={t('storybook.stories.workbenchDemo.section.detail.title')}>
         <TwoColumn
           left={
-            <Card size="small" title={t('storybook.stories.workbenchDemo.card.recordSummary')}>
+            <Card
+              size="small"
+              title={t('storybook.stories.workbenchDemo.card.recordSummary')}
+              style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+              styles={{
+                body: { flex: 1, minHeight: 0 },
+              }}
+            >
               {selectedRecord ? (
-                <Space orientation="vertical" size={16} style={{ width: '100%' }}>
+                <Flex orientation="vertical" gap={16} style={{ width: '100%', height: '100%' }}>
                   <Descriptions
                     size="small"
                     column={1}
@@ -509,6 +497,15 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
                             status={TicketStatusEnum.raw(selectedRecord.status)?.badgeStatus}
                             text={TicketStatusEnum.label(selectedRecord.status)}
                           />
+                        ),
+                      },
+                      {
+                        key: 'channel',
+                        label: t('storybook.stories.workbenchDemo.table.channel'),
+                        children: (
+                          <Tag color={TicketChannelEnum.raw(selectedRecord.channel)?.color || 'default'}>
+                            {TicketChannelEnum.label(selectedRecord.channel)}
+                          </Tag>
                         ),
                       },
                       {
@@ -541,51 +538,37 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
                         children: selectedRecord.updatedAt,
                       },
                     ]}
+                    style={{ flex: 1, minHeight: 0 }}
                   />
                   <Divider style={{ margin: 0 }} />
                   <div>
                     <Text strong>{t('storybook.stories.workbenchDemo.detail.flags')}</Text>
                     <div style={{ marginTop: 8 }}>{flagTagNodes(selectedRecord.flags)}</div>
                   </div>
-                </Space>
+                </Flex>
               ) : null}
             </Card>
           }
           right={
-            <Card size="small" title={t('storybook.stories.workbenchDemo.card.enumMetadata')}>
-              {selectedRecord ? (
-                <Descriptions
-                  size="small"
-                  column={1}
-                  items={[
-                    {
-                      key: 'statusMeta',
-                      label: 'status.raw()',
-                      children: <Text code>{JSON.stringify(TicketStatusEnum.raw(selectedRecord.status))}</Text>,
-                    },
-                    {
-                      key: 'priorityMeta',
-                      label: 'priority.raw()',
-                      children: <Text code>{JSON.stringify(TicketPriorityEnum.raw(selectedRecord.priority))}</Text>,
-                    },
-                    {
-                      key: 'flagMeta',
-                      label: 'flag.findBy()',
-                      children: (
-                        <Text code>
-                          {JSON.stringify(TicketFlagEnum.findBy('value', selectedRecord.flags[0] || 'slaRisk')?.raw)}
-                        </Text>
-                      ),
-                    },
-                    {
-                      key: 'channelMeta',
-                      label: 'channel.raw()',
-                      children: <Text code>{JSON.stringify(TicketChannelEnum.raw(selectedRecord.channel))}</Text>,
-                    },
-                  ]}
-                />
-              ) : null}
-            </Card>
+            <JsonPreview
+              title={t('storybook.stories.workbenchDemo.card.selectedRecord')}
+              value={[
+                'title',
+                'tenant',
+                'owner',
+                'status',
+                'channel',
+                'priority',
+                'region',
+                'severity',
+                'updatedAt',
+                'flags',
+              ].reduce((acc, key) => {
+                acc[key as keyof TicketRecord] = selectedRecord[key as keyof TicketRecord] as never;
+                return acc;
+              }, {} as TicketRecord)}
+              style={{ height: '100%' }}
+            />
           }
         />
       </StorySection>
@@ -594,11 +577,34 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
         title={t('storybook.stories.workbenchDemo.section.source.title')}
         description={t('storybook.stories.workbenchDemo.section.source.description')}
       >
-        <TwoColumn
-          left={
-            <JsonPreview title={t('storybook.stories.workbenchDemo.preview.pluginOutputs')} value={sourcePreview} />
+        <Tabs
+          defaultActiveKey={tableMode}
+          items={Object.keys(codeMap).map((key) => ({
+            key,
+            label: codeMap[key as keyof typeof codeMap].name,
+            children: (
+              <CodePreview
+                code={`
+const ${key} = Enum(
+  ${JSON.stringify(codeMap[key as keyof typeof codeMap].raw(), parseI18n ? i18nReplacer : undefined, 2)
+    .split('\n')
+    .join('\n  ')},
+  { name: '${parseI18n ? i18nReplacer('name', codeMap[key as keyof typeof codeMap][ENUM_OPTIONS]?.name) : codeMap[key as keyof typeof codeMap][ENUM_OPTIONS]?.name}' }
+);`}
+              />
+            ),
+          }))}
+          onChange={(value) => {
+            setTableMode(value as typeof TableModeEnum.valueType);
+          }}
+          tabBarExtraContent={
+            <Switch
+              checked={parseI18n}
+              onChange={(checked) => setParseI18n(checked)}
+              checkedChildren={t('storybook.stories.workbenchDemo.section.source.parseI18n')}
+              unCheckedChildren={t('storybook.stories.workbenchDemo.section.source.parseI18n')}
+            />
           }
-          right={<CodePreview title={t('storybook.stories.workbenchDemo.preview.codeSample')} code={codeSample} />}
         />
       </StorySection>
 
@@ -619,7 +625,6 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
           <Form.Item name="title" label={t('storybook.stories.workbenchDemo.form.title')} rules={[{ required: true }]}>
             <Input placeholder={t('storybook.stories.workbenchDemo.form.titlePlaceholder')} />
           </Form.Item>
-
           <TwoColumn
             left={
               <Space orientation="vertical" size={12} style={{ width: '100%' }}>
@@ -704,6 +709,14 @@ const statusMeta = statusEnum.raw('blocked'); // color / badge / hint
       </Modal>
     </StoryPage>
   );
+}
+
+function i18nReplacer(key: string, value: unknown) {
+  if (typeof value === 'string' && /^storybook\.enums\./.test(value)) {
+    // Replace this with your actual i18n logic
+    return storyT(value);
+  }
+  return value;
 }
 
 export const Playground: Story = {

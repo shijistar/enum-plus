@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createInstance, type i18n } from 'i18next';
 import { getGlobalValueFromUrl } from '../utils/global';
 import enUS from './langs/en-US.json';
@@ -31,8 +31,19 @@ export const storyT: i18n['t'] = ((...args) => {
 
 export function useStoryLocale() {
   const globalLocale = getGlobalValueFromUrl('locale');
+  const [lang, setLang] = useState<string>(globalLocale === 'zh-CN' ? 'zh-CN' : 'en-US');
 
-  return globalLocale === 'zh-CN' ? 'zh-CN' : 'en-US';
+  useEffect(() => {
+    const handleLanguage = (nextLanguage: string) => {
+      setLang(nextLanguage);
+    };
+    storyI18n.on('languageChanged', handleLanguage);
+    return () => {
+      storyI18n.off('languageChanged', handleLanguage);
+    };
+  }, [globalLocale]);
+
+  return lang;
 }
 
 export function useStoryT() {
@@ -52,5 +63,9 @@ export function useStoryT() {
     [locale],
   );
 }
+
+export const changeLanguage = (lng: string) => {
+  storyI18n.changeLanguage(lng);
+};
 
 export default storyI18n;

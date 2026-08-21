@@ -4,14 +4,16 @@ import { type DocsContainerProps } from '@storybook/addon-docs/blocks';
 import type { Preview, ReactRenderer } from '@storybook/react-vite';
 import antdPlugin from '../packages/plugin-antd/src';
 import 'antd/dist/reset.css';
-import { reactI18nextPlugin } from '../packages/plugin-react/src';
+import { i18nextPlugin } from '../packages/plugin-react/src';
 import { Enum } from '../src';
 import useStorybookDecorator from './components/useStorybookDecorator';
-import { storyT } from './locales';
+import storyI18n, { storyT } from './locales';
 import { ensureStoryI18n } from './stories/shared/i18n';
 import './story-styles.css';
 
-Enum.install(reactI18nextPlugin as unknown as Parameters<typeof Enum.install>[0]);
+Enum.install(i18nextPlugin as unknown as Parameters<typeof Enum.install>[0], {
+  instance: storyI18n,
+});
 Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
 ensureStoryI18n();
 
