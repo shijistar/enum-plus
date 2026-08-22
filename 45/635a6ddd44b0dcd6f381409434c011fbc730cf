@@ -1,0 +1,20 @@
+.storybook/stories/32-CoreLocalization.stories.tsx
+  h_99cad05bea77d1 122
+.storybook/locales/langs/zh-CN.json
+  h_99cad05bea77d1 205,209
+.storybook/locales/langs/en-US.json
+  h_99cad05bea77d1 206,209-210
+.storybook/stories/31-CoreApi.stories.tsx
+  h_99cad05bea77d1 198,209
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "45635a6ddd44b0dcd6f381409434c011fbc730cf",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
