@@ -195,6 +195,7 @@ function ApiExplorer() {
         <TwoColumn
           left={
             <JsonPreview
+              forceEnumText
               title={t('storybook.stories.CoreApi.card.toList')}
               value={workflowStatusEnum.toList({
                 valueField: 'id',
@@ -205,6 +206,7 @@ function ApiExplorer() {
           }
           right={
             <JsonPreview
+              forceEnumText
               title={t('storybook.stories.CoreApi.card.toMap')}
               value={workflowStatusEnum.toMap({
                 keySelector: 'key',

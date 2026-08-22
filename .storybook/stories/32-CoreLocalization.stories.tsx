@@ -45,10 +45,6 @@ function LocalizationDemo() {
   const storyLocale = useStoryLocale();
   const [locale, setLocale] = useState<'zh-CN' | 'en-US'>(storyLocale);
 
-  useEffect(() => {
-    setLocale(storyLocale);
-  }, [storyLocale]);
-
   const dictionary: Record<'zh-CN' | 'en-US', Record<string, string>> = {
     'zh-CN': {
       'enums.status.enumName': '发布状态',
@@ -123,6 +119,7 @@ const dictionary = {
   },
 };
 
+// ${t('storybook.stories.CorePatterns.localization.registration.keyPoint')}
 Enum.localize = (key: string) => dictionary[locale][key] ?? key;`}
         />
       </StorySection>
