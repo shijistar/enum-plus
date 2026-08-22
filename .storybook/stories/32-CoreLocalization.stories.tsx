@@ -211,15 +211,6 @@ const flatResourcesEn: Record<string, string> = {
   'storybook.enums.OrderStatus.Draft': 'Draft',
   'storybook.enums.OrderStatus.Review': 'In Review',
   'storybook.enums.OrderStatus.Published': 'Published',
-  'storybook.enums.Priority': 'Priority',
-  'storybook.enums.Priority.Low': 'Low',
-  'storybook.enums.Priority.Medium': 'Medium',
-  'storybook.enums.Priority.High': 'High',
-  'storybook.enums.Priority.Critical': 'Critical',
-  'storybook.enums.Channel': 'Channel',
-  'storybook.enums.Channel.Web': 'Web',
-  'storybook.enums.Channel.Mobile': 'Mobile',
-  'storybook.enums.Channel.Api': 'API',
 };
 
 const flatResourcesZh: Record<string, string> = {
@@ -227,15 +218,6 @@ const flatResourcesZh: Record<string, string> = {
   'storybook.enums.OrderStatus.Draft': '草稿',
   'storybook.enums.OrderStatus.Review': '审核中',
   'storybook.enums.OrderStatus.Published': '已发布',
-  'storybook.enums.Priority': '优先级',
-  'storybook.enums.Priority.Low': '低',
-  'storybook.enums.Priority.Medium': '中',
-  'storybook.enums.Priority.High': '高',
-  'storybook.enums.Priority.Critical': '严重',
-  'storybook.enums.Channel': '渠道',
-  'storybook.enums.Channel.Web': '网页',
-  'storybook.enums.Channel.Mobile': '移动端',
-  'storybook.enums.Channel.Api': 'API',
 };
 
 const fieldTitleEn: Record<string, string> = {
@@ -266,19 +248,6 @@ const nestedResourcesEn = {
         Review: { title: 'In Review' },
         Published: { title: 'Published' },
       },
-      Priority: {
-        title: 'Priority',
-        Low: { title: 'Low' },
-        Medium: { title: 'Medium' },
-        High: { title: 'High' },
-        Critical: { title: 'Critical' },
-      },
-      Channel: {
-        title: 'Channel',
-        Web: { title: 'Web' },
-        Mobile: { title: 'Mobile' },
-        Api: { title: 'API' },
-      },
     },
   },
 };
@@ -291,19 +260,6 @@ const nestedResourcesZh = {
         Draft: { title: '草稿' },
         Review: { title: '审核中' },
         Published: { title: '已发布' },
-      },
-      Priority: {
-        title: '优先级',
-        Low: { title: '低' },
-        Medium: { title: '中' },
-        High: { title: '高' },
-        Critical: { title: '严重' },
-      },
-      Channel: {
-        title: '渠道',
-        Web: { title: '网页' },
-        Mobile: { title: '移动端' },
-        Api: { title: 'API' },
       },
     },
   },
@@ -380,14 +336,6 @@ const globalConfigCode = {
 const minimalInitCode = `const OrderStatusEnum = Enum(
   { Draft: 1, Review: 2, Published: 3 },
   { name: 'OrderStatus' },
-);
-const PriorityEnum = Enum(
-  { Low: 1, Medium: 2, High: 3, Critical: 4 },
-  { name: 'Priority' },
-);
-const ChannelEnum = Enum(
-  { Web: 1, Mobile: 2, Api: 3 },
-  { name: 'Channel' },
 );`;
 
 const legacyCode = `// Without global templates: every enum repeats labels and prefixes
@@ -458,12 +406,6 @@ function TemplatesDemo() {
     () => Enum({ Draft: 1, Review: 2, Published: 3 }, { name: 'OrderStatus' }),
     [mode, readyVersion],
   );
-  const priority = useMemo(
-    () => Enum({ Low: 1, Medium: 2, High: 3, Critical: 4 }, { name: 'Priority' }),
-    [mode, readyVersion],
-  );
-  const channel = useMemo(() => Enum({ Web: 1, Mobile: 2, Api: 3 }, { name: 'Channel' }), [mode, readyVersion]);
-
   return (
     <StoryPage
       title={t('storybook.stories.CorePatterns.templates.page.title')}
@@ -543,14 +485,8 @@ function TemplatesDemo() {
         }
       >
         <Row gutter={[16, 16]}>
-          <Col xs={24} md={12} lg={8}>
+          <Col span={24}>
             <EnumDemoCard fullHeight enumInstance={orderStatus} demoT={demoT} />
-          </Col>
-          <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard fullHeight enumInstance={priority} demoT={demoT} />
-          </Col>
-          <Col xs={24} md={12} lg={8}>
-            <EnumDemoCard fullHeight enumInstance={channel} demoT={demoT} />
           </Col>
         </Row>
       </StorySection>
@@ -615,7 +551,7 @@ function EnumDemoCard(props: { enumInstance: AnyEnum; demoT: i18n['t']; fullHeig
         />
         <Select
           value={selectedValue as never}
-          style={{ width: '100%' }}
+          style={{ width: 280 }}
           options={enumInstance.toList().map((item) => ({ value: item.value, label: item.label }))}
           onChange={(value) => setSelectedValue(value)}
         />

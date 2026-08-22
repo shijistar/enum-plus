@@ -362,11 +362,11 @@ function WorkbenchDemoBody() {
       description={
         <>
           <div>
-            {t('storybook.stories.workbenchDemo.metaDescription')}
+            {t('storybook.stories.workbenchDemo.metaDescription')}{' '}
             {t('storybook.stories.workbenchDemo.section.workspace.description')}
           </div>
           <div>
-            {t('storybook.stories.workbenchDemo.page.description')}
+            {t('storybook.stories.workbenchDemo.page.description') + ' '}
             {t('storybook.stories.workbenchDemo.page.showCode')}
           </div>
         </>

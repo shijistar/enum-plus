@@ -31,10 +31,10 @@ export const storyT: i18n['t'] = ((...args) => {
 
 export function useStoryLocale() {
   const globalLocale = getGlobalValueFromUrl('locale');
-  const [lang, setLang] = useState<string>(globalLocale === 'zh-CN' ? 'zh-CN' : 'en-US');
+  const [lang, setLang] = useState<'zh-CN' | 'en-US'>(globalLocale === 'zh-CN' ? 'zh-CN' : 'en-US');
 
   useEffect(() => {
-    const handleLanguage = (nextLanguage: string) => {
+    const handleLanguage = (nextLanguage: 'zh-CN' | 'en-US') => {
       setLang(nextLanguage);
     };
     storyI18n.on('languageChanged', handleLanguage);
