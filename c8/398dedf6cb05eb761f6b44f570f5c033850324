@@ -1,0 +1,18 @@
+.storybook/stories/10-WorkbenchDemo.stories.tsx
+  h_99cad05bea77d1 365,369
+.storybook/locales/index.ts
+  h_99cad05bea77d1 34,37
+.storybook/stories/32-CoreLocalization.stories.tsx
+  h_99cad05bea77d1 488,554
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "c8398dedf6cb05eb761f6b44f570f5c033850324",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
