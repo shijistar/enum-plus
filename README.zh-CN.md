@@ -102,15 +102,17 @@ const StatusEnum = Enum({
   Published: { value: 3, label: '已发布', color: 'success' },
 });
 
+StatusEnum.Draft; // 1
 StatusEnum.Review; // 2
+StatusEnum.Published; // 3
 StatusEnum.label(2); // '审核中'
 StatusEnum.has(2); // true
 StatusEnum.keys; // ['Draft', 'Review', 'Published']
 StatusEnum.values; // [1, 2, 3]
 StatusEnum.labels; // ['草稿', '审核中', '已发布']
 StatusEnum.items; // [{ key: 'Draft', value: 1, label: '草稿', color: 'default' }, ...]
-StatusEnum.named.Draft; // { key: 'Draft', value: 1, label: '草稿', color: 'default' }
 StatusEnum.item(1); // { key: 'Draft', value: 1, label: '草稿', color: 'default' }
+StatusEnum.named.Draft; // { key: 'Draft', value: 1, label: '草稿', color: 'default' }
 StatusEnum.meta; // { color: [ 'default', 'processing', 'success' ] }
 StatusEnum.findBy('color', 'success'); // { key: 'Published', value: 3, label: '已发布', color: 'success' }
 StatusEnum.toList({ valueField: 'id', labelField: 'name' }); // [{ id: 1, name: '草稿' }, ...]

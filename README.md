@@ -103,15 +103,17 @@ const StatusEnum = Enum({
   Published: { value: 3, label: 'Published', color: 'success' },
 });
 
+StatusEnum.Draft; // 1
 StatusEnum.Review; // 2
+StatusEnum.Published; // 3
 StatusEnum.label(2); // 'In Review'
 StatusEnum.has(2); // true
 StatusEnum.keys; // ['Draft', 'Review', 'Published']
 StatusEnum.values; // [1, 2, 3]
 StatusEnum.labels; // ['Draft', 'In Review', 'Published']
 StatusEnum.items; // [{ key: 'Draft', value: 1, label: 'Draft', color: 'default' }, ...]
-StatusEnum.named.Draft; // { key: 'Draft', value: 1, label: 'Draft', color: 'default' }
 StatusEnum.item(1); // { key: 'Draft', value: 1, label: 'Draft', color: 'default' }
+StatusEnum.named.Draft; // { key: 'Draft', value: 1, label: 'Draft', color: 'default' }
 StatusEnum.meta; // { color: [ 'default', 'processing', 'success' ] }
 StatusEnum.findBy('color', 'success'); // { key: 'Published', value: 3, label: 'Published', color: 'success' }
 StatusEnum.toList({ valueField: 'id', labelField: 'name' }); // [{ id: 1, name: 'Draft' }, ...]
