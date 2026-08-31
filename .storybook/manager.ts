@@ -6,8 +6,7 @@ import storyTitles from './stories/titles.json';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
 import './global-styles.css';
-
-/** - todo: FullDemo继续优化，重点说明页面都是由枚举驱动，底部展示一下几个枚举的代码；切换语言改成下拉框，挪到下面的卡片中去； */
+import { STORIES_EXPAND_ALL, STORY_FINISHED } from 'storybook/internal/core-events';
 
 const globalTheme = getGlobalValueFromUrl('theme');
 const globalLocale = getGlobalValueFromUrl('locale');
@@ -45,6 +44,13 @@ addons.setConfig({
 });
 monitorTitleChanges();
 applyCustomTitleSuffix();
+
+addons.register('user/expand-all', () => {
+  const channel = addons.getChannel();
+  channel.once(STORY_FINISHED, () => {
+    setTimeout(() => channel.emit(STORIES_EXPAND_ALL), 0);
+  });
+});
 
 function createManagerTheme(theme: 'light' | 'dark') {
   if (theme === 'dark') {
