@@ -1,0 +1,14 @@
+.storybook/docs/99-Changelog.mdx
+  h_99cad05bea77d1 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "d1a214c238629a61a2b00695ec0a68e5cad8d8a9",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
