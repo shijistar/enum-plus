@@ -41,7 +41,7 @@ jobs:
         uses: actions/configure-pages@v6
 
       - name: Upload Storybook artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./storybook-static
 
