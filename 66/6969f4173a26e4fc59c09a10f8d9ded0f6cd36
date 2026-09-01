@@ -1,0 +1,20 @@
+.storybook/docs-source/Localization.zh-CN.md
+  h_99cad05bea77d1 33-34,37-55
+.storybook/docs-source/Localization.en-US.md
+  h_99cad05bea77d1 37-55
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 1350-1368
+README-FULL.md
+  h_99cad05bea77d1 1359-1377
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "666969f4173a26e4fc59c09a10f8d9ded0f6cd36",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
