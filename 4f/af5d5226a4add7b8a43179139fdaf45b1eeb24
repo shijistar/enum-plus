@@ -1,0 +1,32 @@
+.claude/helpers/graft-hooks.cjs
+  h_99cad05bea77d1 1-67
+.claude/helpers/graft-statusline.cjs
+  h_99cad05bea77d1 1-67
+.claude/settings.json
+  h_99cad05bea77d1 1-71
+.claude/skills/graft/SKILL.md
+  h_99cad05bea77d1 1-164
+.github/copilot-instructions.md
+  h_99cad05bea77d1 1-42
+.gitignore
+  h_99cad05bea77d1 27-29
+.ignore
+  h_99cad05bea77d1 1-5
+.mcp.json
+  h_99cad05bea77d1 1-8
+AGENTS.md
+  h_99cad05bea77d1 1-42
+opencode.json
+  h_99cad05bea77d1 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "4faf5d5226a4add7b8a43179139fdaf45b1eeb24",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
