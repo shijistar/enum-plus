@@ -1356,6 +1356,25 @@ WeekEnum.named.Monday.label; // Monday or 星期一, depending on the current lo
 WeekEnum.name; // Week or 周, depending on the current locale
 ```
 
+> If the plugin is not installed, the `label` and `name` fields of the enum will be treated as plain strings, and you must manually handle localization when rendering each item.
+>
+> ```js
+> const t = useT();
+> const WeekEnum = Enum(
+>   {
+>     Sunday: { value: 0, label: 'week.sunday' },
+>     Monday: { value: 1, label: 'week.monday' },
+>   },
+>   { name: 'weekDays.name' },
+> );
+> // You must manually handle localization when rendering each item, which can be very tedious
+> <div>
+>   {t(WeekEnum.name)}
+>   {t(WeekEnum.named.Monday.label)}
+>   {t(WeekEnum.label(1))}
+> </div>;
+> ```
+
 Custom metadata can be localized as well. Use `autoLocalizeMeta` when fields such as abbreviations, descriptions, or hints are also localization keys.
 
 > 🚫 **Deprecated**: `autoLocalizeMeta` will be removed in the next major version. Declaring the field in `templates.items` (see [templates](#️-templates)) achieves the same behavior.

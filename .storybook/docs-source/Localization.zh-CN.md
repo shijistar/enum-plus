@@ -29,10 +29,29 @@ const WeekEnum = Enum(
   },
   { name: 'weekDays.name' },
 );
-WeekEnum.label(1); // Monday 或 星期一，取决于当前语言环境
-WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环境
 WeekEnum.name; // Week 或 周，取决于当前语言环境
+WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环境
+WeekEnum.label(1); // Monday 或 星期一，取决于当前语言环境
 ```
+
+> 如果没有安装插件，枚举的 `label` 和 `name` 字段将被视为普通字符串，你必须在每一处渲染时手动处理本地化。
+>
+> ```js
+> const t = useT();
+> const WeekEnum = Enum(
+>   {
+>     Sunday: { value: 0, label: 'week.sunday' },
+>     Monday: { value: 1, label: 'week.monday' },
+>   },
+>   { name: 'weekDays.name' },
+> );
+> // 你必须在每一处渲染时手动处理本地化，这会非常繁琐
+> <div>
+>   {t(WeekEnum.name)}
+>   {t(WeekEnum.named.Monday.label)}
+>   {t(WeekEnum.label(1))}
+> </div>;
+> ```
 
 此插件还支持自定义 i18next 选项，甚至允许完全控制 localize 方法，请参考[插件文档](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next/README.zh-CN.md#插件选项)，了解更多详情。
 

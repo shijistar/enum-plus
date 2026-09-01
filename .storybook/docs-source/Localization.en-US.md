@@ -34,6 +34,25 @@ WeekEnum.named.Monday.label; // Monday or 星期一, depending on the current lo
 WeekEnum.name; // Week or 周, depending on the current locale
 ```
 
+> If the plugin is not installed, the `label` and `name` fields of the enum will be treated as plain strings, and you must manually handle localization when rendering each item.
+>
+> ```js
+> const t = useT();
+> const WeekEnum = Enum(
+>   {
+>     Sunday: { value: 0, label: 'week.sunday' },
+>     Monday: { value: 1, label: 'week.monday' },
+>   },
+>   { name: 'weekDays.name' },
+> );
+> // You must manually handle localization when rendering each item, which can be very tedious
+> <div>
+>   {t(WeekEnum.name)}
+>   {t(WeekEnum.named.Monday.label)}
+>   {t(WeekEnum.label(1))}
+> </div>;
+> ```
+
 This plugin also supports custom i18next options, and even allows complete control over the `localize` method. Please refer to the [plugin documentation](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next#plugin-options) for more details.
 
 If you need to automatically update the UI after switching languages, this requires the capabilities of frameworks like React, Vue, or Angular. Please consider using plugins such as [@enum-plus/plugin-react](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-react) or [@enum-plus/plugin-i18next-vue](https://github.com/shijistar/enum-plus/tree/main/packages/plugin-i18next-vue).

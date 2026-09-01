@@ -1347,6 +1347,25 @@ WeekEnum.named.Monday.label; // Monday 或 星期一，取决于当前语言环�
 WeekEnum.name; // Week 或 周，取决于当前语言环境
 ```
 
+> 如果没有安装插件，枚举的 `label` 和 `name` 字段将被视为普通字符串，你必须在每一处渲染时手动处理本地化。
+>
+> ```js
+> const t = useT();
+> const WeekEnum = Enum(
+>   {
+>     Sunday: { value: 0, label: 'week.sunday' },
+>     Monday: { value: 1, label: 'week.monday' },
+>   },
+>   { name: 'weekDays.name' },
+> );
+> // 你必须在每一处渲染时手动处理本地化，这会非常繁琐
+> <div>
+>   {t(WeekEnum.name)}
+>   {t(WeekEnum.named.Monday.label)}
+>   {t(WeekEnum.label(1))}
+> </div>;
+> ```
+
 自定义元数据字段也可以本地化。当缩写、描述、提示文案等字段也是本地化键值时，可以使用 `autoLocalizeMeta`。
 
 > 🚫 **已废弃（Deprecated）**：`autoLocalizeMeta` 将在下一大版本中移除。在 `templates.items` 中声明该字段（见 [templates](#️-templates)）可获得相同行为。
