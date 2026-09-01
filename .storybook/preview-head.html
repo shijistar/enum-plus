@@ -1,0 +1,26 @@
+<script>
+  (() => {
+    const globalTheme = getGlobalValueFromUrl('theme');
+    const isPreferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = (!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' : 'light';
+    if (theme === 'dark') {
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.backgroundColor = '#1e1e1e';
+    }
+
+    function getGlobalValueFromUrl(name) {
+      if (typeof window === 'undefined') return '';
+      const search = window.location.search;
+      if (!search) return '';
+      const params = new URLSearchParams(search.slice(1));
+      const globals = params.get('globals');
+      if (!globals) return '';
+      for (const g of globals.split(';')) {
+        if (g.startsWith(`${name}:`)) {
+          return g.slice(name.length + 1);
+        }
+      }
+      return '';
+    }
+  })();
+</script>

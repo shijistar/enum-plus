@@ -143,6 +143,59 @@ li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li) {
   --ep-scrollbar-track: rgb(15 23 42 / 40%);
 }
 
+html[data-theme='dark'] .sb-preparing-story,
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-previewBlock,
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-argstableBlock td {
+  /* stylelint-disable-next-line declaration-no-important */
+  background: linear-gradient(180deg, rgb(14 24 33 / 90%), rgb(11 20 28 / 94%)) !important;
+}
+
+html[data-theme='dark'] .sb-preparing-docs {
+  background:
+    radial-gradient(circle at top left, rgb(46 169 162 / 18%), transparent 28%),
+    radial-gradient(circle at top right, rgb(255 153 72 / 14%), transparent 22%),
+    /* stylelint-disable-next-line declaration-no-important */
+    linear-gradient(180deg, rgb(13 20 28 / 96%), rgb(8 13 19 / 98%)) !important;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-previewBlock {
+  border: 1px solid rgb(76 199 184 / 26%);
+}
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-previewBlock_header {
+  box-shadow: rgb(76 199 184 / 26%) 0 -1px 0 0 inset;
+}
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-argstableBlock-body {
+  box-shadow:
+    rgb(76 199 184 / 26%) 0 1px 3px 1px,
+    rgb(76 199 184 / 16%) 0 0 0 1px;
+}
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-argstableBlock-body tr:not(:first-child) {
+  border-color: rgb(76 199 184 / 26%);
+}
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-argstableBlock th span,
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-argstableBlock td span,
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-argstableBlock-body button {
+  background-color: rgb(76 199 184 / 14%);
+}
+/* stylelint-disable-next-line selector-class-pattern */
+html[data-theme='dark'] .sb-previewBlock_icon {
+  background-color: #3dd6c2;
+}
+/* stylelint-disable-next-line rule-empty-line-before */
+html[data-theme='dark'] .sb-loader {
+  border-color: rgb(76 199 184 / 26%);
+  border-top-color: #3dd6c2;
+}
+
 .enum-story-shell * {
   scrollbar-width: thin;
   scrollbar-color: var(--ep-scrollbar-thumb) var(--ep-scrollbar-track);
