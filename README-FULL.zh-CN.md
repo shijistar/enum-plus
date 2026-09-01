@@ -1349,7 +1349,7 @@ WeekEnum.name; // Week 或 周，取决于当前语言环境
 
 > 如果没有安装插件，枚举的 `label` 和 `name` 字段将被视为普通字符串，你必须在每一处渲染时手动处理本地化。
 >
-> ```js
+> ```tsx
 > const t = useT();
 > const WeekEnum = Enum(
 >   {

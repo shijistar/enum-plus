@@ -1358,7 +1358,7 @@ WeekEnum.name; // Week or 周, depending on the current locale
 
 > If the plugin is not installed, the `label` and `name` fields of the enum will be treated as plain strings, and you must manually handle localization when rendering each item.
 >
-> ```js
+> ```tsx
 > const t = useT();
 > const WeekEnum = Enum(
 >   {
