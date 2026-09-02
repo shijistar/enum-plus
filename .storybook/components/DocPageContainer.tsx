@@ -15,12 +15,12 @@ function DocPageContainer(props: PropsWithChildren<DocsContainerProps<ReactRende
   const localeKey = props.context.store?.userGlobals.globals.locale;
   // @ts-expect-error: because store is an internal api
   const themeName = props.context.store?.userGlobals.globals.theme;
+  if (!currentTheme) {
+    currentTheme = themeName;
+  }
 
   // Reload the page if the theme changes.
   useEffect(() => {
-    if (!currentTheme) {
-      currentTheme = themeName;
-    }
     if (themeName !== currentTheme) {
       currentTheme = themeName;
       (window.top ?? window.parent ?? window).location.reload();
