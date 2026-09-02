@@ -1,0 +1,20 @@
+.storybook/docs-source/Introduce.zh-CN.md
+  h_99cad05bea77d1 100-102
+.storybook/preview-head.html
+  h_99cad05bea77d1 9-12
+.storybook/docs-source/Introduce.en-US.md
+  h_99cad05bea77d1 98-100
+.storybook/components/DocPageContainer.tsx
+  h_99cad05bea77d1 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "b506e5aef35e876a09ff5a529fea17927e99427c",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
