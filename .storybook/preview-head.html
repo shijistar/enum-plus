@@ -6,6 +6,9 @@
   const theme = (!globalTheme && isPreferDark) || globalTheme === 'dark' ? 'dark' : 'light';
   if (theme === 'dark') {
     document.documentElement.dataset.theme = theme;
-    document.documentElement.style.backgroundColor = '#1e1e1e';
+    document.documentElement.style.background = `
+      radial-gradient(circle at top left, rgb(46 169 162 / 18%), transparent 28%),
+      radial-gradient(circle at top right, rgb(255 153 72 / 14%), transparent 22%),
+      linear-gradient(180deg, rgb(13 20 28 / 96%), rgb(8 13 19 / 98%))`;
   }
 </script>

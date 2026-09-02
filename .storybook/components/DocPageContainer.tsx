@@ -15,7 +15,7 @@ function DocPageContainer(props: PropsWithChildren<DocsContainerProps<ReactRende
   const localeKey = props.context.store?.userGlobals.globals.locale;
   // @ts-expect-error: because store is an internal api
   const themeName = props.context.store?.userGlobals.globals.theme;
-  if (!currentTheme) {
+  if (currentTheme === undefined) {
     currentTheme = themeName;
   }
 
