@@ -1,12 +1,12 @@
 import type { API_ComponentEntry } from 'storybook/internal/types';
 import { addons } from 'storybook/manager-api';
 import { create } from 'storybook/theming';
+import { STORIES_EXPAND_ALL, STORY_FINISHED } from 'storybook/internal/core-events';
 import docTitles from './docs/titles.json';
 import storyTitles from './stories/titles.json';
 import { getGlobalValueFromUrl } from './utils/global';
 import { dark, light } from './utils/themes';
 import './global-styles.css';
-import { STORIES_EXPAND_ALL, STORY_FINISHED } from 'storybook/internal/core-events';
 
 const globalTheme = getGlobalValueFromUrl('theme');
 const globalLocale = getGlobalValueFromUrl('locale');
@@ -48,7 +48,7 @@ applyCustomTitleSuffix();
 addons.register('user/expand-all', () => {
   const channel = addons.getChannel();
   channel.once(STORY_FINISHED, () => {
-    setTimeout(() => channel.emit(STORIES_EXPAND_ALL), 0);
+    channel.emit(STORIES_EXPAND_ALL);
   });
 });
 

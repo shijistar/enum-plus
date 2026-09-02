@@ -1,13 +1,14 @@
 import { type PropsWithChildren, useEffect } from 'react';
-import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/blocks';
+import type { DocsContainerProps } from '@storybook/addon-docs/blocks';
+import { DocsContainer } from '@storybook/addon-docs/blocks';
 import type { ReactRenderer } from '@storybook/react-vite';
-import storyI18n from '../locales';
+import storyI18n, { changeLanguage } from '../locales';
 import { getGlobalValueFromUrl } from '../utils/global';
 import { dark, getThemeKey, light } from '../utils/themes';
 
 let currentTheme: string | undefined = undefined;
 
-function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<ReactRenderer>>) {
+function DocPageContainer(props: PropsWithChildren<DocsContainerProps<ReactRenderer>>) {
   const globalTheme = getGlobalValueFromUrl('theme');
   const themeKey = getThemeKey(globalTheme);
   // @ts-expect-error: because store is an internal api
@@ -28,7 +29,7 @@ function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<Reac
 
   useEffect(() => {
     if (localeKey && storyI18n.language !== localeKey) {
-      void storyI18n.changeLanguage(localeKey).then(() => {
+      changeLanguage(localeKey).then(() => {
         (window.top ?? window.parent ?? window).location.reload();
       });
     }
@@ -41,4 +42,4 @@ function StorybookDocsContainer(props: PropsWithChildren<DocsContainerProps<Reac
   );
 }
 
-export default StorybookDocsContainer;
+export default DocPageContainer;

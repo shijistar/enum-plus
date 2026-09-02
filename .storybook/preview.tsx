@@ -6,7 +6,7 @@ import antdPlugin from '../packages/plugin-antd/src';
 import 'antd/dist/reset.css';
 import { i18nextPlugin } from '../packages/plugin-react/src';
 import { Enum } from '../src';
-import useStorybookDecorator from './components/useStorybookDecorator';
+import useStoryPageDecorator from './components/useStoryPageDecorator';
 import storyI18n, { storyT } from './locales';
 import { ensureStoryI18n } from './stories/shared/i18n';
 import './story-styles.css';
@@ -18,7 +18,7 @@ Enum.install(antdPlugin as unknown as Parameters<typeof Enum.install>[0]);
 ensureStoryI18n();
 
 // @ts-expect-error: because ThemedDocsContainer is loaded lazily
-const ThemedDocsContainer = lazy(() => import('./components/StorybookDocsContainer.js'));
+const ThemedDocsContainer = lazy(() => import('./components/DocPageContainer.js'));
 
 const preview: Preview = {
   initialGlobals: {
@@ -85,7 +85,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      return useStorybookDecorator(Story, context);
+      return useStoryPageDecorator(Story, context);
     },
   ],
 };

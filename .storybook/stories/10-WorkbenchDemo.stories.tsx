@@ -48,9 +48,9 @@ import { ENUM_OPTIONS } from '../../src';
 const { Text } = Typography;
 
 const meta: Meta = {
-  title: 'Demo/Full Demo',
+  title: 'Demo/Kanban',
   // @ts-expect-error: because titleCN is an extension field
-  titleCN: '演示/完整示例',
+  titleCN: 'Demo/看板',
   parameters: {
     docs: {
       description: {
@@ -720,9 +720,9 @@ function i18nReplacer(key: string, value: unknown) {
 }
 
 export const Playground: Story = {
-  name: 'Full Demo',
+  name: 'Kanban',
   // @ts-expect-error: because nameCN is an extension field
-  nameCN: '完整演示',
+  nameCN: '看板',
   render: function Render() {
     return <WorkbenchDemoBody />;
   },

@@ -65,7 +65,7 @@ export function useStoryT() {
 }
 
 export const changeLanguage = (lng: string) => {
-  storyI18n.changeLanguage(lng);
+  return storyI18n.changeLanguage(lng);
 };
 
 export default storyI18n;

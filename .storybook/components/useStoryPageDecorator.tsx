@@ -14,7 +14,7 @@ const AppLazy = lazy(() => import('antd/es/app'));
 // @ts-expect-error: because of lazy load ConfigProvider component
 const ConfigProviderLazy = lazy(() => import('antd/es/config-provider'));
 
-function useStorybookDecorator(Story: ComponentType, context: StoryContext<ReactRenderer>) {
+function useStoryPageDecorator(Story: ComponentType, context: StoryContext<ReactRenderer>) {
   const localeKey = context.globals.locale === 'zh-CN' ? 'zh-CN' : 'en-US';
   const locale = localeKey === 'zh-CN' ? zhCN : enUS;
   const themeKey = getThemeKey(context.globals.theme);
@@ -71,4 +71,4 @@ function useStorybookDecorator(Story: ComponentType, context: StoryContext<React
   );
 }
 
-export default useStorybookDecorator;
+export default useStoryPageDecorator;
