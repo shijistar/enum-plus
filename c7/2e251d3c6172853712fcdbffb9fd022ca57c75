@@ -1,0 +1,14 @@
+.storybook/components/DocPageContainer.tsx
+  h_99cad05bea77d1 18-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "c72e251d3c6172853712fcdbffb9fd022ca57c75",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
