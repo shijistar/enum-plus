@@ -1,0 +1,43 @@
+.storybook/locales/index.ts
+  h_99cad05bea77d1 68
+README.md
+  h_99cad05bea77d1 69
+.storybook/components/useStoryPageDecorator.tsx
+  h_99cad05bea77d1 1-74
+.storybook/preview-head.html
+  h_99cad05bea77d1 1-2,4-10
+.storybook/stories/10-WorkbenchDemo.stories.tsx
+  h_99cad05bea77d1 51,53,723,725
+.storybook/manager.ts
+  h_99cad05bea77d1 4
+  h_99cad05bea77d1 51
+public/scripts/global.js
+  h_99cad05bea77d1 1-19
+.storybook/docs-source/Support.en-US.md
+  h_99cad05bea77d1 10-11
+  h_99cad05bea77d1 9
+.storybook/components/DocPageContainer.tsx
+  h_99cad05bea77d1 1-45
+.storybook/preview.tsx
+  h_99cad05bea77d1 9,21,88
+public/scripts/global.d.ts
+  h_99cad05bea77d1 1-7
+.storybook/docs-source/Support.zh-CN.md
+  h_99cad05bea77d1 10-11
+  h_99cad05bea77d1 9
+.storybook/utils/global.ts
+  h_99cad05bea77d1 1
+README.zh-CN.md
+  h_99cad05bea77d1 39,68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "fd16cb13529ba0bc0ea3f2e59b27e1c0b1f62bbf",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
