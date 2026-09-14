@@ -1,0 +1,14 @@
+.prettierrc.mjs
+  h_99cad05bea77d1 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3ab2638a57ebfbd6e83e7ffb4023b31f244c2541",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
