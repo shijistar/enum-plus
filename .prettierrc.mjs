@@ -1,1 +1,1 @@
-export { default as prettier } from '@tiny-codes/code-style-all-in-one/prettier';
+export { default } from "@tiny-codes/code-style-all-in-one/prettier";
