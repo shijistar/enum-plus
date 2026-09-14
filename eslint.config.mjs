@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const typescript = require('@tiny-codes/code-style-all-in-one/eslint/typescript').default;
+import typescript from '@tiny-codes/code-style-all-in-one/eslint/typescript';
 
 const projectFiles = ['./tsconfig.eslint.json', './packages/*/tsconfig.json'];
 
