@@ -92,7 +92,7 @@ function WorkbenchDemoBody() {
   );
   const [form] = Form.useForm<TicketFormValues>();
   const watchedRegion = Form.useWatch('region', form) || 'cnNorth';
-  const ownerOptions = useMemo(() => TicketOwnerEnum.items, [TicketOwnerEnum]);
+  const ownerOptions = useMemo(() => TicketOwnerEnum.items, []);
   const selectedRecord = records.find((item) => item.id === selectedRowKey) ?? records[0];
 
   const filteredRecords = useMemo(() => {
@@ -127,17 +127,7 @@ function WorkbenchDemoBody() {
       ['createdAt'],
       ['desc'],
     );
-  }, [
-    channelFilter,
-    TicketChannelEnum,
-    TicketOwnerEnum,
-    TicketPriorityEnum,
-    records,
-    searchText,
-    TicketStatusEnum,
-    statusFilter,
-    tableMode,
-  ]);
+  }, [channelFilter, records, searchText, statusFilter, tableMode]);
 
   const kpis = useMemo(() => {
     const openCount = records.filter((item) => item.status !== 'resolved').length;

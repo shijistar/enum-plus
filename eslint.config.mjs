@@ -1,4 +1,4 @@
-import typescript from '@tiny-codes/code-style-all-in-one/eslint/typescript';
+import recommended from '@tiny-codes/code-style-all-in-one/eslint/react-easy-recommended';
 
 const projectFiles = ['./tsconfig.eslint.json', './packages/*/tsconfig.json'];
 
@@ -22,7 +22,7 @@ export default [
       '*.vue',
     ],
   },
-  ...typescript.map((config) => {
+  ...recommended.map((config) => {
     return {
       ...config,
       languageOptions: {

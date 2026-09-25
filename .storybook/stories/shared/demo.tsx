@@ -207,7 +207,7 @@ export function TagGroup(props: { items: ReactNode[] }) {
   return (
     <Space wrap>
       {props.items.map((item, index) => (
-        <Tag key={`${index}-${String(item)}`}>{item}</Tag>
+        <Tag key={`${String(item)}`}>{item}</Tag>
       ))}
     </Space>
   );

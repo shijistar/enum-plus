@@ -53,6 +53,8 @@ function VueI18nStory() {
           },
         },
       }),
+    // eslint-disable-next-line @eslint-community/eslint-comments/no-restricted-disable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -79,6 +81,8 @@ function VueI18nStory() {
         },
         { name: 'delivery.enumName' },
       ),
+    // eslint-disable-next-line @eslint-community/eslint-comments/no-restricted-disable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [renderTick],
   );
 
@@ -107,6 +111,7 @@ function VueI18nStory() {
             <Space wrap>
               <Button
                 onClick={() => {
+                  // eslint-disable-next-line react-hooks/immutability
                   instance.global.locale.value = 'zh-CN';
                   setRenderTick((value) => value + 1);
                 }}
@@ -115,6 +120,7 @@ function VueI18nStory() {
               </Button>
               <Button
                 onClick={() => {
+                  // eslint-disable-next-line react-hooks/immutability
                   instance.global.locale.value = 'en-US';
                   setRenderTick((value) => value + 1);
                 }}

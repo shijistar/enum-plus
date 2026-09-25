@@ -40,25 +40,24 @@ export const GlobalTemplates: Story = {
   },
 };
 
+const dictionary: Record<'zh-CN' | 'en-US', Record<string, string>> = {
+  'zh-CN': {
+    'enums.status.enumName': '发布状态',
+    'enums.status.draft': '草稿',
+    'enums.status.review': '审核中',
+    'enums.status.published': '已发布',
+  },
+  'en-US': {
+    'enums.status.enumName': 'Release Status',
+    'enums.status.draft': 'Draft',
+    'enums.status.review': 'In Review',
+    'enums.status.published': 'Published',
+  },
+};
 function LocalizationDemo() {
   const t = useStoryT();
   const storyLocale = useStoryLocale();
   const [locale, setLocale] = useState<'zh-CN' | 'en-US'>(storyLocale);
-
-  const dictionary: Record<'zh-CN' | 'en-US', Record<string, string>> = {
-    'zh-CN': {
-      'enums.status.enumName': '发布状态',
-      'enums.status.draft': '草稿',
-      'enums.status.review': '审核中',
-      'enums.status.published': '已发布',
-    },
-    'en-US': {
-      'enums.status.enumName': 'Release Status',
-      'enums.status.draft': 'Draft',
-      'enums.status.review': 'In Review',
-      'enums.status.published': 'Published',
-    },
-  };
 
   const statusEnum = useMemo(
     () =>
@@ -401,6 +400,8 @@ function TemplatesDemo() {
 
   const orderStatus = useMemo(
     () => Enum({ Draft: 1, Review: 2, Published: 3 }, { name: 'OrderStatus' }),
+    // eslint-disable-next-line @eslint-community/eslint-comments/no-restricted-disable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [mode, readyVersion],
   );
   return (

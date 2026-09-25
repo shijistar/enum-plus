@@ -162,7 +162,7 @@ const MergedEnum = Enum({ ...BaseEnum.raw(), ...TerminalEnum.raw() });
                   label: 'meta',
                   children: Object.keys(mergedEnum.meta).map((key) => {
                     const item = mergedEnum.meta[key as keyof typeof mergedEnum.meta];
-                    return <JsonPreview forceEnumText title={key} value={item} />;
+                    return <JsonPreview key={key} forceEnumText title={key} value={item} />;
                   }),
                 },
                 {
@@ -170,7 +170,7 @@ const MergedEnum = Enum({ ...BaseEnum.raw(), ...TerminalEnum.raw() });
                   label: 'named',
                   children: Object.keys(mergedEnum.named).map((key) => {
                     const item = mergedEnum.named[key as keyof typeof mergedEnum.named];
-                    return <JsonPreview forceEnumText title={key} value={item} />;
+                    return <JsonPreview key={key} forceEnumText title={key} value={item} />;
                   }),
                 },
               ]}

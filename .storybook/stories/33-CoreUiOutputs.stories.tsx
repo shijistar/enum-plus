@@ -101,7 +101,7 @@ function UiOutputsDemo() {
   );
 
   const selectOptions = useMemo(() => StatusEnum.toList(), [StatusEnum]);
-  const allOption = { value: 0, label: t('storybook.stories.CoreUiOutputs.allStatuses') };
+  const allOption = useMemo(() => ({ value: 0, label: t('storybook.stories.CoreUiOutputs.allStatuses') }), [t]);
   const checkboxValue = selectedStatus === 0 ? [] : [selectedStatus];
   const menuItems = useMemo(
     () => [allOption, ...StatusEnum.items].map((item) => ({ key: String(item.value), label: item.label })),
