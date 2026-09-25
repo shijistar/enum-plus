@@ -1,4 +1,5 @@
 import recommended from '@tiny-codes/code-style-all-in-one/eslint/react-easy-recommended';
+import { configs as storybookConfigs } from 'eslint-plugin-storybook';
 
 const projectFiles = ['./tsconfig.eslint.json', './packages/*/tsconfig.json'];
 
@@ -35,4 +36,5 @@ export default [
       },
     };
   }),
+  ...storybookConfigs['flat/recommended'],
 ];
