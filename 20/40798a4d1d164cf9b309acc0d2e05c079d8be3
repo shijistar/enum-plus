@@ -1,0 +1,37 @@
+package.json
+  h_99cad05bea77d1 216
+prettier.config.mjs
+  h_99cad05bea77d1 1
+eslint.config.mjs
+  h_99cad05bea77d1 1,25
+.storybook/stories/shared/demo.tsx
+  h_99cad05bea77d1 210
+.storybook/stories/55-PluginVueI18n.stories.tsx
+  h_99cad05bea77d1 56-57,84-85,114,123
+.storybook/stories/41-CoreEnumMerge.stories.tsx
+  h_99cad05bea77d1 165,173
+.storybook/stories/33-CoreUiOutputs.stories.tsx
+  h_99cad05bea77d1 104
+.storybook/stories/32-CoreLocalization.stories.tsx
+  h_99cad05bea77d1 403-404
+  h_99cad05bea77d1 43-56
+.storybook/stories/10-WorkbenchDemo.stories.tsx
+  h_99cad05bea77d1 95,130
+src/localize-interface.ts
+  h_99cad05bea77d1 4
+package-lock.json
+  h_99cad05bea77d1 25,260-301,4822-4858,7026-7028,7038,7044,7056-7057,7073-7074,7078,7095-7098,7101-7102,7105,7108,7111-7114,7118-7122,7125,7128,7293-7294,13705,22054
+src/enum-collection.ts
+  h_99cad05bea77d1 128
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2040798a4d1d164cf9b309acc0d2e05c079d8be3",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
