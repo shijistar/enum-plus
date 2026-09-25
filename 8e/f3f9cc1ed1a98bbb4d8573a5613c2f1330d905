@@ -1,0 +1,18 @@
+eslint.config.mjs
+  h_99cad05bea77d1 2,39
+package-lock.json
+  h_99cad05bea77d1 39,13622-13635
+package.json
+  h_99cad05bea77d1 230
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8ef3f9cc1ed1a98bbb4d8573a5613c2f1330d905",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
