@@ -355,7 +355,7 @@ const WeekEnum = Enum(enumInit, {
 
 ```ts
 const WeekEnum = Enum(
-  { Sunday: { value: 0 }, Monday: { value: 1 } },
+  { Sunday: 0, Monday: 1 },
   {
     name: 'week',
     // 实例模板：与全局设置可以并存，实例配置优先级更高。

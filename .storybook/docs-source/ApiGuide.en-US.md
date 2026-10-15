@@ -358,7 +358,7 @@ Template results take precedence over raw declared strings, but not functions: t
 
 ```ts
 const WeekEnum = Enum(
-  { Sunday: { value: 0 }, Monday: { value: 1 } },
+  { Sunday: 0, Monday: 1 },
   {
     name: 'week',
     // Instance templates: coexist with the global ones and take precedence.
