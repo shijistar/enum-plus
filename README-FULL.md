@@ -653,15 +653,6 @@ The available tokens are:
 Template results take precedence over raw declared strings, but not functions: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. The order of precedence is: raw functions > instance templates > global templates > raw strings. Global and instance templates can coexist: `Enum.config.templates` applies to all enums, while instance-level `templates` are merged field by field and take precedence over global templates with the same name.
 
 ```ts
-// Global templates: shared by every enum.
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-
 const WeekEnum = Enum(
   {
     Sunday: { value: 0 },
@@ -673,6 +664,7 @@ const WeekEnum = Enum(
     templates: {
       items: {
         abbr: 'enum.{name}.{key}.abbr',
+        description: ({ item, options }) => `enum.${options.name}.${item.key}.description`,
       },
     },
   },
@@ -868,7 +860,7 @@ Enum.config.templates = {
   name: 'enum.{name}.name',
   items: {
     label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
+    description: ({ item, options }) => `enum.${options.name}.${item.key}.description`,
   },
 };
 ```

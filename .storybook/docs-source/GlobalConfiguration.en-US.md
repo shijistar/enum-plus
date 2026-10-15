@@ -26,7 +26,7 @@ Enum.config.templates = {
   name: 'enum.{name}.name',
   items: {
     label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
+    description: ({ item, options }) => `enum.${options.name}.${item.key}.description`,
   },
 };
 ```
