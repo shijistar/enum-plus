@@ -1,0 +1,37 @@
+.storybook/docs-source/ApiGuide.en-US.md
+  h_99cad05bea77d1 367-368
+  s_202960d5fb8f73::t_bf5c7f45698f7f 366,369
+.storybook/docs-source/GlobalConfiguration.zh-CN.md
+  h_99cad05bea77d1 29
+README-FULL.zh-CN.md
+  h_99cad05bea77d1 658-659,855
+  h_99cad05bea77d1 657,660
+README-FULL.md
+  h_99cad05bea77d1 667,863
+.storybook/docs-source/GlobalConfiguration.en-US.md
+  h_99cad05bea77d1 29
+.storybook/docs-source/ApiGuide.zh-CN.md
+  h_99cad05bea77d1 364-365
+  h_99cad05bea77d1 363,366
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "065fdb65eec263424d3b5993283446796f7f3322",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_202960d5fb8f73": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "eb8a98fd-2c60-441c-a041-f86d214132be",
+        "model": "unknown"
+      },
+      "human_author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
