@@ -1,0 +1,18 @@
+src/auto-localize.ts
+  h_99cad05bea77d1 54,143-150
+src/enum-collection.ts
+  h_99cad05bea77d1 129-131
+src/enum-item.ts
+  h_99cad05bea77d1 241-244
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bb709461ce4755dbaee75a6b8c64e3e4b1d1f863",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
