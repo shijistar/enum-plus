@@ -1,0 +1,27 @@
+AGENTS.md
+  s_202960d5fb8f73::t_2a1ff3084a7276 1-7
+  h_99cad05bea77d1 31,50,70,90,111,213
+  s_202960d5fb8f73::t_b805e954804536 91
+  s_202960d5fb8f73::t_143c66e6ad7ebc 8-30,32-49,51-69,71-89,92-110,112-212,256-273
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7392d7cc22675f3363a43f96bc04242ab515b608",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_202960d5fb8f73": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "eb8a98fd-2c60-441c-a041-f86d214132be",
+        "model": "unknown"
+      },
+      "human_author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
