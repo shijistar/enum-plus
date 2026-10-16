@@ -238,7 +238,10 @@ export class EnumItemClass<
       return localeKey(this as any);
     }
 
-    if (template) {
+    if (template != null) {
+      if (template === false) {
+        return this[field as keyof this];
+      }
       localeKey = resolveLocalizeTemplate(template, {
         type: 'item',
         metaField: field,

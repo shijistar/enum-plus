@@ -51,7 +51,7 @@ export type LocalizeTemplate<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LP = any,
   OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
-> = string | ((context: LocalizeTemplateContext<TYPE, ET, T, K, V, LP, OPTIONS>) => string | undefined);
+> = string | boolean | ((context: LocalizeTemplateContext<TYPE, ET, T, K, V, LP, OPTIONS>) => string | undefined);
 
 export interface LocalizeTemplatesConfig<
   ET extends EnumInit<K, V>,
@@ -139,6 +139,14 @@ export function resolveLocalizeTemplate<
 ): string | undefined {
   if (typeof template === 'function') {
     return template(context);
+  }
+  if (typeof template === 'boolean') {
+    if (context.type === 'name') {
+      return context.options?.name as string | undefined;
+    } else {
+      const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
+      return itemContext.item[itemContext.metaField as keyof typeof itemContext.item] as string | undefined;
+    }
   }
   const name = context.options?.name;
   const values: Record<string, unknown> = {};
