@@ -341,11 +341,16 @@ const WeekEnum = Enum(enumInit, {
 
 ## ⚙️ templates
 
-`{ name?: string | Function, items?: Record<string, string | Function> }`
+`{ name?: string | boolean | Function, items?: Record<string, string | boolean | Function> }`
 
 Generates localization keys for the enum name, item labels, and item meta fields. This is the recommended unified way to set up localization, and it replaces the legacy `autoLabel`, `labelPrefix`, and `autoLocalizeMeta` options, which are deprecated and will be removed in the next major version.
 
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key, or booleans that control how the raw declared value is used:
+
+- `true` — use the raw declared value as the localization key and localize it. For `name`, this is `options.name`; for `items`, it is the declared meta field value.
+- `false` — keep the raw declared value as-is, without localization.
+
+When the raw value is not declared, the result is `undefined`, except for `items.label`, which falls back to the enum item key (localized for `true`, raw for `false`).
 
 The available tokens are:
 

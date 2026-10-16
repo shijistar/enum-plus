@@ -63,29 +63,32 @@ export interface LocalizeTemplatesConfig<
   OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
 > {
   /**
-   * - **EN:** Internationalization templates configuration for enum names. it supports both `string`
-   *   and `function` forms.
+   * - **EN:** Internationalization templates configuration for enum names. it supports `string`,
+   *   `function` and `boolean` forms.
    *
    *   - `string` - can use the `{name}` token which represents the enum's `options.name` value
    *   - `function` - receives the context `{ options }` and returns the localization key
+   *   - `boolean` - `true` localizes the `options.name` value, `false` keeps it as-is; when
+   *       `options.name` is not set, the result is `undefined`
    *
    * > ⚠️ Note: The `name` template takes precedence over the `options.name` string but is lower than
    * > the `options.name` function. The final priority order is: name function > instance template >
    * > global template > name string. To reference the value of `options.name` in the template, you
    * > need to explicitly use the `{name}` token.
    *
-   * - **CN:** 枚举名称的国际化模板配置，支持 `string` 和 `function` 两种配置形式。
+   * - **CN:** 枚举名称的国际化模板配置，支持 `string`、`function` 和 `boolean` 三种配置形式。
    *
    *   - `string` - 可以使用 `{name}` 占位符，表示枚举的 `options.name` 值
    *   - `function` - 接收上下文 `{ options }` 并返回本地化 key
+   *   - `boolean` - `true` 时本地化 `options.name` 的值，`false` 时原样保留；未设置 `options.name` 时结果为 `undefined`
    *
    * > ⚠️ 注意：`name` 模板的优先级高于 `options.name` 字符串，低于 `options.name` 函数。最终的优先级顺序为：name函数 > 实例模板 > 全局模板 >
    * > name字符串。如果要在模板中引用 `options.name` 的值，需要显式地使用 `{name}` 占位符。
    */
   name?: LocalizeTemplate<'name', ET, T, K, V, LP, OPTIONS>;
   /**
-   * - **EN:** Internationalization templates configuration for enum items. it supports both `string`
-   *   and `function` forms.
+   * - **EN:** Internationalization templates configuration for enum items. it supports `string`,
+   *   `function` and `boolean` forms.
    *
    *   - `string` - the localization template string, supporting multiple tokens:
    *
@@ -94,13 +97,16 @@ export interface LocalizeTemplatesConfig<
    *       - `{value}` - represents the enum item's `value` value
    *       - `{raw}` - represents the raw value of the meta field
    *   - `function` - receives the context `{ item, options }` and returns the localization key
+   *   - `boolean` - `true` localizes the raw meta field value, `false` keeps it as-is; when the raw
+   *       value is not declared, the result is `undefined`, except for `label`, which falls back to
+   *       the enum item key (localized for `true`, raw for `false`)
    *
    * > ⚠️ Note: The `items` template has a higher priority than the raw metadata string but a lower
    * > priority than the raw metadata function. The final priority order is: raw function > instance
    * > template > global template > raw string. To reference the original value of the metadata in the
    * > template, use the `{raw}` token.
    *
-   * - **CN:** 枚举项的国际化模板配置，支持 `string` 和 `function` 两种配置形式。
+   * - **CN:** 枚举项的国际化模板配置，支持 `string`、`function` 和 `boolean` 三种配置形式。
    *
    *   - `string` - 国际化模板字符串，支持使用多个占位符：
    *
@@ -109,6 +115,8 @@ export interface LocalizeTemplatesConfig<
    *       - `{value}` - 表示枚举项的 `value` 值
    *       - `{raw}` - 表示该meta字段的原始值
    *   - `function` - 接收上下文 `{ item, options }` 并返回本地化 key
+   *   - `boolean` - `true` 时本地化元数据字段的原始值，`false` 时原样保留；未声明原始值时结果为 `undefined`，但 `label` 会回退到枚举项的
+   *       key（`true` 时本地化，`false` 时原样返回）
    *
    * > ⚠️ 注意：`items` 模板的优先级高于元数据字符串，低于元数据函数。最终的优先级顺序为：原始函数 > 实例模板 > 全局模板 > 原始字符串。如果要在模板中引用元数据原始值，需要使用
    * > `{raw}` 占位符。
