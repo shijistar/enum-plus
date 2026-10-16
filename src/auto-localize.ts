@@ -145,7 +145,8 @@ export function resolveLocalizeTemplate<
       return context.options?.name as string | undefined;
     } else {
       const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
-      return itemContext.item[itemContext.metaField as keyof typeof itemContext.item] as string | undefined;
+      const raw = itemContext.item.raw as Record<string, unknown> | undefined;
+      return raw?.[itemContext.metaField] as string | undefined;
     }
   }
   const name = context.options?.name;
