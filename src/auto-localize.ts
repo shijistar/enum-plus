@@ -146,7 +146,11 @@ export function resolveLocalizeTemplate<
     } else {
       const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
       const raw = itemContext.item.raw as Record<string, unknown> | undefined;
-      return raw?.[itemContext.metaField] as string | undefined;
+      const rawValue = raw?.[itemContext.metaField] as string | undefined;
+      if (rawValue == null && itemContext.metaField === 'label') {
+        return itemContext.item.key as string | undefined;
+      }
+      return rawValue;
     }
   }
   const name = context.options?.name;

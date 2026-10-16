@@ -2215,9 +2215,10 @@ function assertWeekEnumBooleanTemplates(params: {
       locales['weekday.SaturdayAbbr'],
     ]);
   ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
-    engine.expect(weekEnum.label('Sunday')).toBe(undefined);
-    engine.expect(weekEnum.items[0].label).toBe(undefined);
-    engine.expect(weekEnum.named.Sunday.label).toBe(undefined);
+    // Falls back to the localized item key when the raw label is not declared
+    engine.expect(weekEnum.label('Sunday')).toBe('Sunday');
+    engine.expect(weekEnum.items[0].label).toBe('Sunday');
+    engine.expect(weekEnum.named.Sunday.label).toBe('Sunday');
     engine.expect(weekEnum.items[0].abbr).toBe(undefined);
     engine.expect(weekEnum.named.Sunday.abbr).toBe(undefined);
     engine.expect(weekEnum.meta.abbr).toEqual([]);
@@ -2249,9 +2250,10 @@ function assertWeekEnumBooleanTemplateRaws(params: {
       'weekday.SaturdayAbbr',
     ]);
   ([weekEnum2, weekEnum3, weekEnum4] as (typeof weekEnum1)[]).forEach((weekEnum) => {
-    engine.expect(weekEnum.label('Sunday')).toBe(undefined);
-    engine.expect(weekEnum.items[0].label).toBe(undefined);
-    engine.expect(weekEnum.named.Sunday.label).toBe(undefined);
+    // Falls back to the raw item key when the raw label is not declared
+    engine.expect(weekEnum.label('Sunday')).toBe('Sunday');
+    engine.expect(weekEnum.items[0].label).toBe('Sunday');
+    engine.expect(weekEnum.named.Sunday.label).toBe('Sunday');
     engine.expect(weekEnum.items[0].abbr).toBe(undefined);
     engine.expect(weekEnum.named.Sunday.abbr).toBe(undefined);
     engine.expect(weekEnum.meta.abbr).toEqual([]);
