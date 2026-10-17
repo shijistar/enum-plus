@@ -219,11 +219,10 @@
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.1.9",
-    "@vitest/browser": "^4.1.10",
-    "@vitest/browser-playwright": "^4.1.10",
-    "@vitest/coverage-istanbul": "^4.1.10",
+    "@vitest/browser": "^4.1.12",
+    "@vitest/browser-playwright": "^4.1.12",
+    "@vitest/coverage-istanbul": "^4.1.12",
     "antd": "^6.6.1",
-    "baseline-browser-mapping": "^2.10.13",
     "chromium-bidi": "^14.0.0",
     "cross-env": "^10.1.0",
     "esbuild": "^0.28.2",
@@ -249,7 +248,7 @@
     "tsx": "^4.23.12",
     "typescript": "^5.9.3",
     "vite": "^7.3.6",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.12"
   },
   "packageManager": "npm@11.12.1",
   "engines": {
