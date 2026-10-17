@@ -126,6 +126,9 @@ export class EnumCollectionClass<
     }
     const nameTemplate = (options?.templates?.name ?? internalConfig.templates?.name) as
       LocalizeTemplate<'name', T, T[K], K, V, LP, OPTIONS> | undefined;
+    if (nameTemplate === false) {
+      return options?.name;
+    }
     const localeKey =
       nameTemplate != null
         ? resolveLocalizeTemplate(nameTemplate, {

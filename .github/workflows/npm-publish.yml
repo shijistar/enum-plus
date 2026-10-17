@@ -55,6 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -224,6 +226,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6

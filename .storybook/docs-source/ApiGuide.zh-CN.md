@@ -338,11 +338,16 @@ const WeekEnum = Enum(enumInit, {
 
 ## ⚙️ templates
 
-`{ name?: string | Function, items?: Record<string, string | Function> }`
+`{ name?: string | boolean | Function, items?: Record<string, string | boolean | Function> }`
 
 为枚举名称、枚举项标签和枚举项元数据字段生成本地化 key。这是推荐的统一配置方式，取代已废弃的 `autoLabel`、`labelPrefix`、`autoLocalizeMeta` 三个旧属性（它们将在下一大版本中移除）。
 
-模板可以是字符串，使用 `{name}`、`{key}`、`{value}` 和 `{raw}` 占位符；也可以是函数，接收上下文 `{ type: 'name' | 'item', options, item?, metaField? }` 并返回本地化 key。
+模板可以是字符串，使用 `{name}`、`{key}`、`{value}` 和 `{raw}` 占位符；可以是函数，接收上下文 `{ type: 'name' | 'item', options, item?, metaField? }` 并返回本地化 key；也可以是布尔值，用于控制如何使用原始声明的值：
+
+- `true` — 将原始声明的值作为本地化 key 进行本地化：`name` 使用 `options.name`，`items` 使用各元数据字段声明的原始值。
+- `false` — 原样保留原始声明的值，不做本地化。
+
+未声明原始值时，结果为 `undefined`；但 `items.label` 例外：会回退到枚举项的 key（`true` 时本地化该 key，`false` 时原样返回）。
 
 可用占位符如下：
 
@@ -354,22 +359,16 @@ const WeekEnum = Enum(enumInit, {
 模板结果优先于原始声明的字符串，但不优先于函数：`name` 模板会覆盖 `options.name`，`items` 模板会覆盖枚举项元数据字段的原始值。原始声明的函数会直接返回最终的本地化结果，优先级最高，不会被模板覆盖。优先级顺序为：原始函数 > 实例模板 > 全局模板 > 原始字符串。全局设置与实例配置可以并存：`Enum.config.templates` 对所有枚举生效，实例级 `templates` 按字段逐项合并，且实例配置优先级更高，覆盖同名字段的全局模板。
 
 ```ts
-// 全局模板：所有枚举共享。
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-
 const WeekEnum = Enum(
-  { Sunday: { value: 0 }, Monday: { value: 1 } },
+  { Sunday: 0, Monday: 1 },
   {
     name: 'week',
     // 实例模板：与全局设置可以并存，实例配置优先级更高。
     templates: {
-      items: { abbr: 'enum.{name}.{key}.abbr' },
+      items: {
+        abbr: 'enum.{name}.{key}.abbr',
+        description: ({ item, options }) => `enum.${options.name}.${item.key}.description`,
+      },
     },
   },
 );
