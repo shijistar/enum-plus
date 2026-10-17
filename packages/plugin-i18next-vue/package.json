@@ -51,10 +51,10 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.1",
-    "@vue/test-utils": "^2.4.6",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.5.1",
     "i18next-vue": "^5.3.0",
-    "vue": "^3.5.22"
+    "vue": "^3.5.44"
   },
   "peerDependencies": {
     "enum-plus": "^3.3.0",

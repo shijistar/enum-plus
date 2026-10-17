@@ -52,10 +52,10 @@
     "test:modern": "vitest"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue": "^6.0.10",
     "@vue/devtools-api": "^6.6.4",
-    "@vue/test-utils": "^2.4.6",
-    "vue": "^3.5.22",
+    "@vue/test-utils": "^2.5.1",
+    "vue": "^3.5.44",
     "vue-i18n": "^9.14.5"
   },
   "peerDependencies": {
