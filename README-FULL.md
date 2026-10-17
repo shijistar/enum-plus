@@ -19,7 +19,7 @@
 [![npm latest version](https://img.shields.io/npm/v/enum-plus.svg?cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
 [![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/enum-plus?logo=javascript&label=Minzipped&color=44cc11&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus?activeTab=code)
 [![npm downloads](https://img.shields.io/npm/dm/enum-plus.svg?logo=rolldown&logoColor=fd7b24&label=Downloads&color=007ec6&cacheSeconds=86400)](https://www.npmjs.com/package/enum-plus)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shijistar/enum-plus)
+[![Ask DeepWiki](https://img.shields.io/badge/Ask%20DeepWiki-007ec6?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAPoAAAD6AG1e1JrAAACIUlEQVRYw+2XP2gUQRTGv7d3JhYWQawkIBaCVWzETos0gmAnVoKNTSoLK0E7EQQrC20sBVFBtLPQRgTBtBaKjYgIQUSxiJq7fT+LvCGPJZdNLt4dQj5Y3u7sznzfzLw/s9IO/icANiniCujEfWdsQgBLxAbsbraPZcmBfcAt4DNwKQsZNfEUsAB8YRV12LfA6ZHuedg7AO7ed/c+UBcbQhbiu+6wXIM6EnZWkszMJe2Ke0n6I2la0v51hFeSMLN6OwIK6jJwEBdUYb2MAxRSz6sY4geiahFgLe1Hwq6YWe3us8AN4FQQU4QM64SPY69Xyr43fADgNjAPXHb3peSsD4FDQ0VLEjAHvIhBPS6AHvA1bBO9JPAXcHFbIRtJ5yzwIQZ9CZwAusDJENIkLqsG8DpNyIZJwSUk9wLHgakcesC1JCCjiHm1kYDNOEjptCxpSVK/8f73OFLxPLAYM3oCzEX7MXf/lJbc/8kWpA4HgQdpYI9IWAbeh83whi84cHXL+58EPBoQhnmm94EzwE3gZ2p/Dhzdbhg+TaRr01x7ftb4/jBwFzjXrCvDpmLW9crVLNeR9CaapoGemb2TdCERW1tNaBNQ8jktwmozqwtpqRNtdWAjARYk39IS12ZWRX7vmJmA71nQZgi36gN7gCvAj5xc3P0jcH7kx7Ik5IC73wsh14GZsZySow5002l4Jr0b6+m4eSyvpAn8lEzsx2QHo8RfUrlN+uPq4ksAAAAASUVORK5CYII=&labelColor=0c0c0c&cacheSeconds=86400)](https://github.com/shijistar/enum-plus)
 [![code coverage](https://codecov.io/gh/shijistar/enum-plus/graph/badge.svg?token=JMCDJKLT0B)](https://app.codecov.io/gh/shijistar/enum-plus)
 ![GitHub License](https://img.shields.io/github/license/shijistar/enum-plus?label=License&color=ff8000&cacheSeconds=86400)
 
@@ -56,7 +56,7 @@ It is a lightweight, zero-dependency library, and it works with any front-end fr
 What other exciting features are there? Please continue to explore! Or you can check out this video first.
 
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.0/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.1/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </p>
@@ -124,9 +124,9 @@ yarn add enum-plus
 
 ```html
 <!-- Modern version, ES2020 compatible -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.3.0/umd/enum-plus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.3.1/umd/enum-plus.min.js"></script>
 <!-- Legacy version, ES2015 compatible -->
-<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.3.0/umd/enum-plus-legacy.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/enum-plus@v3.3.1/umd/enum-plus-legacy.min.js"></script>
 ```
 
 - The latest version:
@@ -140,12 +140,12 @@ yarn add enum-plus
 
 ⬇️ **Download**:
 
-- [enum-plus.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus.umd.min.js)
-- [enum-plus.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus.umd.zip) (Full package with sourcemap)
-- [enum-plus-legacy.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus-legacy.umd.min.js)
-- [enum-plus-legacy.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.3.0/enum-plus-legacy.umd.zip) (Full package with sourcemap)
+- [enum-plus.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.3.1/enum-plus.umd.min.js)
+- [enum-plus.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.3.1/enum-plus.umd.zip) (Full package with sourcemap)
+- [enum-plus-legacy.umd.min.js](https://github.com/shijistar/enum-plus/releases/download/v3.3.1/enum-plus-legacy.umd.min.js)
+- [enum-plus-legacy.umd.zip](https://github.com/shijistar/enum-plus/releases/download/v3.3.1/enum-plus-legacy.umd.zip) (Full package with sourcemap)
 
-> You can also download these files from the [GitHub Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.3.0).
+> You can also download these files from the [GitHub Releases](https://github.com/shijistar/enum-plus/releases/tag/v3.3.1).
 
 ## Enum Initialization
 
@@ -637,11 +637,16 @@ const WeekEnum = Enum(enumInit, {
 
 ### ⚙️ templates
 
-`{ name?: string | Function, items?: Record<string, string | Function> }`
+`{ name?: string | boolean | Function, items?: Record<string, string | boolean | Function> }`
 
 Generates localization keys for the enum name, item labels, and item meta fields. This is the recommended unified way to set up localization, and it replaces the legacy `autoLabel`, `labelPrefix`, and `autoLocalizeMeta` options, which are deprecated and will be removed in the next major version.
 
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key, or booleans that control how the raw declared value is used:
+
+- `true` — use the raw declared value as the localization key and localize it. For `name`, this is `options.name`; for `items`, it is the declared meta field value.
+- `false` — keep the raw declared value as-is, without localization.
+
+When the raw value is not declared, the result is `undefined`, except for `items.label`, which falls back to the enum item key (localized for `true`, raw for `false`).
 
 The available tokens are:
 
@@ -653,26 +658,15 @@ The available tokens are:
 Template results take precedence over raw declared strings, but not functions: the `name` template overrides `options.name`, and an `items` template overrides the item's raw meta field value. Raw declared functions return the final localization result directly, so they have the highest priority and are not overridden by templates. The order of precedence is: raw functions > instance templates > global templates > raw strings. Global and instance templates can coexist: `Enum.config.templates` applies to all enums, while instance-level `templates` are merged field by field and take precedence over global templates with the same name.
 
 ```ts
-// Global templates: shared by every enum.
-Enum.config.templates = {
-  name: 'enum.{name}.name',
-  items: {
-    label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
-  },
-};
-
 const WeekEnum = Enum(
-  {
-    Sunday: { value: 0 },
-    Monday: { value: 1 },
-  },
+  { Sunday: 0, Monday: 1 },
   {
     name: 'week',
     // Instance templates: coexist with the global ones and take precedence.
     templates: {
       items: {
         abbr: 'enum.{name}.{key}.abbr',
+        description: ({ item, options }) => `enum.${options.name}.${item.key}.description`,
       },
     },
   },
@@ -848,11 +842,16 @@ Enum.install(i18nextPlugin);
 
 ### templates
 
-`{ name?: string | Function, items?: Record<string, string | Function> }`
+`{ name?: string | boolean | Function, items?: Record<string, string | boolean | Function> }`
 
 `Enum.config.templates` is a global configuration option that defines localization templates for the enum `name` and item fields. It applies to every enum instance, and it is the recommended unified way to set up localization (replacing the legacy `Enum.config.autoLabel`, see below).
 
-Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, or functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key.
+Templates can be strings using the `{name}`, `{key}`, `{value}`, and `{raw}` tokens, functions that receive a context `{ type: 'name' | 'item', options, item?, metaField? }` and return a localization key, or booleans that control how the raw declared value is used:
+
+- `true` — use the raw declared value as the localization key and localize it. For `name`, this is `options.name`; for `items`, it is the declared meta field value.
+- `false` — keep the raw declared value as-is, without localization.
+
+When the raw value is not declared, the result is `undefined`, except for `items.label`, which falls back to the enum item key (localized for `true`, raw for `false`).
 
 The available tokens are:
 
@@ -868,7 +867,7 @@ Enum.config.templates = {
   name: 'enum.{name}.name',
   items: {
     label: 'enum.{name}.{key}.label',
-    description: 'enum.{name}.{key}.description',
+    description: ({ item, options }) => `enum.${options.name}.${item.key}.description`,
   },
 };
 ```

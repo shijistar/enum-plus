@@ -238,7 +238,14 @@ export class EnumItemClass<
       return localeKey(this as any);
     }
 
-    if (template) {
+    if (template != null) {
+      if (template === false) {
+        const rawValue = this.raw?.[field as never];
+        if (rawValue == null && field === 'label') {
+          return this.key;
+        }
+        return rawValue;
+      }
       localeKey = resolveLocalizeTemplate(template, {
         type: 'item',
         metaField: field,

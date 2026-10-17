@@ -2,6 +2,16 @@
 
 # enum-plus Changelog
 
+## 3.3.1
+
+2026-10-16
+
+### Features
+
+- ✨ Support boolean values in localization templates, for both `templates.name` and `templates.items`, at instance level and in the global `Enum.config.templates`:
+  - `true` — use the raw declared value as the localization key and localize it. For `templates.name`, this is `options.name`; for `templates.items`, it is the declared meta field value.
+  - `false` — keep the raw declared value as-is, without localization.
+
 ## 3.3.0
 
 2026-8-13
