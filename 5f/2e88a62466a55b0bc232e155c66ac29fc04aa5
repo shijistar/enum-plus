@@ -1,0 +1,33 @@
+src/auto-localize.ts
+  h_99cad05bea77d1 145,151,153,154,155-160,161-162,170-172,174,179-181,183
+  h_99cad05bea77d1 173,175-178,182
+src/enum-collection.ts
+  h_99cad05bea77d1 123,127,129,131-132,137,145
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1434-1608,1709,1731,2044,2068,2120-2148,2149-2153,2154-2163,2164-2165,2166-2184,2185-2186,2187-2190
+  h_99cad05bea77d1 1433,2028,2040,2042,2052,2064,2066
+src/enum-item.ts
+  h_99cad05bea77d1 242-246,273
+package.json
+  h_99cad05bea77d1 171
+.coderabbit.yaml
+  h_99cad05bea77d1 39
+tsconfig.eslint.json
+  h_99cad05bea77d1 20
+.gitignore
+  h_99cad05bea77d1 25-27
+AGENTS.md
+  h_99cad05bea77d1 110,121,202
+  h_99cad05bea77d1 30-42,109,111-120,122-123
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5f2e88a62466a55b0bc232e155c66ac29fc04aa5",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
