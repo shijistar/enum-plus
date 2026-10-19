@@ -2,6 +2,28 @@
 
 # enum-plus Changelog
 
+## 3.4.0
+
+2026-10-19
+
+### Features
+
+- ✨ Localization functions for enum names and item fields can now return `{ key: string }` to specify a resource key. The key is resolved through the configured localizer, while a plain string keeps its previous behavior as the final localized text. A reusable `ItemFieldFunction` type is available for extension authors.
+- ✨ Add `Enum.config.preserveEmptyMeta` (default `false`). When enabled, `null` and `undefined` values of declared meta fields are retained in `enum.meta` and `enum.items.meta` arrays instead of being filtered out.
+
+### Bug Fixes
+
+- 🐞 Fix TypeScript errors when some standard enum items omit `value` or `label` while other items declare them, by supporting loose standard item definitions. This makes it possible to mix explicit fields with template-driven labels and meta fields.
+
+### Tests & Quality
+
+- ✅ Add unit tests for resource-key function results, loose standard item inference, and `Enum.config.preserveEmptyMeta`.
+- ✅ Remove the legacy Playwright e2e suite and related dependencies; all tests now run through the Vitest and Jest matrix.
+
+### Chores / CI
+
+- 🔧 Simplify the `test-all` script to use the unified Vitest projects.
+
 ## 3.3.1
 
 2026-10-16
