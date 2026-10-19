@@ -172,7 +172,6 @@ export const WeekMetaOnlyConfig = Object.keys(StandardWeekConfig).reduce(
 );
 
 export function genSillyLocalizer(language: LangType, getLocales: getLocalesType) {
-  // should use function here to avoid closure. this is important for the e2e test cases.
   function sillyLocalize(
     content: (typeof neutral)[keyof typeof neutral] | (string & {}) | undefined,
   ): string | undefined {

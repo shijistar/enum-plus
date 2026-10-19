@@ -36,16 +36,12 @@ reviews:
         - Return types of toSelect / toMenu / toFilter / toValueMap (antd) or localize overrides (i18next).
         - Don't import internals from ../../src — plugins should only consume the public Enum API.
 
-    # Test files: Jest CJS + ESM dual config, plus Playwright e2e
+    # Test files: Jest CJS + ESM dual config
     - path: 'test/**'
       instructions: >
         Test suite — verify Jest coverage for both CJS (jest-cjs.config.js) and ESM (jest-esm.config.js), and also consider Vitest (vitest-node / vitest-browser engines) where applicable.
         Check for: edge cases on all 12 init formats, freeze immutability assertions,
         TypeScript version graceful degradation (types-legacy/).
-
-    - path: 'e2e/**'
-      instructions: >
-        Playwright e2e — check test stability (no flaky selectors), and that e2e covers plugin <-> framework integration.
 
     # TypeScript legacy compatibility
     # - path: 'types-legacy/**'

@@ -9,7 +9,6 @@
     "src",
     "scripts",
     "test",
-    "e2e",
     "tslib",
     "tses",
     "types-legacy",
@@ -18,16 +17,5 @@
     "*.ts",
     ".*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "packages",
-    "es",
-    "es-legacy",
-    "lib",
-    "tslib",
-    "tses",
-    "types-legacy",
-    "e2e/fixtures/scripts",
-    "e2e/test-results"
-  ]
+  "exclude": ["node_modules", "packages", "es", "es-legacy", "lib", "tslib", "tses", "types-legacy"]
 }

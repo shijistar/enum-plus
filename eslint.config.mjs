@@ -17,7 +17,6 @@ export default [
       'tslib/**',
       'tses/**',
       'public/**',
-      'e2e/fixtures/scripts',
       '.vscode/**',
       '*.md',
       '*.vue',

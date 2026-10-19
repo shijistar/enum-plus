@@ -9,8 +9,6 @@ test/utils/version.ts
 types-legacy/*/*.d.ts
 node_modules
 npm-debug.log
-e2e/fixtures/scripts
-e2e/test-results
 .codegraph/
 .storybook/docs/titles.json
 .storybook/stories/titles.json

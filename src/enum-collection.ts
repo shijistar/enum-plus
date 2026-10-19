@@ -45,7 +45,6 @@ export class EnumCollectionClass<
   implements InheritableEnumItems<T, K, V, LP, OPTIONS>
 {
   private readonly _options: EnumInitOptions<T, K, V, LP> | undefined;
-  // used for e2e serialization
   private readonly _ds!: EnumItemsArray<T, K, V, LP, OPTIONS>;
 
   constructor(init: T = {} as T, options?: EnumInitOptions<T, K, V, LP>) {
