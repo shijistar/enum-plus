@@ -240,7 +240,9 @@ export class EnumItemClass<
 
     if (template != null) {
       if (template === false) {
-        return this[field as keyof this];
+        // Return the raw value directly to avoid infinite recursion via the getter
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (this.raw as any)?.[field] as EnumItemLabel | undefined;
       }
       localeKey = resolveLocalizeTemplate(template, {
         type: 'item',

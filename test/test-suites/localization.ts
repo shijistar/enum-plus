@@ -1656,6 +1656,321 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
         engine.expect(weekEnumFuncName.name).toBe('Week Days');
       },
     );
+
+    // --- Boolean template tests ---
+    // Semantics: `false` disables templating and returns the raw declared value
+    // (unlocalized); `true` falls back to the raw value and still applies the
+    // configured localizer.
+
+    engine.test(
+      'name template false should return the raw options.name without localization',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          name: 'weekDay.name',
+          templates: { name: false },
+        });
+        return { weekEnum, enUS };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.name).toBe('weekDay.name');
+      },
+    );
+
+    engine.test(
+      'name template true should localize the raw options.name',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          name: 'weekDay.name',
+          templates: { name: true },
+        });
+        return { weekEnum, enUS };
+      },
+      ({ weekEnum, enUS }) => {
+        engine.expect(weekEnum.name).toBe(enUS['weekDay.name']);
+      },
+    );
+
+    engine.test(
+      'name template true should return undefined when options.name is not set',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const weekEnum = Enum(StandardWeekConfig, { templates: { name: true } });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.name).toBe(undefined);
+      },
+    );
+
+    engine.test(
+      'name template false should return undefined when options.name is not set',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const weekEnum = Enum(StandardWeekConfig, { templates: { name: false } });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.name).toBe(undefined);
+      },
+    );
+
+    engine.test(
+      'name template false should not be localized even without a localizer',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        Enum.localize = undefined!;
+        const weekEnum = Enum(StandardWeekConfig, {
+          name: 'weekDay.name',
+          templates: { name: false },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.name).toBe('weekDay.name');
+      },
+    );
+
+    engine.test(
+      'item template false should return the raw meta field value without localization',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          templates: { items: { abbr: false } },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe('weekday.SundayAbbr');
+        engine.expect(weekEnum.named.Sunday.abbr).toBe('weekday.SundayAbbr');
+        engine
+          .expect((weekEnum.meta as { abbr?: string[] }).abbr)
+          .toEqual([
+            'weekday.SundayAbbr',
+            'weekday.MondayAbbr',
+            'weekday.TuesdayAbbr',
+            'weekday.WednesdayAbbr',
+            'weekday.ThursdayAbbr',
+            'weekday.FridayAbbr',
+            'weekday.SaturdayAbbr',
+          ]);
+      },
+    );
+
+    engine.test(
+      'item template true should localize the raw meta field value',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          templates: { items: { abbr: true } },
+        });
+        return { weekEnum, enUS };
+      },
+      ({ weekEnum, enUS }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe(enUS['weekday.SundayAbbr']);
+        engine.expect(weekEnum.named.Sunday.abbr).toBe(enUS['weekday.SundayAbbr']);
+      },
+    );
+
+    engine.test(
+      'label template false should return the raw label without localization',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          templates: { items: { label: false } },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.items[0].label).toBe('weekday.Sunday');
+        engine.expect(weekEnum.named.Sunday.label).toBe('weekday.Sunday');
+        engine.expect(weekEnum.toList()[0]).toEqual({ value: 0, label: 'weekday.Sunday' });
+      },
+    );
+
+    engine.test(
+      'label template true should localize the raw label',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(StandardWeekConfig, {
+          templates: { items: { label: true } },
+        });
+        return { weekEnum, enUS };
+      },
+      ({ weekEnum, enUS }) => {
+        engine.expect(weekEnum.items[0].label).toBe(enUS['weekday.Sunday']);
+      },
+    );
+
+    engine.test(
+      'item template false should return undefined for a field absent from the raw item',
+      ({ EnumPlus: { Enum }, WeekConfig: { WeekValueOnlyConfig } }) => {
+        const weekEnum = Enum(WeekValueOnlyConfig, {
+          templates: { items: { abbr: false } },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe(undefined);
+      },
+    );
+
+    engine.test(
+      'item template false should still work together with autoLocalizeMeta',
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig } }) => {
+        const weekEnum = Enum(StandardWeekConfig, {
+          autoLocalizeMeta: ['abbr'],
+          templates: { items: { abbr: false } },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe('weekday.SundayAbbr');
+        engine.expect(weekEnum.named.Sunday.abbr).toBe('weekday.SundayAbbr');
+      },
+    );
+
+    engine.test(
+      'global boolean template should apply when the instance declares none',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { name: false, items: { abbr: false } };
+        const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+        return { weekEnum, Enum };
+      },
+      ({ weekEnum, Enum }) => {
+        engine.expect(weekEnum.name).toBe('weekDay.name');
+        engine.expect(weekEnum.items[0].abbr).toBe('weekday.SundayAbbr');
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'global boolean true template should localize',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { name: true, items: { abbr: true } };
+        const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+        return { weekEnum, Enum, enUS };
+      },
+      ({ weekEnum, Enum, enUS }) => {
+        engine.expect(weekEnum.name).toBe(enUS['weekDay.name']);
+        engine.expect(weekEnum.items[0].abbr).toBe(enUS['weekday.SundayAbbr']);
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'instance boolean template should override the global one',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { items: { abbr: 'weekday.{key}Abbr' } };
+        const weekEnum = Enum(StandardWeekConfig, {
+          templates: { items: { abbr: false } },
+        });
+        return { weekEnum, Enum };
+      },
+      ({ weekEnum, Enum }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe('weekday.SundayAbbr');
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'instance boolean true template should override a global boolean false template',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { items: { abbr: false } };
+        const weekEnum = Enum(StandardWeekConfig, {
+          templates: { items: { abbr: true } },
+        });
+        return { weekEnum, Enum, enUS };
+      },
+      ({ weekEnum, Enum, enUS }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe(enUS['weekday.SundayAbbr']);
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'global boolean name template should handle an instance without options',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { name: false };
+        const weekEnum = Enum(StandardWeekConfig);
+        return { weekEnum, Enum };
+      },
+      ({ weekEnum, Enum }) => {
+        engine.expect(weekEnum.name).toBe(undefined);
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'global boolean true name template should handle an instance without options',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { name: true };
+        const weekEnum = Enum(StandardWeekConfig);
+        return { weekEnum, Enum };
+      },
+      ({ weekEnum, Enum }) => {
+        engine.expect(weekEnum.name).toBe(undefined);
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'item template false should handle a raw item without the templated field',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { WeekCompactConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(WeekCompactConfig, {
+          templates: { items: { abbr: false } },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe(undefined);
+        engine.expect(weekEnum.named.Sunday.abbr).toBe(undefined);
+      },
+    );
+
+    engine.test(
+      'item template true should handle a raw item without the templated field',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { WeekCompactConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(WeekCompactConfig, {
+          templates: { items: { abbr: true } },
+        });
+        return { weekEnum };
+      },
+      ({ weekEnum }) => {
+        engine.expect(weekEnum.items[0].abbr).toBe(undefined);
+        engine.expect(weekEnum.named.Sunday.abbr).toBe(undefined);
+      },
+    );
   });
 
   function assertEnum(

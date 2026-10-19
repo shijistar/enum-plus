@@ -145,7 +145,10 @@ export function resolveLocalizeTemplate<
       return context.options?.name as string | undefined;
     } else {
       const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
-      return itemContext.item[itemContext.metaField as keyof typeof itemContext.item] as string | undefined;
+      // Read the raw declared value directly: going through the item getter would
+      // recurse back into this function (the getter itself resolves templates).
+      return (itemContext.item.raw as Record<string, unknown> | undefined)?.[itemContext.metaField] as
+        string | undefined;
     }
   }
   const name = context.options?.name;
