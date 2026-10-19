@@ -2,6 +2,7 @@ import type { LocalizeTemplateFields } from './auto-localize';
 import { getTemplateFields, isAutoLocalizeMetaField } from './auto-localize';
 import type { EnumItemInterface, EnumItemOptions } from './enum-item';
 import { EnumItemClass, metaKeys, protectedKeys } from './enum-item';
+import { internalConfig } from './global-config';
 import type {
   EnumInit,
   EnumItemInit,
@@ -123,7 +124,7 @@ export class EnumItemsArray<
             meta[metaKey] = [];
           }
           const metaValue = item[k as never];
-          if (metaValue != null) {
+          if (internalConfig.preserveEmptyMeta || metaValue != null) {
             meta[metaKey].push(metaValue);
           }
         });

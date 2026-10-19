@@ -136,6 +136,31 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
   );
 
   engine.test(
+    'should preserve empty metadata values when Enum.config.preserveEmptyMeta is enabled',
+    ({ EnumPlus: { Enum } }) => {
+      const createMetaEnum = () =>
+        Enum({
+          foo: { value: 1, label: 'foo', status: 'error' },
+          bar: { value: 2, label: 'bar', status: null },
+          baz: { value: 3, label: 'baz', status: undefined },
+          qux: { value: 4, label: 'qux', status: 'warning' },
+        });
+
+      Enum.config.preserveEmptyMeta = true;
+      const preservedEnum = createMetaEnum();
+      Enum.config.preserveEmptyMeta = false;
+      const filteredEnum = createMetaEnum();
+      Enum.config.preserveEmptyMeta = undefined;
+
+      return { preservedEnum, filteredEnum };
+    },
+    ({ preservedEnum, filteredEnum }) => {
+      engine.expect(preservedEnum.items.meta.status).toEqual(['error', null, undefined, 'warning']);
+      engine.expect(filteredEnum.items.meta.status).toEqual(['error', 'warning']);
+    },
+  );
+
+  engine.test(
     'should resolve enum labels by key or value with enum.items.label',
     ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, locales } }) => {
       const weekEnum = Enum(StandardWeekConfig);

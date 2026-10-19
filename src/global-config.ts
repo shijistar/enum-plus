@@ -29,6 +29,14 @@ export const internalConfig: {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   templates?: LocalizeTemplatesConfig<any, any, any, any, any, any>;
+  /**
+   * - **EN:** Whether to always preserve all meta information in the meta array, even if a enum item
+   *   has no value for that meta field
+   * - **CN:** meta数组中是否始终保留所有的元信息，即便某个枚举项的meta没有值
+   *
+   * @default false
+   */
+  preserveEmptyMeta?: boolean;
 } = {
   autoLabel: true,
 };
