@@ -1,0 +1,21 @@
+.coderabbit.yaml
+  h_99cad05bea77d1 39
+tsconfig.eslint.json
+  h_99cad05bea77d1 20
+.gitignore
+  h_99cad05bea77d1 25-27
+AGENTS.md
+  h_99cad05bea77d1 110,121,202
+  h_99cad05bea77d1 30-42,109,111-120,122-123
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0a66f1aabab194e48fd99dd400eb93c0ef93faa6",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+src/auto-localize.ts
+  h_99cad05bea77d1 154,161-162
+test/test-suites/localization.ts
+  h_99cad05bea77d1 2149-2153,2164-2165,2185-2186
+package.json
+  h_99cad05bea77d1 181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "da5e45fd0dab3038360edab7f8dd0f4eebaac172",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
