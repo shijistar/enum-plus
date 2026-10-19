@@ -1,0 +1,22 @@
+src/auto-localize.ts
+  h_99cad05bea77d1 145,151,153,156-162,170-172,174,179-181,183
+  h_99cad05bea77d1 173,175-178,182
+src/enum-collection.ts
+  h_99cad05bea77d1 124,128,130,132-133,138,146
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1434-1608,1709,1731,2044,2068,2120-2184
+  h_99cad05bea77d1 1433,2028,2040,2042,2052,2064,2066
+src/enum-item.ts
+  h_99cad05bea77d1 242-246,273
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b70e90b8ff0b48a88c116f64c80f98ac93a13b3b",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
