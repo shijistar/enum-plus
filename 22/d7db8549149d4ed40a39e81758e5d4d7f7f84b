@@ -1,0 +1,37 @@
+src/enum-item.ts
+  h_99cad05bea77d1 229,235,239-243,270
+test/utils/index.ts
+  h_99cad05bea77d1 3,14,31
+packages/plugin-antd/src/toMenu.ts
+  h_99cad05bea77d1 4,53
+src/enum-items.ts
+  h_99cad05bea77d1 18-19,913-914,920-921,928-929,934,939-940,945
+  h_99cad05bea77d1 919,922-925
+packages/plugin-antd/src/toFilter.ts
+  h_99cad05bea77d1 4
+src/enum-collection.ts
+  h_99cad05bea77d1 124,126-131,136,144
+src/extension.d.ts
+  h_99cad05bea77d1 39-43,45-67
+src/enum.ts
+  h_99cad05bea77d1 175-176,181
+src/types.ts
+  h_99cad05bea77d1 20,41-42,56,66-69,121-123,139,141-143,145,147,149-151,211-215
+  h_99cad05bea77d1 124-125
+test/data/week-config.ts
+  h_99cad05bea77d1 7,189-190,195-196
+  h_99cad05bea77d1 194,197-200
+src/localize-interface.ts
+  h_99cad05bea77d1 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "22d7db8549149d4ed40a39e81758e5d4d7f7f84b",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
