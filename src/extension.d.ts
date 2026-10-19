@@ -36,12 +36,33 @@ declare module 'enum-plus/extension' {
      */
     LocaleKeys:
       | (string & {})
-      | ((
-          // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-          item: import('./enum-item').EnumItemInterface<
-            // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-            import('./types').StandardEnumItemInit<import('./types').EnumValue>
-          >,
-        ) => string | undefined);
+      /**
+       * - **EN:** Function to get the localized text for an enumeration item
+       * - **CN:** 获取枚举项本地化文本的函数
+       */
+      | ItemFieldFunction;
   }
+
+  /**
+   * - **EN:** Type for the function to get the localized text for an enumeration item
+   * - **CN:** 获取枚举项本地化文本的函数类型
+   *
+   * @returns The localized text or the resource key of the enumeration item | 当前枚举项的最终国际化文本或资源键
+   */
+  type ItemFieldFunction = (
+    // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+    item: import('./enum-item').EnumItemInterface<
+      // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+      import('./types').StandardEnumItemInit<import('./types').EnumValue>
+    >,
+  ) =>
+    | string
+    | {
+        /**
+         * - **EN:** The key for the localized text
+         * - **CN:** 本地化文本的键
+         */
+        key: string;
+      }
+    | undefined;
 }

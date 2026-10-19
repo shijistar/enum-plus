@@ -17,6 +17,7 @@ export type EnumInit<K extends keyof any = string, V extends EnumValue = EnumVal
   | DateEnumInit<K>
   | RegExpEnumInit<K>
   | StandardEnumInit<K, V>
+  | LooseStandardEnumInit<K, V>
   | ValueOnlyEnumInit<K, V>
   | LabelOnlyEnumInit<K>
   | MetaOnlyEnumInit<K>
@@ -37,6 +38,8 @@ export type RegExpEnumInit<K extends keyof any> = Record<K, RegExp>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type StandardEnumInit<K extends keyof any, V extends EnumValue> = Record<K, StandardEnumItemInit<V>>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type LooseStandardEnumInit<K extends keyof any, V extends EnumValue> = Record<K, LooseStandardEnumItemInit<V>>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ValueOnlyEnumInit<K extends keyof any, V extends EnumValue> = Record<K, ValueOnlyEnumItemInit<V>>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type LabelOnlyEnumInit<K extends keyof any> = Record<K, LabelOnlyEnumItemInit>;
@@ -50,6 +53,7 @@ export type OmitEnumInit<K extends keyof any> = Record<K, undefined>;
 export type EnumItemInit<V extends EnumValue = EnumValue> =
   | EnumValue
   | StandardEnumItemInit<V>
+  | LooseStandardEnumItemInit<V>
   | ValueOnlyEnumItemInit<V>
   | LabelOnlyEnumItemInit
   | MetaOnlyEnumItemInit
@@ -58,6 +62,10 @@ export type EnumItemInit<V extends EnumValue = EnumValue> =
 export interface StandardEnumItemInit<V extends EnumValue> {
   value: V;
   label: EnumItemLabel;
+}
+export interface LooseStandardEnumItemInit<V extends EnumValue> {
+  value?: V;
+  label?: EnumItemLabel;
 }
 export interface ValueOnlyEnumItemInit<V extends EnumValue> {
   value: V;
@@ -110,9 +118,11 @@ export type ValueTypeFromSingleInit<T, Key = string, Fallback = Key> = T extends
           ? Key
           : T extends CompactEnumItemInit // typeof {}
             ? Key
-            : T extends undefined // typeof undefined
-              ? Fallback
-              : never;
+            : T extends LooseStandardEnumItemInit<infer V> // typeof {value, label}
+              ? V
+              : T extends undefined // typeof undefined
+                ? Fallback
+                : never;
 
 /** Infer the value type from the initialization object of the enumeration collection */
 export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
@@ -126,17 +136,19 @@ export type ValueTypeFromEnumInit<T, K extends EnumKey<T> = EnumKey<T>> =
           ? string | number
           : T extends StandardEnumInit<K, infer V> // format: { foo:{ value:1, label:'foo'}, bar:{value:2, label:'bar'} }
             ? V
-            : T extends ValueOnlyEnumInit<K, infer V> // format: { foo:{value:1}, bar:{value:2} }
+            : T extends LooseStandardEnumInit<K, infer V> // format: { foo:{ value:1, label:'foo'}, bar:{value:2, label:'bar'} }
               ? V
-              : T extends LabelOnlyEnumInit<K> // format: { foo:{label:'foo'}, bar:{label:'bar'} }
-                ? K
-                : T extends MetaOnlyEnumInit<K> // format: { foo:{ meta1: "", meta2: ""}, bar:{ meta1: "", meta2: ""} }
+              : T extends ValueOnlyEnumInit<K, infer V> // format: { foo:{value:1}, bar:{value:2} }
+                ? V
+                : T extends LabelOnlyEnumInit<K> // format: { foo:{label:'foo'}, bar:{label:'bar'} }
                   ? K
-                  : T extends CompactEnumInit<K> // format: { foo:{}, bar:{} }
+                  : T extends MetaOnlyEnumInit<K> // format: { foo:{ meta1: "", meta2: ""}, bar:{ meta1: "", meta2: ""} }
                     ? K
-                    : T extends OmitEnumInit<K> // format: {foo: undefined, bar: undefined}
+                    : T extends CompactEnumInit<K> // format: { foo:{}, bar:{} }
                       ? K
-                      : K; // Unknown format, use key as value
+                      : T extends OmitEnumInit<K> // format: {foo: undefined, bar: undefined}
+                        ? K
+                        : K; // Unknown format, use key as value
 
 /**
  * - **EN:** Find the key of the enumeration item by value
@@ -196,9 +208,11 @@ export type FindValueByKey<T, K extends EnumKey<T>> = T[K] extends EnumValue
           ? K
           : T[K] extends CompactEnumItemInit
             ? K
-            : T[K] extends undefined
-              ? K
-              : never;
+            : T[K] extends LooseStandardEnumItemInit<infer V>
+              ? V
+              : T[K] extends undefined
+                ? K
+                : never;
 
 export type FindKeyByMeta<T, MK extends keyof T[keyof T], MV> = {
   [K in keyof T]: T[K] extends Record<MK, MV> ? K : never;

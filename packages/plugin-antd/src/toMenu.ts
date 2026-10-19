@@ -1,8 +1,7 @@
 import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from 'enum-plus';
 import type { StandardEnumInit } from 'enum-plus/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ToMenuPluginOptions {}
+export type ToMenuPluginOptions = object;
 
 const toMenuPlugin: PluginFunc<ToMenuPluginOptions> = (options, Enum) => {
   Enum.extends({
@@ -51,6 +50,4 @@ export type MenuItemOption<V> = {
    * - **CN:** 菜单项的显示标签
    */
   label: string;
-} & {
-  [Key in `data-${string}`]?: unknown;
-};
+} & Partial<Record<`data-${string}`, unknown>>;

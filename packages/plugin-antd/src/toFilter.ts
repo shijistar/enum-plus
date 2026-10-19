@@ -1,8 +1,7 @@
 import type { EnumInit, EnumKey, EnumValue, IEnum, PluginFunc, ValueTypeFromSingleInit } from 'enum-plus';
 import type { StandardEnumInit } from 'enum-plus/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ToFilterPluginOptions {}
+export type ToFilterPluginOptions = object;
 
 const toFilterPlugin: PluginFunc<ToFilterPluginOptions> = (options, Enum) => {
   Enum.extends({

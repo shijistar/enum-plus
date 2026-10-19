@@ -15,8 +15,9 @@ import type {
   FindValueByKey,
   FindValueByMeta,
   ListItem,
+  LooseStandardEnumInit,
+  LooseStandardEnumItemInit,
   PrimitiveOf,
-  StandardEnumInit,
   StandardEnumItemInit,
   ValueTypeFromSingleInit,
 } from './types';
@@ -909,33 +910,39 @@ export type EnumItemFields = Exclude<
   {
     [
       key in keyof EnumItemInterface<
-        StandardEnumInit<string, string>,
-        StandardEnumItemInit<string>,
+        LooseStandardEnumInit<string, string>,
+        LooseStandardEnumItemInit<string>,
         string,
         string,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         any,
-        EnumItemOptions<StandardEnumInit<string, string>, StandardEnumItemInit<string>, string, string, string>
+        EnumItemOptions<
+          LooseStandardEnumInit<string, string>,
+          LooseStandardEnumItemInit<string>,
+          string,
+          string,
+          string
+        >
       >
     ]: EnumItemInterface<
-      StandardEnumInit<string, string>,
-      StandardEnumItemInit<string>,
+      LooseStandardEnumInit<string, string>,
+      LooseStandardEnumItemInit<string>,
       string,
       string,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       any,
-      EnumItemOptions<StandardEnumInit<string, string>, StandardEnumItemInit<string>, string, string, string>
+      EnumItemOptions<LooseStandardEnumInit<string, string>, LooseStandardEnumItemInit<string>, string, string, string>
     >[key] extends (...args: any[]) => unknown
       ? never
       : key;
   }[keyof EnumItemInterface<
-    StandardEnumInit<string, string>,
-    StandardEnumItemInit<string>,
+    LooseStandardEnumInit<string, string>,
+    LooseStandardEnumItemInit<string>,
     string,
     string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     any,
-    EnumItemOptions<StandardEnumInit<string, string>, StandardEnumItemInit<string>, string, string, string>
+    EnumItemOptions<LooseStandardEnumInit<string, string>, LooseStandardEnumItemInit<string>, string, string, string>
   >] &
     string,
   'raw'

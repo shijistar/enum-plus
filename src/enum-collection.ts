@@ -121,13 +121,21 @@ export class EnumCollectionClass<
    */
   get name(): string | undefined {
     const options = this._options;
+    let resolvedName: string | undefined;
     if (typeof options?.name === 'function') {
-      return options.name(undefined!);
+      const result = options.name(undefined!);
+      if (typeof result === 'string') {
+        resolvedName = result;
+      } else {
+        resolvedName = result?.key;
+      }
+    } else {
+      resolvedName = options?.name;
     }
     const nameTemplate = (options?.templates?.name ?? internalConfig.templates?.name) as
       LocalizeTemplate<'name', T, T[K], K, V, LP, OPTIONS> | undefined;
     if (nameTemplate === false) {
-      return options?.name;
+      return resolvedName;
     }
     const localeKey =
       nameTemplate != null
@@ -135,7 +143,7 @@ export class EnumCollectionClass<
             type: 'name',
             options,
           })
-        : options?.name;
+        : resolvedName;
     const localize = options?.localize ?? localizer.localize;
     if (typeof localize === 'function') {
       return localize(localeKey);

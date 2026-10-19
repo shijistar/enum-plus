@@ -1,6 +1,6 @@
 import type { EnumInit, EnumKey, EnumValue, IEnumItems, ValueTypeFromSingleInit } from '@enum-plus';
 import type { EnumItemInterface, EnumItemOptions } from '@enum-plus/enum-item';
-import type { StandardEnumItemInit } from '@enum-plus/types';
+import type { LooseStandardEnumItemInit } from '@enum-plus/types';
 
 export function toPlainEnums<
   T extends EnumInit<K, V>,
@@ -11,7 +11,7 @@ export function toPlainEnums<
   OPTIONS extends EnumItemOptions<T, T[K], K, V, LP> = EnumItemOptions<T, T[K], K, V, LP>,
 >(
   enums: EnumItemInterface<T, T[K], K, V, LP, OPTIONS>[] & IEnumItems<T, K, V, LP, OPTIONS>,
-  fieldNames: (keyof StandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label'],
+  fieldNames: (keyof LooseStandardEnumItemInit<EnumValue> | 'key')[] = ['key', 'value', 'label'],
 ): { value?: EnumValue; key?: keyof T; label?: string }[] {
   return Array.from(enums).map((item) => {
     const obj: { value?: EnumValue; key?: keyof T; label?: string } = {};
@@ -28,7 +28,7 @@ export function toPlainEnums<
   });
 }
 
-export function pickInitConfig<T extends Record<keyof T, StandardEnumItemInit<EnumValue>>>(
+export function pickInitConfig<T extends Record<keyof T, LooseStandardEnumItemInit<EnumValue>>>(
   obj: T,
   fieldNames: (keyof T[keyof T])[] = ['value', 'label'],
 ): T {

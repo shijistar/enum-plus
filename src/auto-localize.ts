@@ -142,28 +142,23 @@ export function resolveLocalizeTemplate<
   LP = any,
   OPTIONS extends EnumItemOptions<ET, T, K, V, LP> = EnumItemOptions<ET, T, K, V, LP>,
 >(
-  template: LocalizeTemplate<TYPE, ET, T, K, V, LP, OPTIONS>,
+  template: Exclude<LocalizeTemplate<TYPE, ET, T, K, V, LP, OPTIONS>, boolean> | true,
   context: LocalizeTemplateContext<TYPE, ET, T, K, V, LP, OPTIONS>,
 ): string | undefined {
   if (typeof template === 'function') {
     return template(context);
   }
-  if (typeof template === 'boolean') {
-    if (context.type === 'name') {
-      return context.options?.name as string | undefined;
-    } else {
-      const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
-      const raw = itemContext.item.raw as Record<string, unknown> | undefined;
-      const rawValue = raw?.[itemContext.metaField] as string | undefined;
-      if (rawValue == null && itemContext.metaField === 'label') {
-        return itemContext.item.key as string | undefined;
-      }
-      return rawValue;
-    }
-  }
-  const name = context.options?.name;
+
   const values: Record<string, unknown> = {};
-  if (typeof name === 'string') {
+  const name = context.options?.name;
+  if (typeof name === 'function') {
+    const result = name(undefined!);
+    if (typeof result === 'string') {
+      values.name = result;
+    } else {
+      values.name = result?.key;
+    }
+  } else {
     values.name = name;
   }
   if (context.type === 'item') {
@@ -172,6 +167,20 @@ export function resolveLocalizeTemplate<
     values.value = itemContext.item.value;
     values.raw = (itemContext.item.raw as Record<string, unknown>)?.[itemContext.metaField];
   }
+
+  if (template === true) {
+    if (context.type === 'item') {
+      const itemContext = context as unknown as LocalizeTemplateContext<'item', ET, T, K, V, LP, OPTIONS>;
+      const rawValue = values.raw as string | undefined;
+      if (rawValue == null && itemContext.metaField === 'label') {
+        return itemContext.item.key as string | undefined;
+      }
+      return rawValue;
+    } else {
+      return values.name as string;
+    }
+  }
+
   return template.replace(/{(name|key|value|raw)}/g, (match, token: string) =>
     values[token] != null ? String(values[token]) : match,
   );

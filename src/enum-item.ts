@@ -226,7 +226,7 @@ export class EnumItemClass<
     }
     return content;
   }
-  private _$localizeResource(resource: EnumItemLabel | undefined, field: string) {
+  private _$localizeResource(resource: EnumItemLabel | undefined, field: string): string | number | undefined {
     const labelPrefix = this._$options?.labelPrefix;
     const autoLabel = this._$options?.autoLabel ?? internalConfig.autoLabel;
     const template = (this._$options?.templates?.items?.[field as never] ??
@@ -235,7 +235,15 @@ export class EnumItemClass<
 
     if (typeof localeKey === 'function') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return localeKey(this as any);
+      const result = localeKey(this as any);
+      if (typeof result === 'string') {
+        return result;
+      }
+      // A resource key returned by a field function takes precedence over templates,
+      // just like a string returned by the function is used as the final text.
+      if (result?.key != null) {
+        return this._$localize(result.key) ?? result.key;
+      }
     }
 
     if (template != null) {

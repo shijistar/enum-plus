@@ -172,20 +172,13 @@ export interface EnumInterface {
    * @returns Enum collection | 枚举集合
    */
   <
-    const A extends Record<string, unknown>[] | readonly Record<string, unknown>[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const A extends Record<string, any>[] | readonly Record<string, any>[],
     K extends EnumKey<ArrayToMap<A>> = EnumKey<ArrayToMap<A>>,
-    // @ts-expect-error: because no constraint on items of A, so ValueTypeFromSingleInit<ArrayToMap<A>[K], K> does not satisfy EnumValue
     V extends EnumValue = ValueTypeFromSingleInit<ArrayToMap<A>[K], K>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const LP = any,
-    OPTIONS extends ArrayBasedEnumInitOptions<
-      // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-      A[number],
-      K,
-      V,
-      LP
-      // @ts-expect-error: because no constraint on items of A, so ArrayToMap<A> does not satisfy EnumInit<K, V>
-    > = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
+    OPTIONS extends ArrayBasedEnumInitOptions<A[number], K, V, LP> = ArrayBasedEnumInitOptions<A[number], K, V, LP>,
   >(
     init: A,
     options?: OPTIONS,
