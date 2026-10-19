@@ -1,0 +1,16 @@
+src/global-config.ts
+  h_99cad05bea77d1 33-35
+src/enum.ts
+  h_99cad05bea77d1 250-252
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2765239635ed22f821520339b0a78ff48430169b",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
