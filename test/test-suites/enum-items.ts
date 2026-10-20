@@ -156,8 +156,10 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
       return { preservedEnum, filteredEnum };
     },
     ({ preservedEnum, filteredEnum }) => {
-      engine.expect(preservedEnum.items.meta.status).toEqual(['error', null, undefined, undefined, 'warning']);
-      engine.expect(filteredEnum.items.meta.status).toEqual(['error', 'warning']);
+      engine
+        .expect((preservedEnum.items.meta as { status: (string | null | undefined)[] }).status)
+        .toEqual(['error', null, undefined, undefined, 'warning']);
+      engine.expect((filteredEnum.items.meta as { status: string[] }).status).toEqual(['error', 'warning']);
     },
   );
 
