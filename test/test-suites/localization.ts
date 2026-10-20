@@ -1657,101 +1657,6 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
     );
 
     engine.test(
-      'options.templates.name should support boolean values',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, getLocales },
-        i18n: { enUS },
-      }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const optionsTrue: EnumInitOptions<any> = { name: 'weekDay.name', templates: { name: true } };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const optionsFalse: EnumInitOptions<any> = { name: 'weekDay.name', templates: { name: false } };
-        const weekEnumTrue = Enum(StandardWeekConfig, optionsTrue);
-        const weekEnumFalse = Enum(StandardWeekConfig, optionsFalse);
-        const weekEnumTrueWithoutName = Enum(StandardWeekConfig, { templates: { name: true } });
-        const weekEnumFalseWithoutName = Enum(StandardWeekConfig, { templates: { name: false } });
-        const weekEnumTrueFuncName = Enum(StandardWeekConfig, {
-          name: () => 'weekDay.name',
-          templates: { name: true },
-        });
-        const weekEnumFalseFuncName = Enum(StandardWeekConfig, {
-          name: () => 'weekDay.name',
-          templates: { name: false },
-        });
-        return {
-          weekEnumTrue,
-          weekEnumFalse,
-          weekEnumTrueWithoutName,
-          weekEnumFalseWithoutName,
-          weekEnumTrueFuncName,
-          weekEnumFalseFuncName,
-          enUS,
-        };
-      },
-      ({
-        weekEnumTrue,
-        weekEnumFalse,
-        weekEnumTrueWithoutName,
-        weekEnumFalseWithoutName,
-        weekEnumTrueFuncName,
-        weekEnumFalseFuncName,
-        enUS,
-      }) => {
-        // `true` - use the name option as the locale key and localize it
-        engine.expect(weekEnumTrue.name).toBe(enUS['weekDay.name']);
-        engine.expect(weekEnumTrueWithoutName.name).toBe(undefined);
-        // `false` - keep the name option as-is, without localization
-        engine.expect(weekEnumFalse.name).toBe('weekDay.name');
-        engine.expect(weekEnumFalseWithoutName.name).toBe(undefined);
-        // name functions take precedence over boolean templates
-        engine.expect(weekEnumTrueFuncName.name).toBe(enUS['weekDay.name']);
-        engine.expect(weekEnumFalseFuncName.name).toBe('weekDay.name');
-      },
-    );
-
-    engine.test(
-      'Enum.config.templates.name should localize the enum name when set to true',
-      ({
-        EnumPlus: { Enum, defaultLocalize },
-        WeekConfig: { StandardWeekConfig, setLang, getLocales },
-        i18n: { enUS },
-      }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        Enum.config.templates = { name: true };
-        const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
-        const weekEnumWithoutName = Enum(StandardWeekConfig);
-        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => 'weekDay.name' });
-        return { Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName, enUS };
-      },
-      ({ Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName, enUS }) => {
-        engine.expect(weekEnum.name).toBe(enUS['weekDay.name']);
-        engine.expect(weekEnumWithoutName.name).toBe(undefined);
-        engine.expect(weekEnumFuncName.name).toBe(enUS['weekDay.name']);
-        Enum.config.templates = undefined;
-      },
-    );
-
-    engine.test(
-      'Enum.config.templates.name should keep the raw enum name when set to false',
-      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
-        setLang('en-US', Enum, getLocales, defaultLocalize);
-        Enum.config.templates = { name: false };
-        const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
-        const weekEnumWithoutName = Enum(StandardWeekConfig);
-        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => 'weekDay.name' });
-        return { Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName };
-      },
-      ({ Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName }) => {
-        engine.expect(weekEnum.name).toBe('weekDay.name');
-        engine.expect(weekEnumWithoutName.name).toBe(undefined);
-        engine.expect(weekEnumFuncName.name).toBe('weekDay.name');
-        Enum.config.templates = undefined;
-      },
-    );
-
-    engine.test(
       'options.templates.items should localize item fields when set to true',
       ({
         EnumPlus: { Enum, defaultLocalize },
@@ -2022,19 +1927,16 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
     );
     engine.test(
       'should use a custom English localizer for string names while function names keep their own localization',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { StandardWeekConfig, getLocales, genSillyLocalizer, resourceLocalizer },
-        i18n: { enUS },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, getLocales, genSillyLocalizer }, i18n: { enUS } }) => {
+        const englishLocalize = genSillyLocalizer('en-US', getLocales);
         const weekEnum = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('en-US', getLocales),
+          localize: englishLocalize,
           name: 'weekDay.name',
           autoLocalizeMeta: ['abbr'],
         });
         const weekEnumFuncName = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('en-US', getLocales),
-          name: () => resourceLocalizer('weekDay.name'),
+          localize: englishLocalize,
+          name: () => englishLocalize('weekDay.name'),
           autoLocalizeMeta: ['abbr'],
         });
         return { weekEnum, weekEnumFuncName, enUS };
@@ -2046,19 +1948,16 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
     );
     engine.test(
       'should use a custom Chinese localizer for string names while function names keep their own localization',
-      ({
-        EnumPlus: { Enum },
-        WeekConfig: { StandardWeekConfig, getLocales, genSillyLocalizer, resourceLocalizer },
-        i18n: { zhCN },
-      }) => {
+      ({ EnumPlus: { Enum }, WeekConfig: { StandardWeekConfig, getLocales, genSillyLocalizer }, i18n: { zhCN } }) => {
         const weekEnum = Enum(StandardWeekConfig, {
           localize: genSillyLocalizer('zh-CN', getLocales),
           name: 'weekDay.name',
           autoLocalizeMeta: ['abbr'],
         });
+        const localizer = genSillyLocalizer('zh-CN', getLocales);
         const weekEnumFuncName = Enum(StandardWeekConfig, {
-          localize: genSillyLocalizer('zh-CN', getLocales),
-          name: () => resourceLocalizer('weekDay.name'),
+          localize: localizer,
+          name: () => localizer('weekDay.name'),
           autoLocalizeMeta: ['abbr'],
         });
         return { weekEnum, weekEnumFuncName, zhCN };
@@ -2127,9 +2026,17 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
       }) => {
         setLang('en-US', Enum, getLocales, defaultLocalize);
         const weekEnum = Enum(StandardWeekConfig, { name: () => ({ key: 'weekDay.name' }) });
+        const weekEnumWithInvalidTemplate = Enum(StandardWeekConfig, {
+          name: () => ({ key: 'weekDay.name' }),
+          templates: { name: '{name}!' },
+        });
         const weekEnumWithTemplate = Enum(StandardWeekConfig, {
           name: () => ({ key: 'weekDay.name' }),
-          templates: { name: 'ignored.{name}' },
+          templates: { name: '{name}' },
+        });
+        const weekEnumWithFuncTemplate = Enum(StandardWeekConfig, {
+          name: () => ({ key: 'weekDay.name' }),
+          templates: { name: () => '{name}' },
         });
         const weekEnumWithFalseTemplate = Enum(StandardWeekConfig, {
           name: () => ({ key: 'weekDay.name' }),
@@ -2142,10 +2049,6 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
           name: () => 'My Week',
           templates: { name: '{name}!' },
         });
-        const weekEnumWithPlainFuncAndTemplateFunc = Enum(StandardWeekConfig, {
-          name: () => 'My Week',
-          templates: { name: () => '{name}!' },
-        });
         const weekEnumWithoutKeyWithTemplate = Enum(StandardWeekConfig, {
           name: () => undefined,
           templates: { name: 'weekDay.name' },
@@ -2157,10 +2060,11 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
         const names = {
           localized: weekEnum.name,
           withTemplate: weekEnumWithTemplate.name,
+          withFuncTemplate: weekEnumWithFuncTemplate.name,
+          withInvalidTemplate: weekEnumWithInvalidTemplate.name,
           withFalseTemplate: weekEnumWithFalseTemplate.name,
           weekEnumWithPlainFunc: weekEnumWithPlainFunc.name,
           withPlainFuncAndTemplate: weekEnumWithPlainFuncAndTemplate.name,
-          withPlainFuncAndTemplateFunc: weekEnumWithPlainFuncAndTemplateFunc.name,
           withoutKeyWithTemplate: weekEnumWithoutKeyWithTemplate.name,
           withoutKeyWithFuncTemplate: weekEnumWithoutKeyWithFuncTemplate.name,
         };
@@ -2177,15 +2081,111 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
       },
       ({ names, chineseName, nameWithoutLocalizer, enUS, zhCN }) => {
         engine.expect(names.localized).toBe(enUS['weekDay.name']);
-        engine.expect(names.withTemplate).toBe('ignored.weekDay.name');
+        engine.expect(names.withTemplate).toBe(enUS['weekDay.name']);
+        engine.expect(names.withFuncTemplate).toBe('{name}');
+        engine.expect(names.withInvalidTemplate).toBe('weekDay.name!');
         engine.expect(names.withFalseTemplate).toBe('weekDay.name');
         engine.expect(names.weekEnumWithPlainFunc).toBe('My Week');
-        engine.expect(names.withPlainFuncAndTemplate).toBe('My Week!');
-        engine.expect(names.withPlainFuncAndTemplateFunc).toBe('{name}!');
+        engine.expect(names.withPlainFuncAndTemplate).toBe('My Week');
         engine.expect(names.withoutKeyWithTemplate).toBe(enUS['weekDay.name']);
         engine.expect(names.withoutKeyWithFuncTemplate).toBe(enUS['weekDay.name']);
         engine.expect(chineseName).toBe(zhCN['weekDay.name']);
         engine.expect(nameWithoutLocalizer).toBe('weekDay.name');
+      },
+    );
+
+    engine.test(
+      'options.templates.name should support boolean values',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const optionsTrue: EnumInitOptions<any> = { name: 'weekDay.name', templates: { name: true } };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const optionsFalse: EnumInitOptions<any> = { name: 'weekDay.name', templates: { name: false } };
+        const weekEnumTrue = Enum(StandardWeekConfig, optionsTrue);
+        const weekEnumFalse = Enum(StandardWeekConfig, optionsFalse);
+        const weekEnumTrueWithoutName = Enum(StandardWeekConfig, { templates: { name: true } });
+        const weekEnumFalseWithoutName = Enum(StandardWeekConfig, { templates: { name: false } });
+        const weekEnumTrueFuncName = Enum(StandardWeekConfig, {
+          name: () => 'weekDay.name',
+          templates: { name: true },
+        });
+        const weekEnumFalseFuncName = Enum(StandardWeekConfig, {
+          name: () => 'weekDay.name',
+          templates: { name: false },
+        });
+        return {
+          weekEnumTrue,
+          weekEnumFalse,
+          weekEnumTrueWithoutName,
+          weekEnumFalseWithoutName,
+          weekEnumTrueFuncName,
+          weekEnumFalseFuncName,
+          enUS,
+        };
+      },
+      ({
+        weekEnumTrue,
+        weekEnumFalse,
+        weekEnumTrueWithoutName,
+        weekEnumFalseWithoutName,
+        weekEnumTrueFuncName,
+        weekEnumFalseFuncName,
+        enUS,
+      }) => {
+        // `true` - use the name option as the locale key and localize it
+        engine.expect(weekEnumTrue.name).toBe(enUS['weekDay.name']);
+        engine.expect(weekEnumTrueWithoutName.name).toBe(undefined);
+        // `false` - keep the name option as-is, without localization
+        engine.expect(weekEnumFalse.name).toBe('weekDay.name');
+        engine.expect(weekEnumFalseWithoutName.name).toBe(undefined);
+        // name functions take precedence over boolean templates
+        engine.expect(weekEnumTrueFuncName.name).toBe('weekDay.name');
+        engine.expect(weekEnumFalseFuncName.name).toBe('weekDay.name');
+      },
+    );
+
+    engine.test(
+      'Enum.config.templates.name should localize the enum name when set to true',
+      ({
+        EnumPlus: { Enum, defaultLocalize },
+        WeekConfig: { StandardWeekConfig, setLang, getLocales },
+        i18n: { enUS },
+      }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { name: true };
+        const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+        const weekEnumWithoutName = Enum(StandardWeekConfig);
+        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => 'weekDay.name' });
+        return { Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName, enUS };
+      },
+      ({ Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName, enUS }) => {
+        engine.expect(weekEnum.name).toBe(enUS['weekDay.name']);
+        engine.expect(weekEnumWithoutName.name).toBe(undefined);
+        engine.expect(weekEnumFuncName.name).toBe('weekDay.name');
+        Enum.config.templates = undefined;
+      },
+    );
+
+    engine.test(
+      'Enum.config.templates.name should keep the raw enum name when set to false',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { StandardWeekConfig, setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        Enum.config.templates = { name: false };
+        const weekEnum = Enum(StandardWeekConfig, { name: 'weekDay.name' });
+        const weekEnumWithoutName = Enum(StandardWeekConfig);
+        const weekEnumFuncName = Enum(StandardWeekConfig, { name: () => 'weekDay.name' });
+        return { Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName };
+      },
+      ({ Enum, weekEnum, weekEnumWithoutName, weekEnumFuncName }) => {
+        engine.expect(weekEnum.name).toBe('weekDay.name');
+        engine.expect(weekEnumWithoutName.name).toBe(undefined);
+        engine.expect(weekEnumFuncName.name).toBe('weekDay.name');
+        Enum.config.templates = undefined;
       },
     );
     engine.test(

@@ -124,7 +124,7 @@ export class EnumCollectionClass<
     if (typeof options?.name === 'function') {
       const result = options.name(undefined!);
       if (typeof result === 'string') {
-        resolvedName = result;
+        return result;
       } else {
         resolvedName = result?.key;
       }
