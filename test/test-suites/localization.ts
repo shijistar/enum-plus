@@ -1,4 +1,4 @@
-import type { EnumInitOptions, EnumItemInterface, IEnum, ListItem } from '@enum-plus';
+import type { EnumInitOptions, EnumItemInterface, EnumValue, IEnum, ListItem } from '@enum-plus';
 import { ENUM_OPTIONS } from '@enum-plus';
 import type { MapResult } from '@enum-plus/enum-items';
 import type {
@@ -1471,6 +1471,168 @@ const testLocalization = (engine: TestEngineBase<TestEngineTypes>) => {
         engine.expect(zh.namedLabel).toBe(zhCN['weekday.Monday']);
         engine.expect(zh.abbr).toBe(zhCN['weekday.SundayAbbr']);
         engine.expect(zh.namedAbbr).toBe(zhCN['weekday.MondayAbbr']);
+      },
+    );
+
+    engine.test(
+      'item field functions returning resource keys should receive the enum item as input',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { setLang, getLocales }, i18n: { enUS } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        interface FunctionInput {
+          key: string;
+          value: EnumValue;
+          raw: {
+            value: EnumValue;
+            label: unknown;
+            status?: string;
+            abbr?: unknown;
+          };
+        }
+        interface CapturedInput {
+          key: string;
+          value: EnumValue;
+          rawValue: EnumValue;
+          rawStatus: string | undefined;
+          rawLabelIsFunction: boolean;
+          rawAbbrIsFunction: boolean;
+        }
+        const captureInput = (item: FunctionInput): CapturedInput => ({
+          key: item.key,
+          value: item.value,
+          rawValue: item.raw.value,
+          rawStatus: item.raw.status,
+          rawLabelIsFunction: typeof item.raw.label === 'function',
+          rawAbbrIsFunction: typeof item.raw.abbr === 'function',
+        });
+        const createField = (field: 'label' | 'abbr') => {
+          const args: CapturedInput[] = [];
+          return {
+            args,
+            fn: (item: FunctionInput) => {
+              args.push(captureInput(item));
+              return { key: `weekday.${item.key}${field === 'abbr' ? 'Abbr' : ''}` };
+            },
+          };
+        };
+        const labelField = createField('label');
+        const abbrField = createField('abbr');
+        const weekEnum = Enum(
+          {
+            Sunday: { value: 0, status: 'error', label: labelField.fn, abbr: abbrField.fn },
+            Monday: { value: 1, status: 'warning', label: labelField.fn, abbr: abbrField.fn },
+          },
+          { autoLocalizeMeta: ['abbr'] },
+        );
+        // Clear the calls made while collecting auto-localized meta values.
+        labelField.args.length = 0;
+        abbrField.args.length = 0;
+        const labels = [weekEnum.items[0].label, weekEnum.items[1].label];
+        const abbr = [weekEnum.items[0].abbr, weekEnum.items[1].abbr];
+        return { labelArgs: labelField.args, abbrArgs: abbrField.args, labels, abbr, enUS };
+      },
+      ({ labelArgs, abbrArgs, labels, abbr, enUS }) => {
+        engine.expect(labelArgs).toEqual([
+          {
+            key: 'Sunday',
+            value: 0,
+            rawValue: 0,
+            rawStatus: 'error',
+            rawLabelIsFunction: true,
+            rawAbbrIsFunction: true,
+          },
+          {
+            key: 'Monday',
+            value: 1,
+            rawValue: 1,
+            rawStatus: 'warning',
+            rawLabelIsFunction: true,
+            rawAbbrIsFunction: true,
+          },
+        ]);
+        engine.expect(abbrArgs).toEqual(labelArgs);
+        engine.expect(labels).toEqual([enUS['weekday.Sunday'], enUS['weekday.Monday']]);
+        engine.expect(abbr).toEqual([enUS['weekday.SundayAbbr'], enUS['weekday.MondayAbbr']]);
+      },
+    );
+
+    engine.test(
+      'item field functions returning resource keys should combine with string and function names',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { setLang, getLocales }, i18n: { enUS, zhCN } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const label = (item: { key: string }) => ({ key: `weekday.${item.key}` });
+        const abbr = (item: { key: string }) => ({ key: `weekday.${item.key}Abbr` });
+        const createWeekEnum = (name: string | (() => string | { key: string })) =>
+          Enum(
+            {
+              Sunday: { value: 0, label, abbr },
+              Monday: { value: 1, label, abbr },
+            },
+            { name, autoLocalizeMeta: ['abbr'] },
+          );
+        const snapshot = (weekEnum: ReturnType<typeof createWeekEnum>) => ({
+          name: weekEnum.name,
+          labels: [weekEnum.items[0].label, weekEnum.items[1].label],
+          abbr: [weekEnum.items[0].abbr, weekEnum.items[1].abbr],
+          metaAbbr: Array.from(weekEnum.meta.abbr),
+          listLabels: weekEnum.toList().map((item) => item.label),
+        });
+        const stringName = createWeekEnum('weekDay.name');
+        const funcStringName = createWeekEnum(() => 'Custom Week');
+        const funcKeyName = createWeekEnum(() => ({ key: 'weekDay.name' }));
+        const en = {
+          stringName: snapshot(stringName),
+          funcStringName: snapshot(funcStringName),
+          funcKeyName: snapshot(funcKeyName),
+        };
+        setLang('zh-CN', Enum, getLocales, defaultLocalize);
+        const zh = {
+          stringName: snapshot(stringName),
+          funcStringName: snapshot(funcStringName),
+          funcKeyName: snapshot(funcKeyName),
+        };
+        return { en, zh, enUS, zhCN };
+      },
+      ({ en, zh, enUS, zhCN }) => {
+        const expectedEn = {
+          labels: [enUS['weekday.Sunday'], enUS['weekday.Monday']],
+          abbr: [enUS['weekday.SundayAbbr'], enUS['weekday.MondayAbbr']],
+          metaAbbr: [enUS['weekday.SundayAbbr'], enUS['weekday.MondayAbbr']],
+          listLabels: [enUS['weekday.Sunday'], enUS['weekday.Monday']],
+        };
+        const expectedZh = {
+          labels: [zhCN['weekday.Sunday'], zhCN['weekday.Monday']],
+          abbr: [zhCN['weekday.SundayAbbr'], zhCN['weekday.MondayAbbr']],
+          metaAbbr: [zhCN['weekday.SundayAbbr'], zhCN['weekday.MondayAbbr']],
+          listLabels: [zhCN['weekday.Sunday'], zhCN['weekday.Monday']],
+        };
+        engine.expect(en.stringName).toEqual({ name: enUS['weekDay.name'], ...expectedEn });
+        engine.expect(en.funcStringName).toEqual({ name: 'Custom Week', ...expectedEn });
+        engine.expect(en.funcKeyName).toEqual({ name: enUS['weekDay.name'], ...expectedEn });
+        engine.expect(zh.stringName).toEqual({ name: zhCN['weekDay.name'], ...expectedZh });
+        engine.expect(zh.funcStringName).toEqual({ name: 'Custom Week', ...expectedZh });
+        engine.expect(zh.funcKeyName).toEqual({ name: zhCN['weekDay.name'], ...expectedZh });
+      },
+    );
+
+    engine.test(
+      'item templates should use a function name returning a string',
+      ({ EnumPlus: { Enum, defaultLocalize }, WeekConfig: { setLang, getLocales } }) => {
+        setLang('en-US', Enum, getLocales, defaultLocalize);
+        const weekEnum = Enum(
+          {
+            Sunday: { value: 0, label: 'weekday.Sunday' },
+            Monday: { value: 1, label: 'weekday.Monday' },
+          },
+          {
+            name: () => 'Custom Week',
+            templates: { items: { label: '{name}.{key}' } },
+          },
+        );
+        return { name: weekEnum.name, labels: Array.from(weekEnum.labels) };
+      },
+      ({ name, labels }) => {
+        engine.expect(name).toBe('Custom Week');
+        engine.expect(labels).toEqual(['Custom Week.Sunday', 'Custom Week.Monday']);
       },
     );
 
