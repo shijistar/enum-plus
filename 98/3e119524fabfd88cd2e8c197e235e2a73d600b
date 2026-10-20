@@ -1,0 +1,17 @@
+test/test-suites/localization.ts
+  h_99cad05bea77d1 1931,1933,1938-1939,1957,1959-1960,2029,2031-2032,2035-2039,2063-2064,2084-2086,2089,2096-2097,2151,2173
+  h_99cad05bea77d1 1930,1951,2030,2098-2150,2152-2172,2174-2190
+src/enum-collection.ts
+  h_99cad05bea77d1 127
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "983e119524fabfd88cd2e8c197e235e2a73d600b",
+  "prompts": {},
+  "humans": {
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
