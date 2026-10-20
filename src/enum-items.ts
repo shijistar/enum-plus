@@ -116,7 +116,7 @@ export class EnumItemsArray<
       // Collect custom meta fields, including fields declared by templates.items.
       const itemRaw = raw[key];
       const rawMetaKeys = metaKeys(itemRaw);
-      Array.from(new Set([...rawMetaKeys, ...templateMetaKeys]))
+      Array.from(new Set([...rawMetaKeys, ...templateMetaKeys, ...Object.keys(meta)]))
         .filter((k) => !protectedNames.includes(k))
         .forEach((k) => {
           const metaKey = k as Exclude<keyof T[keyof T], EnumItemFields>;
@@ -135,7 +135,10 @@ export class EnumItemsArray<
       const needAutoLocalize = isAutoLocalizeMetaField(key, options);
       if (needAutoLocalize) {
         define(meta, key, {
-          get: () => items.map((item) => item[key as keyof typeof item]).filter((v) => v != null),
+          get: () =>
+            items
+              .map((item) => item[key as keyof typeof item])
+              .filter((v) => internalConfig.preserveEmptyMeta || v != null),
           enumerable: true,
           configurable: false,
         });

@@ -142,8 +142,9 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
         Enum({
           foo: { value: 1, label: 'foo', status: 'error' },
           bar: { value: 2, label: 'bar', status: null },
-          baz: { value: 3, label: 'baz', status: undefined },
-          qux: { value: 4, label: 'qux', status: 'warning' },
+          baz: { value: 3, label: 'baz' },
+          qux: { value: 3, label: 'qux', status: undefined },
+          corge: { value: 4, label: 'corge', status: 'warning' },
         });
 
       Enum.config.preserveEmptyMeta = true;
@@ -155,7 +156,7 @@ export function addEnumItemsTestSuite(engine: TestEngineBase<TestEngineTypes>) {
       return { preservedEnum, filteredEnum };
     },
     ({ preservedEnum, filteredEnum }) => {
-      engine.expect(preservedEnum.items.meta.status).toEqual(['error', null, undefined, 'warning']);
+      engine.expect(preservedEnum.items.meta.status).toEqual(['error', null, undefined, undefined, 'warning']);
       engine.expect(filteredEnum.items.meta.status).toEqual(['error', 'warning']);
     },
   );
