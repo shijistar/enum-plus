@@ -324,7 +324,7 @@ jobs:
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
       - name: Run unit tests for esm-legacy modules
-        run: npm run test:jest-legacy
+        run: npm run test-node-esm-legacy
 
   run-e2e-tests:
     if: ${{ inputs.use-matrix == true }}
