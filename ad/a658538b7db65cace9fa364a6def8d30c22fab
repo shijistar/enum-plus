@@ -1,0 +1,14 @@
+package.json
+  h_5af63d7c957505 167
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ada658538b7db65cace9fa364a6def8d30c22fab",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}
