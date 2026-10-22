@@ -1,0 +1,21 @@
+CHANGELOG.md
+  h_99cad05bea77d1 5-26
+package-lock.json
+  h_99cad05bea77d1 3,9
+package.json
+  h_99cad05bea77d1 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c7a3a8296cdad2fb91ef1df60ee36543e807d861",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    },
+    "h_99cad05bea77d1": {
+      "author": "Fengbao Li <shijistar@gmail.com>"
+    }
+  }
+}
