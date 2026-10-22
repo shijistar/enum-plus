@@ -1,0 +1,12 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3905ff1cb9d7495972cc52e309e4b31da3e07278",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}
