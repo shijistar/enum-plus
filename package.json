@@ -164,7 +164,7 @@
     "test:jest-cjs": "jest --coverage -c jest-cjs.config.js",
     "test:jest-esm": "jest --coverage -c jest-esm.config.js",
     "test:jest-legacy": "jest --coverage -c jest-legacy.config.js",
-    "test:vitest": "run-s test:vitest:node test:vitest:browser test:vitest:browser:legacy",
+    "test:vitest": "run-s gv test:vitest:node test:vitest:browser test:vitest:browser:legacy",
     "test:vitest:node": "vitest run --project node --coverage",
     "test:vitest:browser": "vitest run --project browser --coverage",
     "test:vitest:browser:legacy": "vitest run --project es-legacy-browser",
