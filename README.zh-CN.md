@@ -56,7 +56,7 @@
 这是一套完整的前端业务字典解决方案，更像是一个轻量级的数据源，通常被用作前端公共基础设施。
 
 <div align="center">
-  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.3.1/public/usage-screenshot-high-v3.mp4" target="_blank">
+  <a href="https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v3.4.0/public/usage-screenshot-high-v3.mp4" target="_blank">
     <img src="./public/usage-screenshot-v3.gif" width="500" alt="usage video" />
   </a>
 </div>
