@@ -1,0 +1,16 @@
+src/enum-items.ts
+  h_5af63d7c957505 982-983,990-991
+src/types.ts
+  h_5af63d7c957505 49-50,62,81-84,121,123-131,215-223
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9e52873e2002bff2b8caf1aff8f0f597f9bd3539",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}
