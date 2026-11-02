@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.4.1
+
+2026-11-02
+
+### Features
+
+- ✨ `LooseStandardEnumItemInit` now accepts an index signature, so enum items that omit `value` or `label` can declare custom meta fields without TypeScript errors. This matches the behavior of `MetaOnlyEnumItemInit` and makes mixed item definitions fully usable with additional metadata.
+
 ## 3.4.0
 
 2026-10-19

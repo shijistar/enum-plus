@@ -66,6 +66,7 @@ export interface StandardEnumItemInit<V extends EnumValue> {
 export interface LooseStandardEnumItemInit<V extends EnumValue> {
   value?: V;
   label?: EnumItemLabel;
+  [meta: string]: unknown;
 }
 export interface ValueOnlyEnumItemInit<V extends EnumValue> {
   value: V;
