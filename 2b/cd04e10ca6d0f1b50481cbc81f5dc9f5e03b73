@@ -1,0 +1,20 @@
+src/types.ts
+  h_5af63d7c957505 69
+package.json
+  h_5af63d7c957505 3
+CHANGELOG.md
+  h_5af63d7c957505 5-8,9,10,11,12
+package-lock.json
+  h_5af63d7c957505 3,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2bcd04e10ca6d0f1b50481cbc81f5dc9f5e03b73",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}
