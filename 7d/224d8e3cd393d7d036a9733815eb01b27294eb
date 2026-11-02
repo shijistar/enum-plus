@@ -1,0 +1,14 @@
+CHANGELOG.md
+  h_5af63d7c957505 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d224d8e3cd393d7d036a9733815eb01b27294eb",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}
