@@ -23,7 +23,7 @@ jobs:
   # 4. Cache build output
   install-and-build:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -98,7 +98,7 @@ jobs:
             umd
   node-modules-legacy-cache:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -127,7 +127,7 @@ jobs:
   # Run ts-tests on default Node.js version
   run-node-test:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     steps:
       - uses: actions/checkout@v6
@@ -152,7 +152,7 @@ jobs:
   # Run Node.js CJS unit tests on multiple modern node versions
   run-jest-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     strategy:
       matrix:
@@ -212,7 +212,7 @@ jobs:
   # config validation with `Module ts-jest,[object Object] ... was not found`.
   run-legacy-jest-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [install-and-build, node-modules-legacy-cache]
     strategy:
       matrix:
@@ -252,7 +252,7 @@ jobs:
   # Run ESM unit tests on node versions that support Node.js ESM
   run-esm-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     strategy:
       matrix:
@@ -293,7 +293,7 @@ jobs:
   # Run esm-legacy unit tests on node versions that support Node.js ESM
   run-esm-legacy-node-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     strategy:
       matrix:
@@ -338,7 +338,7 @@ jobs:
 
   run-e2e-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -385,7 +385,7 @@ jobs:
   # Run tests on single specified Node.js version
   run-test-single:
     if: ${{ inputs.use-matrix == false }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
