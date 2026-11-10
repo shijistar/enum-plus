@@ -1,0 +1,18 @@
+.github/workflows/reusable-test.yml
+  h_5af63d7c957505 208-212,250,331-335,337
+AGENTS.md
+  h_5af63d7c957505 258-264
+jest-legacy.config.js
+  h_5af63d7c957505 1-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e81f560ad91ad556339a7db7ccd40653cd97ecdf",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}

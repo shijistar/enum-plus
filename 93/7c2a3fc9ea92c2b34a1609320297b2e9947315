@@ -1,0 +1,16 @@
+.github/workflows/reusable-test.yml
+  h_5af63d7c957505 245,329-374
+.github/workflows/npm-publish.yml
+  h_5af63d7c957505 59,230
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "937c2a3fc9ea92c2b34a1609320297b2e9947315",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}

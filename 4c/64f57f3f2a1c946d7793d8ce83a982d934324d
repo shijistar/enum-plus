@@ -1,0 +1,28 @@
+.storybook/docs-source/Install.en-US.md
+  h_5af63d7c957505 35,37,51-54,56
+.storybook/docs-source/Install.zh-CN.md
+  h_5af63d7c957505 35,37,51-54,56
+.storybook/docs-source/Introduce.en-US.md
+  h_5af63d7c957505 55-56
+.storybook/docs-source/Introduce.zh-CN.md
+  h_5af63d7c957505 57-58
+README-FULL.md
+  h_5af63d7c957505 59,127,129,143-146,148
+README-FULL.zh-CN.md
+  h_5af63d7c957505 59,127,129,143-146,148
+README.md
+  h_5af63d7c957505 60
+README.zh-CN.md
+  h_5af63d7c957505 59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4c64f57f3f2a1c946d7793d8ce83a982d934324d",
+  "prompts": {},
+  "humans": {
+    "h_5af63d7c957505": {
+      "author": "Sage Starr (Leo) <shijistar@gmail.com>"
+    }
+  }
+}
