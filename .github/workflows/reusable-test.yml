@@ -23,7 +23,7 @@ jobs:
   # 4. Cache build output
   install-and-build:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -98,7 +98,7 @@ jobs:
             umd
   node-modules-legacy-cache:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -127,7 +127,7 @@ jobs:
   # Run ts-tests on default Node.js version
   run-node-test:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     steps:
       - uses: actions/checkout@v6
@@ -152,7 +152,7 @@ jobs:
   # Run Node.js CJS unit tests on multiple modern node versions
   run-jest-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     strategy:
       matrix:
@@ -205,9 +205,14 @@ jobs:
         run: npm run test:jest-cjs
 
   # Run CJS unit tests on multiple legacy node versions
+  # NOTE: this job installs the legacy dependency tree from package-legacy-node.json,
+  # where jest is pinned to 23.6.0. That version only understands jest-cjs.config.js
+  # (CJS output in lib/ + tslib/). jest-legacy.config.js relies on Jest 28+ features
+  # (extensionsToTreatAsEsm, array-form `transform`), so running it here fails at
+  # config validation with `Module ts-jest,[object Object] ... was not found`.
   run-legacy-jest-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [install-and-build, node-modules-legacy-cache]
     strategy:
       matrix:
@@ -242,12 +247,12 @@ jobs:
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
       - name: Run unit tests for legacy CJS modules
-        run: npm run test:jest-legacy
+        run: npm run test:jest-cjs
 
   # Run ESM unit tests on node versions that support Node.js ESM
   run-esm-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     strategy:
       matrix:
@@ -288,7 +293,7 @@ jobs:
   # Run esm-legacy unit tests on node versions that support Node.js ESM
   run-esm-legacy-node-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: install-and-build
     strategy:
       matrix:
@@ -323,12 +328,17 @@ jobs:
             umd
           key: ${{ runner.os }}-modern-build-output-${{ github.sha }}
 
+      # NOTE: do NOT use `test-node-esm-legacy` here. It runs through `run-s` from
+      # npm-run-all2@9, whose engines require Node >= 22 (its ansi-styles uses the
+      # RegExp `v` flag), so the Node 16~19 entries of this matrix crash with
+      # `SyntaxError: Invalid regular expression flags`. The es-legacy/tses build
+      # output is already produced and cached by install-and-build, so run Jest directly.
       - name: Run unit tests for esm-legacy modules
-        run: npm run test-node-esm-legacy
+        run: npm run test:jest-legacy
 
   run-e2e-tests:
     if: ${{ inputs.use-matrix == true }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -375,7 +385,7 @@ jobs:
   # Run tests on single specified Node.js version
   run-test-single:
     if: ${{ inputs.use-matrix == false }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:

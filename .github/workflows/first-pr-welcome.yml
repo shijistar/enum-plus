@@ -6,7 +6,7 @@ on:
 
 jobs:
   greet-first-time-contributor:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       pull-requests: write
     # Only run for first-time contributors

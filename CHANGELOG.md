@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.4.1
+
+2026-11-02
+
+### Bug Fixes
+
+- 🐞 Fix TypeScript errors when enum items declare custom meta fields while omitting `value` or `label`. A new `LooseMetaEnumItemInit` type covers loose items that carry extra metadata, and `MetaOnlyEnumItemInit` now accepts arbitrary field names, so mixed standard and loose item definitions type-check without breaking value-type inference.
+
 ## 3.4.0
 
 2026-10-19
