@@ -979,14 +979,16 @@ function parseEnumItem<
           // type of {value, label}
           value = (init.value ?? key) as V;
           if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
-            label = init.label!;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            label = init.label! as any;
           } else {
             label = key as EnumItemLabel;
           }
         } else if ('label' in init && Object.keys(init).some((k) => k === 'label')) {
           // typeof {label}
           value = key as unknown as V;
-          label = init.label ?? (key as EnumItemLabel);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          label = (init.label as any) ?? (key as EnumItemLabel);
         } else {
           // {} empty object
           value = key as unknown as V;

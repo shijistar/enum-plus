@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   check-core-release-tag:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       is_semver_tag: ${{ steps.check-core-release.outputs.is_semver_tag }}
     steps:
@@ -27,7 +27,7 @@ jobs:
           fi
 
   check-plugin-release-tag:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       is_plugin_tag: ${{ steps.check-plugin-release.outputs.is_plugin_tag }}
       plugin_name: ${{ steps.check-plugin-release.outputs.plugin_name }}
@@ -52,11 +52,11 @@ jobs:
   publish-npm-core:
     if: needs.check-core-release-tag.outputs.is_semver_tag == 'true'
     needs: [check-core-release-tag, run-core-unit-tests]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: true
+          token: ${{ secrets.OWNER_PAT }}
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -223,11 +223,11 @@ jobs:
   publish-npm-plugin:
     if: needs.check-plugin-release-tag.outputs.is_plugin_tag == 'true'
     needs: [check-plugin-release-tag]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: true
+          token: ${{ secrets.OWNER_PAT }}
 
       - name: Use Node.js ${{ vars.DEFAULT_NODE_VERSION }}
         uses: actions/setup-node@v6
