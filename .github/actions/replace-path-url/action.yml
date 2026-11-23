@@ -8,9 +8,18 @@ runs:
   using: 'composite'
   steps:
     - run: |
-        sed -i -E "s~https://cdn.jsdelivr.net/npm/enum-plus@v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://cdn.jsdelivr.net/npm/enum-plus@${{ inputs.version }}/~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
-        sed -i -E "s~https://github.com/shijistar/enum-plus/releases/download/v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://github.com/shijistar/enum-plus/releases/download/${{ inputs.version }}/~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
-        sed -i -E "s~https://github.com/shijistar/enum-plus/releases/tag/v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?~https://github.com/shijistar/enum-plus/releases/tag/${{ inputs.version }}~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
-        sed -i -E "s~https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${{ inputs.version }}/~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
-        sed -i -E "s~https://bundlephobia.com/package/enum-plus@[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://bundlephobia.com/package/enum-plus@${{ inputs.version }}~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md
+        INPUT_VERSION="${{ inputs.version }}"
+        VERSION="${INPUT_VERSION#v}"
+        # Replace CDN URLs
+        sed -i -E "s~https://cdn.jsdelivr.net/npm/enum-plus@v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://cdn.jsdelivr.net/npm/enum-plus@${INPUT_VERSION}/~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
+        # Replace GitHub release URLs
+        sed -i -E "s~https://github.com/shijistar/enum-plus/releases/download/v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://github.com/shijistar/enum-plus/releases/download/${INPUT_VERSION}/~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
+        # Replace GitHub tag URLs
+        sed -i -E "s~https://github.com/shijistar/enum-plus/releases/tag/v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?~https://github.com/shijistar/enum-plus/releases/tag/${INPUT_VERSION}~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
+        # Replace CDN URLs
+        sed -i -E "s~https://cdn.jsdelivr.net/gh/shijistar/enum-plus@v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://cdn.jsdelivr.net/gh/shijistar/enum-plus@${INPUT_VERSION}/~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md .storybook/docs-source/Install.en-US.md .storybook/docs-source/Install.zh-CN.md
+        # Replace npm URLs
+        sed -i -E "s~https://www.npmjs.com/package/enum-plus/v/[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://www.npmjs.com/package/enum-plus/v/${VERSION}~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md
+        # Replace bundlephobia URLs
+        sed -i -E "s~https://bundlephobia.com/package/enum-plus@[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9]+\.[0-9]+)?/~https://bundlephobia.com/package/enum-plus@${VERSION}~g" README.md README.zh-CN.md README-FULL.md README-FULL.zh-CN.md .storybook/docs-source/Introduce.en-US.md .storybook/docs-source/Introduce.zh-CN.md
       shell: bash
