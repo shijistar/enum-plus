@@ -2,6 +2,14 @@
 
 # enum-plus Changelog
 
+## 3.4.2
+
+2026-11-23
+
+### Features
+
+- ✨ Replace `MetaOnlyEnumItemInit` type with `interface` for type extension
+
 ## 3.4.1
 
 2026-11-02

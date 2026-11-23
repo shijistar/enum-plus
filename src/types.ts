@@ -78,7 +78,10 @@ export interface LabelOnlyEnumItemInit {
   label: EnumItemLabel;
   value?: never;
 }
-export type MetaOnlyEnumItemInit = Record<string, unknown>;
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+export interface MetaOnlyEnumItemInit {
+  [meta: string]: unknown;
+}
 export interface LooseMetaEnumItemInit<V extends EnumValue> {
   value?: V;
   label?: EnumItemLabel;
