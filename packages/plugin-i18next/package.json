@@ -56,7 +56,7 @@
     "ts2lib": "tsc -p tsconfig.lib.json"
   },
   "devDependencies": {
-    "i18next": "^25.5.2"
+    "i18next": "^26.3.4"
   },
   "peerDependencies": {
     "enum-plus": "^3.0.0",
